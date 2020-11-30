@@ -207,9 +207,9 @@ export default {
     }
   },
   methods: {
-    // 输入字段时
+    // 输入关键字事件
     changeKeyWord (e) {
-      console.log(e)
+      this.$store.commit('handlerBeforeSearchKeyWord', this.packingOptions.name)
     },
     // 詳情返回事件
     changeIsDetail (productDetail) {

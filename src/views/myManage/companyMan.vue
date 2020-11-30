@@ -8,9 +8,12 @@
     <div style="maxWidth:1200px;minWidth:1024px;margin:0 auto;">
       <div class="searchBox">
       <el-form :inline="true" :model="searchForm" class="demo-form-inline">
-        <el-form-item label="关键字查询">
-         <el-input
+        <div style="display:flex;align-items: center;justify-content: space-between;">
+          <div style="display:flex;align-items: center;justify-content: space-between;">
+          <el-form-item label="关键字查询">
+          <el-input
               @keyup.enter.native="search"
+              size="mini"
               clearable
               v-model="searchForm.keyword"
               placeholder="输入关键字"
@@ -22,6 +25,7 @@
           clearable
             v-model="searchForm.hallNumber"
             placeholder="请选择展厅"
+            size="mini"
             style="width: 90%;"
           >
             <el-option
@@ -35,6 +39,7 @@
         <el-form-item label="公司类型">
           <el-select
           clearable
+          size="mini"
             v-model="searchForm.companyType"
             placeholder="请选择"
             style="width: 90%;"
@@ -49,6 +54,7 @@
         </el-form-item>
         <el-form-item label="是否安装">
           <el-select
+          size="mini"
           clearable
             v-model="searchForm.isInstall"
             placeholder="请选择"
@@ -63,6 +69,7 @@
         </el-form-item>
         <el-form-item label="是否重复">
           <el-select
+          size="mini"
             v-model="searchForm.isRepeat"
             placeholder="请选择"
           >
@@ -74,9 +81,12 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item class="btnList">
-          <el-button type="primary" @click="search">查询</el-button>
-        </el-form-item>
+        </div>
+        <div class="btnList">
+          <el-button size="mini" type="primary" @click="search">查询</el-button>
+          <el-button size="mini" type="primary" @click="exportData">导出</el-button>
+        </div>
+        </div>
       </el-form>
     </div>
     <!-- 列表 -->
@@ -158,6 +168,64 @@ export default {
     }
   },
   methods: {
+    // myPlanEdit (type) {
+    //   this.save_type = type
+    //   const datas = {
+    //     keyword: this.searchForm.keyword,
+    //     hallNumber: this.searchForm.hallNumber,
+    //     companyType: this.searchForm.companyType,
+    //     isInstall: this.searchForm.isInstall
+    //   }
+    //   // eslint-disable-next-line camelcase
+    //   const file_type = 'application/msdoc;charset=UTF-8'
+    //   this.$http.post(URL, datas, { responseType: 'arraybuffer' })
+    //     .then(res => {
+    //       const pdfUrl = window.URL.createObjectURL(new Blob([res.data], { type: file_type }))
+    //       let temp = res.headers['content-disposition'].split(';')[1].split('filename=')[1]
+    //       const s = /"/g
+    //       temp = temp.replace(s, '')
+    //       const iconv = require('iconv-lite')
+    //       iconv.skipDecodeWarning = true// 忽略警告
+    //       temp = iconv.decode(temp, 'gbk')
+    //       const link = document.createElement('a')
+    //       link.href = pdfUrl
+    //       link.setAttribute('download', temp)
+    //       document.body.appendChild(link)
+    //       link.click()
+    //       document.body.removeChild(link)
+    //     }).catch(error => {
+    //       console.log(error)
+    //     })
+    // },
+    // 批量导出
+    async exportData () {
+      const fd = {
+        keyword: this.searchForm.keyword,
+        hallNumber: this.searchForm.hallNumber,
+        companyType: this.searchForm.companyType,
+        isInstall: this.searchForm.isInstall
+      }
+      for (const key in fd) {
+        if (fd[key] === null || fd[key] === undefined || fd[key] === '') {
+          delete fd[key]
+        }
+      }
+      let url = '/api/LittleBearInstallDownload'
+      if (this.searchForm.isRepeat) {
+        url = '/api/LittleBearInstallRepeatDownload'
+      }
+      this.$http.post(url, fd).then(res => {
+        const fileName = '公司管理.xls'
+        // 首先请求接口 返回的数据为res
+        let url
+        if (window.navigator.msSaveOrOpenBlob) {
+          // 兼容ie11
+          url = new Blob([res.result])
+        } else {
+          url = URL.createObjectURL(new Blob([res]))
+        }
+      })
+    },
     // 表头类名
     headerStyle ({ row, column, rowIndex, columnIndex }) {
       if (rowIndex) {
@@ -304,6 +372,11 @@ export default {
   padding-top: 50px;
   .btnList {
     float: right;
+  }
+  .el-form{
+    .el-form-item{
+      margin: 0;
+    }
   }
 }
 .tableContent {
