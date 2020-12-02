@@ -29,7 +29,7 @@
               <button class="searchBtn" @click="subSearch">搜索</button>
             </div>
         </div>
-        <button class="advanced" @click="isAdvanced = !isAdvanced">高级搜索</button>
+        <button class="advanced" @click="showAdvanced">高级搜索</button>
         </div>
         <div class="right">
           <img src="~@/assets/images/ErWeiMa.png" alt />
@@ -207,6 +207,11 @@ export default {
     }
   },
   methods: {
+    // 打开高级搜索
+    showAdvanced () {
+      this.isAdvanced = !this.isAdvanced
+      if (this.packingList.length < 1) this.getProductChpaList()
+    },
     // 输入关键字事件
     changeKeyWord (e) {
       this.$store.commit('handlerBeforeSearchKeyWord', this.packingOptions.name)
@@ -340,6 +345,7 @@ export default {
     // 选择图片搜索
     changeUpload (e) {
       this.fileinfo = e.target.files[0]
+      console.log(this.fileinfo)
       const isLt5M = this.fileinfo.size / 1024 / 1024 < 3
       if (!isLt5M) {
         this.$message.error('上传文件大小不能超过 3MB!')
@@ -347,6 +353,7 @@ export default {
         this.$refs.uploadRef.value = ''
         return false
       }
+      console.log(this.fileinfo)
       this.isShowCropper = true
 
       // 上传成功后将图片地址赋值给裁剪框显示图片
@@ -363,7 +370,8 @@ export default {
       this.$refs.cropper.getCropBlob(async file => {
         const urlPreView = URL.createObjectURL(file)
         this.option.img = urlPreView
-        this.$store.commit('handlerBeforeSearchImgPreview', { img: urlPreView, baseImg: this.baseImg })
+        const baseImgs = { img: urlPreView, baseImg: ((this.$store.state.beforeSearchImgPreview && this.$store.state.beforeSearchImgPreview.baseImg) || this.baseImg) }
+        this.$store.commit('handlerBeforeSearchImgPreview', baseImgs)
         // 上传
         const companyNumber = this.$store.state.userInfo.commparnyList
           ? this.$store.state.userInfo.commparnyList[0].companyNumber
@@ -397,7 +405,6 @@ export default {
     }
   },
   created () {
-    this.getProductChpaList()
     this.getHotWord()
   },
   mounted () {}

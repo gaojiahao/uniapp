@@ -54,6 +54,7 @@
         </el-form-item>
         <el-form-item label="是否安装">
           <el-select
+          style="width: 90%;"
           size="mini"
           clearable
             v-model="searchForm.isInstall"
@@ -168,35 +169,6 @@ export default {
     }
   },
   methods: {
-    // myPlanEdit (type) {
-    //   this.save_type = type
-    //   const datas = {
-    //     keyword: this.searchForm.keyword,
-    //     hallNumber: this.searchForm.hallNumber,
-    //     companyType: this.searchForm.companyType,
-    //     isInstall: this.searchForm.isInstall
-    //   }
-    //   // eslint-disable-next-line camelcase
-    //   const file_type = 'application/msdoc;charset=UTF-8'
-    //   this.$http.post(URL, datas, { responseType: 'arraybuffer' })
-    //     .then(res => {
-    //       const pdfUrl = window.URL.createObjectURL(new Blob([res.data], { type: file_type }))
-    //       let temp = res.headers['content-disposition'].split(';')[1].split('filename=')[1]
-    //       const s = /"/g
-    //       temp = temp.replace(s, '')
-    //       const iconv = require('iconv-lite')
-    //       iconv.skipDecodeWarning = true// 忽略警告
-    //       temp = iconv.decode(temp, 'gbk')
-    //       const link = document.createElement('a')
-    //       link.href = pdfUrl
-    //       link.setAttribute('download', temp)
-    //       document.body.appendChild(link)
-    //       link.click()
-    //       document.body.removeChild(link)
-    //     }).catch(error => {
-    //       console.log(error)
-    //     })
-    // },
     // 批量导出
     async exportData () {
       const fd = {
@@ -214,15 +186,20 @@ export default {
       if (this.searchForm.isRepeat) {
         url = '/api/LittleBearInstallRepeatDownload'
       }
-      this.$http.post(url, fd).then(res => {
-        const fileName = '公司管理.xls'
-        // 首先请求接口 返回的数据为res
-        let url
-        if (window.navigator.msSaveOrOpenBlob) {
-          // 兼容ie11
-          url = new Blob([res.result])
-        } else {
-          url = URL.createObjectURL(new Blob([res]))
+      this.$http.post(url, fd, { responseType: 'blob' }).then(res => {
+        const fileName = '公司文档.xls'
+        const blob = res.data
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) { // 兼容IE
+          window.navigator.msSaveOrOpenBlob(blob, fileName)
+        } else { // 兼容Google及fireFox
+          const link = document.createElement('a')
+          link.style.display = 'none'
+          link.download = fileName
+          link.href = URL.createObjectURL(blob)
+          document.body.appendChild(link)
+          link.click()
+          URL.revokeObjectURL(link.href) // 释放URL 对象
+          document.body.removeChild(link)
         }
       })
     },
@@ -360,7 +337,6 @@ export default {
   mounted () {
     this.getOrgCompanyList()
     this.getClientTypeList()
-    // this.drawLine()
   },
   created () {}
 }
@@ -403,11 +379,6 @@ export default {
   .el-form-item{
     @{deep} .el-form-item__content{
       width: 130px;
-    }
-    &:last-of-type{
-      @{deep} .el-form-item__content{
-      width: 70px;
-    }
     }
   }
 }

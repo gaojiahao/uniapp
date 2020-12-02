@@ -13,7 +13,9 @@
         <h4 class="title el-icon-menu">产品目录</h4>
         <div class="treeContent">
           <el-tree
+            highlight-current
             :data="categoryList"
+            check-strictly
             :props="defaultProps"
             accordion
             @node-click="handleNodeClick"
@@ -21,34 +23,6 @@
         </div>
       </div>
       <div class="searchContent">
-        <!-- <div class="productFilter">
-          <el-button size="small" @click="priceSort">
-            价格排序
-            <i class="iconfont icon-xiangshang" style="vertical-align: middle;" v-show="isPriceSort"></i>
-            <i class="iconfont icon-xiangxia" v-show="!isPriceSort" style="vertical-align: middle;"></i>
-          </el-button>
-          <el-button size="small" @click="dateSort">
-            时间排序
-            <i class="iconfont icon-xiangshang" style="vertical-align: middle;" v-show="isDateSort"></i>
-            <i class="iconfont icon-xiangxia" style="vertical-align: middle;" v-show="!isDateSort"></i>
-          </el-button>
-          <div class="priceFilter">
-            <p>价格筛选</p>
-            <el-input class="priceInput"></el-input>
-            <span></span>
-            <el-input class="priceInput"></el-input>
-          </div>
-          <div class="searchBtnBox">
-            <el-button size="small" class="searchBtn">搜索</el-button>
-            <p>
-              总记录共
-              <span class="count">{{ totalCount }}</span>条
-            </p>
-          </div>
-          <div class="more">
-            <i class="iconfont icon-gengduo"></i>
-          </div>
-        </div>-->
         <div class="filterTitle">
           <div class="searchOptions">
             <p>
@@ -143,7 +117,6 @@
                 <div class="details">
                   <ul>
                     <li>
-                      <!-- 出厂货号：{{ item.fa_no }} -->
                       出厂货号：{{ item.fa_no === 0 ? "???" : item.fa_no }}
                     </li>
                     <li>包装：{{ item.fa_no === 0 ? "???" : item.ch_pa }}</li>
@@ -296,6 +269,7 @@ export default {
   components: { bsTop, productSearchTop, productDetail, VueCropper, bsFooter },
   data () {
     return {
+      categoryNumber: null,
       cropperLoading: false,
       // 裁剪组件的基础配置option
       option: {
@@ -410,7 +384,9 @@ export default {
       }
     },
     handleNodeClick (data) {
-      console.log(data)
+      this.currentPage = 1
+      this.categoryNumber = data.id
+      this.getProduct()
     },
     successUpload (response, file, fileList) {
       this.$store.commit('searchValues', response)
@@ -423,7 +399,8 @@ export default {
         const fd = {
           name: this.$store.state.searchValue,
           skipCount: this.currentPage,
-          maxResultCount: this.pageSize
+          maxResultCount: this.pageSize,
+          categoryNumber: this.categoryNumber
         }
         for (const key in fd) {
           if (fd[key] === null || fd[key] === undefined || fd[key] === '') delete fd[key]
@@ -521,6 +498,7 @@ export default {
       this.totalCount = 0
       this.dataList = []
       this.isDetail = false
+      this.categoryNumber = null
       this.search = this.$store.state.searchValues
       if (this.$store.state.imageSearchValue instanceof Array) {
         this.dataList = this.$store.state.imageSearchValue
@@ -868,6 +846,9 @@ export default {
       content: "" !important;
       font-size: 16px;
     }
+  }
+ @{deep} .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
+    background-color: transparent;
   }
   .myFooter {
     // margin-top: 50px;
