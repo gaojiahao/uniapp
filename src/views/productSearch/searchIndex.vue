@@ -1,5 +1,7 @@
 <template>
-  <el-container class="productSearchIndex">
+  <el-container class="productSearchIndex" v-loading="AppLoading"
+    element-loading-spinner
+    element-loading-background="rgba(200, 200, 200, 0.5)">
     <el-header style="padding:0;">
       <bsTop></bsTop>
     </el-header>
@@ -121,7 +123,7 @@
                     </li>
                     <li>包装：{{ item.fa_no === 0 ? "???" : item.ch_pa }}</li>
                     <li>
-                      样品规格：{{
+                      产品规格：{{
                         item.fa_no === 0
                           ? "???"
                           : item.pr_le +
@@ -207,7 +209,7 @@
       </div>
     </div>
     <!-- vueCropper 剪裁图片实现-->
-    <el-dialog title="图片剪裁" :visible.sync="isShowCropper" destroy-on-close append-to-body>
+    <el-dialog title="图片剪裁" :visible.sync="isShowCropper" top="0px" destroy-on-close append-to-body>
       <div class="cropper-content">
         <div class="cropper" style="text-align:center">
           <vueCropper
@@ -269,6 +271,7 @@ export default {
   components: { bsTop, productSearchTop, productDetail, VueCropper, bsFooter },
   data () {
     return {
+      AppLoading: false,
       categoryNumber: null,
       cropperLoading: false,
       // 裁剪组件的基础配置option
@@ -359,10 +362,6 @@ export default {
     // 价格排序
     priceSort () {
       this.isPriceSort = !this.isPriceSort
-      // 数组排序
-      this.dataList.sort((a, b) => {
-        console.log(a, b)
-      })
     },
     // 时间排序
     dateSort () {
@@ -413,11 +412,10 @@ export default {
           this.totalCount = 0
         }
         $('.rootApp').animate({ scrollTop: 0 }) // 回到顶部
-        this.loading = false
       } catch (error) {
-        this.loading = false
         this.totalCount = 0
       }
+      this.loading = false
       this.isDetail = false
     },
     // 显示产品详情
@@ -451,12 +449,14 @@ export default {
     },
     // 获取产品类目列表
     async getProductCategoryList () {
+      this.AppLoading = true
       const res = await this.$http.post('/api/ProductCategoryList', {})
       if (res.data.result.code === 200) {
         this.categoryList = res.data.result.item
       } else {
         this.$message.error(res.data.result.msg)
       }
+      this.AppLoading = false
     }
   },
   watch: {

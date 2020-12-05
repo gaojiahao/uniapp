@@ -88,7 +88,7 @@
                   </li>
                   <li>包装：{{ item.fa_no === 0 ? "???" : item.ch_pa }}</li>
                   <li>
-                    样品规格：{{
+                    产品规格：{{
                       item.fa_no === 0
                         ? "???"
                         : item.pr_le +
@@ -220,7 +220,6 @@ export default {
     },
     // 重新切图
     openCubeImg (img) {
-      console.log('重新打开切图')
       this.$emit('handlerCubeImgEvent', img)
     },
     // 产品收藏
@@ -244,7 +243,6 @@ export default {
     },
     // 文字搜索产品
     async getProductList () {
-      console.log(this.beforeSearch.name)
       if (this.beforeSearch.name) {
         this.$store.commit('addHistoryNames', this.beforeSearch.name)
       }

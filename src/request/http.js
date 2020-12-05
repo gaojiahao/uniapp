@@ -51,6 +51,7 @@ myAxios.install = function (Vue) {
         !config.url.includes('CreateLogRecord') &&
         !config.url.includes('MessageUploadFile') &&
         !config.url.includes('GetInstantMessageByNumber') &&
+        !config.url.includes('ProductCategoryList') &&
         !config.url.includes('GetHotWord') &&
         !config.url.includes('UserConfirm') &&
         !config.url.includes('CreateMessageAccept') &&
@@ -68,7 +69,7 @@ myAxios.install = function (Vue) {
       return config
     },
     error => {
-      console.log('请求错误拦截', error)
+      // console.log('请求错误拦截', error)
       var config = error.config
       // If config does not exist or the retry option is not set, reject
       if (!config || !axios.defaults.retry) return Promise.reject(error)
@@ -135,12 +136,14 @@ myAxios.install = function (Vue) {
         // 不需要loading的请求
         !res.config.url.includes('GetHotWord') &&
         !res.config.url.includes('CreateLogRecord') &&
+        !res.config.url.includes('ProductCategoryList') &&
         !res.config.url.includes('UserConfirm') &&
         !res.config.url.includes('OrgCompanyList') &&
         !res.config.url.includes('SampleOrderTotal')
       ) {
         $Store.commit('updateAppLoading', false)
       }
+      // 屏蔽不需要验证code的请求，如下载导出等
       if (res.config.url.includes('LittleBearInstallDownload') || res.config.url.includes('LittleBearInstallRepeatDownload')) {
         return res
       } else {
@@ -177,7 +180,7 @@ myAxios.install = function (Vue) {
             $Store.commit('handlerHttpContent', '[图片]')
         }
         // 如果请求报404 | 500 | 401 之类的
-        console.log('响应失败拦截', error.response)
+        // console.log('响应失败拦截', error.response)
         switch (error.response.status) {
           case 401:
             Message.closeAll()

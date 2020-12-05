@@ -131,7 +131,7 @@
                     </li>
                     <li>包装：{{ item.fa_no === 0 ? "???" : item.ch_pa }}</li>
                     <li>
-                      样品规格：{{
+                      产品规格：{{
                         item.fa_no === 0
                           ? "???"
                           : item.pr_le +
@@ -380,7 +380,6 @@ export default {
       }
     },
     handleNodeClick (data) {
-      console.log(data.id)
       this.currentPage = 1
       this.categoryNumber = data.id
       this.getProduct()
@@ -410,7 +409,7 @@ export default {
       this.loading = true
       try {
         const fd = {
-          name: this.$store.state.searchValue,
+          keyword: this.$store.state.searchValue,
           categoryNumber: this.categoryNumber,
           skipCount: this.currentPage,
           maxResultCount: this.pageSize
@@ -488,6 +487,7 @@ export default {
         this.currentPage = 1
         this.totalCount = 0
         this.dataList = []
+        this.isDetail = false
         this.categoryNumber = null
         this.search = this.$store.state.searchValues
         if (this.$store.state.hotSearchImg instanceof Array) {
