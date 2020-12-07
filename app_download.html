@@ -52,7 +52,6 @@
             var clientWidth = docEl.clientWidth;
             if (!clientWidth) return;
             clientWidth = clientWidth <= 1080 ? clientWidth : 1080;
-            console.log((clientWidth / 750) * 100)
             docEl.style.fontSize = (clientWidth / 750) * 100 + 'px';
             };
         if (!doc.addEventListener) return;
@@ -70,13 +69,10 @@
         }
         ul, ol, li {
             list-style: none;
-        } 
-        body {
-            min-width: 320px;
-            max-width: 640px;
         }
         .warp{
             width: 10rem;
+            margin: 0 auto;
             height: 10rem;
         }
         .warp>.header{
@@ -145,8 +141,6 @@
     </div>
 </body>
 <script>
-    document.getElementsByClassName('myButton')[0].addEventListener('click', ()=> {
-        location.href = 'http://img.toysbear.com//package/LittleBearAPP.apk';
-    })
+    document.getElementsByClassName('myButton')[0].addEventListener('click', ()=> location.href = 'http://img.toysbear.com//package/LittleBearAPP.apk')
 </script>
 </html>
