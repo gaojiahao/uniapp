@@ -419,17 +419,17 @@
             <el-input
               type="text"
               v-model="addClientForm.companyKeyCode"
-              :disabled="dialogTitle !== '新增客户'"
             ></el-input>
           </el-form-item>
+          <!-- :disabled="dialogTitle !== '新增客户'" -->
         </div>
         <el-form-item label="公司API" prop="api">
           <el-input
             type="text"
             v-model="addClientForm.companyAPI"
-            :disabled="dialogTitle !== '新增客户'"
           ></el-input>
         </el-form-item>
+        <!-- :disabled="dialogTitle !== '新增客户'" -->
         <el-form-item label="公司介绍" prop="homepage">
           <el-input
             type="textarea"

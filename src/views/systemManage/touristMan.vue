@@ -31,7 +31,6 @@
         </el-form-item>
         <el-form-item class="btnList">
           <el-button type="primary" @click="search">查询</el-button>
-          <el-button type="primary" @click="openAddVersion">新增</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -43,22 +42,40 @@
         size="medium"
         :default-sort="{ prop: 'date', order: 'descending' }"
       >
-        <el-table-column prop="platForm" label="手机平台"></el-table-column>
-        <el-table-column prop="vesion" label="版本号"></el-table-column>
-        <el-table-column
-          prop="fileUrl"
-          label="版本地址"
-          align="center"
-          width="400"
-        ></el-table-column>
+        <el-table-column prop="companyName" label="公司名称"></el-table-column>
+        <el-table-column prop="companyType" label="公司类型">
+          <template slot-scope="scope">
+            <template v-for="(item, i) in companyTypeList">
+              <el-tag :key="i" :type="tags[i]" v-if="scope.row.companyType === item.itemCode">{{item.itemText}}</el-tag>
+            </template>
+          </template>
+        </el-table-column>
+        <el-table-column prop="contactsMan" label="联系人"></el-table-column>
+        <el-table-column prop="phoneNumber" label="联系方式"></el-table-column>
+        <el-table-column prop="address" label="公司地址"></el-table-column>
+        <el-table-column prop="qq" label="QQ"></el-table-column>
+        <el-table-column prop="auditState" label="审核状态">
+          <template slot-scope="scope">
+            <template v-for="(item, i) in userAuditTypeList">
+              <el-tag :type="tagss[item.itemCode]" :key="i" v-if="scope.row.auditState == item.itemCode">{{item.itemText}}</el-tag>
+            </template>
+          </template>
+        </el-table-column>
+        <el-table-column prop="remark" label="拒绝原因">
+          <template slot-scope="scope">
+            <template v-for="(item, i) in offAuditTypeList">
+              <span :key="i" v-if="scope.row.remark == item.itemCode">{{item.itemText}}</span>
+            </template>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="createdOn"
-          label="新增日期"
+          label="创建日期"
           sortable
           align="center"
         >
           <template slot-scope="scope">
-            {{ scope.row.createdOn && scope.row.createdOn.replace(/T/g, " ") }}
+            {{ scope.row.createdOn && scope.row.createdOn.split("T")[0] }}
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" width="150">
@@ -68,16 +85,16 @@
               size="mini"
               type="primary"
               @click="openEdit(scope.row)"
-              >编辑</el-button
+              >审核</el-button
             >
-            <el-popconfirm
+            <!-- <el-popconfirm
               title="确定要删除这个版本吗？"
               @onConfirm="handleDelete(scope.row)"
             >
               <el-button size="mini" slot="reference" type="danger"
                 >删除</el-button
               >
-            </el-popconfirm>
+            </el-popconfirm> -->
           </template>
         </el-table-column>
       </el-table>
@@ -95,61 +112,68 @@
       </center>
     </div>
     </div>
-    <!-- 新增编辑版本 -->
+    <!-- 审核 -->
     <el-dialog :title="versionTitle" :visible.sync="versionDialog" v-if="versionDialog" width="50%">
       <el-form
         ref="addVersionForm"
         label-width="100px"
-        :rules="addVersionRules"
-        :model="versionFormData"
+        :model="itemData"
       >
-        <el-form-item label="平台" prop="platForm">
-          <el-select v-model="versionFormData.platForm" placeholder="请选择">
+        <el-form-item label="公司名称：" prop="companyName">
+          <el-input v-model="itemData.companyName" disabled></el-input>
+        </el-form-item>
+        <div class="items">
+          <el-form-item label="公司类型：" prop="companyType">
+          <el-select v-model="itemData.companyType" disabled placeholder="请选择">
             <el-option
-              v-for="item in $store.state.globalJson.Json.PlatForm"
+              v-for="item in companyTypeList"
               :key="item.id"
               :label="item.itemText"
-              :value="item.itemCode"
-            ></el-option>
+              :value="item.itemCode">
+            </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="版本号" prop="vesion">
-          <el-input v-model="versionFormData.vesion"></el-input>
+        <el-form-item label="联系人：" prop="contactsMan">
+          <el-input v-model="itemData.contactsMan" disabled></el-input>
         </el-form-item>
-        <el-form-item label="链接地址" prop="fileUrl">
-          <el-input
-            v-model="versionFormData.fileUrl"
-            :disabled="versionFormData.versionFile  !=  ''"
-          ></el-input>
+        </div>
+        <el-form-item label="联系方式：" prop="phoneNumber">
+          <el-input v-model="itemData.phoneNumber" disabled></el-input>
         </el-form-item>
-        <el-form-item label="上传文件">
-          <input
-            type="file"
-            ref="installFile"
-            @change="changeUpload"
-            :accept="
-              $store.state.globalJson.Json.packageManage &&
-                $store.state.globalJson.Json.packageManage[0].itemCode
-            "
-            :size="
-              $store.state.globalJson.Json.packageManage &&
-                $store.state.globalJson.Json.packageManage[1].itemCode
-            "
-          />
+        <el-form-item label="公司地址：" prop="address">
+          <el-input v-model="itemData.address" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="Q Q：" prop="qq">
+          <el-input v-model="itemData.qq" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="创建日期：" prop="createdOn">
+          <el-input v-model="itemData.createdOn.split('T')[0]" disabled></el-input>
         </el-form-item>
         <center>
           <template>
-            <el-button
-              type="primary"
-              @click="handleEdit()"
-              :disabled="isUpLoad"
-            >
-              <i :class="{ 'el-icon-loading': isUpLoad }"></i>
-              {{ isUpLoad ? "文件上传中" : "提 交" }}
-            </el-button>
-            <el-button type="danger" @click="versionDialog = false"
-              >取 消</el-button
-            >
+            <el-button type="primary" @click="handleEdit(1)">通 过</el-button>
+            <!-- <el-button type="danger" @click="handleEdit(2)">拒 绝</el-button> -->
+            <el-popover
+            style="marginLeft:20px;"
+              placement="right"
+              width="150"
+              trigger="click">
+                <el-select
+                clearable
+                @change="handleEdit(2)"
+                v-model="itemData.remark"
+                placeholder="请选择拒绝原因"
+                style="width: 100%"
+              >
+                <el-option
+                  v-for="(item, index) in offAuditTypeList"
+                  :key="index"
+                  :label="item.itemText"
+                  :value="item.itemCode"
+                ></el-option>
+              </el-select>
+              <el-button slot="reference" type="danger">拒 绝</el-button>
+            </el-popover>
           </template>
         </center>
       </el-form>
@@ -168,32 +192,40 @@ export default {
   components: { bsTop, bsFooter },
   data () {
     return {
+      offAuditTypeList: [],
+      userAuditTypeList: [],
+      companyTypeList: [],
+      tags: ['', 'success', 'warning', 'danger', 'info'],
+      tagss: ['', 'success', 'danger'],
       isUpLoad: false,
       versionDialog: false,
-      versionTitle: '新增版本',
-      versionFormData: {
-        platForm: null,
-        vesion: null,
-        fileUrl: '',
-        versionFile: ''
+      versionTitle: '审核',
+      itemData: {
+        companyName: null,
+        companyType: null,
+        address: null,
+        contactsMan: null,
+        phoneNumber: null,
+        remark: null,
+        qq: null
       },
       totalCount: 0,
       currentPage: 1,
       pageSize: 10,
       tableData: [],
-      addVersionRules: {
-        platForm: [
-          { required: true, message: '请选择手机平台', trigger: 'change' }
-        ],
-        vesion: [
-          { required: true, message: '请输入版本号', trigger: 'blur' },
-          { min: 1, max: 9999, message: '请输入版本号', trigger: 'blur' }
-        ],
-        fileUrl: [
-          { required: true, message: '请输入链接地址', trigger: 'blur' },
-          { min: 1, max: 9999, message: '请输入链接地址', trigger: 'blur' }
-        ]
-      },
+      // addVersionRules: {
+      //   platForm: [
+      //     { required: true, message: '请选择手机平台', trigger: 'change' }
+      //   ],
+      //   vesion: [
+      //     { required: true, message: '请输入版本号', trigger: 'blur' },
+      //     { min: 1, max: 9999, message: '请输入版本号', trigger: 'blur' }
+      //   ],
+      //   fileUrl: [
+      //     { required: true, message: '请输入链接地址', trigger: 'blur' },
+      //     { min: 1, max: 9999, message: '请输入链接地址', trigger: 'blur' }
+      //   ]
+      // },
       pickerOptions: {
         shortcuts: [
           {
@@ -235,10 +267,10 @@ export default {
     // 列表查询
     search () {
       this.currentPage = 1
-      this.getAppVersionPage()
+      this.getCompanyAuditPage()
     },
-    // 获取所有app版本
-    async getAppVersionPage () {
+    // 获取所有公司
+    async getCompanyAuditPage () {
       const fd = {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
@@ -251,7 +283,7 @@ export default {
           delete fd[key]
         }
       }
-      const res = await this.$http.post('/api/BearVesionPage', fd)
+      const res = await this.$http.post('/api/GetCompanyAuditPage', fd)
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items
         this.totalCount = res.data.result.item.totalCount
@@ -260,99 +292,65 @@ export default {
     // 切换当前页
     currentChange (page) {
       this.currentPage = page
-      this.getAppVersionPage()
+      this.getCompanyAuditPage()
     },
     // 切换当前页条数
     handleSizeChange (pageSize) {
       this.pageSize = pageSize
       if (this.currentPage * pageSize > this.totalCount) return false
-      this.getAppVersionPage()
+      this.getCompanyAuditPage()
     },
-    // 打开编辑窗口
+    // 打开审核窗口
     openEdit (row) {
-      console.log(row, this.versionFormData)
-      this.versionTitle = '版本编辑'
-      for (const key in this.versionFormData) {
-        this.versionFormData[key] = row[key]
-      }
-      this.versionFormData.id = row.id
+      this.itemData = row
       this.versionDialog = true
     },
-    // 打开新增版本
-    openAddVersion () {
-      this.versionTitle = '版本新增'
-      this.versionFormData = {
-        vesion: null,
-        fileUrl: '',
-        platForm: '',
-        versionFile: ''
+    // 提交审核
+    async handleEdit (state) {
+      const fd = this.$_.cloneDeepWith(this.itemData)
+      fd.auditState = state
+      if (state === 1) fd.remark = null
+      const res = await this.$http.post('/api/AuditCompany', fd)
+      if (res.data.result.code === 200) {
+        this.getCompanyAuditPage()
+        this.versionDialog = false
+        this.$message.success('审核成功')
+      } else {
+        this.$message.error(res.data.result.msg)
       }
-      this.versionDialog = true
     },
-    // 编辑/新增
-    async handleEdit () {
-      this.$refs.addVersionForm.validate(async valid => {
-        if (valid) {
-          const res = await this.$http.post(
-            this.versionTitle === '版本新增'
-              ? '/api/CreateBearVesion'
-              : '/api/UpdateBearVesion',
-            this.versionFormData
-          )
-          if (res.data.result.code === 200) {
-            this.$message.success(
-              this.versionTitle === '版本新增' ? '新增成功' : '编辑成功'
-            )
-            this.getAppVersionPage()
-            this.versionDialog = false
-          } else {
-            this.$message.error('编辑失败,请检查网络！')
-          }
+    // 获取公司类型列表
+    async getCompanyTypeList (type) {
+      const res = await this.$http.post('/api/ServiceConfigurationList', {
+        basisParameters: type
+      })
+      if (res.data.result.code === 200) {
+        switch (type) {
+          case 'CompanyType':
+            this.companyTypeList = res.data.result.item
+            break
+          case 'userAuditType':
+            this.userAuditTypeList = res.data.result.item
+            break
+          case 'offAuditType':
+            this.offAuditTypeList = res.data.result.item
+            break
         }
-      })
-    },
-    // 删除
-    async handleDelete (row) {
-      const res = await this.$http.post('/api/UpdateBearVesion', {
-        isdelete: true,
-        id: row.id
-      })
-      if (res.data.result.code === 200) {
-        this.$message.success('删除成功')
-        this.getAppVersionPage()
       } else {
-        this.$message.error('删除失败,请检查网络！')
+        this.$message.error(res.data.result.msg)
       }
-    },
-    // 选择文件
-    async changeUpload (e) {
-      this.isUpLoad = true
-      this.versionFormData.versionFile = e.target.files[0]
-      const fd = new FormData()
-      fd.append('BusinessType', 'package')
-      fd.append('file', this.versionFormData.versionFile)
-      const res = await this.$http.post('/api/File/InsertPic', fd)
-      if (res.data.result.code === 200) {
-        this.versionFormData.fileUrl = res.data.result.object[0].filePath
-        this.$message.success('上传文件成功')
-      } else {
-        this.$message.success('上传文件失败，请检查网络')
-      }
-      this.isUpLoad = false
-      console.log(this.versionFormData.versionFile)
     }
   },
   watch: {
-    versionDialog (val) {
-      if (!val) {
-        this.$refs.installFile.value = ''
-      }
-    }
   },
   mounted () {
-    this.getAppVersionPage()
+    this.getCompanyAuditPage()
   },
-  created () {}
+  created () {
+    this.getCompanyTypeList('CompanyType')
+    this.getCompanyTypeList('userAuditType')
+    this.getCompanyTypeList('offAuditType')
+  }
 }
 </script>
 
@@ -373,5 +371,9 @@ export default {
   @{deep} .el-input__count {
     line-height: 15px;
   }
+}
+.items{
+  display: flex;
+  justify-content: space-between;
 }
 </style>
