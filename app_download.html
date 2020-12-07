@@ -3,31 +3,33 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>手机APP下载页面：根据终端辨别下载地址</title>
+    
     <script type="text/javascript">
         // 获取终端的相关信息
         var Terminal = {
             // 辨别移动终端类型
             platform: function () {
-                var u = navigator.userAgent, app = navigator.appVersion;
+                var myUserAgent = navigator.userAgent;
                 return {
                     // 华为
-                    huawei:u.search(/Huawei|Honor|H60-|H30-\s([^\s|;]+)/i) > -1,
+                    huawei:myUserAgent.search(/Huawei|Honor|H60-|H30-\s([^\s|;]+)/i) > -1,
                     // vivo 
-                    vivo:u.search(/vivo\s([^\s|;]+)/i) > -1,
+                    vivo:myUserAgent.search(/vivo\s([^\s|;]+)/i) > -1,
                     // 小米
-                    xiaomi:u.search(/Mi note|Mi \d+ Build|mi one\s([^\s|;]+)/i) > -1,
+                    xiaomi:myUserAgent.search(/Mi note|Mi \d+ Build|mi one\s([^\s|;]+)/i) > -1,
                     // 是否为iPhone或者QQHD浏览器
-                    iPhone: u.indexOf('iPhone') > -1,
+                    iPhone: myUserAgent.indexOf('iPhone') > -1,
                     // 是否iPad
-                    iPad: u.indexOf('iPad') > -1
+                    iPad: myUserAgent.indexOf('iPad') > -1
                 };
             }(),
             // 辨别移动终端的语言：zh-cn、en-us、ko-kr、ja-jp...
             language: (navigator.browserLanguage || navigator.language).toLowerCase()
         }
         // 根据不同的终端，跳转到不同的地址
-        var theUrl = 'http://img.toysbear.com//package/LittleBearAPP.apk';
+        var theUrl;
         if (Terminal.platform.huawei) {
             theUrl = 'https://appgallery.huawei.com/#/app/C102561649';
         } else if (Terminal.platform.xiaomi) {
@@ -38,14 +40,113 @@
             theUrl = 'https://apps.apple.com/cn/app/%E5%B0%8F%E7%AB%B9%E7%86%8A/id1524282710';
         } else if (Terminal.platform.iPad) {
             theUrl = 'https://apps.apple.com/cn/app/%E5%B0%8F%E7%AB%B9%E7%86%8A/id1524282710';
-        }else{
-            theUrl = 'http://img.toysbear.com//package/LittleBearAPP.apk';
         }
-        location.href = theUrl;
+        if (theUrl) location.href = theUrl;
     </script>
+    <script>
+        (function(doc, win) {
+        var docEl = doc.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            // 750 为设计稿宽度  适配rem
+            recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if (!clientWidth) return;
+            clientWidth = clientWidth <= 1080 ? clientWidth : 1080;
+            console.log((clientWidth / 750) * 100)
+            docEl.style.fontSize = (clientWidth / 750) * 100 + 'px';
+            };
+        if (!doc.addEventListener) return;
+        win.addEventListener(resizeEvt, recalc, false);
+        doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <style>
+        html, body, div, p, a, img{
+            padding: 0;
+            margin: 0;
+        }
+        a{
+            text-decoration: none;
+        }
+        ul, ol, li {
+            list-style: none;
+        } 
+        body {
+            min-width: 320px;
+            max-width: 640px;
+        }
+        .warp{
+            width: 10rem;
+            height: 10rem;
+        }
+        .warp>.header{
+            width: 100%;
+            height: 6.813333rem;
+            background: url('static/downloadBg.png') no-repeat center center;
+            background-size: 100% 100%;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .warp>.header>.myLogo {
+            position: absolute;
+            width: 5rem;
+            height: 3.733333rem;
+            bottom: 0;
+            margin-left: 50%;
+            left: 0;transform: translate(-50%,40%);
+        }
+        .warp>.content>.buttomBox{
+            position: fixed;
+            left: 50%;
+            bottom: 1.333333rem;
+            transform: translate(-50%,0);
+        }
+        .warp>.content>.buttomBox>.item{
+            margin: 0;
+            text-align: center;
+            height: 0.44rem;
+            font-size: 0.32rem;
+            font-weight: 400;
+            line-height: 0.44rem;
+            color: #CCCCCC;
+            margin-top: 0.133333rem;
+        }
+        .warp>.content>.buttomBox>.myButton{
+            margin: 0 auto;
+            margin-top: 0.266667rem;
+            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 8rem;
+            height: 1.333333rem;
+            color: #fff;
+            background: linear-gradient(180deg, #2E6DFF 0%, #1654E3 100%);
+            box-shadow: 0px 3px 10px rgba(24, 86, 229, 0.3);
+            border:none;
+            font-size: 0.48rem;
+            border-radius: 0.666667rem;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="warp">
+        <div class="header">
+            <img class="myLogo" src="static/downloadsLogo.png" alt="">
+        </div>
+        <div class="content">
+            <div class="buttomBox">
+                <p class="item">1.0.0(buil 1)-26.90MB</p>
+                <p class="item">更新于：2020-01-16 15:30</p>
+                <a class="myButton">Android版本下载</a>
+            </div>
+        </div>
+    </div>
 </body>
-
+<script>
+    document.getElementsByClassName('myButton')[0].addEventListener('click', ()=> {
+        location.href = 'http://img.toysbear.com//package/LittleBearAPP.apk';
+    })
+</script>
 </html>

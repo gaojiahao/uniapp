@@ -20,22 +20,6 @@
               style="width: 90%"
             ></el-input>
         </el-form-item>
-        <el-form-item label="展厅查询">
-          <el-select
-          clearable
-            v-model="searchForm.hallNumber"
-            placeholder="请选择展厅"
-            size="mini"
-            style="width: 90%;"
-          >
-            <el-option
-              v-for="(item, i) in hallList"
-              :key="i"
-              :label="item.companyName"
-              :value="item.companyNumber"
-            ></el-option>
-          </el-select>
-        </el-form-item>
         </div>
         <div class="btnList">
           <el-button size="mini" type="primary" @click="search">查询</el-button>
@@ -134,38 +118,34 @@ export default {
     // 列表查询
     search () {
       this.currentPage = 1
-      this.getLittleBearInstall()
+      this.getCompanySamplelistPage()
     },
     // 获取公司类型
-    async getClientTypeList () {
-      const res = await this.$http.post('/api/ServiceConfigurationList', {
-        basisParameters: 'CompanyType'
-      })
-      if (res.data.result.code === 200) {
-        this.clientTypeList = res.data.result.item
-      } else {
-        this.$message.error(res.data.result.msg)
-      }
-    },
+    // async getClientTypeList () {
+    //   const res = await this.$http.post('/api/ServiceConfigurationList', {
+    //     basisParameters: 'CompanyType'
+    //   })
+    //   if (res.data.result.code === 200) {
+    //     this.clientTypeList = res.data.result.item
+    //   } else {
+    //     this.$message.error(res.data.result.msg)
+    //   }
+    // },
     // 获取展厅列表
-    async getOrgCompanyList () {
-      const res = await this.$http.post('/api/OrgCompanyList', { companyType: 'Exhibition' })
-      if (res.data.result.code === 200) {
-        this.hallList = res.data.result.item
-        this.searchForm.hallNumber = this.hallList[0].companyNumber
-        this.getLittleBearInstall()
-      } else {
-        this.$message.error(res.data.result.msg)
-      }
-    },
+    // async getOrgCompanyList () {
+    //   const res = await this.$http.post('/api/OrgCompanyList', { companyType: 'Exhibition' })
+    //   if (res.data.result.code === 200) {
+    //     this.hallList = res.data.result.item
+    //     this.searchForm.hallNumber = this.hallList[0].companyNumber
+    //   } else {
+    //     this.$message.error(res.data.result.msg)
+    //   }
+    // },
     // 获取列表
-    async getLittleBearInstall   () {
+    async getCompanySamplelistPage () {
       const fd = {
         keyword: this.searchForm.keyword,
-        hallNumber: this.searchForm.hallNumber,
-        companyType: this.searchForm.companyType,
         skipCount: this.currentPage,
-        isInstall: this.searchForm.isInstall,
         maxResultCount: this.pageSize
       }
       for (const key in fd) {
@@ -173,14 +153,11 @@ export default {
           delete fd[key]
         }
       }
-      let url = '/api/LittleBearInstall'
-      if (this.searchForm.isRepeat) {
-        url = '/api/LittleBearInstallRepeat'
-      }
-      const res = await this.$http.post(url, fd)
+      const res = await this.$http.post('/api/CompanySamplelistPage', fd)
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items
         this.totalCount = res.data.result.item.totalCount
+        console.log(this.tableData)
       } else {
         this.tableData = []
         this.totalCount = 0
@@ -195,67 +172,21 @@ export default {
     // 切换当前页
     currentChange (page) {
       this.currentPage = page
-      this.getLittleBearInstall()
+      this.getCompanySamplelistPage()
     },
     // 切换当前页条数
     handleSizeChange (pageSize) {
       this.pageSize = pageSize
       if (this.currentPage * pageSize > this.totalCount) return false
-      this.getLittleBearInstall()
-    },
-    // 初始化饼状图
-    drawLine () {
-      // 基于准备好的dom，初始化echarts实例
-      const myChart = this.$echarts.init(document.querySelector('.statisticsContent'))
-      myChart.on('click', function (params) {
-        console.log(params.data)
-      })
-      // 绘制图表
-      const options = {
-        title: {
-          text: '手机数据统计',
-          subtext: '重复手机统计',
-          left: 'center'
-        },
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
-        },
-        color: ['#f56c6c', '#5fadff'],
-        legend: {
-          orient: 'vertical',
-          left: 'left',
-          data: ['重复手机号', '正常手机号']
-        },
-        series: [
-          {
-            name: '手机数据统计',
-            type: 'pie',
-            radius: '55%',
-            center: ['50%', '60%'],
-            data: [
-              { value: 100, name: '重复手机号' },
-              { value: 310, name: '正常手机号' }
-            ],
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              }
-            }
-          }
-        ]
-      }
-
-      myChart.setOption(options)
+      this.getCompanySamplelistPage()
     }
   },
   watch: {
   },
   mounted () {
-    this.getOrgCompanyList()
-    this.getClientTypeList()
+    // this.getOrgCompanyList()
+    // this.getClientTypeList()
+    this.getCompanySamplelistPage()
   },
   created () {}
 }
