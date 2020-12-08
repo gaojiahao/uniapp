@@ -10,12 +10,12 @@
       <el-form :inline="true" :model="searchForm" class="demo-form-inline">
         <el-form-item label="关键字查询">
          <el-input
-         clearable
-              @keyup.enter.native="search"
-              v-model="searchForm.keyword"
-              placeholder="输入关键字"
-              style="width: 90%"
-            ></el-input>
+          clearable
+          @keyup.enter.native="search"
+          v-model="searchForm.keyword"
+          placeholder="输入关键字"
+          style="width: 90%"
+         ></el-input>
         </el-form-item>
         <el-form-item label="时间段搜索">
           <el-date-picker

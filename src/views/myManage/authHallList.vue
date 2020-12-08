@@ -70,9 +70,11 @@
            {{ scope.row.applicantsDateTime.split('T')[0] }}
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center">
-        <template slot-scope="scope">
+        <el-table-column label="操作" align="center" width="150">
+          <template slot-scope="scope">
+           <el-button size="mini" type="primary">明细</el-button>
            <el-popconfirm
+              style="margin-left:10px;"
               title="确定要删除这条择样单吗？"
               @onConfirm="handleSampleDelete(scope.row)">
               <el-button size="mini" slot="reference" @click.stop type="danger">删除</el-button>
@@ -103,7 +105,7 @@
     <el-dialog title="择样订单列表" :visible.sync="sampleListDialog" top="60px" destroy-on-close width="70%">
       <div class="childSearchBox">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
-          <div>
+          <div class="childSearchItem">
             <el-form-item label="关键字查询">
           <el-input
             clearable
@@ -146,7 +148,7 @@
         </el-form-item>
           </div>
         <el-form-item class="btnList">
-          <el-button type="primary" size="mini" @click="childSearch">查询</el-button>
+          <el-button type="primary" style="margin-left:10px;" size="mini" @click="childSearch">查询</el-button>
           <el-button type="primary" size="mini" @click="subAuthSample(true)">批量审核</el-button>
         </el-form-item>
       </el-form>
@@ -381,7 +383,7 @@ export default {
     },
     // 删除列表某行
     async handleSampleDelete (row) {
-      const res = await this.$http.post('/api/CompanySamplelistPage', { id: row.id })
+      const res = await this.$http.post('/api/DeleteCompanySamplelist', { id: row.id })
       if (res.data.result.code === 200) {
         this.getCompanySamplelistPage()
         this.$message.success('删除成功')
@@ -488,6 +490,13 @@ export default {
   .demo-form-inline{
     display: flex;
     justify-content: space-between;
+    .childSearchItem{
+      .el-form-item{
+        @{deep} .el-form-item__content{
+          width: 130px;
+        }
+      }
+    }
   }
 }
 </style>

@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>手机APP下载页面：根据终端辨别下载地址</title>
-    
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/template-web.js"></script>
     <script type="text/javascript">
         // 获取终端的相关信息
         var Terminal = {
@@ -60,6 +61,14 @@
         })(document, window);
     </script>
     <style>
+        @font-face {
+            font-family: 'Muyao-Softbrush';
+            src: url('/static/font/Muyao-Softbrush.ttf'); /* IE9 Compat Modes */
+	        src: url('/static/font/Muyao-Softbrush.ttf') format('embedded-opentype'), /* IE6-IE8 */
+             url('/static/font/Muyao-Softbrush.ttf') format('woff'), /* Modern Browsers */
+             url('/static/font/Muyao-Softbrush.ttf')  format('truetype'), /* Safari, Android, iOS */
+             url('/static/font/Muyao-Softbrush.ttf') format('svg'); /* Legacy iOS */
+        }
         html, body, div, p, a, img{
             padding: 0;
             margin: 0;
@@ -78,18 +87,33 @@
         .warp>.header{
             width: 100%;
             height: 6.813333rem;
-            background: url('static/downloadBg.png') no-repeat center center;
+            background: url('/static/downloadBg.png') no-repeat center center;
             background-size: 100% 100%;
             position: relative;
             box-sizing: border-box;
         }
         .warp>.header>.myLogo {
             position: absolute;
-            width: 5rem;
+            width: 3.733333rem;
             height: 3.733333rem;
             bottom: 0;
             margin-left: 50%;
             left: 0;transform: translate(-50%,40%);
+        }
+        .warp>.content>.title {
+            margin: 0;
+            padding: 0;
+            margin-top: 3.786667rem;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .warp>.content>.title> span {
+            font-size: 0.933333rem;
+            font-family: "Muyao-Softbrush";
+            font-weight: 400;
+            color: #505050;
         }
         .warp>.content>.buttomBox{
             position: fixed;
@@ -129,18 +153,57 @@
 <body>
     <div class="warp">
         <div class="header">
-            <img class="myLogo" src="static/downloadsLogo.png" alt="">
+            <img class="myLogo" src="/static/downloadsLogo.png" alt="">
         </div>
         <div class="content">
+            <p class="title">
+                <span>玩具资讯尽在掌中</span>
+            </p>
             <div class="buttomBox">
-                <p class="item">1.0.0(buil 1)-26.90MB</p>
-                <p class="item">更新于：2020-01-16 15:30</p>
+                <p class="item versionCode">1.0.1(buil 1)-26.90MB</p>
+                <p class="item">更新于：2020-12-1 15:30</p>
                 <a class="myButton">Android版本下载</a>
+                <p class="item">深圳小竹熊云科技</p>
             </div>
         </div>
     </div>
 </body>
+<script id="temp" type="text/html">
+    <p class="item versionCode">1.0.1(buil 1)-26.90MB</p>
+    <p class="item">更新于：2020-12-2 15:30</p>
+    <a class="myButton">Android版本下载</a>
+    <p class="item">深圳小竹熊云科技</p>
+</script>
 <script>
     document.getElementsByClassName('myButton')[0].addEventListener('click', ()=> location.href = 'http://img.toysbear.com//package/LittleBearAPP.apk')
+    $(function(){
+        $.ajax({
+            type: "post",
+            url: "https://api.toysbear.com/api/GetToken",
+            data: {
+                companyNum: 'LittleBearWeb',
+                platForm: 'PC'
+            }
+        }).then(res=>{
+            console.log(res)
+            if (res.data.result.code === 200) {
+                const token = res.data.result.item
+                $.ajax({
+                    type: "post",
+                    url: "https://api.toysbear.com/api/NewestVesion",
+                    data: {
+                        platForm: 'Android'
+                    }
+                }).then(res=>{
+                    console.log(res)
+                    if (res.data.result.code === 200) {
+                        const value = res.data.result.item
+                        var html = template('temp', value)
+                        $('.buttomBox').html(html)
+                    }
+                })
+            }
+        })
+    })
 </script>
 </html>
