@@ -391,8 +391,8 @@ export default {
 @deep: ~">>>";
 .login {
   flex: 1;
-  background: url('~@/assets/images/展厅.jpg') no-repeat center;
-  background-size:cover;
+  background: url('~@/assets/images/homeBg.png') no-repeat center;
+  background-size: 100% 100%;
   position: relative;
 }
 .formBox {
@@ -400,6 +400,7 @@ export default {
   height: 400px;
   background-color: #fff;
   border-radius: 10px;
+  box-shadow: 0px 7px 57px rgba(0, 72, 152, 0.2);
   position: absolute;
   left: 60%;
   top: 50%;
