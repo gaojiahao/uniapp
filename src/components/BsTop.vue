@@ -96,8 +96,8 @@
         >
           <el-submenu index="4" popper-class="menuItems">
             <template slot="title">个人中心</template>
-            <div class="menuItems" popper-class="menuItems">
-              <el-menu-item class="menuItem" index="/me">账号管理</el-menu-item>
+            <div class="menuItems">
+              <el-menu-item index="/me">账号管理</el-menu-item>
               <li class="signOut" @click="SignOut">登出</li>
             </div>
           </el-submenu>
