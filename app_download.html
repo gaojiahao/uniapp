@@ -5,8 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>手机APP下载页面：根据终端辨别下载地址</title>
-    <script src="/static/js/jquery.min.js"></script>
-    <script src="/static/js/template-web.js"></script>
     <script type="text/javascript">
         // 获取终端的相关信息
         var Terminal = {
@@ -60,6 +58,8 @@
         doc.addEventListener('DOMContentLoaded', recalc, false);
         })(document, window);
     </script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/template-web.js"></script>
     <style>
         @font-face {
             font-family: 'Muyao-Softbrush';
@@ -118,7 +118,7 @@
         .warp>.content>.buttomBox{
             position: fixed;
             left: 50%;
-            bottom: 1.333333rem;
+            bottom: 0.7rem;
             transform: translate(-50%,0);
         }
         .warp>.content>.buttomBox>.item{
@@ -169,35 +169,41 @@
     </div>
 </body>
 <script id="temp" type="text/html">
-    <p class="item versionCode">1.0.1(buil 1)-26.90MB</p>
-    <p class="item">更新于：2020-12-2 15:30</p>
+    <p class="item versionCode"><span>{{ vesion }}</span>(buil 1)-26.90MB</p>
+    <p class="item">更新于：<span>{{ createdOn.replace(/T/gi, ' ') }}</span></p>
     <a class="myButton">Android版本下载</a>
     <p class="item">深圳小竹熊云科技</p>
 </script>
 <script>
     document.getElementsByClassName('myButton')[0].addEventListener('click', ()=> location.href = 'http://img.toysbear.com//package/LittleBearAPP.apk')
     $(function(){
+        // 发送请求
         $.ajax({
             type: "post",
-            url: "https://api.toysbear.com/api/GetToken",
-            data: {
+            url: "https://www.toysbear.com/api/GetToken",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
                 companyNum: 'LittleBearWeb',
                 platForm: 'PC'
-            }
+            })
         }).then(res=>{
             console.log(res)
-            if (res.data.result.code === 200) {
-                const token = res.data.result.item
+            if (res.result.code === 200) {
+                const token = res.result.item
                 $.ajax({
                     type: "post",
-                    url: "https://api.toysbear.com/api/NewestVesion",
-                    data: {
+                    url: "https://www.toysbear.com/api/NewestVesion",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({
                         platForm: 'Android'
+                    }),
+                    headers: {
+                        Utoken: token
                     }
                 }).then(res=>{
                     console.log(res)
-                    if (res.data.result.code === 200) {
-                        const value = res.data.result.item
+                    if (res.result.code === 200) {
+                        const value = res.result.item
                         var html = template('temp', value)
                         $('.buttomBox').html(html)
                     }
