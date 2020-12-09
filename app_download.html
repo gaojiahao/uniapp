@@ -121,7 +121,7 @@
             bottom: 0.7rem;
             transform: translate(-50%,0);
         }
-        .warp>.content>.buttomBox>.item{
+        .warp>.content>.buttomBox .item{
             margin: 0;
             text-align: center;
             height: 0.44rem;
@@ -131,7 +131,7 @@
             color: #CCCCCC;
             margin-top: 0.133333rem;
         }
-        .warp>.content>.buttomBox>.myButton{
+        .warp>.content>.buttomBox .myButton{
             margin: 0 auto;
             margin-top: 0.266667rem;
             display: block;
@@ -160,8 +160,10 @@
                 <span>玩具资讯尽在掌中</span>
             </p>
             <div class="buttomBox">
-                <p class="item versionCode">1.0.1(buil 1)-26.90MB</p>
-                <p class="item">更新于：2020-12-1 15:30</p>
+                <div class="dynamicTemplate">
+                    <p class="item versionCode">1.0.1(buil 1)-47.661KB</p>
+                    <p class="item">更新于：2020-12-1 15:30</p>
+                </div>
                 <a class="myButton">Android版本下载</a>
                 <p class="item">深圳小竹熊云科技</p>
             </div>
@@ -169,10 +171,8 @@
     </div>
 </body>
 <script id="temp" type="text/html">
-    <p class="item versionCode"><span>{{ vesion }}</span>(buil 1)-26.90MB</p>
+    <p class="item versionCode"><span>{{ vesion }}</span>(buil 1)-47.661KB</p>
     <p class="item">更新于：<span>{{ createdOn.replace(/T/gi, ' ') }}</span></p>
-    <a class="myButton">Android版本下载</a>
-    <p class="item">深圳小竹熊云科技</p>
 </script>
 <script>
     document.getElementsByClassName('myButton')[0].addEventListener('click', ()=> location.href = 'http://img.toysbear.com//package/LittleBearAPP.apk')
@@ -187,7 +187,6 @@
                 platForm: 'PC'
             })
         }).then(res=>{
-            console.log(res)
             if (res.result.code === 200) {
                 const token = res.result.item
                 $.ajax({
@@ -201,11 +200,10 @@
                         Utoken: token
                     }
                 }).then(res=>{
-                    console.log(res)
                     if (res.result.code === 200) {
-                        const value = res.result.item
-                        var html = template('temp', value)
-                        $('.buttomBox').html(html)
+                        var data = res.result.item
+                        var html = template('temp', data)
+                        $('.dynamicTemplate').html(html)
                     }
                 })
             }
