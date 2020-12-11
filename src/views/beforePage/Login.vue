@@ -79,7 +79,7 @@ export default {
       search: '',
       options: {
         // 二维码配置
-        url: '地址',
+        url: ' ',
         icon: require('@/assets/images/logo.png')
       },
       loginforms: {
@@ -225,7 +225,6 @@ export default {
     async getQrCodeUrl () {
       const res = await this.$http.post('/api/UserRandomCode', {})
       if (res.data.result.code === 200) {
-        // this.options.url = 'https://www.toysbear.com/app_download.html'
         this.options.url = res.data.result.item.qrCode
         this.randomCode = res.data.result.item.randomCode
         // 开启长连接
