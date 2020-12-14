@@ -34,7 +34,7 @@
       </el-form>
     </div>
     <div class="tableContent" v-if="tableData && tableData.length">
-      <el-table :data="tableData" style="width: 100%" ref="collecTable">
+      <el-table :data="tableData" style="width: 100%" ref="collecTable" @sort-change="sortChange">
         <el-table-column prop="name" label="产品图片">
           <template slot-scope="scope">
             <el-image
@@ -66,19 +66,20 @@
             </el-image>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="产品名称"></el-table-column>
+        <el-table-column prop="name" label="产品名称" sortable="custom"></el-table-column>
         <el-table-column
+          sortable="custom"
           prop="fa_no"
           label="出厂货号"
           align="center"
         ></el-table-column>
-        <el-table-column prop="isOpen" label="开放状态" align="center">
+        <el-table-column prop="isOpen" label="开放状态" align="center" sortable="custom">
           <template slot-scope="scope">
             <el-tag type="success" v-if="scope.row.isOpen">开放</el-tag>
             <el-tag type="warning" v-else>待开放</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="price" label="底价" align="center">
+        <el-table-column prop="price" label="底价" align="center" sortable>
           <template slot-scope="scope">
             <span style="color:#f56c6c">
               {{ scope.row.price.toFixed(2) }}
@@ -177,6 +178,9 @@ export default {
         this.totalCount = res.data.result.item.totalCount
         this.tableData = res.data.result.item.items
       }
+    },
+    sortChange ({ column, prop, order }) {
+      console.log(column, prop, order)
     },
     search () {
       this.currentPage = 1

@@ -88,12 +88,8 @@
             </el-select>
           </el-form-item>
           <el-form-item class="btnList">
-            <el-button type="primary" @click="search"
-              >查询</el-button
-            >
-            <el-button type="primary" @click="openAddClient"
-              >新增</el-button
-            >
+            <el-button type="primary" @click="search">查询</el-button>
+            <el-button type="primary" @click="openAddClient">新增</el-button>
           </el-form-item>
         </div>
       </el-form>
@@ -101,8 +97,8 @@
     <div class="tableContent">
       <el-table
         :data="tableData"
+        @sort-change="sortChange"
         style="width: 100%"
-        :default-sort="{ prop: 'date', order: 'descending' }"
       >
         <el-table-column prop="companyNumber" label="客户头像" width="80">
           <template slot-scope="scope">
@@ -135,11 +131,11 @@
             </el-link>
           </template>
         </el-table-column>
-        <el-table-column prop="companyName" label="公司名称" ></el-table-column>
+        <el-table-column prop="companyName" label="公司名称" sortable="custom"></el-table-column>
         <!-- <el-table-column prop="e_mail" label="邮箱"></el-table-column> -->
-        <el-table-column prop="phoneNumber" label="联系电话"></el-table-column>
-        <el-table-column prop="integralTotal" label="积分" align="center"></el-table-column>
-        <el-table-column prop="companyType" label="公司类型" align="center">
+        <el-table-column prop="phoneNumber" label="联系电话" sortable="custom"></el-table-column>
+        <el-table-column prop="integralTotal" label="积分" align="center" sortable="custom"></el-table-column>
+        <el-table-column prop="companyType" label="公司类型" align="center" sortable="custom">
           <template slot-scope="scope">
             <el-link :underline="false" v-if="scope.row.companyType === 'Sales'" type="success">销售公司</el-link>
             <el-link :underline="false" v-if="scope.row.companyType === 'Exhibition'" type="warning">展厅</el-link>
@@ -147,14 +143,14 @@
             <el-link :underline="false" v-if="scope.row.companyType === 'Admin'" type="danger">管理员</el-link>
           </template>
         </el-table-column>
-        <el-table-column prop="audit_state" label="审核状态" align="center">
+        <el-table-column prop="audit_state" label="审核状态" align="center" sortable="custom">
           <template slot-scope="scope">
             <template v-for="(item, i) in userAuditTypeList">
               <el-tag :key="i" effect="plain" v-if="scope.row.audit_state === item.itemCode" :type="btnTypes[item.itemCode]">{{item.itemText}}</el-tag>
             </template>
           </template>
         </el-table-column>
-        <el-table-column prop="interiorAudit" label="内部审核" align="center">
+        <el-table-column prop="interiorAudit" label="内部审核" align="center" sortable="custom">
           <template slot-scope="scope">
               <el-tag v-if="scope.row.interiorAudit" type="success">已审核</el-tag>
               <el-tag v-else type='danger'>未审核</el-tag>
@@ -303,13 +299,14 @@
             :disabled="dialogTitle === '审核' || dialogTitle === '内部审核'"
           ></el-input>
         </el-form-item>
-        <el-form-item
+        <div class="threeBox">
+          <el-form-item
           label="公司头像"
-          style="postion: "
           prop="companyLogo"
           v-if="dialogTitle !== '审核' && dialogTitle !== '内部审核'"
         >
           <el-upload
+          :class="{ hide:hide1Upload }"
             :action="baseAPI + '/api/File/InsertPic'"
             list-type="picture-card"
             ref="upload"
@@ -323,10 +320,35 @@
           >
             <i class="el-icon-plus"></i>
           </el-upload>
-          <el-dialog :visible.sync="dialogUpload" destroy-on-close :modal="false">
-            <img width="100%" :src="companyLogoUrl" alt />
-          </el-dialog>
-        </el-form-item>
+            <el-dialog :visible.sync="dialogUpload" destroy-on-close :modal="false">
+              <img width="100%" :src="companyLogoUrl" alt />
+            </el-dialog>
+          </el-form-item>
+          <el-form-item
+            label="上传背景"
+            prop="bgImg"
+            v-if="dialogTitle !== '审核' && dialogTitle !== '内部审核'"
+          >
+            <el-upload
+              :class="{ hide:hide2Upload}"
+              :action="baseAPI + '/api/File/InsertPic'"
+              list-type="picture-card"
+              ref="upload2"
+              :auto-upload="false"
+              :on-change="changeUpload2"
+              :on-preview="handlePictureCardPreview2"
+              :on-remove="handleRemoveImg2"
+              :http-request="successUpload2"
+              :file-list="editImages2"
+              accept=".jpg,.jpeg,.png,.ico,.bmp,.JPG,.JPEG,.PNG,.ICO,.BMP"
+            >
+              <i class="el-icon-plus"></i>
+            </el-upload>
+            <el-dialog :visible.sync="dialogUpload2" destroy-on-close :modal="false">
+              <img width="100%" :src="companyLogoUrl2" alt />
+            </el-dialog>
+          </el-form-item>
+        </div>
         <el-form-item>
           <div class="myMap">
             <BMapComponent
@@ -1003,6 +1025,8 @@ export default {
   components: { bsTop, bsFooter, BMapComponent },
   data () {
     return {
+      hide1Upload: false,
+      hide2Upload: false,
       distribution: null,
       checkAuth: 'authDistribution',
       currentCompany: null,
@@ -1056,6 +1080,7 @@ export default {
       companyConfig: {},
       searchCount: 0,
       editImages: [],
+      editImages2: [],
       userManTotalCount: 100,
       userManCurrentPage: 1,
       userManPageSize: 10,
@@ -1157,8 +1182,13 @@ export default {
       yearMonthDayList: [],
       clientTypeList: [],
       file: null,
+      file2: null,
+      fileList2: [],
+      fileList: [],
       dialogUpload: false,
+      dialogUpload2: false,
       companyLogoUrl: '',
+      companyLogoUrl2: '',
       andClientIcon: '',
       addClientForm: {
         // 新增客户表单
@@ -1180,6 +1210,7 @@ export default {
         companyType: '',
         audit_state: 0,
         companyLogo: '',
+        bgImg: '',
         appLoginCount: 0,
         erpLoginCount: 0
       },
@@ -1231,6 +1262,9 @@ export default {
     }
   },
   methods: {
+    sortChange ({ column, prop, order }) {
+      console.log(column, prop, order)
+    },
     // 提交积分
     async subDistribution () {
       const res = await this.$http.post('/api/UpdateCompanyPoint', { id: this.currentCompany.id, integralTotal: this.distribution })
@@ -1437,6 +1471,15 @@ export default {
     handleRemoveImg (file) {
       if (file) {
         this.addClientForm.companyLogo = ''
+        this.hide1Upload = false
+      }
+    },
+    // 删除bg图片2
+    handleRemoveImg2 (file) {
+      if (file) {
+        this.addClientForm.bgImg = ''
+        this.fileList2 = []
+        this.hide2Upload = false
       }
     },
     // 获取员工列表
@@ -1508,6 +1551,8 @@ export default {
     },
     // 打开新增客户面板
     openAddClient () {
+      this.hide1Upload = false
+      this.hide2Upload = false
       this.clientDialog = true
       this.$nextTick(() => {
         this.$refs.ClientForm.clearValidate()
@@ -1515,6 +1560,7 @@ export default {
       this.isShowLoading = false
       this.dialogTitle = '新增客户'
       this.editImages = []
+      this.editImages2 = []
       this.addClientForm = {
         // 新增客户表单
         companyName: '',
@@ -1534,11 +1580,13 @@ export default {
         remark: '',
         companyType: '',
         companyLogo: '',
+        bgImg: '',
         audit_state: 0,
         appLoginCount: 0,
         erpLoginCount: 0
       }
       this.file = null
+      this.file2 = null
     },
     // 上传头像
     async successUpload () {
@@ -1546,6 +1594,23 @@ export default {
       fd.append('BusinessType', 'Logo')
       fd.append('file', this.file)
       if (!this.file) {
+        return {
+          data: {
+            result: {
+              code: 400,
+              message: '请选择图片'
+            }
+          }
+        }
+      }
+      return await this.$http.post('/api/File/InsertPic', fd)
+    },
+    // 上传bg
+    async successUpload2 () {
+      const fd = new FormData()
+      fd.append('BusinessType', 'Logo')
+      fd.append('file', this.file2)
+      if (!this.file2) {
         return {
           data: {
             result: {
@@ -1571,9 +1636,35 @@ export default {
         fileList.pop()
         return false
       }
+      if (file) {
+        this.hide1Upload = true
+      }
       this.file = file.raw
       this.fileList = fileList
       if (this.$_.size(fileList) > 1) {
+        fileList.shift()
+      }
+    },
+    // 选择背景
+    changeUpload2 (file, fileList) {
+      if (
+        file.size >
+        this.$store.state.globalJson.Json.NoticeRestrictions[5].itemCode
+      ) {
+        this.$message.error(
+          '上传图片大小不能超过 ' +
+            this.$store.state.globalJson.Json.NoticeRestrictions[5].itemCode / 1024 / 1024 +
+            'MB'
+        )
+        fileList.pop()
+        return false
+      }
+      if (file) {
+        this.hide2Upload = true
+      }
+      this.file2 = file.raw
+      this.fileList2 = fileList
+      if (fileList.length > 1) {
         fileList.shift()
       }
     },
@@ -1582,6 +1673,11 @@ export default {
       this.companyLogoUrl = file.url
       this.dialogUpload = true
     },
+    // 预览头像2
+    handlePictureCardPreview2 (file, fileList) {
+      this.companyLogoUrl2 = file.url
+      this.dialogUpload2 = true
+    },
     // 提交新增客户
     async addClient () {
       const imgRes = await this.successUpload()
@@ -1589,24 +1685,32 @@ export default {
         this.addClientForm.companyLogo = imgRes.data.result.object[0].filePath
       } else {
         this.$message.error(imgRes.data.result.message)
+        return
+      }
+      const bgImg = await this.successUpload2()
+      if (bgImg.data.result.code === 200 && bgImg.data.result.object[0]) {
+        this.addClientForm.bgImg = bgImg.data.result.object[0].filePath
+      } else {
+        this.$message.error(bgImg.data.result.message)
       }
       this.$refs.ClientForm.validate(async (valid) => {
         if (valid) {
           this.isShowLoading = true
           this.andClientIcon = 'el-icon-loading'
-          const res = await this.$http.post(
-            '/api/CreateOrgCompany',
-            this.addClientForm
-          )
-          if (res.data.result.code === 200) {
-            this.$message.success('新增客户成功')
-            this.andClientIcon = ''
-            this.file = null
-            this.$refs.ClientForm.clearValidate()
-            this.clientDialog = false
-            this.getClientList()
-          } else {
-            this.$message.error(res.data.result.msg)
+          try {
+            const res = await this.$http.post('/api/CreateOrgCompany', this.addClientForm)
+            if (res.data.result.code === 200) {
+              this.$message.success('新增客户成功')
+              this.andClientIcon = ''
+              this.file = null
+              this.$refs.ClientForm.clearValidate()
+              this.clientDialog = false
+              this.getClientList()
+            } else {
+              this.$message.error(res.data.result.msg)
+            }
+          } catch (error) {
+            this.isShowLoading = false
           }
           this.isShowLoading = false
         }
@@ -1784,51 +1888,73 @@ export default {
     },
     // 打开编辑客户列表
     openEdit (row) {
+      this.hide1Upload = false
+      this.hide2Upload = false
+      this.file = null
+      this.file2 = null
       this.isShowLoading = false
+      row.companyLogo && (this.hide1Upload = true)
+      row.bgImg && (this.hide2Upload = true)
       this.clientDialog = true
       this.$nextTick(() => {
         this.$refs.ClientForm.clearValidate()
       })
       this.editImages = []
+      this.editImages2 = []
       this.dialogTitle = '用户编辑'
       for (const key in row) {
         this.addClientForm[key] = row[key]
       }
-      console.log(this.addClientForm)
       this.$refs.mapBaiduMap &&
       this.$refs.mapBaiduMap.resetMap(this.addClientForm.address)
       row.companyLogo && (this.editImages[0] = { url: row.companyLogo })
+      row.bgImg && (this.editImages2[0] = { url: row.bgImg })
       this.$nextTick(() => {
         this.isShowAttrsList = false
       })
     },
     // 编辑客户列表
     async handlerEdit () {
-      const imgRes = await this.successUpload()
-      if (imgRes.data.result.code === 200 && imgRes.data.result.object[0]) {
-        this.addClientForm.companyLogo = imgRes.data.result.object[0]
-          ? imgRes.data.result.object[0].filePath
-          : this.addClientForm.companyLogo
+      console.log(this.fileList, this.fileList2)
+      if (this.fileList.length) {
+        const imgRes = await this.successUpload()
+        console.log(imgRes)
+        if (imgRes.data.result.code === 200 && imgRes.data.result.object[0]) {
+          this.addClientForm.companyLogo = imgRes.data.result.object[0]
+            ? imgRes.data.result.object[0].filePath
+            : this.addClientForm.companyLogo
+        }
+      }
+      if (this.fileList2.length) {
+        const bgImg = await this.successUpload2()
+        if (bgImg.data.result.code === 200 && bgImg.data.result.object[0]) {
+          this.addClientForm.bgImg = bgImg.data.result.object[0]
+            ? bgImg.data.result.object[0].filePath
+            : this.addClientForm.bgImg
+        }
       }
       console.log(this.addClientForm)
       this.$refs.ClientForm.validate(async (valid) => {
         if (valid) {
           this.isShowLoading = true
           this.andClientIcon = 'el-icon-loading'
-          const res = await this.$http.post(
-            '/api/UpdateOrgCompany',
-            this.addClientForm
-          )
-          if (res.data.result.code === 200) {
-            this.$message.success('编辑客户成功')
-            this.isShowLoading = false
-            this.$refs.ClientForm.clearValidate()
-            this.clientDialog = false
-            this.andClientIcon = ''
-            this.file = null
-            this.getClientList()
-          } else {
-            this.$message.error(res.data.result.msg)
+          try {
+            const res = await this.$http.post(
+              '/api/UpdateOrgCompany',
+              this.addClientForm
+            )
+            if (res.data.result.code === 200) {
+              this.$message.success('编辑客户成功')
+              this.isShowLoading = false
+              this.$refs.ClientForm.clearValidate()
+              this.clientDialog = false
+              this.andClientIcon = ''
+              this.getClientList()
+            } else {
+              this.$message.error(res.data.result.msg)
+              this.isShowLoading = false
+            }
+          } catch (error) {
             this.isShowLoading = false
           }
         }
@@ -1899,6 +2025,10 @@ export default {
 .threeBox {
   display: flex;
   justify-content: space-between;
+  .el-upload{
+    width: 100px;
+    height: 100px;
+  }
 }
 .twoBox {
   display: flex;
@@ -1978,4 +2108,5 @@ export default {
     }
   }
 }
+
 </style>
