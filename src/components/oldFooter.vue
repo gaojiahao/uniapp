@@ -41,8 +41,10 @@
 export default {
   methods: {
     toKefu1 () {
-      var qq1 = 'http://wpa.qq.com/msgrd?v=3&amp;uin=3300802838&amp;site=qq&amp;menu=yes'
-      window.open(qq1, '_blank')
+      // var qq1 = 'http://wpa.qq.com/msgrd?v=3&amp;uin=3300802838&amp;site=qq&amp;menu=yes'
+      // window.open(qq1, '_blank')
+      var qq2 = 'tencent://message/?uin=3300802838&Site=Sambow&Menu=yes'
+      window.open(qq2, '_blank')
     },
     toKefu2 () {
       var qq2 = 'tencent://message/?uin=3300802838&Site=Sambow&Menu=yes'
