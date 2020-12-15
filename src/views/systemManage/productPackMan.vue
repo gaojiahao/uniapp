@@ -16,44 +16,6 @@
             style="width: 90%;"
           ></el-input>
         </el-form-item>
-        <el-form-item label="举报类别">
-          <el-select
-            v-model="searchForm.reportType"
-            placeholder="请选择"
-            clearable
-            style="width: 90%;"
-          >
-            <el-option
-              v-for="(item, i) in [
-                { label: '全部', value: '' },
-                { label: '屏蔽', value: 'Shield' },
-                { label: '举报', value: 'Report' }
-              ]"
-              :key="i"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <!-- <el-form-item label="审核状态搜索">
-          <el-select
-          clearable
-            v-model="searchForm.state"
-            placeholder="请选择"
-            style="width: 90%;"
-          >
-            <el-option
-              v-for="(item, i) in [
-                { label: '全部', value: '' },
-                { label: '审核通过', value: 1 },
-                { label: '审核不通过', value: 0 }
-              ]"
-              :key="i"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item> -->
         <el-form-item label="时间段搜索">
           <el-date-picker
             v-model="searchForm.dateTile"
@@ -68,6 +30,7 @@
         </el-form-item>
         <el-form-item class="btnList">
           <el-button type="primary" @click="search">查询</el-button>
+          <el-button type="primary" @click="openAdd">新增</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -78,53 +41,22 @@
         style="width: 100%"
         :default-sort="{ prop: 'date', order: 'descending' }"
       >
-        <el-table-column prop="userImg" label="用户头像" align="center">
-          <template slot-scope="scope">
-            <el-image class="el-avatar" :src="scope.row.userImg" fit="cover">
-              <div
-                slot="error"
-                size="medium"
-                class="image-slot"
-                style="width:100%;height:100%;display:flex;align-items:center;justify-content:left;white-space: nowrap;"
-              >
-                <img
-                  style="width:100%;height:100%"
-                  src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
-                />
-              </div>
-            </el-image>
-          </template>
-        </el-table-column>
         <el-table-column
-          prop="userName"
-          label="用户名"
-          align="center"
+          prop="ch_pa"
+          label="中文名"
         ></el-table-column>
-        <el-table-column prop="reportType" label="举报类型" align="center">
-          <template slot-scope="scope">
-            <el-tag
-              type="warning"
-              effect="dark"
-              v-if="scope.row.reportType === 'Shield'"
-              >屏蔽</el-tag
-            >
-            <el-tag type="danger" effect="dark" v-else>举报</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="reportState" label="审核状态" align="center">
-          <template slot-scope="scope">
-            <el-tag type="success" v-if="scope.row.reportState"
-              >审核通过</el-tag
-            >
-            <el-tag type="danger" v-else>审核不通过</el-tag>
-          </template>
-        </el-table-column>
+        <el-table-column
+          prop="en_pa"
+          label="英文名"
+        ></el-table-column>
+        <el-table-column
+          prop="pa_nu"
+          label="编号"
+        ></el-table-column>
         <el-table-column
           prop="createdOn"
           label="举报日期"
           sortable
-          align="center"
-          width="200"
         >
           <template slot-scope="scope">
             {{
@@ -133,34 +65,22 @@
             }}
           </template>
         </el-table-column>
-        <el-table-column
-          prop="reportRemark"
-          label="举报原因"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="handleResult"
-          label="处理意见"
-          align="center"
-        ></el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
+              <el-button
+              style="margin-right:10px;"
+              size="mini"
+              type="primary"
+              @click="handleEdit(scope.row)"
+              >编辑</el-button>
             <el-popconfirm
-              title="确定要删除这条举报信息吗？"
+              title="确定要删除这条包装信息吗？"
               @onConfirm="handleDelete(scope.row)"
             >
               <el-button size="mini" slot="reference" type="danger"
                 >删除</el-button
               >
             </el-popconfirm>
-            <el-button
-              style="margin-left:10px;"
-              v-show="scope.row.reportType === 'Report'"
-              size="mini"
-              type="primary"
-              @click="handleEdit(scope.row)"
-              >审核</el-button
-            >
           </template>
         </el-table-column>
       </el-table>
@@ -296,12 +216,11 @@ export default {
       this.currentPage = 1
       this.getMessageReportPage()
     },
-    // 获取所有举报消息
+    // 获取产品包装列表
     async getMessageReportPage () {
       const fd = {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
-        reportType: this.searchForm.reportType,
         keyword: this.searchForm.keyword,
         StartTime: this.searchForm.dateTile && this.searchForm.dateTile[0],
         EndTime: this.searchForm.dateTile && this.searchForm.dateTile[1]
@@ -311,7 +230,7 @@ export default {
           delete fd[key]
         }
       }
-      const res = await this.$http.post('/api/MessageReportPage', fd)
+      const res = await this.$http.post('/api/GetProductPackPage', fd)
       console.log(res)
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items
@@ -329,7 +248,11 @@ export default {
       if (this.currentPage * pageSize > this.totalCount) return false
       this.getMessageReportPage()
     },
-    // 打开审核
+    // 打开新增
+    openAdd () {
+      this.shenheDialog = true
+    },
+    // 打开编辑
     handleEdit (row) {
       for (const key in row) {
         if (key === 'createdOn' && row[key].length) {
