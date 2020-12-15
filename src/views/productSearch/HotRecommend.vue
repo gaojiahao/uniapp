@@ -380,6 +380,7 @@ export default {
       }
     },
     handleNodeClick (data) {
+      this.$store.commit('handlerBeforeSearchImgPreview', null)
       this.currentPage = 1
       this.categoryNumber = data.id
       this.getProduct()

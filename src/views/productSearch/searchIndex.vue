@@ -60,17 +60,17 @@
         <template v-else>
           <div v-show="!isDetail">
             <div class="preview" v-if="$store.state.beforeSearchImgPreview">
-          <div class="miniImg">
-            <el-image
-            @click.native.stop.prevent="openCubeImg($store.state.beforeSearchImgPreview.img)"
-            :src="$store.state.beforeSearchImgPreview.img"
-            fit="contain"></el-image>
-          </div>
-            <el-image
-            :src="$store.state.beforeSearchImgPreview.baseImg"
-            @click.native.stop.prevent="openCubeImg($store.state.beforeSearchImgPreview.baseImg)"
-            fit="contain"></el-image>
-            <div class="title"><span>搜索产品</span></div>
+              <div class="miniImg">
+                <el-image
+                @click.native.stop.prevent="openCubeImg($store.state.beforeSearchImgPreview.img)"
+                :src="$store.state.beforeSearchImgPreview.img"
+                fit="contain"></el-image>
+              </div>
+              <el-image
+              :src="$store.state.beforeSearchImgPreview.baseImg"
+              @click.native.stop.prevent="openCubeImg($store.state.beforeSearchImgPreview.baseImg)"
+              fit="contain"></el-image>
+              <div class="title"><span>搜索产品</span></div>
           </div>
             <ul class="productList">
               <li
@@ -383,6 +383,7 @@ export default {
       }
     },
     handleNodeClick (data) {
+      this.$store.commit('handlerBeforeSearchImgPreview', null)
       this.currentPage = 1
       this.categoryNumber = data.id
       this.getProduct()

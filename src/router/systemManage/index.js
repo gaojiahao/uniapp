@@ -9,6 +9,8 @@ const ErrorLog = () => import('@/views/systemManage/errorLog.vue')
 const SMSMan = () => import('@/views/systemManage/SMSMan.vue')
 const CateAllocation = () => import('@/views/systemManage/cateAllocation.vue')
 const TouristMan = () => import('@/views/systemManage/touristMan.vue')
+const ProductPackAllocation = () => import('@/views/systemManage/productPackAllocation.vue')
+const ProductPackMan = () => import('@/views/systemManage/productPackMan.vue')
 
 export default [
   {
@@ -65,5 +67,15 @@ export default [
     path: '/touristMan',
     name: 'touristMan',
     component: TouristMan
+  },
+  {
+    path: '/productPackAllocation',
+    name: 'productPackAllocation',
+    component: ProductPackAllocation
+  },
+  {
+    path: '/productPackMan',
+    name: 'productPackMan',
+    component: ProductPackMan
   }
 ]

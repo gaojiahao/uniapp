@@ -433,6 +433,7 @@ export default {
       const res = await this.$http.post('/api/GetAdPositionList')
       if (res.data.result.code === 200) {
         this.adPositionList = res.data.result.item
+        console.log(this.adPositionList)
       } else {
         this.$message.error(res.data.result.msg)
       }

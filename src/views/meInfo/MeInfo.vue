@@ -3231,7 +3231,7 @@ export default {
       this.showTypeOptions.showLiaotianType = 'showLiaotianList'
       this.active2 = null
     },
-    // 公司下拉加载更多
+    // 公司列表下拉加载更多
     async companyListLoad(val) {
       this.companyListCurrentPage++
        const res = await this.$http.post('/api/ContactsCompanyListByID', {
@@ -3967,16 +3967,19 @@ export default {
     },
     // 搜索公司列表
     async searchCompanyList () {
-      this.showSearchCompanyCount = false
       this.companyLoadDisabled = true
-      this.companyListCurrentPage = 1
-      await this.getContactsCompanyListByID()
-      this.showSearchCompanyCount = true
-      this.showTypeOptions.showLiaotianType = null
-      this.isGroupNumber = false
-      this.active2 = null
+      $('.listItems').animate({ scrollTop: 0 })
+      this.$nextTick(async ()=>{
+        this.showSearchCompanyCount = false
+        this.companyListCurrentPage = 1
+        await this.getContactsCompanyListByID()
+        this.showSearchCompanyCount = true
+        this.showTypeOptions.showLiaotianType = null
+        this.isGroupNumber = false
+        this.active2 = null
+      })
     },
-    // 获取公司列表 /超时/
+    // 获取公司列表
     async getContactsCompanyListByID () {
       const res = await this.$http.post('/api/ContactsCompanyListByID', {
         companyID: this.showCollection.id,
@@ -3995,15 +3998,18 @@ export default {
     },
     // 点击查看对应公司列表页
     async showCompanyList (val) {
-      this.offDetail()
+      $('.listItems').animate({ scrollTop: 0 })
       this.companyLoadDisabled = true
-      this.showSearchCompanyCount = false
-      this.CompanyList = []
-      this.companyListTotalCount = 0
-      this.showTypeOptions.showType = false
-      this.active2 = null
-      this.showCollection = val
-      this.getContactsCompanyListByID()
+      this.$nextTick(()=> {
+        this.offDetail()
+        this.showSearchCompanyCount = false
+        this.CompanyList = []
+        this.companyListTotalCount = 0
+        this.showTypeOptions.showType = false
+        this.active2 = null
+        this.showCollection = val
+        this.getContactsCompanyListByID()
+      })
     },
     // 上传图片修改头像
     async fileChange (e) {

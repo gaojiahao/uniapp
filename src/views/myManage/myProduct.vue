@@ -66,20 +66,19 @@
             </el-image>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="产品名称" sortable="custom"></el-table-column>
+        <el-table-column prop="name" label="产品名称"></el-table-column>
         <el-table-column
-          sortable="custom"
           prop="fa_no"
           label="出厂货号"
           align="center"
         ></el-table-column>
-        <el-table-column prop="isOpen" label="开放状态" align="center" sortable="custom">
+        <el-table-column prop="isOpen" label="开放状态" align="center" sortable>
           <template slot-scope="scope">
             <el-tag type="success" v-if="scope.row.isOpen">开放</el-tag>
             <el-tag type="warning" v-else>待开放</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="price" label="底价" align="center" sortable>
+        <el-table-column prop="price" label="价格" align="center" sortable>
           <template slot-scope="scope">
             <span style="color:#f56c6c">
               {{ scope.row.price.toFixed(2) }}
@@ -90,15 +89,15 @@
       </el-table>
       <center style="margin-top:20px;">
         <el-pagination
-              layout="total, sizes, prev, pager, next, jumper"
-              :page-sizes="[10, 20, 30, 60]"
-              background
-              :total="totalCount"
-              :page-size="pageSize"
-              :current-page.sync="currentPage"
-              @current-change="handleCurrentChange"
-              @size-change="handleSizeChange"
-            ></el-pagination>
+          layout="total, sizes, prev, pager, next, jumper"
+          :page-sizes="[10, 20, 30, 60]"
+          background
+          :total="totalCount"
+          :page-size="pageSize"
+          :current-page.sync="currentPage"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+        ></el-pagination>
       </center>
     </div>
     <div class="zanwuchanpin" v-else></div>
