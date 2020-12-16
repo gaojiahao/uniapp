@@ -255,7 +255,6 @@ export default {
       let url = '/api/CreateProductPack'
       if (this.title === '编辑') url = '/api/UpdateProductPack'
       const res = await this.$http.post(url, this.packFormData)
-      console.log(res)
       if (res.data.result.code === 200) {
         this.$message.success(this.title + '成功')
         this.getProductPackPage()
