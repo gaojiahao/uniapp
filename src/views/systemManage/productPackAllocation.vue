@@ -57,11 +57,12 @@
           <!-- <el-button type="danger" @click="resetCheckedTwo">重置</el-button> -->
         </div>
         <el-tree
-        draggable
-        accordion
+          draggable
+          accordion
+          :empty-text="emptyText"
           :data="companyCategoryList"
           ref="treeTwo"
-           :filter-node-method="filterNodeTwo"
+          :filter-node-method="filterNodeTwo"
           show-checkbox
           :props="props"
           node-key="id"
@@ -104,6 +105,7 @@ export default {
   components: { bsTop, bsFooter },
   data () {
     return {
+      emptyText: '请选择展厅',
       resetCount: 0,
       startCount: 0,
       isClearCate: false,
@@ -150,7 +152,7 @@ export default {
       await this.recursionClear(this.companyCategoryList)
       this.$refs.treeOne.setCheckedKeys([])
       this.$refs.treeTwo.setCheckedKeys([])
-      this.getSynchrCategoryList()
+      this.getSynchrProductPackList()
       this.$message.closeAll()
       const isCount = (this.startCount - this.resetCount)
       if (isCount) this.$message.error('重置成功' + this.resetCount + '条，失败' + isCount + '条')
@@ -188,7 +190,7 @@ export default {
       if (res.data.result.code === 200) {
         this.$refs.treeOne.setCheckedKeys([])
         this.$refs.treeTwo.setCheckedKeys([])
-        this.getSynchrCategoryList()
+        this.getSynchrProductPackList()
       } else {
         this.$message.closeAll()
         this.$message.error(res.data.result.msg)
@@ -196,7 +198,6 @@ export default {
     },
     // 验证是否选中
     isSelectCate () {
-      console.log(this.$refs.treeOne && this.$refs.treeOne.getCheckedNodes())
       if ((this.$refs.treeOne && this.$refs.treeOne.getCheckedKeys().length > 0) && (this.$refs.treeTwo && this.$refs.treeTwo.getCheckedKeys().length > 0)) {
         return false
       } else {
@@ -213,7 +214,7 @@ export default {
       }
     },
     // 获取产品包装列表
-    async getProductCategoryList () {
+    async getProductPackPage () {
       const res = await this.$http.post('/api/GetProductPackList', {})
       if (res.data.result.code === 200) {
         this.myCategoryList = res.data.result.item
@@ -222,17 +223,21 @@ export default {
       }
     },
     // 获取绑定包装列表
-    async getSynchrCategoryList () {
+    async getSynchrProductPackList () {
       const res = await this.$http.post('/api/GetSynchrProductPackList', { hallNumer: this.value })
       if (res.data.result.code === 200) {
         this.companyCategoryList = res.data.result.item
+        if (this.companyCategoryList.length < 1) {
+          this.emptyText = '此展厅没有包装数据'
+        }
       } else {
         this.$message.error(res.data.result.msg)
       }
     },
     // 选择展厅分类
     changeSelect () {
-      this.getSynchrCategoryList()
+      this.emptyText = '请选择展厅'
+      this.getSynchrProductPackList()
       this.$refs.treeTwo.setCheckedKeys([])
     },
     // 单选
@@ -279,7 +284,7 @@ export default {
     }
   },
   created () {
-    this.getProductCategoryList()
+    this.getProductPackPage()
     this.getOrgCompanyList()
   },
   mounted () {

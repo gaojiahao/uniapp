@@ -98,50 +98,22 @@
       </center>
     </div>
     </div>
-    <!-- 审核 -->
-    <el-dialog title="审核" :visible.sync="shenheDialog" destroy-on-close width="50%">
-      <el-form ref="shenheForm" label-width="100px" :model="shenheFormData">
-        <el-form-item>
-          <el-avatar
-            shape="square"
-            :size="100"
-            fit="contain"
-            :key="shenheFormData.userImg"
-            :src="shenheFormData.userImg"
-          >
-            <img
-              src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
-            />
-          </el-avatar>
+    <!-- 新增/编辑 -->
+    <el-dialog :title="title" :visible.sync="packDialog" destroy-on-close width="50%">
+      <el-form ref="packForm" :rules="packRules" label-width="100px" :model="packFormData">
+        <el-form-item label="包装名称：" prop="ch_pa">
+          <el-input v-model="packFormData.ch_pa"></el-input>
         </el-form-item>
-        <el-form-item label="用户名称" prop="userName">
-          <el-input v-model="shenheFormData.userName" disabled></el-input>
+        <el-form-item label="英文名称：" prop="en_pa">
+          <el-input v-model="packFormData.en_pa"></el-input>
         </el-form-item>
-        <el-form-item label="举报类型" prop="reportType">
-          <el-input v-model="shenheFormData.reportType" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="举报日期" prop="createdOn">
-          <el-input v-model="shenheFormData.createdOn" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="处理意见" prop="handleResult">
-          <el-input
-            type="textarea"
-            resize="none"
-            v-model="shenheFormData.handleResult"
-            show-word-limit
-            suffix="123"
-            :maxlength="
-              $store.state.globalJson.Json.UserRestrictions[0].itemCode
-            "
-            class="txtWrap"
-          ></el-input>
+        <el-form-item label="包装编号：" prop="pa_nu">
+          <el-input v-model="packFormData.pa_nu"></el-input>
         </el-form-item>
         <center>
           <template>
-            <el-button type="primary" @click="review(true)">审核通过</el-button>
-            <el-button type="danger" @click="review(false)"
-              >审核不通过</el-button
-            >
+            <el-button type="primary" @click="submint">提 交</el-button>
+            <el-button type="danger" @click="packDialog = false">取 消</el-button>
           </template>
         </center>
       </el-form>
@@ -160,18 +132,31 @@ export default {
   components: { bsTop, bsFooter },
   data () {
     return {
-      shenheDialog: false,
-      shenheFormData: {
-        userImg: null,
-        userName: null,
-        reportType: null,
-        createdOn: null,
-        handleResult: null
+      packDialog: false,
+      title: '新增',
+      packFormData: {
+        ch_pa: null,
+        en_pa: null,
+        pa_nu: null
       },
       totalCount: 0,
       currentPage: 1,
       pageSize: 10,
       tableData: [],
+      packRules: {
+        ch_pa: [
+          { required: true, message: '请输入包装名称', trigger: 'blur' },
+          { min: 1, max: 99, message: '请输入 1-99 个字符', trigger: 'blur' }
+        ],
+        en_pa: [
+          { required: true, message: '请输入包装英文名称', trigger: 'blur' },
+          { min: 1, max: 99, message: '请输入 1-99 个字符', trigger: 'blur' }
+        ],
+        pa_nu: [
+          { required: true, message: '请输入包装编号', trigger: 'blur' },
+          { min: 1, max: 99, message: '请输入 1-99 个字符', trigger: 'blur' }
+        ]
+      },
       pickerOptions: {
         shortcuts: [
           {
@@ -205,7 +190,6 @@ export default {
       },
       searchForm: {
         keyword: '',
-        state: '',
         dateTile: []
       }
     }
@@ -214,10 +198,10 @@ export default {
     // 列表查询
     search () {
       this.currentPage = 1
-      this.getMessageReportPage()
+      this.getProductPackPage()
     },
     // 获取产品包装列表
-    async getMessageReportPage () {
+    async getProductPackPage () {
       const fd = {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
@@ -231,7 +215,6 @@ export default {
         }
       }
       const res = await this.$http.post('/api/GetProductPackPage', fd)
-      console.log(res)
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items
         this.totalCount = res.data.result.item.totalCount
@@ -240,64 +223,60 @@ export default {
     // 切换当前页
     currentChange (page) {
       this.currentPage = page
-      this.getMessageReportPage()
+      this.getProductPackPage()
     },
     // 切换当前页条数
     handleSizeChange (pageSize) {
       this.pageSize = pageSize
       if (this.currentPage * pageSize > this.totalCount) return false
-      this.getMessageReportPage()
+      this.getProductPackPage()
     },
     // 打开新增
     openAdd () {
-      this.shenheDialog = true
+      this.title = '新增'
+      this.packFormData = {
+        ch_pa: null,
+        en_pa: null,
+        pa_nu: null
+      }
+      this.packDialog = true
     },
     // 打开编辑
     handleEdit (row) {
+      this.title = '编辑'
+      // 克隆
       for (const key in row) {
-        if (key === 'createdOn' && row[key].length) {
-          row[key] = row[key].split('.')[0].replace(/T/g, ' ')
-        }
-        this.shenheFormData[key] =
-          row[key] === 'Shield'
-            ? '屏蔽'
-            : row[key] === 'Report'
-              ? '举报'
-              : row[key]
+        this.packFormData[key] = row[key]
       }
-      this.shenheDialog = true
+      this.packDialog = true
     },
-    // 审核
-    async review (flag) {
-      this.shenheFormData.reportState = flag
-      const res = await this.$http.post(
-        '/api/UpdateMessageReport',
-        this.shenheFormData
-      )
+    // 新增/编辑
+    async submint () {
+      let url = '/api/CreateProductPack'
+      if (this.title === '编辑') url = '/api/UpdateProductPack'
+      const res = await this.$http.post(url, this.packFormData)
       console.log(res)
       if (res.data.result.code === 200) {
-        this.$message.success('审核成功')
-        this.getMessageReportPage()
+        this.$message.success(this.title + '成功')
+        this.getProductPackPage()
       } else {
-        this.$message.error('审核失败，请检查网络')
+        this.$message.error(res.data.result.msg)
       }
-      this.shenheDialog = false
+      this.packDialog = false
     },
-    // 删除举报
+    // 删除
     async handleDelete (row) {
-      row.isDelete = true
-      const res = await this.$http.post('/api/UpdateMessageReport', row)
-      console.log(res)
+      const res = await this.$http.post('/api/DeleteProductPack', { id: row.id })
       if (res.data.result.code === 200) {
-        this.getMessageReportPage()
+        this.getProductPackPage()
         this.$message.success('删除成功')
       } else {
-        this.$message.error('删除失败，请检查网络')
+        this.$message.error(res.data.result.msg)
       }
     }
   },
   mounted () {
-    this.getMessageReportPage()
+    this.getProductPackPage()
   },
   created () {}
 }
