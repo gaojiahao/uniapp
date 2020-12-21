@@ -107,6 +107,13 @@
             </template>
           </template>
         </el-table-column>
+        <el-table-column prop="roleName" label="公司类型">
+          <template slot-scope="scope">
+            <template v-for="(item, i) in clientTypeList">
+              <el-tag disable-transitions :key="i" v-if="scope.row.roleName === item.itemCode" :type="btnTypes[i]" effect="plain">{{item.itemText}}</el-tag>
+            </template>
+          </template>
+        </el-table-column>
         <el-table-column prop="platform" label="终端"></el-table-column>
         <el-table-column prop="link" label="广告地址"></el-table-column>
         <el-table-column prop="createdOn" label="时间" sortable>
@@ -162,13 +169,18 @@
                 <el-option v-for="(item, i) in adTypeList" :key="i" :label="item.enumName" :value="item.enumValue"></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="公司类型：" prop="adType" :label-width="formLabelWidth">
+              <el-select v-model="formDatas.roleName" placeholder="请选择类型">
+                <el-option v-for="(item, i) in clientTypeList" :key="i" :label="item.itemText" :value="item.itemCode"></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="广告终端：" prop="platform" :label-width="formLabelWidth">
               <el-select v-model="formDatas.platform" placeholder="请选择终端">
                 <el-option v-for="(item, i) in platFormList" :key="i" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="广告位置：" prop="adPosition" :label-width="formLabelWidth">
-              <el-select v-model="formDatas.adPosition" placeholder="请选择广告位置">
+              <el-select v-model="formDatas.adPosition" placeholder="请选择位置">
                 <el-option v-for="(item, i) in adPositionList" :key="i" :label="item.enumName" :value="item.enumValue"></el-option>
               </el-select>
             </el-form-item>
@@ -262,6 +274,7 @@ export default {
       ['clean'] // remove formatting button
     ]
     return {
+      clientTypeList: [],
       btnTypes: ['primary', 'success', 'danger', 'warning', 'info'],
       urlHeader: process.env.NODE_ENV === 'production' ? 'http://img.toysbear.com/' : 'http://139.9.71.135:8087/',
       adTypeList: [],
@@ -359,6 +372,25 @@ export default {
     }
   },
   methods: {
+    // 获取公司类型列表
+    async getClientTypeList (type) {
+      const res = await this.$http.post('/api/ServiceConfigurationList', {
+        basisParameters: type
+      })
+      if (res.data.result.code === 200) {
+        switch (type) {
+          case 'CompanyType':
+            this.clientTypeList = res.data.result.item
+            break
+          case 'ExecutionWay':
+            this.yearMonthDayList = res.data.result.item
+            break
+          case 'userAuditType':
+            this.userAuditTypeList = res.data.result.item
+            break
+        }
+      }
+    },
     // 清空终端下拉事件
     clearSelect () {
       this.formInline.platform = 'all'
@@ -570,6 +602,7 @@ export default {
     this.getAdTypeList()
     this.getAdPositionList()
     this.getAdvertisementPage()
+    this.getClientTypeList('CompanyType')
   }
 }
 </script>

@@ -2349,7 +2349,7 @@
                     ',' +
                     Json.MessageRestriction[4].itemCode +
                     ',' +
-                    Json.MessageRestriction[5].itemCode
+                    Json.MessageRestriction[0].itemCode
               "
             />
           </i>
