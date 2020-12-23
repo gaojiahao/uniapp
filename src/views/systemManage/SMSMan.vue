@@ -1,10 +1,12 @@
 <template>
   <el-container>
+    <div class="testBox"></div>
     <el-header style="padding:0;">
       <bsTop></bsTop>
     </el-header>
     <el-main style="padding:0;overflow:visible;">
-    <div style="maxWidth:1200px;minWidth:1024px;margin:0 auto;">
+    <!-- <div style="maxWidth:1200px;minWidth:1024px;margin:0 auto;"> -->
+    <div style="max-width: 1200px;minWidth:1024px;margin:0 auto;">
       <div class="searchBox">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="关键字查询">

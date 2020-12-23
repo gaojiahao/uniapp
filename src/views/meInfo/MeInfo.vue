@@ -18,6 +18,7 @@
           @getNoticeUnreadTotal="getNoticeUnreadTotal"
           :findCount="findCount"
           @orderInfoCount="getOrderInfoCount"
+          @showAddFriend="showAddFriend"
         ></router-view>
         <!-- tabs -->
         <div class="footer">
@@ -1683,6 +1684,61 @@
           </center>
         </div>
       </div>
+      <!-- 添加好友 | 发起群聊 -->
+      <div class="addFriends" v-if="$route.path === '/meInfo/newSletter' && activeType">
+        <div class="topLayout">{{ activeType.text }}</div>
+        <div class="searchBox">
+          <div class="inputBox">
+            <el-input
+              class="searchInput"
+              prefix-icon="iconfont icon-sousuo"
+              v-model="search"
+              clearable
+              placeholder="请输入关键词">
+            </el-input>
+            <el-button type="primary" round>搜索</el-button>
+          </div>
+        </div>
+        <div class="contentList">
+          <div class="itemBox">
+            <div class="left">
+              <div class="icon">
+                <el-image fit="contain" :src="require('@/assets/images/imgError.jpg')" lazy>
+                    <div
+                      slot="placeholder"
+                      class="image-slot"
+                      style="width:40px;height:40px;margin:0 auto;"
+                    >
+                      <img
+                        class="errorImg"
+                        src="~@/assets/images/imgError.jpg"
+                        alt
+                      />
+                    </div>
+                    <div
+                      slot="error"
+                      class="image-slot"
+                      style="width:40px;height:40px;margin:0 auto"
+                    >
+                      <img
+                        class="errorImg"
+                        src="~@/assets/images/imgError.jpg"
+                        alt
+                      />
+                    </div>
+                  </el-image>
+              </div>
+              <div class="nameBox">
+                <div class="name">宋小宝</div>
+                <div class="company">小竹熊云科技</div>
+              </div>
+            </div>
+            <div class="right">
+              添加
+            </div>
+          </div>
+        </div>
+      </div>
       <!-- 发布公告 -->
       <li
         class="contentThree sendGonggaoBox"
@@ -2581,6 +2637,7 @@ export default {
   },
   data () {
     return {
+      activeType: null,
       showErweimaViewer: false,
       infoCount: 0,
       findCount: 0,
@@ -4074,6 +4131,7 @@ export default {
     },
     // 关闭其他信息
     offDetail (active) {
+      this.activeType = null
       this.isGroupNumber = false
       this.rec && this.rec.close()
       this.$setWs.$ws && this.$setWs.$ws.close()
@@ -4861,6 +4919,10 @@ export default {
     // 点击关闭二维码大图
     closeErweimaViewer () {
       this.showErweimaViewer = false
+    },
+    // 打开添加好友或打开发起群聊
+    showAddFriend(type) {
+      this.activeType = type
     }
   },
   mounted () {
@@ -7419,6 +7481,85 @@ export default {
         @{deep} .el-table__body-wrapper::-webkit-scrollbar {
           /*width: 0;宽度为0隐藏*/
           width: 0;
+        }
+      }
+    }
+    // 添加好友
+    .addFriends{
+      width: 32%;
+      height: 827px;
+      border: 1px solid #aaa;
+      box-sizing: border-box;
+      .topLayout{
+        height: 50px;
+        text-align: center;
+        line-height: 50px;
+        border-bottom: 1px solid #f5f5f5;
+      }
+      .searchBox {
+        background-color: #fff;
+        box-sizing: border-box;
+        padding: 0 10px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        .inputBox{
+          flex: 1;
+          background: #F5F5F5;
+          border-radius: 20px;
+          display: flex;
+          justify-content: space-between;
+          @{deep} .searchInput{
+            input.el-input__inner {
+              background-color: transparent;
+              border: none;
+            }
+          }
+          .el-button{
+            background-color: #165AF7;
+          }
+        }
+      }
+      .contentList{
+        width: 100%;
+        height: calc(100% - 110px);
+        .itemBox{
+          height: 60px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          .left{
+            flex: 1;
+            display: flex;
+            align-items: center;
+            .icon{
+              width: 40px;
+              .el-image{
+                width: 40px;
+                height: 40px;
+                img{
+                  width: 40px;
+                  height: 40px;
+                }
+              }
+            }
+            .nameBox{
+              height: 100%;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              .name{
+
+              }
+              .company{
+                font-size: 12px;
+                color: #165AF8;
+              }
+            }
+          }
+          .right{
+
+          }
         }
       }
     }

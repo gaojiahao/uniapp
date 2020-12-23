@@ -30,8 +30,8 @@ Vue.use(VueClipboard)
 Vue.use(NoticeBar)
 Vue.prototype.$setWs = wsConnection
 Vue.component(ElTreeGrid.name, ElTreeGrid)
-Vue.prototype.$video = Video;
-(function (doc, win) {
+Vue.prototype.$video = Video
+;(function (doc, win) {
   var docEl = doc.documentElement
   var resizeEvt =
     'orientationchange' in window ? 'orientationchange' : 'resize'
@@ -44,7 +44,6 @@ Vue.prototype.$video = Video;
   win.addEventListener(resizeEvt, recalc, false)
   doc.addEventListener('DOMContentLoaded', recalc, false)
 })(document, window)
-
 Vue.prototype.$_ = _
 
 Vue.use(ElementUI)

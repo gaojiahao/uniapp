@@ -1,61 +1,61 @@
 <template>
   <div class="box">
+    <div class="topTitle">
+      <span>通讯录</span>
+      <span class="el-icon-circle-plus-outline addFriend" @click="showAddFriendDialog = !showAddFriendDialog">
+        <div class="addFriendDialog" v-show="showAddFriendDialog">
+          <div class="boxAdd">
+            <div class="item" @click="openAddFriend('添加好友')">
+              <i class="itemIcon addIcon"></i>
+              添加好友
+            </div>
+            <div class="item" @click="openAddFriend('发起群聊')">
+              <i class="itemIcon zuIcon"></i>
+              发起群聊
+            </div>
+          </div>
+        </div>
+      </span>
+    </div>
     <div class="search">
       <el-input
         class="searchInput"
         prefix-icon="iconfont icon-sousuo"
         v-model="search"
         clearable
-        placeholder="搜索"
+        placeholder="请输入关键词"
       ></el-input>
     </div>
     <div class="organizationContent">
-      <div class="organizationItem" v-if="Organization">
-        <div
-          class="parent"
-          @click="showorganizationItem(Organization.companyNumber)"
-        >
-          <el-image
-            :src="Organization.companyLogo"
-            class="myAvatar"
-            fit="cover"
-          >
-            <div
-              slot="error"
-              class="image-slot"
-              style="width:100%;height:100%;display:flex;align-items:center;justify-content:left;white-space: nowrap;"
-            >
-              {{ Organization.companyName }}
-            </div>
-          </el-image>
-          <p>{{ Organization.companyName }}</p>
-        </div>
-        <el-collapse-transition>
-          <ol class="items" v-show="show3">
-            <li
-              class="item"
-              v-for="(item, i) in orgList"
-              :key="i"
-              @click="sendInfo(Organization.id, item.id)"
-            >
+      <div class="organizationItem">
+        <div class="organizaItem">
+          <div class="parent">
+            <div class="left">
               <el-image
-                :src="item.userImage"
-                class="myAvatar"
-                :key="item.userImage"
-                fit="cover"
-              >
-                <div
-                  slot="error"
-                  class="image-slot"
-                  style="width:100%;height:100%;display:flex;align-items:center;justify-content:left;white-space: nowrap;"
-                >
-                  {{ item.linkman }}
-                </div>
+              :src="require('@/assets/images/newFriendIcon.png')"
+              class="myAvatar"
+              fit="cover">
               </el-image>
-              <p>{{ item.linkman }}</p>
-            </li>
-          </ol>
-        </el-collapse-transition>
+              <p>新的好友</p>
+            </div>
+            <i class="el-icon-arrow-right"></i>
+          </div>
+        </div>
+      </div>
+      <div class="organizationItem">
+        <div class="organizaItem">
+          <div class="parent">
+            <div class="left">
+              <el-image
+              :src="require('@/assets/images/groupChat.png')"
+              class="myAvatar"
+              fit="cover">
+              </el-image>
+              <p>群聊</p>
+            </div>
+            <i class="el-icon-arrow-right"></i>
+          </div>
+        </div>
       </div>
       <hr />
       <div
@@ -108,7 +108,52 @@
           <p>公司联系人</p>
         </div>
       </div>
-      <h3>常用联系人</h3>
+      <div class="organizationItem" v-if="Organization">
+        <div class="organizaItem">
+        <div
+          class="parent"
+          @click="openCollapse"
+        >
+        <div class="left">
+          <el-image
+            style="backgroundColor:#fff;"
+            :src="require('@/assets/images/colleaguesBook.png')"
+            class="myAvatar"
+            fit="cover">
+          </el-image>
+          <p class="pColleagues">同事通讯录<i :class="{ 'el-icon-arrow-down': true, Colleagues: true, rotateColleagues:showCollapse }"></i></p>
+        </div>
+        </div>
+        <el-collapse-transition>
+          <ol class="items" v-show="showCollapse">
+            <li
+              class="item"
+              v-for="(item, i) in orgList"
+              :key="i"
+              @click="sendInfo(Organization.id, item.id)"
+            >
+              <el-image
+                :src="item.userImage"
+                class="myAvatar"
+                :key="item.userImage"
+                fit="cover"
+              >
+                <div
+                  slot="error"
+                  class="image-slot"
+                  style="width:100%;height:100%;display:flex;align-items:center;justify-content:left;white-space: nowrap;"
+                >
+                  {{ item.linkman }}
+                </div>
+              </el-image>
+              <p>{{ item.linkman }}</p>
+            </li>
+          </ol>
+        </el-collapse-transition>
+        </div>
+      </div>
+      <hr />
+      <h3>我的好友</h3>
       <div
         class="oftenContact"
         v-for="(item, i) in regularContact"
@@ -147,6 +192,8 @@
 export default {
   data () {
     return {
+      showAddFriendDialog: false,
+      showCollapse: false,
       currentPage: 1,
       pageSize: 10,
       show3: false,
@@ -162,6 +209,16 @@ export default {
     }
   },
   methods: {
+    // 点击添加好友|发起群聊事件
+    openAddFriend (text) {
+      this.$emit('showAddFriend', {
+        text: text
+      })
+    },
+    // 打开同事通讯录
+    openCollapse () {
+      this.showCollapse = !this.showCollapse
+    },
     showorganizationItem (val) {
       this.show3 = !this.show3
       this.sendCompany(val)
@@ -238,21 +295,96 @@ export default {
 <style lang="less" scoped>
 @deep: ~">>>";
 .box {
-  padding: 0 5px;
   height: 769px;
   margin-bottom: 60px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  .topTitle{
+    height: 50px;
+    padding: 0 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    span{
+      font-size: 18px;
+      color: #333333;
+      &.addFriend{
+        position: relative;
+        font-weight: 600;
+        cursor: pointer;
+        .addFriendDialog{
+          font-size: 14px;
+          position: absolute;
+          width: 100px;
+          height: 90px;
+          background-color: #fff;
+          box-shadow: 0px 3px 9px 0px rgba(0, 59, 199, 0.1);
+          border-radius: 5px;
+          top: 30px;
+          right: 0;
+          z-index: 2;
+          .boxAdd{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            color: #333;
+            font-weight: normal;
+            padding: 0 10px;
+            box-sizing: border-box;
+            &::after{
+              position: absolute;
+              display: block;
+              content: '';
+              width: 0;
+              height: 0;
+              border: 10px solid transparent;
+              border-bottom-color: #fff;
+              right: 5px;
+              top: -20px;
+            }
+            .item{
+              flex: 1;
+              display: flex;
+              align-items: center;
+              &:last-of-type{
+                border-top: 1px dashed #aaa;
+              }
+              .itemIcon{
+                display: block;
+                width: 14px;
+                height: 14px;
+                margin-right: 5px;
+                &.addIcon{
+                  background: url('~@/assets/images/jiahaoyouicon.png')no-repeat center;
+                  background-size: 100%;
+                }
+                &.zuIcon{
+                  background: url('~@/assets/images/zuIcon.png')no-repeat center;
+                  background-size: 100%;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    border-bottom: 1px solid #f2f5f6;
+  }
 }
 .search {
   background-color: #fff;
   box-sizing: border-box;
-  padding: 20px 20px 0;
+  padding: 0 10px;
+  height: 60px;
+  display: flex;
+  align-items: center;
   @{deep} .searchInput input.el-input__inner {
     border-radius: 20px;
     border: none;
-    background-color: #eceeef;
+    background-color: #F5F5F5;
   }
 }
 
@@ -295,31 +427,59 @@ export default {
   }
   .organizationItem {
     width: 100%;
-    left: 0;
-    padding: 5px;
     cursor: pointer;
-    box-sizing: border-box;
-    .parent {
-      display: flex;
-      align-items: center;
-      height: 40px;
-      @{deep} .myAvatar {
-        margin-right: 10px;
-        color: white;
-        background-color: #165af7;
-        transition: all 1s;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
+    .organizaItem{
+      .parent {
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 60px;
+      .left{
+          flex: 1;
+          display: flex;
+          align-items: center;
+          @{deep} .myAvatar {
+          margin-right: 10px;
+          color: white;
+          background-color: #165af7;
+          transition: all 1s;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+        }
+        .pColleagues{
+          margin-right: 5px;
+          vertical-align: top;
+          .Colleagues{
+            margin-left: 10px;
+            transition: all 0.2s;
+            &.rotateColleagues{
+              /* Rotate div */
+              transform: rotate(180deg);
+              -ms-transform: rotate(180deg);
+              /* Internet Explorer */
+              -moz-transform: rotate(180deg);
+              /* Firefox */
+              -webkit-transform: rotate(180deg);
+              /* Safari 和 Chrome */
+              -o-transform: rotate(180deg);
+              /* Opera */
+            }
+          }
+        }
       }
       &:hover {
-        .myAvatar {
+        .left{
+          .myAvatar {
           -webkit-transform: scale(1.1);
           -moz-transform: scale(1.1);
           -ms-transform: scale(1.1);
           transform: scale(1.1);
+          }
         }
       }
+    }
     }
     .items {
       margin-left: 40px;
@@ -352,7 +512,7 @@ export default {
     }
   }
   hr {
-    height: 10px;
+    height: 20px;
     background-color: #f2f5f6;
     border: none;
   }
@@ -363,7 +523,7 @@ export default {
   .contactPerson {
     width: 100%;
     left: 0;
-    padding: 5px;
+    padding: 0 10px;
     box-sizing: border-box;
     cursor: pointer;
     .parent {
@@ -388,26 +548,27 @@ export default {
     }
   }
   h3 {
+    padding: 10px;
     font-size: 16px;
     font-weight: 700;
   }
   .oftenContact {
-    padding: 5px;
+    padding: 0 10px;
+    height: 60px;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
-    margin-top: 10px;
     box-sizing: border-box;
     cursor: pointer;
     .myAvatar {
       color: white;
       background-color: #165af7;
       transition: all 1s;
-      margin-right: 10px;
       color: white;
       background-color: #165af7;
       transition: all 1s;
-      width: 50px;
-      height: 50px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
     }
     &:hover {

@@ -199,6 +199,11 @@
           </el-form-item>
        </div>
         <div class="formItems">
+          <div class="formItems">
+             <el-form-item label="包装：">
+            <el-input v-model="addProductForm.ch_pa"></el-input>
+          </el-form-item>
+          </div>
           <div class="formItemSan">
             <el-form-item label="装箱量：">
               <el-input v-model="addProductForm.in_en"></el-input
@@ -206,11 +211,6 @@
             ><el-form-item
               ><el-input v-model="addProductForm.ou_lo"></el-input
             ></el-form-item>
-          </div>
-           <div class="formItems">
-             <el-form-item label="包装：">
-            <el-input v-model="addProductForm.ch_pa"></el-input>
-          </el-form-item>
           </div>
         </div>
         <div class="formItems formItemSan">

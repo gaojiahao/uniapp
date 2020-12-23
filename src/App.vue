@@ -62,6 +62,8 @@ export default {
       }
     }
   },
+  computed: {
+  },
   async created () {
     await getMenuFuc()
     this.prohibit()
