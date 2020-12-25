@@ -109,7 +109,7 @@ export default {
     openMap () {
       const mapAttr =
         'https://api.map.baidu.com/geocoder?address=' +
-        this.address +
+        this.companyInfo.address +
         '&output=html&src=webapp.baidu.openAPIdemo'
       window.open(mapAttr)
     },
@@ -258,14 +258,13 @@ export default {
       &.addr {
         display: flex;
         justify-content: space-between;
-        align-items: center;
         cursor: pointer;
         // &:hover{
         //     color: #165af7;
         // }
         .right {
-          width: 21px;
-          height: 29px;
+          width: 20px;
+          height: 20px;
           background: url("~@/assets/images/分享定位地址.png") no-repeat center;
           background-size: contain;
         }

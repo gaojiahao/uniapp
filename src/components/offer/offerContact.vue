@@ -78,8 +78,7 @@ export default {
       scrollable: false,
       url: window.location.href.split('/#/')[0] + '/#/offerSharing?id=' + this.$route.params.id,
       productInfo: null,
-      companyInfo: null,
-      address: '坂田星河wrold'
+      companyInfo: null
     }
   },
   methods: {
@@ -123,7 +122,7 @@ export default {
     openMap () {
       const mapAttr =
         'https://api.map.baidu.com/geocoder?address=' +
-        this.address +
+        this.companyInfo.address +
         '&output=html&src=webapp.baidu.openAPIdemo'
       window.open(mapAttr)
     },
@@ -237,27 +236,28 @@ export default {
       display: flex;
       align-items: center;
       height: 0.533333rem;
+      padding: 5px 0;
       &.addr {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start;
         cursor: pointer;
+        height: 100%;
         .right {
-          width: 0.28rem;
-          height: 0.386667rem;
+          width: 16px;
+          height: 16px;
+          padding-top: 8px;
+          float: right;
           background: url("~@/assets/images/分享定位地址.png") no-repeat center;
-          background-size: contain;
+          background-size: 100%, 100%;
         }
       }
       &.lianxi {
-        margin-top: 0.4rem;
-        font-size: 0.266667rem;
-        font-weight: 600;
+        margin-top: 0.1rem;
+        font-size: 16px;
         a {
-        font-size: 0.266667rem;
-        // @{deep} .el-icon-phone-outline {
-        //     font-size: 0.333333rem;
-        // }
+          font-size: 0.33333rem;
+          font-weight: 600;
         }
       }
     }

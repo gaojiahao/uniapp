@@ -29,7 +29,7 @@
     <div class="organizationContent">
       <div class="organizationItem">
         <div class="organizaItem">
-          <div class="parent">
+          <div class="parent" @click="openAddFriend('新的好友')">
             <div class="left">
               <el-image
               :src="require('@/assets/images/newFriendIcon.png')"
@@ -44,7 +44,7 @@
       </div>
       <div class="organizationItem">
         <div class="organizaItem">
-          <div class="parent">
+          <div class="parent" @click="openAddFriend('选择群聊')">
             <div class="left">
               <el-image
               :src="require('@/assets/images/groupChat.png')"

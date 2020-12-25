@@ -1684,11 +1684,116 @@
           </center>
         </div>
       </div>
+      <!-- 选择群聊 | 新的好友 -->
+      <div class="newFriends" v-if="$route.path === '/meInfo/newSletter' && newFriendOptions">
+        <div class="topLayout">
+          <span></span>
+          <span>{{ newFriendOptions.text }}</span>
+          <span>
+            <span v-if="newFriendOptions.text === '新的好友'" @click="openRootAddFriends">添加好友</span>
+          </span>
+        </div>
+        <div class="newFriendsContentWrap">
+          <template v-if="newFriendOptions.text === '新的好友'">
+            <div class="line"></div>
+            <div class="contentTitle">新的好友</div>
+            <div class="contentList">
+              <!-- 好友item -->
+              <div class="itemBox" @click="openAccept({code:1,item:item})" v-for="(item, i) in friendList" :key="i">
+                <div class="left">
+                  <div class="icon">
+                    <el-image fit="contain" :src="require('@/assets/images/imgError.jpg')" lazy>
+                        <div
+                          slot="placeholder"
+                          class="image-slot"
+                          style="width:40px;height:40px;margin:0 auto;"
+                        >
+                          <img
+                            class="errorImg"
+                            src="~@/assets/images/imgError.jpg"
+                            alt
+                          />
+                        </div>
+                        <div
+                          slot="error"
+                          class="image-slot"
+                          style="width:40px;height:40px;margin:0 auto"
+                        >
+                          <img
+                            class="errorImg"
+                            src="~@/assets/images/imgError.jpg"
+                            alt
+                          />
+                        </div>
+                      </el-image>
+                  </div>
+                  <div class="nameBox">
+                    <div class="name">宋大宝</div>
+                    <div class="company">您好，我是小竹熊云科技科技科技科技科技科技科技</div>
+                  </div>
+                </div>
+                <div class="right">
+                  <el-button v-if="i % 2" size="small" type="primary" @click.stop="openAccept({code:2,item:item})" round>接受</el-button>
+                  <span v-else class="text">已添加</span>
+                </div>
+              </div>
+            </div>
+          </template>
+          <!-- 选择群聊 -->
+          <template v-else>
+            <div class="searchBox">
+              <div class="inputBox">
+                <el-input
+                  class="searchInput"
+                  prefix-icon="iconfont icon-sousuo"
+                  v-model="search"
+                  clearable
+                  placeholder="请输入关键字搜索">
+                </el-input>
+                <el-button type="primary" round>搜索</el-button>
+              </div>
+            </div>
+            <div class="contentListTwo">
+              <li class="item" v-for="i in 50" :key="i">
+                <el-image fit="contain" :src="require('@/assets/images/imgError.jpg')" lazy>
+                  <div
+                    slot="placeholder"
+                    class="image-slot"
+                    style="width:40px;height:40px;margin:0 auto;"
+                  >
+                    <img
+                      class="errorImg"
+                      src="~@/assets/images/imgError.jpg"
+                      alt
+                    />
+                  </div>
+                  <div
+                    slot="error"
+                    class="image-slot"
+                    style="width:40px;height:40px;margin:0 auto"
+                  >
+                    <img
+                      class="errorImg"
+                      src="~@/assets/images/imgError.jpg"
+                      alt
+                    />
+                  </div>
+                </el-image>
+                <span class="name">某某某舔狗群</span>
+                <span class="count">(999)</span>
+              </li>
+            </div>
+          </template>
+        </div>
+        <div class="footer"></div>
+      </div>
       <!-- 添加好友 | 发起群聊 -->
-      <div class="addFriends" v-if="$route.path === '/meInfo/newSletter' && activeType">
-        <div class="topLayout">{{ activeType.text }}</div>
-        <div class="searchBox">
-          <div class="inputBox">
+      <div class="addFriends" v-if="$route.path === '/meInfo/newSletter' && addFriendOptions">
+        <div class="topLayout">{{ addFriendOptions.text }}</div>
+        <!-- 添加好友 -->
+        <template v-if="addFriendOptions.text === '添加好友'">
+            <div class="searchBox">
+            <div class="inputBox">
             <el-input
               class="searchInput"
               prefix-icon="iconfont icon-sousuo"
@@ -1698,45 +1803,204 @@
             </el-input>
             <el-button type="primary" round>搜索</el-button>
           </div>
-        </div>
-        <div class="contentList">
-          <div class="itemBox">
-            <div class="left">
-              <div class="icon">
-                <el-image fit="contain" :src="require('@/assets/images/imgError.jpg')" lazy>
-                    <div
-                      slot="placeholder"
-                      class="image-slot"
-                      style="width:40px;height:40px;margin:0 auto;"
-                    >
-                      <img
-                        class="errorImg"
-                        src="~@/assets/images/imgError.jpg"
-                        alt
-                      />
-                    </div>
-                    <div
-                      slot="error"
-                      class="image-slot"
-                      style="width:40px;height:40px;margin:0 auto"
-                    >
-                      <img
-                        class="errorImg"
-                        src="~@/assets/images/imgError.jpg"
-                        alt
-                      />
-                    </div>
-                  </el-image>
+          </div>
+          <div class="contentList">
+            <!-- 好友item -->
+            <div class="itemBox" v-for="(item, i) in friendList" :key="i">
+              <div class="left">
+                <div class="icon">
+                  <el-image fit="contain" :src="require('@/assets/images/imgError.jpg')" lazy>
+                      <div
+                        slot="placeholder"
+                        class="image-slot"
+                        style="width:40px;height:40px;margin:0 auto;"
+                      >
+                        <img
+                          class="errorImg"
+                          src="~@/assets/images/imgError.jpg"
+                          alt
+                        />
+                      </div>
+                      <div
+                        slot="error"
+                        class="image-slot"
+                        style="width:40px;height:40px;margin:0 auto"
+                      >
+                        <img
+                          class="errorImg"
+                          src="~@/assets/images/imgError.jpg"
+                          alt
+                        />
+                      </div>
+                    </el-image>
+                </div>
+                <div class="nameBox">
+                  <div class="name">宋小宝</div>
+                  <div class="company">某某公司或展厅名</div>
+                </div>
               </div>
-              <div class="nameBox">
-                <div class="name">宋小宝</div>
-                <div class="company">小竹熊云科技</div>
+              <div class="right">
+                <el-button size="small" type="primary" icon="el-icon-plus" @click="openAddFriend(item)" round>添加</el-button>
               </div>
-            </div>
-            <div class="right">
-              添加
             </div>
           </div>
+        </template>
+        <!-- 发起群聊 -->
+        <template v-else>
+            <div class="searchBox">
+              <div class="inputBox">
+              <el-input
+                class="searchInput"
+                prefix-icon="iconfont icon-sousuo"
+                v-model="search"
+                clearable
+                placeholder="请输入小竹熊名称">
+              </el-input>
+              <el-button type="primary" round>搜索</el-button>
+            </div>
+            </div>
+            <el-checkbox-group
+            class="myCheckBox"
+            ref="multipleTable"
+            v-model="selectUsers"
+            @change="handleCheckAllChange"
+            >
+            <div class="item" v-for="(item, i) in friendsList" :key="i">
+              <el-checkbox :label="item">
+                <el-image class="img" :src="item.img" fit="cover">
+                  <div
+                    slot="error"
+                    class="image-slot"
+                    style="width:100%;height:100%;display:flex;align-items:center;justify-content:left;white-space: nowrap;"
+                  >
+                    {{ item.linkman }}
+                  </div>
+                </el-image>
+                {{ item.linkman }}
+              </el-checkbox>
+              <div class="companyName" @click="driveCheckbox(item)">{{ item.company }}</div>
+            </div>
+            </el-checkbox-group>
+            <div class="footer">
+              <div class="footerBox">
+                <div class="totalCount">
+                  <span v-show="selectUsers.length">已选择：{{ selectUsers.length }} 人</span>
+                </div>
+                <div class="footerBtn">
+                  <el-button type="info" :class="{ active: selectUsers.length }" round>完成 <span v-show="selectUsers.length">({{ selectUsers.length }})</span></el-button>
+                </div>
+              </div>
+            </div>
+        </template>
+      </div>
+      <!-- 添加好友验证 -->
+      <div class="addFriends bgClass" v-if="$route.path === '/meInfo/newSletter' && addFriendOptions && showFriendVerification && !addFriendOptions.isShowdialogVerification">
+        <div class="topLayoutTwo">
+          <span class="item"></span>
+          <span class="item">好友验证</span>
+          <span class="item itemBtn">
+            <el-button type="primary" size="mini" round>发送</el-button>
+          </span>
+        </div>
+        <div class="line">
+          发送好友请求
+        </div>
+        <el-input
+          class="roleConText"
+          type="textarea"
+          :rows="4"
+          placeholder="请输入验证信息"
+          v-model="roleConText">
+        </el-input>
+        <div class="line">
+          备注名
+        </div>
+        <el-input class="cateFriends" v-model="selectCateFriends" clearable placeholder="请输入备注"></el-input>
+      </div>
+      <el-dialog
+        title="好友验证"
+        :visible.sync="showdialogVerification"
+        width="40%">
+        <div class="addFriends bgClass addFriendsDialog">
+        <div class="line">
+          发送好友请求
+        </div>
+        <el-input
+          class="roleConText"
+          type="textarea"
+          :rows="4"
+          placeholder="请输入验证信息"
+          v-model="roleConText">
+        </el-input>
+        <div class="line">
+          备注名
+        </div>
+        <el-input class="cateFriends" v-model="selectCateFriends" clearable placeholder="请输入备注"></el-input>
+        <center style="margin-top:100px;">
+          <el-button @click="showdialogVerification = false">取 消</el-button>
+          <el-button type="primary" @click="showdialogVerification = false">发 送</el-button>
+        </center>
+      </div>
+      </el-dialog>
+      <!-- 好友申请 -->
+      <div class="newFriends bgClass" v-if="$route.path === '/meInfo/newSletter' && newFriendOptions && friendApplication">
+        <div class="topLayout">
+          <span></span>
+          <span>好友申请</span>
+          <span></span>
+        </div>
+        <div class="topBox">
+          <div class="nameBox">
+          <el-image fit="contain" :src="require('@/assets/images/imgError.jpg')" lazy>
+            <div
+              slot="placeholder"
+              class="image-slot"
+              style="width:40px;height:40px;margin:0 auto;background-color:#165af8;color:#fff;text-align:center;">
+              名字
+            </div>
+            <div
+              slot="error"
+              class="image-slot"
+              style="width:40px;height:40px;margin:0 auto"
+            >
+              <img
+                class="errorImg"
+                src="~@/assets/images/imgError.jpg"
+                alt
+              />
+            </div>
+          </el-image>
+          <div class="name">
+            超好听的名字
+          </div>
+        </div>
+        <div class="infoContent" v-if="friendApplication.code === 1">
+          <span class="name">张含韵</span>:
+          <span class="info">你好你好我是大佬你好你好我是大佬你好你好我是大佬你好你好我是大佬你好你好我是大佬你好你好我是大佬你好你好我是大佬你好你好我是大佬</span>
+        </div>
+        </div>
+        <div class="remarksBox">
+          <div class="remark">
+            备注标签
+          </div>
+          <div class="isLookMyFind">
+            <span>允许对方查看我的玩具圈</span>
+            <span>
+              <el-switch
+                v-model="lookMyFindSwitch"
+                active-color="#165AF7"
+                inactive-color="#f5f5f5">
+              </el-switch>
+            </span>
+          </div>
+        </div>
+        <div class="source">
+          <span>来源</span>
+          <span class="isAdd">对方通过聊天添加</span>
+        </div>
+         <div class="sub">
+          <span  v-if="friendApplication.code === 1">接受</span>
+          <span  v-else>发消息</span>
         </div>
       </div>
       <!-- 发布公告 -->
@@ -2637,7 +2901,36 @@ export default {
   },
   data () {
     return {
-      activeType: null,
+      lookMyFindSwitch: null,
+      showdialogVerification: false,
+      friendApplication: null,
+      newFriendOptions: null,
+      selectUsers: [],
+      friendsList: [{
+        id: 1,
+        linkman: '张三',
+        company: '超级无敌大大大大大大大大公司1',
+        img: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
+      }, {
+        id: 2,
+        linkman: '李四',
+        company: '公司2',
+        img: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
+      }, {
+        id: 3,
+        linkman: '王五',
+        company: '公司3',
+        img: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
+      }],
+      friendCateList: [{
+        name: '联系人',
+        id: 4
+      }],
+      selectCateFriends: null,
+      roleConText: null,
+      showFriendVerification: null,
+      friendList: 50,
+      addFriendOptions: null,
       showErweimaViewer: false,
       infoCount: 0,
       findCount: 0,
@@ -4131,7 +4424,9 @@ export default {
     },
     // 关闭其他信息
     offDetail (active) {
-      this.activeType = null
+      this.showFriendVerification = null
+      this.addFriendOptions = null
+      this.newFriendOptions = null
       this.isGroupNumber = false
       this.rec && this.rec.close()
       this.$setWs.$ws && this.$setWs.$ws.close()
@@ -4921,8 +5216,65 @@ export default {
       this.showErweimaViewer = false
     },
     // 打开添加好友或打开发起群聊
-    showAddFriend(type) {
-      this.activeType = type
+    showAddFriend(options) {
+      this.showFriendVerification = null
+      switch (options.text) {
+        case '添加好友':
+          this.selectUsers = []
+          this.newFriendOptions = null
+          this.addFriendOptions = options
+        break;
+        case '发起群聊':
+          this.showFriendVerification = null
+          this.newFriendOptions = null
+          this.addFriendOptions = options
+        break;
+        case '新的好友':
+          this.showFriendVerification = null
+          this.addFriendOptions= null
+          this.newFriendOptions = options
+        break;
+        case '选择群聊':
+          this.showFriendVerification = null
+          this.addFriendOptions= null
+          this.newFriendOptions = options
+        break;
+      }
+      
+    },
+    // 发送群聊点击后半部分公司事件
+    driveCheckbox(item) {
+      const list = this.$refs.multipleTable.value
+      let flag = false
+      for (let i = 0; i < list.length; i++) {
+        if(list[i].id === item.id) {
+          flag = true
+          this.selectUsers.pop()
+        }
+      }
+      if(!flag) {
+        this.selectUsers.push(item)
+        console.log(this.selectUsers);
+      }
+    },
+    // 打开添加好友窗口
+    openAddFriend(item) {
+      this.showFriendVerification = item
+      if(this.addFriendOptions.isShowdialogVerification) this.showdialogVerification = true
+    },
+    // 打开添加好友窗口
+    openRootAddFriends() {
+      this.friendApplication = null
+      this.addFriendOptions = {
+        text: '添加好友',
+        isShowdialogVerification: true
+      }
+    },
+    // 接受添加好友
+    openAccept(item) {
+      console.log(item);
+      this.addFriendOptions = null
+      this.friendApplication = item
     }
   },
   mounted () {
@@ -7523,11 +7875,18 @@ export default {
       .contentList{
         width: 100%;
         height: calc(100% - 110px);
+        overflow-x: hidden;
+        overflow-y: scroll;
+        &::-webkit-scrollbar {
+          display: none;
+        }
         .itemBox{
           height: 60px;
           display: flex;
           justify-content: space-between;
           align-items: center;
+          padding: 0 10px;
+          box-sizing: border-box;
           .left{
             flex: 1;
             display: flex;
@@ -7544,22 +7903,426 @@ export default {
               }
             }
             .nameBox{
-              height: 100%;
+              height: 40px;
               display: flex;
               flex-direction: column;
               justify-content: space-between;
               .name{
-
+                color: #1B1B1B;
+                width: 200px;
+                white-space:nowrap;
+                overflow:hidden;
+                text-overflow:ellipsis;
               }
               .company{
                 font-size: 12px;
+                width: 200px;
                 color: #165AF8;
+                white-space:nowrap;
+                overflow:hidden;
+                text-overflow:ellipsis;
               }
             }
           }
           .right{
-
+            .el-button{
+              background-color: #165af8;
+              width: 80px;
+            }
           }
+        }
+      }
+      .footer{
+        height: 60px;
+        padding: 5px 10px;
+        box-sizing: border-box;
+        .footerBox{
+          height: 35px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          .totalCount{
+            font-size: 12px;
+            color: #165AF8;
+            flex: 1;
+          }
+          .footerBtn{
+            .el-button{
+            color: #999;
+            background-color: #f5f5f5;
+            border: none;
+              &.active{
+                background-color: #165AF8;
+                color: #fff;
+              }
+            }
+          }
+        }
+      }
+      .myCheckBox {
+        height: calc(100% - 171px);
+        overflow: auto;
+        .item{
+          height: 60px;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          @{deep} .el-checkbox {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            .el-checkbox__input{
+              border-radius: 50%;
+            }
+            .el-checkbox__label,.el-checkbox__input{
+              display: flex;
+              font-size: 16px;
+              color: #1B1B1B;
+              align-items: center;
+              .el-image {
+              transition: all 0.5s;
+              width: 40px;
+              height: 40px;
+              margin-right: 10px;
+              border-radius: 50%;
+              background-color: #165af7;
+              color: white;
+              }
+            }
+            
+            &:hover {
+              @{deep} .el-image {
+                -webkit-transform: scale(1.1);
+                -moz-transform: scale(1.1);
+                -ms-transform: scale(1.1);
+                transform: scale(1.1);
+              }
+            }
+            .el-checkbox__label,
+            .is-checkbox,
+            .el-checkbox__inner {
+              display: flex;
+              align-items: center;
+              border-radius: 50%;
+            }
+          }
+          .companyName{
+            font-size: 12px;
+            height: 40px;
+            line-height: 40px;
+            width: 100px;
+            color: #666666;
+            text-align: right;
+            padding-right: 20px;
+            cursor: pointer;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+          }
+        }
+      }
+      // 好友验证
+      &.bgClass{
+        background-color: #f6f6f6;
+        &.addFriendsDialog{
+          width: 100%;
+          max-height: 400px;
+        }
+      }
+      .topLayoutTwo{
+        display: flex;
+        height: 50px;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #fff;
+        border-bottom: 1px solid #f5f5f5;
+        box-sizing: border-box;
+        padding: 0 10px;
+        .item{
+          flex: 1;
+          text-align: center;
+          &.itemBtn{
+            text-align: right;
+            .el-button{
+              background-color: #165af7;
+            }
+          }
+        }
+      }
+      .line{
+        height: 40px;
+        line-height: 40px;
+        padding: 0 10px;
+        font-size: 14px;
+        color: #999;
+      }
+      @{deep} .roleConText{
+        font-size: 16px;
+        .el-textarea__inner{
+          border: none;
+          outline: none;
+          padding: 5px 10px;
+        }
+      }
+      @{deep} .cateFriends{
+        width: 100%;
+        font-size: 16px;
+        input{
+          border: none;
+          outline: none;
+        }
+      }
+    }
+    // 新的好友
+    .newFriends{
+      width: 32%;
+      height: 827px;
+      border: 1px solid #aaa;
+      color: #333;
+      box-sizing: border-box;
+      .topLayout{
+        padding: 0 10px;
+        display: flex;
+        line-height: 50px;
+        background-color: #fff;
+        border-bottom: 1px solid #f5f5f5;
+        align-items: center;
+        justify-content: space-between;
+        span{
+          flex: 1;
+          &:nth-of-type(2){
+            text-align: center;
+          }
+          &:nth-of-type(3) {
+            text-align: right;
+            font-size: 12px;
+            color: #666666;
+            span{
+              cursor: pointer;
+            }
+          }
+        }
+      }
+      .newFriendsContentWrap{
+        height: calc(100% - 60px);
+        .line{
+        height: 20px;
+        background-color: #f5f5f5;
+      }
+      .contentTitle{
+        padding: 10px;
+        font-size: 14px;
+      }
+      .contentListTwo{
+        width: 100%;
+        height: calc(100% - 90px);
+        overflow-x: hidden;
+        overflow-y: scroll;
+        &::-webkit-scrollbar {
+          display: none;
+        }
+        .item{
+          height: 60px;
+          padding: 0 10px;
+          display: flex;
+          align-items: center;
+          border: none;
+          width: 100%;
+          box-sizing: border-box;
+          .el-image{
+            width: 40px;
+            height: 40px;
+            img{
+              width: 40px;
+              height: 40px;
+            }
+          }
+          .name{
+            color: #1b1b1b;
+            margin-left: 10px;
+          }
+          .count{
+            color: #999999;
+          }
+        }
+      }
+      .contentList{
+        width: 100%;
+        height: calc(100% - 90px);
+        overflow-x: hidden;
+        overflow-y: scroll;
+        &::-webkit-scrollbar {
+          display: none;
+        }
+        .itemBox{
+          height: 60px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0 10px;
+          box-sizing: border-box;
+          .left{
+            flex: 1;
+            display: flex;
+            align-items: center;
+            .icon{
+              width: 40px;
+              .el-image{
+                width: 40px;
+                height: 40px;
+                img{
+                  width: 40px;
+                  height: 40px;
+                }
+              }
+            }
+            .nameBox{
+              height: 40px;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              .name{
+                color: #1B1B1B;
+                width: 200px;
+                white-space:nowrap;
+                overflow:hidden;
+                text-overflow:ellipsis;
+              }
+              .company{
+                font-size: 12px;
+                width: 200px;
+                color: #165AF8;
+                white-space:nowrap;
+                overflow:hidden;
+                text-overflow:ellipsis;
+              }
+            }
+          }
+          .right{
+            .el-button{
+              background-color: #165af8;
+              width: 80px;
+            }
+            .text{
+              display: block;
+              font-size: 14px;
+              width: 80px;
+              text-align: center;
+              color: #999999;
+            }
+          }
+        }
+      }
+      .searchBox {
+        background-color: #fff;
+        box-sizing: border-box;
+        padding: 0 10px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        .inputBox{
+          flex: 1;
+          background: #F5F5F5;
+          border-radius: 20px;
+          display: flex;
+          justify-content: space-between;
+          @{deep} .searchInput{
+            input.el-input__inner {
+              background-color: transparent;
+              border: none;
+            }
+          }
+          .el-button{
+            background-color: #165AF7;
+          }
+        }
+      }
+      .footer{
+        height: 40px;
+        background-color: #fff;
+      }
+      }
+      
+      &.bgClass {
+        background: #F5F5F5;
+        .topBox{
+            background-color:#fff;
+            padding-bottom:10px;
+            .nameBox{
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            .el-image{
+              width: 40px;
+              height: 40px;
+              border-radius: 50%;
+              margin-right: 10px;
+            }
+            .name {
+              max-width: 300px;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow:ellipsis;
+            }
+          }
+          .infoContent{
+            margin: 10px;
+            margin-bottom: 0;
+            padding: 10px;
+            background-color: #F2F2F2;
+            border-radius: 5px;
+            .name{
+              color: #999999;
+              height: 100%;
+            }
+            .info{
+              color: #666666;
+            }
+          }
+        }
+        .remarksBox {
+          margin-top: 20px;
+          height: 120px;
+          background-color: #fff;
+          display: flex;
+          flex-direction: column;
+          .remark,.isLookMyFind{
+            flex: 1;
+            display: flex;
+            align-items: center;
+            box-sizing: border-box;
+            padding: 0 10px;
+          }
+          .isLookMyFind{
+            border-top: 1px solid #f5f5f5;
+            justify-content: space-between;
+          }
+        }
+        .source{
+          margin-top: 20px;
+          height: 60px;
+          display: flex;
+          box-sizing: border-box;
+          padding: 0 10px;
+          justify-content: space-between;
+          align-items: center;
+          background-color: #fff;
+          .isAdd{
+            font-size: 12px;
+            color: #999;
+          }
+        }
+        .sub{
+          margin-top: 20px;
+          height: 60px;
+          color: #6C96F8;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #fff;
         }
       }
     }
@@ -7704,9 +8467,9 @@ export default {
       max-height: 650px;
       width: 600px;
       margin: 0 auto;
+      border: 2px solid rgb(231, 231, 231);
       overflow-x: hidden;
       overflow-y: scroll;
-      border: 2px solid rgb(231, 231, 231);
       &::-webkit-scrollbar {
         display: none;
       }
