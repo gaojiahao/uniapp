@@ -192,6 +192,7 @@
 export default {
   data () {
     return {
+      regularTotalCount: 0,
       showAddFriendDialog: false,
       showCollapse: false,
       currentPage: 1,
@@ -257,14 +258,14 @@ export default {
     //   });
     // },
     // 获取常用联系人
-    async getContactListPerson () {
-      const res = await this.$http.post('/api/OrgPersonnelPage', {
-        id: this.userInfo.userInfo.id,
+    async getFriendAddressBooksPage () {
+      const res = await this.$http.post('/api/GetFriendAddressBooksPage', {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize
       })
       if (res.data.result.code === 200) {
         this.regularContact = res.data.result.item.items
+        this.regularTotalCount = res.data.result.item.totalCount
       }
     },
     // 点击架构的联系人
@@ -280,10 +281,10 @@ export default {
   mounted () {
     this.getOrgList()
     // this.getContactList();
-    this.getContactListPerson()
+    this.getFriendAddressBooksPage()
     this.$root.eventHub.$on('UpdateOrgPersonnel', () => {
       this.getOrgList()
-      this.getContactListPerson()
+      this.getFriendAddressBooksPage()
     })
   },
   beforeDestroy () {

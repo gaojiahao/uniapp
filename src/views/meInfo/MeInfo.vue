@@ -1754,7 +1754,7 @@
               </div>
             </div>
             <div class="contentListTwo">
-              <li class="item" v-for="i in 50" :key="i">
+              <li class="item" v-for="i in groupMessageList" :key="i">
                 <el-image fit="contain" :src="require('@/assets/images/imgError.jpg')" lazy>
                   <div
                     slot="placeholder"
@@ -2901,6 +2901,7 @@ export default {
   },
   data () {
     return {
+      groupMessageList: [],
       lookMyFindSwitch: null,
       showdialogVerification: false,
       friendApplication: null,
@@ -5275,6 +5276,12 @@ export default {
       console.log(item);
       this.addFriendOptions = null
       this.friendApplication = item
+    },
+    // 获取群聊列表
+    async groupMessageList() {
+      const res = await this.$http.post('/api/GetMyGroupMessagePage', {
+        
+      }) 
     }
   },
   mounted () {
