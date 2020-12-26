@@ -189,7 +189,7 @@
           <el-input v-model="formDatas.adTitle" placeholder="请输入广告标题"></el-input>
         </el-form-item>
         <el-form-item label="广告内容：" v-if="formDatas.adType === 1" :prop="formDatas.adType === 1 && 'content'" :label-width="formLabelWidth">
-          <quill-editor ref="myQuillEditor" v-model="formDatas.content" :options="editorOption"></quill-editor>
+          <quill-editor ref="myQuillEditor" v-model="formDatas.content" :options="editorOption" @change="onEditorChange($event)"></quill-editor>
         </el-form-item>
         <el-form-item label="广告图片：" v-else :prop="formDatas.adType === 0 && 'img'" :label-width="formLabelWidth">
           <div style="border:1px solid #DCDFE6;padding:10px;border-radius:5px;">
@@ -200,7 +200,7 @@
               :on-change="changeUpload"
               :auto-upload="false"
               list-type="picture-card"
-              accept=".jpg,.jpeg,.png,.ico,.bmp,.JPG,.JPEG,.PNG,.ICO,.BMP"
+              :accept="globalJson[0].itemCode"
               :on-preview="handlePictureCardPreview"
               :on-remove="handleRemove"
               :file-list="editImages">
@@ -233,7 +233,7 @@
       :on-change="changeUploadQuill"
       :auto-upload="false"
       list-type="picture-card"
-      accept=".jpg,.jpeg,.png,.ico,.bmp,.JPG,.JPEG,.PNG,.ICO,.BMP"
+      :accept="globalJson[0].itemCode+','+globalJson[3].itemCode"
       :on-preview="handlePictureCardPreview"
       :on-remove="handleRemove"
       :file-list="editImages">
@@ -250,6 +250,10 @@
 <script>
 import bsTop from '@/components/BsTop'
 import bsFooter from '@/components/oldFooter'
+// 这里引入修改过的video模块并注册
+import * as Quill from 'quill'
+import Video from '@/quill/video'
+Quill.register(Video, true)
 export default {
   components: { bsTop, bsFooter },
   data () {
@@ -271,9 +275,12 @@ export default {
       [{ font: [] }],
       [{ align: [] }],
       ['image'],
+      ['video'],
       ['clean'] // remove formatting button
     ]
     return {
+      globalJson: this.$store.state.globalJson.Json.NoticeRestrictions,
+      mediaType: null,
       clientTypeList: [],
       btnTypes: ['primary', 'success', 'danger', 'warning', 'info'],
       urlHeader: process.env.NODE_ENV === 'production' ? 'http://img.toysbear.com/' : 'http://139.9.71.135:8087/',
@@ -315,6 +322,10 @@ export default {
             handlers: {
               // eslint-disable-next-line quote-props
               'image': function (value) {
+                console.log(document.querySelector('.uploadQuill input').click())
+              },
+              // eslint-disable-next-line quote-props
+              'video': function (value) {
                 console.log(document.querySelector('.uploadQuill input').click())
               }
             }
@@ -372,6 +383,8 @@ export default {
     }
   },
   methods: {
+    // 选择视频
+    onEditorChange () { },
     // 获取公司类型列表
     async getClientTypeList (type) {
       const res = await this.$http.post('/api/ServiceConfigurationList', {
@@ -472,14 +485,27 @@ export default {
     },
     // 富文本选图
     async changeUploadQuill (file, fileList) {
-      if (file.size > this.$store.state.globalJson.Json.NoticeRestrictions[5].itemCode) {
-        this.$message.error(
-          '上传图片大小不能超过 ' +
-            this.$store.state.globalJson.Json.NoticeRestrictions[5].itemCode / 1024 / 1024 +
-            'MB'
-        )
-        fileList.pop()
-        return false
+      const list = file.name.split('.')
+      if (this.globalJson[0].itemCode.includes(list[list.length - 1].toUpperCase())) {
+        if (file.size > this.globalJson[5].itemCode) {
+          this.$message.error(
+            '上传图片大小不能超过 ' +
+              this.globalJson[5].itemCode / 1024 / 1024 +
+              'MB'
+          )
+          fileList.pop()
+          return false
+        }
+      } else if (this.globalJson[3].itemCode.includes(list[list.length - 1].toUpperCase())) {
+        if (file.size > this.globalJson[1].itemCode) {
+          this.$message.error(
+            '上传视频大小不能超过 ' +
+              this.globalJson[1].itemCode / 1024 / 1024 +
+              'MB'
+          )
+          fileList.pop()
+          return false
+        }
       }
       try {
         const res = await this.successUpload(file.raw)
@@ -489,8 +515,12 @@ export default {
           console.log(result)
           // 获取光标所在位置
           const pos = quill.selection.savedRange.index
-          // 插入图片到光标位置
-          quill.insertEmbed(pos, 'image', result)
+          // 插入图片到光标位置 | 插入视频到光标位置
+          if (this.globalJson[0].itemCode.includes(list[list.length - 1].toUpperCase())) {
+            quill.insertEmbed(pos, 'image', result)
+          } else {
+            quill.insertEmbed(pos, 'video', result)
+          }
           // 调整光标到最后
           quill.setSelection(length + 1)
         } else {
@@ -547,6 +577,7 @@ export default {
     },
     // 打开新增广告
     openAdd () {
+      this.dialogTitle = '新增广告'
       this.formDatas = {
         adType: 1,
         adPosition: null,
@@ -609,6 +640,10 @@ export default {
 
 <style lang="less" scoped>
 @deep: ~">>>";
+.ql-video{
+  width: 100%;
+  height: 300px;
+}
 .searchForms{
   display: flex;
   justify-content: space-between;
