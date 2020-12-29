@@ -291,9 +291,9 @@ export default {
     },
     // 打开公司订单列表
     openOrder (item) {
-      this.$emit('showInfoListOrder', {
-        sampleFrom: item,
-        showType: 'showInfoListOrder'
+      this.$emit('openOneView', {
+        companyType: item,
+        componentName: 'companyBusinessComponent'
       })
     },
     // 获取订单通知数量

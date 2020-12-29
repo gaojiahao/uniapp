@@ -1444,6 +1444,7 @@ import editPersonalDataComponent from '@/components/editPersonalDataComponent/ed
 import personalChatComponent from '@/components/personalChatComponent/personalChatComponent.vue'
 import myAnnouncement from '@/components/myAnnouncement/myAnnouncement.vue'
 import sendNoticeComponent from '@/components/sendNoticeComponent/sendNoticeComponent.vue'
+import companyBusinessComponent from '@/components/companyBusinessComponent/companyBusinessComponent.vue'
 export default {
   directives: {
     'el-table-infinite-scroll': elTableInfiniteScroll
@@ -1453,6 +1454,7 @@ export default {
     bsFooter,
     BMapComponent,
     ElImageViewer,
+    companyBusinessComponent,
     addFriendComponent,
     launchGroupChat,
     friendVerificationComponent,
