@@ -27,7 +27,7 @@
               <p>消息</p>
             </el-badge>
           </router-link>
-          <router-link to="findList" class="li" @click.native="offDetail()">
+          <router-link to="findList" class="li" @click.native="openOneView({componentName: 'myAnnouncement'})">
             <el-badge :hidden="findCount < 1" :value="findCount">
               <i class="el-icon-s-help"></i>
               <p>玩具圈</p>
@@ -1233,161 +1233,6 @@
         </div>
       </li>
       <!-- 朋友圈我发布的信息 -->
-      <div class="findList" v-if="$route.path === '/meInfo/findList'">
-        <div class="sendFind">
-          <div
-            class="sendFindItem"
-            @click="openSendFind(item.type)"
-            v-for="item in [
-              {
-                id: 1,
-                text: '普通公告',
-                type: 'Ordinary',
-                path: require('@/assets/images/gonggao1.png')
-              },
-              {
-                id: 2,
-                text: '采购公告',
-                type: 'Purchase',
-                path: require('@/assets/images/gonggao2.png')
-              },
-              {
-                id: 3,
-                text: '供应公告',
-                type: 'Supply',
-                path: require('@/assets/images/gonggao3.png')
-              }
-            ]"
-            :key="item.id"
-          >
-            <div class="iconImg">
-              <img :src="item.path" :key="item.path" alt />
-            </div>
-            <div class="txt">{{ item.text }}</div>
-          </div>
-        </div>
-        <div
-          class="findItems"
-          v-infinite-scroll="load"
-          infinite-scroll-disabled="disabled"
-        >
-          <div class="findItem" v-for="(item, i) in dataList" :key="i">
-            <template v-if="item">
-              <div class="topLayout">
-                <div class="img">
-                  <el-image
-                    :src="item.userInfo.image"
-                    class="findImage"
-                    fit="cover"
-                  >
-                    <div
-                      slot="error"
-                      class="image-slot"
-                      style="width:100%;height:100%;display:flex;align-items:center;justify-content:left;white-space: nowrap;"
-                    >
-                      {{ item.userInfo.niceName }}
-                    </div>
-                  </el-image>
-                </div>
-                <div class="title">
-                  <p>{{ item.userInfo.niceName }}</p>
-                </div>
-              </div>
-              <p class="ContentText">
-                <em>{{ item.bearNotice.notice }}</em>
-              </p>
-              <div class="imgComtent" v-if="item.video">
-                <div class="demo1-video">
-                  <video
-                    width="100%"
-                    height="100%"
-                    class="video-js vjs-default-skin vjs-big-play-centered"
-                    controls
-                    style="object-fit:cover"
-                  >
-                    <source :src="item.video" type="video/mp4" />
-                  </video>
-                </div>
-              </div>
-              <template v-else-if="item.imgList.length > 1">
-                <div class="imgComtent">
-                  <el-image
-                    v-for="(val, index) in item.imgList.split(',')"
-                    :key="index"
-                    class="img"
-                    :src="val"
-                    alt
-                    :preview-src-list="item.imgList.split(',')"
-                  ></el-image>
-                </div>
-              </template>
-              <div class="dateInDelet">
-                <div>
-                  <span>{{ dateDiff(item.bearNotice.publishDate) }}</span>
-                  <el-popconfirm
-                    class="deleteBtn"
-                    title="确定要删除这条公告吗？"
-                    @onConfirm="deleteCement(item, i)"
-                  >
-                    <span slot="reference">删除</span>
-                  </el-popconfirm>
-                </div>
-
-                <div class="like">
-                  <span @click="dianZan(item)">
-                    <i
-                      class="iconfont icon-love_icon"
-                      v-show="!item.isLike"
-                    ></i>
-                    <i
-                      class="iconfont icon-aixin"
-                      v-show="item.isLike"
-                      style="color:#fb6055;"
-                    ></i>
-                    <em>{{ item.bearNotice.upvoteTotal }}</em>
-                  </span>
-                  <span class="pinglun" @click="openPinglun(item)">
-                    <i class="iconfont icon-xiaoxi1"></i>
-                    <em>{{ item.bearNotice.review }}</em>
-                  </span>
-                </div>
-              </div>
-              <!-- 评论 -->
-              <div class="reply" v-if="item.noticeInteraction.length > 0">
-                <template v-for="(item1, i) in item.noticeInteraction">
-                  <p :key="i">
-                    <span
-                      style="cursor: pointer;"
-                      @click="openReplyComment(item1)"
-                      >{{ item1.userName }}</span
-                    >
-                    <em v-if="item1.replyToUserName">
-                      回复
-                      <span
-                        @click="openReplyComment(item1, item1.replyToUserName)"
-                        style="padding-right:5px;cursor: pointer;"
-                        >{{ item1.replyToUserName }}</span
-                      >
-                    </em>
-                    ：{{ item1.comment }}
-                  </p>
-                </template>
-              </div>
-            </template>
-          </div>
-          <center
-            style="padding:10px 0;background-color:#eeeeed;margin:10px 0 0 0;position: relative;"
-          >
-            <p v-if="loading">加载中...</p>
-            <p v-if="noMore">没有更多了</p>
-            <div
-              class="huidaodingbu el-icon-caret-top"
-              v-show="dataList.length > 9"
-              @click="toTop"
-            ></div>
-          </center>
-        </div>
-      </div>
       <!-- 二级窗口组件 -->
       <div class="componentOneIs" v-if="oneViews">
         <component :is="oneViews.componentName" :options="oneViews" @openTwoView="openTwoView" :MessageUnreadCount="MessageUnreadCount" @changeMessageUnreadCount="changeMessageUnreadCount" :signalROptions="signalROptions"></component>
@@ -1457,141 +1302,6 @@
           <span  v-else>发消息</span>
         </div>
       </div>
-      <!-- 发布公告 -->
-      <li
-        class="contentThree sendGonggaoBox"
-        v-if="active2 === 5 && $route.path === '/meInfo/findList'"
-      >
-        <div class="sendGonggao">
-          <el-form :model="ruleForm" :rules="{ GonggaoText: [{ required: true, message: '公告内容不能为空' }] }" ref="refGonggao" class="demo-ruleForm" show-message hide-required-asterisk>
-            <el-form-item prop="GonggaoText">
-              <el-input
-                type="textarea"
-                class="txtWrap"
-                resize="none"
-                :rows="5"
-                :placeholder="gonggaoTypes"
-                v-model="ruleForm.GonggaoText"
-                :maxlength="Json.NoticeRestrictions[2].itemCode"
-                show-word-limit
-              ></el-input>
-            </el-form-item>
-          </el-form>
-          <div class="gonggaoImgList">
-            <draggable
-            class="syllable_ul"
-            element="ul"
-            :list="fileList"
-            :options="{group:'id', animation:150}"
-            :no-transition-on-drag="true"
-            @change="changeGonggaoImg"
-            @start="startGonggaoImg"
-            @end="endGonggaoImg"
-            :move="moveGonggaoImg"
-          >
-              <el-col :span="8"  v-for="(value, i) in fileList" :key="i">
-                  <div class="imgItemBox" @mouseenter="itemImgNter(value.uid)" @mouseleave="itemImgLeave">
-                    <el-image fit="contain" :src="value.url"></el-image>
-                    <div class="itemIcon" v-show="isHoverImgItem ===  value.uid">
-                      <span>
-                        <i @click="opemViewer(i)" class="el-icon-zoom-in"/>
-                        <i @click="deleteItemImg(value.uid)" class="el-icon-delete"/>
-                      </span>
-                    </div>
-                  </div>
-                  <el-image-viewer
-                    v-if="showViewer"
-                    :on-close="closeViewer"
-                    :url-list="viewerImgList" />
-              </el-col>
-          </draggable>
-          <el-col class="imgsItemBox" :span="8">
-              <el-upload
-              action="#"
-              list-type="picture-card"
-              :file-list="fileList"
-              :show-file-list="false"
-              :limit="imgAndVideoNum"
-              :on-change="changeFile"
-              class="imgsItem"
-              :auto-upload="false"
-              :accept="uploadAccept"
-            >
-              <i slot="default" class="el-icon-plus"></i>
-              <div slot="file" slot-scope="{ file }">
-                <img
-                  width="100%"
-                  height="100%"
-                  v-if="
-                    Json.NoticeRestrictions &&
-                      Json.NoticeRestrictions[1].itemCode
-                        .toLowerCase()
-                        .includes($_.last(file.name.split('.')))
-                  "
-                  class="el-upload-list__item-thumbnail"
-                  :src="file.url"
-                  alt
-                />
-                <video
-                  v-else-if="
-                    Json.NoticeRestrictions &&
-                      Json.NoticeRestrictions[0].itemCode
-                        .toLowerCase()
-                        .includes($_.last(file.name.split('.')))
-                  "
-                  width="100%"
-                  height="100%"
-                  class="video-js vjs-default-skin vjs-big-play-centered sendVideoImg"
-                  controls
-                  style="object-fit:cover"
-                >
-                  <source
-                    ref="videoPreview"
-                    :src="file.url"
-                    :type="file.raw.type"
-                  />
-                </video>
-                <span class="el-upload-list__item-actions">
-                  <span
-                    class="el-upload-list__item-preview"
-                    @click="handlePictureCardPreview(file)"
-                  >
-                    <i class="el-icon-zoom-in"></i>
-                  </span>
-                  <span
-                    v-if="!disabledImg"
-                    class="el-upload-list__item-delete"
-                    @click="handleDownload(file)"
-                  >
-                    <i class="el-icon-download"></i>
-                  </span>
-                  <span
-                    v-if="!disabledImg"
-                    class="el-upload-list__item-delete"
-                    @click="handleRemove(file, fileList)"
-                  >
-                    <i class="el-icon-delete"></i>
-                  </span>
-                </span>
-              </div>
-            </el-upload>
-              </el-col>
-            <el-dialog :visible.sync="dialogVisibleImg" destroy-on-close>
-              <img
-                v-if="dialogVisibleImg"
-                width="100%"
-                :src="dialogImageUrl"
-                alt
-              />
-            </el-dialog>
-          </div>
-          <div class="sendGonggaoBtn">
-            <el-button type="primary" class="sendBtn" @click="isSelectPush"
-              >发 布</el-button
-            >
-          </div>
-        </div>
-      </li>
     </div>
     <!-- 打标签 -->
     <el-dialog title="新增标签" :visible.sync="dialogAddTag" destroy-on-close width="400px">
@@ -1610,18 +1320,6 @@
         <el-button @click="dialogAddTag = false">取 消</el-button>
         <el-button type="primary" @click="addTag">确 定</el-button>
       </div>
-    </el-dialog>
-    <!-- 评论 -->
-    <el-dialog :title="pinglunTitle" :visible.sync="dialogPinglun" width="30%">
-      <el-form label-position="left" label-width="80px">
-        <el-form-item label="评论内容">
-          <el-input v-model="pinglunValue" autocomplete="off"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogPinglun = false">取 消</el-button>
-        <el-button type="primary" @click="addComment">确 定</el-button>
-      </span>
     </el-dialog>
     <!-- 确认订单 -->
     <el-dialog
@@ -1711,67 +1409,6 @@
         </p>
       </center>
     </el-dialog>
-    <!-- 选择公告推送人 -->
-    <el-dialog
-      title="选择收信人"
-      :visible.sync="selectPush"
-      destroy-on-close
-      width="30%"
-      top="50px"
-    >
-      <el-radio-group class="myRadios" v-model="radio" @change="changeRadios">
-        <el-radio label="all" v-show="$store.state.userInfo.commparnyList[0].companyType === 'Supplier' || $store.state.userInfo.commparnyList[0].companyType === 'Exhibition' || $store.state.userInfo.commparnyList[0].companyType === 'Sales'">
-          <el-avatar
-            :size="30"
-            :src="require('@/assets/images/供应商.png')"
-          ></el-avatar
-          >平台所有人
-        </el-radio>
-        <el-radio label="Sales" v-show="$store.state.userInfo.commparnyList[0].companyType === 'Supplier'">
-          <el-avatar
-            :size="30"
-            :src="require('@/assets/images/公司.png')"
-          ></el-avatar
-          >所有公司联系人
-        </el-radio>
-        <el-radio label="Supplier"  v-show="$store.state.userInfo.commparnyList[0].companyType === 'Exhibition' || $store.state.userInfo.commparnyList[0].companyType === 'Sales'">
-          <el-avatar
-            :size="30"
-            :src="require('@/assets/images/公司.png')"
-          ></el-avatar
-          >所有厂商联系人
-        </el-radio>
-      </el-radio-group>
-      <div class="tongxunlu">
-        <div class="title">
-          <span>通讯录联系人</span>
-        </div>
-        <div class="tongxunluLianxiren" v-infinite-scroll="tongxunluLoad">
-          <el-checkbox-group
-            class="myCheckBox"
-            v-model="checkUserList"
-            @change="handleCheckAllChange"
-          >
-            <el-checkbox v-for="(item, i) in orgList" :key="i" :label="item.id">
-              <el-image class="img" :src="item.userImage" fit="cover">
-                <div
-                  slot="error"
-                  class="image-slot"
-                  style="width:100%;height:100%;display:flex;align-items:center;justify-content:left;white-space: nowrap;"
-                >
-                  {{ item.linkman }}
-                </div>
-              </el-image>
-              {{ item.linkman }}
-            </el-checkbox>
-          </el-checkbox-group>
-        </div>
-      </div>
-      <center>
-        <el-button @click="selectPush = false">取 消</el-button>
-        <el-button type="primary" @click="sendSelectPush">发 送</el-button>
-      </center>
-    </el-dialog>
     <!-- 公司地址定位地图 -->
     <el-dialog
       title="定位"
@@ -1795,8 +1432,6 @@ import bsTop from '@/components/BsTop.vue'
 import bsFooter from '@/components/oldFooter'
 import elTableInfiniteScroll from 'el-table-infinite-scroll'
 import BMapComponent from '@/components/map.vue'
-import draggable from 'vuedraggable'
-import VueQr from 'vue-qr'
 import addFriendComponent from '@/components/addFriendComponent/addFriendComponent.vue'
 import launchGroupChat from '@/components/launchGroupChat/launchGroupChat.vue'
 import friendVerificationComponent from '@/components/friendVerificationComponent/friendVerificationComponent.vue'
@@ -1807,6 +1442,8 @@ import hallContactComponent from '@/components/hallContactComponent/hallContactC
 import personalDataComponent from '@/components/personalDataComponent/personalDataComponent.vue'
 import editPersonalDataComponent from '@/components/editPersonalDataComponent/editPersonalDataComponent.vue'
 import personalChatComponent from '@/components/personalChatComponent/personalChatComponent.vue'
+import myAnnouncement from '@/components/myAnnouncement/myAnnouncement.vue'
+import sendNoticeComponent from '@/components/sendNoticeComponent/sendNoticeComponent.vue'
 export default {
   directives: {
     'el-table-infinite-scroll': elTableInfiniteScroll
@@ -1815,9 +1452,7 @@ export default {
     bsTop,
     bsFooter,
     BMapComponent,
-    draggable,
     ElImageViewer,
-    VueQr,
     addFriendComponent,
     launchGroupChat,
     friendVerificationComponent,
@@ -1827,7 +1462,9 @@ export default {
     hallContactComponent,
     personalDataComponent,
     editPersonalDataComponent,
-    personalChatComponent
+    personalChatComponent,
+    myAnnouncement,
+    sendNoticeComponent
   },
   data () {
     return {
@@ -1851,8 +1488,6 @@ export default {
       findCount: 0,
       orderInfoCount: 0,
       viewerImgList: [],
-      showViewer: false,
-      isHoverImgItem: null,
       drag: false,
       isCheckCube: true,
       myProductSearchValue: null,
@@ -1932,11 +1567,7 @@ export default {
       visibleTXT: false,
       noScrollTop: false,
       audioItem: null,
-      radio: '',
-      checkUserList: [],
       orgList: [],
-      selectPushPersonList: [],
-      selectPush: false,
       imgAndVideoNum: null,
       Json: {}, // 规则
       orderOptions: null,
@@ -1962,11 +1593,8 @@ export default {
       pinglunTitle: '',
       pinglunValue: '',
       gonggaoType: '',
-      ruleForm: { GonggaoText: '' },
-      fileList: [],
       dialogImageUrl: '',
       dialogVideoUrl: '',
-      dialogVisibleImg: false,
       disabledImg: false,
       datas: {},
       dialogAddTag: false,
@@ -2002,7 +1630,6 @@ export default {
       dialogVisible: false,
       maxResultCount: 10,
       total: null,
-      loading: false,
       dataList: []
     }
   },
@@ -2249,21 +1876,10 @@ export default {
           })
       }
     },
-    // 单选事件
-    changeRadios (val) {
-      if (val) {
-        this.checkUserList = []
-      }
-    },
-    // 多选事件
-    handleCheckAllChange (val) {
-      val && (this.radio = '')
-    },
     // 点击公告立即沟通
     async showFindLiaotian ({ item }) {
       this.offDetail()
       this.$store.commit('clearWsMsg')
-      this.MessageUnreadCount = null
       this.orderOptions = null
       this.signalROptions.value = null
       this.signalROptions.attachment = null
@@ -2331,41 +1947,41 @@ export default {
     },
     // 点击个人的立即沟通
     async personalSend () {
-      this.$store.commit('clearWsMsg')
-      this.MessageUnreadCount = null
-      this.chatHistoryCurrentPage = 1
-      this.chatHistoryPageSize = 15
-      this.orderOptions = null
-      this.signalROptions.value = null
-      this.signalROptions.attachment = null
-      this.signalROptions.showmsg = []
-      this.signalROptions.orderNumber = null
-      this.isGroupNumber = false
-      this.signalROptions.name = ''
-      this.signalROptions.uid = ''
-      this.signalROptions.name = this.personalDetail.linkman
-      this.signalROptions.toUserID = this.personalDetail.id
-      this.signalROptions.isGroup = false
-      this.signalROptions.groupNumber = this.personalDetail.groupNumber
-      this.signalROptions.toCompanyID = this.personalDetail.companyId
-      this.signalROptions.msgType = 'Text'
-      try {
-        this.addChannel() // 加入深网频道
-      } catch (error) {
-        this.login()
-        this.$message.warning('断线重连成功')
-      }
-      const res = await this.getInstantMessageByNumber(
-        this.personalDetail.groupNumber
-      )
-      if (res.data.result.code === 200) {
-        this.signalROptions.showmsg = res.data.result.item.items
-        this.chatHistoryTotal = res.data.result.item.totalCount
-      } else {
-        this.personalDetail = []
-      }
-      this.showTypeOptions.showLiaotianType = 'showLiaotianList'
-      this.active2 = null
+      // this.$store.commit('clearWsMsg')
+      // this.MessageUnreadCount = null
+      // this.chatHistoryCurrentPage = 1
+      // this.chatHistoryPageSize = 15
+      // this.orderOptions = null
+      // this.signalROptions.value = null
+      // this.signalROptions.attachment = null
+      // this.signalROptions.showmsg = []
+      // this.signalROptions.orderNumber = null
+      // this.isGroupNumber = false
+      // this.signalROptions.name = ''
+      // this.signalROptions.uid = ''
+      // this.signalROptions.name = this.personalDetail.linkman
+      // this.signalROptions.toUserID = this.personalDetail.id
+      // this.signalROptions.isGroup = false
+      // this.signalROptions.groupNumber = this.personalDetail.groupNumber
+      // this.signalROptions.toCompanyID = this.personalDetail.companyId
+      // this.signalROptions.msgType = 'Text'
+      // try {
+      //   this.addChannel() // 加入深网频道
+      // } catch (error) {
+      //   this.login()
+      //   this.$message.warning('断线重连成功')
+      // }
+      // const res = await this.getInstantMessageByNumber(
+      //   this.personalDetail.groupNumber
+      // )
+      // if (res.data.result.code === 200) {
+      //   this.signalROptions.showmsg = res.data.result.item.items
+      //   this.chatHistoryTotal = res.data.result.item.totalCount
+      // } else {
+      //   this.personalDetail = []
+      // }
+      // this.showTypeOptions.showLiaotianType = 'showLiaotianList'
+      // this.active2 = null
     },
     
     // 点击订单|订单详情立即沟通
@@ -2675,14 +2291,7 @@ export default {
       fd.append('file', file)
       return await this.$http.post('/api/File/MessageUploadFile', fd)
     },
-    // 通讯录下拉加载更多
-    tongxunluLoad () {
-      if (this.orgListCount < 10 || this.orgList.length >= this.orgListCount) {
-        return
-      }
-      this.orgListCurrentPage++
-      this.getOrgList(true)
-    },
+    
     // 获取通讯录列表
     async getOrgList (flag) {
       const res = await this.$http.post('/api/OrgPersonnelPage', {
@@ -2698,166 +2307,10 @@ export default {
         this.orgListCount = res.data.result.item.totalCount
       }
     },
-    // 确定推送公告
-    async sendSelectPush () {
-      this.sendGonggao()
-      const fd = {
-        PushType: 3,
-        UserList: this.checkUserList,
-        CompanyType: this.radio
-      }
-      try {
-        const res = await this.$http.post('/api/GeSendPush', fd)
-        if (res.data.result.code === 200) {
-          console.log('推送成功')
-        } else {
-          this.$message.error(res.data.result.message)
-        }
-      } catch (error) {
-        console.log(error)
-      }
-      this.selectPush = false
-    },
-    // 打开发布公告
-    openSendFind (type) {
-      this.isGroupNumber = false
-      this.active2 = 5
-      this.gonggaoType = type
-      this.showTypeOptions.showLiaotianType = null
-      this.$nextTick(()=>{
-        this.$refs.refGonggao.clearValidate();
-      })
-    },
-    // 发布公告
-    async sendGonggao () {
-      this.$refs.refGonggao.validate(async valid => {
-        if (valid) {
-          let urls = ''
-          let fileType = ''
-          let res;
-          // let imgFlag = false
-          if (this.fileList && this.fileList.length > 0) {
-            const fd = new FormData()
-            for (const val of this.fileList) {
-              fd.append('file', val.raw)
-            }
-            fd.append('BusinessType', 'Notice')
-            res = await this.$http.post('/api/File/InsertPic', fd, {
-              headers: { 'Content-Type': 'multipart/form-data' }
-            })
-            if (res.data.result.code === 200) {
-              urls = res.data.result.object.map(re => {
-                return {
-                  fileAddress: re.filePath,
-                  order: re.orderIndx
-                }
-              })
-            } else {
-              // imgFlag = true
-              this.$message.error(res.data.result.msg)
-            }
-            fileType = this.fileList[0].raw.type.split('/')[0]
-          }
-          // if(imgFlag) return false
-          const result = await this.$http.post('/api/CreateBearNotice', {
-            NoticeTitle: '',
-            NoticeType: this.gonggaoType,
-            Acceptor: this.userInfo.commparnyList[0].companyType,
-            Notice: this.ruleForm.GonggaoText,
-            Publisher: this.userInfo.userInfo.id,
-            IssuedCompanyID: this.userInfo.commparnyList[0].commparnyId,
-            attachmentList: urls,
-            FileType:
-              fileType === 'image' ? 'img' : fileType === 'video' ? 'video' : '' // 文件类型 img video
-          })
-          if (result.data.result.code === 200) {
-            this.$message.success('发布公告成功')
-            // 刷新公告列表
-            this.$root.eventHub.$emit('UpdateFind')
-            this.skipCount = 1
-            this.maxResultCount = 10
-            this.getDataList()
-            this.fileList = []
-            this.ruleForm.GonggaoText = ''
-            this.gonggaoType = ''
-            this.active2 = null
-          } else {
-            this.$message.error(result.data.result.msg)
-          }
-        }
-      })
-    },
+    
     // 关闭订单聊天
     guanbiOrder () {
       this.isOrderShow = false
-    },
-    // 发公告选择图片
-    changeFile (file, fileList) {
-      if (fileList[0].raw.type.split(/\//)[0] === 'video') {
-        this.imgAndVideoNum = 1
-        if (file.size > this.Json.NoticeRestrictions[2].itemCode) {
-          this.$message.error(
-            '上传视频大小不能超过 ' +
-              this.Json.NoticeRestrictions[2].itemCode / 1024 / 1024 +
-              'MB'
-          )
-          fileList.pop()
-          return false
-        }
-      } else {
-        this.imgAndVideoNum = Number(this.Json.NoticeRestrictions[4].itemCode)
-        if (file.raw.type.split(/\//)[0] === 'video') {
-          fileList.pop()
-          this.$message.error('只能上传图片或视频的其中一种文件格式')
-          return false
-        }
-        if (file.size > this.Json.NoticeRestrictions[5].itemCode) {
-          this.$message.error(
-            '上传图片大小不能超过 ' +
-              this.Json.NoticeRestrictions[5].itemCode / 1024 / 1024 +
-              'MB'
-          )
-          fileList.pop()
-          return false
-        }
-      }
-      this.fileList = fileList
-    },
-    // 删除图片
-    handleRemove (file, fileList) {
-      fileList.pop()
-    },
-    // 是否推送公告
-    isSelectPush () {
-      this.$refs.refGonggao.validate(valid => {
-        if (valid) {
-          this.$confirm('是否需要推送公告?', '提示', {
-            distinguishCancelAndClose: true,
-            cancelButtonText: '需要推送',
-            confirmButtonText: '不了，谢谢',
-            type: 'warning'
-          }).then(() => {
-              this.sendGonggao()
-            }).catch(action => {
-              if (action === 'cancel') {
-                this.orgListCurrentPage = 1
-                this.getOrgList()
-                this.radio = ''
-                this.checkUserList = []
-                this.selectPush = true
-              }
-            })
-        }
-      })
-    },
-    // 放大预览
-    handlePictureCardPreview (file) {
-      if (file.raw.type.split(/\//)[0] === 'video') {
-        this.$message.error('功能暂未开放')
-      } else {
-        this.dialogImageUrl = file.url
-        this.dialogVisibleImg = true
-      }
     },
     // 给员工打备注
     async editUserRemark(item){
@@ -3225,53 +2678,6 @@ export default {
         this.$message.error("不能修改别人的资料哦")
       }
     },
-    // 拉到底加载更多
-    load () {
-      this.loading = true
-      setTimeout(async () => {
-        this.skipCount++
-        this.maxResultCount = 10
-        await this.getDataList(true)
-        this.loading = false
-      }, 2000)
-    },
-    // 回到顶部事件
-    async toTop () {
-      let top = $('.findItems').scrollTop()
-      // 实现滚动效果
-      const _that = this
-      const timeTop = setInterval(() => {
-        $('.findItems').scrollTop((top -= 20))
-        if (top <= 0) {
-          clearInterval(timeTop)
-        }
-      }, 1)
-      this.skipCount = 1
-      this.maxResultCount = 10
-      this.dataList = this.dataList.slice(0, 10)
-      $('.findItems').animate({ scrollTop: 0 })
-    },
-    // 获取我发布的公告
-    async getDataList (flag) {
-      const res = await this.$http.post('/api/BearNoticePage', {
-        skipCount: this.skipCount,
-        maxResultCount: this.maxResultCount,
-        publisher: this.userInfo.userInfo.id
-      })
-      if (res.data.result.code === 200) {
-        if (flag) {
-          this.dataList = this.dataList.concat(
-            res.data.result.item.result.items
-          )
-        } else {
-          this.dataList = res.data.result.item.result.items
-          this.loading = false
-        }
-        this.total = res.data.result.item.result.totalCount
-      } else {
-        this.$message.error(res.data.result.msg)
-      }
-    },
     /*
      * 时间戳显示为多少分钟前，多少天前的处理
      * console.log(dateDiff(1411111111111));  // 2014年09月19日
@@ -3340,101 +2746,6 @@ export default {
         return parseInt(minC) + '分钟前'
       }
       return '刚刚'
-    },
-    // 点赞
-    async dianZan (val) {
-      const res = await this.$http.post('/api/UpdateBearNotice', {
-        noticeNumber: val.bearNotice.noticeNumber,
-        NoticeType: 'Upvote',
-        id: val.bearNotice.id
-      })
-      if (res.data.result.code === 200) {
-        if (res.data.result.item.collectTotal) {
-          this.$message.success('点赞成功')
-        } else {
-          this.$message.warning('取消点赞成功')
-        }
-        val.isLike = !val.isLike
-        val.isLike
-          ? val.bearNotice.upvoteTotal++
-          : val.bearNotice.upvoteTotal--
-        this.$root.eventHub.$emit('UpdateFind')
-      }
-    },
-    // 打开评论
-    openPinglun (value) {
-      this.pinglunTitle = '评论'
-      this.dialogPinglun = true
-      this.pinglunForm = value
-    },
-    // 评论
-    async addComment () {
-      let data
-      if (this.pinglunTitle === '回复评论') {
-        data = {
-          noticeNumber: this.huifuPinglun.noticeNumber,
-          interactionType: 'Reply',
-          userName: this.userInfo.userInfo.linkman,
-          comment: this.pinglunValue,
-          replyCompanyID: this.replyToUserName
-            ? this.huifuPinglun.replyCompanyID
-            : this.huifuPinglun.companyID,
-          replyToUser: this.replyToUserName
-            ? this.huifuPinglun.replyToUser
-            : this.huifuPinglun.createdBy,
-          replyToUserName: this.replyToUserName || this.huifuPinglun.userName
-        }
-      } else {
-        data = {
-          noticeNumber: this.pinglunForm.bearNotice.noticeNumber,
-          companyID: this.userInfo.userInfo.id,
-          userName: this.userInfo.userInfo.linkman,
-          interactionType: 'Comment',
-          comment: this.pinglunValue
-        }
-      }
-      const res = await this.$http.post('/api/CreateNoticeInteraction', data)
-      if (res.data.result.code === 200) {
-        this.skipCount = 1
-        this.maxResultCount =
-          this.dataList.length >= 100 ? 10 : this.dataList.length
-        this.getDataList()
-        // 重新调用子路由查看公告
-        this.$root.eventHub.$emit('UpdateFind')
-        this.dialogPinglun = false
-        this.$message.success('评论成功')
-      }
-      this.pinglunValue = ''
-      this.pinglunTitle = ''
-    },
-    // 打开回复评论
-    async openReplyComment (val, replyToUserName) {
-      if (
-        val.createdBy ===
-        (this.$store.state.userInfo.userInfo &&
-          this.$store.state.userInfo.userInfo.id)
-      ) {
-        this.$message.error('不能回复自己哦')
-        return false
-      }
-      this.pinglunTitle = '回复评论'
-      this.dialogPinglun = true
-      this.huifuPinglun = val
-      this.replyToUserName = replyToUserName
-    },
-    // 删除公告
-    async deleteCement (val, i) {
-      const res = await this.$http.post('/api/DeleteBearBotice', {
-        id: val.bearNotice.id
-      })
-      if (res.data.result.code === 200) {
-        this.$message.success('删除成功')
-        this.dataList.splice(i, 1)
-        // 重新调用子路由查看公告
-        this.$root.eventHub.$emit('UpdateFind')
-      } else {
-        this.$message.error(res.data.result.msg)
-      }
     },
     // 关闭确认订单
     handleClose (done) {
@@ -3552,65 +2863,6 @@ export default {
     checkMoreEvent () {
       this.isCheckCube = !this.isCheckCube
     },
-    //evt里面有两个值，一个evt.added 和evt.removed  可以分别知道移动元素的ID和删除元素的ID
-    changeGonggaoImg(evt) {
-      console.log(evt , 'change...')
-      // const newVal = this.fileList[evt.moved.oldIndex]
-      // this.fileList[evt.moved.oldIndex] = this.fileList[evt.moved.newIndex]
-      // this.fileList[evt.moved.newIndex] = newVal
-    },
-    //start ,end ,add,update, sort, remove 得到的都差不多
-    startGonggaoImg(evt) {
-      this.drag = true
-      console.log(evt , 'start...')
-    },
-    endGonggaoImg(evt) {
-      this.drag = true
-      evt.item //可以知道拖动的本身
-      evt.to    // 可以知道拖动的目标列表
-      evt.from  // 可以知道之前的列表
-      evt.oldIndex  // 可以知道拖动前的位置
-      evt.newIndex  // 可以知道拖动后的位置
-    },
-    moveGonggaoImg(evt, originalEvent) {
-      this.isHoverImgItem = null
-      console.log(evt , 'move')
-      console.log(originalEvent) //鼠标位置
-    },
-    // 鼠标移入发公告
-    itemImgNter (id) {
-      this.isHoverImgItem = id
-    },
-    // 鼠标移出发公告
-    itemImgLeave () {
-      this.isHoverImgItem = null
-    },
-    // 点击删除图片预览
-    deleteItemImg (id) {
-      this.fileList.forEach((val, i) => {
-        if (val.uid === id) {
-           this.fileList.splice(i, 1)
-        }
-      });
-      console.log(this.fileList)
-    },
-    // 点击打开预览发公告大图
-    opemViewer (index) {
-      this.showViewer = true;
-      let tempImgList = this.fileList.map(val=>{
-        if (val && val.url) return val.url
-      })
-      let temp = [];
-      for (let i = 0; i < index; i++) {
-        temp.push(tempImgList.shift());
-      }
-      this.viewerImgList = tempImgList.concat(temp);
-      console.log(this.viewerImgList)
-    },
-    // 点击关闭预览发公告大图
-    closeViewer() {
-      this.showViewer = false
-    },
     // 获取玩具圈未读条数
     async getNoticeUnreadTotal () {
       const res = await this.$http.post('/api/GetNoticeUnreadTotal')
@@ -3686,6 +2938,46 @@ export default {
       }
       
     },
+    // 评论
+    async addComment () {
+      let data
+      if (this.pinglunTitle === '回复评论') {
+        data = {
+          noticeNumber: this.huifuPinglun.noticeNumber,
+          interactionType: 'Reply',
+          userName: this.userInfo.userInfo.linkman,
+          comment: this.pinglunValue,
+          replyCompanyID: this.replyToUserName
+            ? this.huifuPinglun.replyCompanyID
+            : this.huifuPinglun.companyID,
+          replyToUser: this.replyToUserName
+            ? this.huifuPinglun.replyToUser
+            : this.huifuPinglun.createdBy,
+          replyToUserName: this.replyToUserName || this.huifuPinglun.userName
+        }
+      } else {
+        data = {
+          noticeNumber: this.pinglunForm.bearNotice.noticeNumber,
+          companyID: this.userInfo.userInfo.id,
+          userName: this.userInfo.userInfo.linkman,
+          interactionType: 'Comment',
+          comment: this.pinglunValue
+        }
+      }
+      const res = await this.$http.post('/api/CreateNoticeInteraction', data)
+      if (res.data.result.code === 200) {
+        this.skipCount = 1
+        this.maxResultCount =
+          this.dataList.length >= 100 ? 10 : this.dataList.length
+        // this.getDataList()
+        // 重新调用子路由查看公告
+        this.$root.eventHub.$emit('UpdateFind')
+        this.dialogPinglun = false
+        this.$message.success('评论成功')
+      }
+      this.pinglunValue = ''
+      this.pinglunTitle = ''
+    },
     // 发送群聊点击后半部分公司事件
     driveCheckbox(item) {
       const list = this.$refs.multipleTable.value
@@ -3744,7 +3036,6 @@ export default {
   },
   mounted () {
     this.activeFind = 2
-    this.getDataList()
     this.login()
     this.$store.commit('clearWsMsg') // 清空已读未读
     this.getNoticeUnreadTotal()
@@ -3829,29 +3120,9 @@ export default {
     allInfoCount () {
       return this.orderInfoCount + this.infoCount
     },
-    noMore () {
-      return this.dataList.length >= this.total
-    },
     
-    disabled () {
-      return this.loading || this.noMore
-    },
     userInfo () {
       return this.$store.state.userInfo
-    },
-    gonggaoTypes () {
-      return this.gonggaoType === 'Ordinary'
-        ? '请输入普通公告内容'
-        : this.gonggaoType === 'Purchase'
-          ? '请输入采购公告内容'
-          : '请输入供应公告内容';
-    },
-    uploadAccept () {
-      return (
-        this.Json.NoticeRestrictions[0].itemCode +
-        ',' +
-        this.Json.NoticeRestrictions[1].itemCode
-      )
     }
   },
   filters: {
@@ -6054,309 +5325,12 @@ export default {
     }
   }
 }
-// 我发布的朋友圈
-.findList {
-  position: relative;
-  width: 32%;
-  padding-top: 100px;
-  border: 1px solid #ccc;
-  height: 827px;
-  box-sizing: border-box;
-  .sendFind {
-    width: 100%;
-    height: 100px;
-    background-color: #f6f6f6;
-    border-radius: 0 0 20px 20px;
-    margin-top: -100px;
-    display: flex;
-    justify-content: space-between;
-    .sendFindItem {
-      width: 33.333%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      align-self: center;
-      text-align: center;
-      cursor: pointer;
-      .iconImg {
-        width: 100%;
-        img {
-          transition: all 1s;
-          border-radius: 50%;
-        }
-      }
-      .txt {
-        width: 100%;
-      }
-      &:hover {
-        .iconImg {
-          img {
-            -webkit-transform: scale(1.1);
-            -moz-transform: scale(1.1);
-            -ms-transform: scale(1.1);
-            transform: scale(1.1);
-          }
-        }
-      }
-    }
-  }
-  .findItems {
-    width: 100%;
-    height: 725px;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    &::-webkit-scrollbar {
-      display: none;
-    }
-    .findItem {
-      width: 100% !important ;
-      border: none !important ;
 
-      .topLayout {
-        display: flex;
-        align-items: center;
-        vertical-align: top;
-        padding: 5px;
-        .img {
-          .findImage {
-            width: 40px;
-            height: 40px;
-            background-color: #165af7;
-            color: white;
-            border-radius: 50%;
-          }
-        }
-        .title {
-          margin-left: 10px;
-          color: #48639f;
-          span {
-            color: #ccc;
-            font-size: 12px;
-          }
-        }
-        i {
-          float: right;
-        }
-      }
-      .imgComtent {
-        margin-left: 50px;
-        margin-bottom: 5px;
-        width: 300px;
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        &::after {
-          content: "";
-          width: 30%;
-        }
-        .img {
-          width: 30%;
-          height: 90px;
-          margin-bottom: 10px;
-          cursor: pointer;
-        }
-      }
-      .ContentText {
-        margin-left: 50px;
-        margin-bottom: 10px;
-
-        display: flex;
-        em {
-          flex: 5;
-        }
-        span {
-          flex: 1;
-          color: #48639f;
-          font-size: 12px;
-          cursor: pointer;
-          text-align: center;
-        }
-      }
-      .dateInDelet {
-        margin-left: 50px;
-        font-size: 12px;
-        color: #ccc;
-        display: flex;
-        justify-content: space-between;
-        .deleteBtn {
-          margin-left: 20px;
-          cursor: pointer;
-          color: #48639f;
-        }
-        .attrs {
-          margin-left: 50px;
-          font-size: 14px;
-        }
-        .like {
-          float: right;
-          span {
-            margin-right: 30px;
-            cursor: pointer;
-            i {
-              font-size: 18px;
-            }
-            em {
-              font-size: 16px;
-              margin-left: 10px;
-            }
-          }
-          .pinglun {
-            position: relative;
-            .pinglunOptions {
-              position: absolute;
-              width: 100px;
-              height: 50px;
-              border: 1px solid #000;
-              border-radius: 10px;
-            }
-          }
-        }
-      }
-      .reply {
-        background-color: #eeeeed;
-        margin-left: 50px;
-        width: 300px;
-        box-sizing: border-box;
-        padding: 5px;
-        border-radius: 5px;
-        font-size: 12px;
-        span {
-          color: #48639f;
-        }
-      }
-    }
-    // 回到顶部
-    .huidaodingbu {
-      position: absolute;
-      top: -47px;
-      right: 0;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      color: #409eff;
-      background-color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      box-shadow: 0 0 6px rgba(0, 0, 0, 0.22);
-      cursor: pointer;
-      &:hover {
-        background-color: #f2f6fc;
-      }
-    }
-  }
-}
 // 发朋友圈样式
 .sendGonggaoBox {
   background-color: #fff !important;
 }
-.sendGonggao {
-  background-color: #fff;
-  box-sizing: border-box;
-  padding: 10px 5px;
-  box-sizing: border-box;
-  .txtWrap {
-    padding: 0;
-    @{deep} .el-input__count{
-      bottom: -5px;
-      line-height: normal;
-      padding: 0 5px;
-    }
-  }
-  .gonggaoImgList {
-    &:after{
-      content: " ";
-      height: 0;
-      clear: both;
-      display: block;
-      visibility: hidden;
-    }
-    .syllable_ul{
-      .el-col {
-        margin-top: 5px;
-        box-sizing: border-box;
-        .imgItemBox{
-          width: 100%;
-          box-sizing: border-box;
-          height: 0;
-          padding-bottom: 100%;
-          position: relative;
-          border-radius: 5px;
-          overflow: hidden;
-          .itemIcon{
-            position: absolute;
-            left: 0;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.4);
-            span {
-              position: absolute;
-              left:50%;
-              top:50%;
-              transform: translate(-50%,-50%);
-              i{
-                color: #fff;
-                margin: 0 5px;
-                cursor: pointer;
-              }
-            }
-          }
-         .el-image {
-          width: 100%;
-          height: 100%;
-          padding-bottom: 100%;
-          position: relative;
-          @{deep} img {
-            position: absolute;
-            width:100%;
-            height:100%;
-            top:0;
-            left:0;
-            bottom: 0;
-            right: 0;
-          }
-        }
-      }
-      @{deep} .el-image-viewer__wrapper{
-            .el-image-viewer__mask {
-              opacity: .1;
-            }
-          }
-      }
-    }
-    .imgsItemBox{
-      margin-top: 5px;
-      .imgsItem {
-          width: 100%;
-          height: 100%;
-          float: left;
-          @{deep} .el-upload{
-            width: 100%;
-            height: 123.98px;
-            line-height: normal;
-            position: relative;
-            .el-icon-plus{
-              position: absolute;
-              left: 50%;
-              top: 50%;
-              transform: translate(-50%, -50%);
-            }
-          }
-        }
-    }
-  }
-  .sendGonggaoBtn {
-    text-align: center;
-    margin: 20px 0;
-    .sendBtn {
-      width: 80%;
-      border-radius: 20px;
-    }
-  }
-}
+
 .btnLists {
   padding: 20px 0;
   display: flex;
@@ -6371,73 +5345,7 @@ export default {
   justify-content: center;
   font-size: 20px;
 }
-.myRadios {
-  @{deep} .el-radio {
-    font-size: 30px;
-    display: flex;
-    align-items: center;
-    margin: 20px;
-    .el-radio__label{
-     .el-avatar {
-      vertical-align: top;
-      margin-right: 10px;
-      }
-    }
-    .el-radio__label,
-    .is-checked,
-    .el-radio__inner {
-      display: flex;
-      align-items: center;
-    }
-  }
-}
-.tongxunlu {
-  .title {
-    margin-bottom: 20px;
-    font-weight: 600;
-  }
-}
-.tongxunluLianxiren {
-  max-height: 430px;
-  overflow: auto;
-  .myCheckBox {
-  .el-checkbox {
-    font-size: 30px;
-    display: flex;
-    align-items: center;
-    margin: 20px;
-    @{deep} .el-checkbox__label, @{deep} .el-checkbox__input{
-      display: flex;
-      align-items: center;
-      .el-image {
-      transition: all 0.5s;
-      width: 30px;
-      height: 30px;
-      margin-right: 10px;
-      border-radius: 50%;
-      background-color: #165af7;
-      color: white;
-      }
-    }
-    
-    &:hover {
-      @{deep} .el-image {
-        -webkit-transform: scale(1.1);
-        -moz-transform: scale(1.1);
-        -ms-transform: scale(1.1);
-        transform: scale(1.1);
-      }
-    }
-    .el-checkbox__label,
-    .is-checkbox,
-    .el-checkbox__inner {
-      display: flex;
-      align-items: center;
-      border-radius: 50%;
-    }
-  }
-}
-}
+
 .zanwushuju1 {
   width: 100%;
   height: 382px;

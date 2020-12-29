@@ -283,7 +283,10 @@ export default {
     },
     // 打开聊天界面
     openLiaotiao (item) {
-      this.$emit('showLiaotianr', item)
+      this.$emit('openOneView', {
+        ...item,
+        componentName: 'personalChatComponent'
+      })
       this.getOrderMessageCount()
     },
     // 打开公司订单列表

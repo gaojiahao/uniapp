@@ -141,13 +141,15 @@
       >
         <p v-if="loading">加载中...</p>
         <p v-if="noMore">没有更多了</p>
-        <div
+        <!-- <div
           class="huidaodingbu el-icon-caret-top"
           @click="toTop"
           v-show="findList.length > 9"
-        ></div>
+        ></div> -->
       </center>
     </ul>
+    <!-- 回到顶部 -->
+    <el-backtop target=".findListAll" :right="1200" :bottom="100"></el-backtop>
     <!-- 评论 -->
     <el-dialog :title="pinglunTitle" :visible.sync="dialogPinglun" destroy-on-close width="30%">
       <el-form label-position="left" label-width="80px">
@@ -231,6 +233,9 @@ export default {
   mounted () {
     this.$emit('getNoticeUnreadTotal')
     this.getDataList()
+    this.$emit('openOneView', {
+      componentName: 'myAnnouncement'
+    })
     this.$root.eventHub.$on('UpdateFind', async () => {
       this.pageSize = 10
       this.currentPage = 1
@@ -291,9 +296,6 @@ export default {
         this.currentPage = 1
         this.pageSize = this.findList.length >= 100 ? 10 : this.findList.length
         this.getDataList()
-        this.$parent.skipCount = 1
-        this.$parent.maxResultCount = 10
-        this.$parent.getDataList()
         this.dialogPinglun = false
         this.$message.success('评论成功')
       }
@@ -323,9 +325,6 @@ export default {
         val.isLike
           ? val.bearNotice.upvoteTotal++
           : val.bearNotice.upvoteTotal--
-        this.$parent.skipCount = 1
-        this.$parent.maxResultCount = 10
-        this.$parent.getDataList()
       }
     },
     openInfoList () {
@@ -339,23 +338,23 @@ export default {
         this.pageSize = 10
         await this.getDataList(true)
         this.loading = false
-      }, 2000)
+      }, 500)
     },
     // 回到顶部事件
-    async toTop () {
-      let top = $('.findListAll').scrollTop()
-      // 实现滚动效果
-      const _that = this
-      const timeTop = setInterval(() => {
-        $('.findListAll').scrollTop((top -= 20))
-        if (top <= 0) {
-          clearInterval(timeTop)
-          _that.currentPage = 1
-          _that.pageSize = 10
-          _that.findList = _that.findList.slice(0, 10)
-        }
-      }, 1)
-    },
+    // async toTop () {
+    //   let top = $('.findListAll').scrollTop()
+    //   // 实现滚动效果
+    //   const _that = this
+    //   const timeTop = setInterval(() => {
+    //     $('.findListAll').scrollTop((top -= 20))
+    //     if (top <= 0) {
+    //       clearInterval(timeTop)
+    //       _that.currentPage = 1
+    //       _that.pageSize = 10
+    //       _that.findList = _that.findList.slice(0, 10)
+    //     }
+    //   }, 1)
+    // },
     // 获取公告列表
     async getDataList (flag) {
       const res = await this.$http.post('/api/BearNoticePage', {

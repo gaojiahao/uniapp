@@ -2,7 +2,7 @@
   <div class="wrapBox">
     <!-- 聊天窗口 -->
     <h3 class="infoListTitle">
-      {{ options.linkman }}
+      {{ this.signalROptions.name }}
     </h3>
     <div
       class="isOrder"
@@ -572,12 +572,16 @@
 
 <script>
 import { mapState } from 'vuex'
+import VueQr from 'vue-qr'
 import Recorder from 'recorder-core/recorder.mp3.min'
 export default {
   props: {
     options: Object,
     signalROptions: Object,
     MessageUnreadCount: Array
+  },
+  components: {
+    VueQr
   },
   // props: ['options', 'signalROptions'],
   data () {
@@ -606,6 +610,7 @@ export default {
   methods: {
     // 初始化消息立即沟通
     async showLiaotianr () {
+      console.log(this.options)
       this.$store.commit('clearWsMsg')
       this.isOrderShow = null
       this.chatHistoryCurrentPage = 1
@@ -618,17 +623,16 @@ export default {
       this.showTypeOptions.showType = null
       this.showTypeOptions.showOrderDetail = false
       this.signalROptions.isGroup = this.options.isGroup
-      this.signalROptions.name = this.options.linkName
-      this.signalROptions.toCompanyID = this.options.companyId
+      this.signalROptions.name = this.options.linkName || this.options.linkman
+      this.signalROptions.toCompanyID = this.options.companyId || this.options.companyID
       this.signalROptions.groupNumber = this.options.groupNumber
       this.signalROptions.msgType = 'Text'
-      this.signalROptions.toUserID = this.options.id
+      this.signalROptions.toUserID = this.options.toUserID || this.options.id
       console.log(this.signalROptions)
       try {
         this.addChannel() // 加入深网频道
       } catch (error) {
-        // this.$parent.login()
-        this.$message.warning('断线重连成功')
+        this.$message.warning('断线重连')
       }
       // 获取聊天记录
       const res = await this.getInstantMessageByNumber()
@@ -696,6 +700,7 @@ export default {
     async getInstantMessageByNumber () {
       // 连接ws
       if (this.signalROptions.groupNumber && !this.isGroupNumber) {
+        console.log('进来了')
         this.$setWs.$ws && this.$setWs.$ws.close()
         this.$store.commit('setWsId', this.signalROptions.groupNumber)
         this.$setWs.initWebSocket()
@@ -914,9 +919,9 @@ export default {
       const fd = {
         MessageType: this.signalROptions.msgType, // 消息类型；Text文字 Picture图片  Video视频 Voice语音  InstantVoice即时语音 TimeVideo即时视频
         Attachment: this.signalROptions.attachment, // 图片地址
-        IsGroup: this.options.isGroup, // 是否是群聊；false点对点 true 群聊
-        ToUserId: this.options.id, // 接收人id
-        ToCompanyId: this.options.companyId, // 接收人公司id
+        IsGroup: this.signalROptions.isGroup, // 是否是群聊；false点对点 true 群聊
+        ToUserId: this.signalROptions.toUserID, // 接收人id
+        ToCompanyId: this.signalROptions.toCompanyID, // 接收人公司id
         Content: this.signalROptions.value, // 文本内容
         Platform: 'PC', // 终端
         OrderNumber: this.signalROptions.orderNumber,
@@ -1230,6 +1235,7 @@ export default {
   },
    beforeDestroy(){
     this.signChannel()
+    this.$setWs.$ws && this.$setWs.$ws.close()
   }
 }
 </script>
