@@ -2,14 +2,31 @@
   <div class="box">
     <div class="topTitle">
       <span>通讯录</span>
-      <span class="el-icon-circle-plus-outline addFriend" @click="showAddFriendDialog = !showAddFriendDialog">
+      <span
+        class="el-icon-circle-plus-outline addFriend"
+        @click="showAddFriendDialog = !showAddFriendDialog"
+      >
         <div class="addFriendDialog" v-show="showAddFriendDialog">
           <div class="boxAdd">
-            <div class="item" @click="openAddFriend('添加好友')">
+            <div
+              class="item"
+              @click="
+                openOneView({
+                  componentName: 'addFriendComponent',
+                })
+              "
+            >
               <i class="itemIcon addIcon"></i>
               添加好友
             </div>
-            <div class="item" @click="openAddFriend('发起群聊')">
+            <div
+              class="item"
+              @click="
+                openOneView({
+                  componentName: 'launchGroupChat',
+                })
+              "
+            >
               <i class="itemIcon zuIcon"></i>
               发起群聊
             </div>
@@ -29,12 +46,20 @@
     <div class="organizationContent">
       <div class="organizationItem">
         <div class="organizaItem">
-          <div class="parent" @click="openAddFriend('新的好友')">
+          <div
+            class="parent"
+            @click="
+              openOneView({
+                componentName: 'newFriendComponent',
+              })
+            "
+          >
             <div class="left">
               <el-image
-              :src="require('@/assets/images/newFriendIcon.png')"
-              class="myAvatar"
-              fit="cover">
+                :src="require('@/assets/images/newFriendIcon.png')"
+                class="myAvatar"
+                fit="cover"
+              >
               </el-image>
               <p>新的好友</p>
             </div>
@@ -44,12 +69,16 @@
       </div>
       <div class="organizationItem">
         <div class="organizaItem">
-          <div class="parent" @click="openAddFriend('选择群聊')">
+          <div
+            class="parent"
+            @click="openOneView({ componentName: 'groupChatComponent' })"
+          >
             <div class="left">
               <el-image
-              :src="require('@/assets/images/groupChat.png')"
-              class="myAvatar"
-              fit="cover">
+                :src="require('@/assets/images/groupChat.png')"
+                class="myAvatar"
+                fit="cover"
+              >
               </el-image>
               <p>群聊</p>
             </div>
@@ -64,11 +93,11 @@
       >
         <div
           class="parent"
-          @click="showcontactPerson('Exhibition')"
+          @click="openOneView({ componentName: 'hallContactComponent', companyType:'Exhibition', id: userInfo.commparnyList[0].commparnyId })"
           v-show="
             this.userInfo.commparnyList &&
-              this.userInfo.commparnyList.length &&
-              this.userInfo.commparnyList[0].companyType  !==  'Exhibition'
+            this.userInfo.commparnyList.length &&
+            this.userInfo.commparnyList[0].companyType !== 'Exhibition'
           "
         >
           <el-avatar
@@ -79,11 +108,11 @@
         </div>
         <div
           class="parent"
-          @click="showcontactPerson('Supplier')"
+          @click="openOneView({ componentName: 'hallContactComponent', companyType:'Supplier', id: userInfo.commparnyList[0].commparnyId })"
           v-show="
             this.userInfo.commparnyList &&
-              this.userInfo.commparnyList.length &&
-              this.userInfo.commparnyList[0].companyType  !==  'Supplier'
+            this.userInfo.commparnyList.length &&
+            this.userInfo.commparnyList[0].companyType !== 'Supplier'
           "
         >
           <el-avatar
@@ -94,11 +123,11 @@
         </div>
         <div
           class="parent"
-          @click="showcontactPerson('Sales')"
+          @click="openOneView({ componentName: 'hallContactComponent', companyType:'Sales', id: userInfo.commparnyList[0].commparnyId })"
           v-show="
             this.userInfo.commparnyList &&
-              this.userInfo.commparnyList.length &&
-              this.userInfo.commparnyList[0].companyType  !==  'Sales'
+            this.userInfo.commparnyList.length &&
+            this.userInfo.commparnyList[0].companyType !== 'Sales'
           "
         >
           <el-avatar
@@ -110,46 +139,59 @@
       </div>
       <div class="organizationItem" v-if="Organization">
         <div class="organizaItem">
-        <div
-          class="parent"
-          @click="openCollapse"
-        >
-        <div class="left">
-          <el-image
-            style="backgroundColor:#fff;"
-            :src="require('@/assets/images/colleaguesBook.png')"
-            class="myAvatar"
-            fit="cover">
-          </el-image>
-          <p class="pColleagues">同事通讯录<i :class="{ 'el-icon-arrow-down': true, Colleagues: true, rotateColleagues:showCollapse }"></i></p>
-        </div>
-        </div>
-        <el-collapse-transition>
-          <ol class="items" v-show="showCollapse">
-            <li
-              class="item"
-              v-for="(item, i) in orgList"
-              :key="i"
-              @click="sendInfo(Organization.id, item.id)"
-            >
+          <div class="parent" @click="openCollapse">
+            <div class="left">
               <el-image
-                :src="item.userImage"
+                style="background-color:#fff;"
+                :src="require('@/assets/images/colleaguesBook.png')"
                 class="myAvatar"
-                :key="item.userImage"
                 fit="cover"
               >
-                <div
-                  slot="error"
-                  class="image-slot"
-                  style="width:100%;height:100%;display:flex;align-items:center;justify-content:left;white-space: nowrap;"
-                >
-                  {{ item.linkman }}
-                </div>
               </el-image>
-              <p>{{ item.linkman }}</p>
-            </li>
-          </ol>
-        </el-collapse-transition>
+              <p class="pColleagues">
+                同事通讯录<i
+                  :class="{
+                    'el-icon-arrow-down': true,
+                    Colleagues: true,
+                    rotateColleagues: showCollapse,
+                  }"
+                ></i>
+              </p>
+            </div>
+          </div>
+          <el-collapse-transition>
+            <ol class="items" v-show="showCollapse">
+              <li
+                class="item"
+                v-for="(item, i) in orgList"
+                :key="i"
+                @click="openOneView({ company: Organization, person: item, componentName: 'personalDataComponent' })"
+              >
+                <el-image
+                  :src="item.userImage"
+                  class="myAvatar"
+                  :key="item.userImage"
+                  fit="cover"
+                >
+                  <div
+                    slot="error"
+                    class="image-slot"
+                    style="
+                      width: 100%;
+                      height: 100%;
+                      display: flex;
+                      align-items: center;
+                      justify-content: left;
+                      white-space: nowrap;
+                    "
+                  >
+                    {{ item.linkman }}
+                  </div>
+                </el-image>
+                <p>{{ item.linkman }}</p>
+              </li>
+            </ol>
+          </el-collapse-transition>
         </div>
       </div>
       <hr />
@@ -169,14 +211,28 @@
           <div
             slot="error"
             class="image-slot"
-            style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;white-space: nowrap;"
+            style="
+              width: 100%;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              white-space: nowrap;
+            "
           >
             {{ item.linkman }}
           </div>
           <div
             slot="placeholder"
             class="image-slot"
-            style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;white-space: nowrap;"
+            style="
+              width: 100%;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              white-space: nowrap;
+            "
           >
             {{ item.linkman }}
           </div>
@@ -197,7 +253,6 @@ export default {
       showCollapse: false,
       currentPage: 1,
       pageSize: 10,
-      show3: false,
       search: '',
       Organization: {},
       orgList: [],
@@ -210,30 +265,8 @@ export default {
     }
   },
   methods: {
-    // 点击添加好友|发起群聊事件
-    openAddFriend (text) {
-      this.$emit('showAddFriend', {
-        text: text
-      })
-    },
-    // 打开同事通讯录
-    openCollapse () {
-      this.showCollapse = !this.showCollapse
-    },
-    showorganizationItem (val) {
-      this.show3 = !this.show3
-      this.sendCompany(val)
-    },
-    // 点击公司查看公司详情
-    sendCompany (val) {
-      this.$emit('showCompany', {
-        id: val,
-        type: 'showCompany',
-        active: 1
-      })
-    },
     // 打开对应联系公司列表
-    showcontactPerson (val) {
+    showCompanyList (val) {
       this.$emit('showCompanyList', {
         listType: val,
         type: 'showCompanyList',
@@ -241,6 +274,26 @@ export default {
         id: this.userInfo.commparnyList[0].commparnyId
       })
     },
+    // 点击添加好友|发起群聊事件
+    openOneView (item) {
+      this.$emit('openOneView', item)
+    },
+    // 打开同事通讯录折叠
+    openCollapse () {
+      this.showCollapse = !this.showCollapse
+    },
+    // showorganizationItem (val) {
+    //   this.show3 = !this.show3
+    //   this.sendCompany(val)
+    // },
+    // 点击公司查看公司详情
+    // sendCompany (val) {
+    //   this.$emit('showCompany', {
+    //     id: val,
+    //     type: 'showCompany',
+    //     active: 1
+    //   })
+    // },
     handleNodeClick (data) {},
     // 获取组织架构
     async getOrgList () {
@@ -269,13 +322,14 @@ export default {
       }
     },
     // 点击架构的联系人
-    sendInfo (companyId, id) {
-      this.$emit('showInfo', {
-        id: id,
-        companyId: companyId,
-        active: 1,
-        type: 'showInfo'
-      })
+    sendInfo (sendInfo) {
+      console.log(sendInfo)
+      // this.$emit('showInfo', {
+      //   id: id,
+      //   companyId: companyId,
+      //   active: 1,
+      //   type: 'showInfo'
+      // })
     }
   },
   mounted () {
@@ -301,20 +355,20 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  .topTitle{
+  .topTitle {
     height: 50px;
     padding: 0 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    span{
+    span {
       font-size: 18px;
       color: #333333;
-      &.addFriend{
+      &.addFriend {
         position: relative;
         font-weight: 600;
         cursor: pointer;
-        .addFriendDialog{
+        .addFriendDialog {
           font-size: 14px;
           position: absolute;
           width: 100px;
@@ -325,7 +379,7 @@ export default {
           top: 30px;
           right: 0;
           z-index: 2;
-          .boxAdd{
+          .boxAdd {
             width: 100%;
             height: 100%;
             display: flex;
@@ -335,10 +389,10 @@ export default {
             font-weight: normal;
             padding: 0 10px;
             box-sizing: border-box;
-            &::after{
+            &::after {
               position: absolute;
               display: block;
-              content: '';
+              content: "";
               width: 0;
               height: 0;
               border: 10px solid transparent;
@@ -346,24 +400,26 @@ export default {
               right: 5px;
               top: -20px;
             }
-            .item{
+            .item {
               flex: 1;
               display: flex;
               align-items: center;
-              &:last-of-type{
+              &:last-of-type {
                 border-top: 1px dashed #aaa;
               }
-              .itemIcon{
+              .itemIcon {
                 display: block;
                 width: 14px;
                 height: 14px;
                 margin-right: 5px;
-                &.addIcon{
-                  background: url('~@/assets/images/jiahaoyouicon.png')no-repeat center;
+                &.addIcon {
+                  background: url("~@/assets/images/jiahaoyouicon.png")
+                    no-repeat center;
                   background-size: 100%;
                 }
-                &.zuIcon{
-                  background: url('~@/assets/images/zuIcon.png')no-repeat center;
+                &.zuIcon {
+                  background: url("~@/assets/images/zuIcon.png") no-repeat
+                    center;
                   background-size: 100%;
                 }
               }
@@ -385,7 +441,7 @@ export default {
   @{deep} .searchInput input.el-input__inner {
     border-radius: 20px;
     border: none;
-    background-color: #F5F5F5;
+    background-color: #f5f5f5;
   }
 }
 
@@ -429,58 +485,58 @@ export default {
   .organizationItem {
     width: 100%;
     cursor: pointer;
-    .organizaItem{
+    .organizaItem {
       .parent {
         padding: 0 10px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         height: 60px;
-      .left{
+        .left {
           flex: 1;
           display: flex;
           align-items: center;
           @{deep} .myAvatar {
-          margin-right: 10px;
-          color: white;
-          background-color: #165af7;
-          transition: all 1s;
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
+            margin-right: 10px;
+            color: white;
+            background-color: #165af7;
+            transition: all 1s;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+          }
+          .pColleagues {
+            margin-right: 5px;
+            vertical-align: top;
+            .Colleagues {
+              margin-left: 10px;
+              transition: all 0.2s;
+              &.rotateColleagues {
+                /* Rotate div */
+                transform: rotate(180deg);
+                -ms-transform: rotate(180deg);
+                /* Internet Explorer */
+                -moz-transform: rotate(180deg);
+                /* Firefox */
+                -webkit-transform: rotate(180deg);
+                /* Safari 和 Chrome */
+                -o-transform: rotate(180deg);
+                /* Opera */
+              }
+            }
+          }
         }
-        .pColleagues{
-          margin-right: 5px;
-          vertical-align: top;
-          .Colleagues{
-            margin-left: 10px;
-            transition: all 0.2s;
-            &.rotateColleagues{
-              /* Rotate div */
-              transform: rotate(180deg);
-              -ms-transform: rotate(180deg);
-              /* Internet Explorer */
-              -moz-transform: rotate(180deg);
-              /* Firefox */
-              -webkit-transform: rotate(180deg);
-              /* Safari 和 Chrome */
-              -o-transform: rotate(180deg);
-              /* Opera */
+        &:hover {
+          .left {
+            .myAvatar {
+              -webkit-transform: scale(1.1);
+              -moz-transform: scale(1.1);
+              -ms-transform: scale(1.1);
+              transform: scale(1.1);
             }
           }
         }
       }
-      &:hover {
-        .left{
-          .myAvatar {
-          -webkit-transform: scale(1.1);
-          -moz-transform: scale(1.1);
-          -ms-transform: scale(1.1);
-          transform: scale(1.1);
-          }
-        }
-      }
-    }
     }
     .items {
       margin-left: 40px;

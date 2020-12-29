@@ -18,7 +18,7 @@
           @getNoticeUnreadTotal="getNoticeUnreadTotal"
           :findCount="findCount"
           @orderInfoCount="getOrderInfoCount"
-          @showAddFriend="showAddFriend"
+          @openOneView="openOneView"
         ></router-view>
         <!-- tabs -->
         <div class="footer">
@@ -38,98 +38,6 @@
             <i class="el-icon-s-custom"></i>
             <p>通讯录</p>
           </router-link>
-        </div>
-      </li>
-      <!-- 查看个人资料 -->
-      <li
-        class="contentTwo"
-        v-if="
-          showCollection.active === 1 &&
-            $route.path === '/meInfo/newSletter' &&
-            showCollection.type === 'showInfo'
-        "
-      >
-        <div class="top"></div>
-        <div class="bottom"></div>
-        <div class="personalInfo" v-if="personalDetail">
-          <div class="name">
-            <div class="text">
-              <p>{{ personalDetail.linkman }}</p>
-            </div>
-            <div class="img">
-              <el-image
-                :src="personalDetail && personalDetail.userImage"
-                :size="80"
-                @click.native="openEdit(personalDetail.id)"
-                class="myAvatar"
-                fit="cover"
-              >
-                <div
-                  slot="error"
-                  class="image-slot"
-                  style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;white-space: nowrap;"
-                >
-                  {{ personalDetail.linkman }}
-                </div>
-                <div
-                  slot="placeholder"
-                  class="image-slot"
-                  style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;white-space: nowrap;"
-                >
-                  {{ personalDetail.linkman }}
-                </div>
-              </el-image>
-            </div>
-          </div>
-          <div class="floor">
-            <div class="title">性别：</div>
-            <p>{{ personalDetail.sex === 1 ? "男" : "女" }}</p>
-          </div>
-          <div class="floor">
-            <div class="title">生日：</div>
-            <p v-if="personalDetail.birthday">
-              {{ personalDetail.birthday.replace(/T[\s\S]*/gi, "") }}
-            </p>
-          </div>
-          <div class="floor">
-            <div class="title">电话：</div>
-            <p>{{ personalDetail.phoneNumber }}</p>
-          </div>
-          <div class="floor">
-            <div class="title myRemark" v-show="!isEditRemark">备注：
-              <el-button class="subRemark" type="success" size="mini" icon="el-icon-edit" @click="ckeckEditUserRemark" plain>编辑</el-button>
-            </div>
-            <div class="title myRemark" v-show="isEditRemark">备注：
-              <el-button class="subRemark" type="success" size="mini" icon="el-icon-check" @click="editUserRemark(personalDetail)" plain>保存</el-button>
-            </div>
-            <p v-show="personalDetail.remark || isEditRemark">
-              <!-- <el-input type="textarea" :disabled="!isEditRemark" autosize class="companyRemark" v-model="personalDetail.remark" placeholder="请输入备注"></el-input> -->
-              <el-input type="textarea" ref="myTextarea" autosize :disabled="!isEditRemark" class="companyRemark" v-model="personalDetail.remark" placeholder="请输入备注"></el-input>
-            </p>
-          </div>
-          <center class="send">
-            <el-button
-              class="sendInfo"
-              :style="{
-                opacity:
-                  personalDetail.id ==
-                  ($store.state.userInfo.userInfo &&
-                    $store.state.userInfo.userInfo.id)
-                    ? 0.7
-                    : 1
-              }"
-              @click="personalSend"
-              :disabled="
-                personalDetail.id ==
-                  ($store.state.userInfo.userInfo &&
-                    $store.state.userInfo.userInfo.id)
-              "
-              round
-            >
-              <i class="el-icon-s-comment el-icon--left sendIcon"></i>
-              发消息
-            </el-button>
-          </center>
         </div>
       </li>
       <!-- 点击对应公司展示我的排号 -->
@@ -1173,209 +1081,6 @@
           <div v-else class="zanwushuju1"></div>
         </ul>
       </li>
-      <!-- 修改个人资料 -->
-      <li class="contentThree" v-if="active2 === 2">
-        <div class="datas">
-          <li>
-            <div class="title">头像</div>
-            <div class="text">
-              <el-image
-                :src="datas && datas.userImage"
-                class="myAvatar"
-                fit="cover"
-              >
-                <div
-                  slot="error"
-                  class="image-slot"
-                  style="width:100%;height:100%;display:flex;align-items:center;justify-content:left;white-space: nowrap;"
-                >
-                  {{ datas.linkman }}
-                </div>
-              </el-image>
-              <input type="file" class="upLoad" @change="fileChange" />
-            </div>
-          </li>
-          <li>
-            <div class="title">姓名</div>
-            <div class="text">
-              <input type="text" v-model="datas.linkman" />
-            </div>
-          </li>
-          <li>
-            <div class="title">性别</div>
-            <div class="text">
-              <select
-                v-model="datas.sex"
-                style="border:none;outline: none;cursor: pointer;"
-              >
-                <option value="1">男</option>
-                <option value="2">女</option>
-              </select>
-            </div>
-          </li>
-          <li>
-            <div class="title">生日</div>
-            <div class="text">
-              <el-date-picker
-                v-model="datas.birthday"
-                type="date"
-                placeholder="选择日期"
-                size="mini"
-                style="width:130px"
-              ></el-date-picker>
-            </div>
-          </li>
-          <li>
-            <div class="title">电话</div>
-            <div class="text">
-              <input type="text" v-model="datas.phoneNumber" />
-            </div>
-          </li>
-          <li>
-            <div class="title">备注</div>
-            <textarea
-              rows="2"
-              cols="15"
-              v-model="datas.remark"
-              style="border-color:#ccc;border-radius:5px;outline:none;overflow:auto;resize:none;"
-              maxlength="500"
-            ></textarea>
-          </li>
-        </div>
-        <center class="send">
-          <el-button class="sendInfo" round @click="editPersonal"
-            >确认</el-button
-          >
-        </center>
-      </li>
-      <!-- 查看公司资料 -->
-      <li
-        class="contentTwo"
-        v-if="
-          showCollection.active === 1 &&
-            $route.path === '/meInfo/newSletter' &&
-            showCollection.type === 'showCompany'
-        "
-      >
-        <div class="CompanyTop"></div>
-        <div class="CompanyBottom"></div>
-        <div class="detailBox" v-if="CompanyDetail">
-          <div class="CompanyDetail">
-            <div class="CompanyName">
-              <div class="text">
-                <p>{{ CompanyDetail && CompanyDetail.companyName }}</p>
-              </div>
-              <div class="img">
-                <el-image
-                  @click.native="openEdit(CompanyDetail.id)"
-                  class="myImgs"
-                  :src="CompanyDetail && CompanyDetail.companyLogo"
-                  fit="cover"
-                >
-                  <div
-                    slot="error"
-                    class="image-slot"
-                    style="width:100%;height:100%;display:flex;align-items:center;justify-content:left;white-space: nowrap;"
-                  >
-                    {{ CompanyDetail && CompanyDetail.companyName }}
-                  </div>
-                </el-image>
-              </div>
-            </div>
-          </div>
-          <div class="ContactInformation">
-            <div class="ContactItem">
-              <div class="title">电话</div>
-              <div class="text">
-                <template v-if="CompanyDetail && CompanyDetail.phoneNumber">
-                  {{ CompanyDetail.phoneNumber }}
-                </template>
-              </div>
-            </div>
-            <div class="ContactItem">
-              <div class="title">邮箱</div>
-              <div class="text">
-                <template v-if="CompanyDetail && CompanyDetail.e_mail">
-                  {{ CompanyDetail.e_mail }}
-                </template>
-              </div>
-            </div>
-            <div class="ContactItem">
-              <div class="title">地址</div>
-              <div class="text">
-                 <template  v-if="CompanyDetail && CompanyDetail.address">
-                  <div class="address el-icon-location-information" @click="openMap(CompanyDetail)">
-                    {{ CompanyDetail.address }}
-                    </div>
-                  </template>
-              </div>
-            </div>
-            <center class="send">
-              <el-button class="sendInfo" @click="companySend" round>
-                <i class="el-icon-s-comment el-icon--left sendIcon"></i>
-                立即沟通
-              </el-button>
-            </center>
-          </div>
-        </div>
-      </li>
-      <!-- 查看对应联系公司列表 -->
-      <li
-        class="contentTwo"
-        v-if="
-          showCollection.active === 1 &&
-            $route.path === '/meInfo/newSletter' &&
-            showCollection.type === 'showCompanyList'
-        "
-      >
-        <div class="list">
-          <div class="mySearchs">
-            <el-input
-              class="searchInput"
-              prefix-icon="iconfont icon-sousuo"
-              clearable
-              v-model="searchCompanyName"
-              placeholder="请输入公司名称进行搜索"
-              @keyup.enter.native="searchCompanyList"
-            ></el-input>
-          </div>
-          <center
-            style="margin-top:10px;font-size:14px;color:#383838;"
-            v-show="showSearchCompanyCount"
-          >
-            搜索到
-            <span style="color:red;">{{ companyListTotalCount }}</span> 个结果
-          </center>
-          <div class="listItems" v-if="companyListTotalCount" v-infinite-scroll="companyListLoad" infinite-scroll-disabled="companyLoadDisabled">
-            <div class="itemsWrap">
-              <div
-              class="item"
-              v-for="(item, i) in CompanyList"
-              :key="i"
-              @click="openCompanyDetail(item.companyId)"
-            >
-              <el-image class="myAvatar" :src="item.companyLogo" fit="cover">
-                <div
-                  slot="error"
-                  class="image-slot"
-                  style="width:100%;height:100%;display:flex;align-items:center;justify-content:left;white-space: nowrap;"
-                >
-                  {{ item.companyName }}
-                </div>
-              </el-image>
-              <p>{{ item.companyName }}</p>
-            </div>
-            </div>
-            <center class="inTheEnd" v-if="isInTheEnd">没有更多了呢</center>
-          </div>
-          <div v-else-if="showSearchCompanyCount" class="searchCompanyNoData">
-            <p>暂无搜到联系人</p>
-          </div>
-          <div v-else class="companyNoData">
-            <p>暂无联系人</p>
-          </div>
-        </div>
-      </li>
       <!-- 查看对应联系公司详情 -->
       <li class="contentThree" v-if="active2 === 4">
         <div class="CompanyTop"></div>
@@ -1684,163 +1389,14 @@
           </center>
         </div>
       </div>
-      <!-- 选择群聊 -->
-
-      <!-- 添加好友 | 发起群聊 -->
-      <div class="addFriends" v-if="$route.path === '/meInfo/newSletter' && addFriendOptions">
-        <div class="topLayout">{{ addFriendOptions.text }}</div>
-        <!-- 添加好友 -->
-        <template v-if="addFriendOptions.text === '添加好友'">
-            <div class="searchBox">
-            <div class="inputBox">
-            <el-input
-              class="searchInput"
-              prefix-icon="iconfont icon-sousuo"
-              v-model="search"
-              clearable
-              placeholder="请输入关键词">
-            </el-input>
-            <el-button type="primary" round>搜索</el-button>
-          </div>
-          </div>
-          <div class="contentList">
-            <!-- 好友item -->
-            <div class="itemBox" v-for="(item, i) in friendList" :key="i">
-              <div class="left">
-                <div class="icon">
-                  <el-image fit="contain" :src="require('@/assets/images/imgError.jpg')" lazy>
-                      <div
-                        slot="placeholder"
-                        class="image-slot"
-                        style="width:40px;height:40px;margin:0 auto;"
-                      >
-                        <img
-                          class="errorImg"
-                          src="~@/assets/images/imgError.jpg"
-                          alt
-                        />
-                      </div>
-                      <div
-                        slot="error"
-                        class="image-slot"
-                        style="width:40px;height:40px;margin:0 auto"
-                      >
-                        <img
-                          class="errorImg"
-                          src="~@/assets/images/imgError.jpg"
-                          alt
-                        />
-                      </div>
-                    </el-image>
-                </div>
-                <div class="nameBox">
-                  <div class="name">宋小宝</div>
-                  <div class="company">某某公司或展厅名</div>
-                </div>
-              </div>
-              <div class="right">
-                <el-button size="small" type="primary" icon="el-icon-plus" @click="openAddFriend(item)" round>添加</el-button>
-              </div>
-            </div>
-          </div>
-        </template>
-        <!-- 发起群聊 -->
-        <template v-else>
-            <div class="searchBox">
-              <div class="inputBox">
-              <el-input
-                class="searchInput"
-                prefix-icon="iconfont icon-sousuo"
-                v-model="search"
-                clearable
-                placeholder="请输入小竹熊名称">
-              </el-input>
-              <el-button type="primary" round>搜索</el-button>
-            </div>
-            </div>
-            <el-checkbox-group
-            class="myCheckBox"
-            ref="multipleTable"
-            v-model="selectUsers"
-            @change="handleCheckAllChange"
-            >
-            <div class="item" v-for="(item, i) in friendsList" :key="i">
-              <el-checkbox :label="item">
-                <el-image class="img" :src="item.img" fit="cover">
-                  <div
-                    slot="error"
-                    class="image-slot"
-                    style="width:100%;height:100%;display:flex;align-items:center;justify-content:left;white-space: nowrap;"
-                  >
-                    {{ item.linkman }}
-                  </div>
-                </el-image>
-                {{ item.linkman }}
-              </el-checkbox>
-              <div class="companyName" @click="driveCheckbox(item)">{{ item.company }}</div>
-            </div>
-            </el-checkbox-group>
-            <div class="footer">
-              <div class="footerBox">
-                <div class="totalCount">
-                  <span v-show="selectUsers.length">已选择：{{ selectUsers.length }} 人</span>
-                </div>
-                <div class="footerBtn">
-                  <el-button type="info" :class="{ active: selectUsers.length }" round>完成 <span v-show="selectUsers.length">({{ selectUsers.length }})</span></el-button>
-                </div>
-              </div>
-            </div>
-        </template>
+      <!-- 二级窗口组件 -->
+      <div class="componentOneIs" v-if="oneViews">
+        <component :is="oneViews.componentName" :options="oneViews" @openTwoView="openTwoView" ></component>
       </div>
-      <!-- 添加好友验证 -->
-      <div class="addFriends bgClass" v-if="$route.path === '/meInfo/newSletter' && addFriendOptions && showFriendVerification && !addFriendOptions.isShowdialogVerification">
-        <div class="topLayoutTwo">
-          <span class="item"></span>
-          <span class="item">好友验证</span>
-          <span class="item itemBtn">
-            <el-button type="primary" size="mini" round>发送</el-button>
-          </span>
-        </div>
-        <div class="line">
-          发送好友请求
-        </div>
-        <el-input
-          class="roleConText"
-          type="textarea"
-          :rows="4"
-          placeholder="请输入验证信息"
-          v-model="roleConText">
-        </el-input>
-        <div class="line">
-          备注名
-        </div>
-        <el-input class="cateFriends" v-model="selectCateFriends" clearable placeholder="请输入备注"></el-input>
+      <!-- 三级窗口组件 -->
+      <div class="componentOneIs" v-if="twoViews">
+        <component :is="twoViews.componentName" :options="twoViews" @openTwoView="openTwoView"></component>
       </div>
-      <el-dialog
-        title="好友验证"
-        :visible.sync="showdialogVerification"
-        width="40%">
-        <div class="addFriends bgClass addFriendsDialog">
-        <div class="line">
-          发送好友请求
-        </div>
-        <el-input
-          class="roleConText"
-          type="textarea"
-          :rows="4"
-          placeholder="请输入验证信息"
-          v-model="roleConText">
-        </el-input>
-        <div class="line">
-          备注名
-        </div>
-        <el-input class="cateFriends" v-model="selectCateFriends" clearable placeholder="请输入备注"></el-input>
-        <center style="margin-top:100px;">
-          <el-button @click="showdialogVerification = false">取 消</el-button>
-          <el-button type="primary" @click="showdialogVerification = false">发 送</el-button>
-        </center>
-      </div>
-      </el-dialog>
       <!-- 好友申请 -->
       <div class="newFriends bgClass" v-if="$route.path === '/meInfo/newSletter' && newFriendOptions && friendApplication">
         <div class="topLayout">
@@ -2034,554 +1590,6 @@
             <el-button type="primary" class="sendBtn" @click="isSelectPush"
               >发 布</el-button
             >
-          </div>
-        </div>
-      </li>
-      <!-- 聊天窗口 -->
-      <li
-        class="contentThree sendGonggaoBox showLiaotianList"
-        v-if="showTypeOptions.showLiaotianType === 'showLiaotianList'"
-      >
-        <h3 class="infoListTitle">
-          {{ signalROptions.name && signalROptions.name }}
-        </h3>
-        <div
-          class="isOrder"
-          @click="isOrderShowEvent"
-          v-if="
-            isOrderShow &&
-              $store.state.userInfo.commparnyList &&
-              $store.state.userInfo.commparnyList[0] &&
-              $store.state.userInfo.commparnyList[0].companyType === 'Supplier'
-          "
-        >
-          <div class="wenzitxt">
-            <h4 style="font-weight:500;">
-              {{ orderItemsOptions && orderItemsOptions.messageTitle }}
-            </h4>
-            <p>
-              客户名称：{{ orderItemsOptions && orderItemsOptions.client_na }}
-            </p>
-            <p>
-              备注：{{ orderItemsOptions && orderItemsOptions.pushContent }}
-            </p>
-          </div>
-          <i class="guanbi el-icon-close" @click.stop="guanbiOrder"></i>
-        </div>
-        <div
-          class="isOrder2"
-          @click="isOrderShowEvent"
-          v-else-if="
-            isOrderShow &&
-              $store.state.userInfo.commparnyList &&
-              $store.state.userInfo.commparnyList[0] &&
-              $store.state.userInfo.commparnyList[0].companyType  !==  'Supplier'
-          "
-        >
-          <div class="left">
-            <el-image
-              fit="contain"
-              :src="orderItemOptions && orderItemOptions.imgUrl[0]"
-            >
-              <div slot="placeholder" class="image-slot">
-                <img class="errorImg" src="~@/assets/images/imgError.jpg" alt />
-              </div>
-              <div slot="error" class="image-slot">
-                <img class="errorImg" src="~@/assets/images/imgError.jpg" alt />
-              </div>
-            </el-image>
-          </div>
-          <div class="right">
-            <h3>{{ orderItemOptions.pr_na }}</h3>
-            <p>货号：{{ orderItemOptions.co_nu }}</p>
-          </div>
-          <i class="guanbi el-icon-close" @click.stop="guanbiOrder"></i>
-        </div>
-        <div
-          class="liaotianList"
-          ref="liaotianRef"
-          @scroll="liaotianScroll"
-          id="liaotianchuangkou"
-        >
-          <div class="liaotianWarp">
-            <p
-              style="textAlign:center;width:100%;color:#b2c3da;padding:10px;box-sizing:border-box;"
-              v-show="loadText && chatHistoryTotal > 10"
-            >
-              <i class="el-icon-loading" v-show="loadText === '加载中...'"></i>
-              {{ loadText }}
-            </p>
-            <template v-for="(item, i) in signalROptions.showmsg">
-              <div :key="i" class="liaotianItens">
-                <div
-                  v-if="item.fromUserId === $store.state.userInfo.userInfo.id"
-                >
-                  <center style="font-size:12px;color:#ccc;">
-                    {{ item.createdOn && dateDiff(item.createdOn) }}
-                  </center>
-                  <!-- 我的消息 -->
-                  <div class="myInfo">
-                    <div class="myAvatarImg">
-                      <el-image
-                        class="img"
-                        :src="$store.state.userInfo.userInfo.userImage"
-                        fit="cover"
-                      >
-                        <div slot="placeholder" class="image-slot">
-                          <img
-                            class="errorImg"
-                            src="~@/assets/images/imgError.jpg"
-                            alt
-                          />
-                        </div>
-                        <div slot="error" class="image-slot">
-                          <img
-                            class="errorImg"
-                            src="~@/assets/images/imgError.jpg"
-                            alt
-                          />
-                        </div>
-                      </el-image>
-                    </div>
-                    <div class="context">
-                      <div
-                        id="myContent"
-                        @contextmenu.prevent.stop="
-                          openEditInfo($event, item.id)
-                        "
-                      >
-                        <!-- 文本 -->
-                        <div
-                          class="youTextInfo"
-                          v-if="item.messageType === 'Text'"
-                        >
-                          <span class="msgTypeText">
-                            <pre>{{ item.content }}</pre></span
-                          >
-                        </div>
-                        <!-- 分享链接 -->
-                        <div
-                          class="youTextInfo"
-                          v-if="item.messageType === 'Product'">
-                          <div class="msgTypeProduct">
-                            <div class="liaotianerweima">
-                              <template v-if="item.content">
-                                  <vue-qr
-                                    :text="item.content"
-                                    colorDark="#018e37"
-                                    colorLight="#fff"
-                                    :margin="0"
-                                    :size="50"
-                                  ></vue-qr>
-                              </template>
-                              <el-image
-                                v-else
-                                style="width: 50px; height: 50px"
-                                :src="require('@/assets/images/imgError.jpg')">
-                              </el-image>
-                            </div>
-                            <div class="right">
-                              <div class="context">
-                                {{ item.attachment || item.content}}
-                              </div>
-                              <a class="see" :href="item.content" target="_blank"><i class="el-icon-view"></i>查看详情</a>
-                              <div class="copy" @click="copyLink(item.id)"><i class="el-icon-link"></i>复制链接</div>
-                              <a :href="item.content" :id="item.id" target="_blank" style="position:fixed;top:9999px;left:9999px;">{{item.content}}</a>
-                            </div>
-                            <!-- <pre>{{ item.content }}</pre> -->
-                          </div>
-                        </div>
-                        <!-- 视频 -->
-                        <div
-                          class="msgTypeVideo"
-                          v-else-if="item.messageType === 'Video'"
-                        >
-                          <video
-                            class="video-js vjs-default-skin vjs-big-play-centered"
-                            controls
-                            style="object-fit:cover"
-                          >
-                            <source
-                              ref="videoPreview"
-                              :src="item.attachment"
-                              :type="
-                                'video/' + $_.last(item.attachment.split('.'))
-                              "
-                            />
-                          </video>
-                        </div>
-                        <!-- 图片 -->
-                        <div
-                          class="msgTypeImage"
-                          v-else-if="item.messageType === 'Picture'"
-                        >
-                          <el-image
-                            fit="contain"
-                            :src="item.attachment"
-                            :key="item.attachment"
-                            :preview-src-list="[item.attachment]"
-                          >
-                            <div slot="error" class="image-slot">
-                              <img
-                                class="errorImg"
-                                src="~@/assets/images/图片加载失败.png"
-                                alt
-                              />
-                            </div>
-                          </el-image>
-                        </div>
-                        <!-- 音频 -->
-                        <div
-                          v-else-if="item.messageType === 'Voice'"
-                          @click="checkMsgTypeAudio(item)"
-                          class="msgTypeAudio"
-                        >
-                          <img
-                            v-show="!item.isOpen"
-                            src="~@/assets/images/暂停.png"
-                            alt
-                          />
-                          <img
-                            v-show="item.isOpen"
-                            src="~@/assets/images/播放.gif"
-                            alt
-                          />
-                          <audio
-                            :ref="'myAudio' + item.attachment"
-                            :src="item.attachment"
-                            @ended="ended"
-                          >
-                            Your browser does not support the audio tag.
-                          </audio>
-                        </div>
-                        <!-- file文件 -->
-                        <a
-                          v-else-if="item.messageType === 'file'"
-                          :href="item.attachment"
-                          :download="$_.last(item.attachment.split('/'))"
-                          target="_blank"
-                          class="msgTypeTXT"
-                        >
-                          <div class="title">附件：</div>
-                          <p>{{ $_.last(item.attachment.split("/")) }}</p>
-                        </a>
-                        <!-- 即时语音功能 -->
-                        <div
-                          style="width:285px;padding:10px;color:#b2b2b2;"
-                          v-else-if="item.messageType === 'InstantVoice'"
-                        >
-                          <center>暂无即时语音功能</center>
-                        </div>
-                        <!-- 即时视频功能 -->
-                        <div
-                          style="width:285px;padding:10px;color:#b2b2b2;"
-                          v-else-if="item.messageType === 'TimeVideo'"
-                        >
-                          <center>暂无即时视频功能</center>
-                        </div>
-                      </div>
-                      <!-- 打开操作消息 -->
-                      <div class="myChehui" v-show="item.id === isChehui">
-                        <div
-                          class="item"
-                          v-if="item.messageType === 'Text'"
-                          @click="copyInfo(item)"
-                        >
-                          复制
-                        </div>
-                        <div
-                          class="item"
-                          v-if="item.messageType  !==  'Voice'"
-                          @click="forwardInfo(item)"
-                        >
-                          转发
-                        </div>
-                        <div class="item" @click="withdrawInfo(item)">撤回</div>
-                        <div class="item" @click="deleteInfo(item)">删除</div>
-                      </div>
-
-                      <!-- 群发已读未读 | 单聊已读未读 -->
-                      <template v-if="signalROptions.isGroup">
-                        <div class="unRead" v-show="item.unreadCout">
-                          {{ isShowReady(item) }}人未读
-                        </div>
-                        <div class="read" v-show="!item.unreadCout">
-                          全部已读
-                        </div>
-                      </template>
-
-                      <template v-else>
-                        <div class="read" v-show="!item.unreadCout">
-                          已读
-                        </div>
-                        <div class="unRead" v-show="isShowReady(item)">
-                          未读
-                        </div>
-                      </template>
-                    </div>
-                  </div>
-                </div>
-                <div v-else>
-                  <center style="font-size:12px;color:#ccc;">
-                    {{ item.createdOn && dateDiff(item.createdOn) }}
-                  </center>
-                  <!-- 你的消息 -->
-                  <div class="youInfo">
-                    <div class="myAvatarImg">
-                      <el-image class="img" :src="item.userImage" fit="cover">
-                        <div
-                          slot="placeholder"
-                          class="image-slot"
-                          style="width:100%;height:100%;backgroundColor:#165af7;color:#fff;display:flex;align-items:center;justify-content: center;white-space: nowrap;"
-                        >
-                          {{ item.linkName }}
-                        </div>
-                        <div
-                          slot="error"
-                          class="image-slot"
-                          style="width:100%;height:100%;backgroundColor:#165af7;color:#fff;display:flex;align-items:center;justify-content: center;white-space: nowrap;"
-                        >
-                          {{ item.linkName }}
-                        </div>
-                      </el-image>
-                    </div>
-                    <div class="context">
-                      <div class="youInfoName">{{ item.linkName }}</div>
-                      <div
-                        id="myContent"
-                        @contextmenu.prevent.stop="
-                          openEditInfo($event, item.id)
-                        "
-                      >
-                        <!-- 文本 -->
-                        <div
-                          class="youTextInfo"
-                          v-if="item.messageType === 'Text'"
-                        >
-                          <span class="msgTypeText"
-                            ><pre>{{ item.content }}</pre></span
-                          >
-                        </div>
-                        <!-- 分享链接 -->
-                          <div class="msgTypeProduct" v-else-if="item.messageType === 'Product'">
-                            <div class="liaotianerweima">
-                              <template v-if="item.content">
-                                  <vue-qr
-                                    :text="item.content"
-                                    colorDark="#018e37"
-                                    colorLight="#fff"
-                                    :margin="0"
-                                    :size="50"
-                                  ></vue-qr>
-                              </template>
-                              <el-image
-                                v-else
-                                style="width: 50px; height: 50px"
-                                :src="require('@/assets/images/imgError.jpg')">
-                              </el-image>
-                            </div>
-                            <div class="right">
-                              <div class="context">
-                                {{ item.attachment || item.content}}
-                              </div>
-                              <a class="see" :href="item.content" target="_blank"><i class="el-icon-view"></i>查看详情</a>
-                              <div class="copy" @click="copyLink(item.id)"><i class="el-icon-link"></i>复制链接</div>
-                              <a :href="item.content" :id="item.id" target="_blank" style="position:fixed;top:9999px;left:9999px;">{{item.content}}</a>
-                            </div>
-                            <!-- <pre>{{ item.content }}</pre> -->
-                          </div>
-                        <!-- 视频 -->
-                        <div
-                          class="msgTypeVideo"
-                          v-else-if="item.messageType === 'Video'"
-                        >
-                          <video
-                            class="video-js vjs-default-skin vjs-big-play-centered"
-                            controls
-                            style="object-fit:cover"
-                          >
-                            <source
-                              ref="videoPreview"
-                              :src="item.attachment"
-                              :type="
-                                'video/' + $_.last(item.attachment.split('.'))
-                              "
-                            />
-                          </video>
-                        </div>
-                        <!-- 图片 -->
-                        <div
-                          class="msgTypeImage"
-                          v-else-if="item.messageType === 'Picture'"
-                        >
-                          <el-image
-                            fit="contain"
-                            :src="item.attachment"
-                            :key="item.attachment"
-                            :preview-src-list="[item.attachment]"
-                          >
-                            <div slot="error" class="image-slot">
-                              <img
-                                class="errorImg"
-                                src="~@/assets/images/图片加载失败.png"
-                                alt
-                              />
-                            </div>
-                          </el-image>
-                        </div>
-                        <!-- 音频 -->
-                        <div
-                          v-else-if="item.messageType === 'Voice'"
-                          @click="checkMsgTypeAudio(item)"
-                          class="msgTypeAudio"
-                        >
-                          <img
-                            v-show="!item.isOpen"
-                            src="~@/assets/images/暂停.png"
-                            alt
-                          />
-                          <img
-                            v-show="item.isOpen"
-                            src="~@/assets/images/播放.gif"
-                            alt
-                          />
-                          <audio
-                            :ref="'myAudio' + item.attachment"
-                            :src="item.attachment"
-                            @ended="ended"
-                          >
-                            Your browser does not support the audio tag.
-                          </audio>
-                        </div>
-                        <!-- file文件 -->
-                        <!-- @click="openPreview(item)" -->
-                        <a
-                          v-else-if="item.messageType === 'file'"
-                          :href="item.attachment"
-                          :download="$_.last(item.attachment.split('/'))"
-                          target="_blank"
-                          class="msgTypeTXT"
-                        >
-                          <div class="title">附件：</div>
-                          <p>{{ $_.last(item.attachment.split("/")) }}</p>
-                        </a>
-                        <!-- 即时语音功能 -->
-                        <div
-                          style="width:250px;padding:10px;color:#b2b2b2;"
-                          v-else-if="item.messageType === 'InstantVoice'"
-                        >
-                          <center>暂无即时语音功能</center>
-                        </div>
-                        <!-- 即时视频功能 -->
-                        <div
-                          style="width:250px;padding:10px;color:#b2b2b2;"
-                          v-else-if="item.messageType === 'TimeVideo'"
-                        >
-                          <center>暂无即时视频功能</center>
-                        </div>
-                      </div>
-                      <div class="myChehui" v-show="item.id === isChehui">
-                        <div
-                          class="item"
-                          v-if="item.messageType === 'Text'"
-                          @click="copyInfo(item)"
-                        >
-                          复制
-                        </div>
-                        <div
-                          class="item"
-                          v-if="item.messageType  !==  'Voice'"
-                          @click="forwardInfo(item)"
-                        >
-                          转发
-                        </div>
-                        <div class="item" @click="deleteInfo(item)">删除</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </template>
-          </div>
-        </div>
-        <div class="infoListSend">
-          <div
-            class="maikef el-icon-microphone"
-            @click="recOpen(true)"
-            v-show="!isShowRec"
-          ></div>
-          <div
-            class="maikef iconfont icon-dakaijianpan"
-            @click="recOpen(false)"
-            v-show="isShowRec"
-          ></div>
-          <div
-            class="sendValueInput"
-            v-show="!isShowRec"
-            @contextmenu.prevent.stop="OpenPaste"
-          >
-            <el-input
-              type="textarea"
-              :rows="2"
-              resize="none"
-              autocomplete="off"
-              v-model="signalROptions.value"
-              ref="sendMessageRef"
-              class="sendValue"
-              @keyup.native.prevent="sendMessage"
-              :maxlength="Json.MessageRestriction[6].itemCode"
-            ></el-input>
-            <div class="pasteIten" v-show="isPaste" @click="pasteInfo($event)">
-              粘贴
-            </div>
-          </div>
-          <el-button
-            class="sendValueBtn"
-            plain
-            v-show="isShowRec"
-            @click="showDeleteButton"
-            :style="{ backgroundColor: sendRec ? '#fff' : '#ecf5ff' }"
-          >
-            <span v-show="sendRec">{{ sendRec }}</span>
-            <img
-              v-show="!sendRec"
-              src="~@/assets/images/录音.gif"
-              alt
-              width="100%"
-              style="vertical-align:top;height:50px;"
-            />
-          </el-button>
-
-          <i class="iconfont icon-746bianjiqi_biaoqing"></i>
-          <i class="iconfont el-icon-circle-plus-outline sendfiles">
-            <input
-              type="file"
-              title
-              ref="refFileInput"
-              @change="changeFiless"
-              class="fileInput"
-              :accept="
-                Json.MessageRestriction &&
-                  Json.MessageRestriction[2].itemCode +
-                    ',' +
-                    Json.MessageRestriction[3].itemCode +
-                    ',' +
-                    Json.MessageRestriction[4].itemCode +
-                    ',' +
-                    Json.MessageRestriction[0].itemCode
-              "
-            />
-          </i>
-          <div class="sendBtnBox">
-            <transition name="show">
-              <el-button
-                class="sendBtn"
-                @click="sendMessages"
-                v-show="signalROptions.value"
-                size="mini"
-                >发送</el-button
-              >
-            </transition>
           </div>
         </div>
       </li>
@@ -2787,19 +1795,47 @@ import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 import bsTop from '@/components/BsTop.vue'
 import bsFooter from '@/components/oldFooter'
 import elTableInfiniteScroll from 'el-table-infinite-scroll'
-import Recorder from 'recorder-core/recorder.mp3.min'
 import BMapComponent from '@/components/map.vue'
 import draggable from 'vuedraggable'
 import VueQr from 'vue-qr'
+import addFriendComponent from '@/components/addFriendComponent/addFriendComponent.vue'
+import launchGroupChat from '@/components/launchGroupChat/launchGroupChat.vue'
+import friendVerificationComponent from '@/components/friendVerificationComponent/friendVerificationComponent.vue'
+import friendApplicationComponent from '@/components/friendApplicationComponent/friendApplicationComponent.vue'
+import newFriendComponent from '@/components/newFriendComponent/newFriendComponent.vue'
+import groupChatComponent from '@/components/groupChatComponent/groupChatComponent.vue'
+import hallContactComponent from '@/components/hallContactComponent/hallContactComponent.vue'
+import personalDataComponent from '@/components/personalDataComponent/personalDataComponent.vue'
+import editPersonalDataComponent from '@/components/editPersonalDataComponent/editPersonalDataComponent.vue'
+import personalChatComponent from '@/components/personalChatComponent/personalChatComponent.vue'
 export default {
   directives: {
     'el-table-infinite-scroll': elTableInfiniteScroll
   },
   components: {
-    bsTop, bsFooter, BMapComponent, draggable, ElImageViewer, VueQr
+    bsTop,
+    bsFooter,
+    BMapComponent,
+    draggable,
+    ElImageViewer,
+    VueQr,
+    addFriendComponent,
+    launchGroupChat,
+    friendVerificationComponent,
+    friendApplicationComponent,
+    newFriendComponent,
+    groupChatComponent,
+    hallContactComponent,
+    personalDataComponent,
+    editPersonalDataComponent,
+    personalChatComponent
   },
   data () {
     return {
+      currentTwoComponent: null,
+      twoViews: null,
+      currentOneComponent: null,
+      oneViews: null,
       groupCurrentPage: 1,
       groupPageSize: 10,
       groupTotalCount: 0,
@@ -2808,29 +1844,6 @@ export default {
       showdialogVerification: false,
       friendApplication: null,
       newFriendOptions: null,
-      selectUsers: [],
-      friendsList: [{
-        id: 1,
-        linkman: '张三',
-        company: '超级无敌大大大大大大大大公司1',
-        img: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-      }, {
-        id: 2,
-        linkman: '李四',
-        company: '公司2',
-        img: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-      }, {
-        id: 3,
-        linkman: '王五',
-        company: '公司3',
-        img: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-      }],
-      friendCateList: [{
-        name: '联系人',
-        id: 4
-      }],
-      selectCateFriends: null,
-      roleConText: null,
       showFriendVerification: null,
       friendList: 50,
       addFriendOptions: null,
@@ -2844,10 +1857,8 @@ export default {
       drag: false,
       isCheckCube: true,
       myProductSearchValue: null,
-      companyLoadDisabled: true,
       companyListPageSize: 20,
       companyListCurrentPage: 1,
-      isEditRemark: false,
       companyAddr: '',
       companyAddrMapDialog: false,
       orderItemOptions: null,
@@ -2857,7 +1868,6 @@ export default {
       drawer: false,
       copyText: null,
       isChehui: null,
-      isPaste: null,
       orderSampleFrom: null,
       orderWsMsg: null,
       orderWs: null,
@@ -2869,7 +1879,6 @@ export default {
       customerVisitCurrentPage: 1,
       customerVisitPageSize: 10,
       showSearchCompanyCount: false,
-      searchCompanyName: '',
       isNoCustomerVisit: false,
       isNoCurrentNumber: false,
       currentNumberPageSize: 10,
@@ -2877,9 +1886,7 @@ export default {
       orderCurrentPage: 1,
       orderPageSize: 10,
       orderLoadText: '加载中...',
-      sendRec: null,
       Loop: null, // 长按事件
-      isShowRec: false,
       rec: null,
       showAddSampleTXT: null,
       activeAddSample: false,
@@ -2922,26 +1929,6 @@ export default {
       orderDetailList: [],
       orderDetailTotal: 0,
       isOrderShow: false,
-      signalROptions: {
-        // 深网配置
-        value: null,
-        attachment: null,
-        addId: '5de91f02f12c41c2b276c9accb4679c7',
-        userName:
-          this.$store.state.userInfo.userInfo &&
-          this.$store.state.userInfo.userInfo.linkman,
-        token: '',
-        showmsg: [],
-        orderNumber: null,
-        creatChannel: null,
-        groupNumber: '',
-        toCompanyID: null,
-        toUserID: null,
-        name: '',
-        uid: '',
-        client: '',
-        channelMember: []
-      },
       ERPOrderOptions: {
         ERPOrderList: null,
         total: 0
@@ -3484,24 +2471,7 @@ export default {
       this.showTypeOptions.showLiaotianType = 'showLiaotianList'
       this.active2 = null
     },
-    // 公司列表下拉加载更多
-    async companyListLoad(val) {
-      this.companyListCurrentPage++
-       const res = await this.$http.post('/api/ContactsCompanyListByID', {
-        companyID: this.showCollection.id,
-        OppositeRole: this.showCollection.listType,
-        companyName: this.searchCompanyName,
-        maxResultCount: this.companyListPageSize,
-        skipCount: this.companyListCurrentPage
-      })
-      if (res.data.result.code === 200) {
-        this.CompanyList = this.CompanyList.concat(res.data.result.item.items)
-        this.companyListTotalCount = res.data.result.item.totalCount
-        if (this.CompanyList.length >= this.companyListTotalCount) this.companyLoadDisabled = true
-      } else {
-        this.$message.error(res.data.result.msg)
-      }
-    },
+    
     // 点击订单|订单详情立即沟通
     async orderSend (item, value) {
       this.$store.commit('clearWsMsg')
@@ -3853,129 +2823,6 @@ export default {
       fd.append('file', file)
       return await this.$http.post('/api/File/MessageUploadFile', fd)
     },
-    // 选择发送文件
-    async changeFiless (e) {
-      this.signalROptions.value = null
-      this.signalROptions.attachment = null
-      const file = e.target.files && e.target.files[0]
-      const type = this.$_.first(file.type.split('/'))
-      switch (type) {
-        case 'application':
-          this.signalROptions.msgType = 'file'
-          break
-        case 'text':
-          this.signalROptions.msgType = 'file'
-          break
-        case 'video':
-          this.signalROptions.msgType = 'Video'
-          break
-        case 'image':
-          this.signalROptions.msgType = 'Picture'
-          break
-      }
-      const res = await this.upLoadFiles(file)
-      if (res.data.result.code === 200) {
-        this.signalROptions.attachment = res.data.result.object[0].filePath
-        this.sendMessages()
-      } else {
-        this.$message.error('上传失败，请检查网络')
-      }
-    },
-    // 开始录音|录制完成发送语音
-    showDeleteButton () {
-      try {
-        if (this.sendRec === '点击录制语音') {
-          this.rec.start()
-        } else {
-          this.recEnd()
-        }
-      } catch (error) {
-        this.$message.error('需要https才能实现这个功能')
-      }
-
-      this.sendRec = this.sendRec === '点击录制语音' ? null : '点击录制语音'
-    },
-    // 初始化录音功能
-    initRec () {
-      // 一般在显示出录音按钮或相关的录音界面时进行此方法调用，后面用户点击开始录音时就能畅通无阻了
-      this.rec = Recorder({
-        type: 'mp3',
-        sampleRate: 16000,
-        bitRate: 16 // mp3格式，指定采样率hz、比特率kbps，其他参数使用默认配置；注意：是数字的参数必须提供数字，不要用字符串；需要使用的type类型，需提前把格式支持文件加载进来，比如使用wav格式需要提前加载wav.js编码引擎
-      })
-      this.rec.open()
-    },
-    // 选择录音
-    recOpen (flag) {
-      console.log(flag)
-      this.isShowRec = flag
-      this.sendRec = '点击录制语音'
-      if (flag) {
-        this.initRec()
-        console.log(this.rec)
-      } else this.rec.close()
-    },
-    // 结束录音
-    recEnd () {
-      const TestApi = '/api/File/MessageUploadFile' // 用来在控制台network中能看到请求数据，测试的请求结果无关紧要
-      const _that = this
-      this.rec.stop(
-        function (blob, duration) {
-          // 录音结束时拿到了blob文件对象，可以用FileReader读取出内容，或者用FormData上传
-          const api = TestApi
-          /** *方式二：使用FormData用multipart/form-data表单上传文件***/
-          const form = new FormData()
-          form.append('upfile', blob, 'recorder.mp3') // 和普通form表单并无二致，后端接收到upfile参数的文件，文件名为recorder.mp3
-          _that.$http.post(api, form).then(result => {
-            if (result.data.result.code === 200) {
-              _that.signalROptions.value = null
-              _that.signalROptions.msgType = 'Voice'
-              _that.signalROptions.attachment =
-                result.data.result.object[0].filePath
-              _that.sendMessages()
-            } else {
-              _that.$message.error('发送失败，请检查网络')
-            }
-          })
-        },
-        function (msg) {
-          this.$message.error('录音失败:' + msg)
-        }
-      )
-    },
-    // 语音播放完事件
-    ended () {
-      this.audioItem.isOpen = false
-      this.audioItem = null
-      this.$nextTick(() => {
-        this.noScrollTop = false
-      })
-    },
-    // 点击听语音
-    checkMsgTypeAudio (val) {
-      this.noScrollTop = true
-      if (!val.isOpen) {
-        console.log(this.$refs['myAudio' + val.attachment][0])
-        this.$refs['myAudio' + val.attachment][0].play()
-        this.$set(val, 'isOpen', true)
-        if (this.audioItem) {
-          this.$refs['myAudio' + this.audioItem.attachment][0].pause()
-          this.$refs['myAudio' + this.audioItem.attachment][0].load()
-          this.audioItem.isOpen = false
-          this.audioItem = null
-        }
-        this.audioItem = val
-      } else {
-        console.log(this.$refs['myAudio' + val.attachment][0])
-        this.$refs['myAudio' + val.attachment][0].pause()
-        this.$refs['myAudio' + val.attachment][0].load()
-        this.$set(val, 'isOpen', false)
-        this.audioItem = null
-        this.$nextTick(() => {
-          this.noScrollTop = false
-        })
-      }
-    },
     // 通讯录下拉加载更多
     tongxunluLoad () {
       if (this.orgListCount < 10 || this.orgList.length >= this.orgListCount) {
@@ -4160,12 +3007,6 @@ export default {
         this.dialogVisibleImg = true
       }
     },
-    ckeckEditUserRemark () {
-      this.isEditRemark = true
-      this.$nextTick(()=>{
-        this.$refs.myTextarea.focus()
-      })
-    },
     // 给员工打备注
     async editUserRemark(item){
       const result = await this.$http.post('/api/UpdateOrgPersonnel', item)
@@ -4200,57 +3041,9 @@ export default {
       }
       this.dialogAddTag = false
     },
-    // 点击对应公司列表查看详情
-    async openCompanyDetail (id) {
-      this.isGroupNumber = false
-      this.showTypeOptions.showLiaotianType = null
-      this.active2 = 4
-      const res = await this.$http.post('api/OrgCompanyLableListByID', {
-        CompanyId: id
-      })
-      if (res.data.result.code === 200) {
-        this.CompanyDetail = res.data.result.item
-        this.CompanyDetail.companyName =
-          res.data.result.item.orgCompany.companyName
-        this.CompanyDetail.companyLogo =
-          res.data.result.item.orgCompany.companyLogo
-        this.CompanyDetail.id = res.data.result.item.orgCompany.id
-      }
-      this.CompanyDetail.detailId = id
-    },
-    // 搜索公司列表
-    async searchCompanyList () {
-      this.companyLoadDisabled = true
-      $('.listItems').animate({ scrollTop: 0 })
-      this.$nextTick(async ()=>{
-        this.showSearchCompanyCount = false
-        this.companyListCurrentPage = 1
-        await this.getContactsCompanyListByID()
-        this.showSearchCompanyCount = true
-        this.showTypeOptions.showLiaotianType = null
-        this.isGroupNumber = false
-        this.active2 = null
-      })
-    },
-    // 获取公司列表
-    async getContactsCompanyListByID () {
-      const res = await this.$http.post('/api/ContactsCompanyListByID', {
-        companyID: this.showCollection.id,
-        OppositeRole: this.showCollection.listType,
-        companyName: this.searchCompanyName,
-        maxResultCount: this.companyListPageSize,
-        skipCount: this.companyListCurrentPage
-      })
-      if (res.data.result.code === 200) {
-        this.CompanyList = res.data.result.item.items
-        this.companyListTotalCount = res.data.result.item.totalCount
-        if (this.companyListTotalCount > this.companyListPageSize) this.companyLoadDisabled = false
-      } else {
-        this.$message.error(res.data.result.msg)
-      }
-    },
     // 点击查看对应公司列表页
     async showCompanyList (val) {
+      console.log(val);
       $('.listItems').animate({ scrollTop: 0 })
       this.companyLoadDisabled = true
       this.$nextTick(()=> {
@@ -4264,12 +3057,7 @@ export default {
         this.getContactsCompanyListByID()
       })
     },
-    // 上传图片修改头像
-    async fileChange (e) {
-      this.file = e.target.files[0]
-      const url = URL.createObjectURL(this.file)
-      this.datas.userImage = url
-    },
+    
     // 点击对应公司查看公司信息
     async showCompany (val) {
       this.showCollection = val
@@ -4612,17 +3400,6 @@ export default {
         this.$message.error("不能修改别人的资料哦")
       }
     },
-    // 获取个人详情页
-    async getPersonalDetails (id) {
-      const res = await this.$http.post('/api/OrgPersonnelByID', {
-        id: id,
-        CompanyId: this.showCollection.companyId
-      })
-      if (res.data.result.code === 200) {
-        this.personalDetail = res.data.result.item
-        this.datas = JSON.parse(JSON.stringify(res.data.result.item))
-      }
-    },
     // 拉到底加载更多
     load () {
       this.loading = true
@@ -4924,45 +3701,6 @@ export default {
         this.orderLoadText = '人家也是有底线滴'
       }
     },
-    // 聊天滚动查看历史记录
-    async liaotianScroll (e) {
-      const topJuli = e.target.scrollTop
-      const warpHeight = $('.liaotianWarp').innerHeight()
-      if (this.timeID) clearTimeout(this.timeID)
-      this.timeID = setTimeout(async () => {
-        if (topJuli === 0) {
-          this.noScrollTop = true
-          this.loadText = '加载中...'
-          if (this.timeID) clearTimeout(this.timeID)
-          this.timeID = setTimeout(async () => {
-            if (this.signalROptions.showmsg.length >= this.chatHistoryTotal) {
-              this.noScrollTop = true
-              this.loadText = '没有更多聊天记录了'
-              this.$nextTick(() => {
-                this.noScrollTop = false
-              })
-              return false
-            }
-            this.chatHistoryCurrentPage++
-            const res = await this.getInstantMessageByNumber()
-            if (res.data.result.code === 200) {
-              this.loadText = null
-              const list = res.data.result.item.items
-              for (let i = list.length - 1; i >= 0; i--) {
-                this.signalROptions.showmsg.unshift(list[i])
-              }
-              this.chatHistoryTotal = res.data.result.item.totalCount
-              this.$nextTick(() => {
-                e.target.scrollTop =
-                  $('.liaotianWarp')[0].offsetHeight - warpHeight
-
-                this.noScrollTop = false
-              })
-            }
-          }, 1000)
-        }
-      }, 500)
-    },
     // 获取系统参数
     async getClientTypeList (type) {
       const res = await this.$http.post('/api/ServiceConfigurationList', {
@@ -5166,23 +3904,12 @@ export default {
       }
     },
     // 打开添加好友窗口
-    openAddFriend(item) {
-      this.showFriendVerification = item
-      if(this.addFriendOptions.isShowdialogVerification) this.showdialogVerification = true
-    },
-    // 打开添加好友窗口
     openRootAddFriends() {
       this.friendApplication = null
       this.addFriendOptions = {
         text: '添加好友',
         isShowdialogVerification: true
       }
-    },
-    // 接受添加好友
-    openAccept(item) {
-      console.log(item);
-      this.addFriendOptions = null
-      this.friendApplication = item
     },
     // 获取群聊列表
     async getGroupMessageList() {
@@ -5194,7 +3921,19 @@ export default {
         this.groupMessageList = res.data.result.item.items
         this.groupTotalCount = res.data.result.item.totalCount
       }
-    }
+    },
+    // 打开二级窗口
+    openOneView(option) {
+      this.oneViews = null
+      this.twoViews = null
+      console.log(option)
+      this.$nextTick(()=>this.oneViews = option)
+    },
+    // 打开三级窗口添加好友
+    openTwoView(option) {
+      this.twoViews = null
+      this.$nextTick(()=>this.twoViews = option)
+    },
   },
   mounted () {
     this.activeFind = 2
@@ -5323,7 +4062,7 @@ export default {
       return this.orderInfoCount + this.infoCount
     },
     updateLiaotian () {
-      return this.signalROptions.showmsg
+      // return this.signalROptions.showmsg
     },
     getWsMsg () {
       return this.$store.state.wsMsg
@@ -5331,9 +4070,7 @@ export default {
     noMore () {
       return this.dataList.length >= this.total
     },
-    isInTheEnd () {
-      return this.CompanyList.length >= this.companyListTotalCount
-    },
+    
     disabled () {
       return this.loading || this.noMore
     },
@@ -5656,81 +4393,7 @@ export default {
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
-        .mySearchs {
-          margin-top: 20px;
-          background-color: #fff;
-          box-sizing: border-box;
-          padding: 0 20px;
-          @{deep} .searchInput input.el-input__inner {
-            border-radius: 20px;
-            border: none;
-            background-color: #eceeef;
-          }
-        }
-        .listItems {
-          flex: 1;
-          box-sizing: border-box;
-          overflow-x: hidden;
-          overflow-y: auto;
-          &::-webkit-scrollbar {
-            display: none;
-          }
-          .itemsWrap{
-            padding: 10px;
-            padding-bottom: 0;
-          }
-          .inTheEnd{
-            height: 40px;
-            line-height: 40px;
-            background-color: #eeeeed;
-          }
-          .item {
-            display: flex;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #ccc;
-            cursor: pointer;
-            .myAvatar {
-              margin-right: 10px;
-              width: 40px;
-              height: 40px;
-              background-color: #165af7;
-              color: #fff;
-              border-radius: 50%;
-            }
-          }
-        }
-        .companyNoData {
-          width: 100%;
-          height: 600px;
-          background: url("~@/assets/images/tu.png") no-repeat center;
-          position: relative;
-          p {
-            position: absolute;
-            width: 100%;
-            font-size: 20px;
-            left: 0;
-            font-weight: 500;
-            color: #9a9a9a;
-            text-align: center;
-            top: 55%;
-          }
-        }
-        .searchCompanyNoData {
-          width: 100%;
-          height: 600px;
-          background: url("~@/assets/images/tu1.png") no-repeat center;
-          position: relative;
-          p {
-            position: absolute;
-            width: 100%;
-            left: 0;
-            font-weight: 500;
-            color: #9a9a9a;
-            text-align: center;
-            top: 55%;
-          }
-        }
+        
       }
     }
     .contentThree {
@@ -6559,657 +5222,6 @@ export default {
           }
         }
       }
-      .liaotianList {
-        height: 715px;
-        padding: 0 10px 10px 10px;
-        font-size: 14px;
-        box-sizing: border-box;
-        /** 单独为横向和竖向设置滚动条 **/
-        overflow-x: none;
-        overflow-y: scroll;
-        &::-webkit-scrollbar {
-          display: none;
-        }
-        .liaotianWarp {
-          position: relative;
-          .youInfo,
-          .myInfo {
-            min-height: 60px;
-            box-sizing: border-box;
-            align-items: center;
-            padding: 10px 0;
-            color: #555;
-            letter-spacing: 1px;
-            .context {
-              position: relative;
-              &::after {
-                content: "";
-                display: block;
-                overflow: hidden;
-                height: 0;
-                clear: both;
-              }
-              #myContent {
-                position: relative;
-              }
-              .myChehui {
-                position: absolute;
-                width: 75px;
-                font-size: 12px;
-                left: 0;
-                top: 0;
-                color: #000;
-                // border-radius: 5px;
-                background-color: #fff;
-                box-sizing: border-box;
-                z-index: 1;
-                border: 1px solid #c4c4c4;
-                box-shadow: 0px 3px 9px 0px rgba(1, 59, 199, 0.2);
-                cursor: pointer;
-                .item {
-                  padding: 5px;
-                  text-align: center;
-                  &:hover {
-                    background-color: #e2e2e2;
-                  }
-                  // &:first-of-type {
-                  //   border-top-left-radius: 5px;
-                  //   border-top-right-radius: 5px;
-                  // }
-                  // &:last-of-type {
-                  //   border-bottom-left-radius: 5px;
-                  //   border-bottom-right-radius: 5px;
-                  // }
-                }
-              }
-            }
-          }
-          .youInfo {
-            .myAvatarImg {
-              float: left;
-              .el-image {
-                transition: all 1s;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-              }
-              &::after {
-                content: "";
-                display: block;
-                height: 0;
-                overflow: hidden;
-                clear: both;
-              }
-            }
-            .context {
-              float: left;
-              margin-left: 10px;
-              max-width: 285px;
-              .youInfoName {
-                font-size: 14px;
-                padding-bottom: 5px;
-                color: #b2b2b2;
-              }
-              .youTextInfo {
-                max-width: 282px;
-                min-height: 32px;
-                min-width: 32px;
-                display: inline-block;
-                box-sizing: border-box;
-                background: linear-gradient(#fff, #d2d2d2, #d2d2d2, #aaa);
-                border: 1px solid #d2d2d2;
-                box-shadow: 0px 3px 9px 0px rgba(12, 44, 119, 0.2);
-                color: #000;
-                border-radius: 10px;
-                padding: 5px 10px;
-                .msgTypeText {
-                  word-wrap: break-word;
-                  word-break: break-all;
-                  pre {
-                    line-height: 20px;
-                    white-space: pre-wrap; /* css3.0 */
-                    white-space: -moz-pre-wrap; /* Firefox */
-                    white-space: -pre-wrap; /* Opera 4-6 */
-                    white-space: -o-pre-wrap; /* Opera 7 */
-                    word-wrap: break-word; /* Internet Explorer 5.5+ */
-                  }
-                }
-                &::before {
-                  content: "";
-                  display: block;
-                  border-bottom: 9px solid transparent;
-                  border-right: 9px solid #d2d2d2;
-                  border-top: 9px solid transparent;
-                  position: absolute;
-                  left: -8px;
-                  top: 15px;
-                  transform: translate(0, -50%);
-                  width: 0;
-                  height: 0;
-                }
-              }
-              .msgTypeVideo {
-                width: 285px;
-                height: 150px;
-                left: 50px;
-                top: -30px;
-                .video-js {
-                  width: 100%;
-                  height: 100%;
-                }
-              }
-              .msgTypeProduct{
-                  float: right;
-                  width: 285px;
-                  min-height: 90px;
-                  box-sizing: border-box;
-                  position: relative;
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                  background: linear-gradient(
-                    #f7f7f7,
-                    #fff
-                  );
-                  box-shadow: 0px 3px 9px 0px rgba(1, 59, 199, 0.2);
-                  border: 1px solid #f7f7f7;
-                  color: #000;
-                  border-radius: 10px;
-                  padding: 5px 10px;
-                  &::after {
-                    clear: both;
-                    content: "";
-                    display: block;
-                    border-bottom: 9px solid transparent;
-                    border-right: 9px solid #f7f7f7;
-                    border-top: 9px solid transparent;
-                    position: absolute;
-                    left: -8px;
-                    top: 15px;
-                    transform: translate(0, -50%);
-                    width: 0;
-                    height: 0;
-                  }
-                  .liaotianerweima {
-                    width: 50px;
-                    height: 50px;
-                    border: 1px solid #dfe6f8;
-                  }
-                  // pre {
-                  //   line-height: 20px;
-                  //   white-space: pre-wrap; /* css3.0 */
-                  //   white-space: -moz-pre-wrap; /* Firefox */
-                  //   white-space: -pre-wrap; /* Opera 4-6 */
-                  //   white-space: -o-pre-wrap; /* Opera 7 */
-                  //   word-wrap: break-word; /* Internet Explorer 5.5+ */
-                  // }
-                  .right {
-                    flex: 1;
-                    position: relative;
-                    box-sizing: border-box;
-                    .context{
-                      width: 200px;
-                      margin-left: 10px;
-                      display: -webkit-box;
-                      overflow: hidden;
-                      white-space: normal !important;
-                      text-overflow: ellipsis;
-                      word-wrap: break-word;
-                      -webkit-line-clamp: 2;
-                      -webkit-box-orient: vertical
-                    }
-                    .see,.copy {
-                      position: absolute;
-                      bottom: -20px;
-                      font-size: 12px;
-                      color: #165AF7;
-                      cursor: pointer;
-                    }
-                    .see{
-                      right: 90px;
-                    }
-                    .copy{
-                      right: 10px;
-                    }
-                  }
-              }
-              .msgTypeImage {
-                max-width: 150px;
-                border: 1px solid #f0eeee;
-                box-shadow: 0px 3px 9px 0px rgba(12, 44, 119, 0.2);
-                left: 50px;
-                top: -30px;
-                box-sizing: border-box;
-                .el-image {
-                  width: 100%;
-                  height: 100%;
-                  position: static;
-                  vertical-align: middle;
-                }
-              }
-              .msgTypeAudio {
-                background: linear-gradient(#fff, #d2d2d2, #d2d2d2, #aaa);
-                border: 1px solid #d2d2d2;
-                box-shadow: 0px 3px 9px 0px rgba(12, 44, 119, 0.2);
-                display: flex;
-                padding: 5px;
-                border-radius: 20px;
-                img {
-                  width: 150px;
-                  height: 20px;
-                  cursor: pointer;
-                }
-              }
-              .msgTypeTXT {
-                display: block;
-                width: 285px;
-                padding: 10px 20px;
-                box-sizing: border-box;
-                border: 1px solid #d2d2d2;
-                box-shadow: 0px 3px 9px 0px rgba(12, 44, 119, 0.2);
-                max-height: 80px;
-                border-radius: 9px;
-                cursor: pointer;
-                color: #298cf7;
-                .title {
-                  font-size: 12px;
-                }
-                p {
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  display: -webkit-box;
-                  -webkit-box-orient: vertical;
-                  -webkit-line-clamp: 2;
-                  box-sizing: border-box;
-                  cursor: pointer;
-                }
-              }
-            }
-            &::after {
-              content: "";
-              display: block;
-              height: 0;
-              overflow: hidden;
-              clear: both;
-            }
-          }
-          .myInfo {
-            .myAvatarImg {
-              float: right;
-              .el-image {
-                transition: all 1s;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                background-color: #165af7;
-                color: #fff;
-                .image-slot {
-                  width: 100%;
-                  height: 100%;
-                  display: flex;
-                  align-items: center;
-                  justify-content: left;
-                }
-                img {
-                  width: 100%;
-                  height: 100%;
-                }
-              }
-            }
-            .context {
-              float: right;
-              max-width: 285px;
-              margin-right: 10px;
-              .youTextInfo {
-                .msgTypeText {
-                  float: right;
-                  max-width: 282px;
-                  min-height: 32px;
-                  min-width: 32px;
-                  box-sizing: border-box;
-                  position: relative;
-                  background: linear-gradient(
-                    #eafad8,
-                    #ade44d,
-                    #ade44d,
-                    #81c40d
-                  );
-                  box-shadow: 0px 3px 9px 0px rgba(1, 59, 199, 0.2);
-                  border: 1px solid #ade44d;
-                  color: #000;
-                  border-radius: 10px;
-                  padding: 5px 10px;
-                  &::after {
-                    content: "";
-                    display: block;
-                    border-bottom: 9px solid transparent;
-                    border-left: 9px solid #bae973;
-                    border-top: 9px solid transparent;
-                    position: absolute;
-                    right: -8px;
-                    top: 15px;
-                    transform: translate(0, -50%);
-                    width: 0;
-                    height: 0;
-                  }
-                  pre {
-                    line-height: 20px;
-                    white-space: pre-wrap; /* css3.0 */
-                    white-space: -moz-pre-wrap; /* Firefox */
-                    white-space: -pre-wrap; /* Opera 4-6 */
-                    white-space: -o-pre-wrap; /* Opera 7 */
-                    word-wrap: break-word; /* Internet Explorer 5.5+ */
-                  }
-                }
-                &::after {
-                  content: "";
-                  display: block;
-                  overflow: hidden;
-                  width: 0;
-                  height: 0;
-                  clear: both;
-                }
-              }
-              .msgTypeText {
-                word-wrap: break-word;
-                word-break: break-all;
-                background: linear-gradient(
-                    #eafad8,
-                    #ade44d,
-                    #ade44d,
-                    #81c40d
-                  );
-                box-shadow: 0px 3px 9px 0px rgba(1, 59, 199, 0.2);
-                border: 1px solid #ade44d;
-                color: #000;
-                border-radius: 10px;
-                padding: 5px 10px;
-                pre {
-                  line-height: 20px;
-                  white-space: pre-wrap; /* css3.0 */
-                  white-space: -moz-pre-wrap; /* Firefox */
-                  white-space: -pre-wrap; /* Opera 4-6 */
-                  white-space: -o-pre-wrap; /* Opera 7 */
-                  word-wrap: break-word; /* Internet Explorer 5.5+ */
-                }
-              }
-              .msgTypeProduct{
-                  float: right;
-                  width: 285px;
-                  min-height: 90px;
-                  box-sizing: border-box;
-                  position: relative;
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                  background: linear-gradient(
-                    #f7f7f7,
-                    #fff
-                  );
-                  box-shadow: 0px 3px 9px 0px rgba(1, 59, 199, 0.2);
-                  border: 1px solid #f7f7f7;
-                  color: #000;
-                  border-radius: 10px;
-                  padding: 5px 10px;
-                  &::after {
-                    content: "";
-                    display: block;
-                    border-bottom: 9px solid transparent;
-                    border-left: 9px solid #f7f7f7;
-                    border-top: 9px solid transparent;
-                    position: absolute;
-                    right: -8px;
-                    top: 15px;
-                    transform: translate(0, -50%);
-                    width: 0;
-                    height: 0;
-                    clear: both;
-                  }
-                  .liaotianerweima {
-                    width: 50px;
-                    height: 50px;
-                    border: 1px solid #dfe6f8;
-                  }
-                  // pre {
-                  //   line-height: 20px;
-                  //   white-space: pre-wrap; /* css3.0 */
-                  //   white-space: -moz-pre-wrap; /* Firefox */
-                  //   white-space: -pre-wrap; /* Opera 4-6 */
-                  //   white-space: -o-pre-wrap; /* Opera 7 */
-                  //   word-wrap: break-word; /* Internet Explorer 5.5+ */
-                  // }
-                  .right {
-                    flex: 1;
-                    position: relative;
-                    box-sizing: border-box;
-                    .context{
-                      width: 200px;
-                      margin-left: 10px;
-                      display: -webkit-box;
-                      overflow: hidden;
-                      white-space: normal !important;
-                      text-overflow: ellipsis;
-                      word-wrap: break-word;
-                      -webkit-line-clamp: 2;
-                      -webkit-box-orient: vertical
-                    }
-                    .see,.copy {
-                      position: absolute;
-                      bottom: -20px;
-                      font-size: 12px;
-                      color: #165AF7;
-                      cursor: pointer;
-                    }
-                    .see{
-                      right: 90px;
-                    }
-                    .copy{
-                      right: 10px;
-                    }
-                  }
-              }
-              .msgTypeVideo {
-                width: 285;
-                height: 150px;
-                left: 50px;
-                top: -30px;
-                .video-js {
-                  width: 100%;
-                  height: 100%;
-                }
-              }
-              .msgTypeImage {
-                max-width: 150px;
-                border: 1px solid #f0eeee;
-                box-shadow: 0px 3px 9px 0px rgba(12, 44, 119, 0.2);
-                left: 50px;
-                top: -30px;
-                @{deep} .el-image {
-                  width: 100%;
-                  height: 100%;
-                  position: static;
-                  vertical-align: middle;
-                }
-              }
-              .msgTypeAudio {
-                background: linear-gradient(#fff, #d2d2d2, #d2d2d2, #aaa);
-                border: 1px solid #d2d2d2;
-                box-shadow: 0px 3px 9px 0px rgba(12, 44, 119, 0.2);
-                display: flex;
-                padding: 5px;
-                border-radius: 20px;
-                img {
-                  width: 150px;
-                  height: 20px;
-                  cursor: pointer;
-                }
-              }
-              .msgTypeTXT {
-                display: block;
-                width: 285px;
-                padding: 10px 20px;
-                box-sizing: border-box;
-                border: 1px solid #d2d2d2;
-                box-shadow: 0px 3px 9px 0px rgba(12, 44, 119, 0.2);
-                max-height: 80px;
-                border-radius: 9px;
-                cursor: pointer;
-                color: #298cf7;
-                .title {
-                  font-size: 12px;
-                }
-                p {
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  display: -webkit-box;
-                  -webkit-box-orient: vertical;
-                  -webkit-line-clamp: 2;
-                  box-sizing: border-box;
-                  cursor: pointer;
-                }
-              }
-              .unRead {
-                color: #165af7;
-                font-size: 12px;
-                text-align: right;
-              }
-              .read {
-                color: #c0c5c9;
-                font-size: 12px;
-                text-align: right;
-              }
-            }
-            &::after {
-              content: "";
-              display: block;
-              height: 0;
-              overflow: hidden;
-              clear: both;
-            }
-          }
-        }
-      }
-      .infoListSend {
-        height: 60px;
-        background-color: #f6f6f6;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        box-sizing: border-box;
-        .sendBtnBox {
-          overflow: hidden;
-        }
-        .maikef {
-          width: 40px;
-          height: 40px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 20px;
-          cursor: pointer;
-          &:hover {
-            color: #409eff;
-          }
-        }
-        @{deep} .sendValue {
-          position: static;
-          textarea {
-            overflow-x: none;
-            overflow-y: auto;
-            &::-webkit-scrollbar {
-              display: none;
-            }
-            padding: 5px;
-          }
-        }
-        .sendValueInput {
-          flex: 1;
-          background-color: #fff;
-          position: relative;
-          .pasteIten {
-            position: absolute;
-            width: 75px;
-            font-size: 12px;
-            left: 0;
-            top: 0;
-            color: #000;
-            border-radius: 3px;
-            background-color: #fff;
-            padding: 5px;
-            text-align: center;
-            z-index: 1;
-            border: 1px solid #c4c4c4;
-            box-sizing: border-box;
-            box-shadow: 0px 3px 9px 0px rgba(1, 59, 199, 0.2);
-            cursor: pointer;
-            &:hover {
-              background-color: #ecf5ff;
-            }
-          }
-        }
-        @{deep} .sendValueBtn {
-          flex: 1;
-          margin: 0;
-          padding: 10px 10px;
-          height: 54px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background-color: #fff;
-          vertical-align: top;
-        }
-        .iconfont {
-          width: 40px;
-          height: 40px;
-          font-size: 20px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          &::before {
-            cursor: pointer;
-          }
-          &:hover {
-            color: #409eff;
-          }
-          &:last-of-type {
-            justify-content: left;
-            width: 30px;
-          }
-        }
-        .sendfiles {
-          position: relative;
-          .fileInput {
-            position: absolute;
-            left: 0;
-            top: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 0;
-            padding: 0;
-            cursor: pointer;
-            opacity: 0;
-            transform: translate(0, -50%);
-            border: 1px solid #000;
-          }
-        }
-        @{deep} .sendBtn {
-          margin-right: 10px;
-        }
-        @{deep} .show-enter-active,
-        @{deep} .show-leave-active {
-          transition: margin-right 0.5s;
-        }
-        @{deep} .show-enter {
-          margin-right: -56px;
-        }
-        @{deep} .show-enter-to,
-        .show-leave {
-          margin-right: 10px;
-        }
-        @{deep} .show-leave-to {
-          margin-right: -56px;
-        }
-      }
       .personalNumberTitle {
         width: 100%;
         height: 150px;
@@ -7755,6 +5767,13 @@ export default {
         }
       }
     }
+    // 一级组件框
+    .componentOneIs{
+      width: 32%;
+      height: 827px;
+      border: 1px solid #aaa;
+      box-sizing: border-box;
+    }
     // 添加好友
     .addFriends{
       width: 32%;
@@ -8247,135 +6266,7 @@ export default {
     }
   }
 }
-.showLiaotianList {
-  position: relative;
-  .infoListTitle {
-    background: linear-gradient(#ccc, #fff, #a5b6c8, #7f90c5);
-  }
-  .isOrder {
-    position: absolute;
-    width: 96%;
-    left: 50%;
-    top: 50px;
-    transform: translate(-50%, 0);
-    border: 1px solid #73add8;
-    border-radius: 20px;
-    background-color: rgba(230, 230, 230, 0.9);
-    display: flex;
-    justify-content: space-between;
-    box-sizing: border-box;
-    padding: 5px;
-    z-index: 1;
-    cursor: pointer;
-    .guanbi {
-      display: block;
-      width: 15px;
-      height: 15px;
-      border: 1px solid #ccc;
-      position: absolute;
-      right: 5px;
-      top: 5px;
-      font-size: 15px;
-      &:hover {
-        color: #2c97ff;
-        border-color: #2c97ff;
-      }
-    }
-    .tupian {
-      width: 60px;
-      height: 60px;
-      background-color: #ddd;
-      border-radius: 20px;
-      overflow: hidden;
-      .el-image {
-        width: 60px;
-        height: 60px;
-      }
-    }
-    .wenzitxt {
-      flex: 1;
-      color: #273d6c;
-      padding: 0 20px 0 10px;
-      h4 {
-        text-overflow: -o-ellipsis-lastline;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        line-clamp: 2;
-        -webkit-box-orient: vertical;
-      }
-      p {
-        color: black;
-        font-size: 12px;
-        margin-top: 3px;
-      }
-      &:last-of-type p {
-        text-overflow: -o-ellipsis-lastline;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        line-clamp: 2;
-        -webkit-box-orient: vertical;
-      }
-    }
-  }
-  .isOrder2 {
-    position: absolute;
-    width: 96%;
-    left: 50%;
-    top: 50px;
-    transform: translate(-50%, 0);
-    border: 1px solid #73add8;
-    border-radius: 20px;
-    background-color: rgba(230, 230, 230, 0.9);
-    display: flex;
-    justify-content: space-between;
-    box-sizing: border-box;
-    padding: 5px;
-    z-index: 1;
-    cursor: pointer;
-    .left {
-      width: 80px;
-      height: 80px;
-      @{deep} .el-image {
-        width: 80px;
-        height: 80px;
-        border-radius: 20px;
-        img {
-          width: 80px;
-          height: 80px;
-          transition: all 1s;
-        }
-      }
-    }
-    .right {
-      flex: 1;
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      h3 {
-        color: #165af7;
-      }
-    }
-    .guanbi {
-      display: block;
-      width: 15px;
-      height: 15px;
-      border: 1px solid #ccc;
-      position: absolute;
-      right: 5px;
-      top: 5px;
-      font-size: 15px;
-      &:hover {
-        color: #2c97ff;
-        border-color: #2c97ff;
-      }
-    }
-  }
-}
+
 @{deep} .TXTClass {
   .el-dialog {
     height: 840px;

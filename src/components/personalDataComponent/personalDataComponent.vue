@@ -1,0 +1,252 @@
+<template>
+<div class="wrapBox">
+<!-- 查看个人资料 -->
+        <div class="top"></div>
+        <div class="bottom"></div>
+        <div class="personalInfo" v-if="personalDetail">
+          <div class="name">
+            <div class="text">
+              <p>{{ personalDetail.linkman }}</p>
+            </div>
+            <div class="img">
+              <el-image
+                :src="personalDetail && personalDetail.userImage"
+                :size="80"
+                @click.native="openEdit(personalDetail)"
+                class="myAvatar"
+                fit="cover"
+              >
+                <div
+                  slot="error"
+                  class="image-slot"
+                  style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;white-space: nowrap;"
+                >
+                  {{ personalDetail.linkman }}
+                </div>
+                <div
+                  slot="placeholder"
+                  class="image-slot"
+                  style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;white-space: nowrap;"
+                >
+                  {{ personalDetail.linkman }}
+                </div>
+              </el-image>
+            </div>
+          </div>
+          <div class="floor">
+            <div class="title">性别：</div>
+            <p>{{ personalDetail.sex === 1 ? "男" : "女" }}</p>
+          </div>
+          <div class="floor">
+            <div class="title">生日：</div>
+            <p v-if="personalDetail.birthday">
+              {{ personalDetail.birthday.replace(/T[\s\S]*/gi, "") }}
+            </p>
+          </div>
+          <div class="floor">
+            <div class="title">电话：</div>
+            <p>{{ personalDetail.phoneNumber }}</p>
+          </div>
+          <div class="floor">
+            <div class="title myRemark" v-show="!isEditRemark">备注：
+              <el-button class="subRemark" type="success" size="mini" icon="el-icon-edit" @click="ckeckEditUserRemark" plain>编辑</el-button>
+            </div>
+            <div class="title myRemark" v-show="isEditRemark">备注：
+              <el-button class="subRemark" type="success" size="mini" icon="el-icon-check" @click="editUserRemark(personalDetail)" plain>保存</el-button>
+            </div>
+            <p v-show="personalDetail.remark || isEditRemark">
+              <!-- <el-input type="textarea" :disabled="!isEditRemark" autosize class="companyRemark" v-model="personalDetail.remark" placeholder="请输入备注"></el-input> -->
+              <el-input type="textarea" ref="myTextarea" autosize :disabled="!isEditRemark" class="companyRemark" v-model="personalDetail.remark" placeholder="请输入备注"></el-input>
+            </p>
+          </div>
+          <center class="send">
+            <el-button
+              class="sendInfo"
+              :style="{
+                opacity:
+                  personalDetail.id ==
+                  ($store.state.userInfo.userInfo &&
+                    $store.state.userInfo.userInfo.id)
+                    ? 0.7
+                    : 1
+              }"
+              @click="openTwoView"
+              :disabled="
+                personalDetail.id ==
+                  ($store.state.userInfo.userInfo &&
+                    $store.state.userInfo.userInfo.id)
+              "
+              round
+            >
+              <i class="el-icon-s-comment el-icon--left sendIcon"></i>
+              发消息
+            </el-button>
+          </center>
+        </div>
+</div>
+</template>
+
+<script>
+export default {
+  props: {
+    options: Object,
+    default: {}
+  },
+  data () {
+    return {
+      personalDetail: null,
+      isEditRemark: false
+    }
+  },
+  methods: {
+    // 打开修改个人信息详情页 打开第三个窗口
+    openEdit (item) {
+      if (this.userInfo.userInfo.id === item.id) {
+        this.$emit('openTwoView', {
+          componentName: 'editPersonalDataComponent',
+          ...item
+        })
+      } else {
+        this.$message.error('不能修改别人的资料哦')
+      }
+    },
+    // 点击个人的立即沟通 打开第三个窗口
+    openTwoView () {
+      this.$emit('openTwoView', {
+        componentName: 'personalChatComponent',
+        ...this.personalDetail
+      })
+    },
+    // 备注
+    ckeckEditUserRemark () {
+      this.isEditRemark = true
+      this.$nextTick(() => {
+        this.$refs.myTextarea.focus()
+      })
+    },
+    // 获取个人详情页
+    async getPersonalDetail () {
+      const res = await this.$http.post('/api/OrgPersonnelByID', {
+        id: this.options.person.id,
+        companyId: this.options.company.id
+      })
+      if (res.data.result.code === 200) {
+        this.personalDetail = res.data.result.item
+        this.datas = JSON.parse(JSON.stringify(res.data.result.item))
+      }
+    }
+  },
+  created () {
+
+  },
+  mounted () {
+    console.log(this.options)
+    this.getPersonalDetail()
+  },
+  computed: {
+    userInfo () {
+      return this.$store.state.userInfo
+    }
+  }
+}
+</script>
+<style scoped lang='less'>
+@deep: ~">>>";
+.wrapBox{
+  width: 100%;
+  height: 827px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  .top {
+    width: 100%;
+    background-color: #165af7;
+  }
+  .bottom {
+    width: 100%;
+    background-color: #eeeeed;
+  }
+  .personalInfo {
+    position: absolute;
+    top: 50px;
+    width: 95%;
+    // height: 700px;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 30px 10px 30px 10px;
+    box-sizing: border-box;
+    .name {
+      height: 80px;
+      margin-top: 10px;
+      display: flex;
+      .text {
+        flex: 2;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        align-self: center;
+        p {
+          font-size: 18px;
+          width: 100%;
+          font-weight: 500;
+        }
+        span {
+          color: #4679f8;
+        }
+      }
+      .img {
+        flex: 1;
+        @{deep} .myAvatar {
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          cursor: pointer;
+          color: white;
+          background-color: #165af7;
+        }
+      }
+    }
+    .floor {
+      .companyRemark {
+         @{deep} .el-textarea__inner {
+          resize: none;
+          box-sizing: border-box;
+          padding-left:0;
+          padding-right:0;
+          font-size:16px;
+          font-family: "Microsoft Yahei";
+          background-color: #fff;
+          border-color: #fff;
+          color: #000;
+         }
+      }
+      .title {
+        color: #7e7e81;
+        font-size: 14px;
+        margin: 10px 0;
+      }
+      .myRemark{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      p {
+        padding-bottom: 10px;
+      }
+    }
+    .send {
+      margin-top: 20px;
+      .sendInfo {
+        background-color: #165af7;
+        color: #fff;
+        width: 80%;
+        .sendIcon {
+          font-size: 16px;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+}
+</style>
