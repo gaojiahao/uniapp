@@ -9,7 +9,6 @@
         <router-view
           @showInfo="showInfo"
           @showInfoListOrder="showInfoListOrder"
-          @showLiaotianr="showLiaotianr"
           @showCompany="showCompany"
           @showCompanyList="showCompanyList"
           @cancelSendGonggao="active2 = null"
@@ -1391,11 +1390,11 @@
       </div>
       <!-- 二级窗口组件 -->
       <div class="componentOneIs" v-if="oneViews">
-        <component :is="oneViews.componentName" :options="oneViews" @openTwoView="openTwoView" ></component>
+        <component :is="oneViews.componentName" :options="oneViews" @openTwoView="openTwoView" :MessageUnreadCount="MessageUnreadCount" @changeMessageUnreadCount="changeMessageUnreadCount" :signalROptions="signalROptions"></component>
       </div>
       <!-- 三级窗口组件 -->
       <div class="componentOneIs" v-if="twoViews">
-        <component :is="twoViews.componentName" :options="twoViews" @openTwoView="openTwoView"></component>
+        <component :is="twoViews.componentName" :options="twoViews" @openTwoView="openTwoView" :MessageUnreadCount="MessageUnreadCount" @changeMessageUnreadCount="changeMessageUnreadCount" :signalROptions="signalROptions"></component>
       </div>
       <!-- 好友申请 -->
       <div class="newFriends bgClass" v-if="$route.path === '/meInfo/newSletter' && newFriendOptions && friendApplication">
@@ -1866,6 +1865,27 @@ export default {
       orderDetailCurrentPage: 1,
       orderDetailPageSize: 10,
       drawer: false,
+      signalROptions: {
+        // 深网配置
+        value: null,
+        attachment: null,
+        addId: '5de91f02f12c41c2b276c9accb4679c7',
+        userName:
+          this.$store.state.userInfo.userInfo &&
+          this.$store.state.userInfo.userInfo.linkman,
+        token: '',
+        loginState: null,
+        showmsg: [],
+        orderNumber: null,
+        creatChannel: null,
+        groupNumber: '',
+        toCompanyID: null,
+        toUserID: null,
+        name: '',
+        uid: this.$store.state.userInfo.uid,
+        client: '',
+        channelMember: []
+      },
       copyText: null,
       isChehui: null,
       orderSampleFrom: null,
@@ -1906,14 +1926,10 @@ export default {
       timeID: null,
       loadText: null,
       activeName: '',
-      loginState: null,
       showOrderCompanyItem: null,
       fileType: null,
       TXTUrl: '',
       visibleTXT: false,
-      chatHistoryCurrentPage: 1,
-      chatHistoryPageSize: 15,
-      chatHistoryTotal: 0,
       noScrollTop: false,
       audioItem: null,
       radio: '',
@@ -2001,14 +2017,14 @@ export default {
       this.signalROptions.client.on(
         'ConnectionStateChanged',
         (newState, reason) => {
-          this.loginState = newState
+          this.signalROptions.loginState = newState
         }
       )
       // 登录
       this.signalROptions.client
         .login({
           token: this.signalROptions.token,
-          uid: this.$store.state.userInfo.uid
+          uid: this.signalROptions.uid
         })
         .then(() => {
           console.log('AgoraRTM客户端登录成功')
@@ -2046,66 +2062,6 @@ export default {
         this.signalROptions.client.logout()
         console.log('退出頻道成功')
       }
-    },
-    // 深网加入频道
-    async addChannel () {
-      if (!this.signalROptions.groupNumber) {
-        return false
-      }
-      if (this.signalROptions.creatChannel) {
-        this.signalROptions.creatChannel.leave()
-      }
-      try {
-        // 创建频道
-        this.signalROptions.creatChannel = this.signalROptions.client.createChannel(
-          this.signalROptions.groupNumber // 此处传入频道 ID// 加入频道
-        )
-        const error = await this.signalROptions.creatChannel.join()
-        if (error) {
-          /* 加入频道失败的处理逻辑 */
-          console.log('加入频道失败', error)
-          // this.login();
-          this.$nextTick(() => this.addChannel())
-        } else {
-          /* 加入频道成功的处理逻辑 */
-          console.log('加入频道成功')
-          await this.getMembers()
-        }
-        // 接收频道消息
-        this.signalROptions.creatChannel.on(
-          'ChannelMessage',
-          async ({ text }, senderId) => {
-            // text 为收到的频道消息文本，senderId 为发送方的 User ID
-            /* 远端用户收到消息的处理逻辑 */
-            // this.$message.success("我收到了频道消息");
-            console.log('我收到了频道消息')
-            this.chatHistoryCurrentPage = 1
-            const res = await this.getInstantMessageByNumber(
-              this.signalROptions.groupNumber
-            )
-            if (res.data.result.code === 200) {
-              this.signalROptions.showmsg = res.data.result.item.items
-              this.chatHistoryTotal = res.data.result.item.totalCount
-            } else {
-              // 订单点击立即沟通拿不到groupNumber，所以没有聊天记录
-              this.CompanyDetail = []
-            }
-            this.$root.eventHub.$emit('resetData')
-          }
-        )
-      } catch (err) {
-        this.login()
-        this.$message.closeAll()
-        this.$message.error('断线重连成功')
-      }
-    },
-    // 深网获取群成员
-    async getMembers () {
-      this.signalROptions.channelMember = await this.signalROptions.creatChannel.getMembers()
-    },
-    // 深网退出频道
-    signChannel () {
-      this.signalROptions.creatChannel.leave()
     },
     async sendMessages () {
       this.noScrollTop = false
@@ -2210,29 +2166,6 @@ export default {
         e.preventDefault() // 阻止浏览器默认换行操作
       }
     },
-    // 发送点对点消息
-    sendPeerToPeer (content, toUserID) {
-      this.signalROptions.client
-        .sendMessageToPeer(
-          { text: content }, // 符合 RtmMessage 接口的参数对象
-          toUserID // 远端用户 ID
-        )
-        .then(sendResult => {
-          if (sendResult.hasPeerReceived) {
-            /* 远端用户收到消息的处理逻辑 */
-            this.$message.closeAll()
-            console.log('远端用户收到我发送的消息')
-          } else {
-            /* 服务器已接收、但远端用户不可达的处理逻辑 */
-            console.log('服务器已接收点对点消息、但远端用户不可达的处理')
-          }
-        })
-        .catch(error => {
-          console.log(error)
-          /* 发送失败的处理逻辑 */
-          this.$message.error('发送失败')
-        })
-    },
     // 个推送
     async GeSendPush (item, toUserID, number) {
       const obj = {
@@ -2258,6 +2191,10 @@ export default {
       } catch (error) {
         console.log('推送失败')
       }
+    },
+    // 更新历史消息
+    changeMessageUnreadCount (val) {
+      this.MessageUnreadCount = val
     },
     // 发送点对点或频道消息
     sendMsg (item) {
@@ -2356,47 +2293,6 @@ export default {
       // }
       this.CompanyDetail = []
       this.showTypeOptions.showLiaotianType = 'showLiaotianList'
-    },
-    // 点击消息立即沟通
-    async showLiaotianr (item) {
-      this.$store.commit('clearWsMsg')
-      this.MessageUnreadCount = null
-      this.offDetail()
-      this.isOrderShow = null
-      this.chatHistoryCurrentPage = 1
-      this.chatHistoryPageSize = 15
-      this.signalROptions.value = null
-      this.signalROptions.attachment = null
-      this.signalROptions.showmsg = []
-      this.signalROptions.orderNumber = null
-      this.signalROptions.name = ''
-      this.signalROptions.uid = ''
-      this.showTypeOptions.showType = null
-      this.showTypeOptions.showOrderDetail = false
-      this.signalROptions.isGroup = item.isGroup
-      this.signalROptions.name = item.linkName
-      this.signalROptions.toCompanyID = item.toCompanyID
-      this.signalROptions.groupNumber = item.groupNumber
-      this.signalROptions.msgType = 'Text'
-      this.signalROptions.toUserID = item.toUserID
-      this.showTypeOptions.showLiaotianType = 'showLiaotianList'
-      try {
-        this.addChannel() // 加入深网频道
-      } catch (error) {
-        this.login()
-        this.$message.warning('断线重连成功')
-      }
-      // 获取聊天记录
-      const res = await this.getInstantMessageByNumber()
-      if (res.data.result.code === 200) {
-        this.signalROptions.showmsg = res.data.result.item.items
-        this.chatHistoryTotal = res.data.result.item.totalCount
-      } else {
-        this.CompanyDetail = []
-      }
-      this.$root.eventHub.$emit('resetData')
-      this.getAllMessagesCount()
-      console.log(this.showTypeOptions)
     },
     // 点击公司的立即沟通
     async companySend () {
@@ -2538,50 +2434,6 @@ export default {
           this.showTypeOptions.showLiaotianType = 'showLiaotianList'
         }
       }
-    },
-    // 创建 发送聊天
-    async createMessageAccept () {
-      const fd = {
-        MessageType: this.signalROptions.msgType,
-        Attachment: this.signalROptions.attachment,
-        IsGroup: this.signalROptions.isGroup,
-        ToUserId: this.signalROptions.toUserID,
-        ToCompanyId: this.signalROptions.toCompanyID,
-        OrderNumber: this.signalROptions.orderNumber,
-        Content: this.signalROptions.value,
-        GroupNumber: this.signalROptions.groupNumber,
-        Platform: 'PC'
-      }
-      for (const key in fd) {
-        if (!fd[key]) delete fd[key]
-      }
-      console.log('发送聊天配置=', fd)
-      return await this.$http.post('/api/CreateMessageAccept', fd)
-    },
-    // 根据GroupNumber 查询所有的聊天记录
-    async getInstantMessageByNumber () {
-      // 连接ws
-      if (this.signalROptions.groupNumber && !this.isGroupNumber) {
-        this.$setWs.$ws && this.$setWs.$ws.close()
-        this.$store.commit('setWsId', this.signalROptions.groupNumber)
-        this.$setWs.initWebSocket()
-      } else {
-        this.isGroupNumber = true
-      }
-      const fd = {
-        skipCount: this.chatHistoryCurrentPage,
-        maxResultCount: this.chatHistoryPageSize,
-        groupNumber: this.signalROptions.groupNumber,
-        ToCompanyId: this.signalROptions.toCompanyID,
-        ToUserId: this.signalROptions.toUserID,
-        isGroup: this.signalROptions.isGroup,
-        orderNumber: this.signalROptions.orderNumber
-      }
-      for (const key in fd) {
-        if (!fd[key]) delete fd[key]
-      }
-      console.log(fd)
-      return await this.$http.post('/api/GetInstantMessageByNumber', fd)
     },
     // 转发消息
     forwardInfo (item) {
@@ -3114,38 +2966,11 @@ export default {
       this.getPersonalDetails(val.id)
     },
     // 关闭其他信息
-    offDetail (active) {
-      this.showFriendVerification = null
-      this.addFriendOptions = null
-      this.newFriendOptions = null
-      this.isGroupNumber = false
-      this.rec && this.rec.close()
-      this.$setWs.$ws && this.$setWs.$ws.close()
-      this.orderCurrentPage = 1
-      this.searchCompanyName = ''
-      this.orderDetailList = []
-      this.isShowRec = false
-      this.fileList = []
-      this.showCollection.active1 = null
-      this.showTypeOptions.showType = null
-      this.showTypeOptions.sampleFrom = null
-      this.showTypeOptions.showLiaotianType = null
-      this.ERPOrderOptions.ERPOrderList = null
-      this.showPersonalNumber = false
-      this.showSampleSelection = false
-      try {
-        this.signalROptions.creatChannel &&
-          this.signalROptions.creatChannel.leave()
-      } catch (error) {
-        console.log(error)
-      }
-
-      this.showTypeOptions.showOrderDetail = false
-      this.showCollection.active = null
-      this.active2 = null
-      this.isOrderShow = null
-      this.showOrderCompanyItem = null
-      this.activeFind = active || null
+    offDetail () {
+      this.currentTwoComponent = null
+      this.twoViews = null
+      this.currentOneComponent = null
+      this.oneViews = null
     },
     // 点击公司订单列表新的消息
     async resetCompanyList () {
@@ -3718,23 +3543,6 @@ export default {
     headerStyle (column) {
       return 'font-weight:600;color:black;'
     },
-    // 显示已读未读
-    isShowReady (item) {
-      if (this.MessageUnreadCount) {
-        if (this.MessageUnreadCount.length) {
-          for (let i = 0; i < this.MessageUnreadCount.length; i++) {
-            if (this.MessageUnreadCount[i].MessageID === item.id) {
-              item.unreadCout = this.MessageUnreadCount[i].Count
-              return item.unreadCout
-            }
-          }
-        } else {
-          item.unreadCout = 0
-        }
-      } else {
-        return item.unreadCout
-      }
-    },
     // 点击公司地址打开定位
     openMap(addr){
       this.companyAddr = addr
@@ -3808,16 +3616,6 @@ export default {
       const res = await this.$http.post('/api/GetNoticeUnreadTotal')
       if (res.data.result.code === 200) {
         this.findCount = res.data.result.item
-      } else {
-        this.$message.error(res.data.result.msg)
-      }
-    },
-    // 获取全部未读消息条数
-    async getAllMessagesCount () {
-      const res = await this.$http.post('/api/GetAllMessagesCount')
-      if (res.data.result.code === 200) {
-        this.infoCount = res.data.result.item
-        console.log(this.infoCount)
       } else {
         this.$message.error(res.data.result.msg)
       }
@@ -3911,6 +3709,16 @@ export default {
         isShowdialogVerification: true
       }
     },
+    // 获取全部未读消息条数
+    async getAllMessagesCount () {
+      const res = await this.$http.post('/api/GetAllMessagesCount')
+      if (res.data.result.code === 200) {
+        this.infoCount = res.data.result.item
+        console.log(this.infoCount)
+      } else {
+        this.$message.error(res.data.result.msg)
+      }
+    },
     // 获取群聊列表
     async getGroupMessageList() {
       const res = await this.$http.post('/api/GetMyGroupMessagePage', {
@@ -3926,7 +3734,6 @@ export default {
     openOneView(option) {
       this.oneViews = null
       this.twoViews = null
-      console.log(option)
       this.$nextTick(()=>this.oneViews = option)
     },
     // 打开三级窗口添加好友
@@ -3980,52 +3787,14 @@ export default {
     this.imgAndVideoNum = Number(this.Json.NoticeRestrictions[4].itemCode)
   },
   watch: {
-    updateLiaotian (msgList) {
-      if (msgList && msgList.length && !this.noScrollTop) {
-        // this.$nextTick(() => {
-        $('#liaotianchuangkou')
-          .stop()
-          .animate(
-            {
-              scrollTop:
-                $('#liaotianchuangkou')[0] &&
-                $('#liaotianchuangkou')[0].scrollHeight +
-                  $('#liaotianchuangkou')[0].offsetHeight
-            },
-            500
-          )
-        // });
-      }
-    },
     // 监听订单长连接推送消息
     '$store.state.wsOrderMsg' (val) {
       this.orderSampleFrom = val
     },
-    getWsMsg: function (data) {
-      if (data) {
-        data = JSON.parse(data)
-      }
-      if (
-        data &&
-        data.action === 'MessageUnreadCount' &&
-        data.SendClientId === this.signalROptions.groupNumber
-      ) {
-        this.MessageUnreadCount = JSON.parse(data.content).UnreadCountList
-        // 长连接接收到
-        console.log('长连接接收到消息', this.MessageUnreadCount)
-      }
-    },
-    'showTypeOptions.showType' (newVal) {
-      if (newVal === 'showInfoList') {
-        this.$nextTick(() => {
-          this.$refs.sendMessageRef.$refs.input.focus()
-        })
-      }
-    },
     'signalROptions.client' (val) {
       if (!val) {
-        console.log('已被迫下线，可刷新重新登录')
-        // this.login();
+        console.log('已被迫下线，可刷新重新登录中')
+        this.login();
       }
     },
     'showTypeOptions.showLiaotianType' (newVal) {
@@ -4041,7 +3810,7 @@ export default {
         this.TXTUrl = null
       }
     },
-    loginState (val) {
+    'signalROptions.loginState' (val) {
       console.log('登录状态', val)
       switch (val) {
         case 'CONNECTED':
@@ -4050,7 +3819,6 @@ export default {
           break
         default:
           this.$message.closeAll()
-          // this.login();
           console.log('即时通讯已断开链接')
           break
       }
@@ -4060,12 +3828,6 @@ export default {
     // 计算订单和消息未读的总和
     allInfoCount () {
       return this.orderInfoCount + this.infoCount
-    },
-    updateLiaotian () {
-      // return this.signalROptions.showmsg
-    },
-    getWsMsg () {
-      return this.$store.state.wsMsg
     },
     noMore () {
       return this.dataList.length >= this.total

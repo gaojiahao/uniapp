@@ -2,7 +2,7 @@
   <div class="wrapBox">
     <!-- 聊天窗口 -->
     <h3 class="infoListTitle">
-      {{ signalROptions.name && signalROptions.name }}
+      {{ options.linkman }}
     </h3>
     <div
       class="isOrder"
@@ -61,7 +61,7 @@
       <div class="liaotianWarp">
         <p
           style="
-            textalign: center;
+            textAlign: center;
             width: 100%;
             color: #b2c3da;
             padding: 10px;
@@ -503,11 +503,11 @@
         v-show="!isShowRec"
         @contextmenu.prevent.stop="OpenPaste"
       >
-        <el-input
-          type="textarea"
+      <!-- type="textarea"
           :rows="2"
           resize="none"
-          autocomplete="off"
+          autocomplete="off" -->
+        <el-input
           v-model="signalROptions.value"
           ref="sendMessageRef"
           class="sendValue"
@@ -576,86 +576,153 @@ import Recorder from 'recorder-core/recorder.mp3.min'
 export default {
   props: {
     options: Object,
-    default: {}
+    signalROptions: Object,
+    MessageUnreadCount: Array
   },
+  // props: ['options', 'signalROptions'],
   data () {
     return {
+      orderSampleFrom: null,
+      chatHistoryCurrentPage: 1,
+      chatHistoryPageSize: 15,
+      chatHistoryTotal: 0,
+      isChehui: null,
       sendRec: null,
       isPaste: null,
       isShowRec: false,
       loadText: null,
       isOrderShow: false,
-      signalROptions: {
-        // 深网配置
-        value: null,
-        attachment: null,
-        addId: '5de91f02f12c41c2b276c9accb4679c7',
-        userName:
-          this.$store.state.userInfo.userInfo &&
-          this.$store.state.userInfo.userInfo.linkman,
-        token: '',
-        showmsg: [],
-        orderNumber: null,
-        creatChannel: null,
-        groupNumber: '',
-        toCompanyID: null,
-        toUserID: null,
-        name: '',
-        uid: '',
-        client: '',
-        channelMember: []
+      isGroupNumber: false,
+      noScrollTop: false,
+      showTypeOptions: {
+        showType: null,
+        sampleFrom: null,
+        showLiaotianType: null,
+        showOrderDetail: false,
+        isShowOrderDetail: true
       }
     }
   },
   methods: {
-    // 深网登录
-    login () {
-      // 登入 RTM 之前，调用 AgoraRTM.createInstance 方法创建一个 RtmClient 实例。
-      this.signalROptions.client = this.$AgoraRTM.createInstance(
-        this.signalROptions.addId
-      )
-      // 通过监听 RtmClient 上的 ConnectionStateChanged 事件可以获得 SDK 连接状态改变的通知
-      this.signalROptions.client.on(
-        'ConnectionStateChanged',
-        (newState, reason) => {
-          this.loginState = newState
+    // 初始化消息立即沟通
+    async showLiaotianr () {
+      this.$store.commit('clearWsMsg')
+      this.isOrderShow = null
+      this.chatHistoryCurrentPage = 1
+      this.chatHistoryPageSize = 15
+      this.signalROptions.value = null
+      this.signalROptions.attachment = null
+      this.signalROptions.showmsg = []
+      this.signalROptions.orderNumber = null
+      this.signalROptions.name = ''
+      this.showTypeOptions.showType = null
+      this.showTypeOptions.showOrderDetail = false
+      this.signalROptions.isGroup = this.options.isGroup
+      this.signalROptions.name = this.options.linkName
+      this.signalROptions.toCompanyID = this.options.companyId
+      this.signalROptions.groupNumber = this.options.groupNumber
+      this.signalROptions.msgType = 'Text'
+      this.signalROptions.toUserID = this.options.id
+      console.log(this.signalROptions)
+      try {
+        this.addChannel() // 加入深网频道
+      } catch (error) {
+        // this.$parent.login()
+        this.$message.warning('断线重连成功')
+      }
+      // 获取聊天记录
+      const res = await this.getInstantMessageByNumber()
+      if (res.data.result.code === 200) {
+        this.signalROptions.showmsg = res.data.result.item.items
+        this.chatHistoryTotal = res.data.result.item.totalCount
+      } else {
+        this.CompanyDetail = []
+      }
+      this.$root.eventHub.$emit('resetData')
+    },
+    // 深网加入频道
+    async addChannel () {
+      if (!this.signalROptions.groupNumber) {
+        return false
+      }
+      if (this.signalROptions.creatChannel) {
+        this.signalROptions.creatChannel.leave()
+      }
+      try {
+        // 创建频道
+        this.signalROptions.creatChannel = this.signalROptions.client.createChannel(
+          this.signalROptions.groupNumber // 此处传入频道 ID// 加入频道
+        )
+        const error = await this.signalROptions.creatChannel.join()
+        if (error) {
+          /* 加入频道失败的处理逻辑 */
+          console.log('加入频道失败', error)
+          // this.login();
+          this.$nextTick(() => this.addChannel())
+        } else {
+          /* 加入频道成功的处理逻辑 */
+          console.log('加入频道成功')
+          await this.getMembers()
         }
-      )
-      // 登录
-      this.signalROptions.client
-        .login({
-          token: this.signalROptions.token,
-          uid: this.$store.state.userInfo.uid
-        })
-        .then(() => {
-          console.log('AgoraRTM客户端登录成功')
-        })
-        .catch(err => {
-          console.log('AgoraRTM客户端登录失败', err)
-        })
-      // 监听 client 上的事件 MessageFromPeer 接收点对点消息
-      this.signalROptions.client.on(
-        'MessageFromPeer',
-        ({ text }, peerId, messageProps) => {
-          // text 为消息文本，peerId 是消息发送方 User ID
-          // this.$message.success("我收到了点对点");
-          console.log('我收到了点对点')
-          this.getAllMessagesCount()
-          this.$root.eventHub.$emit('resetData')
-          /* 收到点对点消息的处理逻辑 */
-        }
-      )
-      // 监听收到来自主叫的呼叫邀请
-      this.signalROptions.client.on(
-        'RemoteInvitationReceived',
-        remoteInvitation => {
-          console.log(remoteInvitation)
-        }
-      )
-      // 监听对方是否在线
-      this.signalROptions.client.on('PeersOnlineStatusChanged', status => {
-        this.$message.error(status)
-      })
+        // 接收频道消息
+        this.signalROptions.creatChannel.on(
+          'ChannelMessage',
+          async ({ text }, senderId) => {
+            // text 为收到的频道消息文本，senderId 为发送方的 User ID
+            /* 远端用户收到消息的处理逻辑 */
+            // this.$message.success("我收到了频道消息");
+            console.log('我收到了频道消息啊哈哈哈哈')
+            this.chatHistoryCurrentPage = 1
+            const res = await this.getInstantMessageByNumber(
+              this.signalROptions.groupNumber
+            )
+            if (res.data.result.code === 200) {
+              this.signalROptions.showmsg = res.data.result.item.items
+              this.chatHistoryTotal = res.data.result.item.totalCount
+            } else {
+              // 订单点击立即沟通拿不到groupNumber，所以没有聊天记录
+              this.CompanyDetail = []
+            }
+            this.$root.eventHub.$emit('resetData')
+          }
+        )
+      } catch (err) {
+        // this.$parent.login()
+        this.$message.closeAll()
+        this.$message.error('断线重连成功')
+      }
+    },
+    // 根据GroupNumber 查询所有的聊天记录
+    async getInstantMessageByNumber () {
+      // 连接ws
+      if (this.signalROptions.groupNumber && !this.isGroupNumber) {
+        this.$setWs.$ws && this.$setWs.$ws.close()
+        this.$store.commit('setWsId', this.signalROptions.groupNumber)
+        this.$setWs.initWebSocket()
+      } else {
+        this.isGroupNumber = true
+      }
+      const fd = {
+        skipCount: this.chatHistoryCurrentPage,
+        maxResultCount: this.chatHistoryPageSize,
+        groupNumber: this.signalROptions.groupNumber,
+        ToCompanyId: this.signalROptions.toCompanyID,
+        ToUserId: this.signalROptions.toUserID,
+        isGroup: this.signalROptions.isGroup,
+        orderNumber: this.signalROptions.orderNumber
+      }
+      for (const key in fd) {
+        if (!fd[key]) delete fd[key]
+      }
+      return await this.$http.post('/api/GetInstantMessageByNumber', fd)
+    },
+    // 深网获取群成员
+    async getMembers () {
+      this.signalROptions.channelMember = await this.signalROptions.creatChannel.getMembers()
+    },
+    // 深网退出频道
+    signChannel () {
+      this.signalROptions && this.signalROptions.creatChannel && this.signalROptions.creatChannel.leave()
     },
     // 即时通讯发消息
     async sendMessage (e) {
@@ -672,6 +739,7 @@ export default {
           this.$message.error('发送内容不能为空')
           return
         }
+        // 判断是不是发送的链接http带头
         if (/^http/.test(this.signalROptions.value)) {
           this.signalROptions.msgType = 'Product'
         }
@@ -703,16 +771,93 @@ export default {
           }
           this.$root.eventHub.$emit('resetData')
         } catch (error) {
-          this.login()
-          this.$message.warning('断线重连成功')
+          // this.login()
+          // this.$message.warning('断线重连成功')
         }
 
         this.signalROptions.value = null
         this.signalROptions.attachment = null
         this.signalROptions.msgType = 'Text'
         this.$refs.refFileInput.value = ''
-        e.preventDefault() // 阻止浏览器默认换行操作
+        e.preventDefault()
       }
+    },
+    // 发送点对点或频道消息
+    sendMsg (item) {
+      // 加入频道成功后可发送频道消息
+      if (item) {
+        item.linkName = this.$store.state.userInfo.userInfo.linkman
+        item.userImage = this.$store.state.userInfo.userInfo.userImage
+        let toUserIDList = []
+        for (let i = 0; i < item.toUserList.length; i++) {
+          // 判断如果不在频道内
+          if (
+            !this.signalROptions.channelMember.includes(item.toUserList[i].uid)
+          ) {
+            // 如果不在频道内并且有uid
+            if (item.toUserList[i].uid) {
+              // 发送点对点消息
+              console.log('发送了点对点')
+              this.sendPeerToPeer(JSON.stringify(item), item.toUserList[i].uid)
+            }
+          } else {
+            // 在频道内的
+            toUserIDList.push(item.toUserList[i].toUserID)
+          }
+        }
+        // 先去重 后去掉在频道内的
+        const newobj = {}
+        const arr = item.toUserList.reduce((preVal, curVal) => {
+        /* eslint-disable */
+          newobj[curVal.toUserID]
+            ? ''
+            : (newobj[curVal.toUserID] = preVal.push(curVal))
+          return preVal
+        }, [])
+        // 发推送
+        toUserIDList = JSON.stringify(toUserIDList)
+        for (let i = 0; i < arr.length; i++) {
+          if (!toUserIDList.includes(arr[i].toUserID)) {
+            this.GeSendPush(item, arr[i].toUserID, 3)
+          }
+        }
+
+        this.$root.eventHub.$emit('UpdateOrgPersonnel')
+        // 在不在频道内都发频道消息
+        this.signalROptions.creatChannel
+          .sendMessage({ text: JSON.stringify(item) })
+          .then(() => {
+            /* 频道消息发送成功的处理逻辑 */
+            console.log('频道消息发送成功')
+          })
+          .catch(error => {
+            /* 频道消息发送失败的处理逻辑 */
+            this.$message.error('频道消息发送失败')
+          })
+      }
+    },
+    // 发送点对点消息
+    sendPeerToPeer (content, toUserID) {
+      this.signalROptions.client
+        .sendMessageToPeer(
+          { text: content }, // 符合 RtmMessage 接口的参数对象
+          toUserID // 远端用户 ID
+        )
+        .then(sendResult => {
+          if (sendResult.hasPeerReceived) {
+            /* 远端用户收到消息的处理逻辑 */
+            this.$message.closeAll()
+            console.log('远端用户收到我发送的消息')
+          } else {
+            /* 服务器已接收、但远端用户不可达的处理逻辑 */
+            console.log('服务器已接收点对点消息、但远端用户不可达的处理')
+          }
+        })
+        .catch(error => {
+          console.log(error)
+          /* 发送失败的处理逻辑 */
+          this.$message.error('发送失败')
+        })
     },
     // 即时通讯发消息
     async sendMessages () {
@@ -755,13 +900,33 @@ export default {
         }
         this.$root.eventHub.$emit('resetData')
       } catch (error) {
-        this.login()
+        // this.login()
         this.$message.warning('断线重连成功')
       }
       this.signalROptions.value = null
       this.signalROptions.attachment = null
       this.signalROptions.msgType = 'Text'
       this.$refs.refFileInput.value = ''
+    },
+    // 创建 发送聊天
+    async createMessageAccept () {
+      console.log(this.options)
+      const fd = {
+        MessageType: this.signalROptions.msgType, // 消息类型；Text文字 Picture图片  Video视频 Voice语音  InstantVoice即时语音 TimeVideo即时视频
+        Attachment: this.signalROptions.attachment, // 图片地址
+        IsGroup: this.options.isGroup, // 是否是群聊；false点对点 true 群聊
+        ToUserId: this.options.id, // 接收人id
+        ToCompanyId: this.options.companyId, // 接收人公司id
+        Content: this.signalROptions.value, // 文本内容
+        Platform: 'PC', // 终端
+        OrderNumber: this.signalROptions.orderNumber,
+        GroupNumber: this.signalROptions.groupNumber
+      }
+      for (const key in fd) {
+        if (!fd[key]) delete fd[key]
+      }
+      console.log('发送聊天配置=', fd)
+      return await this.$http.post('/api/CreateMessageAccept', fd)
     },
     // 选择发送文件
     async changeFiless (e) {
@@ -924,14 +1089,147 @@ export default {
           }, 1000)
         }
       }, 500)
+    },
+    // 显示已读未读
+    isShowReady (item) {
+      if (this.MessageUnreadCount) {
+        if (this.MessageUnreadCount.length) {
+          for (let i = 0; i < this.MessageUnreadCount.length; i++) {
+            if (this.MessageUnreadCount[i].MessageID === item.id) {
+              item.unreadCout = this.MessageUnreadCount[i].Count
+              return item.unreadCout
+            }
+          }
+        } else {
+          item.unreadCout = 0
+        }
+      } else {
+        return item.unreadCout
+      }
+    },
+    /*
+     * 时间戳显示为多少分钟前，多少天前的处理
+     * console.log(dateDiff(1411111111111));  // 2014年09月19日
+     */
+    dateDiff (time) {
+      let timestamp = Number(new Date(time))
+      const arrTimestamp = (timestamp + '').split('')
+      for (var start = 0; start < 13; start++) {
+        if (!arrTimestamp[start]) {
+          arrTimestamp[start] = '0'
+        }
+      }
+      timestamp = arrTimestamp.join('') * 1
+
+      var minute = 1000 * 60
+      var hour = minute * 60
+      var day = hour * 24
+      var halfamonth = day * 15
+      var month = day * 30
+      var now = new Date().getTime()
+      var diffValue = now - timestamp
+
+      // 如果本地时间反而小于变量时间
+      if (diffValue < 0) {
+        return '不久前'
+      }
+
+      // 计算差异时间的量级
+      var monthC = diffValue / month
+      var weekC = diffValue / (7 * day)
+      var dayC = diffValue / day
+      var hourC = diffValue / hour
+      var minC = diffValue / minute
+
+      // 数值补0方法
+      var zero = function (value) {
+        if (value < 10) {
+          return '0' + value
+        }
+        return value
+      }
+
+      // 使用
+      if (monthC > 12) {
+        // 超过1年，直接显示年月日
+        return (function () {
+          var date = new Date(timestamp)
+          return (
+            date.getFullYear() +
+            '年' +
+            zero(date.getMonth() + 1) +
+            '月' +
+            zero(date.getDate()) +
+            '日'
+          )
+        })()
+      } else if (monthC >= 1) {
+        return parseInt(monthC) + '月前'
+      } else if (weekC >= 1) {
+        return parseInt(weekC) + '周前'
+      } else if (dayC >= 1) {
+        return parseInt(dayC) + '天前'
+      } else if (hourC >= 1) {
+        return parseInt(hourC) + '小时前'
+      } else if (minC >= 1) {
+        return parseInt(minC) + '分钟前'
+      }
+      return '刚刚'
     }
   },
   created () {},
-  mounted () {},
+  mounted () {
+    this.showLiaotianr()
+  },
   computed: {
     ...mapState({
-      globalJson: (state) => state.globalJson.Json
-    })
+      globalJson: state => state.globalJson.Json
+    }),
+    updateLiaotian () {
+      return this.signalROptions.showmsg
+    },
+    getWsMsg () {
+      return this.$store.state.wsMsg
+    },
+  },
+  watch: {
+    // 监听订单长连接推送消息
+    '$store.state.wsOrderMsg' (val) {
+      this.orderSampleFrom = val
+    },
+    getWsMsg: function (data) {
+      if (data) {
+        data = JSON.parse(data)
+      }
+      if (
+        data &&
+        data.action === 'MessageUnreadCount' &&
+        data.SendClientId === this.signalROptions.groupNumber
+      ) {
+        this.$emit('changeMessageUnreadCount', JSON.parse(data.content).UnreadCountList)
+        // 长连接接收到
+        console.log(this.MessageUnreadCount)
+      }
+    },
+    // 聊天窗口滚动到底部
+    updateLiaotian (msgList) {
+      if (msgList && msgList.length && !this.noScrollTop) {
+        $('#liaotianchuangkou')
+          .stop()
+          .animate(
+            {
+              scrollTop:
+                $('#liaotianchuangkou')[0] &&
+                $('#liaotianchuangkou')[0].scrollHeight +
+                  $('#liaotianchuangkou')[0].offsetHeight
+            },
+            500
+          )
+      }
+    }
+  },
+   beforeDestroy(){
+    this.signChannel()
   }
 }
 </script>

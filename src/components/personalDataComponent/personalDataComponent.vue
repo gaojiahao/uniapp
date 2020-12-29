@@ -114,7 +114,8 @@ export default {
     openTwoView () {
       this.$emit('openTwoView', {
         componentName: 'personalChatComponent',
-        ...this.personalDetail
+        ...this.personalDetail,
+        isGroup: false
       })
     },
     // 备注
@@ -140,7 +141,6 @@ export default {
 
   },
   mounted () {
-    console.log(this.options)
     this.getPersonalDetail()
   },
   computed: {
