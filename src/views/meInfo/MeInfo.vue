@@ -8,7 +8,6 @@
       <li class="info">
         <router-view
           @showInfo="showInfo"
-          @showInfoListOrder="showInfoListOrder"
           @showCompany="showCompany"
           @showCompanyList="showCompanyList"
           @cancelSendGonggao="active2 = null"
@@ -2450,19 +2449,19 @@ export default {
       }
     },
     // 点击公司业务打开订单列表
-    async showInfoListOrder (val) {
-      this.offDetail()
-      this.showTypeOptions.showType = val.showType
-      this.showTypeOptions.sampleFrom = val.sampleFrom
-      this.showTypeOptions.CompanyNumber = null
-      this.showTypeOptions.isToCompany = null
-      this.showTypeOptions.ReadStatus = null
-      const res = await this.getERPOrderListByPage()
-      if (res.data.result.code === 200) {
-        this.ERPOrderOptions.ERPOrderList = res.data.result.item.items
-        this.ERPOrderOptions.total = res.data.result.item.totalCount
-      }
-    },
+    // async showInfoListOrder (val) {
+    //   this.offDetail()
+    //   this.showTypeOptions.showType = val.showType
+    //   this.showTypeOptions.sampleFrom = val.sampleFrom
+    //   this.showTypeOptions.CompanyNumber = null
+    //   this.showTypeOptions.isToCompany = null
+    //   this.showTypeOptions.ReadStatus = null
+    //   const res = await this.getERPOrderListByPage()
+    //   if (res.data.result.code === 200) {
+    //     this.ERPOrderOptions.ERPOrderList = res.data.result.item.items
+    //     this.ERPOrderOptions.total = res.data.result.item.totalCount
+    //   }
+    // },
     // 打开公司排号公司的订单列表
     async showOrderCompanyList (item) {
       this.offDetail()
@@ -3703,121 +3702,7 @@ export default {
           color: #165af8;
         }
       }
-      .infoOrderList {
-        height: 765px;
-        overflow: auto;
-        padding: 0 10px 10px 10px;
-        font-size: 14px;
-        box-sizing: border-box;
-        background-color: #f5f5f5;
-        /** 单独为横向和竖向设置滚动条 **/
-        overflow-x: none;
-        overflow-y: auto;
-        &::-webkit-scrollbar {
-          display: none;
-        }
-        div {
-          center {
-            margin: 20px 0;
-            .date {
-              height: 24px;
-              width: 156px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              background-color: #dadada;
-              color: #ffffff;
-            }
-          }
-        }
-        .infoOrder {
-          background-color: #fff;
-          box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.14);
-          border-radius: 10px;
-          margin-top: 10px;
-          padding: 0 10px;
-          .orderState {
-            border-bottom: 1px solid #ccc;
-            padding: 10px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            .el-tag {
-              display: flex;
-              align-items: center;
-              &.red {
-                background-color: #f4382e;
-                border-color: #f4382e;
-              }
-              .weiquerenIcon {
-                margin-right: 10px;
-                width: 14px;
-                height: 14px;
-                background: url("~@/assets/images/未确认.png") no-repeat center;
-                background-size: contain;
-              }
-              .yiquxiaoIcon {
-                margin-right: 10px;
-                width: 14px;
-                height: 14px;
-                background: url("~@/assets/images/已取消.png") no-repeat center;
-                background-size: contain;
-              }
-              .wanchengIcon {
-                margin-right: 10px;
-                width: 14px;
-                height: 14px;
-                background: url("~@/assets/images/完成.png") no-repeat center;
-                background-size: contain;
-              }
-              .weichakanIcon {
-                margin-right: 10px;
-                width: 14px;
-                height: 14px;
-                background: url("~@/assets/images/未查看.png") no-repeat center;
-                background-size: contain;
-              }
-            }
-          }
-          .txtWrap {
-            padding-bottom: 5px;
-            border-bottom: 1px solid #ccc;
-            p {
-              padding-top: 5px;
-              &.remark {
-                display: -webkit-box;
-                word-break: break-all;
-                text-overflow: ellipsis;
-                overflow: hidden;
-                white-space: pre-line;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 3;
-              }
-              .title {
-                color: #a0a0a0;
-              }
-            }
-          }
-          .btnList {
-            padding: 10px 0;
-            .box {
-              float: right;
-              button.el-button.el-button--default.el-button--mini.is-round {
-                border-color: #66b1ff;
-                color: #66b1ff;
-              }
-            }
-            &::after {
-              content: "";
-              display: block;
-              width: 0;
-              height: 0;
-              overflow: hidden;
-              clear: both;
-            }
-          }
-        }
-      }
+      
       .mobile {
         box-sizing: border-box;
         padding: 5px 10px;

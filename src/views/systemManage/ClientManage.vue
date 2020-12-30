@@ -168,7 +168,7 @@
             }}
           </template>
         </el-table-column> -->
-        <el-table-column label="操作" align="center" width="420">
+        <el-table-column label="操作" align="center" width="420" fixed="right">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -555,7 +555,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" align="center" min-width="180">
+        <el-table-column label="操作" align="center" min-width="180" fixed="right">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -888,7 +888,7 @@
           label="备注"
           align="center"
         ></el-table-column>
-        <el-table-column label="操作" width="250" align="center">
+        <el-table-column label="操作" width="250" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -977,7 +977,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="操作" align="center" min-width="180">
+          <el-table-column label="操作" align="center" min-width="180" fixed="right">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -1102,7 +1102,7 @@ export default {
       UserManConfig: {
         userManDialog: false,
         title: '用户管理',
-        CompantNumber: null
+        companyNumber: null
       },
       dialogTitle: '新增客户',
       addEmployeeRules: {
@@ -1332,7 +1332,7 @@ export default {
     async getPersinnelList (phoneNumber) {
       const res = await this.$http.post('/api/SearchPersinnel', {
         Client_acc_nu: phoneNumber,
-        CompantNumber: this.employeeMan.companyNumber
+        companyNumber: this.employeeMan.companyNumber
       })
       if (res.data.result.code === 200) {
         this.relatedConfig.relatedDataList = res.data.result.item
@@ -1813,9 +1813,9 @@ export default {
     // 打开绑定公司
     openUserMan (row) {
       this.UserManConfig.userManDialog = true
-      this.UserManConfig.CompantNumber = row.companyNumber
+      this.UserManConfig.companyNumber = row.companyNumber
       this.UserManConfig.phoneNumber = row.phoneNumber
-      this.getUserMan(row.phoneNumber, row.companyType)
+      this.getUserMan(row.companyNumber, row.companyType)
     },
     // 根据公司id查授权信息
     async getCompanyConfigureById (id) {
@@ -1861,9 +1861,9 @@ export default {
       }
     },
     // 获取用户管理列表
-    async getUserMan (phoneNumber, companyType) {
+    async getUserMan (CompanyNumber, companyType) {
       const res = await this.$http.post('/api/SearchCompany', {
-        Handset: phoneNumber,
+        CompanyNumber: CompanyNumber,
         companyType: companyType
       })
       if (res.data.result.code === 200) {
@@ -1873,7 +1873,7 @@ export default {
     // 用户管理分页事件
     userManCurrentChange (currentPage) {
       this.userManCurrentPage = currentPage
-      this.getUserMan(this.UserManConfig.CompantNumber)
+      this.getUserMan(this.UserManConfig.companyNumber)
     },
     // 员工管理分页
     employeeManCurrentChange (page) {
@@ -1964,7 +1964,7 @@ export default {
     async Related (row, code) {
       if (code === 1) {
         const res = await this.$http.post('/api/BindCompany', {
-          companyNumber: this.UserManConfig.CompantNumber,
+          companyNumber: this.UserManConfig.companyNumber,
           CompanyType: row.companyType,
           id: row.id
         })
@@ -1974,7 +1974,7 @@ export default {
         } else {
           this.$message.error(res.data.result.msg)
         }
-        this.getUserMan(this.UserManConfig.phoneNumber, row.companyType)
+        this.getUserMan(this.UserManConfig.companyNumber, row.companyType)
       } else {
         const res = await this.$http.post('/api/BindCompany', {
           companyNumber: null,
@@ -1985,7 +1985,7 @@ export default {
         } else {
           this.$message.error(res.data.result.msg)
         }
-        this.getUserMan(this.UserManConfig.phoneNumber, row.companyType)
+        this.getUserMan(this.UserManConfig.companyNumber, row.companyType)
       }
     }
   },

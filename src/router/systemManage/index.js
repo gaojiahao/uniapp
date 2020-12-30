@@ -11,6 +11,7 @@ const CateAllocation = () => import('@/views/systemManage/cateAllocation.vue')
 const TouristMan = () => import('@/views/systemManage/touristMan.vue')
 const ProductPackAllocation = () => import('@/views/systemManage/productPackAllocation.vue')
 const ProductPackMan = () => import('@/views/systemManage/productPackMan.vue')
+const ClientMerge = () => import('@/views/systemManage/clientMerge.vue')
 
 export default [
   {
@@ -72,6 +73,11 @@ export default [
     path: '/productPackAllocation',
     name: 'productPackAllocation',
     component: ProductPackAllocation
+  },
+  {
+    path: '/clientMerge',
+    name: 'clientMerge',
+    component: ClientMerge
   },
   {
     path: '/productPackMan',
