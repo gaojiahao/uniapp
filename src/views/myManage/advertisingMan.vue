@@ -211,7 +211,7 @@
             </el-dialog>
           </div>
         </el-form-item>
-        <el-form-item label="广告链接：" prop="link" :label-width="formLabelWidth">
+        <el-form-item label="广告链接：" :label-width="formLabelWidth">
           <el-input v-model="formDatas.link" placeholder="请输入广告链接"></el-input>
         </el-form-item>
         <el-form-item label="排序：" prop="sort" :label-width="formLabelWidth">
@@ -348,10 +348,6 @@ export default {
         ],
         content: [
           { required: true, message: '广告内容为必填项', trigger: 'blur' }
-        ],
-        link: [
-          { required: true, message: '请输入广告链接', trigger: 'blur' },
-          { min: 1, max: 99, message: '请输入 1-99 个字符', trigger: 'blur' }
         ],
         img: [
           {
