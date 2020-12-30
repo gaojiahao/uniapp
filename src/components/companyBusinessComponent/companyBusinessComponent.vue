@@ -1,7 +1,8 @@
+
 <template>
 <div class="wrapBox">
         <h3 class="infoListTitle" style="background-color: #fff;">
-          {{ showTypeOptions.sampleFrom | ERPOrderTitle }}
+          {{ showTypeOptions.sampleFrom || ERPOrderTitle }}
           <span style="margin-left:20px;font-size:14px;">
             (共
             <strong style="color:red;">{{ ERPOrderOptions.total }}</strong> 条)
@@ -10,10 +11,9 @@
         <div
           class="xinde"
           v-show="
-            (this.orderSampleFrom &&
-              this.orderSampleFrom.SampleFrom &&
-              this.orderSampleFrom.SampleFrom.toLowerCase()) ==
-              showTypeOptions.sampleFrom.toLowerCase()">
+            (orderSampleFrom &&
+              orderSampleFrom.SampleFrom &&
+              orderSampleFrom.SampleFrom.toLowerCase()) === (showTypeOptions.sampleFrom && showTypeOptions.sampleFrom.toLowerCase())">
           <span
             class="xindeInfo"
             @click="resetCompanyList"
@@ -138,23 +138,187 @@ export default {
   props: ['options'],
   data () {
     return {
-
+      ERPOrderTitle: '厂商业务列表',
+      orderSampleFrom: null,
+      showTypeOptions: {
+        showType: null,
+        sampleFrom: null,
+        showLiaotianType: null,
+        showOrderDetail: false,
+        isShowOrderDetail: true
+      },
+      ERPOrderOptions: {
+        ERPOrderList: null,
+        total: 0
+      }
     }
   },
   methods: {
+    // 下拉加载更多订单
+    async orderLoad () {
+      this.orderLoadText = '加载中...'
+      if (
+        this.ERPOrderOptions.ERPOrderList &&
+        this.ERPOrderOptions.ERPOrderList.length < this.ERPOrderOptions.total
+      ) {
+        this.orderCurrentPage++
+        const res = await this.getERPOrderListByPage()
+        if (res.data.result.code === 200) {
+          this.ERPOrderOptions.ERPOrderList = this.ERPOrderOptions.ERPOrderList.concat(
+            res.data.result.item.items
+          )
+          this.ERPOrderOptions.total = res.data.result.item.totalCount
+        }
+      } else {
+        this.orderCurrentPage = 1
+        this.orderLoadText = '人家也是有底线滴'
+      }
+    },
+    // 打开订单详情-----------------------------------------------------------------------------------------------------------------
+    async openOrderDetail (item) {
+      this.orderOptions = item
+      this.activeName = item.messageExt === '0' ? 'first' : 'last'
+      const res = await this.getOrderDetail(item) // 获取订单详情
+      this.getOrderDetailTotal(item) // 获取订单详情合计
+      if (res.data.result.code === 200) {
+        this.orderDetailList = res.data.result.item.items
+        this.orderDetailTotal = res.data.result.item.totalCount
+      }
+      // 重新获取列表刷新状态
+      this.orderCurrentPage = 1
+      const re = await this.getERPOrderListByPage()
+      if (re.data.result.code === 200) {
+        this.ERPOrderOptions.ERPOrderList = re.data.result.item.items
+        this.ERPOrderOptions.total = re.data.result.item.totalCount
+        for (let i = 0; i < this.ERPOrderOptions.ERPOrderList.length; i++) {
+          if (
+            this.ERPOrderOptions.ERPOrderList[i].erpOrderID ===
+            this.orderOptions.erpOrderID
+          ) {
+            this.orderOptions = this.ERPOrderOptions.ERPOrderList[i]
+          }
+        }
+      }
+      this.$root.eventHub.$emit('resetCompany')
+      console.log(this.orderOptions)
+      this.showTypeOptions.isShowOrderDetail = true
+      this.showTypeOptions.showOrderDetail = true
+      this.showTypeOptions.showLiaotianType = null
+      this.isGroupNumber = false
+      this.showPersonalNumber = false
+      this.showSampleSelection = false
+    },
+    // 点击公司订单列表新的消息
+    async resetCompanyList () {
+      this.$store.commit('clearWsOrderMsg')
+      // 刷新列表
+      this.orderCurrentPage = 1
+      const res = await this.getERPOrderListByPage()
+      if (res.data.result.code === 200) {
+        this.ERPOrderOptions.ERPOrderList = res.data.result.item.items
+        this.ERPOrderOptions.total = res.data.result.item.totalCount
+      }
+    },
+    // 查询订单业务通知
+    async getERPOrderListByPage () {
+      const fd = {
+        skipCount: this.orderCurrentPage,
+        maxResultCount: this.orderPageSize
+      }
+      if (this.showTypeOptions.sampleFrom !== null) { fd.sampleFrom = this.showTypeOptions.sampleFrom }
+      if (this.showTypeOptions.CompanyNumber !== null) { fd.CompanyNumber = this.showTypeOptions.CompanyNumber }
+      if (this.showTypeOptions.ReadStatus !== null) { fd.ReadStatus = this.showTypeOptions.ReadStatus }
+      if (this.showTypeOptions.isToCompany !== null) { fd.isToCompany = this.showTypeOptions.isToCompany }
+      return await this.$http.post('/api/GetERPOrderListByPage', fd)
+    },
+    // 确认订单
+    async configOrder (val) {
+      this.orderOptions = val
+      this.queRenDialog = true
+    },
+    // 点击订单|订单详情立即沟通
+    async orderSend (item, value) {
+      this.$store.commit('clearWsMsg')
+      this.MessageUnreadCount = null
+      this.orderItemsOptions = item
+      this.orderItemOptions = value
+      const res = await this.$http.post('/api/GetPersonnelListByERPOrderNumber', {
+        orderNumber: item ? item.orderNumber : this.orderOptions.orderNumber
+      })
+      if (res.data.result.code === 200) {
+        if (res.data.result.item.length < 1) {
+          this.$message.error('该用户未注册')
+          return false
+        } else {
+          this.showPersonalNumber = false
+          this.isGroupNumber = false
+          this.signalROptions.value = null
+          this.signalROptions.attachment = null
+          this.signalROptions.showmsg = []
+          this.signalROptions.uid = ''
+          this.signalROptions.name = item
+            ? res.data.result.item[0].companyName
+            : this.$store.state.userInfo.commparnyList[0].companyType ===
+              'Exhibition'
+              ? value.supplierPersonnelName
+              : value.exhibitionPersonnelName
+          this.signalROptions.isGroup = !!item
+          this.signalROptions.msgType = 'Text'
+          this.signalROptions.orderNumber = item
+            ? item.orderNumber
+            : this.orderOptions.orderNumber
+          this.signalROptions.groupNumber = null
+          this.signalROptions.toUserID = item
+            ? res.data.result.item[0].companyName
+            : this.$store.state.userInfo.commparnyList[0].companyType ===
+              'Exhibition'
+              ? value.supplierPersonnelID
+              : value.exhibitionPersonnelID
+          this.signalROptions.toCompanyID = item
+            ? res.data.result.item[0].companyName
+            : this.$store.state.userInfo.commparnyList[0].companyType ===
+              'Exhibition'
+              ? value.supplierId
+              : value.exhibitionId
+
+          this.showTypeOptions.isShowOrderDetail = false
+          this.CompanyDetail = []
+          console.log(this.signalROptions.groupNumber)
+          try {
+            this.addChannel() // 加入深网频道
+          } catch (error) {
+            this.login()
+            this.$message.warning('断线重连成功')
+          }
+          const re = await this.getInstantMessageByNumber()
+          if (re.data.result.code === 200) {
+            this.signalROptions.showmsg = re.data.result.item.items
+            this.chatHistoryTotal = re.data.result.item.totalCount
+          } else {
+            this.personalDetail = []
+          }
+        }
+      }
+    }
   },
   created () {
 
   },
   mounted () {
 
+  },
+  watch: {
+    // 监听订单长连接推送消息
+    '$store.state.wsOrderMsg' (val) {
+      this.orderSampleFrom = val
+    }
   }
 }
 </script>
 <style scoped lang='less'>
 @deep: ~">>>";
 .wrapBox{
-  height: 827px;
+  height: 825px;
   width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -169,19 +333,23 @@ export default {
     font-weight: 500;
   }
   .xinde {
-    padding: 20px 0;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
     border-top:1px solid #ccc;
     text-align:center;
     .xindeInfo{
-      border-radius:30px;
+      border-radius: 30px;
       background-color:#f8f8f8;
       color:#00b94b;
-      padding:8px 40px;
+      padding:8px 30px;
       cursor: pointer;
     }
   }
   .infoOrderList {
-        height: 765px;
+        flex: 1;
         overflow: auto;
         padding: 0 10px 10px 10px;
         font-size: 14px;

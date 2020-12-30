@@ -291,6 +291,7 @@ export default {
     },
     // 打开公司订单列表
     openOrder (item) {
+      console.log(item)
       this.$emit('openOneView', {
         companyType: item,
         componentName: 'companyBusinessComponent'

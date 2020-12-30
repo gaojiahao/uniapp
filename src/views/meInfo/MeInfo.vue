@@ -1984,74 +1984,6 @@ export default {
       // this.showTypeOptions.showLiaotianType = 'showLiaotianList'
       // this.active2 = null
     },
-    
-    // 点击订单|订单详情立即沟通
-    async orderSend (item, value) {
-      this.$store.commit('clearWsMsg')
-      this.MessageUnreadCount = null
-      this.orderItemsOptions = item
-      this.orderItemOptions = value
-      const res = await this.$http.post('/api/GetPersonnelListByERPOrderNumber', {
-        orderNumber: item ? item.orderNumber : this.orderOptions.orderNumber
-      })
-      if (res.data.result.code === 200) {
-        if (res.data.result.item.length < 1) {
-          this.$message.error('该用户未注册')
-          return false
-        } else {
-          this.showPersonalNumber = false
-          this.isGroupNumber = false
-          this.signalROptions.value = null
-          this.signalROptions.attachment = null
-          this.signalROptions.showmsg = []
-          this.signalROptions.uid = ''
-          this.signalROptions.name = item
-            ? res.data.result.item[0].companyName
-            : this.$store.state.userInfo.commparnyList[0].companyType ===
-              'Exhibition'
-              ? value.supplierPersonnelName
-              : value.exhibitionPersonnelName
-          this.signalROptions.isGroup = !!item
-          this.signalROptions.msgType = 'Text'
-          this.signalROptions.orderNumber = item
-            ? item.orderNumber
-            : this.orderOptions.orderNumber
-          this.signalROptions.groupNumber = null
-          this.signalROptions.toUserID = item
-            ? res.data.result.item[0].companyName
-            : this.$store.state.userInfo.commparnyList[0].companyType ===
-              'Exhibition'
-              ? value.supplierPersonnelID
-              : value.exhibitionPersonnelID
-          this.signalROptions.toCompanyID = item
-            ? res.data.result.item[0].companyName
-            : this.$store.state.userInfo.commparnyList[0].companyType ===
-              'Exhibition'
-              ? value.supplierId
-              : value.exhibitionId
-
-          this.showTypeOptions.isShowOrderDetail = false
-          this.CompanyDetail = []
-          console.log(this.signalROptions.groupNumber)
-          try {
-            this.addChannel() // 加入深网频道
-          } catch (error) {
-            this.login()
-            this.$message.warning('断线重连成功')
-          }
-          const re = await this.getInstantMessageByNumber()
-          if (re.data.result.code === 200) {
-            this.signalROptions.showmsg = re.data.result.item.items
-            this.chatHistoryTotal = re.data.result.item.totalCount
-          } else {
-            this.personalDetail = []
-          }
-          this.isOrderShow = true
-          // item ? (this.isOrderShow = false) : (this.isOrderShow = true);
-          this.showTypeOptions.showLiaotianType = 'showLiaotianList'
-        }
-      }
-    },
     // 转发消息
     forwardInfo (item) {
       switch (item.messageType) {
@@ -2173,18 +2105,6 @@ export default {
         this.$message.error('复制失败')
       }
     },
-    // 查询订单业务通知
-    async getERPOrderListByPage () {
-      const fd = {
-        skipCount: this.orderCurrentPage,
-        maxResultCount: this.orderPageSize
-      }
-      if (this.showTypeOptions.sampleFrom !== null) { fd.sampleFrom = this.showTypeOptions.sampleFrom }
-      if (this.showTypeOptions.CompanyNumber !== null) { fd.CompanyNumber = this.showTypeOptions.CompanyNumber }
-      if (this.showTypeOptions.ReadStatus !== null) { fd.ReadStatus = this.showTypeOptions.ReadStatus }
-      if (this.showTypeOptions.isToCompany !== null) { fd.isToCompany = this.showTypeOptions.isToCompany }
-      return await this.$http.post('/api/GetERPOrderListByPage', fd)
-    },
     // 获取订单详情合计
     async getOrderDetailTotal ({
       orderType,
@@ -2242,40 +2162,6 @@ export default {
           maxResultCount: this.orderDetailPageSize
         })
       }
-    },
-    // 打开订单详情-----------------------------------------------------------------------------------------------------------------
-    async openOrderDetail (item) {
-      this.orderOptions = item
-      this.activeName = item.messageExt === '0' ? 'first' : 'last'
-      const res = await this.getOrderDetail(item) // 获取订单详情
-      this.getOrderDetailTotal(item) // 获取订单详情合计
-      if (res.data.result.code === 200) {
-        this.orderDetailList = res.data.result.item.items
-        this.orderDetailTotal = res.data.result.item.totalCount
-      }
-      // 重新获取列表刷新状态
-      this.orderCurrentPage = 1
-      const re = await this.getERPOrderListByPage()
-      if (re.data.result.code === 200) {
-        this.ERPOrderOptions.ERPOrderList = re.data.result.item.items
-        this.ERPOrderOptions.total = re.data.result.item.totalCount
-        for (let i = 0; i < this.ERPOrderOptions.ERPOrderList.length; i++) {
-          if (
-            this.ERPOrderOptions.ERPOrderList[i].erpOrderID ===
-            this.orderOptions.erpOrderID
-          ) {
-            this.orderOptions = this.ERPOrderOptions.ERPOrderList[i]
-          }
-        }
-      }
-      this.$root.eventHub.$emit('resetCompany')
-      console.log(this.orderOptions)
-      this.showTypeOptions.isShowOrderDetail = true
-      this.showTypeOptions.showOrderDetail = true
-      this.showTypeOptions.showLiaotianType = null
-      this.isGroupNumber = false
-      this.showPersonalNumber = false
-      this.showSampleSelection = false
     },
     // 聊天窗口列表事件
     isOrderShowEvent () {
@@ -2425,17 +2311,6 @@ export default {
       this.twoViews = null
       this.currentOneComponent = null
       this.oneViews = null
-    },
-    // 点击公司订单列表新的消息
-    async resetCompanyList () {
-      this.$store.commit('clearWsOrderMsg')
-      // 刷新列表
-      this.orderCurrentPage = 1
-      const res = await this.getERPOrderListByPage()
-      if (res.data.result.code === 200) {
-        this.ERPOrderOptions.ERPOrderList = res.data.result.item.items
-        this.ERPOrderOptions.total = res.data.result.item.totalCount
-      }
     },
     // 点击排号订单列表新的消息
     async resetPaihaoCompanyList () {
@@ -2811,31 +2686,6 @@ export default {
         case 400:
           this.$message.error(res.data.result.msg)
           break
-      }
-    },
-    // 确认订单
-    async configOrder (val) {
-      this.orderOptions = val
-      this.queRenDialog = true
-    },
-    // 下拉加载更多订单
-    async orderLoad () {
-      this.orderLoadText = '加载中...'
-      if (
-        this.ERPOrderOptions.ERPOrderList &&
-        this.ERPOrderOptions.ERPOrderList.length < this.ERPOrderOptions.total
-      ) {
-        this.orderCurrentPage++
-        const res = await this.getERPOrderListByPage()
-        if (res.data.result.code === 200) {
-          this.ERPOrderOptions.ERPOrderList = this.ERPOrderOptions.ERPOrderList.concat(
-            res.data.result.item.items
-          )
-          this.ERPOrderOptions.total = res.data.result.item.totalCount
-        }
-      } else {
-        this.orderCurrentPage = 1
-        this.orderLoadText = '人家也是有底线滴'
       }
     },
     // 获取系统参数
