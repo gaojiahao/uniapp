@@ -73,8 +73,6 @@
               <div class="title"><span>搜索产品</span></div>
           </div>
             <ul class="productList">
-              <el-image fit="contain" src="http://hsimg.toysbao.com/yptimg.aspx?ma_nu=00093&number=HS0000786&type=2&HS0000786.jpg" lazy>
-              </el-image>
               <li
                 class="productItems"
                 v-for="(item, i) in dataList"
