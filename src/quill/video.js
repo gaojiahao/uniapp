@@ -12,6 +12,8 @@ class Video extends BlockEmbed {
     // 添加video标签所需的属性
     node.setAttribute('controls', 'controls')
     node.setAttribute('type', 'video/mp4')
+    node.style.backgroundImage = 'url(@/assets/images/bg.png) no-repeat'
+    node.style.backgroundSize = '100% 100%'
     node.style.width = '100%'
     node.setAttribute('src', this.sanitize(value))
     return node

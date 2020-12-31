@@ -169,7 +169,7 @@
                 <el-option v-for="(item, i) in adTypeList" :key="i" :label="item.enumName" :value="item.enumValue"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="公司类型：" prop="adType" :label-width="formLabelWidth">
+            <el-form-item label="公司类型：" prop="roleName" :label-width="formLabelWidth">
               <el-select v-model="formDatas.roleName" placeholder="请选择类型">
                 <el-option v-for="(item, i) in clientTypeList" :key="i" :label="item.itemText" :value="item.itemCode"></el-option>
               </el-select>
@@ -200,7 +200,7 @@
               :on-change="changeUpload"
               :auto-upload="false"
               list-type="picture-card"
-              :accept="globalJson[0].itemCode"
+              :accept="globalJson[0].itemCode+','+globalJson[3].itemCode"
               :on-preview="handlePictureCardPreview"
               :on-remove="handleRemove"
               :file-list="editImages">
@@ -251,7 +251,7 @@
 import bsTop from '@/components/BsTop'
 import bsFooter from '@/components/oldFooter'
 // 这里引入修改过的video模块并注册
-import * as Quill from 'quill'
+import Quill from 'quill'
 import Video from '@/quill/video'
 Quill.register(Video, true)
 export default {
@@ -298,6 +298,7 @@ export default {
       dialogTitle: '新增广告',
       formDatas: {
         adType: 1,
+        roleName: null,
         adPosition: null,
         platform: null,
         adTitle: null,
@@ -408,6 +409,7 @@ export default {
     openEdit (row) {
       this.formDatas = {
         adType: null,
+        roleName: null,
         adPosition: null,
         platform: null,
         adTitle: null,
@@ -530,14 +532,26 @@ export default {
     },
     // 选择图片校验大小
     async changeUpload (file, fileList) {
-      if (file.size > this.$store.state.globalJson.Json.NoticeRestrictions[5].itemCode) {
-        this.$message.error(
-          '上传图片大小不能超过 ' +
+      if (this.globalJson[0].itemCode.includes(file.raw.type.split('/')[1].toUpperCase())) {
+        if (file.size > this.$store.state.globalJson.Json.NoticeRestrictions[5].itemCode) {
+          this.$message.error(
+            '上传图片大小不能超过 ' +
             this.$store.state.globalJson.Json.NoticeRestrictions[5].itemCode / 1024 / 1024 +
             'MB'
-        )
-        fileList.pop()
-        return false
+          )
+          fileList.pop()
+          return false
+        }
+      } else if (this.globalJson[3].itemCode.includes(file.raw.type.split('/')[1].toUpperCase())) {
+        if (file.size > this.$store.state.globalJson.Json.NoticeRestrictions[1].itemCode) {
+          this.$message.error(
+            '上传图片大小不能超过 ' +
+            this.$store.state.globalJson.Json.NoticeRestrictions[1].itemCode / 1024 / 1024 +
+            'MB'
+          )
+          fileList.pop()
+          return false
+        }
       }
       if (fileList.length > 1) {
         fileList.shift()
