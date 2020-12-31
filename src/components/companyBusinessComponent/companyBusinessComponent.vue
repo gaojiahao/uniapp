@@ -138,6 +138,8 @@ export default {
   props: ['options'],
   data () {
     return {
+      orderCurrentPage: 1,
+      orderPageSize: 20,
       ERPOrderTitle: '厂商业务列表',
       orderSampleFrom: null,
       showTypeOptions: {
@@ -174,62 +176,27 @@ export default {
         this.orderLoadText = '人家也是有底线滴'
       }
     },
-    // 打开订单详情-----------------------------------------------------------------------------------------------------------------
-    async openOrderDetail (item) {
-      this.orderOptions = item
-      this.activeName = item.messageExt === '0' ? 'first' : 'last'
-      const res = await this.getOrderDetail(item) // 获取订单详情
-      this.getOrderDetailTotal(item) // 获取订单详情合计
-      if (res.data.result.code === 200) {
-        this.orderDetailList = res.data.result.item.items
-        this.orderDetailTotal = res.data.result.item.totalCount
+    // 查询订单业务通知
+    async getERPOrderListByPage () {
+      const fd = {
+        skipCount: this.orderCurrentPage,
+        maxResultCount: this.orderPageSize,
+        readStatus: '-1',
+        sampleFrom: this.options.companyType
       }
-      // 重新获取列表刷新状态
-      this.orderCurrentPage = 1
-      const re = await this.getERPOrderListByPage()
-      if (re.data.result.code === 200) {
-        this.ERPOrderOptions.ERPOrderList = re.data.result.item.items
-        this.ERPOrderOptions.total = re.data.result.item.totalCount
-        for (let i = 0; i < this.ERPOrderOptions.ERPOrderList.length; i++) {
-          if (
-            this.ERPOrderOptions.ERPOrderList[i].erpOrderID ===
-            this.orderOptions.erpOrderID
-          ) {
-            this.orderOptions = this.ERPOrderOptions.ERPOrderList[i]
-          }
-        }
-      }
-      this.$root.eventHub.$emit('resetCompany')
-      console.log(this.orderOptions)
-      this.showTypeOptions.isShowOrderDetail = true
-      this.showTypeOptions.showOrderDetail = true
-      this.showTypeOptions.showLiaotianType = null
-      this.isGroupNumber = false
-      this.showPersonalNumber = false
-      this.showSampleSelection = false
+      return await this.$http.post('/api/GetERPOrderListByPage', fd)
     },
-    // 点击公司订单列表新的消息
-    async resetCompanyList () {
-      this.$store.commit('clearWsOrderMsg')
-      // 刷新列表
-      this.orderCurrentPage = 1
+    // 点击您有新的消息
+    resetCompanyList () {
+      console.log(123)
+    },
+    // 打开页面获取数据
+    async getOrderList () {
       const res = await this.getERPOrderListByPage()
       if (res.data.result.code === 200) {
         this.ERPOrderOptions.ERPOrderList = res.data.result.item.items
         this.ERPOrderOptions.total = res.data.result.item.totalCount
       }
-    },
-    // 查询订单业务通知
-    async getERPOrderListByPage () {
-      const fd = {
-        skipCount: this.orderCurrentPage,
-        maxResultCount: this.orderPageSize
-      }
-      if (this.showTypeOptions.sampleFrom !== null) { fd.sampleFrom = this.showTypeOptions.sampleFrom }
-      if (this.showTypeOptions.CompanyNumber !== null) { fd.CompanyNumber = this.showTypeOptions.CompanyNumber }
-      if (this.showTypeOptions.ReadStatus !== null) { fd.ReadStatus = this.showTypeOptions.ReadStatus }
-      if (this.showTypeOptions.isToCompany !== null) { fd.isToCompany = this.showTypeOptions.isToCompany }
-      return await this.$http.post('/api/GetERPOrderListByPage', fd)
     },
     // 确认订单
     async configOrder (val) {
@@ -305,7 +272,7 @@ export default {
 
   },
   mounted () {
-
+    this.getOrderList()
   },
   watch: {
     // 监听订单长连接推送消息
