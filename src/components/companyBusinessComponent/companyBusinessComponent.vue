@@ -2,7 +2,7 @@
 <template>
 <div class="wrapBox">
         <h3 class="infoListTitle" style="background-color: #fff;">
-          {{ showTypeOptions.sampleFrom || ERPOrderTitle }}
+          {{ options.companyType | ERPOrderTitle }}
           <span style="margin-left:20px;font-size:14px;">
             (共
             <strong style="color:red;">{{ ERPOrderOptions.total }}</strong> 条)
@@ -10,15 +10,11 @@
         </h3>
         <div
           class="xinde"
-          v-show="
-            (orderSampleFrom &&
-              orderSampleFrom.SampleFrom &&
-              orderSampleFrom.SampleFrom.toLowerCase()) === (showTypeOptions.sampleFrom && showTypeOptions.sampleFrom.toLowerCase())">
+          v-show="orderSampleFrom && orderSampleFrom.SampleFrom.toLowerCase() === (showTypeOptions.sampleFrom.toLowerCase())">
           <span
             class="xindeInfo"
             @click="resetCompanyList"
-            >您有新的消息通知</span
-          >
+            >您有新的消息通知 </span>
         </div>
         <div class="infoOrderList" v-infinite-scroll="orderLoad">
           <template
@@ -33,7 +29,7 @@
                   item.createdOn && item.createdOn.replace(/T/, " ")
                 }}</span>
               </center>
-              <div class="infoOrder" @click="openOrderDetail(item)">
+              <div class="infoOrder" @click="openTwoView(item)">
                 <div class="orderState">
                   <div class="title">
                     {{
@@ -140,7 +136,6 @@ export default {
     return {
       orderCurrentPage: 1,
       orderPageSize: 20,
-      ERPOrderTitle: '厂商业务列表',
       orderSampleFrom: null,
       showTypeOptions: {
         showType: null,
@@ -156,9 +151,17 @@ export default {
     }
   },
   methods: {
+    // 打开三级窗口添加好友
+    openTwoView (item) {
+      const fd = {
+        ...item,
+        componentName: 'orderDetailComponent'
+      }
+      this.$emit('openTwoView', fd)
+    },
     // 下拉加载更多订单
     async orderLoad () {
-      this.orderLoadText = '加载中...'
+      this.orderLoadText = '人家也是有底线滴'
       if (
         this.ERPOrderOptions.ERPOrderList &&
         this.ERPOrderOptions.ERPOrderList.length < this.ERPOrderOptions.total
@@ -172,8 +175,7 @@ export default {
           this.ERPOrderOptions.total = res.data.result.item.totalCount
         }
       } else {
-        this.orderCurrentPage = 1
-        this.orderLoadText = '人家也是有底线滴'
+        this.orderLoadText = '加载中...'
       }
     },
     // 查询订单业务通知
@@ -187,8 +189,15 @@ export default {
       return await this.$http.post('/api/GetERPOrderListByPage', fd)
     },
     // 点击您有新的消息
-    resetCompanyList () {
-      console.log(123)
+    async resetCompanyList () {
+      this.$store.commit('clearWsOrderMsg')
+      // 刷新列表
+      this.orderCurrentPage = 1
+      const res = await this.getERPOrderListByPage()
+      if (res.data.result.code === 200) {
+        this.ERPOrderOptions.ERPOrderList = res.data.result.item.items
+        this.ERPOrderOptions.total = res.data.result.item.totalCount
+      }
     },
     // 打开页面获取数据
     async getOrderList () {
@@ -204,11 +213,10 @@ export default {
       this.queRenDialog = true
     },
     // 点击订单|订单详情立即沟通
-    async orderSend (item, value) {
+    async orderSend (item) {
       this.$store.commit('clearWsMsg')
       this.MessageUnreadCount = null
       this.orderItemsOptions = item
-      this.orderItemOptions = value
       const res = await this.$http.post('/api/GetPersonnelListByERPOrderNumber', {
         orderNumber: item ? item.orderNumber : this.orderOptions.orderNumber
       })
@@ -217,53 +225,16 @@ export default {
           this.$message.error('该用户未注册')
           return false
         } else {
-          this.showPersonalNumber = false
-          this.isGroupNumber = false
-          this.signalROptions.value = null
-          this.signalROptions.attachment = null
-          this.signalROptions.showmsg = []
-          this.signalROptions.uid = ''
-          this.signalROptions.name = item
-            ? res.data.result.item[0].companyName
-            : this.$store.state.userInfo.commparnyList[0].companyType ===
-              'Exhibition'
-              ? value.supplierPersonnelName
-              : value.exhibitionPersonnelName
-          this.signalROptions.isGroup = !!item
-          this.signalROptions.msgType = 'Text'
-          this.signalROptions.orderNumber = item
-            ? item.orderNumber
-            : this.orderOptions.orderNumber
-          this.signalROptions.groupNumber = null
-          this.signalROptions.toUserID = item
-            ? res.data.result.item[0].companyName
-            : this.$store.state.userInfo.commparnyList[0].companyType ===
-              'Exhibition'
-              ? value.supplierPersonnelID
-              : value.exhibitionPersonnelID
-          this.signalROptions.toCompanyID = item
-            ? res.data.result.item[0].companyName
-            : this.$store.state.userInfo.commparnyList[0].companyType ===
-              'Exhibition'
-              ? value.supplierId
-              : value.exhibitionId
-
-          this.showTypeOptions.isShowOrderDetail = false
-          this.CompanyDetail = []
-          console.log(this.signalROptions.groupNumber)
-          try {
-            this.addChannel() // 加入深网频道
-          } catch (error) {
-            this.login()
-            this.$message.warning('断线重连成功')
+          const fd = {
+            linkName: res.data.result.item[0].companyName,
+            isGroup: true,
+            toUserID: '',
+            toCompanyID: '',
+            ...item,
+            componentName: 'personalChatComponent'
           }
-          const re = await this.getInstantMessageByNumber()
-          if (re.data.result.code === 200) {
-            this.signalROptions.showmsg = re.data.result.item.items
-            this.chatHistoryTotal = re.data.result.item.totalCount
-          } else {
-            this.personalDetail = []
-          }
+          this.$emit('openTwoView', fd)
+          console.log(fd, this.options, item)
         }
       }
     }
@@ -273,12 +244,59 @@ export default {
   },
   mounted () {
     this.getOrderList()
+    this.$root.eventHub.$on('resetGetERPOrderListByPage', () => {
+      this.orderCurrentPage = 1
+      this.getOrderList()
+    })
+    console.log(this.options)
+  },
+  filters: {
+    myState (val) {
+      let msg
+      switch (val.orderStatus) {
+        case '0':
+          msg = '未查看'
+          break
+        case '1':
+          msg = '未确认'
+          break
+        case '99':
+          msg = '已取消'
+          break
+        case '9':
+          msg = '已完成'
+          break
+      }
+      return msg
+    },
+    ERPOrderTitle (val) {
+      let type
+      switch (val) {
+        case 'SUPPLIER':
+        case 'supplier':
+          type = '厂商业务列表'
+          break
+        case 'SALES':
+        case 'sales':
+          type = '公司业务列表'
+          break
+        case 'HALL':
+        case 'hall':
+          type = '展厅业务列表'
+          break
+      }
+      return type
+    }
   },
   watch: {
     // 监听订单长连接推送消息
     '$store.state.wsOrderMsg' (val) {
+      console.log(val)
       this.orderSampleFrom = val
     }
+  },
+  beforeDestroy () {
+    this.$root.eventHub.$off('resetGetERPOrderListByPage')
   }
 }
 </script>

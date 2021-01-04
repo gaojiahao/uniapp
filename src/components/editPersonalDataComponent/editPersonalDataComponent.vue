@@ -139,6 +139,7 @@ export default {
 }
 </script>
 <style scoped lang='less'>
+@deep: ~">>>";
 .wrapBox{
     height: 827px;
     width: 100%;

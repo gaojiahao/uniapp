@@ -16,10 +16,10 @@
     >
       <div class="wenzitxt">
         <h4 style="font-weight: 500">
-          {{ orderItemsOptions && orderItemsOptions.messageTitle }}
+          {{ options && options.messageTitle }}
         </h4>
-        <p>客户名称：{{ orderItemsOptions && orderItemsOptions.client_na }}</p>
-        <p>备注：{{ orderItemsOptions && orderItemsOptions.pushContent }}</p>
+        <p>客户名称：{{ options && options.client_na }}</p>
+        <p>备注：{{ options && options.pushContent }}</p>
       </div>
       <i class="guanbi el-icon-close" @click.stop="guanbiOrder"></i>
     </div>
@@ -612,7 +612,6 @@ export default {
     async showLiaotianr () {
       console.log(this.options)
       this.$store.commit('clearWsMsg')
-      this.isOrderShow = null
       this.chatHistoryCurrentPage = 1
       this.chatHistoryPageSize = 15
       this.signalROptions.value = null
@@ -626,8 +625,10 @@ export default {
       this.signalROptions.name = this.options.linkName || this.options.linkman
       this.signalROptions.toCompanyID = this.options.companyId || this.options.companyID
       this.signalROptions.groupNumber = this.options.groupNumber
+      this.signalROptions.orderNumber = this.options.orderNumber
       this.signalROptions.msgType = 'Text'
       this.signalROptions.toUserID = this.options.toUserID || this.options.id
+      this.isOrderShow = (!!this.options.orderNumber)
       console.log(this.signalROptions)
       try {
         this.addChannel() // 加入深网频道
@@ -1055,6 +1056,10 @@ export default {
           this.noScrollTop = false
         })
       }
+    },
+    // 聊天窗口列表事件
+    guanbiOrder () {
+      this.isOrderShow = false
     },
     // 聊天滚动查看历史记录
     async liaotianScroll (e) {
