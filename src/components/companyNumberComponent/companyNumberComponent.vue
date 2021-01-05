@@ -1,8 +1,8 @@
-
 <template>
 <div class="wrapBox">
+    <!-- 点击对应公司展示我的排号 -->
         <h3 class="infoListTitle" style="background-color: #fff;">
-          {{ options.companyType | ERPOrderTitle }}
+          {{ options.client_na }}
           <span style="margin-left:20px;font-size:14px;">
             (共
             <strong style="color:red;">{{ ERPOrderOptions.total }}</strong> 条)
@@ -14,15 +14,81 @@
           <span
             class="xindeInfo"
             @click="resetCompanyList"
-            >您有新的消息通知 </span>
+            >您有新的消息通知</span
+          >
         </div>
-        <div class="infoOrderList" v-infinite-scroll="orderLoad" infinite-scroll-disabled="disabled">
-          <template
+        <template
+          v-if="
+              options.sampleFrom.toLowerCase() === 'hall' &&
+              $store.state.userInfo.commparnyList &&
+              $store.state.userInfo.commparnyList[0] &&
+              $store.state.userInfo.commparnyList[0].companyType === 'Supplier'
+          "
+        >
+          <div class="meCode" @click="openRowMeCode(personalNumber)">
+            <div class="meCodeContent">
+              <el-image
+                class="meCodeImg"
+                :src="options.companyLogo"
+                fit="cover"
+              >
+                <div
+                  slot="placeholder"
+                  class="image-slot"
+                  style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;white-space: nowrap;"
+                >
+                  {{ options.client_na }}
+                </div>
+                <div
+                  slot="error"
+                  class="image-slot"
+                  style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;white-space: nowrap;"
+                >
+                  {{ options.client_na }}
+                </div>
+              </el-image>
+              <div class="codeTitle">我的排号:</div>
+              <div class="code">{{ personalNumber.arr_nu }}</div>
+            </div>
+            <i class="el-icon-arrow-right"></i>
+          </div>
+          <div
+            class="productList"
             v-if="
-              ERPOrderOptions.ERPOrderList &&
-                ERPOrderOptions.ERPOrderList.length
+              $store.state.userInfo.commparnyList[0].companyType === 'Supplier'
             "
           >
+            <span
+              :class="{
+                productIten: true,
+                active: showSampleSelection === 'historySample'
+              }"
+              @click="openSampleList('historySample')"
+            >
+              <i class="historyIcon"></i>历史择样
+            </span>
+            <span
+              :class="{
+                productIten: true,
+                active: showSampleSelection === 'rankingSample'
+              }"
+              @click="openSampleList('rankingSample')"
+            >
+              <i class="rankingIcon"></i>择样排行
+            </span>
+            <span
+              :class="{
+                productIten: true,
+                active: showSampleSelection === 'myProduct'
+              }"
+              @click="openSampleList('myProduct')"
+            >
+              <i class="myProductIcon"></i>我的产品
+            </span>
+          </div>
+        </template>
+        <div class="infoOrderList" v-infinite-scroll="orderLoad" infinite-scroll-disabled="disabled">
+          <template v-if="ERPOrderOptions.ERPOrderList.length">
             <div v-for="(item, i) in ERPOrderOptions.ERPOrderList" :key="i">
               <center>
                 <span class="date">{{
@@ -132,15 +198,15 @@ export default {
   data () {
     return {
       loading: false,
+      currentNumberPageSize: 10,
+      currentNumberCurrentPage: 0,
+      orderSampleFrom: null,
+      showSampleSelection: null,
       orderCurrentPage: 1,
       orderPageSize: 20,
-      orderSampleFrom: null,
-      showTypeOptions: {
-        showType: null,
-        sampleFrom: null,
-        showLiaotianType: null,
-        showOrderDetail: false,
-        isShowOrderDetail: true
+      personalNumber: {
+        arr_nu: 1024,
+        historyNumbers: []
       },
       ERPOrderOptions: {
         ERPOrderList: [],
@@ -173,9 +239,19 @@ export default {
         }
       }
     },
+    // 打开页面订单获取数据
+    async getOrderList () {
+      const res = await this.getERPOrderListByPage()
+      if (res.data.result.code === 200) {
+        this.ERPOrderOptions.ERPOrderList = res.data.result.item.items
+        this.ERPOrderOptions.total = res.data.result.item.totalCount
+      }
+    },
     // 查询订单业务通知
     async getERPOrderListByPage () {
       const fd = {
+        companyNumber: this.options.companyNumber,
+        isToCompany: this.options.isToCompany,
         skipCount: this.orderCurrentPage,
         maxResultCount: this.orderPageSize,
         readStatus: '-1',
@@ -194,18 +270,18 @@ export default {
         this.ERPOrderOptions.total = res.data.result.item.totalCount
       }
     },
-    // 打开页面获取数据
-    async getOrderList () {
-      const res = await this.getERPOrderListByPage()
-      if (res.data.result.code === 200) {
-        this.ERPOrderOptions.ERPOrderList = res.data.result.item.items
-        this.ERPOrderOptions.total = res.data.result.item.totalCount
-      }
-    },
-    // 确认订单
-    async configOrder (val) {
-      this.orderOptions = val
-      this.queRenDialog = true
+    // 弹出我的排号list
+    openNumberList () {
+      console.log(this.personalNumber)
+      this.$alert(
+        (this.personalNumber.historyNumbers &&
+          this.personalNumber.historyNumbers.join(',')) ||
+          '10,30,100,3023,2233',
+        '排号',
+        {
+          confirmButtonText: '确定'
+        }
+      )
     },
     // 点击订单|订单详情立即沟通
     async orderSend (item) {
@@ -232,18 +308,54 @@ export default {
           console.log(fd, this.options, item)
         }
       }
+    },
+    // 获取当前排号
+    async getCurrentNumber () {
+      return await this.$http.post('/api/CurrentNumber', {
+        companyNumber: this.options.client_nu,
+        pageSize: this.currentNumberPageSize,
+        pageIndex: this.currentNumberCurrentPage
+      })
+    },
+    // 打开我的排号详情
+    async openRowMeCode () {
+      this.customerVisitCurrentPage = 1
+      const currentNumberList = await this.getCurrentNumber()
+      if (currentNumberList.data.result.code === 200) {
+        if (!currentNumberList.data.result.item.length) {
+          this.isNoCurrentNumber = true
+        }
+        this.currentCodeList = currentNumberList.data.result.item
+      }
+      const res = await this.getCustomerVisit()
+      if (res.data.result.code === 200) {
+        if (!res.data.result.item.length) {
+          this.isNoCustomerVisit = true
+        }
+        this.customerVisitList = res.data.result.item
+      }
+      this.showPersonalNumber = true
+      this.showSampleSelection = null
+      this.showTypeOptions.showOrderDetail = false
     }
   },
   created () {
 
   },
-  mounted () {
+  async mounted () {
     this.getOrderList()
     this.$root.eventHub.$on('resetGetERPOrderListByPage', () => {
       this.orderCurrentPage = 1
       this.getOrderList()
     })
-    console.log(this.options)
+  },
+  computed: {
+    noMore () {
+      return this.ERPOrderOptions.ERPOrderList.length >= this.ERPOrderOptions.total
+    },
+    disabled () {
+      return this.loading || this.noMore
+    }
   },
   filters: {
     myState (val) {
@@ -263,24 +375,6 @@ export default {
           break
       }
       return msg
-    },
-    ERPOrderTitle (val) {
-      let type
-      switch (val) {
-        case 'SUPPLIER':
-        case 'supplier':
-          type = '厂商业务列表'
-          break
-        case 'SALES':
-        case 'sales':
-          type = '公司业务列表'
-          break
-        case 'HALL':
-        case 'hall':
-          type = '展厅业务列表'
-          break
-      }
-      return type
     }
   },
   watch: {
@@ -288,14 +382,6 @@ export default {
     '$store.state.wsOrderMsg' (val) {
       console.log(val)
       this.orderSampleFrom = val
-    }
-  },
-  computed: {
-    noMore () {
-      return this.ERPOrderOptions.ERPOrderList.length >= this.ERPOrderOptions.total
-    },
-    disabled () {
-      return this.loading || this.noMore
     }
   },
   beforeDestroy () {
@@ -335,6 +421,102 @@ export default {
       padding:8px 30px;
       cursor: pointer;
     }
+  }
+  .meCode {
+    width: 100%;
+    height: 100px;
+    background-color: #f6f9ff;
+    padding: 0 20px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    justify-content: space-between;
+    cursor: pointer;
+    .meCodeImg {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: #165af7;
+      color: #fff;
+    }
+    .meCodeContent {
+      flex: 1;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      .codeTitle {
+        margin: 0 10px;
+      }
+      .code {
+        font-size: 30px;
+        color: #165af8;
+        font-weight: bold;
+      }
+    }
+    &:hover .el-icon-arrow-right {
+      color: #165af8;
+    }
+  }
+  .productList {
+        height: 70px;
+        width: 100%;
+        box-sizing: border-box;
+        background-color: #f6f9ff;
+        border-top: 10px solid #f3f3f3;
+        border-bottom: 10px solid #f3f3f3;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .productIten {
+          font-size: 14px;
+          width: 33%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          &:nth-of-type(2) {
+            position: relative;
+            &::before,
+            &::after {
+              content: "";
+              position: absolute;
+              width: 2px;
+              height: 20px;
+              background-color: #b6caf2;
+            }
+            &::before {
+              left: -2px;
+            }
+            &::after {
+              right: -2px;
+            }
+          }
+          .historyIcon,
+          .rankingIcon,
+          .myProductIcon {
+            width: 16px;
+            height: 16px;
+            background-color: #ccc;
+            margin-right: 5px;
+          }
+          .historyIcon {
+            background: url("~@/assets/images/历史.png") no-repeat center;
+            background-size: contain;
+          }
+          .rankingIcon {
+            background: url("~@/assets/images/排行.png") no-repeat center;
+            background-size: contain;
+          }
+          .myProductIcon {
+            background: url("~@/assets/images/产品.png") no-repeat center;
+            background-size: contain;
+          }
+          &.active {
+            background-color: #fff;
+          }
+        }
   }
   .infoOrderList {
         flex: 1;
@@ -452,5 +634,4 @@ export default {
         }
       }
 }
-
 </style>

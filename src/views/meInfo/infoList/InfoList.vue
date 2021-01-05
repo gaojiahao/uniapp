@@ -278,8 +278,9 @@ export default {
     },
     // 打开公司排号
     openOrderCompanyList (item) {
+      item.componentName = 'companyNumberComponent'
       console.log(item)
-      this.$emit('showOrderCompanyList', item)
+      this.$emit('openOneView', item)
     },
     // 打开聊天界面
     openLiaotiao (item) {

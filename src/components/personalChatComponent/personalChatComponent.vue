@@ -722,6 +722,12 @@ export default {
       }
       return await this.$http.post('/api/GetInstantMessageByNumber', fd)
     },
+    // 聊天窗口订单事件
+    isOrderShowEvent () {
+      var fd = this.$_.cloneDeepWith(this.options)
+      fd.componentName = 'orderDetailComponent'
+      this.$emit('openTwoView', fd)
+    },
     // 深网获取群成员
     async getMembers () {
       this.signalROptions.channelMember = await this.signalROptions.creatChannel.getMembers()
