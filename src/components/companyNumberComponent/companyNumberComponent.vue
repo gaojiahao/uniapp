@@ -61,27 +61,27 @@
             <span
               :class="{
                 productIten: true,
-                active: showSampleSelection === 'historySample'
+                active: showSampleSelection === 'choosingHistoryComponent'
               }"
-              @click="openSampleList('historySample')"
+              @click="openSampleList('choosingHistoryComponent')"
             >
               <i class="historyIcon"></i>历史择样
             </span>
             <span
               :class="{
                 productIten: true,
-                active: showSampleSelection === 'rankingSample'
+                active: showSampleSelection === 'sampleSelectionRankingComponent'
               }"
-              @click="openSampleList('rankingSample')"
+              @click="openSampleList('sampleSelectionRankingComponent')"
             >
               <i class="rankingIcon"></i>择样排行
             </span>
             <span
               :class="{
                 productIten: true,
-                active: showSampleSelection === 'myProduct'
+                active: showSampleSelection === 'myProductComponent'
               }"
-              @click="openSampleList('myProduct')"
+              @click="openSampleList('myProductComponent')"
             >
               <i class="myProductIcon"></i>我的产品
             </span>
@@ -218,7 +218,8 @@ export default {
     // 打开 历史择样|择样排行|我的产品 列表
     async openSampleList (val) {
       var fd = this.$_.cloneDeepWith(this.options)
-      fd.componentName = 'choosingHistoryComponent'
+      fd.componentName = val
+      this.showSampleSelection = val
       this.$emit('openTwoView', fd)
     },
     // 打开三级窗口订单详情
@@ -227,11 +228,11 @@ export default {
         ...item,
         componentName: 'orderDetailComponent'
       }
+      this.showSampleSelection = null
       this.$emit('openTwoView', fd)
     },
     // 下拉加载更多订单
     async orderLoad () {
-      console.log(this.ERPOrderOptions.ERPOrderList, this.ERPOrderOptions.total)
       if (
         this.ERPOrderOptions.ERPOrderList.length < this.ERPOrderOptions.total
       ) {
@@ -282,6 +283,7 @@ export default {
     },
     // 点击订单|订单详情立即沟通
     async orderSend (item) {
+      this.showSampleSelection = null
       this.$store.commit('clearWsMsg')
       this.MessageUnreadCount = null
       this.orderItemsOptions = item
@@ -314,6 +316,7 @@ export default {
     },
     // 打开我的排号详情
     async openRowMeCode () {
+      this.showSampleSelection = null
       var fd = this.$_.cloneDeepWith(this.options)
       fd.componentName = 'rowNumberDetails'
       this.$emit('openTwoView', fd)

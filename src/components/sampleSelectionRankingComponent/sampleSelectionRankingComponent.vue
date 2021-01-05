@@ -1,9 +1,9 @@
 <template>
 <div class="wrapBox">
- <!-- 打开历史择样列表 -->
-        <div class="historyWrapContent">
-          <p class="titleTXT">历史择样</p>
-          <div class="bigHistoryHeaderTop">
+    <!-- 打开择样排行列表 -->
+      <div class="rankingWrapContent">
+          <p class="titleTXT">择样排行</p>
+          <div class="bigRankingHeaderTop">
             <div class="changshang">
               <div class="icon">
                 <i></i>
@@ -16,33 +16,25 @@
               </div>
               <div class="text">出厂货号</div>
             </div>
-            <div class="kehu">
+            <div class="zeyangshu">
               <div class="icon">
                 <i></i>
               </div>
-              <div class="text">客户</div>
-            </div>
-            <div class="shijian">
-              <div class="icon">
-                <i></i>
-              </div>
-              <div class="text">时间</div>
+              <div class="text">择样数</div>
             </div>
           </div>
         </div>
+
         <ul
-          class="historyWrapBody"
+          class="rankingWrapBody"
           v-infinite-scroll="addSampleSelectionList"
-          infinite-scroll-disabled="disabled"
+          infinite-scroll-disabled="activeAddSample"
         >
-          <template v-if="sampleSelectionList.length">
+          <template v-if="sampleSelectionList && sampleSelectionList.length">
             <li v-for="(item, i) in sampleSelectionList" :key="i">
-              <span>{{ item.ma_na }}</span>
-              <span>{{ item.fa_no }}</span>
-              <span>{{ item.client_na }}</span>
-              <span>{{
-                item.happendate && item.happendate.split(/ /)[0]
-              }}</span>
+              <span class="item">{{ item.ma_na }}</span>
+              <span class="item">{{ item.fa_no }}</span>
+              <span class="item">{{ item.sumfa_no }}</span>
             </li>
             <center style="padding:10px;backgroundColor:#f5f7fa;color:#aaa">
               <p v-if="loading">加载中...</p>
@@ -79,7 +71,7 @@ export default {
     },
     // 获取 历史择样
     async getSampleSelectionList () {
-      return await this.$http.post('/api/OrderOfferDetailHistoryPage', {
+      return await this.$http.post('/api/ProductRanking', {
         companyNumber: this.options.client_nu,
         pageIndex: this.mySampleSelectionCurrentPage,
         pageSize: this.sampleSelectionPageSize
@@ -93,7 +85,6 @@ export default {
     const res = await this.getSampleSelectionList()
     if (res.data.result.code === 200) {
       this.sampleSelectionList = res.data.result.item
-      console.log(this.sampleSelectionList)
       this.sampleSelectionTotalCount = res.data.result.item.totalCount
     }
   },
@@ -116,7 +107,7 @@ export default {
   display: flex;
   position: relative;
   flex-direction: column;
-  .historyWrapContent {
+  .rankingWrapContent {
         width: 100%;
         height: 150px;
         padding: 0 20px;
@@ -131,7 +122,7 @@ export default {
           text-align: center;
           padding: 20px;
         }
-        .bigHistoryHeaderTop {
+        .bigRankingHeaderTop {
           width: 100%;
           flex: 1;
           background-color: #fff;
@@ -142,8 +133,8 @@ export default {
           justify-content: space-between;
           .changshang,
           .huohao,
-          .kehu,
-          .shijian {
+          .zeyangshu,
+          .name {
             height: 100%;
             flex: 1;
             display: flex;
@@ -169,7 +160,6 @@ export default {
             }
           }
           .changshang {
-            position: relative;
             .icon {
               i {
                 background: url("~@/assets/images/工厂.png") no-repeat center;
@@ -177,27 +167,8 @@ export default {
                 border-radius: 0;
               }
             }
-            &::before {
-              content: "";
-              position: absolute;
-              height: 20px;
-              width: 2px;
-              right: -1px;
-              top: 50%;
-              background-color: #bfbfbf;
-              transform: translate(0, -50%);
-            }
           }
           .huohao {
-            .icon {
-              i {
-                background: url("~@/assets/images/编号@2x (1).png") no-repeat
-                  center;
-                background-size: contain;
-              }
-            }
-          }
-          .kehu {
             position: relative;
             &::before,
             &::after {
@@ -217,24 +188,31 @@ export default {
             }
             .icon {
               i {
-                background: url("~@/assets/images/客户@2x (1).png") no-repeat
+                background: url("~@/assets/images/编号@2x (1).png") no-repeat
                   center;
                 background-size: contain;
               }
             }
           }
-          .shijian {
+          .name {
             .icon {
               i {
-                background: url("~@/assets/images/时间@2x (1).png") no-repeat
-                  center;
+                background: url("~@/assets/images/名称@2x.png") no-repeat center;
+                background-size: contain;
+              }
+            }
+          }
+          .zeyangshu {
+            .icon {
+              i {
+                background: url("~@/assets/images/数据@2x.png") no-repeat center;
                 background-size: contain;
               }
             }
           }
         }
   }
-  .historyWrapBody {
+  .rankingWrapBody {
         font-size: 14px;
         border: none;
         height: 675px;
@@ -253,12 +231,29 @@ export default {
           align-items: center;
           justify-content: center;
           border-bottom: 1px solid #f2f2f2;
-          span {
+          padding: 0 20px;
+          .item {
             flex: 1;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            padding: 0 5px;
+          }
+          .imgItem {
+            flex: 1;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            box-sizing: border-box;
+            padding: 0 5px;
+            @{deep} .el-image {
+              cursor: pointer;
+            }
           }
         }
-  }
+      }
 }
 .zanwushuju1 {
   width: 100%;
