@@ -215,6 +215,12 @@ export default {
     }
   },
   methods: {
+    // 打开 历史择样|择样排行|我的产品 列表
+    async openSampleList (val) {
+      var fd = this.$_.cloneDeepWith(this.options)
+      fd.componentName = 'choosingHistoryComponent'
+      this.$emit('openTwoView', fd)
+    },
     // 打开三级窗口订单详情
     openTwoView (item) {
       const fd = {

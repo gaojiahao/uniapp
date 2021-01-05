@@ -38,65 +38,6 @@
           </router-link>
         </div>
       </li>
-      <!-- 打开历史择样列表 -->
-      <li class="contentThree" v-if="showSampleSelection === 'historySample'">
-        <div class="historyWrapContent">
-          <p class="titleTXT">历史择样</p>
-          <div class="bigHistoryHeaderTop">
-            <div class="changshang">
-              <div class="icon">
-                <i></i>
-              </div>
-              <div class="text">厂商名称</div>
-            </div>
-            <div class="huohao">
-              <div class="icon">
-                <i></i>
-              </div>
-              <div class="text">出厂货号</div>
-            </div>
-            <div class="kehu">
-              <div class="icon">
-                <i></i>
-              </div>
-              <div class="text">客户</div>
-            </div>
-            <div class="shijian">
-              <div class="icon">
-                <i></i>
-              </div>
-              <div class="text">时间</div>
-            </div>
-          </div>
-        </div>
-        <ul
-          class="historyWrapBody"
-          v-infinite-scroll="addSampleSelectionList"
-          infinite-scroll-disabled="activeAddSample"
-        >
-          <template v-if="sampleSelectionList && sampleSelectionList.length">
-            <li v-for="(item, i) in sampleSelectionList" :key="i">
-              <span>{{ item.ma_na }}</span>
-              <span>{{ item.fa_no }}</span>
-              <span>{{ item.client_na }}</span>
-              <span>{{
-                item.happendate && item.happendate.split(/ /)[0]
-              }}</span>
-            </li>
-            <center
-              style="padding:10px;backgroundColor:#f5f7fa;color:#aaa"
-              v-show="showAddSampleTXT"
-            >
-              <i
-                class="el-icon-loading"
-                v-show="showAddSampleTXT === '加载中...'"
-              ></i>
-              {{ showAddSampleTXT }}
-            </center>
-          </template>
-          <div v-else class="zanwushuju1"></div>
-        </ul>
-      </li>
       <!-- 打开择样排行列表 -->
       <li class="contentThree" v-if="showSampleSelection === 'rankingSample'">
         <div class="rankingWrapContent">
@@ -250,158 +191,6 @@
           </template>
           <div v-else class="zanwushuju1"></div>
         </ul>
-      </li>
-      <!-- 查看对应联系公司详情 -->
-      <li class="contentThree" v-if="active2 === 4">
-        <div class="CompanyTop"></div>
-        <div class="CompanyBottom"></div>
-        <div class="detailBox">
-          <div class="CompanyDetail" v-if="CompanyDetail">
-            <div class="CompanyName">
-              <div class="text">
-                <p>
-                  {{
-                    CompanyDetail &&
-                      CompanyDetail.orgCompany &&
-                      CompanyDetail.orgCompany.companyName
-                  }}
-                </p>
-              </div>
-              <div class="img">
-                <el-image
-                  class="myAvatar"
-                  :src="
-                    CompanyDetail &&
-                      CompanyDetail.orgCompany &&
-                      CompanyDetail.orgCompany.companyLogo
-                  "
-                  fit="cover"
-                >
-                  <div
-                    slot="error"
-                    class="image-slot"
-                    style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;white-space: nowrap;"
-                  >
-                    {{
-                      CompanyDetail &&
-                        CompanyDetail.orgCompany &&
-                        CompanyDetail.orgCompany.companyName
-                    }}
-                  </div>
-                </el-image>
-              </div>
-            </div>
-
-            <div
-              class="evaluation"
-              v-if="CompanyDetail && CompanyDetail.isMain"
-            >
-              <p class="evaluationTitle">自身评价</p>
-              <div class="tags">
-                <template v-if="CompanyDetail && CompanyDetail.companyLabel">
-                  <el-button
-                    size="small"
-                    round
-                    icon="el-icon-edit"
-                    @click="openAddTag"
-                    >填写标签</el-button
-                  >
-                  <el-tag
-                    class="deleteTag"
-                    closable
-                    :type="tagsType[i]"
-                    v-for="(item, i) in CompanyDetail.companyLabel"
-                    :key="i"
-                    >{{ item.labelName }}</el-tag
-                  >
-                </template>
-              </div>
-            </div>
-            <template v-else>
-              <div class="evaluation">
-                <p class="evaluationTitle">自身评价</p>
-                <div class="tags">
-                  <template v-if="CompanyDetail && CompanyDetail.companyLabel">
-                    <template v-for="(item, i) in CompanyDetail.companyLabel">
-                      <el-tag
-                        v-if="!item.isCompany"
-                        :type="tagsType[i]"
-                        :key="i"
-                        >{{ item.labelName }}</el-tag
-                      >
-                    </template>
-                  </template>
-                </div>
-              </div>
-              <div class="evaluation">
-                <p class="evaluationTitle">我的评价</p>
-                <div class="tags">
-                  <el-button
-                    size="small"
-                    round
-                    icon="el-icon-edit"
-                    @click="openAddTag"
-                    >填写标签</el-button
-                  >
-                  <template v-if="CompanyDetail && CompanyDetail.companyLabel">
-                    <template v-for="(item, i) in CompanyDetail.companyLabel">
-                      <el-tag
-                        v-if="item.isCompany"
-                        :type="tagsType[i]"
-                        :key="i"
-                        >{{ item.labelName }}</el-tag
-                      >
-                    </template>
-                  </template>
-                </div>
-              </div>
-            </template>
-          </div>
-          <div class="ContactInformation">
-            <div class="ContactItem">
-              <div class="title">电话</div>
-              <div class="text">
-                <span
-                  v-if="
-                    CompanyDetail &&
-                      CompanyDetail.orgCompany &&
-                      CompanyDetail.orgCompany.phoneNumber
-                  "
-                  >{{ CompanyDetail.orgCompany.phoneNumber }}</span
-                >
-              </div>
-            </div>
-            <div class="ContactItem">
-              <div class="title">邮箱</div>
-              <div class="text">
-                <template
-                  v-if="
-                    CompanyDetail &&
-                      CompanyDetail.orgCompany &&
-                      CompanyDetail.orgCompany.e_mail
-                  "
-                  >{{ CompanyDetail.orgCompany.e_mail }}</template
-                >
-              </div>
-            </div>
-            <div class="ContactItem">
-              <div class="title">地址</div>
-              <div class="text">
-                <template  v-if="CompanyDetail && CompanyDetail.orgCompany && CompanyDetail.orgCompany.address">
-                   <div class="address el-icon-location-information"  @click="openMap(CompanyDetail.orgCompany)">
-                     {{ CompanyDetail.orgCompany.address }}
-                     </div>
-                  </template>
-              </div>
-            </div>
-            <center class="send">
-              <el-button class="sendInfo" @click="companySend" round>
-                <i class="el-icon-s-comment el-icon--left sendIcon"></i>
-                立即沟通
-              </el-button>
-            </center>
-          </div>
-        </div>
       </li>
       <!-- 朋友圈我发布的信息 -->
       <!-- 二级窗口组件 -->
@@ -618,6 +407,7 @@ import companyBusinessComponent from '@/components/companyBusinessComponent/comp
 import orderDetailComponent from '@/components/orderDetailComponent/orderDetailComponent.vue'
 import companyNumberComponent from '@/components/companyNumberComponent/companyNumberComponent.vue'
 import rowNumberDetails from '@/components/rowNumberDetails/rowNumberDetails.vue'
+import choosingHistoryComponent from '@/components/choosingHistoryComponent/choosingHistoryComponent.vue'
 export default {
   components: {
     bsTop,
@@ -639,6 +429,7 @@ export default {
     orderDetailComponent,
     sendNoticeComponent,
     rowNumberDetails,
+    choosingHistoryComponent,
     companyNumberComponent
   },
   data () {
@@ -2519,149 +2310,7 @@ export default {
           flex-direction: column;
         }
       }
-      .historyWrapContent {
-        width: 100%;
-        height: 150px;
-        padding: 0 20px;
-        box-sizing: border-box;
-        background-color: #165af7;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        font-size: 14px;
-        .titleTXT {
-          color: white;
-          text-align: center;
-          padding: 20px;
-        }
-        .bigHistoryHeaderTop {
-          width: 100%;
-          flex: 1;
-          background-color: #fff;
-          border-radius: 10px 10px 0 0;
-          display: flex;
-          align-items: center;
-          box-sizing: border-box;
-          justify-content: space-between;
-          .changshang,
-          .huohao,
-          .kehu,
-          .shijian {
-            height: 100%;
-            flex: 1;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            align-content: center;
-            .text,
-            .icon {
-              width: 100%;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            }
-            .icon {
-              margin-bottom: 5px;
-              i {
-                display: block;
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-              }
-            }
-          }
-          .changshang {
-            position: relative;
-            .icon {
-              i {
-                background: url("~@/assets/images/工厂.png") no-repeat center;
-                background-size: cover;
-                border-radius: 0;
-              }
-            }
-            &::before {
-              content: "";
-              position: absolute;
-              height: 20px;
-              width: 2px;
-              right: -1px;
-              top: 50%;
-              background-color: #bfbfbf;
-              transform: translate(0, -50%);
-            }
-          }
-          .huohao {
-            .icon {
-              i {
-                background: url("~@/assets/images/编号@2x (1).png") no-repeat
-                  center;
-                background-size: contain;
-              }
-            }
-          }
-          .kehu {
-            position: relative;
-            &::before,
-            &::after {
-              content: "";
-              position: absolute;
-              height: 20px;
-              width: 2px;
-              top: 50%;
-              background-color: #bfbfbf;
-              transform: translate(0, -50%);
-            }
-            &::before {
-              left: -1px;
-            }
-            &::after {
-              right: -1px;
-            }
-            .icon {
-              i {
-                background: url("~@/assets/images/客户@2x (1).png") no-repeat
-                  center;
-                background-size: contain;
-              }
-            }
-          }
-          .shijian {
-            .icon {
-              i {
-                background: url("~@/assets/images/时间@2x (1).png") no-repeat
-                  center;
-                background-size: contain;
-              }
-            }
-          }
-        }
-      }
-      .historyWrapBody {
-        font-size: 14px;
-        border: none;
-        height: 675px;
-        width: 100%;
-        /** 单独为横向和竖向设置滚动条 **/
-        overflow-x: none;
-        overflow-y: scroll;
-        &::-webkit-scrollbar {
-          display: none;
-        }
-        li {
-          border: none;
-          width: 100%;
-          height: 60px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-bottom: 1px solid #f2f2f2;
-          span {
-            flex: 1;
-            text-align: center;
-          }
-        }
-      }
+      
       .rankingWrapContent {
         width: 100%;
         height: 150px;
@@ -3481,16 +3130,6 @@ export default {
   align-items: center;
   justify-content: center;
   font-size: 20px;
-}
-
-.zanwushuju1 {
-  width: 100%;
-  height: 382px;
-  margin: 0 auto;
-  background: url("~@/assets/images/暂无数据.png") no-repeat center;
-  background-size: 100%;
-  position: absolute;
-  left: 0;
 }
 .querenDialog {
   font-size: 16px;
