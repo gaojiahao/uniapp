@@ -471,6 +471,7 @@ export default {
           const fd = {
             linkName: res.data.result.item[0].companyName,
             isGroup: true,
+            isOrderShow: true,
             ...item,
             toUserID: '',
             companyId: '',

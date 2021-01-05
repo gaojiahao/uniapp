@@ -5,7 +5,7 @@
       <span class="item"></span>
       <span class="item">好友验证</span>
       <span class="item itemBtn">
-        <el-button type="primary" size="mini" round>发送</el-button>
+        <el-button type="primary" @click="createFriendApply" size="mini" round>发送</el-button>
       </span>
     </div>
     <div class="line">发送好友请求</div>
@@ -14,13 +14,13 @@
       type="textarea"
       :rows="4"
       placeholder="请输入验证信息"
-      v-model="roleConText"
+      v-model="content"
     >
     </el-input>
     <div class="line">备注名</div>
     <el-input
       class="cateFriends"
-      v-model="selectCateFriends"
+      v-model="remarkName"
       clearable
       placeholder="请输入备注"
     ></el-input>
@@ -36,13 +36,13 @@
           type="textarea"
           :rows="4"
           placeholder="请输入验证信息"
-          v-model="roleConText"
+          v-model="content"
         >
         </el-input>
         <div class="line">备注名</div>
         <el-input
           class="cateFriends"
-          v-model="selectCateFriends"
+          v-model="remarkName"
           clearable
           placeholder="请输入备注"
         ></el-input>
@@ -59,14 +59,25 @@
 
 <script>
 export default {
+  props: ['options'],
   data () {
     return {
-      roleConText: null,
-      selectCateFriends: null,
+      content: null,
+      remarkName: null,
       showdialogVerification: false
     }
   },
-  methods: {},
+  methods: {
+    async createFriendApply () {
+      const fd = { recipientCompanyId: this.options.companyId, recipientPersonnelId: this.options.id, source: '搜索', content: this.content, remarkName: this.remarkName }
+      const res = await this.$http.post('/api/CreateFriendApply', fd)
+      if (res.data.result.code === 200) {
+        this.$message.success('发送添加好友请求成功')
+      } else {
+        this.$message.error(res.data.result.msg)
+      }
+    }
+  },
   created () {},
   mounted () {}
 }

@@ -8,11 +8,12 @@
           class="searchInput"
           prefix-icon="iconfont icon-sousuo"
           v-model="search"
+          @keyup.enter.native="getUserByPhoneOrNamePage"
           clearable
-          placeholder="请输入关键词"
+          placeholder="请输入完整号码搜索用户"
         >
         </el-input>
-        <el-button type="primary" round>搜索</el-button>
+        <el-button type="primary" @click="getUserByPhoneOrNamePage" round>搜索</el-button>
       </div>
     </div>
     <div class="contentList">
@@ -21,7 +22,7 @@
         <div class="left">
           <el-image
             fit="contain"
-            :src="require('@/assets/images/imgError.jpg')"
+            :src="item.userImage"
             lazy
           >
             <div
@@ -40,8 +41,8 @@
             </div>
           </el-image>
           <div class="middle">
-          <div class="name">宋小宝</div>
-          <div class="company">某某公司或展厅名或展厅名或展厅名或展或展或展</div>
+          <div class="name">{{item.linkman}}</div>
+          <div class="company">{{ item.companyName }}</div>
         </div>
         </div>
         <div class="right">
@@ -64,19 +65,35 @@ export default {
   data () {
     return {
       search: null,
-      friendList: 50
+      pageSize: 10,
+      currentPage: 1,
+      totalCount: 0,
+      friendList: []
     }
   },
   methods: {
+    async getUserByPhoneOrNamePage () {
+      const res = await this.$http.post('/api/GetUserByPhoneOrNamePage', {
+        maxResultCount: this.pageSize,
+        skipCount: this.currentPage,
+        keyWord: this.search
+      })
+      if (res.data.result.code === 200) {
+        this.friendList = res.data.result.item.items
+        this.totalCount = res.data.result.item.totalCount
+      }
+    },
     openAddFriend (item) {
       this.$emit('openTwoView', {
         componentName: 'friendVerificationComponent',
-        item: item
+        ...item
       })
     }
   },
   created () {},
-  mounted () {}
+  mounted () {
+    this.getUserByPhoneOrNamePage()
+  }
 }
 </script>
 <style scoped lang='less'>

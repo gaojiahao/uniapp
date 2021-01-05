@@ -594,8 +594,8 @@ export default {
       sendRec: null,
       isPaste: null,
       isShowRec: false,
-      loadText: null,
       isOrderShow: false,
+      loadText: null,
       isGroupNumber: false,
       noScrollTop: false,
       showTypeOptions: {
@@ -628,7 +628,7 @@ export default {
       this.signalROptions.orderNumber = this.options.orderNumber
       this.signalROptions.msgType = 'Text'
       this.signalROptions.toUserID = this.options.toUserID || this.options.id
-      this.isOrderShow = (!!this.options.orderNumber)
+      this.isOrderShow = this.options.isOrderShow
       console.log(this.signalROptions)
       try {
         this.addChannel() // 加入深网频道
