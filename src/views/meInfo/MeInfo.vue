@@ -38,92 +38,6 @@
           </router-link>
         </div>
       </li>
-      <!-- 打开我的排号详情 -->
-      <li class="contentThree" v-if="showPersonalNumber">
-        <div class="personalNumberTitle">
-          <p class="titleTXT">{{ showOrderCompanyItem.client_na }}排号</p>
-          <div class="numberWarp" @click="openNumberList">
-            <el-image
-              class="myImg"
-              :src="showOrderCompanyItem.companyLogo"
-              fit="cover"
-            >
-              <div
-                slot="placeholder"
-                class="image-slot"
-                style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;white-space: nowrap;"
-              >
-                {{ showOrderCompanyItem.client_na }}
-              </div>
-              <div
-                slot="error"
-                class="image-slot"
-                style="width:100%;height:100%;display:flex;align-items:center;justify-content:left;white-space: nowrap;"
-              >
-                {{ showOrderCompanyItem.client_na }}
-              </div>
-            </el-image>
-            <div>
-              <div class="codeTitle">我的排号:</div>
-              <div class="code">{{ personalNumber.arr_nu || 102435 }}</div>
-            </div>
-          </div>
-        </div>
-        <div class="personalNumberContent">
-          <div class="currentCode">
-            <div class="left">
-              <span>当前排号</span>
-            </div>
-            <div class="right"></div>
-          </div>
-          <el-table
-            class="currentCodeContent"
-            :data="currentCodeList"
-            style="width: 100%"
-            height="200"
-            :cell-style="timeStyle"
-            :header-row-style="headerStyle"
-            v-el-table-infinite-scroll="nextCurrentCodeContent"
-          >
-            <el-table-column
-              prop="nego_nu"
-              label="洽谈室"
-              align="center"
-              width="100"
-            ></el-table-column>
-            <el-table-column
-              prop="arr_nu"
-              label="当前排号"
-              align="center"
-            ></el-table-column>
-            <el-table-column
-              prop="hallcountage"
-              label="平均等待时间"
-              align="center"
-            ></el-table-column>
-          </el-table>
-          <div class="buyer">
-            <div class="left">
-              <span>采购商</span>
-            </div>
-            <div class="right"></div>
-          </div>
-          <ul class="buyerContent" v-infinite-scroll="buyerContentLoad">
-            <li
-              class="buyerItem"
-              v-for="(item, i) in customerVisitList"
-              :key="i"
-            >
-              <div class="title">{{ item.client_na }}</div>
-              <div class="date">
-                {{
-                  item.happenDate && item.happenDate.replace(/ [\s\S]+/gi, "")
-                }}
-              </div>
-            </li>
-          </ul>
-        </div>
-      </li>
       <!-- 打开历史择样列表 -->
       <li class="contentThree" v-if="showSampleSelection === 'historySample'">
         <div class="historyWrapContent">
@@ -687,7 +601,6 @@
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 import bsTop from '@/components/BsTop.vue'
 import bsFooter from '@/components/oldFooter'
-import elTableInfiniteScroll from 'el-table-infinite-scroll'
 import BMapComponent from '@/components/map.vue'
 import addFriendComponent from '@/components/addFriendComponent/addFriendComponent.vue'
 import launchGroupChat from '@/components/launchGroupChat/launchGroupChat.vue'
@@ -704,10 +617,8 @@ import sendNoticeComponent from '@/components/sendNoticeComponent/sendNoticeComp
 import companyBusinessComponent from '@/components/companyBusinessComponent/companyBusinessComponent.vue'
 import orderDetailComponent from '@/components/orderDetailComponent/orderDetailComponent.vue'
 import companyNumberComponent from '@/components/companyNumberComponent/companyNumberComponent.vue'
+import rowNumberDetails from '@/components/rowNumberDetails/rowNumberDetails.vue'
 export default {
-  directives: {
-    'el-table-infinite-scroll': elTableInfiniteScroll
-  },
   components: {
     bsTop,
     bsFooter,
@@ -727,6 +638,7 @@ export default {
     myAnnouncement,
     orderDetailComponent,
     sendNoticeComponent,
+    rowNumberDetails,
     companyNumberComponent
   },
   data () {
@@ -812,8 +724,6 @@ export default {
       sampleSelectionPageSize: 20,
       sampleSelectionList: [],
       sampleSelectionTotalCount: 0,
-      currentCodeList: [],
-      customerVisitList: [],
       showPersonalNumber: false,
       timeID: null,
       loadText: null,
@@ -1540,10 +1450,6 @@ export default {
     // 打开公司排号公司的订单列表
     async showOrderCompanyList (item) {
       this.offDetail()
-      const re = await this.getPersonalNumber(item)
-      if (re.data.result.code === 200) {
-        this.personalNumber = re.data.result.item
-      }
       this.showOrderCompanyItem = item
 
       this.showTypeOptions.sampleFrom = null
@@ -1555,33 +1461,6 @@ export default {
       if (res.data.result.code === 200) {
         this.ERPOrderOptions.ERPOrderList = res.data.result.item.items
         this.ERPOrderOptions.total = res.data.result.item.totalCount
-      }
-    },
-    // 获取排号
-    async getPersonalNumber (item) {
-      return await this.$http.post('/api/PersonalNumber', {
-        companyNumber: item.client_nu
-      })
-    },
-    // 获取排号中的采购商
-    async getCustomerVisit () {
-      return await this.$http.post('/api/CustomerVisit', {
-        companyNumber: this.showOrderCompanyItem.client_nu,
-        skipCount: this.customerVisitCurrentPage,
-        maxResultCount: this.customerVisitPageSize
-      })
-    },
-    // 采购商下拉加载
-    async buyerContentLoad () {
-      if (this.isNoCustomerVisit) {
-        return
-      }
-      this.customerVisitCurrentPage++
-      const res = await this.getCustomerVisit()
-      if (res.data.result.code === 200) {
-        this.customerVisitList = this.customerVisitList.concat(
-          res.data.result.item
-        )
       }
     },
     // 下拉加载更多
@@ -1817,14 +1696,6 @@ export default {
       if (res.data.result.code === 200) {
         return res.data.result.item
       }
-    },
-    // 列样式
-    timeStyle (column) {
-      return 'color: #165af8'
-    },
-    // 表头样式
-    headerStyle (column) {
-      return 'font-weight:600;color:black;'
     },
     // 点击公司地址打开定位
     openMap(addr){
@@ -2648,58 +2519,6 @@ export default {
           flex-direction: column;
         }
       }
-      
-      .personalNumberTitle {
-        width: 100%;
-        height: 150px;
-        padding: 0 30px;
-        box-sizing: border-box;
-        background-color: #165af7;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        font-size: 14px;
-        .titleTXT {
-          box-sizing: border-box;
-          color: white;
-          text-align: center;
-          padding: 20px;
-        }
-        .numberWarp {
-          width: 100%;
-          flex: 1;
-          padding: 0 20px;
-          box-sizing: border-box;
-          background-color: #fff;
-          border-radius: 10px 10px 0 0;
-          display: flex;
-          align-items: center;
-          cursor: pointer;
-          .myImg {
-            margin-right: 10px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #165af7;
-            color: #fff;
-          }
-          .code {
-            font-size: 30px;
-            color: #165af8;
-            font-weight: bold;
-          }
-        }
-        .historyHeaderTop {
-          width: 100%;
-          flex: 1;
-          background-color: #fff;
-          border-radius: 10px 10px 0 0;
-          display: flex;
-          align-items: center;
-          padding: 0 10px;
-          box-sizing: border-box;
-        }
-      }
       .historyWrapContent {
         width: 100%;
         height: 150px;
@@ -3107,82 +2926,6 @@ export default {
             padding: 0 5px;
             @{deep} .el-image {
               cursor: pointer;
-            }
-          }
-        }
-      }
-      .personalNumberContent {
-        flex: 1;
-        background-color: #fff;
-        display:flex;
-        flex-direction: column;
-        .currentCode,
-        .buyer {
-          // margin-top: 5px;
-          background-color: #f6f9ff;
-          height: 60px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 0 20px;
-          box-sizing: border-box;
-          .left {
-            font-weight: bold;
-            position: relative;
-            span {
-              margin-left: 30px;
-            }
-            &::before {
-              content: "";
-              position: absolute;
-              width: 25px;
-              height: 25px;
-              border-radius: 50%;
-              background: url("~@/assets/images/排号.png") no-repeat center;
-              background-size: contain;
-              top: 50%;
-              transform: translate(0, -50%);
-            }
-          }
-          .right {
-            color: #888888;
-          }
-        }
-        .buyer {
-          .left {
-            &::before {
-              content: "";
-              position: absolute;
-              width: 25px;
-              height: 25px;
-              border-radius: 50%;
-              background: url("~@/assets/images/采购商.png") no-repeat center;
-              background-size: contain;
-              top: 50%;
-              transform: translate(0, -50%);
-            }
-          }
-        }
-        .buyerContent {
-          width: 100%;
-          padding: 0 20px;
-          box-sizing: border-box;
-          height: 315px;
-          overflow: auto;
-          font-size: 14px;
-          .buyerItem {
-            width: 100%;
-            height: 50px;
-            border: none;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #e5e5e5;
-            .title {
-              color: #333;
-            }
-            .date {
-              color: #555;
             }
           }
         }

@@ -25,7 +25,7 @@
               $store.state.userInfo.commparnyList[0].companyType === 'Supplier'
           "
         >
-          <div class="meCode" @click="openRowMeCode(personalNumber)">
+          <div class="meCode" @click="openRowMeCode">
             <div class="meCodeContent">
               <el-image
                 class="meCodeImg"
@@ -205,7 +205,7 @@ export default {
       orderCurrentPage: 1,
       orderPageSize: 20,
       personalNumber: {
-        arr_nu: 1024,
+        arr_nu: null,
         historyNumbers: []
       },
       ERPOrderOptions: {
@@ -241,6 +241,10 @@ export default {
     },
     // 打开页面订单获取数据
     async getOrderList () {
+      const re = await this.getPersonalNumber()
+      if (re.data.result.code === 200) {
+        this.personalNumber = re.data.result.item
+      }
       const res = await this.getERPOrderListByPage()
       if (res.data.result.code === 200) {
         this.ERPOrderOptions.ERPOrderList = res.data.result.item.items
@@ -270,19 +274,6 @@ export default {
         this.ERPOrderOptions.total = res.data.result.item.totalCount
       }
     },
-    // 弹出我的排号list
-    openNumberList () {
-      console.log(this.personalNumber)
-      this.$alert(
-        (this.personalNumber.historyNumbers &&
-          this.personalNumber.historyNumbers.join(',')) ||
-          '10,30,100,3023,2233',
-        '排号',
-        {
-          confirmButtonText: '确定'
-        }
-      )
-    },
     // 点击订单|订单详情立即沟通
     async orderSend (item) {
       this.$store.commit('clearWsMsg')
@@ -309,34 +300,17 @@ export default {
         }
       }
     },
-    // 获取当前排号
-    async getCurrentNumber () {
-      return await this.$http.post('/api/CurrentNumber', {
-        companyNumber: this.options.client_nu,
-        pageSize: this.currentNumberPageSize,
-        pageIndex: this.currentNumberCurrentPage
+    // 获取排号
+    async getPersonalNumber () {
+      return await this.$http.post('/api/PersonalNumber', {
+        companyNumber: this.options.client_nu
       })
     },
     // 打开我的排号详情
     async openRowMeCode () {
-      this.customerVisitCurrentPage = 1
-      const currentNumberList = await this.getCurrentNumber()
-      if (currentNumberList.data.result.code === 200) {
-        if (!currentNumberList.data.result.item.length) {
-          this.isNoCurrentNumber = true
-        }
-        this.currentCodeList = currentNumberList.data.result.item
-      }
-      const res = await this.getCustomerVisit()
-      if (res.data.result.code === 200) {
-        if (!res.data.result.item.length) {
-          this.isNoCustomerVisit = true
-        }
-        this.customerVisitList = res.data.result.item
-      }
-      this.showPersonalNumber = true
-      this.showSampleSelection = null
-      this.showTypeOptions.showOrderDetail = false
+      var fd = this.$_.cloneDeepWith(this.options)
+      fd.componentName = 'rowNumberDetails'
+      this.$emit('openTwoView', fd)
     }
   },
   created () {
