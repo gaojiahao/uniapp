@@ -7,7 +7,7 @@
     <!-- 搜索 -->
     <div style="maxWidth:1200px;minWidth:1024px;margin:0 auto;">
         <div class="searchBox">
-      <el-form :inline="true" :model="formInline" class="searchForm">
+      <el-form :inline="true" :model="formInline" size="mini" class="searchForm">
           <div class="searchItem">
             <el-form-item label="关键查询：">
             <el-input
@@ -15,8 +15,26 @@
               @keyup.enter.native="search"
               v-model="formInline.CompanyName"
               placeholder="输入关键字"
-              style="width: 100%"
+              style="width: 90%"
             ></el-input>
+          </el-form-item>
+          <el-form-item label="类型查询：">
+            <el-select
+              clearable
+              v-model="formInline.CompanyType"
+              placeholder="请选择"
+              style="width: 90%"
+            >
+              <el-option
+                v-for="item in [
+                  { itemCode: null, itemText: '全部' },
+                  ...clientTypeList,
+                ]"
+                :key="item.itemCode"
+                :label="item.itemText"
+                :value="item.itemCode"
+              ></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="时间查询：">
             <el-date-picker
@@ -601,6 +619,8 @@ export default {
   components: { bsTop, bsFooter },
   data () {
     return {
+      clientTypeList: [],
+      yearMonthDayList: [],
       relatedConfig: {
         title: '员工绑定',
         relatedDialog: false,
@@ -693,6 +713,7 @@ export default {
       pageSize: 10,
       formInline: {
         CompanyName: null,
+        CompanyType: null,
         dateTile: null
       },
       pickerOptions: {
@@ -995,6 +1016,7 @@ export default {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         CompanyName: this.formInline.CompanyName,
+        CompanyType: this.formInline.CompanyType,
         StartTime: this.formInline.dateTile && this.formInline.dateTile[0],
         EndTime: this.formInline.dateTile && this.formInline.dateTile[1]
       }
@@ -1060,12 +1082,22 @@ export default {
       this.mergeDialog = true
     },
     // 获取公司类型列表
-    async getClientTypeList () {
+    async getClientTypeList (type) {
       const res = await this.$http.post('/api/ServiceConfigurationList', {
-        basisParameters: 'userAuditType'
+        basisParameters: type
       })
       if (res.data.result.code === 200) {
-        this.userAuditTypeList = res.data.result.item
+        switch (type) {
+          case 'CompanyType':
+            this.clientTypeList = res.data.result.item
+            break
+          case 'ExecutionWay':
+            this.yearMonthDayList = res.data.result.item
+            break
+          case 'userAuditType':
+            this.userAuditTypeList = res.data.result.item
+            break
+        }
       }
     },
     // 获取员工列表
@@ -1107,7 +1139,8 @@ export default {
   },
   mounted () {
     this.getClientList()
-    this.getClientTypeList()
+    this.getClientTypeList('userAuditType')
+    this.getClientTypeList('CompanyType')
   },
   created () {}
 }
@@ -1124,7 +1157,7 @@ export default {
         display: flex;
         align-items: center;
         .el-form-item{
-            margin: 0 10px;
+            margin: 0;
         }
     }
 }
@@ -1136,5 +1169,9 @@ export default {
 }
 .el-radio{
     margin: 10px;
+}
+.el-date-editor{
+  padding-left: 0;
+  padding-right: 0;
 }
 </style>
