@@ -131,11 +131,11 @@
             </el-link>
           </template>
         </el-table-column>
-        <el-table-column prop="companyName" label="公司名称" sortable="custom"></el-table-column>
+        <el-table-column prop="companyName" label="公司名称"></el-table-column>
         <!-- <el-table-column prop="e_mail" label="邮箱"></el-table-column> -->
-        <el-table-column prop="phoneNumber" label="联系电话" sortable="custom"></el-table-column>
-        <el-table-column prop="integralTotal" label="积分" align="center" sortable="custom"></el-table-column>
-        <el-table-column prop="companyType" label="公司类型" align="center" sortable="custom">
+        <el-table-column prop="phoneNumber" label="联系电话" sortable></el-table-column>
+        <el-table-column prop="integralTotal" label="积分" align="center" sortable></el-table-column>
+        <el-table-column prop="companyType" label="公司类型" align="center">
           <template slot-scope="scope">
             <el-link :underline="false" v-if="scope.row.companyType === 'Sales'" type="success">销售公司</el-link>
             <el-link :underline="false" v-if="scope.row.companyType === 'Exhibition'" type="warning">展厅</el-link>
@@ -143,14 +143,14 @@
             <el-link :underline="false" v-if="scope.row.companyType === 'Admin'" type="danger">管理员</el-link>
           </template>
         </el-table-column>
-        <el-table-column prop="audit_state" label="审核状态" align="center" sortable="custom">
+        <el-table-column prop="audit_state" label="审核状态" align="center">
           <template slot-scope="scope">
             <template v-for="(item, i) in userAuditTypeList">
               <el-tag :key="i" effect="plain" v-if="scope.row.audit_state === item.itemCode" :type="btnTypes[item.itemCode]">{{item.itemText}}</el-tag>
             </template>
           </template>
         </el-table-column>
-        <el-table-column prop="interiorAudit" label="内部审核" align="center" sortable="custom">
+        <el-table-column prop="interiorAudit" label="内部审核" align="center">
           <template slot-scope="scope">
               <el-tag v-if="scope.row.interiorAudit" type="success">已审核</el-tag>
               <el-tag v-else type='danger'>未审核</el-tag>
