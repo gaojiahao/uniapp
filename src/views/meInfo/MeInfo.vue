@@ -255,6 +255,8 @@ import rowNumberDetails from '@/components/rowNumberDetails/rowNumberDetails.vue
 import choosingHistoryComponent from '@/components/choosingHistoryComponent/choosingHistoryComponent.vue'
 import sampleSelectionRankingComponent from '@/components/sampleSelectionRankingComponent/sampleSelectionRankingComponent.vue'
 import myProductComponent from '@/components/myProductComponent/myProductComponent.vue'
+import chatInformationComponent from '@/components/chatInformationComponent/chatInformationComponent.vue'
+import chatSettingsComponent from '@/components/chatSettingsComponent/chatSettingsComponent.vue'
 export default {
   components: {
     bsTop,
@@ -279,6 +281,8 @@ export default {
     choosingHistoryComponent,
     sampleSelectionRankingComponent,
     myProductComponent,
+    chatInformationComponent,
+    chatSettingsComponent,
     companyNumberComponent
   },
   data () {
