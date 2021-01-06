@@ -4,7 +4,7 @@
   <div class="groupMembers">
     <div class="title">群成员</div>
     <ul class="items">
-      <li class="item" v-for="(item, i) in 50" :key="i">
+      <li class="item" v-for="(item, i) in 13" :key="i">
         <div class="userImg">
           <el-image
             fit="contain"
@@ -29,6 +29,18 @@
         </div>
         <p class="name">张木伟张木伟张木伟张木伟</p>
       </li>
+      <li class="item">
+        <div class="userImg">
+          <i class="el-image plusIcon"></i>
+        </div>
+        <p class="name"></p>
+      </li>
+      <li class="item">
+        <div class="userImg">
+          <i class="el-image removeIcon"></i>
+        </div>
+        <p class="name"></p>
+      </li>
       <li class="block"></li>
       <li class="block"></li>
       <li class="block"></li>
@@ -39,8 +51,9 @@
     <span class="item">查看全部群成员<i class="el-icon-arrow-right"></i></span>
   </div>
   <div class="lookSee">
-    <p class="item"><span>查找聊天记录</span><i class="el-icon-arrow-right"></i></p>
-    <p class="item"><span>我在本群的昵称</span><i class="el-icon-arrow-right"></i></p>
+    <p class="item"><span>查找聊天记录</span><i class="el-icon-arrow-right right"></i></p>
+    <p class="item"><span>群聊名称</span><span class="right">xxx找样群<i class="el-icon-arrow-right right"></i></span></p>
+    <p class="item"><span>我在本群的昵称</span><i class="el-icon-arrow-right right"></i></p>
   </div>
   <el-popconfirm
     class="deleteBtn"
@@ -71,7 +84,7 @@ export default {
 
   },
   mounted () {
-
+    console.log(this.options)
   }
 }
 </script>
@@ -118,7 +131,6 @@ export default {
         width: 65px;
         height: 80px;
         box-sizing: border-box;
-        cursor: pointer;
         .userImg{
           height: 50px;
           display: flex;
@@ -128,10 +140,19 @@ export default {
             width: 50px;
             height: 50px;
             border-radius: 25px;
+            cursor: pointer;
             img{
               width: 50px;
               height: 50px;
             }
+          }
+          .plusIcon{
+            background: url('~@/assets/images/plusIcon.png') no-repeat;
+            background-size: contain;
+          }
+          .removeIcon{
+            background: url('~@/assets/images/removeIcon.png') no-repeat;
+            background-size: contain;
           }
         }
         .name{
@@ -169,6 +190,14 @@ export default {
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
+      border-bottom: 1px solid #eee;
+      &:last-of-type{
+        border-bottom: none;
+      }
+      .right{
+        color: #666;
+        font-size: 14px;
+      }
     }
   }
   .deleteOut{

@@ -655,15 +655,12 @@ export default {
       this.$root.eventHub.$emit('resetData')
     },
     moreEvent () {
-      console.log(this.options.isGroup)
       const option = this.$_.cloneDeepWith(this.options)
+      option.componentName = 'chatSettingsComponent' // 单聊
       if (this.options.isGroup) { // 群聊
         option.componentName = 'chatInformationComponent'
-        this.$emit('openTwoView', option)
-      } else { // 单聊
-        option.componentName = 'chatSettingsComponent'
-        this.$emit('openTwoView', option)
       }
+      this.$emit('openTwoView', option)
     },
     // 深网加入频道
     async addChannel () {
