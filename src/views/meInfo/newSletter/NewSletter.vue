@@ -202,7 +202,8 @@
         :key="i"
         @click="sendInfo(item.companyId, item.id)"
       >
-        <el-image
+        <div class="left">
+          <el-image
           :src="item.userImage"
           class="myAvatar"
           :key="item.userImage"
@@ -220,7 +221,7 @@
               white-space: nowrap;
             "
           >
-            {{ item.linkman }}
+            {{ item.remarkName?item.remarkName:item.userName }}
           </div>
           <div
             slot="placeholder"
@@ -234,11 +235,14 @@
               white-space: nowrap;
             "
           >
-            {{ item.linkman }}
+            {{ item.remarkName?item.remarkName:item.userName }}
           </div>
         </el-image>
-        <em>{{ item.linkman }}</em>
-        <i v-if="item.isFocus" class="iconfont icon-wujiaoxing"></i>
+        <em>{{ item.remarkName?item.remarkName:item.userName }}</em>
+        </div>
+        <div class="right">
+          小竹熊云科技
+        </div>
       </div>
     </div>
   </div>
@@ -310,12 +314,13 @@ export default {
     //     OppositeRole: this.userInfo.commparnyList[0].companyType
     //   });
     // },
-    // 获取常用联系人
+    // 获取我的好友
     async getFriendAddressBooksPage () {
       const res = await this.$http.post('/api/GetFriendAddressBooksPage', {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize
       })
+      console.log(res)
       if (res.data.result.code === 200) {
         this.regularContact = res.data.result.item.items
         this.regularTotalCount = res.data.result.item.totalCount
@@ -615,32 +620,38 @@ export default {
     box-sizing: border-box;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     box-sizing: border-box;
     cursor: pointer;
-    .myAvatar {
-      color: white;
-      background-color: #165af7;
-      transition: all 1s;
-      color: white;
-      background-color: #165af7;
-      transition: all 1s;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-    }
-    &:hover {
-      .myAvatar {
-        -webkit-transform: scale(1.1);
-        -moz-transform: scale(1.1);
-        -ms-transform: scale(1.1);
-        transform: scale(1.1);
+    .left{
+      display: flex;
+      align-items: center;
+        .myAvatar {
+        color: white;
+        background-color: #165af7;
+        transition: all 1s;
+        color: white;
+        background-color: #165af7;
+        transition: all 1s;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
+      &:hover {
+        .myAvatar {
+          -webkit-transform: scale(1.1);
+          -moz-transform: scale(1.1);
+          -ms-transform: scale(1.1);
+          transform: scale(1.1);
+        }
+      }
+      em {
+        margin: 0 10px;
       }
     }
-    em {
-      margin: 0 10px;
-    }
-    i {
-      color: #ff6060;
+    .right{
+      font-size: 12px;
+      color: #666666;
     }
   }
   .el-tree-node__expand-icon.expanded {

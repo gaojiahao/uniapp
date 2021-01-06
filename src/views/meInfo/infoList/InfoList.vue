@@ -425,6 +425,7 @@ export default {
       switch (item.msgType) {
         case 'Text':
         case 'Product':
+        case 'SystemPrompt':
           msg = item.content
           break
         case 'Video':

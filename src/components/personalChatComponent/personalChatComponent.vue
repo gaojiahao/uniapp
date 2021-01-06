@@ -74,7 +74,14 @@
         </p>
         <template v-for="(item, i) in signalROptions.showmsg">
           <div :key="i" class="liaotianItens">
-            <div v-if="item.fromUserId === $store.state.userInfo.userInfo.id">
+            <!-- 系统消息 -->
+            <center v-if="item.messageType === 'SystemPrompt'">
+              <center style="font-size: 12px; color: #ccc;margin:5px 0;">
+                {{ item.createdOn && dateDiff(item.createdOn) }}
+              </center>
+                <p style="padding: 5px 20px;border-radius:20px;background-color:#d7d7d7;display: inline-block;font-size: 12px; color: #fff">{{item.content}}</p>
+              </center>
+            <div v-else-if="item.fromUserId === $store.state.userInfo.userInfo.id">
               <center style="font-size: 12px; color: #ccc">
                 {{ item.createdOn && dateDiff(item.createdOn) }}
               </center>

@@ -8,12 +8,12 @@
         </div>
         <div class="topBox">
           <div class="nameBox">
-          <el-image fit="contain" :src="require('@/assets/images/imgError.jpg')" lazy>
+          <el-image fit="contain" :src="option.userImage" lazy>
             <div
               slot="placeholder"
               class="image-slot"
               style="width:40px;height:40px;margin:0 auto;background-color:#165af8;color:#fff;text-align:center;">
-              名字
+              {{ option.userName }}
             </div>
             <div
               slot="error"
@@ -28,23 +28,23 @@
             </div>
           </el-image>
           <div class="name">
-            超好听的名字
+            {{ option.userName }}
           </div>
         </div>
         <div class="infoContent" v-if="option.code && option.code === 1">
-          <span class="name">张含韵</span>:
-          <span class="info">你好你好我是大佬你好你好我是大佬你好你好我是大佬你好你好我是大佬你好你好我是大佬你好你好我是大佬你好你好我是大佬你好你好我是大佬</span>
+          <span class="name">{{ option.userName }}</span>:
+          <span class="info">{{ option.content }}</span>
         </div>
         </div>
         <div class="remarksBox">
           <div class="remark">
-            备注标签
+            <el-input v-model="remarkName" placeholder="备注"></el-input>
           </div>
           <div class="isLookMyFind">
             <span>允许对方查看我的玩具圈</span>
             <span>
               <el-switch
-                v-model="lookMyFindSwitch"
+                v-model="checkMyToyCircle"
                 active-color="#165AF7"
                 inactive-color="#f5f5f5">
               </el-switch>
@@ -53,9 +53,9 @@
         </div>
         <div class="source">
           <span>来源</span>
-          <span class="isAdd">对方通过聊天添加</span>
+          <span class="isAdd">对方通过{{ option.source }}添加</span>
         </div>
-         <div class="sub">
+         <div class="sub" @click="subAddFriend">
           <span v-if="option.code && option.code === 1">接受</span>
           <span v-else>发消息</span>
         </div>
@@ -65,16 +65,42 @@
 <script>
 export default {
   props: {
-    options: Object,
-    default: {}
+    options: Object
   },
   data () {
     return {
-      lookMyFindSwitch: null,
+      remarkName: '',
+      checkMyToyCircle: false,
       option: this.options
     }
   },
   methods: {
+    // 接受申请
+    async subAddFriend () {
+      if (this.option.code === 1) {
+        const res = await this.$http.post('/api/CreateFriendAddressBook', { applyId: this.option.id, remarkName: this.remarkName, checkMyToyCircle: this.checkMyToyCircle })
+        if (res.data.result.code === 200) {
+          console.log(this.option)
+        } else {
+          this.$message.error(res.data.result.msg)
+        }
+      } else { // 发消息
+        const res = await this.$http.post('/api/UpdateFriendAddressBook', { friendPersonnelId: this.option.senderPersonnelId, friendCompanyId: this.option.senderCompanyId, remarkName: this.remarkName, checkMyToyCircle: this.checkMyToyCircle })
+        if (res.data.result.code === 200) {
+          console.log(this.option)
+        } else {
+          this.$message.error(res.data.result.msg)
+        }
+        const fd = {
+          isGroup: false,
+          linkName: this.option.userName,
+          companyId: this.option.senderCompanyId,
+          toUserID: this.option.senderPersonnelId,
+          componentName: 'personalChatComponent'
+        }
+        this.$emit('openTwoView', fd)
+      }
+    }
   },
   created () {
 
@@ -302,6 +328,13 @@ export default {
             align-items: center;
             box-sizing: border-box;
             padding: 0 10px;
+            @{deep} .el-input{
+              border: none;
+              input{
+                border: none;
+                padding: 0;
+              }
+            }
           }
           .isLookMyFind{
             border-top: 1px solid #f5f5f5;
@@ -330,9 +363,7 @@ export default {
           justify-content: center;
           align-items: center;
           background-color: #fff;
-          span{
-            cursor: pointer;
-          }
+          cursor: pointer;
         }
     }
 </style>

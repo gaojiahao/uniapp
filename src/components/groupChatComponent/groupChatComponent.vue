@@ -1,18 +1,19 @@
 <template>
   <!-- 发起群聊 -->
   <div class="wrapBox">
-    <div class="topLayout">发起群聊</div>
+    <div class="topLayout">发起群聊 <span v-if="totalCount > 0">{{totalCount}}</span></div>
     <!-- 发起群聊 -->
     <div class="searchBox">
       <div class="inputBox">
         <el-input
           class="searchInput"
           prefix-icon="iconfont icon-sousuo"
-          v-model="search"
+          v-model="keyWord"
+          @keyup.enter.native="search"
           clearable
           placeholder="请输入关键词">
         </el-input>
-        <el-button type="primary" round>搜索</el-button>
+        <el-button type="primary" @click="search" round>搜索</el-button>
       </div>
     </div>
     <!-- 下拉列表 -->
@@ -50,17 +51,37 @@
 export default {
   data () {
     return {
-      search: '',
-      friendList: 20
+      currentPage: 1,
+      pageSize: 20,
+      totalCount: 0,
+      keyWord: null,
+      friendList: []
     }
   },
   methods: {
     openTwoView (item) {
       console.log(item)
+    },
+    // 关键字搜索
+    search () {
+      this.currentPage = 1
+      this.getMyGroupMessagePage()
+    },
+    // 初始化列表
+    async getMyGroupMessagePage () {
+      const res = await this.$http.post('/api/GetMyGroupMessagePage', { skipCount: this.currentPage, maxResultCount: this.pageSize, keyWord: this.keyWord })
+      if (res.data.result.code === 200) {
+        this.friendList = res.data.result.item.items
+        this.totalCount = res.data.result.item.totalCount
+      } else {
+        this.$message.error(res.data.result.msg)
+      }
     }
   },
   created () {},
-  mounted () {}
+  mounted () {
+    this.getMyGroupMessagePage()
+  }
 }
 </script>
 <style scoped lang='less'>

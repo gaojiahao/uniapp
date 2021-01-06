@@ -21,11 +21,11 @@
     </div>
     <div class="contentList">
       <!-- 好友item -->
-      <div class="itemBox" v-for="(item, i) in friendList" :key="i" @click="openTwoView({item,componentName: 'friendApplicationComponent',code:1})">
+      <div class="itemBox" v-for="(item, i) in friendList" :key="i" @click="lookFindApply({...item,componentName: 'friendApplicationComponent',code:1})">
         <div class="left">
           <el-image
             fit="contain"
-            :src="require('@/assets/images/imgError.jpg')"
+            :src="item.userImage"
             lazy
           >
             <div
@@ -44,18 +44,26 @@
             </div>
           </el-image>
           <div class="middle">
-          <div class="name">宋小宝</div>
-          <div class="company">您好 我是大大大大哥</div>
+          <div class="name">{{ item.userName }}</div>
+          <div class="company">{{ item.content }}</div>
         </div>
         </div>
         <div class="right">
           <el-button
             size="mini"
             type="primary"
-            @click.stop="openTwoView({item,componentName: 'friendApplicationComponent',code:2})"
+            @click.stop.native="openTwoView({...item,componentName: 'friendApplicationComponent',code:2})"
             round
-            >接受</el-button
-          >
+            v-if="item.state !== 2"
+            >接受</el-button>
+            <el-button
+            size="mini"
+            style="backgroundColor:#ccc;borderColor:#ccc;"
+            type="primary"
+            disabled
+            round
+            v-else
+            >已添加</el-button>
         </div>
       </div>
     </div>
@@ -66,24 +74,49 @@
 export default {
   data () {
     return {
+      currentPage: 1,
+      pageSize: 20,
+      total: 0,
       search: null,
-      friendList: [{
-        name: 1,
-        id: 1
-      },
-      {
-        name: 2,
-        id: 2
-      }]
+      friendList: []
     }
   },
   methods: {
-    openTwoView (item) {
+    // 查看好友申请明细
+    async lookFindApply (item) {
+      if (item.state === 2) {
+        const fd = { ...item, componentName: 'friendApplicationComponent', code: 2 }
+        this.$emit('openTwoView', fd)
+      } else {
+        if (item.code === 2) {
+          const res = await this.$http.post('/api/CreateFriendAddressBook', { applyId: item.id })
+          if (res.data.result.code === 200) {
+            this.$emit('openTwoView', item)
+          } else {
+            this.$message.error(res.data.result.msg)
+          }
+        } else {
+          this.$emit('openTwoView', item)
+        }
+      }
+    },
+    // 打开三级窗口
+    async openTwoView (item) {
       this.$emit('openTwoView', item)
+    },
+    // 获取新的好友列表
+    async getFriendApplyPage () {
+      const res = await this.$http.post('/api/GetFriendApplyPage', { maxResultCount: this.pageSize, skipCount: this.currentPage })
+      if (res.data.result.code === 200) {
+        this.friendList = res.data.result.item.items
+        this.total = res.data.result.item.totalCount
+      }
     }
   },
   created () {},
-  mounted () {}
+  mounted () {
+    this.getFriendApplyPage()
+  }
 }
 </script>
 <style scoped lang='less'>
