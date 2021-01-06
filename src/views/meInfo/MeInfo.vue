@@ -237,11 +237,11 @@ import bsTop from '@/components/BsTop.vue'
 import bsFooter from '@/components/oldFooter'
 import BMapComponent from '@/components/map.vue'
 import addFriendComponent from '@/components/addFriendComponent/addFriendComponent.vue'
-import launchGroupChat from '@/components/launchGroupChat/launchGroupChat.vue'
+import chooseGroupChatComponent from '@/components/chooseGroupChatComponent/chooseGroupChatComponent.vue'
 import friendVerificationComponent from '@/components/friendVerificationComponent/friendVerificationComponent.vue'
 import friendApplicationComponent from '@/components/friendApplicationComponent/friendApplicationComponent.vue'
 import newFriendComponent from '@/components/newFriendComponent/newFriendComponent.vue'
-import groupChatComponent from '@/components/groupChatComponent/groupChatComponent.vue'
+import launchGroupChatComponent from '@/components/launchGroupChatComponent/launchGroupChatComponent.vue'
 import hallContactComponent from '@/components/hallContactComponent/hallContactComponent.vue'
 import personalDataComponent from '@/components/personalDataComponent/personalDataComponent.vue'
 import editPersonalDataComponent from '@/components/editPersonalDataComponent/editPersonalDataComponent.vue'
@@ -263,11 +263,11 @@ export default {
     ElImageViewer,
     companyBusinessComponent,
     addFriendComponent,
-    launchGroupChat,
+    chooseGroupChatComponent,
     friendVerificationComponent,
     friendApplicationComponent,
     newFriendComponent,
-    groupChatComponent,
+    launchGroupChatComponent,
     hallContactComponent,
     personalDataComponent,
     editPersonalDataComponent,

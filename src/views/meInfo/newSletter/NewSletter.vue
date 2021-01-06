@@ -23,7 +23,7 @@
               class="item"
               @click="
                 openOneView({
-                  componentName: 'launchGroupChat',
+                  componentName: 'launchGroupChatComponent',
                 })
               "
             >
@@ -71,7 +71,7 @@
         <div class="organizaItem">
           <div
             class="parent"
-            @click="openOneView({ componentName: 'groupChatComponent' })"
+            @click="openOneView({ componentName: 'chooseGroupChatComponent' })"
           >
             <div class="left">
               <el-image
@@ -241,7 +241,7 @@
         <em>{{ item.remarkName?item.remarkName:item.userName }}</em>
         </div>
         <div class="right">
-          小竹熊云科技
+          {{item.companyName}}
         </div>
       </div>
     </div>

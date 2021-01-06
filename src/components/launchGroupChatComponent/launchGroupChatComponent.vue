@@ -1,18 +1,19 @@
 <template>
   <!-- 发起群聊 -->
   <div class="wrapBox">
-    <div class="topLayout">发起群聊</div>
+    <div class="topLayout">发起群聊 <span v-if="totalCount > 0">({{totalCount}})</span></div>
     <!-- 发起群聊 -->
     <div class="searchBox">
       <div class="inputBox">
         <el-input
           class="searchInput"
           prefix-icon="iconfont icon-sousuo"
-          v-model="search"
+          v-model="keyWord"
+          @keyup.enter.native="search"
           clearable
           placeholder="请输入小竹熊名称">
         </el-input>
-        <el-button type="primary" round>搜索</el-button>
+        <el-button type="primary" @click="search" round>搜索</el-button>
       </div>
     </div>
     <el-checkbox-group
@@ -22,7 +23,7 @@
     >
       <div class="item" v-for="(item, i) in friendsList" :key="i">
         <el-checkbox :label="item">
-          <el-image class="img" :src="item.img" fit="cover">
+          <el-image class="img" :src="item.userImage" fit="cover">
             <div
               slot="error"
               class="image-slot"
@@ -35,13 +36,13 @@
                 white-space: nowrap;
               "
             >
-              {{ item.linkman }}
+              {{ item.remarkName?item.remarkName:item.userName }}
             </div>
           </el-image>
-          {{ item.linkman }}
+          {{ item.remarkName?item.remarkName:item.userName }}
         </el-checkbox>
-        <div class="companyName" @click="driveCheckbox(item)">
-          {{ item.company }}
+        <div class="companyName">
+          {{ item.remarkName?item.remarkName:item.companyName }}
         </div>
       </div>
     </el-checkbox-group>
@@ -53,7 +54,7 @@
           >
         </div>
         <div class="footerBtn">
-          <el-button type="info" :class="{ active: selectUsers.length }" round
+          <el-button type="info" @click="submitGroup" :disabled="selectUsers.length < 1" :class="{ active: selectUsers.length }" round
             >完成
             <span v-show="selectUsers.length"
               >({{ selectUsers.length }})</span
@@ -69,31 +70,33 @@
 export default {
   data () {
     return {
-      search: '',
+      keyWord: '',
+      currentPage: 1,
+      pageSize: 20,
+      totalCount: 0,
       selectUsers: [],
-      friendsList: [{
-        id: 1,
-        linkman: '张三',
-        company: '超级无敌大大大大大大大大公司1',
-        img: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-      }, {
-        id: 2,
-        linkman: '李四',
-        company: '公司2',
-        img: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-      }, {
-        id: 3,
-        linkman: '王五',
-        company: '公司3',
-        img: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
-      }],
-      friendCateList: [{
-        name: '联系人',
-        id: 4
-      }]
+      friendsList: []
     }
   },
   methods: {
+    // 完成发起群聊
+    async submitGroup () {
+      const groupUsers = this.selectUsers.map(v => ({ userId: v.friendPersonnelId, companyId: v.friendCompanyId }))
+      const res = await this.$http.post('/api/EstablishGroup', { groupUsers: groupUsers })
+      if (res.data.result.code === 200) {
+        console.log(res.data.result.item)
+        const fd = {
+          isGroup: res.data.result.item.isGroup,
+          groupNumber: res.data.result.item.groupNumber,
+          linkName: res.data.result.item.linkName,
+          companyID: res.data.result.item.companyID,
+          componentName: 'personalChatComponent'
+        }
+        this.$emit('openTwoView', fd)
+      } else {
+        this.$message.error(res.data.result.msg)
+      }
+    },
     // 发送群聊点击后半部分公司事件
     driveCheckbox (item) {
       const list = this.$refs.multipleTable.value
@@ -108,10 +111,25 @@ export default {
         this.selectUsers.push(item)
         console.log(this.selectUsers)
       }
+    },
+    // 搜索
+    search () {
+      this.currentPage = 1
+      this.getFriendAddressBooksPage()
+    },
+    // 获取好友列表
+    async getFriendAddressBooksPage () {
+      const res = await this.$http.post('/api/GetFriendAddressBooksPage', { maxResultCount: this.pageSize, skipCount: this.currentPage, keyWord: this.keyWord })
+      if (res.data.result.code === 200) {
+        this.friendsList = res.data.result.item.items
+        this.totalCount = res.data.result.item.totalCount
+      }
     }
   },
   created () {},
-  mounted () {}
+  mounted () {
+    this.getFriendAddressBooksPage()
+  }
 }
 </script>
 <style scoped lang='less'>

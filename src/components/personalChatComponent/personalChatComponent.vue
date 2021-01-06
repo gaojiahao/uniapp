@@ -2,7 +2,9 @@
   <div class="wrapBox">
     <!-- 聊天窗口 -->
     <h3 class="infoListTitle">
-      {{ this.signalROptions.name }}
+      <span class="item"></span>
+      <span class="item">{{ this.signalROptions.name }}</span>
+      <span class="item"><i class="el-icon-more" @click="moreEvent"></i></span>
     </h3>
     <div
       class="isOrder"
@@ -652,6 +654,9 @@ export default {
       }
       this.$root.eventHub.$emit('resetData')
     },
+    moreEvent () {
+      console.log(this.options.isGroup)
+    },
     // 深网加入频道
     async addChannel () {
       if (!this.signalROptions.groupNumber) {
@@ -1266,10 +1271,22 @@ export default {
   .infoListTitle {
     height: 50px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     font-weight: 500;
+    padding: 0 10px;
+    box-sizing: border-box;
     background: linear-gradient(#ccc, #fff, #a5b6c8, #7f90c5);
+    .item{
+      flex: 1;
+      text-align: center;
+      &:last-of-type {
+        text-align: right;
+        i{
+          cursor: pointer;
+        }
+      }
+    }
   }
   .isOrder {
     position: absolute;

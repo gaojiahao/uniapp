@@ -1,7 +1,7 @@
 <template>
   <!-- 发起群聊 -->
   <div class="wrapBox">
-    <div class="topLayout">发起群聊 <span v-if="totalCount > 0">{{totalCount}}</span></div>
+    <div class="topLayout">选择群聊 <span v-if="totalCount > 0">{{totalCount}}</span></div>
     <!-- 发起群聊 -->
     <div class="searchBox">
       <div class="inputBox">
@@ -19,10 +19,10 @@
     <!-- 下拉列表 -->
     <div class="contentList">
       <!-- 好友item -->
-      <div class="itemBox" v-for="(item, i) in friendList" :key="i" @click="openTwoView({item,componentName: 'friendApplicationComponent',code:1})">
+      <div class="itemBox" v-for="(item, i) in friendList" :key="i" @click="openTwoView({...item,componentName: 'personalChatComponent'})">
           <el-image
             fit="contain"
-            :src="require('@/assets/images/imgError.jpg')"
+            :src="item.userImage"
             lazy
           >
             <div
@@ -40,8 +40,8 @@
               <img class="errorImg" src="~@/assets/images/imgError.jpg" alt />
             </div>
           </el-image>
-          <div class="name">XXX什么什么什么什么群</div>
-          <div class="count">(999)</div>
+          <div class="name">{{item.linkName}}</div>
+          <div class="count">({{item.groupUserCount}})</div>
       </div>
     </div>
   </div>
@@ -60,7 +60,14 @@ export default {
   },
   methods: {
     openTwoView (item) {
-      console.log(item)
+      const fd = {
+        isGroup: item.isGroup,
+        linkName: item.linkName,
+        groupNumber: item.groupNumber,
+        componentName: item.componentName
+      }
+      console.log(fd)
+      this.$emit('openTwoView', fd)
     },
     // 关键字搜索
     search () {
