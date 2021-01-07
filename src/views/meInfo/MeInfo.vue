@@ -257,6 +257,7 @@ import sampleSelectionRankingComponent from '@/components/sampleSelectionRanking
 import myProductComponent from '@/components/myProductComponent/myProductComponent.vue'
 import chatInformationComponent from '@/components/chatInformationComponent/chatInformationComponent.vue'
 import chatSettingsComponent from '@/components/chatSettingsComponent/chatSettingsComponent.vue'
+import addNewMembersComponent from '@/components/addNewMembersComponent/addNewMembersComponent.vue'
 export default {
   components: {
     bsTop,
@@ -283,6 +284,7 @@ export default {
     myProductComponent,
     chatInformationComponent,
     chatSettingsComponent,
+    addNewMembersComponent,
     companyNumberComponent
   },
   data () {

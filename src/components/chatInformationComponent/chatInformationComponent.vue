@@ -161,8 +161,7 @@ export default {
     addNewMembers () {
       console.log(this.options)
       const fd = this.$_.cloneDeep(this.options)
-      fd.componentName = 'launchGroupChatComponent'
-      fd.rootComponent = 'chatInformationComponent'
+      fd.componentName = 'addNewMembersComponent'
       this.$emit('openTwoView', fd)
     },
     // 切换搜索聊天记录类型
