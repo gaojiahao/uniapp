@@ -1,9 +1,9 @@
 <template>
   <!-- 发起群聊 -->
   <div class="wrapBox">
-    <div class="topLayout">选择联系人<span v-if="totalCount > 0">({{totalCount}})</span></div>
+    <div class="topLayout">选择群成员<span v-if="friendsList.length">({{friendsList.length}})</span></div>
     <!-- 发起群聊 -->
-    <div class="searchBox">
+    <!-- <div class="searchBox">
       <div class="inputBox">
         <el-input
           class="searchInput"
@@ -15,7 +15,7 @@
         </el-input>
         <el-button type="primary" @click="search" round>搜索</el-button>
       </div>
-    </div>
+    </div> -->
     <el-checkbox-group
       class="myCheckBox"
       ref="multipleTable"
@@ -23,7 +23,7 @@
     >
       <div class="item" v-for="(item, i) in friendsList" :key="i">
         <el-checkbox :label="item">
-          <el-image class="img" :src="item.userImage" fit="cover">
+            <el-image class="img" :src="item.userImage" fit="cover">
             <div
               slot="error"
               class="image-slot"
@@ -36,13 +36,14 @@
                 white-space: nowrap;
               "
             >
-              {{ item.remarkName?item.remarkName:item.userName }}
+              {{ item.nickName?item.nickName:item.linkman }}
             </div>
           </el-image>
-          {{ item.remarkName?item.remarkName:item.userName }}
+          {{ item.nickName?item.nickName:item.linkman }}
+          <span class="qunzhu" v-if="item.groupLeader">群主</span>
         </el-checkbox>
         <div class="companyName">
-          {{ item.remarkName?item.remarkName:item.companyName }}
+         {{ item.nickName?item.nickName:item.linkman }}
         </div>
       </div>
     </el-checkbox-group>
@@ -55,7 +56,7 @@
         </div>
         <div class="footerBtn">
           <el-button type="info" @click="submitGroup" :disabled="selectUsers.length < 1" :class="{ active: selectUsers.length }" round
-            >完成
+            >移除
             <span v-show="selectUsers.length"
               >({{ selectUsers.length }})</span
             ></el-button
@@ -80,16 +81,17 @@ export default {
     }
   },
   methods: {
-    // 完成发起群聊
+    // 提交移除群成员
     async submitGroup () {
-      const groupUsers = this.selectUsers.map(v => ({ userId: v.friendPersonnelId, companyId: v.friendCompanyId }))
+      const groupUsers = this.selectUsers.map(v => ({ userId: v.id, companyId: v.companyId }))
       // 添加新成员
       console.log(this.options, groupUsers)
       const fd = {
         groupNumber: this.options.groupNumber,
+        delType: 0,
         groupUsers: groupUsers
       }
-      const res = await this.$http.post('/api/CreateMessageMember', fd)
+      const res = await this.$http.post('/api/DeleteMessageMember', fd)
       if (res.data.result.code === 200) {
         this.$root.eventHub.$emit('resetGroupList')
         const data = {
@@ -121,20 +123,19 @@ export default {
     // 搜索
     search () {
       this.currentPage = 1
-      this.getFriendAddressBooksPage()
+      this.getGroupUserByGroupNumber()
     },
-    // 获取好友列表
-    async getFriendAddressBooksPage () {
-      const res = await this.$http.post('/api/GetFriendAddressBooksPage', { maxResultCount: this.pageSize, skipCount: this.currentPage, keyWord: this.keyWord })
+    // 获取群成员列表
+    async getGroupUserByGroupNumber () {
+      const res = await this.$http.post('/api/GetGroupUserByGroupNumber', { groupNumber: this.options.groupNumber })
       if (res.data.result.code === 200) {
-        this.friendsList = res.data.result.item.items
-        this.totalCount = res.data.result.item.totalCount
+        this.friendsList = res.data.result.item.personnels
       }
     }
   },
   created () {},
   mounted () {
-    this.getFriendAddressBooksPage()
+    this.getGroupUserByGroupNumber()
   }
 }
 </script>
@@ -261,8 +262,14 @@ export default {
     }
   }
   .myCheckBox {
-    height: calc(100% - 171px);
+    height: calc(100% - 111px);
     overflow: auto;
+    .qunzhu{
+        font-size: 12px;
+        color: #999;
+        margin-left: 5px;
+        transform: scale(0.8)
+    }
     .item {
       height: 60px;
       width: 100%;

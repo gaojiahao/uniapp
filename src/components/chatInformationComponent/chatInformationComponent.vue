@@ -37,7 +37,7 @@
       </li>
       <li class="item" v-if="myInfo && myInfo.groupLeader">
         <div class="userImg">
-          <i class="el-image removeIcon"></i>
+          <i class="el-image removeIcon" @click="removeMembers"></i>
         </div>
         <p class="name"></p>
       </li>
@@ -157,9 +157,14 @@ export default {
     }
   },
   methods: {
+    // 删除成员
+    removeMembers () {
+      const fd = this.$_.cloneDeep(this.options)
+      fd.componentName = 'removeMembersComponent'
+      this.$emit('openTwoView', fd)
+    },
     // 添加新成员
     addNewMembers () {
-      console.log(this.options)
       const fd = this.$_.cloneDeep(this.options)
       fd.componentName = 'addNewMembersComponent'
       this.$emit('openTwoView', fd)

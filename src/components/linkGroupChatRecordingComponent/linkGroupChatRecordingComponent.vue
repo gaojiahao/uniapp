@@ -40,7 +40,7 @@
       </el-pagination>
     </center>
   </div>
-  <div v-else class="zanwuxinxi1"></div>
+  <div v-else class="zanwuxinxi"></div>
 </div>
 </template>
 

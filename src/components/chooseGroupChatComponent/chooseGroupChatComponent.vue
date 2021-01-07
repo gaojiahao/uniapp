@@ -1,7 +1,7 @@
 <template>
   <!-- 发起群聊 -->
   <div class="wrapBox">
-    <div class="topLayout">选择群聊 <span v-if="totalCount > 0">{{totalCount}}</span></div>
+    <div class="topLayout">选择群聊 <span v-if="totalCount > 0">({{totalCount}})</span></div>
     <!-- 发起群聊 -->
     <div class="searchBox">
       <div class="inputBox">
@@ -88,6 +88,13 @@ export default {
   created () {},
   mounted () {
     this.getMyGroupMessagePage()
+    this.$root.eventHub.$on('resetGroupList', async () => {
+      this.currentPage = 1
+      this.getMyGroupMessagePage()
+    })
+  },
+  beforeDestroy () {
+    this.$root.eventHub.$off('resetGroupList')
   }
 }
 </script>
