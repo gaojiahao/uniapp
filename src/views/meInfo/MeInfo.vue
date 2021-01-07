@@ -928,15 +928,6 @@ export default {
         })
       }
     },
-    // 上传文件
-    async upLoadFiles (file) {
-      const fd = new FormData()
-      fd.append('fileType', this.signalROptions.msgType)
-      fd.append('fileName', file.name)
-      fd.append('file', file)
-      return await this.$http.post('/api/File/MessageUploadFile', fd)
-    },
-    
     // 获取通讯录列表
     async getOrgList (flag) {
       const res = await this.$http.post('/api/OrgPersonnelPage', {
@@ -1143,36 +1134,6 @@ export default {
     // 获取所有订单未读消息
     getOrderInfoCount (value) {
      this.orderInfoCount = value
-    },
-    // 复制聊天窗口链接地址
-    copyLink(id) {
-      var link = document.getElementById(id)
-      var range
-      if (document.body.createTextRange) {
-        range = document.body.createTextRange()
-        range.moveToElementText(link)
-        range.select()
-      } else if (window.getSelection) {
-        var selection = window.getSelection()
-        range = document.createRange()
-        console.log(range.text, range.htmlText);
-        range.selectNodeContents(link)
-        selection.removeAllRanges()
-        selection.addRange(range)
-      } else {
-        console.warn('none')
-      }
-      document.execCommand('Copy') // 执行浏览器复制命令
-      // console.warn('none')
-      this.$message.success('已复制好，可贴粘。')
-    },
-    // 点击预览二维码大图
-    openErweima () {
-      this.showErweimaViewer = true
-    },
-    // 点击关闭二维码大图
-    closeErweimaViewer () {
-      this.showErweimaViewer = false
     },
     // 打开添加好友或打开发起群聊
     showAddFriend(options) {

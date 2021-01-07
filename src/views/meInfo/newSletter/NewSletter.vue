@@ -23,7 +23,7 @@
               class="item"
               @click="
                 openOneView({
-                  componentName: 'launchGroupChatComponent',
+                  componentName: 'launchGroupChatComponent'
                 })
               "
             >

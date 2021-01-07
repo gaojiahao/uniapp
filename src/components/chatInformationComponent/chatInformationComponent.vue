@@ -3,12 +3,12 @@
   <div class="topLayout">聊天信息 <span v-if="totalCount > 0">{{totalCount}}</span></div>
   <div class="groupMembers">
     <div class="title">群成员</div>
-    <ul class="items">
-      <li class="item" v-for="(item, i) in 13" :key="i">
+    <ul class="items" v-if="groupObject.personnels">
+      <li class="item" v-for="(item, i) in groupObject.personnels" :key="i">
         <div class="userImg">
           <el-image
             fit="contain"
-            src=""
+            :src="item.userImage"
             lazy
           >
             <div
@@ -27,15 +27,15 @@
             </div>
           </el-image>
         </div>
-        <p class="name">张木伟张木伟张木伟张木伟</p>
+        <p class="name">{{ item.linkman }}</p>
       </li>
-      <li class="item">
+      <li class="item" v-if="myInfo && myInfo.groupLeader">
         <div class="userImg">
-          <i class="el-image plusIcon"></i>
+          <i class="el-image plusIcon" @click="addNewMembers"></i>
         </div>
         <p class="name"></p>
       </li>
-      <li class="item">
+      <li class="item" v-if="myInfo && myInfo.groupLeader">
         <div class="userImg">
           <i class="el-image removeIcon"></i>
         </div>
@@ -51,9 +51,16 @@
     <span class="item">查看全部群成员<i class="el-icon-arrow-right"></i></span>
   </div>
   <div class="lookSee">
-    <p class="item"><span>查找聊天记录</span><i class="el-icon-arrow-right right"></i></p>
-    <p class="item"><span>群聊名称</span><span class="right">xxx找样群<i class="el-icon-arrow-right right"></i></span></p>
-    <p class="item"><span>我在本群的昵称</span><i class="el-icon-arrow-right right"></i></p>
+    <p class="item" @click="openCheckChatRecord">
+      <span>查找聊天记录</span>
+      <i class="el-icon-arrow-right right"></i></p>
+    <p class="item" @click="openEditGroupName" v-if="myInfo && myInfo.groupLeader">
+      <span>群聊名称</span>
+      <span class="right">{{ groupObject.linkName }}<i class="el-icon-arrow-right right"></i></span>
+    </p>
+    <p class="item" @click="openEditNickname">
+      <span>我在本群的昵称</span>
+      <span class="right">{{ groupNickName }}<i class="el-icon-arrow-right right"></i></span></p>
   </div>
   <el-popconfirm
     class="deleteBtn"
@@ -63,28 +70,176 @@
       <span>删除并退出</span>
     </div>
   </el-popconfirm>
+  <!-- 查看聊天记录 -->
+  <el-dialog
+  title="查看聊天记录"
+  :visible.sync="checkChatDialog"
+  class="seeCheckChat"
+  top="60px"
+  width="40%">
+  <div class="checkboxMsgType">
+    <el-radio-group v-model="msgType" size="small" @change="changeMsgType">
+      <el-radio :label="item.value" border v-for="(item, i) in msgTypeList" :key="i">{{ item.label }}</el-radio>
+    </el-radio-group>
+  </div>
+  <!-- 动态组件 -->
+  <component :is="dynamicComponent" :options="options"></component>
+</el-dialog>
+  <!-- 修改群名称 -->
+  <el-dialog
+  title="修改群名称"
+  :visible.sync="editGroupNameDialog"
+  width="30%">
+  <el-input
+  placeholder="请输入群名称"
+  v-model="modifyGroupName"
+  clearable>
+</el-input>
+  <center slot="footer" class="dialog-footer">
+    <el-button @click="editGroupNameDialog = false">取 消</el-button>
+    <el-button type="primary" @click="subGroupName">确 定</el-button>
+  </center>
+</el-dialog>
+  <!-- 修改我在群里的群昵称 -->
+  <el-dialog
+  title="修改群昵称"
+  :visible.sync="editNicknameDialog"
+  width="30%">
+  <el-input
+  placeholder="请输入群昵称"
+  v-model="modifyGroupNickname"
+  clearable>
+</el-input>
+  <center slot="footer" class="dialog-footer">
+    <el-button @click="editNicknameDialog = false">取 消</el-button>
+    <el-button type="primary" @click="subGroupNickname">确 定</el-button>
+  </center>
+</el-dialog>
 </div>
 </template>
 
 <script>
+import textGroupChatRecordingComponent from '@/components/textGroupChatRecordingComponent/textGroupChatRecordingComponent'
+import mediaGroupChatRecordingComponent from '@/components/mediaGroupChatRecordingComponent/mediaGroupChatRecordingComponent'
+import linkGroupChatRecordingComponent from '@/components/linkGroupChatRecordingComponent/linkGroupChatRecordingComponent'
 export default {
+  components: {
+    textGroupChatRecordingComponent,
+    linkGroupChatRecordingComponent,
+    mediaGroupChatRecordingComponent
+  },
   props: ['options'],
   data () {
     return {
-      totalCount: 0
+      dynamicComponent: 'textGroupChatRecordingComponent',
+      msgType: 'Text',
+      msgTypeList: [{
+        value: 'Text',
+        label: '文本搜索'
+      },
+      {
+        value: 'imgorvideo',
+        label: '图片/视频搜索'
+      }, {
+        value: 'Product',
+        label: '链接搜索'
+      }],
+      groupObject: {}, // 群资料
+      myInfo: null, // 我的群资料
+      groupNickName: null, // 我的群昵称
+      totalCount: 0,
+      checkChatDialog: false,
+      modifyGroupNickname: null,
+      modifyGroupName: null,
+      userInfo: this.$store.state.userInfo.userInfo,
+      editGroupNameDialog: false,
+      editNicknameDialog: false
     }
   },
   methods: {
+    // 添加新成员
+    addNewMembers () {
+      console.log(this.options)
+      const fd = this.$_.cloneDeep(this.options)
+      fd.componentName = 'launchGroupChatComponent'
+      fd.rootComponent = 'chatInformationComponent'
+      this.$emit('openTwoView', fd)
+    },
+    // 切换搜索聊天记录类型
+    changeMsgType () {
+      this.dynamicComponent = null
+      switch (this.msgType) {
+        case 'Text':
+          this.dynamicComponent = 'textGroupChatRecordingComponent'
+          break
+        case 'imgorvideo':
+          this.dynamicComponent = 'mediaGroupChatRecordingComponent'
+          break
+        case 'Product':
+          this.dynamicComponent = 'linkGroupChatRecordingComponent'
+          break
+      }
+    },
+    // 修改我在群里的群昵称
+    async subGroupNickname () {
+      const res = await this.$http.post('/api/UpdateMessageMemberNickName', { nickName: this.modifyGroupNickname, groupNumber: this.options.groupNumber })
+      if (res.data.result.code === 200) {
+        this.editNicknameDialog = false
+        this.getGroupUserByGroupNumber()
+      } else {
+        this.$message.error(res.data.result.msg)
+      }
+    },
+    // 修改群名称
+    async subGroupName () {
+      const res = await this.$http.post('/api/UpdateGroupAccept', { linkName: this.modifyGroupName, groupNumber: this.options.groupNumber })
+      if (res.data.result.code === 200) {
+        this.editGroupNameDialog = false
+        this.getGroupUserByGroupNumber()
+      } else {
+        this.$message.error(res.data.result.msg)
+      }
+    },
+    // 打开查看聊天记录
+    openCheckChatRecord () {
+      this.checkChatDialog = true
+    },
+    // 打开修改群名称
+    openEditGroupName () {
+      this.modifyGroupName = this.groupObject.linkName
+      this.editGroupNameDialog = true
+    },
+    // 打开修改群昵称
+    openEditNickname () {
+      this.modifyGroupNickname = this.groupNickName
+      this.editNicknameDialog = true
+    },
+    // 退出群聊
     deleteCement () {
       console.log('退出了群聊')
-    }
+    },
     // 获取群成员
+    async getGroupUserByGroupNumber () {
+      const res = await this.$http.post('/api/GetGroupUserByGroupNumber', { groupNumber: this.options.groupNumber })
+      if (res.data.result.code === 200) {
+        this.groupObject = res.data.result.item
+        for (let i = 0; i < this.groupObject.personnels.length; i++) {
+          if (this.groupObject.personnels[i].id === this.userInfo.id) {
+            this.myInfo = this.groupObject.personnels[i]
+            this.groupNickName = this.groupObject.personnels[i].nickName
+          }
+        }
+      } else {
+        this.$message.error(res.data.result.msg)
+      }
+    }
   },
   created () {
 
   },
   mounted () {
     console.log(this.options)
+    this.getGroupUserByGroupNumber()
   }
 }
 </script>
@@ -214,4 +369,14 @@ export default {
   display: flex;
   justify-content: center;
 }
+.checkboxMsgType{
+  padding: 10px;
+}
+
+  @{deep} .seeCheckChat{
+    .el-dialog__body{
+      padding: 0;
+      margin: 0;
+    }
+  }
 </style>

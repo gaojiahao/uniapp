@@ -3,7 +3,7 @@
     <!-- 聊天窗口 -->
     <h3 class="infoListTitle">
       <span class="item"></span>
-      <span class="item">{{ this.signalROptions.name }}</span>
+      <span class="item title">{{ this.signalROptions.name }}</span>
       <span class="item"><i class="el-icon-more" @click="moreEvent"></i></span>
     </h3>
     <div
@@ -771,6 +771,7 @@ export default {
         // 判断是不是发送的链接http带头
         if (/^http/.test(this.signalROptions.value)) {
           this.signalROptions.msgType = 'Product'
+          this.signalROptions.attachment = this.signalROptions.value
         }
         try {
           const res = await this.createMessageAccept()
@@ -901,6 +902,7 @@ export default {
       }
       if (/^http/.test(this.signalROptions.value)) {
         this.signalROptions.msgType = 'Product'
+        this.signalROptions.attachment = this.signalROptions.value
       }
       try {
         const res = await this.createMessageAccept()
@@ -957,6 +959,36 @@ export default {
       console.log('发送聊天配置=', fd)
       return await this.$http.post('/api/CreateMessageAccept', fd)
     },
+    // 复制聊天窗口链接地址
+    copyLink(id) {
+      var link = document.getElementById(id)
+      var range
+      if (document.body.createTextRange) {
+        range = document.body.createTextRange()
+        range.moveToElementText(link)
+        range.select()
+      } else if (window.getSelection) {
+        var selection = window.getSelection()
+        range = document.createRange()
+        console.log(range.text, range.htmlText);
+        range.selectNodeContents(link)
+        selection.removeAllRanges()
+        selection.addRange(range)
+      } else {
+        console.warn('none')
+      }
+      document.execCommand('Copy') // 执行浏览器复制命令
+      // console.warn('none')
+      this.$message.success('已复制好，可贴粘。')
+    },
+    // 点击预览二维码大图
+    openErweima () {
+      this.showErweimaViewer = true
+    },
+    // 点击关闭二维码大图
+    closeErweimaViewer () {
+      this.showErweimaViewer = false
+    },
     // 选择发送文件
     async changeFiless (e) {
       this.signalROptions.value = null
@@ -984,6 +1016,14 @@ export default {
       } else {
         this.$message.error('上传失败，请检查网络')
       }
+    },
+    // 上传文件
+    async upLoadFiles (file) {
+      const fd = new FormData()
+      fd.append('fileType', this.signalROptions.msgType)
+      fd.append('fileName', file.name)
+      fd.append('file', file)
+      return await this.$http.post('/api/File/MessageUploadFile', fd)
     },
     // 开始录音|录制完成发送语音
     showDeleteButton () {
@@ -1282,10 +1322,16 @@ export default {
     padding: 0 10px;
     box-sizing: border-box;
     background: linear-gradient(#ccc, #fff, #a5b6c8, #7f90c5);
-    .item{
+    .title{
       flex: 1;
       text-align: center;
+    }
+    .item {
+      &:first-of-type{
+        width: 19px;
+      }
       &:last-of-type {
+        width: 19px;
         text-align: right;
         i{
           cursor: pointer;

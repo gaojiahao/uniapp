@@ -18,7 +18,7 @@
     </div>
     <!-- 下拉列表 -->
     <div class="contentList">
-      <!-- 好友item -->
+      <!-- 群item -->
       <div class="itemBox" v-for="(item, i) in friendList" :key="i" @click="openTwoView({...item,componentName: 'personalChatComponent'})">
           <el-image
             fit="contain"

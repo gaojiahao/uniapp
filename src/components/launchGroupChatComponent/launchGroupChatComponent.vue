@@ -82,6 +82,7 @@ export default {
     // 完成发起群聊
     async submitGroup () {
       const groupUsers = this.selectUsers.map(v => ({ userId: v.friendPersonnelId, companyId: v.friendCompanyId }))
+      // 发起群聊
       const res = await this.$http.post('/api/EstablishGroup', { groupUsers: groupUsers })
       if (res.data.result.code === 200) {
         console.log(res.data.result.item)
@@ -96,6 +97,27 @@ export default {
       } else {
         this.$message.error(res.data.result.msg)
       }
+      // } else { // 添加群成员
+      //   console.log(this.options, groupUsers)
+      //   const fd = {
+      //     groupNumber: this.options.groupNumber,
+      //     groupUsers: groupUsers
+      //   }
+      //   const res = await this.$http.post('/api/CreateMessageMember', fd)
+      //   if (res.data.result.code === 200) {
+      //     console.log(res.data.result.item)
+      //     const data = {
+      //       isGroup: true,
+      //       groupNumber: this.options.groupNumber,
+      //       linkName: this.options.linkName,
+      //       companyID: res.data.result.item.companyID,
+      //       componentName: 'personalChatComponent'
+      //     }
+      //     this.$emit('openTwoView', data)
+      //   } else {
+      //     this.$message.error(res.data.result.msg)
+      //   }
+      // }
     },
     // 发送群聊点击后半部分公司事件
     driveCheckbox (item) {
