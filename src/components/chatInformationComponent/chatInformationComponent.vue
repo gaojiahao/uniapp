@@ -3,8 +3,8 @@
   <div class="topLayout">聊天信息 <span v-if="totalCount > 0">{{totalCount}}</span></div>
   <div class="groupMembers">
     <div class="title">群成员</div>
-    <ul class="items" v-if="groupObject.personnels">
-      <li class="item" v-for="(item, i) in groupObject.personnels" :key="i">
+    <ul class="items">
+      <li class="item" v-for="(item, i) in groupList" :key="i">
         <div class="userImg">
           <el-image
             fit="contain"
@@ -48,7 +48,7 @@
     </ul>
   </div>
   <div class="lookGroupMembers">
-    <span class="item">查看全部群成员<i class="el-icon-arrow-right"></i></span>
+    <span class="item" @click="openGroupList">查看全部群成员<i class="el-icon-arrow-right"></i></span>
   </div>
   <div class="lookSee">
     <p class="item" @click="openCheckChatRecord">
@@ -131,6 +131,7 @@ export default {
   props: ['options'],
   data () {
     return {
+      groupList: [],
       dynamicComponent: 'textGroupChatRecordingComponent',
       msgType: 'Text',
       msgTypeList: [{
@@ -157,6 +158,11 @@ export default {
     }
   },
   methods: {
+    // 查看全部群成员
+    openGroupList () {
+      this.groupObject.componentName = 'seeGroupMembersComponent'
+      this.$emit('openTwoView', this.groupObject)
+    },
     // 删除成员
     removeMembers () {
       const fd = this.$_.cloneDeep(this.options)
@@ -232,6 +238,12 @@ export default {
             this.myInfo = this.groupObject.personnels[i]
             this.groupNickName = this.groupObject.personnels[i].nickName
           }
+        }
+        if (this.groupObject.personnels.length > 13) {
+          this.groupList = this.groupObject.personnels.slice(0, 13)
+          console.log(this.groupList)
+        } else {
+          this.groupList = this.groupObject.personnels
         }
       } else {
         this.$message.error(res.data.result.msg)

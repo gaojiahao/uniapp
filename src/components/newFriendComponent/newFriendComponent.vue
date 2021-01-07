@@ -52,7 +52,7 @@
           <el-button
             size="mini"
             type="primary"
-            @click.stop.native="openTwoView({...item,componentName: 'friendApplicationComponent',code:2})"
+            @click.stop.native="acceptEvent({...item,componentName: 'friendApplicationComponent',code:2})"
             round
             v-if="item.state !== 2"
             >接受</el-button>
@@ -82,22 +82,26 @@ export default {
     }
   },
   methods: {
+    // 接受事件
+    async acceptEvent (item) {
+      console.log(item)
+      const res = await this.$http.post('/api/CreateFriendAddressBook', { applyId: item.id })
+      if (res.data.result.code === 200) {
+        this.$message.success('添加好友成功')
+        this.$root.eventHub.$emit('resetMyFriends')
+        await this.getFriendApplyPage()
+        this.$emit('openTwoView', item)
+      } else {
+        this.$message.error(res.data.result.msg)
+      }
+    },
     // 查看好友申请明细
     async lookFindApply (item) {
       if (item.state === 2) {
         const fd = { ...item, componentName: 'friendApplicationComponent', code: 2 }
         this.$emit('openTwoView', fd)
       } else {
-        if (item.code === 2) {
-          const res = await this.$http.post('/api/CreateFriendAddressBook', { applyId: item.id })
-          if (res.data.result.code === 200) {
-            this.$emit('openTwoView', item)
-          } else {
-            this.$message.error(res.data.result.msg)
-          }
-        } else {
-          this.$emit('openTwoView', item)
-        }
+        this.$emit('openTwoView', item)
       }
     },
     // 打开三级窗口
@@ -116,6 +120,13 @@ export default {
   created () {},
   mounted () {
     this.getFriendApplyPage()
+    this.$root.eventHub.$on('resetNewFriends', () => {
+      this.currentPage = 1
+      this.getFriendApplyPage()
+    })
+  },
+  beforeDestroy () {
+    this.$root.eventHub.$off('resetNewFriends')
   }
 }
 </script>
@@ -200,6 +211,7 @@ export default {
             }
           }
         .middle{
+          margin-left: 10px;
           height: 40px;
           display: flex;
           flex-direction: column;

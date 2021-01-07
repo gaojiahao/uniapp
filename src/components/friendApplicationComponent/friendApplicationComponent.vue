@@ -80,7 +80,8 @@ export default {
       if (this.option.code === 1) {
         const res = await this.$http.post('/api/CreateFriendAddressBook', { applyId: this.option.id, remarkName: this.remarkName, checkMyToyCircle: this.checkMyToyCircle })
         if (res.data.result.code === 200) {
-          console.log(this.option)
+          this.$root.eventHub.$emit('resetNewFriends')
+          this.$message.success('添加好友成功')
         } else {
           this.$message.error(res.data.result.msg)
         }

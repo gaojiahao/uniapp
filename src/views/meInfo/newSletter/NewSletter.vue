@@ -345,9 +345,14 @@ export default {
       this.getOrgList()
       this.getFriendAddressBooksPage()
     })
+    this.$root.eventHub.$on('resetMyFriends', () => {
+      this.currentPage = 1
+      this.getFriendAddressBooksPage()
+    })
   },
   beforeDestroy () {
     this.$root.eventHub.$off('UpdateOrgPersonnel')
+    this.$root.eventHub.$off('resetMyFriends')
   }
 }
 </script>

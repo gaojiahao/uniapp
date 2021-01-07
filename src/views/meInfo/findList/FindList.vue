@@ -234,7 +234,7 @@ export default {
     this.$emit('getNoticeUnreadTotal')
     this.getDataList()
     this.$emit('openOneView', {
-      componentName: 'myAnnouncement'
+      componentName: 'myAnnouncementComponent'
     })
     this.$root.eventHub.$on('UpdateFind', async () => {
       this.pageSize = 10

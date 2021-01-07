@@ -25,7 +25,7 @@
               <p>消息</p>
             </el-badge>
           </router-link>
-          <router-link to="findList" class="li" @click.native="openOneView({componentName: 'myAnnouncement'})">
+          <router-link to="findList" class="li" @click.native="openOneView({componentName: 'myAnnouncementComponent'})">
             <el-badge :hidden="findCount < 1" :value="findCount">
               <i class="el-icon-s-help"></i>
               <p>玩具圈</p>
@@ -246,7 +246,7 @@ import hallContactComponent from '@/components/hallContactComponent/hallContactC
 import personalDataComponent from '@/components/personalDataComponent/personalDataComponent.vue'
 import editPersonalDataComponent from '@/components/editPersonalDataComponent/editPersonalDataComponent.vue'
 import personalChatComponent from '@/components/personalChatComponent/personalChatComponent.vue'
-import myAnnouncement from '@/components/myAnnouncement/myAnnouncement.vue'
+import myAnnouncementComponent from '@/components/myAnnouncementComponent/myAnnouncementComponent.vue'
 import sendNoticeComponent from '@/components/sendNoticeComponent/sendNoticeComponent.vue'
 import companyBusinessComponent from '@/components/companyBusinessComponent/companyBusinessComponent.vue'
 import orderDetailComponent from '@/components/orderDetailComponent/orderDetailComponent.vue'
@@ -259,6 +259,7 @@ import chatInformationComponent from '@/components/chatInformationComponent/chat
 import chatSettingsComponent from '@/components/chatSettingsComponent/chatSettingsComponent.vue'
 import removeMembersComponent from '@/components/removeMembersComponent/removeMembersComponent.vue'
 import addNewMembersComponent from '@/components/addNewMembersComponent/addNewMembersComponent.vue'
+import seeGroupMembersComponent from '@/components/seeGroupMembersComponent/seeGroupMembersComponent.vue'
 export default {
   components: {
     bsTop,
@@ -276,7 +277,7 @@ export default {
     personalDataComponent,
     editPersonalDataComponent,
     personalChatComponent,
-    myAnnouncement,
+    myAnnouncementComponent,
     orderDetailComponent,
     sendNoticeComponent,
     rowNumberDetails,
@@ -287,6 +288,7 @@ export default {
     chatSettingsComponent,
     removeMembersComponent,
     addNewMembersComponent,
+    seeGroupMembersComponent,
     companyNumberComponent
   },
   data () {

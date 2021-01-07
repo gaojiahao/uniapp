@@ -131,7 +131,7 @@
                         <div class="liaotianerweima">
                           <template v-if="item.content">
                             <vue-qr
-                              :text="item.content"
+                              :text="item.content || item.attachment"
                               colorDark="#018e37"
                               colorLight="#fff"
                               :margin="0"
