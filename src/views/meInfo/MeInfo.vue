@@ -14,8 +14,8 @@
         ></router-view>
         <!-- tabs -->
         <div class="footer">
-          <router-link to="infoList" class="li">
-            <el-badge :hidden="allInfoCount < 1" :value="allInfoCount" @click.native="openOneView(null)">
+          <router-link to="infoList" class="li" @click.native="openOneView(null)">
+            <el-badge :hidden="allInfoCount < 1" :value="allInfoCount">
               <i class="el-icon-s-comment"></i>
               <p>消息</p>
             </el-badge>
@@ -34,11 +34,11 @@
       </li>
       <!-- 二级窗口组件 -->
       <div class="componentOneIs" v-if="oneViews">
-        <component :is="oneViews.componentName" :options="oneViews" @openTwoView="openTwoView" :MessageUnreadCount="MessageUnreadCount" @changeMessageUnreadCount="changeMessageUnreadCount" :signalROptions="signalROptions"></component>
+        <component :is="oneViews.componentName" :options="oneViews" :signalROptions="rtm" @openTwoView="openTwoView"></component>
       </div>
       <!-- 三级窗口组件 -->
       <div class="componentOneIs" v-if="twoViews">
-        <component :is="twoViews.componentName" :options="twoViews" @openTwoView="openTwoView" :MessageUnreadCount="MessageUnreadCount" @changeMessageUnreadCount="changeMessageUnreadCount" :signalROptions="signalROptions"></component>
+        <component :is="twoViews.componentName" :options="twoViews" :signalROptions="rtm" @openTwoView="openTwoView"></component>
       </div>
     </div>
     <!-- 打标签 -->
@@ -103,7 +103,6 @@ import chatSettingsComponent from '@/components/chatSettingsComponent/chatSettin
 import removeMembersComponent from '@/components/removeMembersComponent/removeMembersComponent.vue'
 import addNewMembersComponent from '@/components/addNewMembersComponent/addNewMembersComponent.vue'
 import seeGroupMembersComponent from '@/components/seeGroupMembersComponent/seeGroupMembersComponent.vue'
-// import friendsDetailsComponent from '@/components/friendsDetailsComponent/friendsDetailsComponent.vue'
 export default {
   components: {
     bsTop,
@@ -134,27 +133,14 @@ export default {
     addNewMembersComponent,
     seeGroupMembersComponent,
     companyNumberComponent
-    // friendsDetailsComponent
   },
   data () {
     return {
-      MessageUnreadCount: [],
-      companyAddrMapDialog: false, // 公司地址
-      tagValue: '', // 打标签
-      dialogAddTag: false, // 打标签
-      twoViews: null,
-      oneViews: null,
-      infoCount: 0,
-      findCount: 0,
-      orderInfoCount: 0,
-      signalROptions: {
-        // 深网配置
+      rtm: new this.RTM({ // 深网配置
         value: null,
         attachment: null,
         addId: '5de91f02f12c41c2b276c9accb4679c7',
-        userName:
-          this.$store.state.userInfo.userInfo &&
-          this.$store.state.userInfo.userInfo.linkman,
+        userName: this.$store.state.userInfo.userInfo.linkman,
         token: '',
         loginState: null,
         showmsg: [],
@@ -164,73 +150,22 @@ export default {
         toCompanyID: null,
         toUserID: null,
         name: '',
-        uid: this.$store.state.userInfo.uid,
-        client: '',
+        uid: this.$store.state.userInfo.userInfo.id,
+        client: {},
+        AgoraRTM: this.$AgoraRTM,
         channelMember: []
-      }
+      }), // 深网对象
+      companyAddrMapDialog: false, // 公司地址
+      tagValue: '', // 打标签
+      dialogAddTag: false, // 打开打标签
+      twoViews: null, // 第二个窗口数据
+      oneViews: null, // 第三个窗口数据
+      infoCount: 0, // 消息未读数量
+      findCount: 0, // 朋友圈未读数量
+      orderInfoCount: 0 // 订单未读数量
     }
   },
   methods: {
-    // 深网登录
-    login () {
-      // 登入 RTM 之前，调用 AgoraRTM.createInstance 方法创建一个 RtmClient 实例。
-      this.signalROptions.client = this.$AgoraRTM.createInstance(
-        this.signalROptions.addId
-      )
-      // 通过监听 RtmClient 上的 ConnectionStateChanged 事件可以获得 SDK 连接状态改变的通知
-      this.signalROptions.client.on(
-        'ConnectionStateChanged',
-        (newState, reason) => {
-          this.signalROptions.loginState = newState
-        }
-      )
-      // 登录
-      this.signalROptions.client
-        .login({
-          token: this.signalROptions.token,
-          uid: this.signalROptions.uid
-        })
-        .then(() => {
-          console.log('AgoraRTM客户端登录成功')
-        })
-        .catch(err => {
-          console.log('AgoraRTM客户端登录失败', err)
-        })
-      // 监听 client 上的事件 MessageFromPeer 接收点对点消息
-      this.signalROptions.client.on(
-        'MessageFromPeer',
-        ({ text }, peerId, messageProps) => {
-          // text 为消息文本，peerId 是消息发送方 User ID
-          // this.$message.success("我收到了点对点");
-          console.log('我收到了点对点')
-          this.getAllMessagesCount()
-          this.$root.eventHub.$emit('resetData')
-          /* 收到点对点消息的处理逻辑 */
-        }
-      )
-      // 监听收到来自主叫的呼叫邀请
-      this.signalROptions.client.on(
-        'RemoteInvitationReceived',
-        remoteInvitation => {
-          console.log(remoteInvitation)
-        }
-      )
-      // 监听对方是否在线
-      this.signalROptions.client.on('PeersOnlineStatusChanged', status => {
-        this.$message.error(status)
-      })
-    },
-    // 深网登出
-    signOut () {
-      if (this.signalROptions.client && this.signalROptions.client.logout) {
-        this.signalROptions.client.logout()
-        console.log('退出頻道成功')
-      }
-    },
-    // 更新历史消息
-    changeMessageUnreadCount (val) {
-      this.MessageUnreadCount = val
-    },
     // 打开添加标签
     openAddTag () {
       this.dialogAddTag = true
@@ -286,28 +221,21 @@ export default {
     }
   },
   mounted () {
-    this.login()
+    this.$root.eventHub.$emit('resetLogin')
     this.$store.commit('clearWsMsg') // 清空已读未读
     this.getNoticeUnreadTotal() // 获取玩具圈未读数量
     this.getAllMessagesCount() // // 获取消息全部未读条数
+    this.rtm.login()
   },
   created () {},
   watch: {
-    'signalROptions.client' (val) {
-      if (!val) {
-        console.log('已被迫下线，可刷新重新登录中')
-        this.login()
-      }
-    },
     'signalROptions.loginState' (val) {
       console.log('登录状态', val)
       switch (val) {
         case 'CONNECTED':
-          this.$message.closeAll()
           console.log('即时通讯链接成功')
           break
         default:
-          this.$message.closeAll()
           console.log('即时通讯已断开链接')
           break
       }
@@ -317,34 +245,10 @@ export default {
     // 计算订单和消息未读的总和
     allInfoCount () {
       return this.orderInfoCount + this.infoCount
-    },
-    userInfo () {
-      return this.$store.state.userInfo
-    }
-  },
-  filters: {
-    ERPOrderTitle (val) {
-      let type
-      switch (val) {
-        case 'SUPPLIER':
-        case 'supplier':
-          type = '厂商业务列表'
-          break
-        case 'SALES':
-        case 'sales':
-          type = '公司业务列表'
-          break
-        case 'HALL':
-        case 'hall':
-          type = '展厅业务列表'
-          break
-      }
-      return type
     }
   },
   beforeDestroy () {
-    this.signOut()
-    this.signalROptions.creatChannel && this.signChannel()
+    this.$root.eventHub.$off('resetLogin')
   }
 }
 </script>
@@ -397,16 +301,15 @@ export default {
         }
       }
     }
-    // 一级组件框
+    // 组件框样式
     .componentOneIs{
       width: 32%;
       height: 827px;
-      border: 1px solid #aaa;
+      border: 1px solid #ccc;
       box-sizing: border-box;
     }
   }
 }
-
 .companyAddrMapBox{
   height:500px;
 }

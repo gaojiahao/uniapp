@@ -8,7 +8,7 @@ import md5 from 'js-md5'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
-import AgoraRTM from 'agora-rtm-sdk'
+import RTM from '@/store/signalROptions'
 import Video from 'video.js'
 import 'video.js/dist/video-js.css'
 import '@/assets/css/globalVariable.less'
@@ -48,11 +48,11 @@ Vue.prototype.$_ = _
 
 Vue.use(ElementUI)
 Vue.prototype.$md5 = md5
-Vue.prototype.$AgoraRTM = AgoraRTM
+Vue.prototype.RTM = RTM
 Vue.use(myAxios)
 
 Vue.config.productionTip = false
-new Vue({
+const vm = new Vue({
   router,
   store,
   render: h => h(App),
@@ -62,7 +62,7 @@ new Vue({
   mounted () {
     window.onresize = () => {
       window.screenWidth = document.documentElement.clientWidth
-      this.$store.state.screenWidth = window.screenWidth
+      store.screenWidth = window.screenWidth
     }
   }
 }).$mount('#app')

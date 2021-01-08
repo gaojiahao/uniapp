@@ -416,11 +416,6 @@ export default {
   },
   filters: {
     messageFilter (item) {
-      // if (item.msgType === "Text") {
-      //   return item.content;
-      // } else {
-      //   return "您有一条新的消息";
-      // }
       let msg
       switch (item.msgType) {
         case 'Text':
@@ -459,10 +454,6 @@ export default {
     this.$root.eventHub.$on('resetData', () => {
       this.getInfoList()
     })
-    // this.$root.eventHub.$on("resetCompany", () => {
-    //   this.getOrderCompanyList();
-    //   this.getOrderMessageCount();
-    // });
   },
   watch: {
     allCount (val) {

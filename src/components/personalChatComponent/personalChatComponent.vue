@@ -586,15 +586,14 @@ import Recorder from 'recorder-core/recorder.mp3.min'
 export default {
   props: {
     options: Object,
-    signalROptions: Object,
-    MessageUnreadCount: Array
+    signalROptions: Object
   },
   components: {
     VueQr
   },
-  // props: ['options', 'signalROptions'],
   data () {
     return {
+      MessageUnreadCount: [],
       orderSampleFrom: null,
       chatHistoryCurrentPage: 1,
       chatHistoryPageSize: 15,
@@ -619,7 +618,7 @@ export default {
   methods: {
     // 初始化消息立即沟通
     async showLiaotianr () {
-      console.log(this.options)
+      console.log(this.options, this.signalROptions)
       this.$store.commit('clearWsMsg')
       this.signalROptions.isGroup = this.options.isGroup
       this.signalROptions.name = this.options.linkName || this.options.linkman
@@ -629,7 +628,6 @@ export default {
       this.signalROptions.msgType = 'Text'
       this.signalROptions.toUserID = this.options.toUserID || this.options.id
       this.isOrderShow = this.options.isOrderShow
-      console.log(this.signalROptions)
       try {
         this.addChannel() // 加入深网频道
       } catch (error) {
@@ -785,7 +783,6 @@ export default {
     async getInstantMessageByNumber () {
       // 连接ws
       if (this.signalROptions.groupNumber && !this.isGroupNumber) {
-        console.log('进来了')
         this.$setWs.$ws && this.$setWs.$ws.close()
         this.$store.commit('setWsId', this.signalROptions.groupNumber)
         this.$setWs.initWebSocket()
@@ -1024,8 +1021,7 @@ export default {
         }
         this.$root.eventHub.$emit('resetData')
       } catch (error) {
-        // this.login()
-        this.$message.warning('断线重连成功')
+        this.$root.eventHub.$emit('resetLogin')
       }
       this.signalROptions.value = null
       this.signalROptions.attachment = null
@@ -1034,7 +1030,6 @@ export default {
     },
     // 创建 发送聊天
     async createMessageAccept () {
-      console.log(this.options)
       const fd = {
         MessageType: this.signalROptions.msgType, // 消息类型；Text文字 Picture图片  Video视频 Voice语音  InstantVoice即时语音 TimeVideo即时视频
         Attachment: this.signalROptions.attachment, // 图片地址
@@ -1049,7 +1044,6 @@ export default {
       for (const key in fd) {
         if (!fd[key]) delete fd[key]
       }
-      console.log('发送聊天配置=', fd)
       return await this.$http.post('/api/CreateMessageAccept', fd)
     },
     // 复制聊天窗口链接地址
@@ -1374,6 +1368,7 @@ export default {
       this.orderSampleFrom = val
     },
     getWsMsg: function (data) {
+      console.log(data, '接收到长连接推送的已读未读聊天记录');
       if (data) {
         data = JSON.parse(data)
       }
@@ -1382,9 +1377,8 @@ export default {
         data.action === 'MessageUnreadCount' &&
         data.SendClientId === this.signalROptions.groupNumber
       ) {
-        this.$emit('changeMessageUnreadCount', JSON.parse(data.content).UnreadCountList)
-        // 长连接接收到
-        console.log(this.MessageUnreadCount)
+        // 长连接接收到未读消息
+        this.MessageUnreadCount = JSON.parse(data.content).UnreadCountList
       }
     },
     // 聊天窗口滚动到底部
