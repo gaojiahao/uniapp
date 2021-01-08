@@ -2,9 +2,9 @@
 <div class="wrapBox">
     <div class="topLayout">聊天设置</div>
     <div class="personDetails">
-      <div class="block">
-        <el-avatar :size="50" src=""><div class="userImgError">user</div></el-avatar>
-        <div class="userName">张含韵</div>
+      <div class="block" @click="topPersonDataCom">
+        <el-avatar :size="50" :src="options.userImage"><div class="userImgError">{{ this.options.linkman }}</div></el-avatar>
+        <div class="userName">{{ this.options.linkman }}</div>
       </div>
     </div>
     <div class="chatContent">
@@ -56,6 +56,10 @@ export default {
     }
   },
   methods: {
+    // 查看个人信息详情
+    topPersonDataCom () {
+      this.$emit('openTwoView')
+    },
     // 切换搜索聊天记录类型
     openRecord (msgType) {
       this.checkChatDialog = true
@@ -107,13 +111,14 @@ export default {
     display: flex;
     align-items: center;
     .block{
+      cursor: pointer;
       .userImgError{
         background-color: #165AF8;
         color: #fff;
       }
       .userName{
         font-size: 14px;
-        width: 60px;
+        width: 50px;
         color: #999999;
         text-align: center;
         overflow: hidden;/*超出部分隐藏*/

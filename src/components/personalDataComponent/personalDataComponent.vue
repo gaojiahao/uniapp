@@ -101,8 +101,14 @@
             >
               发 消 息
             </el-button>
-            <el-button
+            <el-popconfirm
+            @onConfirm="confirmRemoveFriends"
             v-if="personalDetail.isFriend"
+              title="是否确定删除好友?"
+            >
+            <el-button
+            slot="reference"
+            style="margin-top: 10px;"
               class="sendInfo danger"
               :style="{
                 opacity:
@@ -112,7 +118,6 @@
                     ? 0.7
                     : 1
               }"
-              @click="removeFriends"
               :disabled="
                 personalDetail.id ==
                   ($store.state.userInfo.userInfo &&
@@ -122,6 +127,7 @@
             >
               删除好友
             </el-button>
+          </el-popconfirm>
           </center>
         </div>
 </div>
@@ -148,12 +154,17 @@ export default {
         source: '同事'
       })
     },
-    // 删除好友
-    removeFriends () {
-      this.$emit('openTwoView', {
-        componentName: 'friendVerificationComponent',
-        ...this.personalDetail
-      })
+    // 确认删除好友
+    async confirmRemoveFriends () {
+      const res = await this.$http.post('/api/DeleteFriendAddressBook', { friendCompanyId: this.personalDetail.companyId, friendUserId: this.personalDetail.id })
+      console.log(res)
+      if (res.data.result.code === 200 && res.data.result.item) {
+        this.$message.success('删除好友成功')
+        this.getPersonalDetail()
+        this.$root.eventHub.$emit('UpdateOrgPersonnel')
+      } else {
+        this.$message.error(res.data.result.msg)
+      }
     },
     // 打开修改个人信息详情页 打开第三个窗口
     openEdit (item) {
@@ -307,12 +318,12 @@ export default {
           font-size: 16px;
           vertical-align: middle;
         }
-        &.danger{
+      }
+      .danger{
           background-color: #F5F5F5;
           border: none;
           color: #FF2B20;
         }
-      }
     }
   }
 }
