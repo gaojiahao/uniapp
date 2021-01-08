@@ -165,7 +165,7 @@
                 class="item"
                 v-for="(item, i) in orgList"
                 :key="i"
-                @click="openOneView({ company: Organization, person: item, componentName: 'personalDataComponent' })"
+                @click="openColleague(item)"
               >
                 <el-image
                   :src="item.userImage"
@@ -200,7 +200,7 @@
         class="oftenContact"
         v-for="(item, i) in regularContact"
         :key="i"
-        @click="sendInfo(item.companyId, item.id)"
+        @click="sendInfo(item)"
       >
         <div class="left">
           <el-image
@@ -278,6 +278,11 @@ export default {
         id: this.userInfo.commparnyList[0].commparnyId
       })
     },
+    // 打开同事详情
+    openColleague (item) {
+      const fd = { userId: item.id, companyId: this.Organization.id, componentName: 'personalDataComponent' }
+      this.$emit('openOneView', fd)
+    },
     // 点击添加好友|发起群聊事件
     openOneView (item) {
       this.$emit('openOneView', item)
@@ -320,28 +325,22 @@ export default {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize
       })
-      console.log(res)
       if (res.data.result.code === 200) {
         this.regularContact = res.data.result.item.items
         this.regularTotalCount = res.data.result.item.totalCount
       }
     },
-    // 点击架构的联系人
-    sendInfo (sendInfo) {
-      console.log(sendInfo)
-      // this.$emit('showInfo', {
-      //   id: id,
-      //   companyId: companyId,
-      //   active: 1,
-      //   type: 'showInfo'
-      // })
+    // 点击我的好友
+    sendInfo (item) {
+      const fd = { userId: item.friendPersonnelId, companyId: item.friendCompanyId, componentName: 'personalDataComponent' }
+      this.$emit('openOneView', fd)
     }
   },
   mounted () {
     this.getOrgList()
-    // this.getContactList();
     this.getFriendAddressBooksPage()
     this.$root.eventHub.$on('UpdateOrgPersonnel', () => {
+      this.currentPage = 1
       this.getOrgList()
       this.getFriendAddressBooksPage()
     })

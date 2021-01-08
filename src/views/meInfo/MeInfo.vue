@@ -260,6 +260,7 @@ import chatSettingsComponent from '@/components/chatSettingsComponent/chatSettin
 import removeMembersComponent from '@/components/removeMembersComponent/removeMembersComponent.vue'
 import addNewMembersComponent from '@/components/addNewMembersComponent/addNewMembersComponent.vue'
 import seeGroupMembersComponent from '@/components/seeGroupMembersComponent/seeGroupMembersComponent.vue'
+// import friendsDetailsComponent from '@/components/friendsDetailsComponent/friendsDetailsComponent.vue'
 export default {
   components: {
     bsTop,
@@ -290,6 +291,7 @@ export default {
     addNewMembersComponent,
     seeGroupMembersComponent,
     companyNumberComponent
+    // friendsDetailsComponent
   },
   data () {
     return {

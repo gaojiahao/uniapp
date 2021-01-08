@@ -61,6 +61,27 @@
           </div>
           <center class="send">
             <el-button
+            v-if="!personalDetail.isFriend"
+              class="sendInfo"
+              :style="{
+                opacity:
+                  personalDetail.id ==
+                  ($store.state.userInfo.userInfo &&
+                    $store.state.userInfo.userInfo.id)
+                    ? 0.7
+                    : 1
+              }"
+              @click="addFriends"
+              :disabled="
+                personalDetail.id ==
+                  ($store.state.userInfo.userInfo &&
+                    $store.state.userInfo.userInfo.id)
+              "
+              round
+            >
+              添加好友
+            </el-button>
+            <el-button
               class="sendInfo"
               :style="{
                 opacity:
@@ -78,8 +99,28 @@
               "
               round
             >
-              <i class="el-icon-s-comment el-icon--left sendIcon"></i>
-              发消息
+              发 消 息
+            </el-button>
+            <el-button
+            v-if="personalDetail.isFriend"
+              class="sendInfo danger"
+              :style="{
+                opacity:
+                  personalDetail.id ==
+                  ($store.state.userInfo.userInfo &&
+                    $store.state.userInfo.userInfo.id)
+                    ? 0.7
+                    : 1
+              }"
+              @click="removeFriends"
+              :disabled="
+                personalDetail.id ==
+                  ($store.state.userInfo.userInfo &&
+                    $store.state.userInfo.userInfo.id)
+              "
+              round
+            >
+              删除好友
             </el-button>
           </center>
         </div>
@@ -99,6 +140,21 @@ export default {
     }
   },
   methods: {
+    // 添加好友
+    addFriends () {
+      this.$emit('openTwoView', {
+        componentName: 'friendVerificationComponent',
+        ...this.personalDetail,
+        source: '同事'
+      })
+    },
+    // 删除好友
+    removeFriends () {
+      this.$emit('openTwoView', {
+        componentName: 'friendVerificationComponent',
+        ...this.personalDetail
+      })
+    },
     // 打开修改个人信息详情页 打开第三个窗口
     openEdit (item) {
       if (this.userInfo.userInfo.id === item.id) {
@@ -128,8 +184,8 @@ export default {
     // 获取个人详情页
     async getPersonalDetail () {
       const res = await this.$http.post('/api/OrgPersonnelByID', {
-        id: this.options.person.id,
-        companyId: this.options.company.id
+        id: this.options.userId,
+        companyId: this.options.companyId
       })
       if (res.data.result.code === 200) {
         this.personalDetail = res.data.result.item
@@ -239,11 +295,22 @@ export default {
       margin-top: 20px;
       .sendInfo {
         background-color: #165af7;
+        border: none;
         color: #fff;
         width: 80%;
+        margin: 0;
+        margin-top: 10px;
+        &:first-of-type {
+          margin: 0;
+        }
         .sendIcon {
           font-size: 16px;
           vertical-align: middle;
+        }
+        &.danger{
+          background-color: #F5F5F5;
+          border: none;
+          color: #FF2B20;
         }
       }
     }

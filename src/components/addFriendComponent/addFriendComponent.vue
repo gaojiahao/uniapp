@@ -86,7 +86,8 @@ export default {
     openAddFriend (item) {
       this.$emit('openTwoView', {
         componentName: 'friendVerificationComponent',
-        ...item
+        ...item,
+        source: '搜索'
       })
     }
   },

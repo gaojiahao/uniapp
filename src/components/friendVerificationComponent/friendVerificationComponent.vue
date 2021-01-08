@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     async createFriendApply () {
-      const fd = { recipientCompanyId: this.options.companyId, recipientPersonnelId: this.options.id, source: '搜索', content: this.content, remarkName: this.remarkName }
+      const fd = { recipientCompanyId: this.options.companyId, recipientPersonnelId: this.options.id, source: this.options.source, content: this.content, remarkName: this.remarkName }
       const res = await this.$http.post('/api/CreateFriendApply', fd)
       if (res.data.result.code === 200) {
         this.$message.success('发送添加好友请求成功')
@@ -79,7 +79,9 @@ export default {
     }
   },
   created () {},
-  mounted () {}
+  mounted () {
+    console.log(this.options)
+  }
 }
 </script>
 <style scoped lang='less'>
