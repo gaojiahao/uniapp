@@ -621,15 +621,6 @@ export default {
     async showLiaotianr () {
       console.log(this.options)
       this.$store.commit('clearWsMsg')
-      this.chatHistoryCurrentPage = 1
-      this.chatHistoryPageSize = 15
-      this.signalROptions.value = null
-      this.signalROptions.attachment = null
-      this.signalROptions.showmsg = []
-      this.signalROptions.orderNumber = null
-      this.signalROptions.name = ''
-      this.showTypeOptions.showType = null
-      this.showTypeOptions.showOrderDetail = false
       this.signalROptions.isGroup = this.options.isGroup
       this.signalROptions.name = this.options.linkName || this.options.linkman
       this.signalROptions.toCompanyID = this.options.companyId || this.options.companyID
@@ -653,6 +644,82 @@ export default {
         this.CompanyDetail = []
       }
       this.$root.eventHub.$emit('resetData')
+    },
+    // 撤回消息
+    async withdrawInfo (item) {
+      try {
+        const res = await this.$http.post('/api/UpdateWithdrawMessage', {
+          id: item.id,
+          isDelete: true,
+          groupNumber: item.groupNumber,
+          isWithdraw: true,
+          companyID: item.companyId,
+          fromUserID: item.fromUserId
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    // 转发消息
+    forwardInfo (item) {
+      console.log(item)
+    },
+    // 打开编辑聊天消息
+    openEditInfo (e, id) {
+      this.noScrollTop = true
+      this.isPaste = null
+      this.isChehui = id
+      const x = e.layerX // 鼠标left位置
+      const y = e.layerY // 鼠标top位置
+      this.copyDOM = $(e.target).offsetParent()
+      this.copyDOM
+        .offsetParent()
+        .children('.myChehui')
+        .css({ left: x, top: y })
+    },
+    // 复制消息
+    copyInfo (item) {
+      switch (item.messageType) {
+        case 'Text':
+          this.copyContact()
+          break
+      }
+    },
+    // 复制文字方法
+    copyContact (contat) {
+      window.getSelection().removeAllRanges()
+      const range = document.createRange()
+      range.selectNode(this.copyDOM[0])
+      this.copyText = this.copyDOM[0].innerText
+      window.getSelection().addRange(range)
+      try {
+        const successful = document.execCommand('copy')
+        if (successful) this.$message.success('复制成功')
+        else this.$message.error('复制失败')
+      } catch (error) {
+        this.$message.error('复制失败')
+      }
+    },
+    // 打开粘贴
+    OpenPaste (e) {
+      this.isChehui = null
+      this.isPaste = true
+      const x = e.layerX // 鼠标left位置
+      const y = e.layerY // 鼠标top位置
+      $(e.target)
+        .offsetParent()
+        .children('.pasteIten')
+        .css({ left: x, top: y })
+    },
+    // 粘贴
+    pasteInfo () {
+      if (window.clipboardData) {
+        this.signalROptions.value = window.clipboardData.getData('Text')
+      } else {
+        this.signalROptions.value = this.copyText
+        // clipboardData.setData("Text", range.text);
+        // document.all.pp.value = clipboardData.getData("Text");
+      }
     },
     moreEvent () {
       const option = this.$_.cloneDeepWith(this.options)
@@ -810,6 +877,32 @@ export default {
         this.signalROptions.msgType = 'Text'
         this.$refs.refFileInput.value = ''
         e.preventDefault()
+      }
+    },
+    // 个推送
+    async GeSendPush (item, toUserID, number) {
+      const obj = {
+        callType: number,
+        channelId: item.groupNumber,
+        userAvatar: item.userImage,
+        userId: toUserID,
+        userName: item.linkName
+      }
+      try {
+        const res = await this.$http.post('/api/GeSendPush', {
+          UserId: toUserID,
+          Title: '您有一条新的消息',
+          Description: item.content || item.attachment,
+          ExtraBody: item.content || item.attachment,
+          ActionData: JSON.stringify(obj)
+        })
+        if (res.data.result.code === 200) {
+          console.log('推送成功')
+        } else {
+          this.$message.error(res.data.result.message)
+        }
+      } catch (error) {
+        console.log('推送失败')
       }
     },
     // 发送点对点或频道消息
@@ -1250,7 +1343,17 @@ export default {
       return '刚刚'
     }
   },
-  created () {},
+  created () {
+    document.onclick = () => {
+      this.isChehui = null
+      this.isPaste = null
+    }
+    document.oncontextmenu = () => {
+      this.isChehui = null
+      this.isPaste = null
+      return false
+    }
+  },
   mounted () {
     this.showLiaotianr()
   },

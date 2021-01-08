@@ -185,6 +185,17 @@ export default {
         isGroup: false
       })
     },
+    // 给员工打备注
+    async editUserRemark (item) {
+      const result = await this.$http.post('/api/UpdateOrgPersonnel', item)
+      if (result.data.result.code === 200) {
+        this.getPersonalDetails(result.data.result.item.id)
+        this.$message.success('修改成功')
+        this.isEditRemark = false
+      } else {
+        this.$message.success('修改失败')
+      }
+    },
     // 备注
     ckeckEditUserRemark () {
       this.isEditRemark = true

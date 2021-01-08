@@ -123,6 +123,93 @@
           </template>
           <div v-else class="zanwushuju1"></div>
         </div>
+        <!-- 确认订单 -->
+    <el-dialog
+      title="确认提示"
+      :visible.sync="queRenDialog"
+      width="30%"
+    >
+      <center class="querenDialog">
+        <h3 class="title">{{ options.client_na }}</h3>
+        <p class="titleText">需要带走或借走所有样品？</p>
+        <template>
+          <div class="btns" v-if="options.messageExt === 3">
+            <el-button
+              @click="UpdateERPOrderStatus('1')"
+              size="medium"
+              round
+              :class="{ activeGray: options.messageStatus === 1 }"
+              >不可带</el-button
+            >
+            <el-button
+              @click="UpdateERPOrderStatus('0')"
+              size="medium"
+              round
+              :class="{
+                blueBtn: true,
+                activeBlue: options.messageStatus === 0
+              }"
+              >可带</el-button
+            >
+          </div>
+          <div class="btns" v-else-if="options.messageExt === 5">
+            <el-button
+              size="medium"
+              @click="UpdateERPOrderStatus('1')"
+              round
+              :class="{ activeGray: options.messageStatus === 1 }"
+              >不可借</el-button
+            >
+            <el-button
+              @click="UpdateERPOrderStatus('0')"
+              size="medium"
+              round
+              :class="{
+                orangeBtn: true,
+                activeOrange: options.messageStatus === 0
+              }"
+              >可借</el-button
+            >
+          </div>
+          <div class="btns" v-else-if="options.messageExt === 11">
+            <el-button
+              size="medium"
+              @click="UpdateERPOrderStatus('2')"
+              round
+              :class="{ activeGray: options.messageStatus === 2 }"
+              >不可带</el-button
+            >
+            <el-button
+              @click="UpdateERPOrderStatus('0')"
+              size="medium"
+              round
+              :class="{
+                blueBtn: true,
+                activeBlue: options.messageStatus === 0
+              }"
+              >可带</el-button
+            >
+            <el-button
+              @click="UpdateERPOrderStatus('1')"
+              size="medium"
+              round
+              :class="{
+                orangeBtn: true,
+                activeOrange: options.messageStatus === 1
+              }"
+              >可借</el-button
+            >
+          </div>
+        </template>
+        <p style="padding-top:20px;">
+          <i
+            style="width:16px;height:16px;backgroundColor:#709AFA;display:inline-block;border-radius:50%;color:white;vertical-align: middle;"
+            >!</i
+          >
+          此次操作将确认所有货号状态
+        </p>
+      </center>
+    </el-dialog>
 </div>
 </template>
 
@@ -135,6 +222,7 @@ export default {
       orderCurrentPage: 1,
       orderPageSize: 20,
       orderSampleFrom: null,
+      queRenDialog: false,
       showTypeOptions: {
         showType: null,
         sampleFrom: null,
@@ -156,6 +244,37 @@ export default {
         componentName: 'orderDetailComponent'
       }
       this.$emit('openTwoView', fd)
+    },
+    // 确认订单列表修改订单状态
+    async UpdateERPOrderStatus (messageStatus) {
+      const res = await this.$http.post('/api/UpdateERPOrderStatus', {
+        erpOrderID: this.options.erpOrderID,
+        messageStatus: messageStatus,
+        statusType: 'ConfirmStatus'
+      })
+      if (res && res.data.result.code === 200) {
+        this.$message.success('确认订单完成')
+        // 重新获取订单列表
+        this.orderCurrentPage = 1
+        const re = await this.getERPOrderListByPage()
+        if (re.data.result.code === 200) {
+          this.ERPOrderOptions.ERPOrderList = re.data.result.item.items
+          console.log(re.data.result.item.items)
+          this.ERPOrderOptions.total = re.data.result.item.totalCount
+          for (let i = 0; i < this.ERPOrderOptions.ERPOrderList.length; i++) {
+            if (
+              this.ERPOrderOptions.ERPOrderList[i].erpOrderID ===
+              this.orderOptions.erpOrderID
+            ) {
+              this.options = this.ERPOrderOptions.ERPOrderList[i]
+            }
+          }
+        }
+
+        this.queRenDialog = false
+      } else {
+        this.$message.success('确认订单失败，请检查网络')
+      }
     },
     // 下拉加载更多订单
     async orderLoad () {
@@ -451,6 +570,40 @@ export default {
           }
         }
       }
+}
+.querenDialog {
+  font-size: 16px;
+  .title {
+    color: #165af7;
+    font-weight: bold;
+  }
+  .titleText,
+  .title {
+    padding-bottom: 20px;
+    color: black;
+  }
+  .btns {
+    .blueBtn {
+      color: #165af7;
+      border-color: #165af7;
+      &.activeBlue {
+        background-color: #165af7;
+        color: white;
+      }
+    }
+    .orangeBtn {
+      color: #f56024;
+      border-color: #f56024;
+      &.activeOrange {
+        background-color: #f56024;
+        color: white;
+      }
+    }
+    .activeGray {
+      background-color: #5a5a5a;
+      color: white;
+    }
+  }
 }
 
 </style>
