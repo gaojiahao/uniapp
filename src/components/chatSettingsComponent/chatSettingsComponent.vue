@@ -58,6 +58,13 @@ export default {
   methods: {
     // 查看个人信息详情
     topPersonDataCom () {
+      console.log(this.options)
+      const data = {
+        userId: this.options.id,
+        companyId: this.options.companyId,
+        componentName: 'personalDataComponent'
+      }
+      this.$emit('openTwoView', data)
       this.$emit('openTwoView')
     },
     // 切换搜索聊天记录类型
