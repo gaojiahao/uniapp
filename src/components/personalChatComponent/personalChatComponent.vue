@@ -618,7 +618,7 @@ export default {
   methods: {
     // 初始化消息立即沟通
     async showLiaotianr () {
-      console.log(this.options, this.signalROptions)
+      console.log(this.signalROptions)
       this.$store.commit('clearWsMsg')
       this.signalROptions.isGroup = this.options.isGroup
       this.signalROptions.name = this.options.linkName || this.options.linkman
@@ -632,6 +632,13 @@ export default {
         this.addChannel() // 加入深网频道
       } catch (error) {
         this.$message.warning('断线重连')
+      }
+      // 连接ws
+      if (this.signalROptions.groupNumber) {
+        if (this.$setWs.$ws) this.$setWs.$ws.close()
+        this.$store.commit('setWsId', this.signalROptions.groupNumber)
+        this.$setWs.initWebSocket()
+        console.log(this.$setWs)
       }
       // 获取聊天记录
       const res = await this.getInstantMessageByNumber()
@@ -719,6 +726,7 @@ export default {
         // document.all.pp.value = clipboardData.getData("Text");
       }
     },
+    // 判断单聊群聊 查看明细
     moreEvent () {
       const option = this.$_.cloneDeepWith(this.options)
       option.componentName = 'chatSettingsComponent' // 单聊
@@ -781,14 +789,6 @@ export default {
     },
     // 根据GroupNumber 查询所有的聊天记录
     async getInstantMessageByNumber () {
-      // 连接ws
-      if (this.signalROptions.groupNumber && !this.isGroupNumber) {
-        this.$setWs.$ws && this.$setWs.$ws.close()
-        this.$store.commit('setWsId', this.signalROptions.groupNumber)
-        this.$setWs.initWebSocket()
-      } else {
-        this.isGroupNumber = true
-      }
       const fd = {
         skipCount: this.chatHistoryCurrentPage,
         maxResultCount: this.chatHistoryPageSize,
@@ -812,6 +812,7 @@ export default {
     // 深网获取群成员
     async getMembers () {
       this.signalROptions.channelMember = await this.signalROptions.creatChannel.getMembers()
+      console.log(this.signalROptions.channelMember, 111)
     },
     // 深网退出频道
     signChannel () {
@@ -822,7 +823,6 @@ export default {
       if (e.ctrlKey && e.keyCode === 13) {
         this.signalROptions.value += '\n' // 换行
       } else if (e.key === 'Enter' || e.code === 'Enter' || e.keyCode === 13) {
-        e.preventDefault() // 禁止回车的默认换行
         this.noScrollTop = false
         if (
           this.signalROptions.msgType === 'Text' &&
@@ -844,13 +844,6 @@ export default {
 
           if (res.data.result.code === 200) {
             this.signalROptions.groupNumber = res.data.result.item.groupNumber
-            // 连接ws
-            if (this.isGroupNumber) {
-              this.$setWs.$ws && this.$setWs.$ws.close()
-              this.$store.commit('setWsId', this.signalROptions.groupNumber)
-              this.$setWs.initWebSocket()
-              this.isGroupNumber = false
-            }
             // 加入深网频道
             try {
               await this.getMembers()
@@ -865,8 +858,7 @@ export default {
           }
           this.$root.eventHub.$emit('resetData')
         } catch (error) {
-          // this.login()
-          // this.$message.warning('断线重连成功')
+          this.$message.warning('断线重连成功')
         }
 
         this.signalROptions.value = null
@@ -1000,13 +992,6 @@ export default {
         this.signalROptions.value = ''
         if (res.data.result.code === 200) {
           this.signalROptions.groupNumber = res.data.result.item.groupNumber
-          // 连接ws
-          if (this.isGroupNumber) {
-            this.$setWs.$ws && this.$setWs.$ws.close()
-            this.$store.commit('setWsId', this.signalROptions.groupNumber)
-            this.$setWs.initWebSocket()
-            this.isGroupNumber = false
-          }
           // 加入深网频道
           try {
             await this.getMembers()
@@ -1368,7 +1353,6 @@ export default {
       this.orderSampleFrom = val
     },
     getWsMsg: function (data) {
-      console.log(data, '接收到长连接推送的已读未读聊天记录');
       if (data) {
         data = JSON.parse(data)
       }
@@ -1379,6 +1363,8 @@ export default {
       ) {
         // 长连接接收到未读消息
         this.MessageUnreadCount = JSON.parse(data.content).UnreadCountList
+        // 长连接接收到
+        console.log('长连接接收到消息', this.MessageUnreadCount)
       }
     },
     // 聊天窗口滚动到底部

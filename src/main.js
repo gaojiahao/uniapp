@@ -48,7 +48,7 @@ Vue.prototype.$_ = _
 
 Vue.use(ElementUI)
 Vue.prototype.$md5 = md5
-Vue.prototype.RTM = RTM
+Vue.prototype.$RTM = RTM
 Vue.use(myAxios)
 
 Vue.config.productionTip = false

@@ -136,11 +136,10 @@ export default {
   },
   data () {
     return {
-      rtm: new this.RTM({ // 深网配置
+      rtm: new this.$RTM({ // 深网配置
         value: null,
         attachment: null,
         addId: '5de91f02f12c41c2b276c9accb4679c7',
-        userName: this.$store.state.userInfo.userInfo.linkman,
         token: '',
         loginState: null,
         showmsg: [],
@@ -150,11 +149,9 @@ export default {
         toCompanyID: null,
         toUserID: null,
         name: '',
-        uid: this.$store.state.userInfo.userInfo.id,
         client: {},
-        AgoraRTM: this.$AgoraRTM,
         channelMember: []
-      }), // 深网对象
+      }),
       companyAddrMapDialog: false, // 公司地址
       tagValue: '', // 打标签
       dialogAddTag: false, // 打开打标签
@@ -225,7 +222,7 @@ export default {
     this.$store.commit('clearWsMsg') // 清空已读未读
     this.getNoticeUnreadTotal() // 获取玩具圈未读数量
     this.getAllMessagesCount() // // 获取消息全部未读条数
-    this.rtm.login()
+    this.rtm.login(this.$store.state.userInfo.uid, this.$store.state.userInfo.userInfo.linkman)
   },
   created () {},
   watch: {
@@ -249,6 +246,8 @@ export default {
   },
   beforeDestroy () {
     this.$root.eventHub.$off('resetLogin')
+    this.rtm.signOut()
+    this.rtm = null
   }
 }
 </script>

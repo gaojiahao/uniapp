@@ -243,7 +243,6 @@ export default {
     // 下拉加载
     loadMore () {
       this.loading = true
-      console.log('进来了')
       setTimeout(async () => {
         this.currentPage++
         this.pageSize = 20

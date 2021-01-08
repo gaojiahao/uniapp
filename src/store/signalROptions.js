@@ -18,11 +18,11 @@
 // }
 import AgoraRTM from 'agora-rtm-sdk'
 class RMT {
-  constructor ({ value, attachment, addId, userName, token, loginState, showmsg, orderNumber, creatChannel, groupNumber, toCompanyID, toUserID, name, uid, client, channelMember }) {
+  constructor ({ value, attachment, addId, token, loginState, showmsg, orderNumber, creatChannel, groupNumber, toCompanyID, toUserID, name, client, channelMember }) {
     this.value = value
     this.attachment = attachment
     this.addId = addId
-    this.userName = userName
+    this.userName = null
     this.token = token
     this.loginState = loginState
     this.showmsg = showmsg
@@ -32,14 +32,14 @@ class RMT {
     this.toCompanyID = toCompanyID
     this.toUserID = toUserID
     this.name = name
-    this.uid = uid
     this.client = client
     this.channelMember = channelMember
     this.AgoraRTM = AgoraRTM
   }
 
   // 深网登录
-  login () {
+  login (uid, userName) {
+    this.userName = userName
     // 登入 RTM 之前，调用 AgoraRTM.createInstance 方法创建一个 RtmClient 实例。
     this.client = this.AgoraRTM.createInstance(this.addId)
     // 通过监听 RtmClient 上的 ConnectionStateChanged 事件可以获得 SDK 连接状态改变的通知
@@ -53,7 +53,7 @@ class RMT {
     this.client
       .login({
         token: this.token,
-        uid: this.uid
+        uid: uid
       })
       .then(() => {
         console.log('AgoraRTM客户端登录成功')

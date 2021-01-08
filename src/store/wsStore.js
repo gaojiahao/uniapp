@@ -34,7 +34,6 @@ const wsConnection = {
     // 每次接收到服务端消息后 重置websocket心跳
     wsConnection.resetHeartbeat()
     // 服务端发送来的消息存到vuex
-    console.log(msg)
     store.commit('setwsMsg', msg.data)
   },
   wsError (err) {
