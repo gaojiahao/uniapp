@@ -411,7 +411,6 @@ export default {
   },
   mounted () {
     this.$root.eventHub.$on('UpdateFind', async () => {
-      this.pageSize = 20
       this.currentPage = 1
       this.getDataList()
     })

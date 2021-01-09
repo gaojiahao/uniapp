@@ -167,6 +167,11 @@ export default {
     openAddTag () {
       this.dialogAddTag = true
     },
+    // 深网接收到消息的回调
+    receiveMessageCallback () {
+      this.getAllMessagesCount()
+      this.$root.eventHub.$emit('resetData')
+    },
     // 添加标签
     async addTag () {
       const res = await this.$http.post('/api/CreateCompanyLabel', {
@@ -200,7 +205,6 @@ export default {
       const res = await this.$http.post('/api/GetAllMessagesCount')
       if (res.data.result.code === 200) {
         this.infoCount = res.data.result.item
-        console.log(this.infoCount)
       } else {
         this.$message.error(res.data.result.msg)
       }
@@ -222,7 +226,14 @@ export default {
     this.$store.commit('clearWsMsg') // 清空已读未读
     this.getNoticeUnreadTotal() // 获取玩具圈未读数量
     this.getAllMessagesCount() // // 获取消息全部未读条数
-    this.rtm.login(this.$store.state.userInfo.uid, this.$store.state.userInfo.userInfo.linkman)
+    this.rtm.login(this.$store.state.userInfo.uid, this.$store.state.userInfo.userInfo.linkman, this.receiveMessageCallback)
+    this.$root.eventHub.$on('resetRTM', () => {
+      this.rtm.login(this.$store.state.userInfo.uid, this.$store.state.userInfo.userInfo.linkman, this.receiveMessageCallback)
+    })
+    this.$root.eventHub.$on('resetAllMessagesCount', () => {
+      this.getNoticeUnreadTotal() // 获取玩具圈未读数量
+      this.getAllMessagesCount() // // 获取消息全部未读条数
+    })
   },
   created () {},
   watch: {
@@ -246,6 +257,8 @@ export default {
   },
   beforeDestroy () {
     this.$root.eventHub.$off('resetLogin')
+    this.$root.eventHub.$off('resetAllMessagesCount')
+    this.$root.eventHub.$off('resetRTM')
     this.rtm.signOut()
     this.rtm = null
   }

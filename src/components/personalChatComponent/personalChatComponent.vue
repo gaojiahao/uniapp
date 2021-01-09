@@ -618,7 +618,6 @@ export default {
   methods: {
     // 初始化消息立即沟通
     async showLiaotianr () {
-      console.log(this.options, 123)
       this.$store.commit('clearWsMsg')
       this.signalROptions.isGroup = this.options.isGroup
       this.signalROptions.name = this.options.linkName || this.options.linkman
@@ -649,6 +648,7 @@ export default {
       } else {
         this.CompanyDetail = []
       }
+      this.$root.eventHub.$emit('resetAllMessagesCount')
       this.$root.eventHub.$emit('resetData')
     },
     // 撤回消息
@@ -783,9 +783,9 @@ export default {
           }
         )
       } catch (err) {
-        // this.$parent.login()
         this.$message.closeAll()
-        this.$message.error('断线重连成功')
+        this.$root.eventHub.$emit('resetRTM')
+        this.$message.success('断线重连成功')
       }
     },
     // 根据GroupNumber 查询所有的聊天记录
@@ -859,7 +859,8 @@ export default {
           }
           this.$root.eventHub.$emit('resetData')
         } catch (error) {
-          this.$message.warning('断线重连成功')
+          this.$root.eventHub.$emit('resetRTM')
+          this.$message.success('断线重连成功Two')
         }
 
         this.signalROptions.value = null

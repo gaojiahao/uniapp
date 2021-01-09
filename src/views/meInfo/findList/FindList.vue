@@ -2,7 +2,7 @@
   <div>
     <div class="wanjuquanTop">
       <h4>玩具圈 <span v-if="findCount" style="color:#f56c6c;">{{findCount}}</span></h4>
-      <el-badge :value="8" @click.native="openInfoList">
+      <el-badge :value="findCount" @click.native="openInfoList">
         <div class="infoList"></div>
       </el-badge>
     </div>
@@ -231,13 +231,11 @@ export default {
     }
   },
   mounted () {
-    this.$emit('getNoticeUnreadTotal')
     this.getDataList()
     this.$emit('openOneView', {
       componentName: 'myAnnouncementComponent'
     })
     this.$root.eventHub.$on('UpdateFind', async () => {
-      this.pageSize = 10
       this.currentPage = 1
       this.getDataList()
     })
@@ -340,21 +338,6 @@ export default {
         this.loading = false
       }, 500)
     },
-    // 回到顶部事件
-    // async toTop () {
-    //   let top = $('.findListAll').scrollTop()
-    //   // 实现滚动效果
-    //   const _that = this
-    //   const timeTop = setInterval(() => {
-    //     $('.findListAll').scrollTop((top -= 20))
-    //     if (top <= 0) {
-    //       clearInterval(timeTop)
-    //       _that.currentPage = 1
-    //       _that.pageSize = 10
-    //       _that.findList = _that.findList.slice(0, 10)
-    //     }
-    //   }, 1)
-    // },
     // 获取公告列表
     async getDataList (flag) {
       const res = await this.$http.post('/api/BearNoticePage', {
@@ -362,6 +345,7 @@ export default {
         maxResultCount: this.pageSize
       })
       if (res.data.result.code === 200) {
+        this.$emit('getNoticeUnreadTotal')
         if (flag) {
           this.findList = this.findList.concat(
             res.data.result.item.result.items

@@ -38,7 +38,7 @@ class RMT {
   }
 
   // 深网登录
-  login (uid, userName) {
+  login (uid, userName, callback) {
     this.userName = userName
     // 登入 RTM 之前，调用 AgoraRTM.createInstance 方法创建一个 RtmClient 实例。
     this.client = this.AgoraRTM.createInstance(this.addId)
@@ -66,9 +66,8 @@ class RMT {
       'MessageFromPeer',
       ({ text }, peerId, messageProps) => {
         // text 为消息文本，peerId 是消息发送方 User ID
-        console.log('我收到了点对点', text, peerId, messageProps)
-        this.getAllMessagesCount()
-        this.$root.eventHub.$emit('resetData')
+        console.log('我收到了点对点', 123)
+        callback()
         /* 收到点对点消息的处理逻辑 */
       }
     )
