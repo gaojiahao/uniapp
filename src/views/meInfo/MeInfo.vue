@@ -211,10 +211,10 @@ export default {
       this.twoViews = null
       this.$nextTick(() => { this.oneViews = option })
     },
-    // 打开三级窗口添加好友
+    // 打开三级窗口
     openTwoView (option) {
       this.twoViews = null
-      this.$nextTick(() => { this.twoViews = option })
+      this.$nextTick(() => { if (this.oneViews.componentName !== option.componentName) this.twoViews = option })
     }
   },
   mounted () {

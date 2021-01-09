@@ -205,6 +205,7 @@ export default {
     },
     // 获取个人详情页
     async getPersonalDetail () {
+      console.log(this.options)
       const res = await this.$http.post('/api/OrgPersonnelByID', {
         id: this.options.userId,
         companyId: this.options.companyId

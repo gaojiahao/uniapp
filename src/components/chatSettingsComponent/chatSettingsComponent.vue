@@ -60,12 +60,11 @@ export default {
     topPersonDataCom () {
       console.log(this.options)
       const data = {
-        userId: this.options.id,
-        companyId: this.options.companyId,
+        userId: this.options.toUserID,
+        companyId: this.options.toCompanyID,
         componentName: 'personalDataComponent'
       }
       this.$emit('openTwoView', data)
-      this.$emit('openTwoView')
     },
     // 切换搜索聊天记录类型
     openRecord (msgType) {
@@ -118,6 +117,12 @@ export default {
     display: flex;
     align-items: center;
     .block{
+      @{deep} .el-avatar{
+        img{
+          width: 50px;
+          height: 50px;
+        }
+      }
       cursor: pointer;
       .userImgError{
         background-color: #165AF8;

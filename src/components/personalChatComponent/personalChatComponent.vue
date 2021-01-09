@@ -618,10 +618,11 @@ export default {
   methods: {
     // 初始化消息立即沟通
     async showLiaotianr () {
-      console.log(this.signalROptions)
+      console.log(this.options, 123)
       this.$store.commit('clearWsMsg')
       this.signalROptions.isGroup = this.options.isGroup
       this.signalROptions.name = this.options.linkName || this.options.linkman
+      this.signalROptions.userImage = this.options.userImage
       this.signalROptions.toCompanyID = this.options.companyId || this.options.companyID
       this.signalROptions.groupNumber = this.options.groupNumber
       this.signalROptions.orderNumber = this.options.orderNumber
@@ -728,9 +729,9 @@ export default {
     },
     // 判断单聊群聊 查看明细
     moreEvent () {
-      const option = this.$_.cloneDeepWith(this.options)
+      const option = this.$_.cloneDeepWith(this.signalROptions)
       option.componentName = 'chatSettingsComponent' // 单聊
-      if (this.options.isGroup) { // 群聊
+      if (this.signalROptions.isGroup) { // 群聊
         option.componentName = 'chatInformationComponent'
       }
       this.$emit('openTwoView', option)
