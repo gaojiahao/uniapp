@@ -26,6 +26,7 @@ export default {
       dialogVisible: false,
       rtm: new this.$RTM({ // 深网配置
         isGroup: false,
+        isErp: true,
         loginState: null,
         attachment: null,
         token: '',

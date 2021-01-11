@@ -3,8 +3,8 @@
     <!-- 聊天窗口 -->
     <h3 class="infoListTitle">
       <span class="item"></span>
-      <span class="item title">{{ this.signalROptions.toLinkName }}</span>
-      <span class="item"><i class="el-icon-more" @click="moreEvent"></i></span>
+      <span class="item title">{{ signalROptions.toLinkName }}</span>
+      <span class="item"><i class="el-icon-more" v-show="!signalROptions.isErp" @click="moreEvent"></i></span>
     </h3>
     <div
       class="isOrder"
@@ -606,12 +606,11 @@ export default {
   methods: {
     // 初始化消息立即沟通
     async showLiaotianr () {
-      console.log(this.options.userImage, this.signalROptions.toUserImage)
       this.$store.commit('clearWsMsg')
       if (this.options) {
         this.signalROptions.isGroup = this.options.isGroup
         this.signalROptions.toLinkName = this.options.linkName || this.options.linkman
-        this.signalROptions.toUserImage = this.options.userImage
+        this.signalROptions.toUserImage = this.options.userImage || this.signalROptions.toUserImage
         this.signalROptions.toUserID = this.options.toUserID || this.options.id
         this.signalROptions.toCompanyID = this.options.companyId || this.options.companyID
         this.signalROptions.groupNumber = this.options.groupNumber

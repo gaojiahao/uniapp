@@ -18,7 +18,7 @@
 // }
 import AgoraRTM from 'agora-rtm-sdk'
 class RMT {
-  constructor ({ addId, isGroup, linkName, orgLinkName, orgCompanyID, uid, orgUserID, orgUserImage, userImage, msgType, value, attachment, token, loginState, showmsg, orderNumber, creatChannel, groupNumber, toCompanyID, toUserID, client, channelMember }) {
+  constructor ({ addId, isGroup, isErp, linkName, orgLinkName, orgCompanyID, uid, orgUserID, orgUserImage, userImage, msgType, value, attachment, token, loginState, showmsg, orderNumber, creatChannel, groupNumber, toCompanyID, toUserID, client, channelMember }) {
     this.addId = addId || '5de91f02f12c41c2b276c9accb4679c7'
     this.isGroup = isGroup || false // 是否群聊
     this.msgType = msgType || 'Text' // 消息类型默认文本
@@ -26,6 +26,7 @@ class RMT {
     this.attachment = attachment // 发送的消息文件图片语音等内容
     this.token = token
     this.uid = uid
+    this.isErp = isErp || false
     this.loginState = loginState
     this.showmsg = showmsg // 聊天信息集合
     this.orderNumber = orderNumber
