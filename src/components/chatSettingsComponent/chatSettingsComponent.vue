@@ -3,8 +3,8 @@
     <div class="topLayout">聊天设置</div>
     <div class="personDetails">
       <div class="block" @click="topPersonDataCom">
-        <el-avatar :size="50" :src="options.userImage"><div class="userImgError">{{ this.options.linkman }}</div></el-avatar>
-        <div class="userName">{{ this.options.linkman }}</div>
+        <el-avatar :size="50" :src="options.toUserImage"><div class="userImgError">{{ this.options.toLinkName }}</div></el-avatar>
+        <div class="userName">{{ this.options.toLinkName }}</div>
       </div>
     </div>
     <div class="chatContent">

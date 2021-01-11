@@ -519,7 +519,7 @@
           ref="sendMessageRef"
           class="sendValue"
           @keyup.native.prevent="sendMessage"
-          :maxlength="globalJson.MessageRestriction[6].itemCode"
+          :maxlength="globalJson.MessageRestriction && globalJson.MessageRestriction[6].itemCode"
         ></el-input>
         <div class="pasteIten" v-show="isPaste" @click="pasteInfo($event)">
           粘贴
@@ -582,12 +582,13 @@ import { mapState } from 'vuex'
 import VueQr from 'vue-qr'
 import Recorder from 'recorder-core/recorder.mp3.min'
 export default {
-  props: ['options', 'signalROptions'],
+  props: ['options', 'signalROptions', 'Json'],
   components: {
     VueQr
   },
   data () {
     return {
+      globalJson: {},
       MessageUnreadCount: [],
       orderSampleFrom: null,
       chatHistoryCurrentPage: 1,
@@ -605,6 +606,7 @@ export default {
   methods: {
     // 初始化消息立即沟通
     async showLiaotianr () {
+      console.log(this.options.userImage, this.signalROptions.toUserImage)
       this.$store.commit('clearWsMsg')
       if (this.options) {
         this.signalROptions.isGroup = this.options.isGroup
@@ -616,6 +618,10 @@ export default {
         this.signalROptions.orderNumber = this.options.orderNumber
         this.signalROptions.msgType = 'Text'
         this.isOrderShow = this.options.isOrderShow || false
+      }
+      // 适配全局系统参数
+      if (this.Json) {
+        this.globalJson = (this.Json ? this.Json : this.$store.state.globalJson.Json)
       }
       console.log(this.options, this.signalROptions, 999)
       try {
@@ -1329,9 +1335,6 @@ export default {
     this.showLiaotianr()
   },
   computed: {
-    ...mapState({
-      globalJson: state => state.globalJson.Json
-    }),
     updateLiaotian () {
       return this.signalROptions.showmsg
     },
