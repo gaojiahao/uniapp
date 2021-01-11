@@ -7,7 +7,7 @@
       <li class="item" v-for="(item, i) in groupList" :key="i">
         <div class="userImg">
           <el-image
-            fit="contain"
+            :size="50"
             :src="item.userImage"
             lazy
           >

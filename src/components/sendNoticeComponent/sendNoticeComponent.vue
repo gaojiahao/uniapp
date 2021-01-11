@@ -28,7 +28,8 @@
             @end="endGonggaoImg"
             :move="moveGonggaoImg"
           >
-              <el-col :span="8"  v-for="(value, i) in fileList" :key="i">
+          <template v-if="this.fileType === 'image'">
+            <el-col :span="8"  v-for="(value, i) in fileList" :key="i">
                   <div class="imgItemBox" @mouseenter="itemImgNter(value.uid)" @mouseleave="itemImgLeave">
                     <el-image fit="contain" :src="value.url"></el-image>
                     <div class="itemIcon" v-show="isHoverImgItem ===  value.uid">
@@ -43,6 +44,32 @@
                     :on-close="closeViewer"
                     :url-list="viewerImgList" />
               </el-col>
+          </template>
+          <template  v-if="this.fileType === 'video'">
+            <div style="width:100%;position: relative;"  v-for="(item, i) in fileList" :key="i">
+                <video width="100%" height="150px" class="video-js vjs-default-skin vjs-big-play-centered sendVideoImg" controls style="object-fit:contain; margin: 0 auto">
+                <source
+                  ref="videoPreview"
+                  :src="item.url"
+                  type="video/mp4">
+              </video>
+              <i style="position: absolute;right:0;top:0;cursor: pointer;" @click="deleteItemImg(item.uid)" class="el-icon-circle-close videoDelete" />
+            </div>
+            <!-- <el-col :span="8"  v-for="(value, i) in fileList" :key="i">
+                    <video width="100%" height="150px" class="video-js vjs-default-skin vjs-big-play-centered sendVideoImg" controls style="object-fit:contain; margin: 0 auto" v-for="(value, i) in fileList" :key="i">
+                      <source
+                        ref="videoPreview"
+                        :src="value.url"
+                        type="video/mp4"
+                      />
+                    </video>
+                    <div class="itemIcon" v-show="isHoverImgItem ===  value.uid">
+                      <span>
+                        <i @click="deleteItemImg(value.uid)" class="el-icon-delete"/>
+                      </span>
+                    </div>
+              </el-col> -->
+          </template>
           </draggable>
           <el-col class="imgsItemBox" :span="8">
               <el-upload
@@ -58,38 +85,6 @@
             >
               <i slot="default" class="el-icon-plus"></i>
               <div slot="file" slot-scope="{ file }">
-                <img
-                  width="100%"
-                  height="100%"
-                  v-if="
-                    globalJson.NoticeRestrictions &&
-                      globalJson.NoticeRestrictions[1].itemCode
-                        .toLowerCase()
-                        .includes($_.last(file.name.split('.')))
-                  "
-                  class="el-upload-list__item-thumbnail"
-                  :src="file.url"
-                  alt
-                />
-                <video
-                  v-else-if="
-                    globalJson.NoticeRestrictions &&
-                      globalJson.NoticeRestrictions[0].itemCode
-                        .toLowerCase()
-                        .includes($_.last(file.name.split('.')))
-                  "
-                  width="100%"
-                  height="100%"
-                  class="video-js vjs-default-skin vjs-big-play-centered sendVideoImg"
-                  controls
-                  style="object-fit:cover"
-                >
-                  <source
-                    ref="videoPreview"
-                    :src="file.url"
-                    :type="file.raw.type"
-                  />
-                </video>
                 <span class="el-upload-list__item-actions">
                   <span
                     class="el-upload-list__item-preview"
@@ -196,6 +191,7 @@
 
 <script>
 import draggable from 'vuedraggable'
+import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 export default {
   props: {
     options: {
@@ -203,11 +199,13 @@ export default {
     }
   },
   components: {
+    ElImageViewer,
     draggable
   },
   data () {
     return {
       fileList: [],
+      fileType: '',
       radio: '',
       orgList: [],
       checkUserList: [],
@@ -236,7 +234,6 @@ export default {
       this.$refs.refGonggao.validate(async valid => {
         if (valid) {
           let urls = ''
-          let fileType = ''
           let res
           // let imgFlag = false
           if (this.fileList && this.fileList.length > 0) {
@@ -259,7 +256,7 @@ export default {
               // imgFlag = true
               this.$message.error(res.data.result.msg)
             }
-            fileType = this.fileList[0].raw.type.split('/')[0]
+            this.fileType = this.fileList[0].raw.type.split('/')[0]
           }
           // if(imgFlag) return false
           const result = await this.$http.post('/api/CreateBearNotice', {
@@ -271,7 +268,7 @@ export default {
             IssuedCompanyID: this.$store.state.userInfo.commparnyList[0].commparnyId,
             attachmentList: urls,
             FileType:
-              fileType === 'image' ? 'img' : fileType === 'video' ? 'video' : '' // 文件类型 img video
+              this.fileType === 'image' ? 'img' : this.fileType === 'video' ? 'video' : '' // 文件类型 img video
           })
           if (result.data.result.code === 200) {
             this.$message.success('发布公告成功')
@@ -383,10 +380,10 @@ export default {
     changeFile (file, fileList) {
       if (fileList[0].raw.type.split(/\//)[0] === 'video') {
         this.imgAndVideoNum = 1
-        if (file.size > this.globalJson.NoticeRestrictions[2].itemCode) {
+        if (file.size > this.globalJson.NoticeRestrictions[1].itemCode) {
           this.$message.error(
             '上传视频大小不能超过 ' +
-              this.globalJson.NoticeRestrictions[2].itemCode / 1024 / 1024 +
+              this.globalJson.NoticeRestrictions[1].itemCode / 1024 / 1024 +
               'MB'
           )
           fileList.pop()
@@ -410,6 +407,7 @@ export default {
         }
       }
       this.fileList = fileList
+      this.fileType = this.fileList[0].raw.type.split('/')[0]
     },
     // 删除图片
     handleRemove (file, fileList) {
@@ -661,5 +659,10 @@ export default {
   }
 }
 }
+}
+.videoDelete {
+  &:hover {
+    color: #409eff
+  }
 }
 </style>

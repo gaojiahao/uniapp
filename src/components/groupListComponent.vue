@@ -5,7 +5,6 @@
     <span></span>
     <span>{{ groupListOptions.text }}</span>
     <span>
-      <!-- <span v-if="newFriendOptions.text === '新的好友'" @click="openRootAddFriends">添加好友</span> -->
     </span>
   </div>
   <div class="newFriendsContentWrap">

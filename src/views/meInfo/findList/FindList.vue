@@ -2,7 +2,7 @@
   <div>
     <div class="wanjuquanTop">
       <h4>玩具圈 <span v-if="findCount" style="color:#f56c6c;">{{findCount}}</span></h4>
-      <el-badge :value="findCount" @click.native="openInfoList">
+      <el-badge :hidden="findCount===0" :value="findCount" @click.native="openInfoList">
         <div class="infoList"></div>
       </el-badge>
     </div>
@@ -77,7 +77,7 @@
               height="100%"
               class="video-js vjs-default-skin vjs-big-play-centered"
               controls
-              style="object-fit:cover"
+              style="object-fit:contain"
             >
               <source :src="item.video" type="video/mp4" />
             </video>

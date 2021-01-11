@@ -147,11 +147,9 @@
                         </div>
                         <div class="right">
                           <div class="context">
-                            {{ item.attachment || item.content }}
+                            {{ item.content || item.attachment }}
                           </div>
-                          <a class="see" :href="item.content" target="_blank"
-                            ><i class="el-icon-view"></i>查看详情</a
-                          >
+                          <a class="see" :href="item.content" target="_blank"><i class="el-icon-view"></i>查看详情</a>
                           <div class="copy" @click="copyLink(item.id)">
                             <i class="el-icon-link"></i>复制链接
                           </div>
@@ -163,7 +161,6 @@
                             >{{ item.content }}</a
                           >
                         </div>
-                        <!-- <pre>{{ item.content }}</pre> -->
                       </div>
                     </div>
                     <!-- 视频 -->
@@ -174,7 +171,7 @@
                       <video
                         class="video-js vjs-default-skin vjs-big-play-centered"
                         controls
-                        style="object-fit: cover"
+                        style="object-fit: contain"
                       >
                         <source
                           ref="videoPreview"
@@ -604,15 +601,7 @@ export default {
       isShowRec: false,
       isOrderShow: false,
       loadText: null,
-      isGroupNumber: false,
-      noScrollTop: false,
-      showTypeOptions: {
-        showType: null,
-        sampleFrom: null,
-        showLiaotianType: null,
-        showOrderDetail: false,
-        isShowOrderDetail: true
-      }
+      noScrollTop: false
     }
   },
   methods: {
@@ -627,7 +616,8 @@ export default {
       this.signalROptions.orderNumber = this.options.orderNumber
       this.signalROptions.msgType = 'Text'
       this.signalROptions.toUserID = this.options.toUserID || this.options.id
-      this.isOrderShow = this.options.isOrderShow
+      this.isOrderShow = this.options.isOrderShow || false
+      console.log(this.options, this.signalROptions, 999)
       try {
         this.addChannel() // 加入深网频道
       } catch (error) {
@@ -753,7 +743,7 @@ export default {
         if (error) {
           /* 加入频道失败的处理逻辑 */
           console.log('加入频道失败', error)
-          // this.login();
+          this.$root.eventHub.$emit('resetLogin') // 重新登录
           this.$nextTick(() => this.addChannel())
         } else {
           /* 加入频道成功的处理逻辑 */
@@ -834,7 +824,7 @@ export default {
           return
         }
         // 判断是不是发送的链接http带头
-        if (/^http/.test(this.signalROptions.value)) {
+        if (/^(http:\/\/)|(https:\/\/)|(www\.)/.test(this.signalROptions.value)) {
           this.signalROptions.msgType = 'Product'
           this.signalROptions.attachment = this.signalROptions.value
         }
@@ -984,7 +974,7 @@ export default {
         this.$message.error('发送内容不能为空')
         return
       }
-      if (/^http/.test(this.signalROptions.value)) {
+      if (/^(http:\/\/)|(https:\/\/)|(www\.)/.test(this.signalROptions.value)) {
         this.signalROptions.msgType = 'Product'
         this.signalROptions.attachment = this.signalROptions.value
       }

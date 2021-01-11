@@ -75,7 +75,6 @@
   </el-container>
 </template>
 <script>
-import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 import bsTop from '@/components/BsTop.vue'
 import bsFooter from '@/components/oldFooter'
 import BMapComponent from '@/components/map.vue'
@@ -108,7 +107,6 @@ export default {
     bsTop,
     bsFooter,
     BMapComponent,
-    ElImageViewer,
     companyBusinessComponent,
     addFriendComponent,
     chooseGroupChatComponent,

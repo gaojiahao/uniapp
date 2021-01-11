@@ -50,7 +50,7 @@
             height="100%"
             class="video-js vjs-default-skin vjs-big-play-centered"
             controls
-            style="object-fit:cover"
+            style="object-fit:contain"
           >
             <source :src="item.video" type="video/mp4" />
           </video>
