@@ -221,11 +221,17 @@ export default {
   },
   mounted () {
     this.getPersonalDetail()
+    this.$root.eventHub.$on('UpdateOrgPersonnel', () => {
+      this.getPersonalDetail()
+    })
   },
   computed: {
     userInfo () {
       return this.$store.state.userInfo
     }
+  },
+  beforeDestroy () {
+    this.$root.eventHub.$off('UpdateOrgPersonnel')
   }
 }
 </script>

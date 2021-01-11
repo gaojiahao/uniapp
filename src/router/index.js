@@ -44,13 +44,13 @@ router.beforeEach(async (to, from, next) => {
     const res = await getToken()
     const obj = ((typeof res === 'string') && res.constructor === String) ? { accessToken: res } : null
     $Store.commit('setToken', obj)
-    if (to.path.includes('/beforeIndex') || to.path.includes('/erp') || to.path.includes('/offer')) {
+    if (to.path.includes('/beforeIndex') || to.path.includes('/erp') || to.path.includes('/offer') || to.path.includes('/publicChat')) {
       next()
     } else {
       return next({ path: '/beforeIndex/login' })
     }
   } else { // 如果有登录token
-    if (to.path.includes('/beforeIndex') || to.path.includes('/erp') || to.path.includes('/offer')) {
+    if (to.path.includes('/beforeIndex') || to.path.includes('/erp') || to.path.includes('/offer') || to.path.includes('/publicChat')) {
       next()
     } else {
       if ($Store.state.isLogin) {

@@ -137,16 +137,19 @@ export default {
       rtm: new this.$RTM({ // 深网配置
         value: null,
         attachment: null,
-        addId: '5de91f02f12c41c2b276c9accb4679c7',
         token: '',
         loginState: null,
         showmsg: [],
         orderNumber: null,
         creatChannel: null,
         groupNumber: '',
-        toCompanyID: null,
+        toLinkName: null,
+        toUserImage: null, // 接收人头像
         toUserID: null,
-        name: '',
+        toCompanyID: null,
+        orgLinkName: this.$store.state.userInfo.userInfo.linkman,
+        orgUserID: this.$store.state.userInfo.userInfo.id,
+        orgUserImage: this.$store.state.userInfo.userInfo.userImage,
         client: {},
         channelMember: []
       }),

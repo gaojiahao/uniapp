@@ -17,6 +17,8 @@
             </el-form-item>
           </el-form>
           <div class="gonggaoImgList">
+          <!-- 发图片玩具圈 -->
+          <template v-if="this.fileType === 'image'">
             <draggable
             class="syllable_ul"
             element="ul"
@@ -28,7 +30,6 @@
             @end="endGonggaoImg"
             :move="moveGonggaoImg"
           >
-          <template v-if="this.fileType === 'image'">
             <el-col :span="8"  v-for="(value, i) in fileList" :key="i">
                   <div class="imgItemBox" @mouseenter="itemImgNter(value.uid)" @mouseleave="itemImgLeave">
                     <el-image fit="contain" :src="value.url"></el-image>
@@ -44,8 +45,10 @@
                     :on-close="closeViewer"
                     :url-list="viewerImgList" />
               </el-col>
+            </draggable>
           </template>
-          <template  v-if="this.fileType === 'video'">
+          <!-- 发视频玩具圈 -->
+          <template  v-else-if="this.fileType === 'video'">
             <div style="width:100%;position: relative;"  v-for="(item, i) in fileList" :key="i">
                 <video width="100%" height="150px" class="video-js vjs-default-skin vjs-big-play-centered sendVideoImg" controls style="object-fit:contain; margin: 0 auto">
                 <source
@@ -55,22 +58,7 @@
               </video>
               <i style="position: absolute;right:0;top:0;cursor: pointer;" @click="deleteItemImg(item.uid)" class="el-icon-circle-close videoDelete" />
             </div>
-            <!-- <el-col :span="8"  v-for="(value, i) in fileList" :key="i">
-                    <video width="100%" height="150px" class="video-js vjs-default-skin vjs-big-play-centered sendVideoImg" controls style="object-fit:contain; margin: 0 auto" v-for="(value, i) in fileList" :key="i">
-                      <source
-                        ref="videoPreview"
-                        :src="value.url"
-                        type="video/mp4"
-                      />
-                    </video>
-                    <div class="itemIcon" v-show="isHoverImgItem ===  value.uid">
-                      <span>
-                        <i @click="deleteItemImg(value.uid)" class="el-icon-delete"/>
-                      </span>
-                    </div>
-              </el-col> -->
           </template>
-          </draggable>
           <el-col class="imgsItemBox" :span="8">
               <el-upload
               action="#"

@@ -14,12 +14,15 @@ import _404 from '@/router/404/index'
 import ERP from '@/router/ERP/index'
 /** 报价分享模块 */
 import offer from '@/router/offer/index'
+/** 公共聊天模块 */
+import publicChat from '@/router/publicChat/index'
 /** 特殊搜索路由 */
 const SearchIndex = () => import('@/views/productSearch/searchIndex.vue')
 /** 静态路由 */
 export const staticRouters = [
   beforeModule,
   orderManage,
+  publicChat,
   me,
   meInfo,
   {

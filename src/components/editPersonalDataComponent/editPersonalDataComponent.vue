@@ -6,7 +6,7 @@
             <div class="title">头像</div>
             <div class="text">
               <el-image
-                :src="options.userImage"
+                :src="datas.userImage"
                 class="myAvatar"
                 fit="cover"
               >
@@ -15,7 +15,7 @@
                   class="image-slot"
                   style="width:100%;height:100%;display:flex;align-items:center;justify-content:left;white-space: nowrap;"
                 >
-                  {{ options.linkman }}
+                  {{ datas.linkman }}
                 </div>
               </el-image>
               <input type="file" :accept="uploadAccept" class="upLoad" @change="fileChange" />
@@ -24,14 +24,14 @@
           <li>
             <div class="title">姓名</div>
             <div class="text">
-              <input type="text" v-model="options.linkman" />
+              <input type="text" v-model="datas.linkman" />
             </div>
           </li>
           <li>
             <div class="title">性别</div>
             <div class="text">
               <select
-                v-model="options.sex"
+                v-model="datas.sex"
                 style="border:none;outline: none;cursor: pointer;"
               >
                 <option value="1">男</option>
@@ -43,7 +43,7 @@
             <div class="title">生日</div>
             <div class="text">
               <el-date-picker
-                v-model="options.birthday"
+                v-model="datas.birthday"
                 type="date"
                 placeholder="选择日期"
                 size="mini"
@@ -54,7 +54,7 @@
           <li>
             <div class="title">电话</div>
             <div class="text">
-              <input type="text" v-model="options.phoneNumber" />
+              <input type="text" v-model="datas.phoneNumber" />
             </div>
           </li>
           <li>
@@ -62,7 +62,7 @@
             <textarea
               rows="2"
               cols="15"
-              v-model="options.remark"
+              v-model="datas.remark"
               style="border-color:#ccc;border-radius:5px;outline:none;overflow:auto;resize:none;"
               maxlength="500"
             ></textarea>
@@ -86,7 +86,7 @@ export default {
   data () {
     return {
       file: null,
-      datas: null
+      datas: { ...this.options }
     }
   },
   methods: {
@@ -111,16 +111,15 @@ export default {
         .replace(/ [\s\S]+/g, '')
       const result = await this.$http.post('/api/UpdateOrgPersonnel', formData)
       if (result.data.result.code === 200) {
-        this.getPersonalDetails(result.data.result.item.id)
         this.$root.eventHub.$emit('UpdateOrgPersonnel')
         this.$message.success('修改成功')
       }
     },
-    // 上传图片修改头像
+    // 选择图片修改头像
     async fileChange (e) {
       this.file = e.target.files[0]
       const url = URL.createObjectURL(this.file)
-      this.datas = url
+      this.datas.userImage = url
     }
   },
   created () {

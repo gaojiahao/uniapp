@@ -3,7 +3,7 @@
     <!-- 聊天窗口 -->
     <h3 class="infoListTitle">
       <span class="item"></span>
-      <span class="item title">{{ this.signalROptions.name }}</span>
+      <span class="item title">{{ this.signalROptions.toLinkName }}</span>
       <span class="item"><i class="el-icon-more" @click="moreEvent"></i></span>
     </h3>
     <div
@@ -83,16 +83,17 @@
               </center>
                 <p style="padding: 5px 20px;border-radius:20px;background-color:#d7d7d7;display: inline-block;font-size: 12px; color: #fff">{{item.content}}</p>
               </center>
-            <div v-else-if="item.fromUserId === $store.state.userInfo.userInfo.id">
+            <div v-else-if="item.fromUserId === signalROptions.orgUserID">
               <center style="font-size: 12px; color: #ccc">
                 {{ item.createdOn && dateDiff(item.createdOn) }}
               </center>
               <!-- 我的消息 -->
               <div class="myInfo">
                 <div class="myAvatarImg">
+                    <!-- :src="$store.state.userInfo.userInfo.userImage" -->
                   <el-image
                     class="img"
-                    :src="$store.state.userInfo.userInfo.userImage"
+                    :src="signalROptions.orgUserImage"
                     fit="cover"
                   >
                     <div slot="placeholder" class="image-slot">
@@ -581,10 +582,7 @@ import { mapState } from 'vuex'
 import VueQr from 'vue-qr'
 import Recorder from 'recorder-core/recorder.mp3.min'
 export default {
-  props: {
-    options: Object,
-    signalROptions: Object
-  },
+  props: ['options', 'signalROptions'],
   components: {
     VueQr
   },
@@ -608,15 +606,17 @@ export default {
     // 初始化消息立即沟通
     async showLiaotianr () {
       this.$store.commit('clearWsMsg')
-      this.signalROptions.isGroup = this.options.isGroup
-      this.signalROptions.name = this.options.linkName || this.options.linkman
-      this.signalROptions.userImage = this.options.userImage
-      this.signalROptions.toCompanyID = this.options.companyId || this.options.companyID
-      this.signalROptions.groupNumber = this.options.groupNumber
-      this.signalROptions.orderNumber = this.options.orderNumber
-      this.signalROptions.msgType = 'Text'
-      this.signalROptions.toUserID = this.options.toUserID || this.options.id
-      this.isOrderShow = this.options.isOrderShow || false
+      if (this.options) {
+        this.signalROptions.isGroup = this.options.isGroup
+        this.signalROptions.toLinkName = this.options.linkName || this.options.linkman
+        this.signalROptions.toUserImage = this.options.userImage
+        this.signalROptions.toUserID = this.options.toUserID || this.options.id
+        this.signalROptions.toCompanyID = this.options.companyId || this.options.companyID
+        this.signalROptions.groupNumber = this.options.groupNumber
+        this.signalROptions.orderNumber = this.options.orderNumber
+        this.signalROptions.msgType = 'Text'
+        this.isOrderShow = this.options.isOrderShow || false
+      }
       console.log(this.options, this.signalROptions, 999)
       try {
         this.addChannel() // 加入深网频道
@@ -890,8 +890,8 @@ export default {
     sendMsg (item) {
       // 加入频道成功后可发送频道消息
       if (item) {
-        item.linkName = this.$store.state.userInfo.userInfo.linkman
-        item.userImage = this.$store.state.userInfo.userInfo.userImage
+        item.linkName = this.signalROptions.orgLinkName
+        item.userImage = this.signalROptions.orgUserImage
         let toUserIDList = []
         for (let i = 0; i < item.toUserList.length; i++) {
           // 判断如果不在频道内
