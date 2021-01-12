@@ -55,12 +55,9 @@ export default {
     },
     // 获取用户信息
     async getHSMessageInformation () {
-      const res = await this.$http.post('/api/GetHSMessageInformation', {
-        phoneNumber: '18588466529',
-        companyNumber: 'HS0000005',
-        maPhoneNumber: '18023296593',
-        maKeyGuid: '001EB718-78EC-490D-8D9A-FB2B46DD1EE2'
-      })
+      const { phoneNumber, companyNumber, maPhoneNumber, maKeyGuid } = this.$route.query
+      console.log(phoneNumber, companyNumber, maPhoneNumber, maKeyGuid)
+      const res = await this.$http.post('/api/GetHSMessageInformation', { phoneNumber, companyNumber, maPhoneNumber, maKeyGuid })
       const data = res.data.result
       if (data.code === 200) {
         this.rtm.isGroup = data.item.isGroup

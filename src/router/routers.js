@@ -12,6 +12,8 @@ import me from '@/router/me/index'
 import _404 from '@/router/404/index'
 /** ERP模块 */
 import ERP from '@/router/ERP/index'
+/** 不需要loadding的模块 */
+import dontLoad from '@/router/dontLoad/index'
 /** 报价分享模块 */
 import offer from '@/router/offer/index'
 /** 公共聊天模块 */
@@ -32,6 +34,7 @@ export const staticRouters = [
   },
   _404,
   ...ERP,
+  ...dontLoad,
   ...offer,
   {
     path: '/',
