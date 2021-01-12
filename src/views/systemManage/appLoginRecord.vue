@@ -50,16 +50,21 @@
         style="width: 100%"
       >
         <el-table-column
+          prop="companyName"
+          align="center"
+          label="公司名称"
+        ></el-table-column>
+        <el-table-column prop="companyNumber" label="公司编号" align="center"></el-table-column>
+        <el-table-column
           prop="linkman"
           align="center"
-          label="用户名"
+          label="员工名称"
         ></el-table-column>
         <el-table-column
           prop="phoneNumber"
           label="手机号码"
           align="center"
         ></el-table-column>
-        <el-table-column prop="companyNumber" label="公司编号" align="center"></el-table-column>
         <el-table-column prop="createdOn" label="登录时间" sortable align="center">
           <template slot-scope="scope" v-if="scope.row.createdOn">{{
             scope.row.createdOn.replace(/T/g, " ")
