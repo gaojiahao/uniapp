@@ -12,6 +12,7 @@ const TouristMan = () => import('@/views/systemManage/touristMan.vue')
 const ProductPackAllocation = () => import('@/views/systemManage/productPackAllocation.vue')
 const ProductPackMan = () => import('@/views/systemManage/productPackMan.vue')
 const ClientMerge = () => import('@/views/systemManage/clientMerge.vue')
+const AppLoginRecord = () => import('@/views/systemManage/appLoginRecord.vue')
 
 export default [
   {
@@ -83,5 +84,10 @@ export default [
     path: '/productPackMan',
     name: 'productPackMan',
     component: ProductPackMan
+  },
+  {
+    path: '/appLoginRecord',
+    name: 'appLoginRecord',
+    component: AppLoginRecord
   }
 ]
