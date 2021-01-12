@@ -56,7 +56,7 @@ export default {
     // 获取用户信息
     async getHSMessageInformation () {
       const { phoneNumber, companyNumber, maPhoneNumber, maKeyGuid } = this.$route.query
-      console.log(phoneNumber, companyNumber, maPhoneNumber, maKeyGuid)
+      // const res = await this.$http.post('/api/GetHSMessageInformation', { phoneNumber: phoneNumber.trim(), companyNumber: companyNumber.trim(), maPhoneNumber: maPhoneNumber.trim(), maKeyGuid: maKeyGuid.trim() })
       const res = await this.$http.post('/api/GetHSMessageInformation', { phoneNumber, companyNumber, maPhoneNumber, maKeyGuid })
       const data = res.data.result
       if (data.code === 200) {
