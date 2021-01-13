@@ -15,6 +15,7 @@ const ClientMerge = () => import('@/views/systemManage/clientMerge.vue')
 const AppLoginRecord = () => import('@/views/systemManage/appLoginRecord.vue')
 const SeeProductRecordCount = () => import('@/views/systemManage/seeProductRecordCount.vue')
 const DownloadStatistics = () => import('@/views/systemManage/downloadStatistics.vue')
+const VipSpotNewProductsMan = () => import('@/views/systemManage/vipSpotNewProductsMan.vue')
 
 export default [
   {
@@ -101,5 +102,10 @@ export default [
     path: '/downloadStatistics',
     name: 'downloadStatistics',
     component: DownloadStatistics
+  },
+  {
+    path: '/vipSpotNewProductsMan',
+    name: 'vipSpotNewProductsMan',
+    component: VipSpotNewProductsMan
   }
 ]

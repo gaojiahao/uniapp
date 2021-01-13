@@ -53,7 +53,7 @@
     </div>
     <div class="tableContent">
       <el-table :data="productList" style="width: 100%">
-        <el-table-column class="productImg" label="产品图片" prop="img">
+        <el-table-column class="productImg" label="产品图片" prop="img" width="80">
           <template slot-scope="scope">
             <el-image class="img" :src="scope.row.img" fit="cover" :preview-src-list="[scope.row.img && scope.row.img.replace(/_MiddlePic/gi, '_Photo')]">
               <div

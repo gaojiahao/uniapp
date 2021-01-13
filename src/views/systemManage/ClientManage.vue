@@ -17,6 +17,7 @@
               style="width: 100%"
             ></el-input>
           </el-form-item>
+          {{formInline.Audit_state}}
             <el-form-item label="审核状态：">
             <el-select
               clearable
