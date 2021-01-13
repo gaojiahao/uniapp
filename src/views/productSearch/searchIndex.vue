@@ -171,16 +171,16 @@
                           : item.ne_we + "/" + item.gr_we + "(kg)"
                       }}
                     </li>
-                    <el-tag type="success"
-                      >来源：{{
-                        $store.state.userInfo.commparnyList &&
-                        $store.state.userInfo.commparnyList[0] &&
-                        $store.state.userInfo.commparnyList[0].companyType ==
-                          "Exhibition"
-                          ? item.supplierName
-                          : item.exhibitionName
-                      }}</el-tag
-                    >
+                    <!-- 厂商角色 -->
+                    <el-tag type="success" v-if="$store.state.userInfo.commparnyList && $store.state.userInfo.commparnyList[0] && $store.state.userInfo.commparnyList[0].companyType === 'Supplier'"
+                      >来源：{{ item.supplierNumber == ($store.state.userInfo.commparnyList && $store.state.userInfo.commparnyList[0] && $store.state.userInfo.commparnyList[0].companyNumber) ? item.supplierName : item.exhibitionName }}
+                    </el-tag>
+                    <!-- 展厅角色 | 管理员角色 -->
+                    <el-tag type="success" v-else-if="(($store.state.userInfo.commparnyList && $store.state.userInfo.commparnyList[0] && $store.state.userInfo.commparnyList[0].companyType) === 'Exhibition') || (($store.state.userInfo.commparnyList && $store.state.userInfo.commparnyList[0] && $store.state.userInfo.commparnyList[0].companyType) === 'Admin')"
+                      >来源：{{ item.supplierName }}
+                    </el-tag>
+                    <!-- 游客角色 | 公司角色-->
+                    <el-tag type="success" v-else>来源：{{ item.isIntegral ? item.supplierName : item.exhibitionName }}</el-tag>
                   </ul>
                 </div>
               </li>

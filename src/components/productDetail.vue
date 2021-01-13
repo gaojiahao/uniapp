@@ -146,17 +146,20 @@
               }}
             </li>
             <div class="tagBox">
-              <el-tag type="success" @click="openSourceDetail(productDetail)"
-                >来源：{{
-                  $store.state.userInfo.commparnyList &&
-                  $store.state.userInfo.commparnyList[0] &&
-                  $store.state.userInfo.commparnyList[0].companyType ==
-                    "Exhibition"
-                    ? productDetail.supplierName
-                    : productDetail.exhibitionName
-                }}
+              <!-- 厂商角色 -->
+              <el-tag type="success" v-if="$store.state.userInfo.commparnyList && $store.state.userInfo.commparnyList[0] && $store.state.userInfo.commparnyList[0].companyType === 'Supplier'"
+                   @click="openSupplierDetail(productDetail)"
+                >来源：{{ productDetail.supplierNumber == $store.state.userInfo.commparnyList[0].companyNumber ? productDetail.supplierName : productDetail.exhibitionName }}
               </el-tag>
-
+              <!-- 展厅角色 | 管理员角色 -->
+              <el-tag type="success" v-else-if="$store.state.userInfo.commparnyList && $store.state.userInfo.commparnyList[0] && $store.state.userInfo.commparnyList[0].companyType === 'Exhibition' || $store.state.userInfo.commparnyList[0].companyType === 'Admin'"
+                   @click="openExhibitionDetail(productDetail)"
+                >来源：{{ productDetail.supplierName }}
+              </el-tag>
+              <!-- 游客角色 | 公司角色-->
+              <el-tag type="success" v-else @click="openSalesDetail(productDetail)">来源：{{ productDetail.isIntegral ? productDetail.supplierName : productDetail.exhibitionName }}
+              </el-tag>
+              <!-- 来源模态框 -->
               <div class="box" v-show="isShowSourceDetail">
                 <div class="title">
                   <span>来源明细：</span>
@@ -286,21 +289,40 @@ export default {
     changeIsDetail () {
       this.$emit('changeIsDetail', this.productDetail)
     },
-    // 打开来源详情
-    async openSourceDetail (item) {
-      let number
-      if (
-        this.$store.state.userInfo.commparnyList &&
-        this.$store.state.userInfo.commparnyList[0] &&
-        this.$store.state.userInfo.commparnyList[0].companyType === 'Exhibition'
-      ) {
-        number = item.supplierNumber
-      } else {
-        number = item.exhibitionNumber
-      }
+    // 展厅 | 管理员 角色打开来源详情
+    async openExhibitionDetail (item) {
       if (!this.isShowSourceDetail) {
         const res = await this.$http.post('/api/CompanyByID', {
-          companyNumber: number
+          companyNumber: item.supplierNumber
+        })
+        if (res.data.result.code === 200) {
+          this.companyData = res.data.result.item
+        } else {
+          this.isShowSourceDetail = true
+        }
+      }
+      this.isShowSourceDetail = !this.isShowSourceDetail
+    },
+    // 公司角色打开来源详情
+    async openSalesDetail (item) {
+      console.log(item)
+      if (!this.isShowSourceDetail) {
+        const res = await this.$http.post('/api/CompanyByID', {
+          companyNumber: item.bearProduct.isIntegral ? item.supplierNumber : item.exhibitionNumber
+        })
+        if (res.data.result.code === 200) {
+          this.companyData = res.data.result.item
+        } else {
+          this.isShowSourceDetail = true
+        }
+      }
+      this.isShowSourceDetail = !this.isShowSourceDetail
+    },
+    // 工厂角色打开来源详情
+    async openSupplierDetail (item) {
+      if (!this.isShowSourceDetail) {
+        const res = await this.$http.post('/api/CompanyByID', {
+          companyNumber: item.supplierNumber === (this.$store.state.userInfo.commparnyList && this.$store.state.userInfo.commparnyList[0] && this.$store.state.userInfo.commparnyList[0].supplierNumber) ? item.supplierName : item.exhibitionNumber
         })
         if (res.data.result.code === 200) {
           this.companyData = res.data.result.item

@@ -192,7 +192,7 @@
         </div>
       </div>
       <!-- 产品列表 -->
-      <productList v-show="!isProductDetail" ref="childrenProduct" @showProductDetail="showProductDetail" @handlerCubeImgEvent="handlerCubeImgEvent" style="margin:50px 0" />
+      <productList v-if="!isProductDetail" ref="childrenProduct" @showProductDetail="showProductDetail" @handlerCubeImgEvent="handlerCubeImgEvent" style="margin:50px 0" />
       <div class="productDetailBox" v-if="isProductDetail">
         <productDetail @changeIsDetail="changeIsDetail" :number="productNumber" />
       </div>
@@ -316,8 +316,10 @@ export default {
     // 詳情返回事件
     changeIsDetail (productDetail) {
       this.isProductDetail = false
-      this.$refs.childrenProduct.productList.forEach(item => {
-        if (item.productNumber === this.productNumber) item.isFavorite = productDetail.isFavorite
+      this.$nextTick(() => {
+        this.$refs.childrenProduct.productList.forEach(item => {
+          if (item.productNumber === this.productNumber) item.isFavorite = productDetail.isFavorite
+        })
       })
     },
     // 打開產品詳情

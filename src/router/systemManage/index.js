@@ -13,6 +13,8 @@ const ProductPackAllocation = () => import('@/views/systemManage/productPackAllo
 const ProductPackMan = () => import('@/views/systemManage/productPackMan.vue')
 const ClientMerge = () => import('@/views/systemManage/clientMerge.vue')
 const AppLoginRecord = () => import('@/views/systemManage/appLoginRecord.vue')
+const SeeProductRecordCount = () => import('@/views/systemManage/seeProductRecordCount.vue')
+const DownloadStatistics = () => import('@/views/systemManage/downloadStatistics.vue')
 
 export default [
   {
@@ -89,5 +91,15 @@ export default [
     path: '/appLoginRecord',
     name: 'appLoginRecord',
     component: AppLoginRecord
+  },
+  {
+    path: '/seeProductRecordCount',
+    name: 'seeProductRecordCount',
+    component: SeeProductRecordCount
+  },
+  {
+    path: '/downloadStatistics',
+    name: 'downloadStatistics',
+    component: DownloadStatistics
   }
 ]
