@@ -179,7 +179,6 @@ export default {
         }
       }
       const res = await this.$http.post('/api/SearchProductRecordsPage', fd)
-      console.log(res)
       if (res.data.result.code === 200) {
         this.SMSInfoList = res.data.result.item.items
         this.totalCount = res.data.result.item.totalCount

@@ -305,7 +305,6 @@ export default {
     },
     // 公司角色打开来源详情
     async openSalesDetail (item) {
-      console.log(item)
       if (!this.isShowSourceDetail) {
         const res = await this.$http.post('/api/CompanyByID', {
           companyNumber: item.bearProduct.isIntegral ? item.supplierNumber : item.exhibitionNumber

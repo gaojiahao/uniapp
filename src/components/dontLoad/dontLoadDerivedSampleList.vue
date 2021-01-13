@@ -213,7 +213,7 @@ export default {
       }
       const res = await this.$http.post('/api/GetQuoteListBasicPage', fd)
       if (res.data.result.code === 200) {
-        console.log(res)
+        this.$message.success(res.data.result.msg)
       } else {
         this.$message.error(res.data.result.msg)
       }
