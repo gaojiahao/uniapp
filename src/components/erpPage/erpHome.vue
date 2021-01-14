@@ -29,29 +29,29 @@
             fit="contain"
           >
           <div
-                      slot="placeholder"
-                      class="image-slot"
-                      style="width: 80px; margin: 0 auto"
-                    >
-                      <img
-                        class="errorImg"
-                        style="width: 80px;"
-                        src="~@/assets/images/imgError.jpg"
-                        alt
-                      />
-                    </div>
-                    <div
-                      slot="error"
-                      class="image-slot"
-                      style="width: 80px; margin: 0 auto"
-                    >
-                      <img
-                        class="errorImg"
-                        style="width: 80px;"
-                        src="~@/assets/images/imgError.jpg"
-                        alt
-                      />
-                    </div>
+            slot="placeholder"
+            class="image-slot"
+            style="width: 80px; margin: 0 auto"
+          >
+            <img
+              class="errorImg"
+              style="width: 80px;"
+              src="~@/assets/images/imgError.jpg"
+              alt
+            />
+          </div>
+          <div
+            slot="error"
+            class="image-slot"
+            style="width: 80px; margin: 0 auto"
+          >
+            <img
+              class="errorImg"
+              style="width: 80px;"
+              src="~@/assets/images/imgError.jpg"
+              alt
+            />
+          </div>
           </el-image>
         </div>
         <div class="text">{{ item.companyName }}</div>

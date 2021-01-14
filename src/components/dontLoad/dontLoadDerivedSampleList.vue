@@ -199,17 +199,17 @@ export default {
   methods: {
     // 获取择样列表
     async getQuoteListBasicPage () {
+      // eslint-disable-next-line camelcase
+      const { the_nu, client_nu, hallNumber } = this.$route.query
+      console.log(the_nu, client_nu, hallNumber)
       const fd = {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
-        the_nu: '',
-        client_nu: '',
+        the_nu: the_nu,
+        client_nu: client_nu,
+        hallNumber: hallNumber,
         keyWord: '',
-        hallNumber: '',
-        co_nuList: '',
-        sortOrder: '',
-        sortType: '',
-        type: ''
+        type: 0
       }
       const res = await this.$http.post('/api/GetQuoteListBasicPage', fd)
       if (res.data.result.code === 200) {
