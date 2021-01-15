@@ -218,7 +218,7 @@
             </p>
             <p class="productPrice" v-show="(productInfo && productInfo.productOfferType) !== 'company'">
               出厂价：<span class="price">{{
-                item.cu_de + item.unitPrice.toFixed((item.decimalPlaces || 2))
+                '￥' + item.unitPrice.toFixed((item.decimalPlaces || 2))
               }}</span>
             </p>
             <p class="productPrice">
@@ -236,7 +236,7 @@
           class="squareItem"
           v-for="(item, i) in productList"
           :key="i"
-          @click.stop.native="productDetail(item.productNumber)"
+          @click.stop.native="productDetail(item.id)"
         >
           <div class="top">
             <el-image
@@ -268,9 +268,9 @@
             <p class="productCode">
               出厂货号：<span>{{ item.fa_no }}</span>
             </p>
-            <p class="productPrice">
+            <p class="productPrice" v-show="(productInfo && productInfo.productOfferType) !== 'company'">
               出厂价：<span class="price">{{
-                item.cu_de + item.unitPrice.toFixed((item.decimalPlaces || 2))
+                '￥' + item.unitPrice.toFixed((item.decimalPlaces || 2))
               }}</span>
             </p>
             <p class="productPrice">
@@ -614,12 +614,12 @@ export default {
       }
     },
     // 点击列表进入详情页
-    productDetail (number) {
-      if (!number) {
+    productDetail (id) {
+      if (!id) {
         this.$message.error('该产品没有产品编号')
         return false
       }
-      this.$router.push({ name: 'offerDetail', params: { id: number, pid: this.$route.query.id } })
+      this.$router.push({ name: 'offerDetail', params: { id: id, pid: this.$route.query.id } })
     }
   },
   created () {
