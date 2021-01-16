@@ -108,6 +108,7 @@
         <p class="textItem">出厂货号：{{productDetail.fa_no}}</p>
         <p class="textItem">包装方式：{{productDetail.ch_pa}}</p>
         <p class="textItem">样品规格：{{productDetail.pr_le + " X " + productDetail.pr_wi + " X " + productDetail.pr_hi + "(CM)"}}</p>
+        <p class="textItem">包装规格：{{productDetail.in_le + " X " + productDetail.in_wi + " X " + productDetail.in_hi + "(CM)"}}</p>
         <p class="textItem">外箱规格：{{productDetail.ou_le + " X " + productDetail.ou_wi + " X " + productDetail.ou_hi + "(CM)"}}</p>
         <p class="textItem">装箱量：{{productDetail.in_en + "/" + productDetail.ou_lo + "(PCS)"}}</p>
         <p class="textItem">体积/材积：{{productDetail.bulk_stere + "(CBM)" + "/" + productDetail.bulk_feet + "(CUFT)"}}</p>
