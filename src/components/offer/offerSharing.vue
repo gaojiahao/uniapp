@@ -217,9 +217,9 @@
               体积/材积：<span>{{  item.bulk_stere + "(CBM)" + "/" + item.bulk_feet + "(CUFT)" }}</span>
             </p>
             <p class="productPrice" v-show="(productInfo && productInfo.productOfferType) !== 'company'">
-              出厂价：<span class="price">{{
-                '￥' + item.unitPrice.toFixed((item.decimalPlaces || 2))
-              }}</span>
+              出厂价：<span class="price">
+                {{ '￥' + item.unitPrice }}
+              </span>
             </p>
             <p class="productPrice">
               报价：<span class="price">{{
@@ -269,9 +269,9 @@
               出厂货号：<span>{{ item.fa_no }}</span>
             </p>
             <p class="productPrice" v-show="(productInfo && productInfo.productOfferType) !== 'company'">
-              出厂价：<span class="price">{{
-                '￥' + item.unitPrice.toFixed((item.decimalPlaces || 2))
-              }}</span>
+              出厂价：<span class="price">
+                {{ '￥' + item.unitPrice }}
+              </span>
             </p>
             <p class="productPrice">
               报价：<span class="price">{{
