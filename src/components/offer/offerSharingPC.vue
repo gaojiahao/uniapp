@@ -183,7 +183,7 @@
                       体积/材积：<span>{{ item.bulk_stere + "(CBM)" + "/" + item.bulk_feet + "(CUFT)" }}</span>
                     </li>
                     <li v-show="productInfo && productInfo.productOfferType !== 'company'">
-                      出厂价：<span class="price" v-if="$_.isNumber(item.unitPrice)">{{ '￥' + item.unitPrice }}</span>
+                      出厂价：<span class="price" v-if="$_.isNumber(item.unitPrice)">{{ '￥' + item.unitPrice.toFixed(2) }}</span>
                     </li>
                     <li>
                       报价：<span class="price" v-if="$_.isNumber(item.offerAmount)">{{item.cu_de + item.offerAmount.toFixed((item.decimalPlaces || 2))}}</span>

@@ -218,7 +218,7 @@
             </p>
             <p class="productPrice" v-show="(productInfo && productInfo.productOfferType) !== 'company'">
               出厂价：<span class="price">
-                {{ '￥' + item.unitPrice }}
+                {{ '￥' + item.unitPrice.toFixed(2) }}
               </span>
             </p>
             <p class="productPrice">
@@ -270,7 +270,7 @@
             </p>
             <p class="productPrice" v-show="(productInfo && productInfo.productOfferType) !== 'company'">
               出厂价：<span class="price">
-                {{ '￥' + item.unitPrice }}
+                {{ '￥' + item.unitPrice.toFixed(2) }}
               </span>
             </p>
             <p class="productPrice">

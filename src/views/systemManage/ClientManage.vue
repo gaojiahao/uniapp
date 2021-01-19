@@ -388,7 +388,7 @@
           <el-form-item label="手机" prop="phoneNumber">
             <el-input
               v-model.trim="addClientForm.phoneNumber"
-              :disabled="dialogTitle === '审核' || dialogTitle === '用户编辑' || dialogTitle === '内部审核'"
+              :disabled="dialogTitle === '审核' || dialogTitle === '内部审核'"
             ></el-input>
           </el-form-item>
           <el-form-item label="联系人" prop="contactsMan">
