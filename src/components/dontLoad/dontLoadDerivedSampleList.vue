@@ -4,7 +4,7 @@
       <div class="topLayout">
         <div class="left">
           <div class="logoImg">
-            <el-image :src="require('@/assets/images/ab_logo.png')"  fit="fill"></el-image>
+            <el-image :src="require('@/assets/images/logo.png')"  fit="fill"></el-image>
           </div>
           <div class="companyInfo">
             <div class="infoBox">

@@ -535,15 +535,6 @@ export default {
           margin: 0 auto;
           position: relative;
           display: flex;
-          .searchImg {
-            position: absolute;
-            left: 5px;
-            top: 0;
-            width: 230px;
-            height: 80px;
-            background: url('~@/assets/images/searchTopBg.png') no-repeat;
-            z-index: 1;
-          }
           .inputBox{
               border-radius: 10px;
               border: 1px solid #3872f8;

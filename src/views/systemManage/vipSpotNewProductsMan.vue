@@ -41,7 +41,7 @@
                 class="image-slot"
                 style="width: 50px; height: 50px; margin: 0 auto"
               >
-                <img class="errorImg" src="~@/assets/images/ab_logo.png" alt />
+                <img class="errorImg" src="~@/assets/images/logo.png" alt />
               </div>
               <div
                 slot="error"
@@ -50,7 +50,7 @@
               >
                 <img
                   class="errorImg"
-                  src="~@/assets/images/ab_logo.png"
+                  src="~@/assets/images/logo.png"
                   alt
                 />
               </div>

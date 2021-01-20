@@ -1,5 +1,92 @@
 <template>
-  <div class="erpHomeBox">
+  <div class="erpHomeWrap">
+    <div class="toplauotBox">
+      <div class="toplauot">
+        <div class="left">
+          <el-image
+            style="width: 76px; height: 76px"
+            :src="require('@/assets/images/logo.png')"
+            fit="contain"></el-image>
+            <div class="titleBox">
+              <div class="chTitle">
+                小竹熊择样单同步管理
+              </div>
+              <div class="enTitle">
+                Shenzhen Little Bamboo Bear Technology co.,Ltd.
+              </div>
+            </div>
+        </div>
+        <div class="right">
+          <div class="shouyeBox">
+            <i class="homeIcon"></i>
+            <span class="homeText">首页</span>
+          </div>
+          <div class="shouyeBox">
+            <i class="mySampleIcon"></i>
+            <span class="sampleText">
+              我的择样单
+            </span>
+          </div>
+          <div class="loginBtn">登录系统</div>
+        </div>
+      </div>
+    </div>
+    <div class="bannerTong">
+      <div class="bannerContext">
+        <div class="contentBox">
+          <p class="title">小竹熊择样信息同步宏升erp</p>
+          <p class="explain">让办公更快捷  更畅通  更高效</p>
+        </div>
+      </div>
+    </div>
+    <div class="floorBox">
+      <div class="flootTitle">
+        <span>宏升合作展厅</span>
+        <span class="more">更多合作展厅<i class="el-icon-arrow-right moreIcon"></i></span>
+      </div>
+      <div class="exhibitionList">
+        <div class="bigExhibitions">
+          <div class="bigExhibitionItem" v-for="item in bigHalls" :key="item">
+            <div class="imgBox">
+              <el-image class="hallLogo" :src="item.bgImg">
+              <div slot="error" class="image-slot">
+                <img style="width: 273px; height: 121px" src="~@/assets/images/imgError.jpg" alt />
+              </div>
+            </el-image>
+            </div>
+            <div class="hallName">
+              <div>{{ item.companyName }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="minExhibitions">
+           <div class="minExhibitionItem" v-for="item in minHalls" :key="item">
+            <div class="imgBox">
+              <el-image class="hallLogo" :src="item.bgImg">
+              <div slot="error" class="image-slot">
+                <img style="width: 127px; height: 70px" src="~@/assets/images/imgError.jpg" alt />
+              </div>
+            </el-image>
+            </div>
+            <div class="hallName">
+              <div>{{ item.companyName }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="floorBox">
+      <div class="flootTitle">
+        <span>新品推荐</span>
+        <span class="more">更多新品<i class="el-icon-arrow-right moreIcon"></i></span>
+      </div>
+      <div class="newArrivals">
+        <swiper v-if="newProductList" :dataList="newProductList"></swiper>
+      </div>
+    </div>
+  </div>
+  <!-- 旧版模板 -->
+  <!-- <div class="erpHomeBox">
     <div class="erweimaApp" @mouseenter="hoverLogo" @mouseleave="hoverIsLogo">
       <img class="jiaerweima" :src="jiaerweima" alt="" />
       <div class="saomaDiv" v-show="isActive">
@@ -75,11 +162,11 @@
     <div class="footer">
       <el-button type="primary" @click="toLogins">同步订单</el-button>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
-import swiper from '@/components/minSwiper'
+import swiper from '@/components/swiper'
 export default {
   components: {
     swiper
@@ -92,9 +179,10 @@ export default {
       currentPage: 1,
       pageSize: 10,
       direction: 'left',
-      dataList: [],
+      newProductList: [],
       token: null,
-      orgCompanyList: []
+      bigHalls: [],
+      minHalls: []
     }
   },
   methods: {
@@ -114,18 +202,19 @@ export default {
         AuditStatus: 0
       })
       if (res.data.result.code === 200) {
-        this.dataList = res.data.result.item.items
+        this.newProductList = res.data.result.item.items
       }
     },
-    // 获取展厅
+    // 获取大小展厅
     async getOrgCompany () {
-      const res = await this.$http.post('/api/CompanyManagementPage', {
+      const res = await this.$http.post('/api/GetExhibitionList', {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         companyType: 'Exhibition'
       })
       if (res.data.result.code === 200) {
-        this.orgCompanyList = res.data.result.item.items
+        this.bigHalls = res.data.result.item.bigHallList
+        this.minHalls = res.data.result.item.smallHallList
       }
     },
     // 去公司
@@ -159,6 +248,8 @@ export default {
 [v-cloak] {
   display: none;
 }
+@import './erpHome.less';
+//  旧版样式
 .erpHomeBox {
   width: 800px;
   height: 800px;
