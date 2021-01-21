@@ -50,7 +50,7 @@
             <div class="imgBox">
               <el-image class="hallLogo" :src="item.bgImg">
               <div slot="error" class="image-slot">
-                <img style="width: 273px; height: 121px" src="~@/assets/images/imgError.jpg" alt />
+                <img style="width: 127px; height: 70px" src="~@/assets/images/imgError.jpg" alt />
               </div>
             </el-image>
             </div>
@@ -81,7 +81,22 @@
         <span class="more">更多新品<i class="el-icon-arrow-right moreIcon"></i></span>
       </div>
       <div class="newArrivals">
-        <swiper v-if="newProductList" :dataList="newProductList"></swiper>
+        <div class="itemBox" v-for="(item, i) in 6" :key="i">
+          <div class="imgBox">
+              <el-image class="hallLogo" :src="require('@/assets/images/prductItemIcon.png')">
+              <div slot="error" class="image-slot">
+                <img style="width: 180px; height: 136px" src="~@/assets/images/imgError.jpg" alt />
+              </div>
+            </el-image>
+            </div>
+            <div class="contentText">
+              <div class="hallName">
+                <p>积木飞机</p>
+                <p>出厂货号：HS0046642</p>
+                <p>参考单价：￥10</p>
+              </div>
+            </div>
+        </div>
       </div>
     </div>
     <!-- 广告层 -->
@@ -89,7 +104,13 @@
       <div class="editionCenter">
         <div class="erweimaBox">
           <div class="erweimaWrap">
-            <el-image style="width: 88px; height: 88px" :src="require('../../assets/images/ErWeiMa.png')" fit="contain"></el-image>
+            <el-image style="width: 92px; height: 92px" :src="require('@/assets/images/ErWeiMa.png')" fit="contain"></el-image>
+          </div>
+          <div class="conText">
+            <div class="TextWrap">
+              <p class="text">扫码下载</p>
+              <p class="text">小竹熊APP</p>
+            </div>
           </div>
         </div>
       </div>
@@ -176,11 +197,11 @@
 </template>
 
 <script>
-import swiper from '@/components/swiper'
+// import swiper from '@/components/swiper'
 export default {
-  components: {
-    swiper
-  },
+  // components: {
+  //   swiper
+  // },
   data () {
     return {
       jiaerweima: require('@/assets/images/erweimaicon@2x.png'),
