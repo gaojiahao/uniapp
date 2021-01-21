@@ -5,10 +5,47 @@
 .erpHomeWrap{
   background-color: #F5F5F5;
   min-height: 100vh;
+  box-sizing: border-box;
+  // 广告层
+  .advertisingLayer{
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    left: -10px;
+    top: 0;
+    box-sizing: border-box;
+    pointer-events: none;
+    .editionCenter{
+      width: 1200px;
+      margin: 0 auto;
+      height: 100%;
+      position: relative;
+      .erweimaBox{
+        position: absolute;
+        width: 112px;
+        height: 147px;
+        right: -130px;
+        bottom: 30px;
+        background-color: #fff;
+        border: 1px solid #E9E9E9;
+        border-radius: 5px;
+        pointer-events: auto; // 关键
+        cursor: pointer;
+        .erweimaWrap{
+          width: 100%;
+          height: 108px;
+          padding: 10px;
+          box-sizing: border-box;
+        }
+      }
+    }
+  }
+  // 内容层
   .toplauotBox{
     height: 90px;
     width: 100%;
     background-color: #fff;
+    box-sizing: border-box;
     .toplauot{
       height: 100%;
       width: 1200px;
@@ -152,7 +189,7 @@
         display: flex;
         justify-content: space-between;
         width: 100%;
-        
+        overflow: hidden;
         // overflow-y: hidden;
         // overflow-x: auto;
         // &::-webkit-scrollbar {
@@ -163,6 +200,7 @@
           height: 155px;
           display: inline-block;
           margin-right: 20px;
+          cursor: pointer;
           &:last-of-type{
             margin-right: 0;
           }
@@ -192,6 +230,7 @@
           width: 127px;
           display: inline-block;
           margin-right: 20px;
+          cursor: pointer;
           &:last-of-type{
             margin-right: 0;
           }

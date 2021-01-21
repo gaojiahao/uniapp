@@ -84,6 +84,16 @@
         <swiper v-if="newProductList" :dataList="newProductList"></swiper>
       </div>
     </div>
+    <!-- 广告层 -->
+    <div class="advertisingLayer">
+      <div class="editionCenter">
+        <div class="erweimaBox">
+          <div class="erweimaWrap">
+            <el-image style="width: 88px; height: 88px" :src="require('../../assets/images/ErWeiMa.png')" fit="contain"></el-image>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <!-- 旧版模板 -->
   <!-- <div class="erpHomeBox">
