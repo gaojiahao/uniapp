@@ -59,7 +59,7 @@
                       class="errorImg"
                     >
                       <img
-                        src="~@/assets/images/imgError.jpg"
+                        src="~@/assets/images/imgError.png"
                         alt
                       />
                     </div>
@@ -68,7 +68,7 @@
                       class="errorImg"
                     >
                       <img
-                        src="~@/assets/images/imgError.jpg"
+                        src="~@/assets/images/imgError.png"
                         alt
                       />
                     </div>

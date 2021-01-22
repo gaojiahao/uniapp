@@ -50,7 +50,7 @@
               <div slot="placeholder" class="image-slot">
                 <img
                   class="errorImg"
-                  src="~@/assets/images/imgError.jpg"
+                  src="~@/assets/images/imgError.png"
                   alt
                   style="width:80px;height:80px;margin:0 auto;"
                 />
@@ -58,7 +58,7 @@
               <div slot="error" class="image-slot">
                 <img
                   class="errorImg"
-                  src="~@/assets/images/imgError.jpg"
+                  src="~@/assets/images/imgError.png"
                   alt
                   style="width:80px;height:80px;margin:0 auto;"
                 />

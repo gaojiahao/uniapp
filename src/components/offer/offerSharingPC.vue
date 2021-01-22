@@ -10,7 +10,7 @@
                     >
                       <img
                         class="errorImg"
-                        src="~@/assets/images/imgError.jpg"
+                        src="~@/assets/images/imgError.png"
                         alt
                       />
                     </div>
@@ -20,7 +20,7 @@
                     >
                       <img
                         class="errorImg"
-                        src="~@/assets/images/imgError.jpg"
+                        src="~@/assets/images/imgError.png"
                         alt
                       />
                     </div>
@@ -148,7 +148,7 @@
                     >
                       <img
                         class="errorImg"
-                        src="~@/assets/images/imgError.jpg"
+                        src="~@/assets/images/imgError.png"
                         alt
                       />
                     </div>
@@ -159,7 +159,7 @@
                     >
                       <img
                         class="errorImg"
-                        src="~@/assets/images/imgError.jpg"
+                        src="~@/assets/images/imgError.png"
                         alt
                       />
                     </div>

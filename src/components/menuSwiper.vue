@@ -21,10 +21,10 @@
             "
           >
             <div slot="placeholder" class="image-slot">
-              <img class="errorImg" src="~@/assets/images/imgError.jpg" alt />
+              <img class="errorImg" src="~@/assets/images/imgError.png" alt />
             </div>
             <div slot="error" class="image-slot">
-              <img class="errorImg" src="~@/assets/images/imgError.jpg" alt />
+              <img class="errorImg" src="~@/assets/images/imgError.png" alt />
             </div>
           </el-image>
         </el-carousel-item>

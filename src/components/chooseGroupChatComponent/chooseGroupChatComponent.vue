@@ -30,14 +30,14 @@
               class="image-slot"
               style="width: 40px; height: 40px; margin: 0 auto"
             >
-              <img class="errorImg" src="~@/assets/images/imgError.jpg" alt />
+              <img class="errorImg" src="~@/assets/images/imgError.png" alt />
             </div>
             <div
               slot="error"
               class="image-slot"
               style="width: 40px; height: 40px; margin: 0 auto"
             >
-              <img class="errorImg" src="~@/assets/images/imgError.jpg" alt />
+              <img class="errorImg" src="~@/assets/images/imgError.png" alt />
             </div>
           </el-image>
           <div class="name">{{item.linkName}}</div>

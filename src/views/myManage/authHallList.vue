@@ -166,7 +166,7 @@
           <template slot-scope="scope">
             <el-image class="tableImg" :src="scope.row.imgUrl" :preview-src-list="[scope.row.imgUrl]">
               <div slot="error" class="image-slot">
-                <img class="errorImg" src="~@/assets/images/imgError.jpg" alt />
+                <img class="errorImg" src="~@/assets/images/imgError.png" alt />
               </div>
             </el-image>
           </template>
@@ -231,7 +231,7 @@
         <el-form-item>
           <el-image class="formImg" :src="currentAuthRow.imgUrl" :preview-src-list="[currentAuthRow.imgUrl]">
               <div slot="error" class="image-slot">
-                <img class="errorImg" src="~@/assets/images/imgError.jpg" alt />
+                <img class="errorImg" src="~@/assets/images/imgError.png" alt />
               </div>
           </el-image>
         </el-form-item>

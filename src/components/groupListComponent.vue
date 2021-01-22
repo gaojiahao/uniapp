@@ -16,7 +16,7 @@
         <div class="itemBox" @click="openAccept({code:1,item:item})" v-for="(item, i) in friendList" :key="i">
           <div class="left">
             <div class="icon">
-              <el-image fit="contain" :src="require('@/assets/images/imgError.jpg')" lazy>
+              <el-image fit="contain" :src="require('@/assets/images/imgError.png')" lazy>
                   <div
                     slot="placeholder"
                     class="image-slot"
@@ -24,7 +24,7 @@
                   >
                     <img
                       class="errorImg"
-                      src="~@/assets/images/imgError.jpg"
+                      src="~@/assets/images/imgError.png"
                       alt
                     />
                   </div>
@@ -35,7 +35,7 @@
                   >
                     <img
                       class="errorImg"
-                      src="~@/assets/images/imgError.jpg"
+                      src="~@/assets/images/imgError.png"
                       alt
                     />
                   </div>
@@ -69,7 +69,7 @@
       </div>
       <div class="contentListTwo">
         <li class="item" v-for="i in groupMessageList" :key="i">
-          <el-image fit="contain" :src="require('@/assets/images/imgError.jpg')" lazy>
+          <el-image fit="contain" :src="require('@/assets/images/imgError.png')" lazy>
             <div
               slot="placeholder"
               class="image-slot"
@@ -77,7 +77,7 @@
             >
               <img
                 class="errorImg"
-                src="~@/assets/images/imgError.jpg"
+                src="~@/assets/images/imgError.png"
                 alt
               />
             </div>
@@ -88,7 +88,7 @@
             >
               <img
                 class="errorImg"
-                src="~@/assets/images/imgError.jpg"
+                src="~@/assets/images/imgError.png"
                 alt
               />
             </div>

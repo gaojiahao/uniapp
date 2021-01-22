@@ -41,10 +41,10 @@
           :src="orderItemOptions && orderItemOptions.imgUrl[0]"
         >
           <div slot="placeholder" class="image-slot">
-            <img class="errorImg" src="~@/assets/images/imgError.jpg" alt />
+            <img class="errorImg" src="~@/assets/images/imgError.png" alt />
           </div>
           <div slot="error" class="image-slot">
-            <img class="errorImg" src="~@/assets/images/imgError.jpg" alt />
+            <img class="errorImg" src="~@/assets/images/imgError.png" alt />
           </div>
         </el-image>
       </div>
@@ -99,14 +99,14 @@
                     <div slot="placeholder" class="image-slot">
                       <img
                         class="errorImg"
-                        src="~@/assets/images/imgError.jpg"
+                        src="~@/assets/images/imgError.png"
                         alt
                       />
                     </div>
                     <div slot="error" class="image-slot">
                       <img
                         class="errorImg"
-                        src="~@/assets/images/imgError.jpg"
+                        src="~@/assets/images/imgError.png"
                         alt
                       />
                     </div>
@@ -142,7 +142,7 @@
                           <el-image
                             v-else
                             style="width: 50px; height: 50px"
-                            :src="require('@/assets/images/imgError.jpg')"
+                            :src="require('@/assets/images/imgError.png')"
                           >
                           </el-image>
                         </div>
@@ -358,7 +358,7 @@
                         <el-image
                           v-else
                           style="width: 50px; height: 50px"
-                          :src="require('@/assets/images/imgError.jpg')"
+                          :src="require('@/assets/images/imgError.png')"
                         >
                         </el-image>
                       </div>

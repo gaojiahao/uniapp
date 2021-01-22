@@ -16,14 +16,14 @@
               class="image-slot"
               style="width: 50px; height: 50px; margin: 0 auto"
             >
-              <img class="errorImg" src="~@/assets/images/imgError.jpg" alt />
+              <img class="errorImg" src="~@/assets/images/imgError.png" alt />
             </div>
             <div
               slot="error"
               class="image-slot"
               style="width: 50px; height: 50px; margin: 0 auto"
             >
-              <img class="errorImg" src="~@/assets/images/imgError.jpg" alt />
+              <img class="errorImg" src="~@/assets/images/imgError.png" alt />
             </div>
           </el-image>
         </div>

@@ -6,7 +6,7 @@
           <li class="item">
           <el-image class="img" :src="item.userImage" :preview-src-list="[item.userImage]">
             <div slot="error" class="image-slot">
-              <img src="~@/assets/images/imgError.jpg" alt="">
+              <img src="~@/assets/images/imgError.png" alt="">
             </div>
           </el-image>
           <div class="name">{{ item.linkName }}</div>
@@ -16,7 +16,7 @@
           <div class="left">
             <el-image class="img" :src="require('../../assets/images/linkIcon.png')" :preview-src-list="[item.userImage]">
             <div slot="error" class="image-slot">
-              <img src="~@/assets/images/imgError.jpg" alt="">
+              <img src="~@/assets/images/imgError.png" alt="">
             </div>
           </el-image>
           </div>

@@ -23,35 +23,10 @@
       position: relative;
       .erweimaBox{
         position: absolute;
-        width: 112px;
-        height: 147px;
         right: -130px;
         bottom: 30px;
-        background-color: #fff;
-        border: 1px solid #E9E9E9;
-        border-radius: 5px;
         pointer-events: auto; // 关键
         cursor: pointer;
-        .erweimaWrap{
-          width: 100%;
-          height: 103px;
-          padding: 10px;
-          padding-bottom: 0;
-          box-sizing: border-box;
-        }
-        .conText{
-          height: 44px;
-          color: #333333;
-          display: flex;
-          font-size: 13px;
-          justify-content: center;
-          .TextWrap{
-            .text{
-              text-align: center;
-              line-height: 17px;
-            }
-          }
-        }
       }
     }
   }
@@ -111,7 +86,7 @@
             width: 21px;
             height: 21px;
             margin-right: 10px;
-            background: url('~@/assets/images/homeIcon.png') no-repeat center;
+            background: url('~@/assets/images/activeHomeIcon.png') no-repeat center;
           }
           .mySampleIcon{
             width: 21px;
@@ -278,8 +253,9 @@
       padding: 20px;
       display: flex;
       justify-content: space-between;
+      flex-wrap: wrap;
       .itemBox{
-        height: 238px;
+        // height: 238px;
         width: 180px;
         box-sizing: border-box;
         &:last-of-type{
@@ -297,13 +273,25 @@
           width: 180px;
           height: 102px;
           display: flex;
-          align-items: center;
           .hallName{
             width: 180px;
             margin-top: 10px;
             overflow: hidden;/*超出部分隐藏*/
             white-space: nowrap;/*不换行*/
             text-overflow:ellipsis;/*超出部分文字以...显示*/
+            .name{
+              font-size: 16px;
+              font-weight: 400;
+              line-height: 44px;
+            }
+            .textItem{
+              font-size: 14px;
+              line-height: 22px;
+              color: #999;
+              .price{
+                color: #FF0032;
+              }
+            }
           }
         }
       }

@@ -5,7 +5,7 @@
         <li class="item" v-for="(item, i) in groupMessageList" :key="i">
           <el-image class="img" :src="item.attachment" :preview-src-list="[item.attachment]" v-if="item.messageType === 'Picture'">
             <div slot="error" class="image-slot">
-              <img src="~@/assets/images/imgError.jpg" alt="">
+              <img src="~@/assets/images/imgError.png" alt="">
             </div>
           </el-image>
           <video v-else controls class="video-js" style="object-fit:cover">

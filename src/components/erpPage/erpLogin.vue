@@ -1,6 +1,127 @@
 <template>
   <div class="erpLoginBox">
-    <div class="erweimaApp" @mouseenter="hoverLogo" @mouseleave="hoverIsLogo">
+    <div class="toplauotBox">
+      <div class="toplauot">
+        <div class="left">
+          <el-image
+            style="width: 76px; height: 76px"
+            :src="require('@/assets/images/logo.png')"
+            fit="contain"></el-image>
+            <div class="titleBox">
+              <div class="chTitle">
+                小竹熊择样单同步管理
+              </div>
+              <div class="enTitle">
+                Shenzhen Little Bamboo Bear Technology co.,Ltd.
+              </div>
+            </div>
+        </div>
+        <div class="right">
+          <div class="shouyeBox" @click="toHome">
+            <i class="homeIcon"></i>
+            <span class="homeText">首页</span>
+          </div>
+          <div class="shouyeBox" @click="isErpOrder">
+            <i class="mySampleIcon"></i>
+            <span class="sampleText">
+              我的择样单
+            </span>
+          </div>
+          <div class="loginBtn">登录系统</div>
+        </div>
+      </div>
+    </div>
+    <div class="loginWrap">
+      <div class="loginBox">
+        <div class="left">
+          <p class="yijian">择样信息一键同步</p>
+        </div>
+        <div class="middel">
+          <div class="qrCodeWrap">
+            <div class="qrCodeBox">
+              <p class="title">二维码登录</p>
+              <div class="saomadenglu">
+                <vue-qr
+                :text="options.url"
+                :logoSrc="options.icon + '?cache'"
+                :colorDark="options.colorDark"
+                :colorLight="options.colorLight"
+                :margin="options.margin"
+                :size="options.size"
+              ></vue-qr>
+              </div>
+              <p class="saoyisao">请用小竹熊App扫一扫登录</p>
+            </div>
+          </div>
+        </div>
+        <div class="right">
+          <div class="title">登录系统</div>
+          <div class="accountLogin">账号登录</div>
+          <div class="myForm">
+          <el-form :model="loginForm" ref="erpLoginRef" :rules="mobileRules" label-width="74px">
+            <el-form-item prop="PhoneNumber" label="手机号">
+              <div class="myInputBox">
+                <!-- <i class="inputIcon mobile"></i> -->
+                <el-input
+                  v-model="loginForm.PhoneNumber"
+                  class="myInput"
+                  placeholder="请输入手机号码"
+                ></el-input>
+              </div>
+            </el-form-item>
+            <el-form-item prop="identifyCode" label="验证码">
+              <div class="getCode">
+                <div class="myInputBox">
+                  <!-- <i class="inputIcon idCode"></i> -->
+                  <el-input
+                    v-model="loginForm.identifyCode"
+                    class="verifycode myInput"
+                    placeholder="请输入验证码"
+                    @keyup.enter.native="toErpOrder"
+                    :disabled="
+                      loginForm.PhoneNumber.search(
+                        /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|8[0-9]|9[89])\d{8}$/
+                      ) === -1
+                    "
+                  ></el-input>
+                </div>
+                <span
+                  v-show="show"
+                  :style="{
+                    opacity:
+                      loginForm.PhoneNumber.search(
+                        /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|8[0-9]|9[89])\d{8}$/
+                      ) === -1
+                        ? 0.5
+                        : 1
+                  }"
+                  @click="getCode"
+                  >获取验证码</span
+                >
+                <span v-show="!show" class="count active"
+                  >{{ count }}s重新获取</span
+                >
+              </div>
+            </el-form-item>
+            <el-form-item>
+              <el-button
+                type="primary"
+                :class="{ loginBtn: true, active: !loginForm.identifyCode }"
+                :disabled="!loginForm.identifyCode"
+                @click="toErpOrder"
+                >登录</el-button
+              >
+            </el-form-item>
+            </el-form>
+          </div>
+          <div class="erweimaBox">
+            <erweimaComponent />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 旧版界面 -->
+    <!-- <div class="erweimaApp" @mouseenter="hoverLogo" @mouseleave="hoverIsLogo">
       <img class="jiaerweima" :src="jiaerweima" alt="" />
       <div class="saomaDiv" v-show="isActive">
         <div class="saoma"></div>
@@ -103,19 +224,22 @@
           </el-form>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 import VueQr from 'vue-qr'
+import erweimaComponent from './erweimaComponent'
 import { getMenuFuc } from '@/router/index'
 export default {
   components: {
-    VueQr
+    VueQr,
+    erweimaComponent
   },
   data () {
     return {
+      myWs: null,
       jiaerweima: require('@/assets/images/erweimaicon@2x.png'),
       isActive: false,
       timer: null,
@@ -125,7 +249,11 @@ export default {
       options: {
         // 二维码配置
         url: 'https://www.baidu.com',
-        icon: require('@/assets/images/logo.png')
+        icon: require('@/assets/images/logo.png'),
+        colorDark: '#018e37',
+        colorLight: '#fff',
+        margin: 10,
+        size: 198
       },
       show: true,
       count: 60,
@@ -157,6 +285,12 @@ export default {
     hoverIsLogo () {
       this.jiaerweima = require('@/assets/images/erweimaicon@2x.png')
       this.isActive = false
+    },
+    toHome () {
+      this.$router.push('/erpHome')
+    },
+    isErpOrder () {
+      this.$router.push('/erpOrder')
     },
     // 手机验证倒计时
     async getCode () {
@@ -256,17 +390,17 @@ export default {
         //   'ws://139.9.71.135:8090/ws?UserId=' + this.randomCode
         // )
         // 正式
-        this.ws = new WebSocket(
+        this.myWs = new WebSocket(
           'wss://impush.toysbear.com/ws?UserId=' + this.randomCode
         )
         // 监听webSocket连接
-        this.ws.onopen = this.websocketonopen
+        this.myWs.onopen = this.websocketonopen
         // 监听webSocket错误信息
-        this.ws.onerror = this.websocketonerror
+        this.myWs.onerror = this.websocketonerror
         // 监听webSocket消息
-        this.ws.onmessage = this.websocketonmessage
+        this.myWs.onmessage = this.websocketonmessage
         // 监听webSocket退出
-        this.ws.onclose = this.websocketclose
+        this.myWs.onclose = this.websocketclose
       }
     },
     // webSocket 连接成功
@@ -288,7 +422,7 @@ export default {
     },
     // webSocket 数据发送
     websocketsend (agentData) {
-      this.ws.send(agentData)
+      this.myWs.send(agentData)
     },
     // 关闭 webSocket
     websocketclose () {
@@ -309,7 +443,6 @@ export default {
         RandomCode: this.randomCode
       })
       if (res.data.result.isLogin) {
-        this.websocketclose()
         clearInterval(this.qrTimer)
         this.qrTimer = null
         this.$store.commit('setToken', res.data.result)
@@ -371,273 +504,273 @@ export default {
   beforeDestroy () {
     clearInterval(this.qrTimer)
     clearInterval(this.timer)
-    this.websocketclose()
+    this.myWs.close()
   }
 }
 </script>
 
 <style lang="less" scoped>
-@deep: ~">>>";
-.erpLoginBox {
-  width: 800px;
-  height: 800px;
-  background: url("~@/assets/images/erpbg.png") no-repeat center;
-  background-size: 100%;
-  margin: 0 auto;
-  box-sizing: border-box;
-  padding: 0 32px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  .erweimaApp {
-    position: absolute;
-    right: 0;
-    top: 100px;
-    width: 34px;
-    height: 34px;
-    border: 1px solid #165af7;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transform: translate(0, -50%);
-    &:hover {
-      background-color: #165af7;
-    }
-    .jiaerweima {
-      width: 18px;
-      height: 18px;
-      left: -50%;
-      top: 50%;
-    }
-    .saomaDiv {
-      position: absolute;
-      width: 120px;
-      height: 100px;
-      left: -110px;
-      .saoma {
-        width: 100px;
-        height: 100px;
-        position: absolute;
-        box-sizing: border-box;
-        background: url("~@/assets/images/erweimaxiazai.png") no-repeat center;
-        background-size: 100%;
-        &::after {
-          content: "";
-          display: block;
-          position: absolute;
-          right: -19px;
-          top: 50%;
-          width: 0;
-          height: 0;
-          border: 10px solid transparent;
-          border-left-color: #fff;
-          transform: translate(0, -50%);
-        }
-      }
-    }
-  }
-  .top {
-    height: 195px;
-    width: 100%;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    justify-content: center;
-    .logo {
-      height: 72px;
-      img {
-        height: 72px;
-      }
-    }
-    p {
-      margin-top: 10px;
-      .topP {
-        position: relative;
-        padding: 0 10px;
-        &::before,
-        &::after {
-          content: "";
-          position: absolute;
-          width: 60px;
-          height: 2px;
-          background-color: #d8e3fa;
-          top: 50%;
-        }
-        &::before {
-          left: 100%;
-        }
-        &::after {
-          right: 100%;
-        }
-      }
-    }
-  }
-  .loginFormBox {
-    width: 100%;
-    height: 416px;
-    background: url("~@/assets/images/erpLoginBg1.png") no-repeat center;
-    background-size: 100% 100%;
-    border-radius: 20px;
-    box-shadow: 1px 3px 10px 1px rgba(0, 60, 200, 0.1);
-    padding: 50px;
-    box-sizing: border-box;
-    display: flex;
-    .formIten {
-      flex: 1;
-    }
-    .left {
-      .leftBox {
-        width: 220px;
-        margin: 0 auto;
-        box-sizing: border-box;
-        .title {
-          text-indent: 20px;
-          font-weight: 400;
-          span {
-            position: relative;
-            &::before {
-              content: "";
-              position: absolute;
-              width: 6px;
-              height: 20px;
-              left: -10px;
-              top: 50%;
-              opacity: 0.7;
-              border-radius: 0px 3px 3px 0px;
-              background-color: #165af7;
-              transform: translate(0, -50%);
-            }
-          }
-        }
-        .erweima {
-          width: 100%;
-          height: 220px;
-          margin: 29px 0 6px 0;
-          box-sizing: border-box;
-          padding: 10px;
-          .erweimaBox {
-            border: 1px solid #eeeeee;
-            background-color: #fff;
-            position: relative;
-            .refresh {
-              position: absolute;
-              width: 100%;
-              height: 100%;
-              left: 0;
-              top: 0;
-              background-color: rgba(255, 255, 255, 0.9);
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              .refreshIcon {
-                width: 100px;
-                height: 100px;
-                background-color: #fff;
-                border-radius: 50%;
-                cursor: pointer;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 50px;
-              }
-            }
-          }
-        }
-        .info {
-          font-size: 14px;
-          font-weight: 300;
-          color: #353535;
-          text-align: center;
-        }
-      }
-    }
-    .right {
-      .title {
-        text-indent: 20px;
-        font-weight: 400;
-        span {
-          position: relative;
-          &::before {
-            content: "";
-            position: absolute;
-            width: 6px;
-            height: 20px;
-            left: -10px;
-            top: 50%;
-            opacity: 0.7;
-            border-radius: 0px 3px 3px 0px;
-            background-color: #165af7;
-            transform: translate(0, -50%);
-          }
-        }
-      }
-      .myForm {
-        margin-top: 29px;
-        /deep/ .el-form-item {
-          padding: 10px 0;
-          /deep/ input {
-            height: 54px;
-          }
-          .myInputBox {
-            position: relative;
-            .inputIcon {
-              position: absolute;
-              left: 20px;
-              top: 50%;
-              width: 30px;
-              height: 30px;
-              z-index: 1;
-              transform: translate(0, -50%);
-              &.mobile {
-                background: url("~@/assets/images/手机 (2).png") no-repeat
-                  center;
-              }
-              &.idCode {
-                background: url("~@/assets/images/验证码.png") no-repeat center;
-              }
-            }
-            .myInput {
-              input.el-input__inner {
-                padding-left: 57px;
-              }
-            }
-          }
-        }
-        .getCode {
-          display: flex;
-          color: #999;
-          justify-content: space-between;
-          cursor: pointer;
-          span {
-            flex-shrink: 0;
-            height: 54px;
-            width: 120px;
-            background: #447dff;
-            border-radius: 25px;
-            margin-left: 10px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffffff;
-            &.active {
-              opacity: 0.5;
-            }
-          }
-        }
-        .loginBtn {
-          width: 100%;
-          height: 60px;
-          border-radius: 10px;
-          background: #165af7;
-          &.active {
-            opacity: 0.5;
-          }
-        }
-      }
-    }
-  }
-}
+@import './erpLogin.less' ;
+// .erpLoginBox {
+//   width: 800px;
+//   height: 800px;
+//   background: url("~@/assets/images/erpbg.png") no-repeat center;
+//   background-size: 100%;
+//   margin: 0 auto;
+//   box-sizing: border-box;
+//   padding: 0 32px;
+//   position: absolute;
+//   top: 50%;
+//   left: 50%;
+//   transform: translate(-50%, -50%);
+//   .erweimaApp {
+//     position: absolute;
+//     right: 0;
+//     top: 100px;
+//     width: 34px;
+//     height: 34px;
+//     border: 1px solid #165af7;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     transform: translate(0, -50%);
+//     &:hover {
+//       background-color: #165af7;
+//     }
+//     .jiaerweima {
+//       width: 18px;
+//       height: 18px;
+//       left: -50%;
+//       top: 50%;
+//     }
+//     .saomaDiv {
+//       position: absolute;
+//       width: 120px;
+//       height: 100px;
+//       left: -110px;
+//       .saoma {
+//         width: 100px;
+//         height: 100px;
+//         position: absolute;
+//         box-sizing: border-box;
+//         background: url("~@/assets/images/erweimaxiazai.png") no-repeat center;
+//         background-size: 100%;
+//         &::after {
+//           content: "";
+//           display: block;
+//           position: absolute;
+//           right: -19px;
+//           top: 50%;
+//           width: 0;
+//           height: 0;
+//           border: 10px solid transparent;
+//           border-left-color: #fff;
+//           transform: translate(0, -50%);
+//         }
+//       }
+//     }
+//   }
+//   .top {
+//     height: 195px;
+//     width: 100%;
+//     box-sizing: border-box;
+//     display: flex;
+//     flex-direction: column;
+//     text-align: center;
+//     justify-content: center;
+//     .logo {
+//       height: 72px;
+//       img {
+//         height: 72px;
+//       }
+//     }
+//     p {
+//       margin-top: 10px;
+//       .topP {
+//         position: relative;
+//         padding: 0 10px;
+//         &::before,
+//         &::after {
+//           content: "";
+//           position: absolute;
+//           width: 60px;
+//           height: 2px;
+//           background-color: #d8e3fa;
+//           top: 50%;
+//         }
+//         &::before {
+//           left: 100%;
+//         }
+//         &::after {
+//           right: 100%;
+//         }
+//       }
+//     }
+//   }
+//   .loginFormBox {
+//     width: 100%;
+//     height: 416px;
+//     background: url("~@/assets/images/erpLoginBg1.png") no-repeat center;
+//     background-size: 100% 100%;
+//     border-radius: 20px;
+//     box-shadow: 1px 3px 10px 1px rgba(0, 60, 200, 0.1);
+//     padding: 50px;
+//     box-sizing: border-box;
+//     display: flex;
+//     .formIten {
+//       flex: 1;
+//     }
+//     .left {
+//       .leftBox {
+//         width: 220px;
+//         margin: 0 auto;
+//         box-sizing: border-box;
+//         .title {
+//           text-indent: 20px;
+//           font-weight: 400;
+//           span {
+//             position: relative;
+//             &::before {
+//               content: "";
+//               position: absolute;
+//               width: 6px;
+//               height: 20px;
+//               left: -10px;
+//               top: 50%;
+//               opacity: 0.7;
+//               border-radius: 0px 3px 3px 0px;
+//               background-color: #165af7;
+//               transform: translate(0, -50%);
+//             }
+//           }
+//         }
+//         .erweima {
+//           width: 100%;
+//           height: 220px;
+//           margin: 29px 0 6px 0;
+//           box-sizing: border-box;
+//           padding: 10px;
+//           .erweimaBox {
+//             border: 1px solid #eeeeee;
+//             background-color: #fff;
+//             position: relative;
+//             .refresh {
+//               position: absolute;
+//               width: 100%;
+//               height: 100%;
+//               left: 0;
+//               top: 0;
+//               background-color: rgba(255, 255, 255, 0.9);
+//               display: flex;
+//               align-items: center;
+//               justify-content: center;
+//               .refreshIcon {
+//                 width: 100px;
+//                 height: 100px;
+//                 background-color: #fff;
+//                 border-radius: 50%;
+//                 cursor: pointer;
+//                 display: flex;
+//                 justify-content: center;
+//                 align-items: center;
+//                 font-size: 50px;
+//               }
+//             }
+//           }
+//         }
+//         .info {
+//           font-size: 14px;
+//           font-weight: 300;
+//           color: #353535;
+//           text-align: center;
+//         }
+//       }
+//     }
+//     .right {
+//       .title {
+//         text-indent: 20px;
+//         font-weight: 400;
+//         span {
+//           position: relative;
+//           &::before {
+//             content: "";
+//             position: absolute;
+//             width: 6px;
+//             height: 20px;
+//             left: -10px;
+//             top: 50%;
+//             opacity: 0.7;
+//             border-radius: 0px 3px 3px 0px;
+//             background-color: #165af7;
+//             transform: translate(0, -50%);
+//           }
+//         }
+//       }
+//       .myForm {
+//         margin-top: 29px;
+//         /deep/ .el-form-item {
+//           padding: 10px 0;
+//           /deep/ input {
+//             height: 54px;
+//           }
+//           .myInputBox {
+//             position: relative;
+//             .inputIcon {
+//               position: absolute;
+//               left: 20px;
+//               top: 50%;
+//               width: 30px;
+//               height: 30px;
+//               z-index: 1;
+//               transform: translate(0, -50%);
+//               &.mobile {
+//                 background: url("~@/assets/images/手机 (2).png") no-repeat
+//                   center;
+//               }
+//               &.idCode {
+//                 background: url("~@/assets/images/验证码.png") no-repeat center;
+//               }
+//             }
+//             .myInput {
+//               input.el-input__inner {
+//                 padding-left: 57px;
+//               }
+//             }
+//           }
+//         }
+//         .getCode {
+//           display: flex;
+//           color: #999;
+//           justify-content: space-between;
+//           cursor: pointer;
+//           span {
+//             flex-shrink: 0;
+//             height: 54px;
+//             width: 120px;
+//             background: #447dff;
+//             border-radius: 25px;
+//             margin-left: 10px;
+//             font-size: 14px;
+//             display: flex;
+//             align-items: center;
+//             justify-content: center;
+//             color: #ffffff;
+//             &.active {
+//               opacity: 0.5;
+//             }
+//           }
+//         }
+//         .loginBtn {
+//           width: 100%;
+//           height: 60px;
+//           border-radius: 10px;
+//           background: #165af7;
+//           &.active {
+//             opacity: 0.5;
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
 </style>

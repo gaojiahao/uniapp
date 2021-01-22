@@ -60,7 +60,7 @@ export default {
         audit_state: '1',
         companyAPI: null,
         companyKeyCode: null,
-        companyLogo: require('@/assets/images/imgError.jpg'),
+        companyLogo: require('@/assets/images/imgError.png'),
         companyName: '深圳宏煌网络科技有限公司',
         companyNumber: 'HS0010552',
         companyType: 'Exhibition',
