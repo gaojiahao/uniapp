@@ -49,8 +49,13 @@
                 :margin="options.margin"
                 :size="options.size"
               ></vue-qr>
+              <div class="refresh" v-show="showQrCode">
+                <div class="refreshIcon" @click="getQrCodeUrl">
+                  <i class="el-icon-refresh"></i>
+                </div>
               </div>
-              <p class="saoyisao">请用小竹熊App扫一扫登录</p>
+              </div>
+              <p class="saoyisao">{{ qrcodeTitle }}</p>
             </div>
           </div>
         </div>
@@ -290,7 +295,8 @@ export default {
       this.$router.push('/erpHome')
     },
     isErpOrder () {
-      this.$router.push('/erpOrder')
+      if (this.$store.state.isLogin) this.$router.push('/erpOrder')
+      else this.$message.error('请先登录')
     },
     // 手机验证倒计时
     async getCode () {
@@ -335,6 +341,7 @@ export default {
           })
           if (res.data.result.isLogin) {
             this.$store.commit('setToken', res.data.result)
+            this.$store.commit('handlerLogin', true)
             await this.waitTime(1)
             this.$router.push('/erpOrder')
             // if (res.data.result.commparnyList.length === 1) {
@@ -366,7 +373,7 @@ export default {
       const TIME_COUNT = 300
       let count = TIME_COUNT
       this.showQrCode = false
-      this.qrcodeTitle = '请用小竹熊 云科技App扫一扫登录'
+      this.qrcodeTitle = '请用小竹熊App扫一扫登录'
       clearInterval(this.qrTimer)
       this.qrTimer = setInterval(() => {
         if (count > 0 && count <= TIME_COUNT) {
@@ -446,6 +453,7 @@ export default {
         clearInterval(this.qrTimer)
         this.qrTimer = null
         this.$store.commit('setToken', res.data.result)
+        this.$store.commit('handlerLogin', true)
         this.$store.commit(
           'setComparnyId',
           res.data.result.commparnyList[0].commparnyId
@@ -498,7 +506,7 @@ export default {
     }
   },
   mounted () {
-    // this.$store.dispatch("getToken");
+    if (this.$route.query.id === 'signOut') this.$store.commit('removeLoginItems')
     this.getQrCodeUrl()
   },
   beforeDestroy () {

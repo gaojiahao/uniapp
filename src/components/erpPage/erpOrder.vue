@@ -30,9 +30,9 @@
           </div>
           <!-- <div class="loginBtn" @click="toLogins">登录系统</div> -->
           <div class="signOutBox">
-            <el-image class="userImg" :src="require('@/assets/images/logo.png')">
+            <el-image class="userImg" :src="$store.state.userInfo.userInfo.userImage">
               <div slot="error" class="image-slot">
-                <img style="width: 40px; height: 40px; borderRadius: 50%;" src="~@/assets/images/logo.png" alt />
+                <img style="width: 40px; height: 40px; borderRadius: 50%;" :src="require('@/assets/images/logo.png')" alt />
               </div>
             </el-image>
             <span  class="signOut" @click="signOut">退出</span>
@@ -260,7 +260,7 @@ export default {
     },
     // 退出登录
     signOut () {
-      this.$router.push('/erpLogin')
+      this.$router.push('/erpLogin?id=signOut')
     },
     // 去详情页
     openDetail (item) {

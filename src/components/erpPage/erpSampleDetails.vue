@@ -4,27 +4,27 @@
     <div class="left">
       <el-image class="hallLogo" :src="require('@/assets/images/logo.png')">
         <div slot="error" class="image-slot">
-          <img style="width: 80px; height: 80px" src="~@/assets/images/logo.png" alt />
+          <img style="width: 80px; height: 80px" :src="option.fromCompanyLogo" alt />
         </div>
       </el-image>
     </div>
     <div class="right">
-      <div class="addrs">广东省深圳市新悦翔展厅</div>
+      <div class="addrs">{{ option.fromCompanyName }}</div>
       <div class="sampleDetail">
         <div class="item">
-          <div class="title">本次代号：</div>123456789
+          <div class="title">本次代号：</div>{{ option.the_nu }}
         </div>
         <div class="item">
-          <div class="title">择样数量：</div>205
+          <div class="title">择样数量：</div>{{ totalCount }}
         </div>
         <div class="item">
-          <div class="title">择样编号：</div>0123456789
+          <div class="title">择样编号：</div>{{ option.number }}
         </div>
         <div class="item">
-          <div class="title">择样时间：</div>YYYT-MM-DD
+          <div class="title">择样时间：</div>{{ option.happenDate.split('T')[0] }}
         </div>
         <div class="item">
-          <div class="title">厂商数量：</div>25
+          <div class="title">厂商数量：</div>{{ tableData | filterTableData }}
         </div>
       </div>
     </div>
@@ -38,6 +38,7 @@
     height="500"
     style="width: 100%">
     <el-table-column
+      fixed="left"
       prop="imgUrl"
       align="center"
       label="图片"
@@ -50,8 +51,15 @@
         </el-image>
       </template>
     </el-table-column>
+    <el-table-column
+        prop="pr_na"
+        fixed="left"
+        align="center"
+        label="产品名称"
+        >
+      </el-table-column>
       <el-table-column
-        prop="name"
+        prop="client_nu"
         align="center"
         label="公司编号"
         >
@@ -60,12 +68,6 @@
         prop="fa_no"
         align="center"
         label="货号"
-        >
-      </el-table-column>
-      <el-table-column
-        prop="pr_na"
-        align="center"
-        label="产品名称"
         >
       </el-table-column>
       <el-table-column
@@ -87,8 +89,8 @@
         >
       </el-table-column>
       <el-table-column
-        align="ha_in_qu"
-        prop="name"
+        align="center"
+        prop="ha_in_qu"
         label="价格"
         >
       </el-table-column>
@@ -149,17 +151,25 @@
           align="center"
           label="备注">
         </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
           prop="name"
           align="center"
           label="摊位号">
-        </el-table-column>
+        </el-table-column> -->
       <el-table-column
           prop="ma_na"
           align="center"
-          label="厂家资料">
+          label="厂家名称">
+        </el-table-column>
+        <el-table-column
+          prop="ma_nu"
+          align="center"
+          label="厂家编号">
         </el-table-column>
       </el-table>
+      <div class="erweimaWrap">
+          <erweimaComponent />
+        </div>
     </div>
     <center class="paginationWrap">
         <el-pagination
@@ -178,7 +188,11 @@
 </template>
 
 <script>
+import erweimaComponent from './erweimaComponent'
 export default {
+  components: {
+    erweimaComponent
+  },
   props: ['option'],
   data () {
     return {
@@ -237,6 +251,22 @@ export default {
       }]
     }
   },
+  filters: {
+    filterTableData (list) {
+      const newdata = []
+      let i, j
+      for (i = 0; i < list.length; i++) {
+        for (j = i + 1; j < list.length; j++) {
+          if (list[i].ma_nu === list[j].ma_nu) {
+            j = false
+            break
+          }
+        }
+        if (j) newdata.push(list[i])
+      };
+      return newdata.length
+    }
+  },
   methods: {
     // 获取详情列表
     async getOrderDetail () {
@@ -262,6 +292,7 @@ export default {
 
   },
   mounted () {
+    console.log(this.option)
     this.getOrderDetail()
   }
 }
@@ -324,6 +355,12 @@ export default {
     .tableWrap{
       height: 500px;
       background-color: #fff;
+      position: relative;
+      .erweimaWrap{
+        position: absolute;
+        right: -130px;
+        bottom: 0px;
+      }
     }
     @{deep} .paginationWrap{
       padding: 20px 0;

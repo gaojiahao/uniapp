@@ -27,7 +27,15 @@
               我的择样单
             </span>
           </div>
-          <div class="loginBtn" @click="toLogins">登录系统</div>
+          <div class="signOutBox" v-if="$store.state.isLogin">
+            <el-image class="userImg" :src="$store.state.userInfo.userInfo.userImage">
+              <div slot="error" class="image-slot">
+                <img style="width: 40px; height: 40px; borderRadius: 50%;" :src="require('@/assets/images/logo.png')" alt />
+              </div>
+            </el-image>
+            <span  class="signOut" @click="signOut">退出</span>
+          </div>
+          <div v-else class="loginBtn" @click="toLogins">登录系统</div>
         </div>
       </div>
     </div>
@@ -48,7 +56,7 @@
         <div class="bigExhibitions">
           <div class="bigExhibitionItem" v-for="(item, i) in bigHalls" :key="i">
             <div class="imgBox">
-              <el-image class="hallLogo" :src="item.bgImg">
+              <el-image class="hallLogo" :preview-src-list="[item.bgImg]" :src="item.bgImg">
               <div slot="error" class="image-slot">
                 <img style="width: 127px; height: 70px" src="~@/assets/images/logo.png" alt />
               </div>
@@ -62,7 +70,7 @@
         <div class="minExhibitions">
            <div class="minExhibitionItem" v-for="(item, i) in minHalls" :key="i">
             <div class="imgBox">
-              <el-image class="hallLogo" :src="item.bgImg">
+              <el-image class="hallLogo" :preview-src-list="[item.bgImg]" :src="item.bgImg">
               <div slot="error" class="image-slot">
                 <img style="width: 127px; height: 70px" src="~@/assets/images/logo.png" alt />
               </div>
@@ -218,7 +226,8 @@ export default {
   methods: {
     // 去订单页
     isErpOrder () {
-      this.$router.push('/erpOrder')
+      if (this.$store.state.isLogin) this.$router.push('/erpOrder')
+      else this.$router.push('/erpLogin')
     },
     hoverLogo () {
       this.isActive = true
@@ -257,6 +266,10 @@ export default {
     //   })
     //   window.open(href.href, '_blank')
     // },
+    // 退出登录
+    signOut () {
+      this.$router.push('/erpLogin?id=signOut')
+    },
     // 去登录页
     toLogins () {
       this.$router.push('/erpLogin')
