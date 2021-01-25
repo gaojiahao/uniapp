@@ -66,7 +66,7 @@
           <el-form :model="loginForm" ref="erpLoginRef" :rules="mobileRules" label-width="74px">
             <el-form-item prop="PhoneNumber" label="手机号">
               <div class="myInputBox">
-                <!-- <i class="inputIcon mobile"></i> -->
+                <i class="inputIcon mobile"></i>
                 <el-input
                   v-model="loginForm.PhoneNumber"
                   class="myInput"
@@ -77,7 +77,7 @@
             <el-form-item prop="identifyCode" label="验证码">
               <div class="getCode">
                 <div class="myInputBox">
-                  <!-- <i class="inputIcon idCode"></i> -->
+                  <i class="inputIcon idCode"></i>
                   <el-input
                     v-model="loginForm.identifyCode"
                     class="verifycode myInput"
@@ -91,6 +91,7 @@
                   ></el-input>
                 </div>
                 <span
+                class="codeSpan"
                   v-show="show"
                   :style="{
                     opacity:
@@ -250,7 +251,7 @@ export default {
       timer: null,
       qrTimer: null,
       showQrCode: false,
-      qrcodeTitle: '请用小竹熊 云科技App扫一扫登录',
+      qrcodeTitle: '请用小竹熊App扫一扫登录',
       options: {
         // 二维码配置
         url: 'https://www.baidu.com',

@@ -63,21 +63,21 @@
             </el-image>
             </div>
             <div class="hallName">
-              <div>{{ item.companyName }}</div>
+              {{ item.companyName }}
             </div>
           </div>
         </div>
         <div class="minExhibitions">
-           <div class="minExhibitionItem" v-for="(item, i) in minHalls" :key="i">
+           <div class="minExhibitionItem" v-for="(item, i) in advertList" :key="i">
             <div class="imgBox">
-              <el-image class="hallLogo" :preview-src-list="[item.bgImg]" :src="item.bgImg">
+              <el-image class="hallLogo" :preview-src-list="[item.img]" :src="item.img">
               <div slot="error" class="image-slot">
                 <img style="width: 127px; height: 70px" src="~@/assets/images/logo.png" alt />
               </div>
             </el-image>
             </div>
             <div class="hallName">
-              <div>{{ item.companyName }}</div>
+              {{ item.adTitle }}
             </div>
           </div>
         </div>
@@ -211,6 +211,7 @@ export default {
   },
   data () {
     return {
+      advertList: [],
       jiaerweima: require('@/assets/images/erweimaicon@2x.png'),
       isActive: false,
       isShow: false,
@@ -248,6 +249,18 @@ export default {
         this.newProductList = res.data.result.item.items
       }
     },
+    // 获取小广告
+    async getAdvertisementPage () {
+      const res = await this.$http.post('/api/GetAdvertisementPage', {
+        adPosition: 4,
+        maxResultCount: 8,
+        platform: 'PC',
+        skipCount: 1
+      })
+      if (res.data.result.code === 200) {
+        this.advertList = res.data.result.item.items
+      }
+    },
     // 获取大小展厅
     async getOrgCompany () {
       const res = await this.$http.post('/api/GetExhibitionList', {
@@ -283,6 +296,7 @@ export default {
   },
   mounted () {
     this.getProductsByTypePage()
+    this.getAdvertisementPage()
     this.getOrgCompany()
   }
 }

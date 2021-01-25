@@ -31,7 +31,7 @@
         <div class="blockBox">
         <div class="block">
         <div style="display:flex;justify-content:space-between;">
-          <el-input placeholder="输入关键字进行过滤" prefix-icon="el-icon-search" clearable v-model="filterTextOne"></el-input>
+          <el-input placeholder="输入关键字进行过滤" prefix-icon="el-icon-search" @keyup.enter.native="searchOneFilter" clearable v-model="filterTextOne"></el-input>
           <!-- <el-button type="danger" @click="resetCheckedOne">重置</el-button> -->
         </div>
         <el-tree
@@ -53,7 +53,7 @@
       </div>
       <div class="block">
         <div style="display:flex;justify-content:space-between;">
-          <el-input placeholder="输入关键字进行过滤" prefix-icon="el-icon-search" clearable v-model="filterTextTwo"></el-input>
+          <el-input placeholder="输入关键字进行过滤" prefix-icon="el-icon-search" @keyup.enter.native="searchTwoFilter" clearable v-model="filterTextTwo"></el-input>
           <!-- <el-button type="danger" @click="resetCheckedTwo">重置</el-button> -->
         </div>
         <el-tree
@@ -138,6 +138,14 @@ export default {
     }
   },
   methods: {
+    // 重新搜索
+    searchOneFilter () {
+      this.$refs.treeOne.filter(this.filterTextOne)
+    },
+    // 重新搜索2
+    searchTwoFilter () {
+      this.$refs.treeTwo.filter(this.filterTextTwo)
+    },
     // 全部清空
     async clearCateAll () {
       if (!this.companyCategoryList || this.companyCategoryList.length === 0) {

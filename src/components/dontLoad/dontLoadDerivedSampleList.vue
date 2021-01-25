@@ -25,7 +25,7 @@
         </div>
       </div>
       <div class="btnBox">
-        <el-button type="primary">导出Excel</el-button>
+        <el-button type="primary" @click="exportExcel">导出Excel</el-button>
       </div>
       <div class="tableBox">
         <el-table
@@ -197,11 +197,36 @@ export default {
     }
   },
   methods: {
+    // 导出择样单
+    exportExcel () {
+      // eslint-disable-next-line camelcase
+      const { the_nu, client_nu, hallNumber } = this.$route.query
+      this.$http.post('/api/GetQuoteListBasicExcel', {
+        the_nu: the_nu,
+        client_nu: client_nu,
+        hallNumber: hallNumber
+      }, { responseType: 'blob' }).then(res => {
+        const fileName = '择样订单.xls'
+        const blob = res.data
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) { // 兼容IE
+          window.navigator.msSaveOrOpenBlob(blob, fileName)
+        } else { // 兼容Google及fireFox
+          const link = document.createElement('a')
+          link.style.display = 'none'
+          link.download = fileName
+          link.href = URL.createObjectURL(blob)
+          document.body.appendChild(link)
+          link.click()
+          URL.revokeObjectURL(link.href) // 释放URL 对象
+          document.body.removeChild(link)
+        }
+      })
+    },
     // 获取择样列表
     async getQuoteListBasicPage () {
       // eslint-disable-next-line camelcase
       const { the_nu, client_nu, hallNumber } = this.$route.query
-      console.log(the_nu, client_nu, hallNumber)
+      console.log(the_nu, client_nu, hallNumber, this.$route.query)
       const fd = {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
@@ -213,7 +238,8 @@ export default {
       }
       const res = await this.$http.post('/api/GetQuoteListBasicPage', fd)
       if (res.data.result.code === 200) {
-        this.$message.success(res.data.result.msg)
+        this.tableData = res.data.result.item.items
+        this.totalCount = res.data.result.item.totalCount
       } else {
         this.$message.error(res.data.result.msg)
       }
