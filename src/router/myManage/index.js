@@ -8,6 +8,7 @@ const DefaultFormulaMan = () => import('@/views/myManage/defaultFormulaMan.vue')
 const BearproductOff = () => import('@/views/myManage/bearproductOff.vue')
 const OffHallMan = () => import('@/views/myManage/offHallMan.vue')
 const AuthHallList = () => import('@/views/myManage/authHallList.vue')
+const PermissionSetting = () => import('@/views/myManage/permissionSetting.vue')
 export default [
   {
     path: '/myCustomer',
@@ -58,5 +59,10 @@ export default [
     path: '/authHallList',
     name: 'authHallList',
     component: AuthHallList
+  },
+  {
+    path: '/permissionSetting',
+    name: 'permissionSetting',
+    component: PermissionSetting
   }
 ]

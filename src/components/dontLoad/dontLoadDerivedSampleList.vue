@@ -257,6 +257,7 @@ export default {
 
   },
   mounted () {
+    // if (this.$store.state.screenWidth > 1024) this.$router.push('/offerSharingPC?id=')
     this.getQuoteListBasicPage()
   }
 }

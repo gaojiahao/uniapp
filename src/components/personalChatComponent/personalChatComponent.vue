@@ -851,6 +851,10 @@ export default {
               UIDList: this.signalROptions.channelMember
             })
             this.sendMsg(res.data.result.item) // 深网发消息
+          } else {
+            this.signalROptions.showmsg.pop()
+            this.$message.error(res.data.result.msg)
+            return false
           }
           this.$root.eventHub.$emit('resetData')
         } catch (error) {
@@ -1000,9 +1004,15 @@ export default {
             UIDList: this.signalROptions.channelMember
           })
           this.sendMsg(res.data.result.item) // 深网发消息
+          this.$root.eventHub.$emit('resetData')
+        } else {
+          this.signalROptions.showmsg.pop()
+          this.$message.error(res.data.result.msg)
+          return false
         }
-        this.$root.eventHub.$emit('resetData')
+        
       } catch (error) {
+        this.$message.error('发送失败')
         this.$root.eventHub.$emit('resetLogin')
       }
       this.signalROptions.value = null
@@ -1547,6 +1557,15 @@ export default {
     /** 单独为横向和竖向设置滚动条 **/
     overflow-x: none;
     overflow-y: scroll;
+    -ms-scroll-chaining: chained;
+    -ms-overflow-style: none;
+    -ms-content-zooming: zoom;
+    -ms-scroll-rails: none;
+    -ms-content-zoom-limit-min: 100%;
+    -ms-content-zoom-limit-max: 500%;
+    -ms-scroll-snap-type: proximity;
+    -ms-scroll-snap-points-x: snapList(100%, 200%, 300%, 400%, 500%);
+    -ms-overflow-style: none;
     &::-webkit-scrollbar {
       display: none;
     }
