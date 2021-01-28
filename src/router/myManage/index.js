@@ -9,6 +9,8 @@ const BearproductOff = () => import('@/views/myManage/bearproductOff.vue')
 const OffHallMan = () => import('@/views/myManage/offHallMan.vue')
 const AuthHallList = () => import('@/views/myManage/authHallList.vue')
 const PermissionSetting = () => import('@/views/myManage/permissionSetting.vue')
+const CustomerManagement = () => import('@/views/myManage/customerManagement.vue')
+const CompanyShare = () => import('@/views/myManage/companyShare.vue')
 export default [
   {
     path: '/myCustomer',
@@ -64,5 +66,15 @@ export default [
     path: '/permissionSetting',
     name: 'permissionSetting',
     component: PermissionSetting
+  },
+  {
+    path: '/customerManagement',
+    name: 'customerManagement',
+    component: CustomerManagement
+  },
+  {
+    path: '/companyShare',
+    name: 'companyShare',
+    component: CompanyShare
   }
 ]

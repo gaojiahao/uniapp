@@ -62,7 +62,7 @@ const vm = new Vue({
   mounted () {
     window.onresize = () => {
       window.screenWidth = document.documentElement.clientWidth
-      store.screenWidth = window.screenWidth
+      store.state.screenWidth = window.screenWidth
     }
   }
 }).$mount('#app')
