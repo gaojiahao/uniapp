@@ -214,15 +214,15 @@ export default {
         startTime: this.searchForm.dateTile && this.searchForm.dateTile[0],
         endTime: this.searchForm.dateTile && this.searchForm.dateTile[1],
         keyword: this.searchForm.keyword,
-        skipCount: this.currentPage,
-        maxResultCount: this.pageSize
+        pageIndex: this.currentPage,
+        pageSize: this.pageSize
       }
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === '') {
           delete fd[key]
         }
       }
-      const res = await this.$http.post('/companyshare/api/SearchCustomerInfosPage', fd)
+      const res = await this.$http.post('/api/SearchCustomerInfosPage', fd)
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items
         this.totalCount = res.data.result.item.totalCount
@@ -251,8 +251,8 @@ export default {
     async subProcessingLog () {
       this.$refs.addClientFormRef.validate(async (valid) => {
         if (valid) {
-          let url = '/companyshare/api/CreateCustomerInfo'
-          if (this.dialogTitle === '编辑客户') url = '/companyshare/api/UpdateCustomerInfo'
+          let url = '/api/CreateCustomerInfo'
+          if (this.dialogTitle === '编辑客户') url = '/api/UpdateCustomerInfo'
           const res = await this.$http.post(url, this.clienFormData)
           if (res.data.result.code === 200) {
             await this.getSearchCustomerInfosPage()
@@ -271,7 +271,7 @@ export default {
     },
     // 删除
     async handleDelete (row) {
-      const res = await this.$http.post('/companyshare/api/DeleteCustomerInfo?id=' + row.id, {})
+      const res = await this.$http.post('/api/DeleteCustomerInfo?id=' + row.id, {})
       if (res.data.result.code === 200) {
         this.$message.success('删除成功')
         this.getSearchCustomerInfosPage()

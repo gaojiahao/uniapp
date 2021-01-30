@@ -40,35 +40,59 @@
       <el-table
         size="mini"
         :data="tableData"
+        ref="multipleTable"
         style="width: 100%"
         :default-sort="{ prop: 'date', order: 'descending' }"
-      >
-        <el-table-column prop="name" label="客户名称"></el-table-column>
-        <el-table-column prop="phoneNumber" label="联系方式"></el-table-column>
+        @row-click="rowClick"
+        >
+        <el-table-column type="expand">
+           <template slot-scope="props">
+             <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="客户：">
+                <el-tag style="margin-left:20px;" v-for="(item, i) in props.row.customerInfos" :key="i">{{ item.name }}</el-tag>
+              </el-form-item>
+            </el-form>
+           </template>
+        </el-table-column>
+        <el-table-column prop="shareUrl" label="网址"></el-table-column>
+        <el-table-column prop="verifyCode" label="登录码" width="100"></el-table-column>
+        <el-table-column prop="profit" label="利率" width="50"></el-table-column>
         <el-table-column
           prop="createdOn"
           label="创建时间"
+          width="150"
+          align="center"
           sortable
         >
           <template slot-scope="scope">
             {{ scope.row.createdOn && scope.row.createdOn.replace(/T/g, " ") }}
           </template>
         </el-table-column>
-        <el-table-column prop="remark" label="备注"></el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column
+          prop="expireTime"
+          label="有效期"
+          width="150"
+          align="center"
+          sortable
+        >
+          <template slot-scope="scope">
+            {{ scope.row.expireTime && scope.row.expireTime.replace(/T/g, " ") }}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作"  width="200" align="center">
           <template slot-scope="scope">
             <el-button
               style="margin-right:10px;"
               size="mini"
               type="primary"
-              @click="openEdit(scope.row)"
+              @click.stop="openEdit(scope.row)"
               >编辑</el-button
             >
             <el-popconfirm
               title="确定要删除这个版本吗？"
               @onConfirm="handleDelete(scope.row)"
             >
-              <el-button size="mini" slot="reference" type="danger"
+              <el-button size="mini" @click.stop slot="reference" type="danger"
                 >删除</el-button
               >
             </el-popconfirm>
@@ -103,7 +127,7 @@
           <el-input v-model="clienFormData.url" placeholder="请输入站点域名" clearable></el-input>
         </el-form-item>
         <el-form-item label="利润率：" prop="profit">
-          <el-input type=number v-model.number="clienFormData.profit" clearable placeholder="请输入利润率"></el-input>
+          <el-input v-model="clienFormData.profit" clearable placeholder="请输入利润率"></el-input>
         </el-form-item>
         <!-- <el-form-item label="允许大陆访问：" prop="isOpenChina">
           <el-radio v-model="clienFormData.isOpenChina" :label="0">否</el-radio>
@@ -223,19 +247,23 @@ export default {
     }
   },
   methods: {
+    // 行被点击了
+    rowClick (row) {
+      this.$refs.multipleTable.toggleRowExpansion(row)
+    },
     // 获取客户列表
     async getClientList () {
       const fd = {
         keyword: this.clientKeyword,
-        skipCount: this.clientCurrentPage,
-        maxResultCount: this.clientPageSize
+        pageIndex: this.clientCurrentPage,
+        pageSize: this.clientPageSize
       }
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === '') {
           delete fd[key]
         }
       }
-      const res = await this.$http.post('/companyshare/api/SearchCustomerInfosPage', fd)
+      const res = await this.$http.post('/api/SearchCustomerInfosPage', fd)
       if (res.data.result.code === 200) {
         this.clientList = res.data.result.item.items
         this.clientListTotalCount = res.data.result.item.totalCount
@@ -282,7 +310,7 @@ export default {
           delete fd[key]
         }
       }
-      const res = await this.$http.post('/companyshare/api/SearchWebsiteShareInfosPage', fd)
+      const res = await this.$http.post('/api/SearchWebsiteShareInfosPage', fd)
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items
         this.totalCount = res.data.result.item.totalCount
@@ -305,23 +333,20 @@ export default {
       for (const key in row) {
         this.clienFormData[key] = row[key]
       }
+      console.log(row)
+      this.clienFormData.customerInfoIds = row.customerInfos.map(val => val.id)
       this.addClienDialog = true
     },
     // 提交新增 | 编辑 客户
     async subProcessingLog () {
       this.$refs.addClientFormRef.validate(async (valid) => {
         if (valid) {
-          let url = '/companyshare/api/CreateWebsiteShare'
-          if (this.dialogTitle === '编辑分享') url = '/companyshare/api/UpdateCustomerInfo'
+          let url = '/api/CreateWebsiteShareInfo'
+          if (this.dialogTitle === '编辑分享') url = '/api/UpdateWebsiteShareInfo'
           const res = await this.$http.post(url, this.clienFormData)
           if (res.data.result.code === 200) {
-            // await this.getSearchWebsiteShareInfosPage()
             this.addClienDialog = false
-            this.clienFormData = {
-              name: null,
-              phoneNumber: null,
-              remark: null
-            }
+            this.getSearchWebsiteShareInfosPage()
             this.$message.success('操作成功')
           } else {
             this.$message.error(res.data.result.msg)
@@ -331,7 +356,7 @@ export default {
     },
     // 删除
     async handleDelete (row) {
-      const res = await this.$http.post('/companyshare/api/DeleteCustomerInfo?id=' + row.id, {})
+      const res = await this.$http.post('/api/DeleteWebsiteShareInfo?id=' + row.id, {})
       if (res.data.result.code === 200) {
         this.$message.success('删除成功')
         this.getSearchWebsiteShareInfosPage()
