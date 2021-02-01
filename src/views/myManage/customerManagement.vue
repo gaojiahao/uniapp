@@ -214,8 +214,8 @@ export default {
         startTime: this.searchForm.dateTile && this.searchForm.dateTile[0],
         endTime: this.searchForm.dateTile && this.searchForm.dateTile[1],
         keyword: this.searchForm.keyword,
-        pageIndex: this.currentPage,
-        pageSize: this.pageSize
+        skipCount: this.currentPage,
+        maxResultCount: this.pageSize
       }
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === '') {

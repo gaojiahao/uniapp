@@ -255,8 +255,8 @@ export default {
     async getClientList () {
       const fd = {
         keyword: this.clientKeyword,
-        pageIndex: this.clientCurrentPage,
-        pageSize: this.clientPageSize
+        skipCount: this.clientCurrentPage,
+        maxResultCount: this.clientPageSize
       }
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === '') {
