@@ -30,6 +30,7 @@
           ></el-date-picker>
         </el-form-item> -->
         <el-form-item class="btnList">
+          <el-button type="primary" @click="openClientOrder">客户订单</el-button>
           <el-button type="primary" @click="search">查询</el-button>
           <el-button type="primary" @click="openAddClien">新增客户</el-button>
         </el-form-item>
@@ -116,6 +117,10 @@
         </center>
       </el-form>
     </el-dialog>
+    <!-- 分享客户订单dialog -->
+    <el-dialog title="客户订单" :visible.sync="clientOrderDialog" v-if="clientOrderDialog" top="60px" width="80%">
+      <clientOrderComponent />
+    </el-dialog>
   </el-main>
     <el-footer style="padding:0;" height="162px">
       <bsFooter></bsFooter>
@@ -126,10 +131,12 @@
 <script>
 import bsTop from '@/components/BsTop'
 import bsFooter from '@/components/oldFooter'
+import clientOrderComponent from '@/components/clientOrderComponent/clientOrderComponent.vue'
 export default {
-  components: { bsTop, bsFooter },
+  components: { bsTop, bsFooter, clientOrderComponent },
   data () {
     return {
+      clientOrderDialog: false,
       dialogTitle: '新增客户',
       addClienDialog: false,
       clienFormData: {
@@ -193,6 +200,10 @@ export default {
     }
   },
   methods: {
+    // 打开查看分享客户订单
+    openClientOrder () {
+      this.clientOrderDialog = true
+    },
     // 打开新增客户
     openAddClien () {
       this.dialogTitle = '新增客户'

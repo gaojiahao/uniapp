@@ -30,6 +30,7 @@
           ></el-date-picker>
         </el-form-item> -->
         <el-form-item class="btnList">
+          <el-button type="primary" @click="openLoginLog">访问记录</el-button>
           <el-button type="primary" @click="search">查询</el-button>
           <el-button type="primary" @click="openAddClien">新增分享</el-button>
         </el-form-item>
@@ -126,9 +127,76 @@
         <el-form-item label="站点域名：" prop="url">
           <el-input v-model="clienFormData.url" placeholder="请输入站点域名" clearable></el-input>
         </el-form-item>
-        <el-form-item label="利润率：" prop="profit">
-          <el-input v-model="clienFormData.profit" clearable placeholder="请输入利润率"></el-input>
-        </el-form-item>
+        <div class="formItemBox">
+          <el-form-item label="报价方式：" prop="offerMethod">
+            <el-select v-model="clienFormData.offerMethod" placeholder="请选择报价方式">
+              <el-option
+                v-for="(item, i) in options.offerMethod"
+                :key="i"
+                :label="item.itemCode"
+                :value="item.parameter">
+            </el-option>
+          </el-select>
+          </el-form-item>
+          <el-form-item label="利润率：" prop="profit">
+            <el-input v-model="clienFormData.profit" placeholder="请输入利润率">
+              <span slot="suffix">%</span>
+            </el-input>
+          </el-form-item>
+        </div>
+        <div class="formItemBox">
+          <el-form-item label="币种：" prop="currencyType">
+            <el-select v-model="clienFormData.currencyType" placeholder="请选择币种">
+              <el-option
+                v-for="(item, i) in options.cu_deList"
+                :key="i"
+                :label="item.itemCode"
+                :value="item.parameter">
+            </el-option>
+          </el-select>
+          </el-form-item>
+          <el-form-item label="总费用：" prop="totalCost">
+            <el-input v-model="clienFormData.totalCost" clearable placeholder="请输入总费用">
+            </el-input>
+          </el-form-item>
+        </div>
+        <div class="formItemBox">
+          <el-form-item label="汇率：" prop="exchange">
+            <el-input v-model="clienFormData.exchange" clearable placeholder="请输入汇率"></el-input>
+          </el-form-item>
+          <el-form-item label="每车尺码：" prop="size">
+            <el-select v-model="clienFormData.size" placeholder="请选择尺码">
+              <el-option
+                v-for="(item, i) in options.size"
+                :key="i"
+                :label="item.itemCode"
+                :value="item.parameter">
+            </el-option>
+          </el-select>
+          </el-form-item>
+        </div>
+        <div class="formItemBox">
+          <el-form-item label="小数位数：" prop="decimalPlaces">
+            <el-select v-model="clienFormData.decimalPlaces" placeholder="请选择小数位数">
+              <el-option
+                v-for="(item, i) in options.decimalPlaces"
+                :key="i"
+                :label="item.itemCode"
+                :value="item.parameter">
+            </el-option>
+          </el-select>
+          </el-form-item>
+          <el-form-item label="取舍方式：" prop="rejectionMethod">
+            <el-select v-model="clienFormData.rejectionMethod" placeholder="请选择取舍方式">
+              <el-option
+                v-for="(item, i) in options.rejectionMethod"
+                :key="i"
+                :label="item.itemCode"
+                :value="item.parameter">
+            </el-option>
+          </el-select>
+          </el-form-item>
+        </div>
         <!-- <el-form-item label="允许大陆访问：" prop="isOpenChina">
           <el-radio v-model="clienFormData.isOpenChina" :label="0">否</el-radio>
           <el-radio v-model="clienFormData.isOpenChina" :label="1">是</el-radio>
@@ -163,6 +231,10 @@
         </center>
       </el-form>
     </el-dialog>
+    <!-- 查看访问记录dialog -->
+    <el-dialog title="访问记录" :visible.sync="isLoginLog" v-if="isLoginLog" width="50%">
+      <accessRecordComponent />
+    </el-dialog>
   </el-main>
     <el-footer style="padding:0;" height="162px">
       <bsFooter></bsFooter>
@@ -173,10 +245,19 @@
 <script>
 import bsTop from '@/components/BsTop'
 import bsFooter from '@/components/oldFooter'
+import accessRecordComponent from '@/components/accessRecordComponent/accessRecordComponent.vue'
 export default {
-  components: { bsTop, bsFooter },
+  components: { bsTop, bsFooter, accessRecordComponent },
   data () {
     return {
+      isLoginLog: false,
+      options: { // 报价配置项
+        cu_deList: [],
+        decimalPlaces: [],
+        offerMethod: [],
+        rejectionMethod: [],
+        size: []
+      },
       timer: null,
       clientCurrentPage: 1,
       clientPageSize: 20,
@@ -189,7 +270,15 @@ export default {
         url: null,
         profit: null,
         expireTime: null,
-        customerInfoIds: null
+        customerInfoIds: null,
+        offerMethod: '汕头',
+        currencyType: '¥',
+        currencyTypeName: 'RMB',
+        totalCost: '',
+        exchange: '',
+        size: '24',
+        decimalPlaces: '3',
+        rejectionMethod: '四舍五入'
       },
       totalCount: 0,
       currentPage: 1,
@@ -203,10 +292,31 @@ export default {
           { required: true, message: '请输入利润率', trigger: 'blur' }
         ],
         expireTime: [
-          { required: true, message: '请请选择过期时间', trigger: 'blur' }
+          { required: true, message: '请选择过期时间', trigger: 'change' }
         ],
         customerInfoIds: [
-          { required: true, message: '请选择客户', trigger: 'blur' }
+          { required: true, message: '请选择客户', trigger: 'change' }
+        ],
+        offerMethod: [
+          { required: true, message: '请选择报价方式', trigger: 'change' }
+        ],
+        currencyType: [
+          { required: true, message: '请选择币种', trigger: 'change' }
+        ],
+        totalCost: [
+          { required: true, message: '请输入总费用', trigger: 'blur' }
+        ],
+        exchange: [
+          { required: true, message: '请输入汇率', trigger: 'blur' }
+        ],
+        size: [
+          { required: true, message: '请选择尺寸', trigger: 'change' }
+        ],
+        decimalPlaces: [
+          { required: true, message: '请选择小数位数', trigger: 'change' }
+        ],
+        rejectionMethod: [
+          { required: true, message: '请选择取舍方式', trigger: 'change' }
         ]
       },
       pickerOptions: {
@@ -247,6 +357,18 @@ export default {
     }
   },
   methods: {
+    // 打开查看访问记录
+    openLoginLog () {
+      this.isLoginLog = true
+    },
+    // 获取系统配置项
+    async getSelectCompanyOffer () {
+      const res = await this.$http.post('/api/GetSelectCompanyOffer', {
+        basisParameters: 'CompanyProductOffer'
+      })
+      if (res.data.result.code === 200) this.options = res.data.result.item
+      else this.$message.error(res.data.result.msg)
+    },
     // 行被点击了
     rowClick (row) {
       this.$refs.multipleTable.toggleRowExpansion(row)
@@ -287,9 +409,19 @@ export default {
         url: null,
         profit: null,
         expireTime: null,
-        customerInfoIds: null
+        customerInfoIds: null,
+        offerMethod: '汕头',
+        currencyType: '¥',
+        currencyTypeName: 'RMB',
+        totalCost: '',
+        exchange: '',
+        size: '24',
+        decimalPlaces: '3',
+        rejectionMethod: '四舍五入'
       }
-      this.addClienDialog = true
+      this.$nextTick(() => {
+        this.addClienDialog = true
+      })
     },
     // 列表查询
     search () {
@@ -371,7 +503,9 @@ export default {
     this.getSearchWebsiteShareInfosPage()
     this.getClientList()
   },
-  created () {}
+  created () {
+    this.getSelectCompanyOffer()
+  }
 }
 </script>
 
@@ -389,6 +523,10 @@ export default {
 @{deep} .el-form{
   .el-input, .el-select{
     width: 100%;
+  }
+  .formItemBox {
+    display: flex;
+    justify-content: space-between;
   }
 }
 </style>
