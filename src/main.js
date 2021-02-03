@@ -20,6 +20,7 @@ import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css' // import styles
 import 'quill/dist/quill.snow.css' // for snow theme
 import 'quill/dist/quill.bubble.css' // for bubble theme
+import '@/assets/js/rem.js'
 import { NoticeBar } from 'vant'
 // 引入echarts
 import echarts from 'echarts'
@@ -31,19 +32,6 @@ Vue.use(NoticeBar)
 Vue.prototype.$setWs = wsConnection
 Vue.component(ElTreeGrid.name, ElTreeGrid)
 Vue.prototype.$video = Video
-;(function (doc, win) {
-  var docEl = doc.documentElement
-  var resizeEvt =
-    'orientationchange' in window ? 'orientationchange' : 'resize'
-  var recalc = function () {
-    var clientWidth = docEl.clientWidth
-    if (!clientWidth) return
-    docEl.style.fontSize = clientWidth / 7.5 + 'px'
-  }
-  if (!doc.addEventListener) return
-  win.addEventListener(resizeEvt, recalc, false)
-  doc.addEventListener('DOMContentLoaded', recalc, false)
-})(document, window)
 Vue.prototype.$_ = _
 
 Vue.use(ElementUI)

@@ -127,6 +127,16 @@
         <el-form-item label="站点域名：" prop="url">
           <el-input v-model="clienFormData.url" placeholder="请输入站点域名" clearable></el-input>
         </el-form-item>
+        <el-form-item label="允许导出：" prop="isExportExcel">
+         <el-select v-model="clienFormData.isExportExcel" placeholder="请选择">
+            <el-option
+              v-for="(item, i) in [{label:'是',value: true},{label:'否',value: false}]"
+              :key="i"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <div class="formItemBox">
           <el-form-item label="报价方式：" prop="offerMethod">
             <el-select v-model="clienFormData.offerMethod" placeholder="请选择报价方式">
@@ -268,6 +278,7 @@ export default {
       addClienDialog: false,
       clienFormData: {
         url: null,
+        isExportExcel: false,
         profit: null,
         expireTime: null,
         customerInfoIds: null,
@@ -287,6 +298,9 @@ export default {
       addRules: {
         url: [
           { required: true, message: '请输入站点域名', trigger: 'blur' }
+        ],
+        isExportExcel: [
+          { required: true, message: '请输入站点域名', trigger: 'change' }
         ],
         profit: [
           { required: true, message: '请输入利润率', trigger: 'blur' }
@@ -313,10 +327,10 @@ export default {
           { required: true, message: '请选择尺寸', trigger: 'change' }
         ],
         decimalPlaces: [
-          { required: true, message: '请选择小数位数', trigger: 'change' }
+          { required: true, message: '请选择小数位数', trigger: 'blur' }
         ],
         rejectionMethod: [
-          { required: true, message: '请选择取舍方式', trigger: 'change' }
+          { required: true, message: '请选择取舍方式', trigger: 'blur' }
         ]
       },
       pickerOptions: {
@@ -407,6 +421,7 @@ export default {
       this.dialogTitle = '新增分享'
       this.clienFormData = {
         url: null,
+        isExportExcel: false,
         profit: null,
         expireTime: null,
         customerInfoIds: null,
