@@ -249,10 +249,10 @@
           </div>
           <div>
             <el-form-item label="毛重/净重：">
-              <el-input v-model="addProductForm.ne_we"></el-input
+              <el-input v-model="addProductForm.gr_we"></el-input
               ><span class="itemX">/</span></el-form-item
             ><el-form-item
-              ><el-input v-model="addProductForm.gr_we"></el-input
+              ><el-input v-model="addProductForm.ne_we"></el-input
             ></el-form-item>
           </div>
         </div>

@@ -83,7 +83,7 @@
                 <p class="contextItem"> 外箱规格：{{ item.ou_le + " X " + item.ou_wi + " X " + item.ou_hi + "(CM)" }}(CM)</p>
                 <p class="contextItem"> 装箱量：{{ item.in_en + "/" + item.ou_lo + "(PCS)" }}</p>
                 <p class="contextItem"> 体积/材积：{{ item.bulk_stere + "(CBM)" + "/" + item.bulk_feet + "(CUFT)" }}</p>
-                <p class="contextItem"> 毛重净重：{{ item.ne_we + "/" + item.gr_we + "(KG)" }}</p>
+                <p class="contextItem"> 毛重净重：{{ item.gr_we + "/" + item.ne_we + "(KG)" }}</p>
                 <p class="contextItem"> 参考单价：<span class="price">{{ item.cu_de + item.price }}</span> </p>
               </div>
             </li>

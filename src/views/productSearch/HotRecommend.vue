@@ -176,7 +176,7 @@
                       毛重/净重：{{
                         item.fa_no === 0
                           ? "???"
-                          : item.ne_we + "/" + item.gr_we + "(kg)"
+                          : item.gr_we + "/" + item.ne_we + "(kg)"
                       }}
                     </li>
                     <!-- 厂商角色 -->

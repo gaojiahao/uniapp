@@ -139,9 +139,9 @@
               毛重/净重：{{
                 productDetail.bearProduct.fa_no === 0
                   ? "???"
-                  : productDetail.bearProduct.ne_we +
+                  : productDetail.bearProduct.gr_we +
                     "/" +
-                    productDetail.bearProduct.gr_we +
+                    productDetail.bearProduct.ne_we +
                     "(kg)"
               }}
             </li>

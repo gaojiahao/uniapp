@@ -114,7 +114,7 @@
           <p class="textItem">外箱规格：{{productDetail.ou_le + " X " + productDetail.ou_wi + " X " + productDetail.ou_hi + "(CM)"}}</p>
           <p class="textItem">装箱量：{{productDetail.in_en + "/" + productDetail.ou_lo + "(PCS)"}}</p>
           <p class="textItem">体积/材积：{{productDetail.bulk_stere + "(CBM)" + "/" + productDetail.bulk_feet + "(CUFT)"}}</p>
-          <p class="textItem">毛重/净重：{{productDetail.ne_we + "/" + productDetail.gr_we + "(kg)"}}</p>
+          <p class="textItem">毛重/净重：{{productDetail.gr_we + "/" + productDetail.ne_we + "(kg)"}}</p>
           <p class="textItem" v-show="productInfo && productInfo.productOfferType !== 'company'">出厂价：<span class="price" v-if="$_.isNumber(productDetail.unitPrice)">{{ '￥' + productDetail.unitPrice.toFixed(2) }}</span></p>
           <p class="textItem">报价：<span class="price" v-if="$_.isNumber(productDetail.offerAmount)">{{productDetail.cu_de + productDetail.offerAmount.toFixed((productDetail.decimalPlaces || 2))}}</span></p>
       </div>

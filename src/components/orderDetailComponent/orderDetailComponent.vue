@@ -302,7 +302,7 @@
                     item.bulk_stere
                   }}(CUFT)
                 </p>
-                <p>净重/毛重：{{ item.ne_we }}/{{ item.gr_we }}(kg)</p>
+                <p>净重/毛重：{{ item.gr_we }}/{{ item.ne_we }}(kg)</p>
                 <p>
                   参考单价：<span class="price">{{
                     item.cu_de + item.fa_pr.toFixed(2)
