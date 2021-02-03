@@ -1,27 +1,25 @@
 <template>
   <div class="baojia">
   <div class="productBox">
-    <div class="item" v-for="(item, i) in 10" :key="i">
-      <div class="myImgBox">
+      <!-- <el-image
+      class="myImg"
+      :preview-src-list="['https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg']"
+      src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+      fit="contain"></el-image> -->
+      <el-carousel class="myImg">
+      <el-carousel-item v-for="item in 4" :key="item">
+        <div class="myImgBox">
         <el-image
-        class="myImg"
-        :preview-src-list="['https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg']"
-        src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-        fit="contain"></el-image>
-        <div class="newIcon"></div>
+          class="myImg"
+          :preview-src-list="['https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg']"
+          src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+          fit="cover">
+        </el-image>
       </div>
-      <div class="context">
-        <p class="itemText name">积木飞机</p>
-        <p class="itemText">出厂货号：<span>HS0046642</span></p>
-        <p class="itemText">参考单价：<span class="price">￥10</span></p>
-      </div>
-      <div class="iconBox">
-        <div class="vipIcon"></div>
-        <div class="presentIcon"></div>
-        <div class="cardIcon"></div>
-      </div>
+      </el-carousel-item>
+    </el-carousel>
+      <div class="newIcon"></div>
     </div>
-  </div>
 </div>
 </template>
 

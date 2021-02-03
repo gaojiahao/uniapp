@@ -12,80 +12,33 @@
     width: 100%;
     padding: .266667rem;
     box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-    .item {
-      width: 3.35rem;
-      height: 6rem;
-      border-radius: 5px;
-      box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.14);
-      .myImgBox {
-        position: relative;
-        width: 3.35rem;
-        height: 3.35rem;
-        .myImg {
-          width: 3.35rem;
-          height: 3.35rem;
-        }
-        .newIcon {
-          width: .933333rem;
-          height: .933333rem;
-          background: url('~@/assets/images/new.png') no-repeat center;
-          background-size: 100% 100%;
-          position: absolute;
-          left: -1px;
-          top: -1px;
+    @{deep} .myImgBox {
+      width: 100%;
+      height: 300px;
+      background-color: #f0f;
+      box-sizing: border-box;
+      position: relative;
+      .newIcon {
+        width: .933333rem;
+        height: .933333rem;
+        background: url('~@/assets/images/new.png') no-repeat center;
+        background-size: 100% 100%;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+      }
+      .myImg {
+        width: 100%;
+        height: 300px;
+        position: static;
+        img {
+          position: static;
         }
       }
-      .context {
-        width: 100%;
-        height: 1.866667rem;
-        font-size: 14px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
-        .itemText {
-          color: #000;
-          font-weight: 400;
-          padding: 10px;
-          white-space:nowrap;
-          overflow:hidden;
-          text-overflow:ellipsis;
-          &.name {
-            font-size: 20px;
-            font-weight: 500;
-          }
-          .price { 
-            color: #FF0032;
-          }
-        }
-      }
-      .iconBox {
-        width: 100%;
-        height: .7rem;
-        display: flex;
-        align-items: center;
-        .vipIcon {
-          width: .8rem;
-          height: .4rem;
-          margin-left: .2rem;
-          background: url('~@/assets/images/vip.png') no-repeat center;
-          background-size: contain;
-        }
-        .presentIcon {
-          width: .666667rem;
-          height: .4rem;
-          margin-left: .2rem;
-          background: url('~@/assets/images/present.png') no-repeat center;
-          background-size: contain;
-        }
-        .cardIcon {
-          width: .4rem;
-          height: .4rem;
-          margin-left: .2rem;
-          background: url('~@/assets/images/card.png') no-repeat center;
-          background-size: 100% 100%;
-        }
+      .el-carousel__button {
+        width: 10px;
+        height: 10px;
+        border-radius: 5px;
       }
     }
   }
