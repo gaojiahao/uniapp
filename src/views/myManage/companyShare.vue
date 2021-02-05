@@ -30,7 +30,6 @@
           ></el-date-picker>
         </el-form-item> -->
         <el-form-item class="btnList">
-          <el-button type="primary" @click="openLoginLog">访问记录</el-button>
           <el-button type="primary" @click="search">查询</el-button>
           <el-button type="primary" @click="openAddClien">新增分享</el-button>
         </el-form-item>
@@ -80,12 +79,24 @@
             {{ scope.row.expireTime && scope.row.expireTime.replace(/T/g, " ") }}
           </template>
         </el-table-column>
-        <el-table-column label="操作"  width="200" align="center">
+        <el-table-column label="操作"  width="350" align="center">
           <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="primary"
+              @click.stop="openLoginLog(scope.row)"
+              >访问记录</el-button
+            >
+            <el-button
+              size="mini"
+              type="success"
+              @click.stop="openClientOrder(scope.row)"
+              >客户订单</el-button
+            >
             <el-button
               style="margin-right:10px;"
               size="mini"
-              type="primary"
+              type="warning"
               @click.stop="openEdit(scope.row)"
               >编辑</el-button
             >
@@ -117,7 +128,7 @@
     <!-- <div style="maxWidth:1200px;minWidth:800px;margin:0 auto;">
     </div> -->
     <!-- 新增编辑分享dialog -->
-    <el-dialog :title="dialogTitle" :visible.sync="addClienDialog" destroy-on-close width="40%">
+    <el-dialog :title="dialogTitle" :visible.sync="addClienDialog" :close-on-click-modal="false" width="40%">
       <el-form
         ref="addClientFormRef"
         label-width="120px"
@@ -127,6 +138,24 @@
         <el-form-item label="站点域名：" prop="url">
           <el-input v-model="clienFormData.url" placeholder="请输入站点域名" clearable></el-input>
         </el-form-item>
+        <el-form-item label="选择客户：" prop="customerInfoIds">
+          <div class="formItemBox">
+          <el-select v-model="clienFormData.customerInfoIds" multiple :filter-method="filterMethod" filterable clearable placeholder="请输入客户名或选择客户">
+            <el-option
+              v-for="item in clientList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+          <el-button
+              style="margin-left:10px;"
+              type="primary"
+              @click.stop="openAddMyClient"
+              >新增客户</el-button
+            >
+          </div>
+        </el-form-item>
         <el-form-item label="允许导出：" prop="isExportExcel">
          <el-select v-model="clienFormData.isExportExcel" placeholder="请选择">
             <el-option
@@ -134,6 +163,17 @@
               :key="i"
               :label="item.label"
               :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <!-- 默认公式 -->
+        <el-form-item label="默认公式：">
+         <el-select v-model="defaultFormula" placeholder="请选择">
+            <el-option
+              v-for="(item, i) in customerTemplate"
+              :key="i"
+              :label="item.name"
+              :value="JSON.stringify(item)">
             </el-option>
           </el-select>
         </el-form-item>
@@ -223,16 +263,6 @@
             value-format="yyyy-MM-ddTHH:mm:ss">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="选择客户：" prop="customerInfoIds">
-          <el-select v-model="clienFormData.customerInfoIds" multiple :filter-method="filterMethod" filterable clearable placeholder="请输入客户名或选择客户">
-            <el-option
-              v-for="item in clientList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
-          </el-select>
-        </el-form-item>
         <center>
           <template>
             <el-button type="primary" @click="subProcessingLog">提 交</el-button>
@@ -242,8 +272,37 @@
       </el-form>
     </el-dialog>
     <!-- 查看访问记录dialog -->
-    <el-dialog title="访问记录" :visible.sync="isLoginLog" v-if="isLoginLog" width="50%">
-      <accessRecordComponent />
+    <el-dialog title="访问记录" :close-on-click-modal="false" :visible.sync="isLoginLog" v-if="isLoginLog" width="50%">
+      <accessRecordComponent :item="clienFormData" />
+    </el-dialog>
+    <!-- 分享客户订单dialog -->
+    <el-dialog title="客户订单" :close-on-click-modal="false" :visible.sync="clientOrderDialog" v-if="clientOrderDialog" top="60px" width="80%">
+      <clientOrderComponent :item="clienFormData" />
+    </el-dialog>
+    <!-- 新增客户dialog -->
+    <el-dialog title="新增客户" top="30vh" :close-on-click-modal="false" append-to-body :visible.sync="addMyClientDialog" destroy-on-close width="50%" >
+      <el-form
+        ref="addMyClientRef"
+        label-width="100px"
+        :rules="addMyClientRules"
+        :model="addClientFormData"
+      >
+        <el-form-item label="客户名称" prop="name">
+          <el-input v-model="addClientFormData.name" placeholder="请输入客户名称" ></el-input>
+        </el-form-item>
+        <el-form-item label="联系方式">
+          <el-input v-model="addClientFormData.phoneNumber" placeholder="请输入联系方式"></el-input>
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input type="textarea" placeholder="请输入备注信息" :rows="4" resize="none" v-model="addClientFormData.remark"></el-input>
+        </el-form-item>
+        <center>
+          <template>
+            <el-button type="primary" @click="subMyClient">提 交</el-button>
+            <el-button type="danger" @click="addMyClientDialog = false">取 消</el-button>
+          </template>
+        </center>
+      </el-form>
     </el-dialog>
   </el-main>
     <el-footer style="padding:0;" height="162px">
@@ -256,10 +315,26 @@
 import bsTop from '@/components/BsTop'
 import bsFooter from '@/components/oldFooter'
 import accessRecordComponent from '@/components/accessRecordComponent/accessRecordComponent.vue'
+import clientOrderComponent from '@/components/clientOrderComponent/clientOrderComponent.vue'
 export default {
-  components: { bsTop, bsFooter, accessRecordComponent },
+  components: { bsTop, bsFooter, accessRecordComponent, clientOrderComponent },
   data () {
     return {
+      addMyClientRules: {
+        name: [
+          { required: true, message: '请输入客户名称', trigger: 'blur' }
+        ]
+      },
+      addMyClientDialog: false,
+      addClientFormData: {
+        name: null,
+        phoneNumber: null,
+        remark: null
+      },
+      defaultShareDomain: null,
+      defaultFormula: null,
+      customerTemplate: [],
+      clientOrderDialog: false,
       isLoginLog: false,
       options: { // 报价配置项
         cu_deList: [],
@@ -279,16 +354,16 @@ export default {
       clienFormData: {
         url: null,
         isExportExcel: false,
-        profit: null,
+        profit: 0,
         expireTime: null,
         customerInfoIds: null,
         offerMethod: '汕头',
         currencyType: '¥',
         currencyTypeName: 'RMB',
-        totalCost: '',
-        exchange: '',
-        size: '24',
-        decimalPlaces: '3',
+        totalCost: 0,
+        exchange: 0,
+        size: 24,
+        decimalPlaces: 3,
         rejectionMethod: '四舍五入'
       },
       totalCount: 0,
@@ -305,11 +380,11 @@ export default {
         profit: [
           { required: true, message: '请输入利润率', trigger: 'blur' }
         ],
-        expireTime: [
-          { required: true, message: '请选择过期时间', trigger: 'change' }
-        ],
+        // expireTime: [
+        //   { required: true, message: '请选择过期时间', trigger: 'change' }
+        // ],
         customerInfoIds: [
-          { required: true, message: '请选择客户', trigger: 'change' }
+          { required: true, message: '请选择客户', trigger: 'blur' }
         ],
         offerMethod: [
           { required: true, message: '请选择报价方式', trigger: 'change' }
@@ -371,9 +446,52 @@ export default {
     }
   },
   methods: {
+    // 提交新增客户
+    subMyClient () {
+      this.$refs.addMyClientRef.validate(async (valid) => {
+        if (valid) {
+          const res = await this.$http.post('/api/CreateCustomerInfo', this.addClientFormData)
+          if (res.data.result.code === 200) {
+            this.getClientList()
+            this.addMyClientDialog = false
+            this.$message.success('新增操作成功')
+          } else {
+            this.$message.error(res.data.result.msg)
+          }
+        }
+      })
+    },
+    // 打开新增客户
+    openAddMyClient () {
+      this.addClientFormData = {
+        name: null,
+        phoneNumber: null,
+        remark: null
+      }
+      this.addMyClientDialog = true
+    },
+    // 打开查看分享客户订单
+    openClientOrder (row) {
+      for (const key in row) {
+        this.clienFormData[key] = row[key]
+      }
+      this.clienFormData.customerInfoIds = row.customerInfos.map(val => val.id)
+      this.clientOrderDialog = true
+    },
     // 打开查看访问记录
-    openLoginLog () {
+    openLoginLog (row) {
+      for (const key in row) {
+        this.clienFormData[key] = row[key]
+      }
+      this.clienFormData.customerInfoIds = row.customerInfos.map(val => val.id)
       this.isLoginLog = true
+    },
+    // 获取客户报价模板
+    async getSelectProductOfferFormulaList () {
+      const res = await this.$http.post('/api/SelectProductOfferFormulaList', {})
+      if (res.data.result.code === 200) {
+        this.customerTemplate = res.data.result.item
+      } else this.$message.error(res.data.result.msg)
     },
     // 获取系统配置项
     async getSelectCompanyOffer () {
@@ -418,22 +536,10 @@ export default {
     },
     // 打开新增分享
     openAddClien () {
+      this.clienFormData.totalCost = 0
+      this.clienFormData.url = this.defaultShareDomain
       this.dialogTitle = '新增分享'
-      this.clienFormData = {
-        url: null,
-        isExportExcel: false,
-        profit: null,
-        expireTime: null,
-        customerInfoIds: null,
-        offerMethod: '汕头',
-        currencyType: '¥',
-        currencyTypeName: 'RMB',
-        totalCost: '',
-        exchange: '',
-        size: '24',
-        decimalPlaces: '3',
-        rejectionMethod: '四舍五入'
-      }
+      this.defaultFormula = JSON.stringify(this.customerTemplate[0])
       this.$nextTick(() => {
         this.addClienDialog = true
       })
@@ -459,8 +565,9 @@ export default {
       }
       const res = await this.$http.post('/api/SearchWebsiteShareInfosPage', fd)
       if (res.data.result.code === 200) {
-        this.tableData = res.data.result.item.items
-        this.totalCount = res.data.result.item.totalCount
+        this.defaultShareDomain = res.data.result.item.defaultShareDomain
+        this.tableData = res.data.result.item.shareInfos.items
+        this.totalCount = res.data.result.item.shareInfos.totalCount
       }
     },
     // 切换当前页
@@ -476,11 +583,11 @@ export default {
     },
     // 打开编辑客户
     openEdit (row) {
+      this.defaultFormula = null
       this.dialogTitle = '编辑分享'
       for (const key in row) {
         this.clienFormData[key] = row[key]
       }
-      console.log(row)
       this.clienFormData.customerInfoIds = row.customerInfos.map(val => val.id)
       this.addClienDialog = true
     },
@@ -512,14 +619,44 @@ export default {
       }
     }
   },
-  watch: {
-  },
   mounted () {
     this.getSearchWebsiteShareInfosPage()
     this.getClientList()
   },
   created () {
     this.getSelectCompanyOffer()
+    this.getSelectProductOfferFormulaList()
+  },
+  watch: {
+    defaultFormula: {
+      deep: true,
+      handler (newVal) {
+        if (newVal) {
+          const obj = JSON.parse(newVal)
+          this.clienFormData.profit = obj.profit
+          this.clienFormData.offerMethod = obj.offerMethod
+          this.clienFormData.currencyType = obj.cu_de
+          this.clienFormData.currencyTypeName = obj.cu_deName
+          this.clienFormData.exchange = obj.exchange
+          this.clienFormData.size = obj.size
+          this.clienFormData.decimalPlaces = obj.decimalPlaces
+          this.clienFormData.rejectionMethod = obj.rejectionMethod
+        }
+      }
+    },
+    'clienFormData.currencyType': {
+      deep: true,
+      handler (newVal) {
+        if (newVal) {
+          this.options.cu_deList.forEach(val => {
+            if (val.parameter === newVal) this.clienFormData.currencyTypeName = val.itemCode
+          })
+          this.$nextTick(() => {
+            console.log(this.clienFormData)
+          })
+        }
+      }
+    }
   }
 }
 </script>

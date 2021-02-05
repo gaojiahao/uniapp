@@ -57,6 +57,7 @@ export default {
   components: {
     clientOrderdetailComponent
   },
+  props: ['item'],
   data () {
     return {
       shareOrderNumber: null,
@@ -75,7 +76,7 @@ export default {
     },
     // 获取分享客户订单
     async getSearchCompanyShareOrdersPage () {
-      const res = await this.$http.post('/api/SearchCompanyShareOrdersPage', { skipCount: this.currentPage, maxResultCount: this.pageSize })
+      const res = await this.$http.post('/api/SearchCompanyShareOrdersPage', { skipCount: this.currentPage, maxResultCount: this.pageSize, shareId: this.item.id })
       console.log(res)
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items
@@ -97,6 +98,7 @@ export default {
     }
   },
   created () {
+    console.log(this.item)
     this.getSearchCompanyShareOrdersPage()
   },
   mounted () {

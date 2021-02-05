@@ -30,7 +30,6 @@
           ></el-date-picker>
         </el-form-item> -->
         <el-form-item class="btnList">
-          <el-button type="primary" @click="openClientOrder">客户订单</el-button>
           <el-button type="primary" @click="search">查询</el-button>
           <el-button type="primary" @click="openAddClien">新增客户</el-button>
         </el-form-item>
@@ -103,7 +102,7 @@
         <el-form-item label="客户名称" prop="name">
           <el-input v-model="clienFormData.name" placeholder="请输入客户名称" ></el-input>
         </el-form-item>
-        <el-form-item label="联系方式" prop="phoneNumber">
+        <el-form-item label="联系方式">
           <el-input v-model="clienFormData.phoneNumber" placeholder="请输入联系方式"></el-input>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
@@ -117,10 +116,6 @@
         </center>
       </el-form>
     </el-dialog>
-    <!-- 分享客户订单dialog -->
-    <el-dialog title="客户订单" :visible.sync="clientOrderDialog" v-if="clientOrderDialog" top="60px" width="80%">
-      <clientOrderComponent />
-    </el-dialog>
   </el-main>
     <el-footer style="padding:0;" height="162px">
       <bsFooter></bsFooter>
@@ -131,12 +126,10 @@
 <script>
 import bsTop from '@/components/BsTop'
 import bsFooter from '@/components/oldFooter'
-import clientOrderComponent from '@/components/clientOrderComponent/clientOrderComponent.vue'
 export default {
-  components: { bsTop, bsFooter, clientOrderComponent },
+  components: { bsTop, bsFooter },
   data () {
     return {
-      clientOrderDialog: false,
       dialogTitle: '新增客户',
       addClienDialog: false,
       clienFormData: {
@@ -151,14 +144,6 @@ export default {
       addRules: {
         name: [
           { required: true, message: '请输入客户名称', trigger: 'blur' }
-        ],
-        phoneNumber: [
-          { required: true, message: '请输入联系方式', trigger: 'blur' },
-          {
-            pattern: /^[1][3,4,5,7,8][0-9]{9}$/,
-            message: '手机格式不正确',
-            trigger: 'blur'
-          }
         ]
       },
       pickerOptions: {
@@ -200,10 +185,6 @@ export default {
     }
   },
   methods: {
-    // 打开查看分享客户订单
-    openClientOrder () {
-      this.clientOrderDialog = true
-    },
     // 打开新增客户
     openAddClien () {
       this.dialogTitle = '新增客户'

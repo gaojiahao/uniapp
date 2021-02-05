@@ -56,6 +56,7 @@
 
 <script>
 export default {
+  props: ['item'],
   data () {
     return {
       tableData: [],
@@ -67,7 +68,7 @@ export default {
   methods: {
     // 获取用户访问记录
     async getSearchLoginLogPage () {
-      const res = await this.$http.post('/api/SearchLoginLogPage', { skipCount: this.currentPage, maxResultCount: this.pageSize })
+      const res = await this.$http.post('/api/SearchLoginLogPage', { skipCount: this.currentPage, maxResultCount: this.pageSize, shareId: this.item.id })
       console.log(res)
       if (res.data.result.code === 200) {
         this.totalCount = res.data.result.item.totalCount
@@ -89,6 +90,7 @@ export default {
     }
   },
   created () {
+    console.log(this.item)
     this.getSearchLoginLogPage()
   },
   mounted () {
