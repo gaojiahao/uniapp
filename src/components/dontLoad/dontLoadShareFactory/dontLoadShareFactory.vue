@@ -119,7 +119,9 @@ export default {
       this.$store.commit('updateAppLoading', false)
     }
   },
-  created () {},
+  created () {
+    if (document.body.clientWidth > 1024) this.$router.push('/dontLoadShareFactoryPC?id=' + this.$route.query.id)
+  },
   beforeDestroy () {
     document.title = '小竹熊 云科技'
   },
@@ -132,14 +134,6 @@ export default {
     }
   },
   mounted () {
-    // if (this.$store.state.screenWidth > 1024) this.$router.push('/offerSharingPC?id=' + this.$route.query.id)
-  },
-  watch: {
-    '$store.state.screenWidth' (val) {
-      // if (val > 1024) {
-      //   this.$router.push('/offerSharingPC?id=' + this.$route.query.id)
-      // }
-    }
   }
 }
 </script>

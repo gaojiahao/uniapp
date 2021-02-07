@@ -10,14 +10,14 @@
           <div
             slot="error"
             class="image-slot"
-            style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;white-space: nowrap;"
+            style="width:100%;height:100%;display:flex;align-items:center;white-space: nowrap;"
           >
             {{ item.companyName }}
           </div>
           <div
             slot="placeholder"
             class="image-slot"
-            style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;white-space: nowrap;"
+            style="width:100%;height:100%;display:flex;align-items:center;white-space: nowrap;"
           >
             {{ item.companyName }}
           </div>
@@ -159,6 +159,7 @@ ul {
     cursor: pointer;
     @{deep} .img {
       width: 50px;
+      min-width: 50px;
       height: 50px;
       background-color: #165af7;
       color: #fff;

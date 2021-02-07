@@ -1,7 +1,9 @@
 const DontLoadDerivedSampleList = () => import('@/components/dontLoad/dontLoadDerivedSampleList/dontLoadDerivedSampleList.vue')
 const DontLoadShareFactory = () => import('@/components/dontLoad/dontLoadShareFactory/dontLoadShareFactory.vue')
-const DontLoadAllProducts = () => import('@/components/dontLoad/dontLoadAllProducts/dontLoadAllProducts.vue')
-const DontLoadProductDetails = () => import('@/components/dontLoad/dontLoadProductDetails/dontLoadProductDetails.vue')
+const DontLoadShareFactoryAllProducts = () => import('@/components/dontLoad/dontLoadShareFactory/dontLoadShareFactoryAllProducts/dontLoadShareFactoryAllProducts.vue')
+const DontLoadShareFactoryProductDetails = () => import('@/components/dontLoad/dontLoadShareFactory/dontLoadShareFactoryProductDetails/dontLoadShareFactoryProductDetails.vue')
+const DontLoadShareFactoryPC = () => import('@/components/dontLoad/dontLoadShareFactory/dontLoadShareFactoryPC/dontLoadShareFactoryPC.vue')
+const DontLoadShareFactoryAllProductsPC = () => import('@/components/dontLoad/dontLoadShareFactory/dontLoadShareFactoryPC/dontLoadShareFactoryAllProductsPC/dontLoadShareFactoryAllProductsPC.vue')
 
 export default [
   {
@@ -17,11 +19,21 @@ export default [
   {
     path: '/dontLoadAllProducts',
     name: 'dontLoadAllProducts',
-    component: DontLoadAllProducts
+    component: DontLoadShareFactoryAllProducts
   },
   {
     path: '/dontLoadProductDetails',
     name: 'dontLoadProductDetails',
-    component: DontLoadProductDetails
+    component: DontLoadShareFactoryProductDetails
+  },
+  {
+    path: '/dontLoadShareFactoryPC',
+    name: 'dontLoadShareFactoryPC',
+    component: DontLoadShareFactoryPC
+  },
+  {
+    path: '/dontLoadShareFactoryAllProductsPC',
+    name: 'dontLoadShareFactoryAllProductsPC',
+    component: DontLoadShareFactoryAllProductsPC
   }
 ]

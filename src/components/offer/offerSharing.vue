@@ -623,6 +623,7 @@ export default {
     }
   },
   created () {
+    if (document.body.clientWidth > 1024) this.$router.push('/offerSharingPC?id=' + this.$route.query.id)
     this.getProductOfferByNumber()
     this.getProductOfferDetailPage()
   },
@@ -637,16 +638,8 @@ export default {
       return this.$store.state.vueElementLoading || this.noMore
     }
   },
-  mounted () {
-    if (this.$store.state.screenWidth > 1024) this.$router.push('/offerSharingPC?id=' + this.$route.query.id)
-  },
-  watch: {
-    '$store.state.screenWidth' (val) {
-      if (val > 1024) {
-        this.$router.push('/offerSharingPC?id=' + this.$route.query.id)
-      }
-    }
-  }
+  mounted () {},
+  watch: {}
 }
 </script>
 <style scoped lang='less'>

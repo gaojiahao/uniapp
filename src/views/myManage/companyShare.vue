@@ -55,8 +55,8 @@
            </template>
         </el-table-column>
         <el-table-column prop="shareUrl" label="网址"></el-table-column>
-        <el-table-column prop="verifyCode" label="登录码" width="100"></el-table-column>
-        <el-table-column prop="profit" label="利率" width="50"></el-table-column>
+        <el-table-column prop="verifyCode" label="登录码" width="100">
+        </el-table-column>
         <el-table-column
           prop="createdOn"
           label="创建时间"
@@ -79,8 +79,15 @@
             {{ scope.row.expireTime && scope.row.expireTime.replace(/T/g, " ") }}
           </template>
         </el-table-column>
-        <el-table-column label="操作"  width="350" align="center">
+        <el-table-column label="操作"  width="450" align="center">
           <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="primary"
+              plain
+              @click.stop="resetLoginCode(scope.row)"
+              >刷新登录码</el-button
+            >
             <el-button
               size="mini"
               type="primary"
@@ -360,9 +367,9 @@ export default {
         offerMethod: '汕头',
         currencyType: '¥',
         currencyTypeName: 'RMB',
-        totalCost: 0,
+        totalCost: '0',
         exchange: 0,
-        size: 24,
+        size: '24',
         decimalPlaces: 3,
         rejectionMethod: '四舍五入'
       },
@@ -580,6 +587,12 @@ export default {
       this.pageSize = pageSize
       if (this.currentPage * pageSize > this.totalCount) return false
       this.getSearchWebsiteShareInfosPage()
+    },
+    async resetLoginCode (row) {
+      const res = await this.$http.post('/api/RefreshVerifyCode?id=' + row.id)
+      const { code, item, msg } = res.data.result
+      if (code === 200) row.verifyCode = item
+      else this.$message.error(msg)
     },
     // 打开编辑客户
     openEdit (row) {
