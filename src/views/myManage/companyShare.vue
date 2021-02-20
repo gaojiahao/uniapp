@@ -54,7 +54,28 @@
             </el-form>
            </template>
         </el-table-column>
-        <el-table-column prop="shareUrl" label="网址"></el-table-column>
+        <el-table-column prop="shareUrl" label="网址">
+          <template slot-scope="scope">
+            <div :id="scope.row.id">
+              {{ scope.row.shareUrl }}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="复制/扫码"  width="180" align="center">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="success"
+              @click.stop="copyUrl(scope.row.id)"
+              >复制</el-button>
+            <el-button
+              size="mini"
+              type="primary"
+              @click.stop="generateQRCode(scope.row.shareUrl)"
+              >生成二维码</el-button
+            >
+          </template>
+        </el-table-column>
         <el-table-column prop="verifyCode" label="登录码" width="100">
         </el-table-column>
         <el-table-column
@@ -311,6 +332,19 @@
         </center>
       </el-form>
     </el-dialog>
+    <!-- 生成二维码 -->
+    <el-dialog
+      :visible.sync="QRCodeDialog"
+      v-if="QRCodeDialog"
+      width="20%">
+      <vue-qr
+        style="width:100%;"
+        :text="QRCodeUrl"
+        colorLight="#fff"
+        colorDark="#000"
+        :margin="0"
+      ></vue-qr>
+    </el-dialog>
   </el-main>
     <el-footer style="padding:0;" height="162px">
       <bsFooter></bsFooter>
@@ -323,10 +357,13 @@ import bsTop from '@/components/BsTop'
 import bsFooter from '@/components/oldFooter'
 import accessRecordComponent from '@/components/accessRecordComponent/accessRecordComponent.vue'
 import clientOrderComponent from '@/components/clientOrderComponent/clientOrderComponent.vue'
+import VueQr from 'vue-qr'
 export default {
-  components: { bsTop, bsFooter, accessRecordComponent, clientOrderComponent },
+  components: { bsTop, bsFooter, accessRecordComponent, clientOrderComponent, VueQr },
   data () {
     return {
+      QRCodeDialog: false,
+      QRCodeUrl: '',
       addMyClientRules: {
         name: [
           { required: true, message: '请输入客户名称', trigger: 'blur' }
@@ -453,6 +490,32 @@ export default {
     }
   },
   methods: {
+    // 复制链接
+    copyUrl (id) {
+      var link = document.getElementById(id)
+      var range
+      if (document.body.createTextRange) {
+        range = document.body.createTextRange()
+        range.moveToElementText(link)
+        range.select()
+      } else if (window.getSelection) {
+        var selection = window.getSelection()
+        range = document.createRange()
+        range.selectNodeContents(link)
+        selection.removeAllRanges()
+        selection.addRange(range)
+      } else {
+        console.warn('none')
+      }
+      document.execCommand('Copy') // 执行浏览器复制命令
+      // console.warn('none')
+      this.$message.success('已复制好，可贴粘。')
+    },
+    // 生成二维码
+    generateQRCode (url) {
+      this.QRCodeUrl = url
+      this.QRCodeDialog = true
+    },
     // 提交新增客户
     subMyClient () {
       this.$refs.addMyClientRef.validate(async (valid) => {
