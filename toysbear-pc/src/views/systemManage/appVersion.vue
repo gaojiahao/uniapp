@@ -103,16 +103,28 @@
         :rules="addVersionRules"
         :model="versionFormData"
       >
-        <el-form-item label="平台" prop="platForm">
-          <el-select v-model="versionFormData.platForm" placeholder="请选择">
-            <el-option
-              v-for="item in $store.state.globalJson.Json.PlatForm"
-              :key="item.id"
-              :label="item.itemText"
-              :value="item.itemCode"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+        <div style="display:flex;justifyContent:space-between;">
+          <el-form-item label="平台" prop="platForm">
+            <el-select v-model="versionFormData.platForm" placeholder="请选择">
+              <el-option
+                v-for="item in $store.state.globalJson.Json.PlatForm"
+                :key="item.id"
+                :label="item.itemText"
+                :value="item.itemCode"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="强制更新" prop="forceUpdate">
+            <el-select v-model="versionFormData.forceUpdate" placeholder="请选择">
+              <el-option
+                v-for="(item, i) in [{itemText: '是',itemCode: true},{itemText: '否',itemCode: false}]"
+                :key="i"
+                :label="item.itemText"
+                :value="item.itemCode"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </div>
         <el-form-item label="版本号" prop="vesion">
           <el-input v-model="versionFormData.vesion"></el-input>
         </el-form-item>
@@ -173,6 +185,7 @@ export default {
       versionTitle: '新增版本',
       versionFormData: {
         platForm: null,
+        forceUpdate: false,
         vesion: null,
         fileUrl: '',
         versionFile: ''
@@ -184,6 +197,9 @@ export default {
       addVersionRules: {
         platForm: [
           { required: true, message: '请选择手机平台', trigger: 'change' }
+        ],
+        forceUpdate: [
+          { required: true, message: '请选择是否强制更新', trigger: 'change' }
         ],
         vesion: [
           { required: true, message: '请输入版本号', trigger: 'blur' },
@@ -283,6 +299,7 @@ export default {
       this.versionTitle = '版本新增'
       this.versionFormData = {
         vesion: null,
+        forceUpdate: false,
         fileUrl: '',
         platForm: '',
         versionFile: ''

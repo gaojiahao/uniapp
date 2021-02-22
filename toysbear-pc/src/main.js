@@ -9,6 +9,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
 import RTM from '@/assets/js/signalROptions'
+import IM from '@/assets/js/im.js'
 import Video from 'video.js'
 import 'video.js/dist/video-js.css'
 import '@/assets/css/globalVariable.less'
@@ -24,7 +25,6 @@ import '@/assets/js/rem.js'
 import { NoticeBar } from 'vant'
 // 引入echarts
 import echarts from 'echarts'
-
 Vue.prototype.$echarts = echarts
 Vue.use(VueQuillEditor)
 Vue.use(VueClipboard)
@@ -37,8 +37,9 @@ Vue.prototype.$_ = _
 Vue.use(ElementUI)
 Vue.prototype.$md5 = md5
 Vue.prototype.$RTM = RTM
-Vue.use(myAxios)
+Vue.prototype.IM = IM
 
+Vue.use(myAxios)
 Vue.config.productionTip = false
 const vm = new Vue({
   router,
