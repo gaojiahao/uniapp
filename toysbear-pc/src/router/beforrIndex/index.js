@@ -2,17 +2,9 @@ const Home = () => import('@/views/beforePage/Home.vue')
 const BeforeIndex = () => import('@/views/beforePage/BeforeIndex.vue')
 const Login = () => import('@/views/beforePage/Login.vue')
 const LoginConfirm = () => import('@/views/beforePage/LoginConfirm.vue')
-const Showroom = () => import('@/views/beforePage/Showroom.vue')
-const Buyers = () => import('@/views/beforePage/Buyers.vue')
-const Supplier = () => import('@/views/beforePage/Supplier.vue')
 const Product = () => import('@/views/beforePage/Product.vue')
-const FindSamInfo = () => import('@/views/beforePage/FindSamInfo.vue')
-const Exhibition = () => import('@/views/beforePage/Exhibition.vue')
-const PurchaseInfo = () => import('@/views/beforePage/PurchaseInfo.vue')
-const NoticeDetail = () => import('@/views/beforePage/NoticeDetail')
 const CompanyDetail = () => import('@/views/beforePage/CompanyDetail')
 const ProductDetail = () => import('@/views/beforePage/productDetail')
-const ShowRoomDetail = () => import('@/views/beforePage/showRoomDetail')
 const CompanyInfo = () => import('@/views/beforePage/companyInfo')
 const ContactUs = () => import('@/views/beforePage/companyInfo/contactUs')
 const AboutUs = () => import('@/views/beforePage/companyInfo/aboutUs')
@@ -44,26 +36,6 @@ export default {
       component: LoginConfirm
     },
     {
-      path: 'showroom',
-      name: 'Showroom',
-      component: Showroom
-    },
-    {
-      path: 'showRoomDetail/:id',
-      name: 'ShowRoomDetail',
-      component: ShowRoomDetail
-    },
-    {
-      path: 'buyers',
-      name: 'Buyers',
-      component: Buyers
-    },
-    {
-      path: 'supplier',
-      name: 'Supplier',
-      component: Supplier
-    },
-    {
       path: 'product',
       name: 'Product',
       component: Product
@@ -72,26 +44,6 @@ export default {
       path: 'productDetail/:id',
       name: 'ProductDetail',
       component: ProductDetail
-    },
-    {
-      path: 'findSamInfo',
-      name: 'FindSamInfo',
-      component: FindSamInfo
-    },
-    {
-      path: 'purchaseInfo',
-      name: 'PurchaseInfo',
-      component: PurchaseInfo
-    },
-    {
-      path: 'exhibition',
-      name: 'Exhibition',
-      component: Exhibition
-    },
-    {
-      path: 'noticeDetail/:id',
-      name: 'noticeDetail',
-      component: NoticeDetail
     },
     {
       path: 'companyDetail/:id',

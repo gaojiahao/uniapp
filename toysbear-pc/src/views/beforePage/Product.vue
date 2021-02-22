@@ -317,7 +317,7 @@ export default {
     changeIsDetail (productDetail) {
       this.isProductDetail = false
       this.$nextTick(() => {
-        this.$refs.childrenProduct.productList.forEach(item => {
+        this.$refs.childrenProduct.productList && this.$refs.childrenProduct.productList.forEach(item => {
           if (item.productNumber === this.productNumber) item.isFavorite = productDetail.isFavorite
         })
       })
