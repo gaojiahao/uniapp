@@ -40,7 +40,90 @@
         </div>
       </div>
     </div>
-    <!-- 表单区 -->
+    <!-- 条件搜索区 -->
+    <div class="searchBox">
+      <el-form :inline="true" label-position="right" label-width="100px" :model="searchFD" class="demo-form-inline">
+      <div class="items">
+        <div class="itemBox">
+          <el-form-item label="关键查询：">
+            <el-input
+            clearable
+              @keyup.enter.native="search"
+              v-model="searchFD.keyword"
+              placeholder="输入关键字"
+              style="width: 100%"
+            ></el-input>
+          </el-form-item>
+        </div>
+        <div class="itemBox">
+          <el-form-item label="来源：">
+            <el-select
+              clearable
+              v-model="searchFD.keyword"
+              placeholder="请选择"
+              style="width: 100%"
+            >
+              <el-option
+                v-for="(item, index) in []"
+                :key="index"
+                :label="item.itemText"
+                :value="item.itemCode"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </div>
+        <div class="itemBox">
+          <el-form-item label="订单类型：">
+            <el-select
+              clearable
+              v-model="searchFD.keyword"
+              placeholder="请选择"
+              style="width: 100%"
+            >
+              <el-option
+                v-for="(item, index) in []"
+                :key="index"
+                :label="item.itemText"
+                :value="item.itemCode"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </div>
+      </div>
+      <div class="items">
+        <div class="itemBox">
+          <el-form-item label="订单编号：">
+            <el-input
+            clearable
+              @keyup.enter.native="search"
+              v-model="searchFD.laiyuan"
+              placeholder="请输入"
+              style="width: 100%"
+            ></el-input>
+          </el-form-item>
+        </div>
+        <div class="itemBox">
+          <el-form-item label="时间：">
+            <el-date-picker
+              v-model="searchFD.dateTile"
+              style="max-width: 217px;"
+              value-format="yyyy-MM-ddTHH:mm:ss"
+              type="daterange"
+              :picker-options="pickerOptions"
+              range-separator="—"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              align="right"
+            ></el-date-picker>
+          </el-form-item>
+        </div>
+        <div class="itemBox">
+          <el-button type="primary">搜索</el-button>
+        </div>
+      </div>
+      </el-form>
+    </div>
+    <!-- table表格区 -->
     <div class="tableBox" v-if="!isOrderDetial">
       <div class="tableWrap">
         <el-table
@@ -230,8 +313,11 @@ export default {
   },
   data () {
     return {
+      searchFD: {
+        keyword: null
+      },
       currentSample: null,
-      myOrderSample: '我的择样单',
+      myOrderSample: '我的订单',
       isOrderDetial: false,
       jiaerweima: require('@/assets/images/erweimaicon@2x.png'),
       isActive: false,
@@ -245,7 +331,38 @@ export default {
       tableList: [],
       totalCount: 0,
       currentPage: 1,
-      pageSize: 10
+      pageSize: 10,
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: '最近一周',
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', [start, end])
+            }
+          },
+          {
+            text: '最近一个月',
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', [start, end])
+            }
+          },
+          {
+            text: '最近三个月',
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+              picker.$emit('pick', [start, end])
+            }
+          }
+        ]
+      }
     }
   },
   computed: {
