@@ -9,7 +9,7 @@
             fit="contain"></el-image>
             <div class="titleBox">
               <div class="chTitle">
-                小竹熊择样单同步管理
+                小竹熊订单同步管理
               </div>
               <div class="enTitle">
                 Shenzhen Little Bamboo Bear Technology co.,Ltd.
@@ -24,7 +24,7 @@
           <div class="shouyeBox" @click="isErpOrder">
             <i class="mySampleIcon"></i>
             <span class="sampleText">
-              我的择样单
+              我的订单
             </span>
           </div>
           <div class="loginBtn">登录系统</div>
@@ -34,7 +34,7 @@
     <div class="loginWrap">
       <div class="loginBox">
         <div class="left">
-          <p class="yijian">择样信息一键同步</p>
+          <p class="yijian">订单信息一键同步</p>
         </div>
         <div class="middel">
           <div class="qrCodeWrap">

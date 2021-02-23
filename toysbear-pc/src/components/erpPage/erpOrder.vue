@@ -10,7 +10,7 @@
             fit="contain"></el-image>
             <div class="titleBox">
               <div class="chTitle">
-                小竹熊择样单同步管理
+                小竹熊订单同步管理
               </div>
               <div class="enTitle">
                 Shenzhen Little Bamboo Bear Technology co.,Ltd.

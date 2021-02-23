@@ -36,6 +36,7 @@
       </el-form>
     </div>
     <!-- 列表 -->
+    <!-- @row-click="rowClick" -->
     <div class="tableContent">
       <el-table
         size="mini"
@@ -43,9 +44,8 @@
         ref="multipleTable"
         style="width: 100%"
         :default-sort="{ prop: 'date', order: 'descending' }"
-        @row-click="rowClick"
         >
-        <el-table-column type="expand">
+        <!-- <el-table-column type="expand">
            <template slot-scope="props">
              <el-form label-position="left" inline class="demo-table-expand">
               <el-form-item label="客户：">
@@ -53,7 +53,7 @@
               </el-form-item>
             </el-form>
            </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column prop="shareUrl" label="网址">
           <template slot-scope="scope">
             <div :id="scope.row.id">
@@ -78,26 +78,28 @@
         </el-table-column>
         <el-table-column prop="verifyCode" label="登录码" align="center" width="100">
         </el-table-column>
+        <el-table-column prop="customerName" label="客户" align="center">
+        </el-table-column>
         <el-table-column
           prop="createdOn"
           label="创建时间"
-          width="150"
+           width="100"
           align="center"
           sortable
         >
           <template slot-scope="scope">
-            {{ scope.row.createdOn && scope.row.createdOn.replace(/T/g, " ") }}
+            {{ scope.row.createdOn && scope.row.createdOn.split("T")[0] }}
           </template>
         </el-table-column>
         <el-table-column
           prop="expireTime"
           label="有效期"
-          width="150"
+          width="100"
           align="center"
           sortable
         >
           <template slot-scope="scope">
-            {{ scope.row.expireTime && scope.row.expireTime.replace(/T/g, " ") }}
+            {{ scope.row.expireTime && scope.row.expireTime.split("T")[0] || "永久有效" }}
           </template>
         </el-table-column>
         <el-table-column label="操作"  width="450" align="center">
@@ -168,7 +170,7 @@
         </el-form-item>
         <el-form-item label="选择客户：" prop="customerInfoIds">
           <div class="formItemBox">
-          <el-select v-model="clienFormData.customerInfoIds" multiple :filter-method="filterMethod" filterable clearable placeholder="请输入客户名或选择客户">
+          <el-select v-model="clienFormData.customerInfoId" :filter-method="filterMethod" filterable clearable placeholder="请 输入/选择 客户">
             <el-option
               v-for="item in clientList"
               :key="item.id"
@@ -400,7 +402,7 @@ export default {
         isExportExcel: false,
         profit: 0,
         expireTime: null,
-        customerInfoIds: null,
+        customerInfoId: null,
         offerMethod: '汕头',
         currencyType: '¥',
         currencyTypeName: 'RMB',
@@ -427,7 +429,7 @@ export default {
         // expireTime: [
         //   { required: true, message: '请选择过期时间', trigger: 'change' }
         // ],
-        customerInfoIds: [
+        customerInfoId: [
           { required: true, message: '请选择客户', trigger: 'blur' }
         ],
         offerMethod: [
@@ -611,6 +613,7 @@ export default {
     openAddClien () {
       this.clienFormData.totalCost = 0
       this.clienFormData.url = this.defaultShareDomain
+      this.clienFormData.customerInfoId = null
       this.dialogTitle = '新增分享'
       this.defaultFormula = JSON.stringify(this.customerTemplate[0])
       this.$nextTick(() => {
@@ -667,10 +670,10 @@ export default {
       for (const key in row) {
         this.clienFormData[key] = row[key]
       }
-      this.clienFormData.customerInfoIds = row.customerInfos.map(val => val.id)
+      this.clienFormData.customerInfoId = row.customerId
       this.addClienDialog = true
     },
-    // 提交新增 | 编辑 客户
+    // 提交新增 | 编辑 分享
     async subProcessingLog () {
       this.$refs.addClientFormRef.validate(async (valid) => {
         if (valid) {

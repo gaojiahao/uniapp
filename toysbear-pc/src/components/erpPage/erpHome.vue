@@ -9,7 +9,7 @@
             fit="contain"></el-image>
             <div class="titleBox">
               <div class="chTitle">
-                小竹熊择样单同步管理
+                小竹熊订单同步管理
               </div>
               <div class="enTitle">
                 Shenzhen Little Bamboo Bear Technology co.,Ltd.
@@ -24,7 +24,7 @@
           <div class="shouyeBox" @click="isErpOrder">
             <i class="mySampleIcon"></i>
             <span class="sampleText">
-              我的择样单
+              我的订单
             </span>
           </div>
           <div class="signOutBox" v-if="$store.state.isLogin">
@@ -42,7 +42,7 @@
     <div class="bannerTong">
       <div class="bannerContext">
         <div class="contentBox">
-          <p class="title">小竹熊择样信息同步宏升erp</p>
+          <p class="title">小竹熊订单同步宏升erp</p>
           <p class="explain">让办公更快捷  更畅通  更高效</p>
         </div>
       </div>
@@ -56,9 +56,9 @@
         <div class="bigExhibitions">
           <div class="bigExhibitionItem" v-for="(item, i) in bigHalls" :key="i">
             <div class="imgBox">
-              <el-image class="hallLogo" :preview-src-list="[item.bgImg]" :src="item.bgImg">
+              <el-image class="hallLogo" fit="contain" :preview-src-list="[item.bgImg]" :src="item.bgImg">
               <div slot="error" class="image-slot">
-                <img style="width: 127px; height: 70px" src="~@/assets/images/logo.png" alt />
+                <img style="width: 273px; height: 121px; object-fit: contain;" src="~@/assets/images/logo.png" alt />
               </div>
             </el-image>
             </div>
@@ -68,16 +68,16 @@
           </div>
         </div>
         <div class="minExhibitions">
-           <div class="minExhibitionItem" v-for="(item, i) in advertList" :key="i">
+           <div class="minExhibitionItem" v-for="(item, i) in minHalls" :key="i">
             <div class="imgBox">
-              <el-image class="hallLogo" :preview-src-list="[item.img]" :src="item.img">
+              <el-image class="hallLogo" fit="contain" :preview-src-list="[item.bgImg]" :src="item.bgImg">
               <div slot="error" class="image-slot">
-                <img style="width: 127px; height: 70px" src="~@/assets/images/logo.png" alt />
+                <img style="width: 127px; height: 70px; object-fit: contain;" src="~@/assets/images/logo.png" alt />
               </div>
             </el-image>
             </div>
             <div class="hallName">
-              {{ item.adTitle }}
+              {{ item.companyName }}
             </div>
           </div>
         </div>
