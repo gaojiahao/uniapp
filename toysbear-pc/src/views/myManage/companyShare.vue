@@ -302,7 +302,7 @@
       </el-form>
     </el-dialog>
     <!-- 查看访问记录dialog -->
-    <el-dialog title="访问记录" :close-on-click-modal="false" :visible.sync="isLoginLog" v-if="isLoginLog" width="50%">
+    <el-dialog title="访问记录" :close-on-click-modal="false" :visible.sync="isLoginLog" v-if="isLoginLog" top="60px" width="50%">
       <accessRecordComponent :item="clienFormData" />
     </el-dialog>
     <!-- 分享客户订单dialog -->
@@ -550,7 +550,6 @@ export default {
       for (const key in row) {
         this.clienFormData[key] = row[key]
       }
-      this.clienFormData.customerInfoIds = row.customerInfos.map(val => val.id)
       this.clientOrderDialog = true
     },
     // 打开查看访问记录
@@ -558,7 +557,6 @@ export default {
       for (const key in row) {
         this.clienFormData[key] = row[key]
       }
-      this.clienFormData.customerInfoIds = row.customerInfos.map(val => val.id)
       this.isLoginLog = true
     },
     // 获取客户报价模板

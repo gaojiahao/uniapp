@@ -1,10 +1,37 @@
 <template>
 <div>
-<el-table
+    <el-card class="box-card">
+      <ul class="customerInfoBox">
+        <li class="itemBox">
+          <span>客户名称：</span>
+          <span class="content">{{ tableData.customerName }}</span>
+        </li>
+        <li class="itemBox">
+          <span>订单编号：</span>
+          <span class="content">{{ tableData.shareOrderNumber }}</span>
+        </li>
+        <li class="itemBox">
+          <span>生成订单日期：</span>
+          <span class="content">{{ tableData.createdOn && tableData.createdOn.replace(/T/, ' ') }}</span>
+        </li>
+        <li class="itemBox">
+          <span>总款数：</span>
+          <span class="content">{{ tableData.totalAmount }}</span>
+        </li>
+      </ul>
+    </el-card>
+    <el-table
         size="mini"
-        :data="tableData"
+        :data="tableData.shareOrderDetails && tableData.shareOrderDetails.items"
         style="width:100%"
+        ref="dataTable"
+        height="600px"
+        highlight-current-row
       >
+      <el-table-column
+      type="selection"
+      width="55">
+    </el-table-column>
         <el-table-column prop="companyName" label="产品图片" align="center">
           <template slot-scope="scope">
             <el-image fit="contain" style="width: 100px; height:100px;" :preview-src-list="[scope.row.productImage]" :src="scope.row.productImage" lazy>
@@ -35,7 +62,6 @@
         </el-table-column>
         <el-table-column prop="productName" label="产品名称" align="center"></el-table-column>
         <el-table-column prop="productNumber" label="产品编号" align="center"></el-table-column>
-        <el-table-column prop="shareOrderNumber" label="订单编号" align="center"></el-table-column>
         <el-table-column prop="productPrice" label="总价" align="center"></el-table-column>
         <el-table-column prop="productCount" label="产品数" align="center"></el-table-column>
         <!-- <el-table-column label="操作" align="center" width="200">
@@ -95,8 +121,9 @@ export default {
       const res = await this.$http.post('/api/SearchCompanyShareOrderDetailsPage', { skipCount: this.currentPage, maxResultCount: this.pageSize, shareOrderNumber: this.shareOrderNumber })
       console.log(res)
       if (res.data.result.code === 200) {
-        this.tableData = res.data.result.item.items
-        this.totalCount = res.data.result.item.totalCount
+        this.tableData = res.data.result.item
+        this.totalCount = res.data.result.item.shareOrderDetails.totalCount
+        this.$refs.dataTable.toggleAllSelection()
       } else {
         this.$message.error(res.data.result.msg)
       }
@@ -117,10 +144,19 @@ export default {
     this.getSearchCompanyShareOrderDetailsPage()
   },
   mounted () {
-
   }
 }
 </script>
 <style scoped lang='less'>
-
+.customerInfoBox {
+  display: flex;
+  // align-items: center;
+  .itemBox {
+    flex: 1;
+    margin-right: 5px;
+    .content {
+      color: #999;
+    }
+  }
+}
 </style>

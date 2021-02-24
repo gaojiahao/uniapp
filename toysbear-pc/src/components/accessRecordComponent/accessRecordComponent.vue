@@ -5,6 +5,7 @@
         :data="tableData"
         ref="multipleTable"
         style="width: 100%"
+        height="600px"
         :default-sort="{ prop: 'date', order: 'descending' }"
         >
         <el-table-column prop="companyNumber" label="公司编号" align="center"></el-table-column>

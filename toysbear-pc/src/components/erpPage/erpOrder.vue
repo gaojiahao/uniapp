@@ -40,7 +40,9 @@
         </div>
       </div>
     </div>
-    <!-- 条件搜索区 -->
+    <!-- 列表区 -->
+    <template v-if="!isOrderDetial">
+       <!-- 条件搜索区 -->
     <div class="searchBox">
       <el-form :inline="true" label-position="right" label-width="100px" :model="searchFD" class="demo-form-inline">
       <div class="items">
@@ -59,15 +61,21 @@
           <el-form-item label="来源：">
             <el-select
               clearable
-              v-model="searchFD.keyword"
+              v-model="searchFD.orderFrom "
               placeholder="请选择"
               style="width: 100%"
             >
               <el-option
-                v-for="(item, index) in []"
+                v-for="(item, index) in [{
+                  label: '展厅',
+                  value: 'Hall'
+                },{
+                  label: '小竹熊',
+                  value: 'LittleBear'
+                }]"
                 :key="index"
-                :label="item.itemText"
-                :value="item.itemCode"
+                :label="item.label"
+                :value="item.value"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -76,15 +84,24 @@
           <el-form-item label="订单类型：">
             <el-select
               clearable
-              v-model="searchFD.keyword"
+              v-model="searchFD.orderType"
               placeholder="请选择"
               style="width: 100%"
             >
               <el-option
-                v-for="(item, index) in []"
+                v-for="(item, index) in [{
+                  label: '择样',
+                  value: 'Sample'
+                },{
+                  label: '找样',
+                  value: 'CompanySample'
+                },{
+                  label: '客户订单',
+                  value: 'ShareOrder'
+                }]"
                 :key="index"
-                :label="item.itemText"
-                :value="item.itemCode"
+                :label="item.label"
+                :value="item.value"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -96,7 +113,7 @@
             <el-input
             clearable
               @keyup.enter.native="search"
-              v-model="searchFD.laiyuan"
+              v-model="searchFD.orderNumber"
               placeholder="请输入"
               style="width: 100%"
             ></el-input>
@@ -104,12 +121,13 @@
         </div>
         <div class="itemBox">
           <el-form-item label="时间：">
+            <!-- type="daterange" -->
             <el-date-picker
-              v-model="searchFD.dateTile"
+              v-model="dateTile"
               style="max-width: 217px;"
               value-format="yyyy-MM-ddTHH:mm:ss"
-              type="daterange"
               :picker-options="pickerOptions"
+              type="daterange"
               range-separator="—"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
@@ -118,13 +136,13 @@
           </el-form-item>
         </div>
         <div class="itemBox">
-          <el-button type="primary">搜索</el-button>
+          <el-button type="primary" @click="search">搜索</el-button>
         </div>
       </div>
       </el-form>
     </div>
     <!-- table表格区 -->
-    <div class="tableBox" v-if="!isOrderDetial">
+    <div class="tableBox">
       <div class="tableWrap">
         <el-table
         :header-cell-style="{ backgroundColor: '#2D60B3', color: '#fff' }"
@@ -195,6 +213,7 @@
             ></el-pagination>
       </center>
     </div>
+    </template>
     <!-- 详情 -->
     <div v-else>
       <erpSampleDetails :option="currentSample" />
@@ -313,8 +332,14 @@ export default {
   },
   data () {
     return {
+      dateTile: null,
       searchFD: {
-        keyword: null
+        keyword: null,
+        orderFrom: null,
+        orderType: null,
+        startTime: null,
+        endTime: null,
+        orderNumber: null
       },
       currentSample: null,
       myOrderSample: '我的订单',
@@ -373,7 +398,7 @@ export default {
   methods: {
     resetSample () {
       this.isOrderDetial = false
-      this.myOrderSample = '我的择样单'
+      this.myOrderSample = '我的订单'
     },
     // 退出登录
     signOut () {
@@ -383,7 +408,7 @@ export default {
     openDetail (item) {
       this.currentSample = item
       this.isOrderDetial = true
-      this.myOrderSample = '返回择样列表'
+      this.myOrderSample = '返回订单列表'
     },
     // 去主页
     toHome () {
@@ -425,16 +450,27 @@ export default {
       if (this.currentPage * pages > this.totalCount) return
       this.getOrderList()
     },
+    // 搜索
+    search () {
+      this.currentPage = 1
+      this.getOrderList()
+    },
     async getOrderList () {
-      const res = await this.$http.post('/api/SampleOrderERPPage', {
+      const fd = {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
-        OrderType: 'Sample'
-      })
+        orderType: 'Sample',
+        ...this.searchFD
+      }
+      if (this.dateTile) {
+        fd.startTime = this.dateTile[0]
+        fd.endTime = this.dateTile[1]
+      }
+      for (const key in fd) {
+        if (fd[key] === null || fd[key] === undefined || fd[key] === '') delete fd[key]
+      }
+      const res = await this.$http.post('/api/SampleOrderERPPage', fd)
       if (res.data.result.code === 200) {
-        // for (let i = 0; i < 20; i++) {
-        //   this.tableList.push(res.data.result.item.items[0])
-        // }
         this.tableList = res.data.result.item.items
         this.totalCount = res.data.result.item.totalCount
       } else {

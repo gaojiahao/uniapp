@@ -3,7 +3,8 @@
 <el-table
         size="mini"
         :data="tableData"
-        style="width:100%"
+        style="width:100%;"
+        height="600px"
       >
         <el-table-column prop="companyName" label="公司名称" align="center"></el-table-column>
         <el-table-column prop="contactName" label="联系人" align="center"></el-table-column>
@@ -45,7 +46,7 @@
         ></el-pagination>
       </center>
       <!-- 订单详情dialog -->
-    <el-dialog title="客户订单" :visible.sync="isOrderDetailDialog" append-to-body v-if="isOrderDetailDialog" top="60px" width="80%">
+    <el-dialog title="订单明细" :visible.sync="isOrderDetailDialog" append-to-body v-if="isOrderDetailDialog" top="60px" width="80%">
       <clientOrderdetailComponent :shareOrderNumber="shareOrderNumber" />
     </el-dialog>
 </div>
@@ -76,7 +77,7 @@ export default {
     },
     // 获取分享客户订单
     async getSearchCompanyShareOrdersPage () {
-      const res = await this.$http.post('/api/SearchCompanyShareOrdersPage', { skipCount: this.currentPage, maxResultCount: this.pageSize, shareId: this.item.id })
+      const res = await this.$http.post('/api/SearchCompanyShareOrdersPage', { skipCount: this.currentPage, maxResultCount: this.pageSize, shareId: this.item.id, customerId: this.item.customerId })
       console.log(res)
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items

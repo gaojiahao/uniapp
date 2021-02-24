@@ -77,9 +77,21 @@
             </el-image>
             </div>
             <div class="hallName">
-              {{ item.companyName }}
+              {{ item.companyName || item.adTitle }}
             </div>
           </div>
+          <!-- <div class="minExhibitionItem" v-for="(ad, j) in advertList" :key="j">
+            <div class="imgBox">
+              <el-image class="hallLogo" fit="contain" :preview-src-list="[ad.img]" :src="ad.img">
+              <div slot="error" class="image-slot">
+                <img style="width: 127px; height: 70px; object-fit: contain;" src="~@/assets/images/logo.png" alt />
+              </div>
+            </el-image>
+            </div>
+            <div class="hallName">
+              {{ ad.adTitle }}
+            </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -296,7 +308,7 @@ export default {
   },
   mounted () {
     this.getProductsByTypePage()
-    this.getAdvertisementPage()
+    // this.getAdvertisementPage()
     this.getOrgCompany()
   }
 }
