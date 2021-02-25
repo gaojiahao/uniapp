@@ -8,7 +8,7 @@
         height="600px"
         :default-sort="{ prop: 'date', order: 'descending' }"
         >
-        <el-table-column prop="companyNumber" label="公司编号" align="center"></el-table-column>
+        <!-- <el-table-column prop="companyNumber" label="公司编号" align="center"></el-table-column> -->
         <el-table-column prop="email" label="登录邮箱" align="center"></el-table-column>
         <el-table-column
           prop="createdOn"

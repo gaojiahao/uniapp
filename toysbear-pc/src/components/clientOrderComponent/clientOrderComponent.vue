@@ -46,9 +46,11 @@
         ></el-pagination>
       </center>
       <!-- 订单详情dialog -->
-    <el-dialog title="订单明细" :visible.sync="isOrderDetailDialog" append-to-body v-if="isOrderDetailDialog" top="60px" width="80%">
-      <clientOrderdetailComponent :shareOrderNumber="shareOrderNumber" />
-    </el-dialog>
+    <transition name="el-zoom-in-bottom">
+      <el-dialog title="订单明细" :visible.sync="isOrderDetailDialog" append-to-body v-if="isOrderDetailDialog" top="60px" width="80%">
+        <clientOrderdetailComponent :shareOrderNumber="shareOrderNumber" />
+      </el-dialog>
+    </transition>
 </div>
 </template>
 

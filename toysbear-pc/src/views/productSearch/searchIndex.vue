@@ -451,13 +451,17 @@ export default {
     // 获取产品类目列表
     async getProductCategoryList () {
       this.AppLoading = true
-      const res = await this.$http.post('/api/ProductCategoryList', {})
-      if (res.data.result.code === 200) {
-        this.categoryList = res.data.result.item
-      } else {
-        this.$message.error(res.data.result.msg)
+      try {
+        const res = await this.$http.post('/api/ProductCategoryList', {})
+        if (res.data.result.code === 200) {
+          this.categoryList = res.data.result.item
+        } else {
+          this.$message.error(res.data.result.msg)
+        }
+        this.AppLoading = false
+      } catch (error) {
+        this.AppLoading = false
       }
-      this.AppLoading = false
     }
   },
   watch: {

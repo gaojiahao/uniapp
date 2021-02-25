@@ -166,6 +166,9 @@
         :model="clienFormData"
       >
         <el-form-item label="站点域名：" prop="url">
+          <div style="display:flex;margin-bottom:10px;">
+            <el-tag @click="clienFormData.url = item" style="margin-right: 10px;cursor: pointer;" v-for="(item, i) in defaultShareDomain" :key="i">{{ item }}</el-tag>
+          </div>
           <el-input v-model="clienFormData.url" placeholder="请输入站点域名" clearable></el-input>
         </el-form-item>
         <el-form-item label="选择客户：" prop="customerInfoIds">
@@ -302,13 +305,17 @@
       </el-form>
     </el-dialog>
     <!-- 查看访问记录dialog -->
-    <el-dialog title="访问记录" :close-on-click-modal="false" :visible.sync="isLoginLog" v-if="isLoginLog" top="60px" width="50%">
-      <accessRecordComponent :item="clienFormData" />
-    </el-dialog>
+    <transition name="el-zoom-in-top">
+      <el-dialog title="访问记录" :visible.sync="isLoginLog" v-if="isLoginLog" top="60px" width="50%">
+        <accessRecordComponent :item="clienFormData" />
+      </el-dialog>
+    </transition>
     <!-- 分享客户订单dialog -->
-    <el-dialog title="客户订单" :close-on-click-modal="false" :visible.sync="clientOrderDialog" v-if="clientOrderDialog" top="60px" width="80%">
-      <clientOrderComponent :item="clienFormData" />
-    </el-dialog>
+    <transition name="el-zoom-in-top">
+      <el-dialog title="客户订单" :visible.sync="clientOrderDialog" v-if="clientOrderDialog" top="60px" width="80%">
+        <clientOrderComponent :item="clienFormData" />
+      </el-dialog>
+    </transition>
     <!-- 新增客户dialog -->
     <el-dialog title="新增客户" top="30vh" :close-on-click-modal="false" append-to-body :visible.sync="addMyClientDialog" destroy-on-close width="50%" >
       <el-form
@@ -377,7 +384,7 @@ export default {
         phoneNumber: null,
         remark: null
       },
-      defaultShareDomain: null,
+      defaultShareDomain: [],
       defaultFormula: null,
       customerTemplate: [],
       clientOrderDialog: false,
@@ -610,7 +617,7 @@ export default {
     // 打开新增分享
     openAddClien () {
       this.clienFormData.totalCost = 0
-      this.clienFormData.url = this.defaultShareDomain
+      this.clienFormData.url = null
       this.clienFormData.customerInfoId = null
       this.dialogTitle = '新增分享'
       this.defaultFormula = JSON.stringify(this.customerTemplate[0])
