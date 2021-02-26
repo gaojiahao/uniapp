@@ -8,7 +8,7 @@
       >
         <el-table-column prop="companyName" label="公司名称" align="center"></el-table-column>
         <el-table-column prop="contactName" label="联系人" align="center"></el-table-column>
-        <el-table-column prop="loginEmail" label="邮箱" align="center"></el-table-column>
+        <el-table-column prop="email" label="邮箱" align="center"></el-table-column>
         <el-table-column prop="orderNumber" label="订单编号" align="center"></el-table-column>
         <el-table-column prop="totalAmount" label="总价" align="center"></el-table-column>
         <el-table-column prop="totalCount" label="产品数" align="center"></el-table-column>
