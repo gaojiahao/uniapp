@@ -24,7 +24,7 @@
               class="item"
               v-for="(item, i) in companyList"
               :key="i"
-              @click="openCompanyDetail(item.companyId)"
+              @click="openCompanyDetail(item)"
             >
               <el-image class="myAvatar" :src="item.companyLogo" fit="cover">
                 <div
@@ -76,9 +76,6 @@ export default {
         this.companyListCurrentPage = 1
         await this.getContactsCompanyListByID()
         this.showSearchCompanyCount = true
-        this.showTypeOptions.showLiaotianType = null
-        this.isGroupNumber = false
-        this.active2 = null
       })
     },
     // 公司列表下拉加载更多
@@ -117,23 +114,11 @@ export default {
       }
     },
     // 点击对应公司列表查看详情
-    async openCompanyDetail (id) {
-      console.log(id)
-    //   this.isGroupNumber = false
-    //   this.showTypeOptions.showLiaotianType = null
-    //   this.active2 = 4
-    //   const res = await this.$http.post('api/OrgCompanyLableListByID', {
-    //     CompanyId: id
-    //   })
-    //   if (res.data.result.code === 200) {
-    //     this.CompanyDetail = res.data.result.item
-    //     this.CompanyDetail.companyName =
-    //       res.data.result.item.orgCompany.companyName
-    //     this.CompanyDetail.companyLogo =
-    //       res.data.result.item.orgCompany.companyLogo
-    //     this.CompanyDetail.id = res.data.result.item.orgCompany.id
-    //   }
-    //   this.CompanyDetail.detailId = id
+    async openCompanyDetail (item) {
+      this.$emit('openTwoView', {
+        componentName: 'companyDetailsComponent',
+        ...item
+      })
     }
   },
   created () {
