@@ -257,47 +257,74 @@
       <el-dialog title="订单模板" append-to-body v-show="exportTemplateDialog" :visible.sync="exportTemplateDialog" top="60px" width="80%">
         <!-- <div class="box" style="height:500px;"> -->
           <el-card class="box-card">
-            <div slot="header" class="clearfix">
-              <span>模板一</span>
+            <div slot="header" style="display:flex; align-items:center; justify-content:space-between">
+              <span class="headerTitle">模板一</span>
+              <div>
+                <el-button type="primary" @click="openViewer(require('@/assets/images/template1.png'))">预览</el-button>
+                <el-button type="success" @click="exportOrder(1)">导出</el-button>
+              </div>
             </div>
-            <div v-for="o in 4" :key="o" class="text item">
-              模板一
-            </div>
-          </el-card>
-          <el-card class="box-card">
-            <div slot="header" class="clearfix">
-              <span>模板一</span>
-            </div>
-            <div v-for="o in 4" :key="o" class="text item">
-              模板一
+            <div class="modeImgBox">
+              <el-image fit="contain" class="myImg" :src="require('@/assets/images/template1.png')"></el-image>
             </div>
           </el-card>
           <el-card class="box-card">
-            <div slot="header" class="clearfix">
-              <span>模板一</span>
+            <div slot="header" style="display:flex; align-items:center; justify-content:space-between">
+              <span class="headerTitle">模板二</span>
+              <div>
+                <el-button type="primary" @click="openViewer(require('@/assets/images/template2.png'))">预览</el-button>
+                <el-button type="success" @click="exportOrder(2)">导出</el-button>
+              </div>
             </div>
-            <div v-for="o in 4" :key="o" class="text item">
-              模板一
+            <div class="modeImgBox">
+              <el-image fit="contain" class="myImg" :src="require('@/assets/images/template2.png')"></el-image>
             </div>
           </el-card>
           <el-card class="box-card">
-            <div slot="header" class="clearfix">
-              <span>模板一</span>
+            <div slot="header" style="display:flex; align-items:center; justify-content:space-between">
+              <span class="headerTitle">模板三</span>
+              <div>
+                <el-button type="primary" @click="openViewer(require('@/assets/images/template3.png'))">预览</el-button>
+                <el-button type="success" @click="exportOrder(3)">导出</el-button>
+              </div>
             </div>
-            <div v-for="o in 4" :key="o" class="text item">
-              模板一
+            <div class="modeImgBox">
+              <el-image fit="contain" class="myImg" :src="require('@/assets/images/template3.png')"></el-image>
             </div>
           </el-card>
+          <el-card class="box-card">
+            <div slot="header" style="display:flex; align-items:center; justify-content:space-between">
+              <span class="headerTitle">模板四</span>
+              <div>
+                <el-button type="primary" @click="openViewer(require('@/assets/images/template4.png'))">预览</el-button>
+                <el-button type="success" @click="exportOrder(4)">导出</el-button>
+              </div>
+            </div>
+            <div class="modeImgBox">
+              <el-image fit="contain" class="myImg" :src="require('@/assets/images/template4.png')"></el-image>
+            </div>
+          </el-card>
+          <!-- 模板预览 -->
+          <el-image-viewer
+            style="z-index:9999"
+            v-if="showViewer"
+            :on-close="closeViewer"
+            :url-list="viewerImgList" />
       </el-dialog>
     </transition>
 </div>
 </template>
 
 <script>
+import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 export default {
+  components: {
+    ElImageViewer
+  },
   props: ['shareOrderNumber'],
   data () {
     return {
+      showViewer: false,
       exportTemplateDialog: false,
       isOrderDetailDialog: false,
       tableData: [],
@@ -307,6 +334,39 @@ export default {
     }
   },
   methods: {
+    // 导出模板
+    exportOrder (type) {
+      const fd = {
+        templateType: type,
+        shareOrderNumber: this.tableData.shareOrderNumber
+      }
+      this.$http.post('/api/ExportCustomerOrderDetailToExcel', fd, { responseType: 'blob' }).then(res => {
+        const fileName = '订单明细.xls'
+        const blob = res.data
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) { // 兼容IE
+          window.navigator.msSaveOrOpenBlob(blob, fileName)
+        } else { // 兼容Google及fireFox
+          const link = document.createElement('a')
+          link.style.display = 'none'
+          link.download = fileName
+          link.href = URL.createObjectURL(blob)
+          document.body.appendChild(link)
+          link.click()
+          URL.revokeObjectURL(link.href) // 释放URL 对象
+          document.body.removeChild(link)
+        }
+      })
+    },
+    // 点击关闭预览模板
+    closeViewer () {
+      this.showViewer = false
+    },
+    // 打开预览模板
+    openViewer (url) {
+      console.log(url)
+      this.viewerImgList = [url]
+      this.showViewer = true
+    },
     // 打开选择导出模板
     openSelectTemplate () {
       this.exportTemplateDialog = true
@@ -347,7 +407,7 @@ export default {
 }
 </script>
 <style scoped lang='less'>
-
+@deep: ~">>>";
   .infoBox {
     display: flex;
     align-items: center;
@@ -388,5 +448,38 @@ export default {
           border-color: #2468a9;
         }
       }
+  }
+  @{deep} .el-dialog__header {
+    padding: 10px 20px;
+  }
+  @{deep}.el-dialog__body {
+    padding: 20px;
+  }
+  @{deep} .el-card {
+    margin-top: 20px;
+    background-color: #fff;
+    &:first-child {
+      margin-top: 0;
+    }
+    .el-card__header,
+    .el-card__body {
+      padding: 5px 20px;
+      background-color: #fff;
+      .modeImgBox {
+        width: 100%;
+        height: 100px;
+        .myImg {
+          height: 100px;
+          width: 100%;
+        }
+      }
+    }
+    .el-card__header {
+      background-color: #dde8f8;
+      .headerTitle {
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
   }
 </style>

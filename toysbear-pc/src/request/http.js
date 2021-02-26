@@ -144,7 +144,9 @@ myAxios.install = function (Vue) {
         $Store.commit('updateAppLoading', false)
       }
       // 屏蔽不需要验证code的请求，如下载导出等
-      if (res.config.url.includes('LittleBearInstallDownload') || res.config.url.includes('LittleBearInstallRepeatDownload')) {
+      if (res.config.url.includes('LittleBearInstallDownload') ||
+        res.config.url.includes('LittleBearInstallRepeatDownload') ||
+        res.config.url.includes('ExportCustomerOrderDetailToExcel')) {
         return res
       } else {
         if (res.data.result.code === 401 || res.data.result.code === 403) {

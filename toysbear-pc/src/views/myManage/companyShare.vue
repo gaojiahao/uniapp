@@ -167,11 +167,11 @@
       >
         <el-form-item label="站点域名：" prop="url">
           <div style="display:flex;margin-bottom:10px;">
-            <el-tag @click="clienFormData.url = item" style="margin-right: 10px;cursor: pointer;" v-for="(item, i) in defaultShareDomain" :key="i">{{ item }}</el-tag>
+            <el-tag @click="clienFormData.url = item" style="margin-right: 10px;cursor: pointer;" v-for="(item, key) of defaultShareDomain" :key="item">{{ key }}</el-tag>
           </div>
           <el-input v-model="clienFormData.url" placeholder="请输入站点域名" clearable></el-input>
         </el-form-item>
-        <el-form-item label="选择客户：" prop="customerInfoIds">
+        <el-form-item label="选择客户：" prop="customerInfoId">
           <div class="formItemBox">
           <el-select v-model="clienFormData.customerInfoId" :filter-method="filterMethod" filterable clearable placeholder="请 输入/选择 客户">
             <el-option
