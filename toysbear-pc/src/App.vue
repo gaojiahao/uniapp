@@ -133,7 +133,7 @@ export default {
   right: 0;
   bottom: 0;
   background: url("~@/assets/images/loadding.gif") no-repeat center center;
-  background-size: 200px 200px;
+  background-size: 100px 100px;
   width: 100%;
   height: 100%;
 }

@@ -68,6 +68,7 @@
 export default {
   data () {
     return {
+      productDetail: {},
       direction: null, // 移动方向
       startX: 0, // 开始触摸的位置
       moveX: 0, // 滑动时的位置
@@ -134,7 +135,7 @@ export default {
     }
   },
   created () {
-    console.log(this.$route.query)
+    this.productDetail = JSON.parse(sessionStorage.getItem('currentProduct'))
     document.title = '产品详情'
   },
   beforeDestroy () {

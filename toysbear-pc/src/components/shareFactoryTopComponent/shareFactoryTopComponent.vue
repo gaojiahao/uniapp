@@ -3,8 +3,30 @@
   <div class="topLaout">
     <el-image
       class="myImg"
-      src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+      :src="companyInfo.companyLogo"
       fit="contain">
+      <div
+        slot="placeholder"
+        class="image-slot"
+        style="width: 80px;height: 80px;"
+      >
+        <img
+          class="errorImg"
+          src="~@/assets/images/imgError.png"
+          alt
+        />
+      </div>
+      <div
+        slot="error"
+        class="image-slot"
+        style="width: 80px;height: 80px;"
+      >
+        <img
+          class="errorImg"
+          src="~@/assets/images/imgError.png"
+          alt
+        />
+      </div>
     </el-image>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/dontLoadShareFactoryPC' }">参考报价分享</el-breadcrumb-item>
@@ -16,7 +38,7 @@
 
 <script>
 export default {
-  props: ['title'],
+  props: ['title', 'companyInfo'],
   data () {
     return {
 

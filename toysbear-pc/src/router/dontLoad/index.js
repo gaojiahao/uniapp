@@ -4,6 +4,7 @@ const DontLoadShareFactoryAllProducts = () => import('@/components/dontLoad/dont
 const DontLoadShareFactoryProductDetails = () => import('@/components/dontLoad/dontLoadShareFactory/dontLoadShareFactoryProductDetails/dontLoadShareFactoryProductDetails.vue')
 const DontLoadShareFactoryPC = () => import('@/components/dontLoad/dontLoadShareFactory/dontLoadShareFactoryPC/dontLoadShareFactoryPC.vue')
 const DontLoadShareFactoryAllProductsPC = () => import('@/components/dontLoad/dontLoadShareFactory/dontLoadShareFactoryPC/dontLoadShareFactoryAllProductsPC/dontLoadShareFactoryAllProductsPC.vue')
+const DontLoadProductDetailsPC = () => import('@/components/dontLoad/dontLoadShareFactory/dontLoadShareFactoryPC/dontLoadProductDetailsPC/dontLoadProductDetailsPC.vue')
 
 export default [
   {
@@ -35,5 +36,10 @@ export default [
     path: '/dontLoadShareFactoryAllProductsPC',
     name: 'dontLoadShareFactoryAllProductsPC',
     component: DontLoadShareFactoryAllProductsPC
+  },
+  {
+    path: '/dontLoadProductDetailsPC',
+    name: 'dontLoadProductDetailsPC',
+    component: DontLoadProductDetailsPC
   }
 ]
