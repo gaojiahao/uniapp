@@ -144,7 +144,7 @@ export default {
   methods: {
     // 查看更多
     toAllProduct () {
-      this.$router.push('/dontLoadShareFactoryAllProducts')
+      this.$router.push('/dontLoadAllProducts')
     },
     // 产品详情
     toProductDetail (item) {

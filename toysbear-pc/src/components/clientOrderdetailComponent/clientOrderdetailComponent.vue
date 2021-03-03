@@ -37,12 +37,15 @@
         :header-cell-style="{ backgroundColor: '#2468a9', color: '#fff' }"
         style="width:100%"
         ref="dataTable"
-        height="500px"
+        height="600px"
       >
-      <!-- <el-table-column
-      type="selection"
-      width="55">
-    </el-table-column> -->
+      <el-table-column
+      label="序号"
+      fixed
+      align="center"
+      type="index"
+      width="50">
+    </el-table-column>
         <el-table-column fixed label="产品图片" width="82" align="center">
           <template slot-scope="scope">
             <el-image fit="contain" style="width: 60px; height:60px;" :preview-src-list="[scope.row.productImage]" :src="scope.row.productImage" lazy>
@@ -73,8 +76,20 @@
         </el-table-column>
         <el-table-column fixed prop="fa_no" label="产品货号" align="center"></el-table-column>
         <el-table-column fixed prop="productName" label="名称" align="center"></el-table-column>
-        <el-table-column prop="costPrice" label="厂价(¥)" align="center"></el-table-column>
-        <el-table-column prop="productPrice" :label="tableData.currencyType ? '客价(' + tableData.currencyType + ')' : '客价'" align="center"></el-table-column>
+        <el-table-column prop="costPrice" label="厂价(¥)" align="center">
+          <template slot-scope="scope">
+            <span style="color:#ff0b00;">
+              {{ scope.row.costPrice }}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="productPrice" :label="tableData.currencyType ? '客价(' + tableData.currencyType + ')' : '客价'" align="center">
+          <template slot-scope="scope">
+            <span style="color:#ff0b00;">
+              {{ scope.row.productPrice }}
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column label="产品规格(CM)" align="center">
           <el-table-column
             label="长"

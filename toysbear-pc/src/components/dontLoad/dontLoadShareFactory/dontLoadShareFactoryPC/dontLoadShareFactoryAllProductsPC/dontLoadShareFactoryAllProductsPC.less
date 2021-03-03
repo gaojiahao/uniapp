@@ -44,10 +44,23 @@
       }
       .right {
         flex: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .keywordBox {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          font-size: 14px;
+          .title {
+            width: 150px;
+          }
+        }
         .more{
           margin-right: 32px;
           display: flex;
           justify-content: flex-end;
+          flex: 1;
           cursor: pointer;
           i.list{
             display: block;
@@ -235,7 +248,7 @@
     margin: 0 auto;
     flex-wrap: wrap;
     justify-content: space-between;
-    padding-bottom: 20px;
+    padding: 20px 0;
     .item {
       width: 282px;
       height: 285px;
@@ -245,6 +258,7 @@
       flex-direction: column;
       justify-content: space-between;
       margin-bottom: 20px;
+      cursor: pointer;
       &:nth-last-of-type(1) {
         margin-bottom: 0;
       }
@@ -299,6 +313,7 @@
       margin-bottom: 20px;
       display: flex;
       border-radius: 4px;
+      cursor: pointer;
       .el-image {
         width: 202px;
         height: 270px;
@@ -329,7 +344,7 @@
           -webkit-line-clamp: 2;
           line-clamp: 2;
           -webkit-box-orient: vertical;
-          margin-bottom: 20px;
+          margin-bottom: 5px;
         }
         .textBox {
           color: #999999;

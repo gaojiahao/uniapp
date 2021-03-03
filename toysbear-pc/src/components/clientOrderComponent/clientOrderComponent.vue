@@ -10,7 +10,13 @@
         <el-table-column prop="contactName" label="联系人" align="center"></el-table-column>
         <el-table-column prop="email" label="邮箱" align="center"></el-table-column>
         <el-table-column prop="orderNumber" label="订单编号" align="center"></el-table-column>
-        <el-table-column prop="totalAmount" label="总价" align="center"></el-table-column>
+        <el-table-column prop="totalAmount" label="总价" align="center">
+          <template  slot-scope="scope">
+            <span style="color:#ff0b00;">
+              {{ scope.row.totalAmount }}
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column prop="totalCount" label="产品数" align="center"></el-table-column>
         <el-table-column prop="remark" label="备注" align="center"></el-table-column>
         <el-table-column label="操作" align="center" width="200">

@@ -1,6 +1,6 @@
 <template>
 <div class="productWrao">
-  <topComponent :title="topTitle" />
+  <topComponent :title="topTitle" :companyInfo="companyInfo" />
   <div class="filterBox">
     <div class="filterTitle">
       <div class="left">
@@ -14,6 +14,12 @@
         </div>
       </div>
       <div class="right">
+        <div class="keywordBox">
+          <span class="title">关键字搜索：</span>
+          <el-input size="mini" v-model="packingOptions.keyword" placeholder="请输入关键字搜索" @keyup.enter.native="getSupplierProductShare">
+            <el-button slot="append" @click="getSupplierProductShare" icon="el-icon-search"></el-button>
+          </el-input>
+        </div>
         <div class="more">
           <i v-show="isList" class="list" @click="checkList"></i>
           <i v-show="!isList" class="square" @click="checkList"></i>
@@ -67,7 +73,7 @@
           <div class="submitBtnList">
             <!-- <div class="reset">重置</div> -->
             <el-button class="reset" type="info" @click="resetPackingOptions">重置</el-button>
-            <el-button class="submit" type="info"  @click="search">确认</el-button>
+            <el-button class="submit" type="info"  @click="getSupplierProductShare">确认</el-button>
           </div>
       </div>
     </transition>
@@ -97,16 +103,41 @@
       </transition> -->
   </div>
   <div class="productGongge" v-if="!isList">
-    <div class="item" v-for="(item, i) in 32" :key="i">
+    <div class="item" @click="toProductDetail(item)" v-for="(item, i) in productList" :key="i">
       <el-image
         style="width: 282px; height: 211px; min-height: 211px;"
-        src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-        fit="contain"></el-image>
+        :src="item.img"
+        fit="contain">
+          <div
+              slot="placeholder"
+              class="image-slot"
+              style="width: 100%;height: 100%;"
+            >
+              <img
+                style="width: 100%;height: 100%; object-fit: contain;"
+                class="errorImg"
+                src="~@/assets/images/imgError.png"
+                alt
+              />
+            </div>
+            <div
+              slot="error"
+              class="image-slot"
+              style="width: 100%;height: 100%;"
+            >
+              <img
+                class="errorImg"
+                style="width: 100%;height: 100%; object-fit: contain;"
+                src="~@/assets/images/imgError.png"
+                alt
+              />
+            </div>
+        </el-image>
         <div class="context">
-          <div class="productName">积木飞机</div>
+          <div class="productName">{{ item.name }}</div>
           <div class="textBox">
-            <span>货号：8188B8188B</span>
-            <span>参考单价：<span class="price">￥3.8</span></span>
+            <span>货号：{{ item.fa_no }}</span>
+            <span>参考单价：<span class="price">￥{{ item.price }}</span></span>
           </div>
         </div>
     </div>
@@ -115,35 +146,60 @@
     <p class="kong"></p>
   </div>
   <div class="productList" v-else>
-    <div class="item" v-for="(item, i) in 31" :key="i">
+    <div class="item" @click="toProductDetail(item)" v-for="(item, i) in productList" :key="i">
       <el-image
-        src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-        fit="contain"></el-image>
+        :src="item.img"
+        fit="contain">
+          <div
+              slot="placeholder"
+              class="image-slot"
+              style="width: 100%;height: 100%;"
+            >
+              <img
+                style="width: 100%;height: 100%; object-fit: contain;"
+                class="errorImg"
+                src="~@/assets/images/imgError.png"
+                alt
+              />
+            </div>
+            <div
+              slot="error"
+              class="image-slot"
+              style="width: 100%;height: 100%;"
+            >
+              <img
+                class="errorImg"
+                style="width: 100%;height: 100%; object-fit: contain;"
+                src="~@/assets/images/imgError.png"
+                alt
+              />
+            </div>
+        </el-image>
         <div class="context">
-          <div class="productName">二通遥控车警车兰博基尼毒药白、蓝两色混装</div>
+          <div class="productName">{{ item.name }}</div>
           <div class="textBox">
-            出厂货号：<span class="value">8188B</span>
+            出厂货号：<span class="value">{{ item.fa_no }}</span>
           </div>
           <div class="textBox">
-            包装：<span class="value">吸板</span>
+            包装：<span class="value">{{ item.packName }}</span>
           </div>
           <div class="textBox">
-            装箱量：<span class="value">2/72(PCS)</span>
+            装箱量：<span class="value">{{item.in_en + "/" + item.ou_lo + "(PCS)"}}</span>
           </div>
           <div class="textBox">
-            样品规格：<span class="value">19*19*5(CM)</span>
+            样品规格：<span class="value">{{item.pr_le + " X " + item.pr_wi + " X " + item.pr_hi + "(CM)"}}</span>
           </div>
           <div class="textBox">
-            包装规格：<span class="value">19*19*5(CM)</span>
+            包装规格：<span class="value">{{item.in_le + " X " + item.in_wi + " X " + item.in_hi + "(CM)"}}</span>
           </div>
           <div class="textBox">
-            体积/材积：<span class="value">0.336/11.85</span>
+            体积/材积：<span class="value">{{item.bulk_stere + "(CBM)" + "/" + item.bulk_feet + "(CUFT)"}}</span>
           </div>
           <div class="textBox">
-            毛重/净重：<span class="value">9.6/11.6(KG)</span>
+            毛重/净重：<span class="value">{{item.gr_we + "/" + item.ne_we + "(kg)"}}</span>
           </div>
           <div class="textBox">
-            参考单价：<span class="price">￥3.8</span>
+            参考单价：<span class="price">￥{{ item.price }}</span>
           </div>
         </div>
     </div>
@@ -153,8 +209,8 @@
       background
       :page-sizes="[8, 16, 32, 40]"
       :page-size="30"
-      layout="sizes, prev, pager, next"
-      :total="1000">
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="totalCount">
     </el-pagination>
   </center>
 </div>
@@ -168,9 +224,9 @@ export default {
   },
   data () {
     return {
-      topTitle: '',
+      topTitle: '所有产品',
       sortOrder: 0,
-      sortType: null,
+      sortType: 0,
       isList: false,
       isPrice: 0,
       isDate: 0,
@@ -179,6 +235,7 @@ export default {
       isScreen: 0,
       // 高级搜索
       packingOptions: {
+        keyword: null,
         minPrice: null,
         maxPrice: null,
         pa_nu: null,
@@ -199,10 +256,56 @@ export default {
       categoryList: [],
       isItemActive: null,
       currentCate: null,
+      productList: [],
+      companyInfo: {},
+      currentPage: 1,
+      pageSize: 10,
+      totalCount: 0,
       categoryChildren: []
     }
   },
   methods: {
+    // 产品详情
+    toProductDetail (item) {
+      sessionStorage.setItem('currentProduct', JSON.stringify(item))
+      this.$router.push({ path: '/dontLoadProductDetailsPC' })
+    },
+    // 获取包装方式list
+    async getProductChpaList () {
+      const res = await this.$http.post('/api/GetProductChpaList', { supplierNumber: 'HS0000006' })
+      if (res.data.result.code === 200) {
+        this.packingList = res.data.result.item
+      } else {
+        this.$message.error(res.data.result.msg)
+      }
+    },
+    // 获取厂商信息
+    async getCompanyByIDShare () {
+      const res = await this.$http.post('/api/CompanyByIDShare ', { companyNumber: 'HS0000006' })
+      if (res.data.result.code === 200) {
+        this.companyInfo = res.data.result.item
+      } else this.$message.error(res.data.result.msg)
+    },
+    // 获取厂商所有产品
+    async getSupplierProductShare () {
+      const fd = {
+        skipCount: this.currentPage,
+        maxResultCount: this.pageSize,
+        companyNumber: 'HS0000006',
+        sortOrder: this.sortOrder,
+        sortType: this.sortType,
+        ...this.packingOptions
+      }
+      for (const key in fd) {
+        if (fd[key] === undefined || fd[key] === null || fd[key] === '') delete fd[key]
+      }
+      const res = await this.$http.post('/api/SupplierProductShare', fd)
+      if (res.data.result.code === 200) {
+        this.productList = res.data.result.item.items
+        this.totalCount = res.data.result.item.totalCount
+        console.log(this.productList, this.totalCount)
+      } else this.$message.error(res.data.result.msg)
+    },
     // 搜索
     search () {
       console.log('search')
@@ -215,41 +318,34 @@ export default {
     sortHot (number) {
       this.sortOrder = number
       this.sortType = this.isHot = this.isHot === 1 ? 2 : 1
-      this.isScreen = this.isCate = this.isDate = this.isPrice = 0
+      this.isCate = this.isDate = this.isPrice = 0
       this.currentPage = 1
-      this.search()
+      this.getSupplierProductShare()
     },
     // 价格排序
     sortPrice (number) {
       this.sortOrder = number
       this.sortType = this.isPrice = this.isPrice === 1 ? 2 : 1
-      this.isScreen = this.isCate = this.isHot = this.isDate = 0
+      this.isCate = this.isHot = this.isDate = 0
       this.currentPage = 1
-      this.search()
+      this.getSupplierProductShare()
     },
     // 时间排序
     sortDate (number) {
       this.sortOrder = number
       this.sortType = this.isDate = this.isDate === 1 ? 2 : 1
-      this.isScreen = this.isCate = this.isHot = this.isPrice = 0
+      // this.isScreen = this.isCate = this.isHot = this.isPrice = 0
+      this.isCate = this.isHot = this.isPrice = 0
       this.currentPage = 1
-      this.search()
+      this.getSupplierProductShare()
     },
     // 点击筛选事件
     sortScreen () {
       this.isCate = 0
       // this.sortOrder = 0
       this.isScreen = this.isScreen === 1 ? 0 : 1
+      if (!this.isScreen) this.resetPackingOptions()
       // this.isCate = this.isDate = this.isHot = this.isPrice = 0
-    },
-    // 点击分类事件
-    sortCate () {
-      this.isScreen = 0
-      // this.isActive = null
-      // this.allCateCount = 0
-      // this.sortOrder = 0
-      this.isCate = this.isCate === 1 ? 0 : 1
-      // this.isActive = this.isScreen = this.isDate = this.isHot = this.isPrice = 0
     },
     // 重置分类搜索
     resetCategory () {
@@ -320,11 +416,11 @@ export default {
     }
   },
   created () {
-    if (this.$route.query.id === 'product') this.topTitle = '所有产品'
-    else this.topTitle = '推荐产品'
+    this.getProductChpaList()
   },
   mounted () {
-
+    this.getSupplierProductShare()
+    this.getCompanyByIDShare()
   }
 }
 </script>

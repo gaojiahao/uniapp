@@ -8,7 +8,7 @@
       <ul class="myInfo" v-if="meInfo">
         <li class="logo">
           <el-image
-            :src="meInfo && meInfo.companyLogo"
+            :src="meInfo.companyLogo"
             class="myAvatar"
             fit="cover"
           >
@@ -95,7 +95,7 @@
               </div>
             </el-image>
             <el-tag
-              closable
+              :closable="meInfo.isMain"
               @click="openAddEmploee(1, item)"
               @close="deleteEmploee(item)"
               style
@@ -106,9 +106,9 @@
         </div>
       </div>
       <center style="margin-top:50px;">
-        <el-button type="primary" style="width:100px;" @click="editEmployee"
-          >保存</el-button
-        >
+        <el-button type="primary" style="width:100px;" :disabled="!meInfo.isMain" @click="editEmployee">
+          保存
+        </el-button>
       </center>
     </el-card>
     <!-- 修改密码 -->
@@ -284,7 +284,7 @@ export default {
       logoFile: null,
       currentPage: 1,
       pageSize: 10,
-      meInfo: null,
+      meInfo: {},
       fit: 'contain',
       url:
         'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
@@ -344,6 +344,7 @@ export default {
       })
       if (res.data.result.code === 200) {
         this.meInfo = res.data.result.item
+        console.log(this.meInfo)
       }
     },
     // 上传头像
@@ -355,29 +356,30 @@ export default {
     },
     // 保存修改
     async editEmployee () {
-      this.$confirm('确定要保存以上的修改吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(async () => {
-          if (/^blob:/.test(this.meInfo.companyLogo)) {
-            const res = await this.uploadLogo(this.companyInfo)
-            if (res.data.result.code === 200) {
-              this.meInfo.companyLogo = res.data.result.object[0].filePath
-            }
-          }
-          const res = await this.$http.post('/api/UpdateOrgCompany', this.meInfo)
-          this.getCompanyUserList()
-        })
-        .catch(() => {
-          this.$refs.uploadLogo.value = ''
-          this.getCompanyUserList()
-          this.$message({
-            type: 'info',
-            message: '已取消保存'
-          })
-        })
+      console.log(this.meInfo)
+      // this.$confirm('确定要保存以上的修改吗?', '提示', {
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      //   type: 'warning'
+      // })
+      //   .then(async () => {
+      //     if (/^blob:/.test(this.meInfo.companyLogo)) {
+      //       const res = await this.uploadLogo(this.companyInfo)
+      //       if (res.data.result.code === 200) {
+      //         this.meInfo.companyLogo = res.data.result.object[0].filePath
+      //       }
+      //     }
+      //     const res = await this.$http.post('/api/UpdateOrgCompany', this.meInfo)
+      //     this.getCompanyUserList()
+      //   })
+      //   .catch(() => {
+      //     this.$refs.uploadLogo.value = ''
+      //     this.getCompanyUserList()
+      //     this.$message({
+      //       type: 'info',
+      //       message: '已取消保存'
+      //     })
+      //   })
     },
     // 选择头像
     changeLogo (e) {
@@ -408,12 +410,15 @@ export default {
     },
     // 打开添加员工
     openAddEmploee (code, row) {
-      console.log(row)
+      if (!this.meInfo.isMain) {
+        this.$message.error('你不是主账号，不能操作')
+        return false
+      }
       this.editImages = []
       if (row) {
         this.isEdit = true
         this.employeeTitle = '编辑员工'
-        for (const key in this.addEmployeeForm) {
+        for (const key in row) {
           this.addEmployeeForm[key] = row[key]
         }
         row.userImage && (this.editImages[0] = { url: row.userImage })

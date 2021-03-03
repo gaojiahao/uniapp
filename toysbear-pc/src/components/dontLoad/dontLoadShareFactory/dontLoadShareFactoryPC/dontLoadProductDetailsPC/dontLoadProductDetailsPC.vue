@@ -143,7 +143,7 @@ export default {
   data () {
     return {
       companyInfo: {},
-      topTitle: '',
+      topTitle: '产品详情',
       productDetail: {},
       integralTotal: null,
       isShowSourceDetail: false,
