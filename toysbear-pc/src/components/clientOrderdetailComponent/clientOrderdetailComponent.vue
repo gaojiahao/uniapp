@@ -17,10 +17,10 @@
             <span class="content">{{ tableData.createdOn && tableData.createdOn.replace(/T/, ' ') }}</span>
           </li>
           </div>
-          <li class="totlePrice">
+          <!-- <li class="totlePrice">
             <span>总款数：</span>
-            <span class="content">{{ tableData.totalAmount }}</span>
-          </li>
+            <span class="content">{{ tableData.totalKuanshu }}</span>
+          </li> -->
         </ul>
         <div class="btns">
           <el-button type="primary" @click="openSelectTemplate">
@@ -28,6 +28,26 @@
             导出订单
           </el-button>
         </div>
+      </div>
+      <div class="infoBox">
+        <ul class="totalAllBox">
+          <li class="totlePrice">
+            <span>总款数：</span>
+            <span class="content">{{ tableData.totalKuanshu }}</span>
+          </li>
+          <li class="totlePrice">
+            <span>总箱数：</span>
+            <span class="content">{{ tableData.totalCount }}</span>
+          </li>
+          <li class="totlePrice">
+            <span>总数量：</span>
+            <span class="content">{{ tableData.totalNumber }}</span>
+          </li>
+          <li class="totlePrice">
+            <span>总金额：</span>
+            <span class="content">{{ tableData.totalAmount }}</span>
+          </li>
+        </ul>
       </div>
     </el-card>
     <!-- highlight-current-row -->
@@ -90,8 +110,8 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column label="产品规格(CM)" align="center">
-          <el-table-column
+        <el-table-column label="产品规格(CM)" width="100" align="center">
+          <!-- <el-table-column
             label="长"
             align="center">
             <template slot-scope="scope">
@@ -111,15 +131,15 @@
             <template slot-scope="scope">
               <span>{{ scope.row.pr_hi }}</span>
             </template>
-          </el-table-column>
-          <!-- <template slot-scope="scope">
+          </el-table-column> -->
+          <template slot-scope="scope">
             <div>
-              {{ scope.row.pr_le }} x {{ scope.row.pr_wi }} x {{ scope.row.pr_hi }}(cm)
+              {{ scope.row.pr_le }} x {{ scope.row.pr_wi }} x {{ scope.row.pr_hi }}
             </div>
-          </template> -->
+          </template>
         </el-table-column>
-        <el-table-column label="包装规格(CM)" align="center">
-          <el-table-column
+        <el-table-column label="包装规格(CM)" width="100" align="center">
+          <!-- <el-table-column
             label="长"
             align="center">
             <template slot-scope="scope">
@@ -139,15 +159,15 @@
             <template slot-scope="scope">
               <span>{{ scope.row.in_hi }}</span>
             </template>
-          </el-table-column>
-          <!-- <template slot-scope="scope">
+          </el-table-column> -->
+          <template slot-scope="scope">
             <div>
-              {{ scope.row.in_le }} x {{ scope.row.in_wi }} x {{ scope.row.in_hi }}(cm)
+              {{ scope.row.in_le }} x {{ scope.row.in_wi }} x {{ scope.row.in_hi }}
             </div>
-          </template> -->
+          </template>
         </el-table-column>
-        <el-table-column label="外箱规格(CM)" align="center">
-          <el-table-column
+        <el-table-column label="外箱规格(CM)" width="100" align="center">
+          <!-- <el-table-column
             label="长"
             align="center">
             <template slot-scope="scope">
@@ -167,15 +187,15 @@
             <template slot-scope="scope">
               <span>{{ scope.row.ou_hi }}</span>
             </template>
-          </el-table-column>
-          <!-- <template slot-scope="scope">
+          </el-table-column> -->
+          <template slot-scope="scope">
             <div>
-              {{ scope.row.ou_le }} x {{ scope.row.ou_wi }} x {{ scope.row.ou_hi }}(cm)
+              {{ scope.row.ou_le }} x {{ scope.row.ou_wi }} x {{ scope.row.ou_hi }}
             </div>
-          </template> -->
+          </template>
         </el-table-column>
         <el-table-column label="毛重/净重(KG)" align="center">
-          <el-table-column
+          <!-- <el-table-column
             label="毛重"
             align="center">
              <template slot-scope="scope">
@@ -188,15 +208,15 @@
             <template slot-scope="scope">
               <span>{{ scope.row.ne_we }}</span>
             </template>
-          </el-table-column>
-          <!-- <template slot-scope="scope">
+          </el-table-column> -->
+          <template slot-scope="scope">
             <div>
-              {{ scope.row.gr_we }}/{{ scope.row.ne_we }}(kg)
+              {{ scope.row.gr_we }}/{{ scope.row.ne_we }}
             </div>
-          </template> -->
+          </template>
         </el-table-column>
-        <el-table-column label="体积/材积(CBM/CUFT)" align="center">
-          <el-table-column
+        <el-table-column label="体积/材积(CBM/CUFT)" width="90" align="center">
+          <!-- <el-table-column
             label="体积"
             align="center">
              <template slot-scope="scope">
@@ -209,12 +229,12 @@
             <template slot-scope="scope">
               <span>{{ scope.row.bulk_feet }}</span>
             </template>
-          </el-table-column>
-          <!-- <template slot-scope="scope">
+          </el-table-column> -->
+          <template slot-scope="scope">
             <div>
-              {{ scope.row.bulk_stere }}(cbm)/{{ scope.row.bulk_feet }}(cuft)
+              {{ scope.row.bulk_stere }}/{{ scope.row.bulk_feet }}
             </div>
-          </template> -->
+          </template>
         </el-table-column>
         <el-table-column label="厂商资料" align="center">
           <el-table-column
@@ -426,6 +446,22 @@ export default {
   .infoBox {
     display: flex;
     align-items: center;
+    height: 50px;
+    align-items: center;
+    .totalAllBox {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .totlePrice {
+        display: flex;
+        justify-content: center;
+        font-weight: bold;
+        .content {
+          color: rgb(255, 11, 0);
+        }
+      }
+    }
     .customerInfoBox {
       flex: 1;
       display: flex;
