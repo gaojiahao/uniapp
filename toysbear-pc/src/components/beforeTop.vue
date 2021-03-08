@@ -20,15 +20,24 @@
           <div class="loginTitle">
             <!-- 未登录 -->
             <div class="myLogin" v-if="!isLogin">
-                <button class="loginBtn" @click="toLogin">登录</button>
+              <button class="loginBtn" @click="toLogin">登录</button>
             </div>
             <!-- 已登录 -->
             <div class="user" v-else>
               <div class="infoList">
-                <span @click="infoListEvent(1)"><i class="iconfont icon-ego-box"></i>我的产品</span>
-                <span @click="infoListEvent(2)"><i class="iconfont icon-laba"></i>择样消息</span>
-                <span @click="infoListEvent(3)"><i class="el-icon-bell"></i>我的消息</span>
-                <span @click="infoListEvent(4)"><i class="el-icon-user-solid"></i>{{ userInfo.userInfo && userInfo.userInfo.linkman }}</span>
+                <span @click="infoListEvent(1)"
+                  ><i class="iconfont icon-ego-box"></i>我的产品</span
+                >
+                <span @click="infoListEvent(2)"
+                  ><i class="iconfont icon-laba"></i>择样消息</span
+                >
+                <span @click="infoListEvent(3)"
+                  ><i class="el-icon-bell"></i>我的消息</span
+                >
+                <span @click="infoListEvent(4)"
+                  ><i class="el-icon-user-solid"></i
+                  >{{ userInfo.userInfo && userInfo.userInfo.linkman }}</span
+                >
               </div>
               <a class="tuichu" width="20" @click="SignOut">退出</a>
             </div>
@@ -40,76 +49,78 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 export default {
-  data () {
-    return {}
+  data() {
+    return {};
   },
   methods: {
     // 进登录页
-    toLogin () {
-      this.$router.push({ path: '/beforeIndex/login' })
+    toLogin() {
+      this.$router.push({ path: "/beforeIndex/login" });
     },
-    errorHandler () {
-      return true
+    errorHandler() {
+      return true;
     },
     // 消息列表点击事件
-    infoListEvent (count) {
-      let routeItem
+    infoListEvent(count) {
+      let routeItem;
       switch (count) {
         case 1:
-          routeItem = '/myProduct'
-          break
+          routeItem = "/myProduct";
+          break;
         case 2:
-          routeItem = '/meInfo/infoList'
-          break
+          routeItem = "/meInfo/infoList";
+          break;
         case 3:
-          routeItem = '/meInfo/infoList'
-          break
+          routeItem = "/meInfo/infoList";
+          break;
         case 4:
-          routeItem = '/me'
-          break
+          routeItem = "/me";
+          break;
       }
-      const href = this.$router.resolve(routeItem)
-      window.open(href.href, '_blank')
+      const href = this.$router.resolve(routeItem);
+      window.open(href.href, "_blank");
       // window.open("http://127.0.0.1:8081/#/me", "_blank");
     },
     // 登出
-    SignOut () {
+    SignOut() {
       // this.dialogVisible = true;
-      this.$confirm('确定要退出系统吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+      this.$confirm("确定要退出系统吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
       })
         .then(async () => {
-          this.$router.push({ name: 'Login', query: { id: 'signOut' } })
-          this.$message.success('退出成功')
+          this.$router.push({ name: "Login", query: { id: "signOut" } });
+          this.$message.success("退出成功");
         })
         .catch(() => {
           this.$message({
-            type: 'info',
-            message: '已取消登出'
-          })
-        })
+            type: "info",
+            message: "已取消登出"
+          });
+        });
     },
     // 联系客服
-    toQQ () {
-      window.open('tencent://message/?uin=3300802838&Site=Sambow&Menu=yes', '_blank')
+    toQQ() {
+      window.open(
+        "tencent://message/?uin=3300802838&Site=Sambow&Menu=yes",
+        "_blank"
+      );
     }
   },
   computed: {
-    isLogin () {
-      return this.$store.state.isLogin
+    isLogin() {
+      return this.$store.state.isLogin;
     },
-    ...mapState(['userInfo'])
+    ...mapState(["userInfo"])
   },
-  mounted () {
-  }
+  mounted() {}
   // beforeDestroy () {
   //   this.$store.commit('handlerBeforeSearchImgPreview', null)
   // }
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -130,11 +141,12 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-     color:#797979;
-    .left,.right{
-      flex:1;
+    color: #797979;
+    .left,
+    .right {
+      flex: 1;
     }
-    .middle{
+    .middle {
       text-align: center;
       color: #000;
       font-weight: 600;
@@ -178,7 +190,7 @@ export default {
         align-items: center;
         .myLogin {
           font-size: 12px;
-          .loginBtn{
+          .loginBtn {
             color: #3872f8;
             border: 1px solid #3872f8;
             background-color: #fff;
@@ -187,7 +199,7 @@ export default {
             font-size: 12px;
             outline: none;
             cursor: pointer;
-            &:hover{
+            &:hover {
               background-color: #ecf5ff;
             }
           }
@@ -197,21 +209,21 @@ export default {
           align-items: center;
           justify-content: space-between;
           font-size: 12px;
-          .infoList{
+          .infoList {
             display: flex;
             align-items: center;
-            span{
+            span {
               display: flex;
               align-items: center;
               margin-right: 20px;
               cursor: pointer;
-              &:hover{
+              &:hover {
                 color: #3872f8;
               }
-              &:hover i{
+              &:hover i {
                 background-color: #3872f8;
               }
-              i{
+              i {
                 width: 20px;
                 height: 20px;
                 background-color: #666666;
@@ -225,10 +237,10 @@ export default {
             }
           }
           .tuichu {
-            color:#797979;
+            color: #797979;
             font-size: 12px;
             cursor: pointer;
-            &:hover{
+            &:hover {
               color: #3872f8;
             }
           }

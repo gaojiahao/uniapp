@@ -52,34 +52,34 @@ export default {
       default: false
     }
   },
-  data () {
+  data() {
     return {
       formInline: {
-        keyWord: '',
-        code: '',
-        source: ''
+        keyWord: "",
+        code: "",
+        source: ""
       },
       options: [
         {
-          value: '选项1',
-          label: '展厅'
+          value: "选项1",
+          label: "展厅"
         },
         {
-          value: '选项2',
-          label: '公司'
+          value: "选项2",
+          label: "公司"
         },
         {
-          value: '选项3',
-          label: '供应商'
+          value: "选项3",
+          label: "供应商"
         }
       ]
-    }
+    };
   },
   methods: {
-    search () {},
-    addData () {}
+    search() {},
+    addData() {}
   }
-}
+};
 </script>
 
 <style lang="less" scoped>

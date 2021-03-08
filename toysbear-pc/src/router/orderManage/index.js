@@ -1,6 +1,6 @@
-const OrderManage = () => import('@/views/orderManage/OrderManage.vue')
+const OrderManage = () => import("@/views/orderManage/OrderManage.vue");
 export default {
-  path: '/orderManage',
-  name: 'OrderManage',
+  path: "/orderManage",
+  name: "OrderManage",
   component: OrderManage
-}
+};

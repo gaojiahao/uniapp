@@ -1,7 +1,9 @@
 <template>
   <!-- 发起群聊 -->
   <div class="wrapBox">
-    <div class="topLayout">发起群聊 <span v-if="totalCount > 0">({{totalCount}})</span></div>
+    <div class="topLayout">
+      发起群聊 <span v-if="totalCount > 0">({{ totalCount }})</span>
+    </div>
     <!-- 发起群聊 -->
     <div class="searchBox">
       <div class="inputBox">
@@ -11,7 +13,8 @@
           v-model="keyWord"
           @keyup.enter.native="search"
           clearable
-          placeholder="请输入小竹熊名称">
+          placeholder="请输入小竹熊名称"
+        >
         </el-input>
         <el-button type="primary" @click="search" round>搜索</el-button>
       </div>
@@ -36,13 +39,13 @@
                 white-space: nowrap;
               "
             >
-              {{ item.remarkName?item.remarkName:item.userName }}
+              {{ item.remarkName ? item.remarkName : item.userName }}
             </div>
           </el-image>
-          {{ item.remarkName?item.remarkName:item.userName }}
+          {{ item.remarkName ? item.remarkName : item.userName }}
         </el-checkbox>
         <div class="companyName">
-          {{ item.remarkName?item.remarkName:item.companyName }}
+          {{ item.remarkName ? item.remarkName : item.companyName }}
         </div>
       </div>
     </el-checkbox-group>
@@ -54,7 +57,12 @@
           >
         </div>
         <div class="footerBtn">
-          <el-button type="info" @click="submitGroup" :disabled="selectUsers.length < 1" :class="{ active: selectUsers.length }" round
+          <el-button
+            type="info"
+            @click="submitGroup"
+            :disabled="selectUsers.length < 1"
+            :class="{ active: selectUsers.length }"
+            round
             >完成
             <span v-show="selectUsers.length"
               >({{ selectUsers.length }})</span
@@ -68,34 +76,39 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-      keyWord: '',
+      keyWord: "",
       currentPage: 1,
       pageSize: 20,
       totalCount: 0,
       selectUsers: [],
       friendsList: []
-    }
+    };
   },
   methods: {
     // 完成发起群聊
-    async submitGroup () {
-      const groupUsers = this.selectUsers.map(v => ({ userId: v.friendPersonnelId, companyId: v.friendCompanyId }))
+    async submitGroup() {
+      const groupUsers = this.selectUsers.map(v => ({
+        userId: v.friendPersonnelId,
+        companyId: v.friendCompanyId
+      }));
       // 发起群聊
-      const res = await this.$http.post('/api/EstablishGroup', { groupUsers: groupUsers })
+      const res = await this.$http.post("/api/EstablishGroup", {
+        groupUsers: groupUsers
+      });
       if (res.data.result.code === 200) {
-        console.log(res.data.result.item)
+        console.log(res.data.result.item);
         const fd = {
           isGroup: res.data.result.item.isGroup,
           groupNumber: res.data.result.item.groupNumber,
           linkName: res.data.result.item.linkName,
           companyID: res.data.result.item.companyID,
-          componentName: 'personalChatComponent'
-        }
-        this.$emit('openTwoView', fd)
+          componentName: "personalChatComponent"
+        };
+        this.$emit("openTwoView", fd);
       } else {
-        this.$message.error(res.data.result.msg)
+        this.$message.error(res.data.result.msg);
       }
       // } else { // 添加群成员
       //   console.log(this.options, groupUsers)
@@ -120,41 +133,45 @@ export default {
       // }
     },
     // 发送群聊点击后半部分公司事件
-    driveCheckbox (item) {
-      const list = this.$refs.multipleTable.value
-      let flag = false
+    driveCheckbox(item) {
+      const list = this.$refs.multipleTable.value;
+      let flag = false;
       for (let i = 0; i < list.length; i++) {
         if (list[i].id === item.id) {
-          flag = true
-          this.selectUsers.pop()
+          flag = true;
+          this.selectUsers.pop();
         }
       }
       if (!flag) {
-        this.selectUsers.push(item)
-        console.log(this.selectUsers)
+        this.selectUsers.push(item);
+        console.log(this.selectUsers);
       }
     },
     // 搜索
-    search () {
-      this.currentPage = 1
-      this.getFriendAddressBooksPage()
+    search() {
+      this.currentPage = 1;
+      this.getFriendAddressBooksPage();
     },
     // 获取好友列表
-    async getFriendAddressBooksPage () {
-      const res = await this.$http.post('/api/GetFriendAddressBooksPage', { maxResultCount: this.pageSize, skipCount: this.currentPage, keyWord: this.keyWord })
+    async getFriendAddressBooksPage() {
+      const res = await this.$http.post("/api/GetFriendAddressBooksPage", {
+        maxResultCount: this.pageSize,
+        skipCount: this.currentPage,
+        keyWord: this.keyWord
+      });
       if (res.data.result.code === 200) {
-        this.friendsList = res.data.result.item.items
-        this.totalCount = res.data.result.item.totalCount
+        this.friendsList = res.data.result.item.items;
+        this.totalCount = res.data.result.item.totalCount;
       }
     }
   },
-  created () {},
-  mounted () {
-    this.getFriendAddressBooksPage()
+  created() {},
+  mounted() {
+    this.getFriendAddressBooksPage();
   }
-}
+};
 </script>
-<style scoped lang='less'>
+<style scoped lang="less">
 @deep: ~">>>";
 .wrapBox {
   width: 100%;

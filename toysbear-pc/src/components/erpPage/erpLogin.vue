@@ -6,15 +6,16 @@
           <el-image
             style="width: 76px; height: 76px"
             :src="require('@/assets/images/logo.png')"
-            fit="contain"></el-image>
-            <div class="titleBox">
-              <div class="chTitle">
-                小竹熊订单同步管理
-              </div>
-              <div class="enTitle">
-                Shenzhen Little Bamboo Bear Technology co.,Ltd.
-              </div>
+            fit="contain"
+          ></el-image>
+          <div class="titleBox">
+            <div class="chTitle">
+              小竹熊订单同步管理
             </div>
+            <div class="enTitle">
+              Shenzhen Little Bamboo Bear Technology co.,Ltd.
+            </div>
+          </div>
         </div>
         <div class="right">
           <div class="shouyeBox" @click="toHome">
@@ -42,18 +43,18 @@
               <p class="title">二维码登录</p>
               <div class="saomadenglu">
                 <vue-qr
-                :text="options.url"
-                :logoSrc="options.icon + '?cache'"
-                :colorDark="options.colorDark"
-                :colorLight="options.colorLight"
-                :margin="options.margin"
-                :size="options.size"
-              ></vue-qr>
-              <div class="refresh" v-show="showQrCode">
-                <div class="refreshIcon" @click="getQrCodeUrl">
-                  <i class="el-icon-refresh"></i>
+                  :text="options.url"
+                  :logoSrc="options.icon + '?cache'"
+                  :colorDark="options.colorDark"
+                  :colorLight="options.colorLight"
+                  :margin="options.margin"
+                  :size="options.size"
+                ></vue-qr>
+                <div class="refresh" v-show="showQrCode">
+                  <div class="refreshIcon" @click="getQrCodeUrl">
+                    <i class="el-icon-refresh"></i>
+                  </div>
                 </div>
-              </div>
               </div>
               <p class="saoyisao">{{ qrcodeTitle }}</p>
             </div>
@@ -63,61 +64,66 @@
           <div class="title">登录系统</div>
           <div class="accountLogin">账号登录</div>
           <div class="myForm">
-          <el-form :model="loginForm" ref="erpLoginRef" :rules="mobileRules" label-width="74px">
-            <el-form-item prop="PhoneNumber" label="手机号">
-              <div class="myInputBox">
-                <i class="inputIcon mobile"></i>
-                <el-input
-                  v-model="loginForm.PhoneNumber"
-                  class="myInput"
-                  placeholder="请输入手机号码"
-                ></el-input>
-              </div>
-            </el-form-item>
-            <el-form-item prop="identifyCode" label="验证码">
-              <div class="getCode">
+            <el-form
+              :model="loginForm"
+              ref="erpLoginRef"
+              :rules="mobileRules"
+              label-width="74px"
+            >
+              <el-form-item prop="PhoneNumber" label="手机号">
                 <div class="myInputBox">
-                  <i class="inputIcon idCode"></i>
+                  <i class="inputIcon mobile"></i>
                   <el-input
-                    v-model="loginForm.identifyCode"
-                    class="verifycode myInput"
-                    placeholder="请输入验证码"
-                    @keyup.enter.native="toErpOrder"
-                    :disabled="
-                      loginForm.PhoneNumber.search(
-                        /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|8[0-9]|9[89])\d{8}$/
-                      ) === -1
-                    "
+                    v-model="loginForm.PhoneNumber"
+                    class="myInput"
+                    placeholder="请输入手机号码"
                   ></el-input>
                 </div>
-                <span
-                class="codeSpan"
-                  v-show="show"
-                  :style="{
-                    opacity:
-                      loginForm.PhoneNumber.search(
-                        /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|8[0-9]|9[89])\d{8}$/
-                      ) === -1
-                        ? 0.5
-                        : 1
-                  }"
-                  @click="getCode"
-                  >获取验证码</span
+              </el-form-item>
+              <el-form-item prop="identifyCode" label="验证码">
+                <div class="getCode">
+                  <div class="myInputBox">
+                    <i class="inputIcon idCode"></i>
+                    <el-input
+                      v-model="loginForm.identifyCode"
+                      class="verifycode myInput"
+                      placeholder="请输入验证码"
+                      @keyup.enter.native="toErpOrder"
+                      :disabled="
+                        loginForm.PhoneNumber.search(
+                          /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|8[0-9]|9[89])\d{8}$/
+                        ) === -1
+                      "
+                    ></el-input>
+                  </div>
+                  <span
+                    class="codeSpan"
+                    v-show="show"
+                    :style="{
+                      opacity:
+                        loginForm.PhoneNumber.search(
+                          /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|8[0-9]|9[89])\d{8}$/
+                        ) === -1
+                          ? 0.5
+                          : 1
+                    }"
+                    @click="getCode"
+                    >获取验证码</span
+                  >
+                  <span v-show="!show" class="count active"
+                    >{{ count }}s重新获取</span
+                  >
+                </div>
+              </el-form-item>
+              <el-form-item>
+                <el-button
+                  type="primary"
+                  :class="{ loginBtn: true, active: !loginForm.identifyCode }"
+                  :disabled="!loginForm.identifyCode"
+                  @click="toErpOrder"
+                  >登录</el-button
                 >
-                <span v-show="!show" class="count active"
-                  >{{ count }}s重新获取</span
-                >
-              </div>
-            </el-form-item>
-            <el-form-item>
-              <el-button
-                type="primary"
-                :class="{ loginBtn: true, active: !loginForm.identifyCode }"
-                :disabled="!loginForm.identifyCode"
-                @click="toErpOrder"
-                >登录</el-button
-              >
-            </el-form-item>
+              </el-form-item>
             </el-form>
           </div>
           <div class="erweimaBox">
@@ -235,116 +241,116 @@
 </template>
 
 <script>
-import VueQr from 'vue-qr'
-import erweimaComponent from './erweimaComponent'
-import { getMenuFuc } from '@/router/index'
+import VueQr from "vue-qr";
+import erweimaComponent from "./erweimaComponent";
+import { getMenuFuc } from "@/router/index";
 export default {
   components: {
     VueQr,
     erweimaComponent
   },
-  data () {
+  data() {
     return {
       myWs: null,
-      jiaerweima: require('@/assets/images/erweimaicon@2x.png'),
+      jiaerweima: require("@/assets/images/erweimaicon@2x.png"),
       isActive: false,
       timer: null,
       qrTimer: null,
       showQrCode: false,
-      qrcodeTitle: '请用小竹熊App扫一扫登录',
+      qrcodeTitle: "请用小竹熊App扫一扫登录",
       options: {
         // 二维码配置
-        url: 'https://www.baidu.com',
-        icon: require('@/assets/images/logo.png'),
-        colorDark: '#018e37',
-        colorLight: '#fff',
+        url: "https://www.baidu.com",
+        icon: require("@/assets/images/logo.png"),
+        colorDark: "#018e37",
+        colorLight: "#fff",
         margin: 10,
         size: 198
       },
       show: true,
       count: 60,
       loginForm: {
-        PhoneNumber: '',
-        identifyCode: ''
+        PhoneNumber: "",
+        identifyCode: ""
       },
       mobileRules: {
         PhoneNumber: [
           {
             required: true,
             pattern: /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|8[0-9]|9[89])\d{8}$/,
-            message: '手机格式不正确',
-            trigger: 'blur'
+            message: "手机格式不正确",
+            trigger: "blur"
           }
         ],
         identifyCode: [
-          { required: true, message: '请输入验证码', trigger: 'blur' },
-          { min: 4, message: '验证码长度最少为4位', trigger: 'blur' }
+          { required: true, message: "请输入验证码", trigger: "blur" },
+          { min: 4, message: "验证码长度最少为4位", trigger: "blur" }
         ]
       }
-    }
+    };
   },
   methods: {
-    hoverLogo () {
-      this.isActive = true
-      this.jiaerweima = require('@/assets/images/erweima2.png')
+    hoverLogo() {
+      this.isActive = true;
+      this.jiaerweima = require("@/assets/images/erweima2.png");
     },
-    hoverIsLogo () {
-      this.jiaerweima = require('@/assets/images/erweimaicon@2x.png')
-      this.isActive = false
+    hoverIsLogo() {
+      this.jiaerweima = require("@/assets/images/erweimaicon@2x.png");
+      this.isActive = false;
     },
-    toHome () {
-      this.$router.push('/erpHome')
+    toHome() {
+      this.$router.push("/erpHome");
     },
-    isErpOrder () {
-      if (this.$store.state.isLogin) this.$router.push('/erpOrder')
-      else this.$message.error('请先登录')
+    isErpOrder() {
+      if (this.$store.state.isLogin) this.$router.push("/erpOrder");
+      else this.$message.error("请先登录");
     },
     // 手机验证倒计时
-    async getCode () {
+    async getCode() {
       if (
         !/^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|8[0-9]|9[89])\d{8}$/.test(
           this.loginForm.PhoneNumber
         )
       ) {
-        this.$message.closeAll()
-        this.$message.error('请输入手机号')
-        return
+        this.$message.closeAll();
+        this.$message.error("请输入手机号");
+        return;
       }
-      const res = await this.$http.post('/api/SendSMS', {
+      const res = await this.$http.post("/api/SendSMS", {
         PhoneNumber: this.loginForm.PhoneNumber,
-        MessageType: 'SignIn'
-      })
-      console.log(res)
-      const TIME_COUNT = 60
+        MessageType: "SignIn"
+      });
+      console.log(res);
+      const TIME_COUNT = 60;
       if (!this.timer) {
-        this.count = TIME_COUNT
-        this.show = false
+        this.count = TIME_COUNT;
+        this.show = false;
         this.timer = setInterval(() => {
           if (this.count > 0 && this.count <= TIME_COUNT) {
-            this.count--
+            this.count--;
           } else {
-            this.show = true
-            clearInterval(this.timer)
-            this.timer = null
+            this.show = true;
+            clearInterval(this.timer);
+            this.timer = null;
           }
-        }, 1000)
+        }, 1000);
       }
     },
     // 登录
-    async toErpOrder () {
+    async toErpOrder() {
       this.$refs.erpLoginRef.validate(async valid => {
         if (valid) {
-          const res = await this.$http.post('/api/Authenticate', {
+          const res = await this.$http.post("/api/Authenticate", {
             userAccountOrUserMobile: this.loginForm.PhoneNumber,
-            platForm: 'HSERP',
-            loginType: 'VerificationCode',
+            platForm: "HSERP",
+            loginType: "VerificationCode",
             VerificationCode: this.loginForm.identifyCode
-          })
+          });
           if (res.data.result.isLogin) {
-            this.$store.commit('setToken', res.data.result)
-            this.$store.commit('handlerLogin', true)
-            await this.waitTime(1)
-            this.$router.push('/erpOrder')
+            this.$store.commit("setToken", res.data.result);
+            this.$store.commit("handlerLogin", true);
+            await this.waitTime(1);
+            this.$router.push("/erpOrder");
             // if (res.data.result.commparnyList.length === 1) {
             //   // 一个角色
             //   this.$router.push("/erpOrder");
@@ -358,39 +364,39 @@ export default {
             //   });
             // }
           } else {
-            this.$message.error(res.data.result.message)
+            this.$message.error(res.data.result.message);
           }
         }
-      })
+      });
     },
     // 获取二维码链接
-    async getQrCodeUrl () {
-      const res = await this.$http.post('/api/UserRandomCode', {})
+    async getQrCodeUrl() {
+      const res = await this.$http.post("/api/UserRandomCode", {});
       if (res.data.result.code === 200) {
-        this.options.url = res.data.result.item.qrCode
-        this.randomCode = res.data.result.item.randomCode
-        this.initWebSocket()
+        this.options.url = res.data.result.item.qrCode;
+        this.randomCode = res.data.result.item.randomCode;
+        this.initWebSocket();
       }
-      const TIME_COUNT = 300
-      let count = TIME_COUNT
-      this.showQrCode = false
-      this.qrcodeTitle = '请用小竹熊App扫一扫登录'
-      clearInterval(this.qrTimer)
+      const TIME_COUNT = 300;
+      let count = TIME_COUNT;
+      this.showQrCode = false;
+      this.qrcodeTitle = "请用小竹熊App扫一扫登录";
+      clearInterval(this.qrTimer);
       this.qrTimer = setInterval(() => {
         if (count > 0 && count <= TIME_COUNT) {
-          count--
+          count--;
         } else {
-          this.showQrCode = true
-          this.qrcodeTitle = '二维码已失效，点击刷新'
-          clearInterval(this.qrTimer)
-          this.qrTimer = null
+          this.showQrCode = true;
+          this.qrcodeTitle = "二维码已失效，点击刷新";
+          clearInterval(this.qrTimer);
+          this.qrTimer = null;
         }
-      }, 1000)
+      }, 1000);
     },
     // 初始化 webSocket
-    initWebSocket () {
-      if (typeof WebSocket === 'undefined') {
-        this.$message.error('您的浏览器不支持WebSocket')
+    initWebSocket() {
+      if (typeof WebSocket === "undefined") {
+        this.$message.error("您的浏览器不支持WebSocket");
       } else {
         // 初始化weosocket
         // 测试
@@ -399,127 +405,128 @@ export default {
         // )
         // 正式
         this.myWs = new WebSocket(
-          'wss://impush.toysbear.com/ws?UserId=' + this.randomCode
-        )
+          "wss://impush.toysbear.com/ws?UserId=" + this.randomCode
+        );
         // 监听webSocket连接
-        this.myWs.onopen = this.websocketonopen
+        this.myWs.onopen = this.websocketonopen;
         // 监听webSocket错误信息
-        this.myWs.onerror = this.websocketonerror
+        this.myWs.onerror = this.websocketonerror;
         // 监听webSocket消息
-        this.myWs.onmessage = this.websocketonmessage
+        this.myWs.onmessage = this.websocketonmessage;
         // 监听webSocket退出
-        this.myWs.onclose = this.websocketclose
+        this.myWs.onclose = this.websocketclose;
       }
     },
     // webSocket 连接成功
-    websocketonopen () {
-      console.log('WebSocket连接成功')
+    websocketonopen() {
+      console.log("WebSocket连接成功");
     },
     // webSocket 连接错误
-    websocketonerror (e) {
-      console.log('WebSocket连接发生错误')
+    websocketonerror() {
+      console.log("WebSocket连接发生错误");
     },
     // webSocket 数据接收
-    websocketonmessage (e) {
-      const redata = JSON.parse(e.data)
-      console.log(redata)
-      if (redata.action === 'QrCodeLogin') {
-        this.getUserConfirm()
-        console.log('成功了')
+    websocketonmessage(e) {
+      const redata = JSON.parse(e.data);
+      console.log(redata);
+      if (redata.action === "QrCodeLogin") {
+        this.getUserConfirm();
+        console.log("成功了");
       }
     },
     // webSocket 数据发送
-    websocketsend (agentData) {
-      this.myWs.send(agentData)
+    websocketsend(agentData) {
+      this.myWs.send(agentData);
     },
     // 关闭 webSocket
-    websocketclose () {
-      console.log('退出websocket了')
+    websocketclose() {
+      console.log("退出websocket了");
     },
     // 等一会
-    async waitTime (s) {
-      this.$store.commit('updateAppLoading', true)
-      return new Promise(function (resolve, reject) {
-        setTimeout(function () {
-          resolve()
-        }, 1000 * s)
-      })
+    async waitTime(s) {
+      this.$store.commit("updateAppLoading", true);
+      return new Promise(function(resolve) {
+        setTimeout(function() {
+          resolve();
+        }, 1000 * s);
+      });
     },
     // 监听结果
-    async getUserConfirm () {
-      const res = await this.$http.post('/api/UserConfirm', {
+    async getUserConfirm() {
+      const res = await this.$http.post("/api/UserConfirm", {
         RandomCode: this.randomCode
-      })
+      });
       if (res.data.result.isLogin) {
-        clearInterval(this.qrTimer)
-        this.qrTimer = null
-        this.$store.commit('setToken', res.data.result)
-        this.$store.commit('handlerLogin', true)
+        clearInterval(this.qrTimer);
+        this.qrTimer = null;
+        this.$store.commit("setToken", res.data.result);
+        this.$store.commit("handlerLogin", true);
         this.$store.commit(
-          'setComparnyId',
+          "setComparnyId",
           res.data.result.commparnyList[0].commparnyId
-        )
-        await this.waitTime(1)
+        );
+        await this.waitTime(1);
         // 二维码登录成功获取菜单
         try {
-          const re = await this.$http.post('/api/GetUserRoleMenu', {})
+          const re = await this.$http.post("/api/GetUserRoleMenu", {});
           if (re.data.result.code === 200) {
-            this.$store.commit('setRouters', re.data.result.item.modulesList)
-            await getMenuFuc()
-            const Json = {}
+            this.$store.commit("setRouters", re.data.result.item.modulesList);
+            await getMenuFuc();
+            const Json = {};
             Json.MessageRestriction = await this.getClientTypeList(
-              'MessageRestriction'
-            )
+              "MessageRestriction"
+            );
             Json.UserRestrictions = await this.getClientTypeList(
-              'UserRestrictions'
-            )
+              "UserRestrictions"
+            );
             Json.NoticeRestrictions = await this.getClientTypeList(
-              'NoticeRestrictions'
-            )
+              "NoticeRestrictions"
+            );
             Json.CompanyRestrictions = await this.getClientTypeList(
-              'CompanyRestrictions'
-            )
-            Json.PlatForm = await this.getClientTypeList('PlatForm')
-            console.log(Json)
-            this.$store.commit('globalJson/setGlobalJson', Json)
-            this.$router.push('/erpOrder')
+              "CompanyRestrictions"
+            );
+            Json.PlatForm = await this.getClientTypeList("PlatForm");
+            console.log(Json);
+            this.$store.commit("globalJson/setGlobalJson", Json);
+            this.$router.push("/erpOrder");
           } else {
-            this.$message.error(re.data.result.msg)
-            this.$store.commit('removeLoginItems')
+            this.$message.error(re.data.result.msg);
+            this.$store.commit("removeLoginItems");
           }
         } catch (error) {
-          this.$store.commit('updateAppLoading', false)
-          this.$message.error('获取菜单失败，请检查该角色是否有公司类型')
+          this.$store.commit("updateAppLoading", false);
+          this.$message.error("获取菜单失败，请检查该角色是否有公司类型");
         }
       } else {
-        this.$message.closeAll()
-        console.log(res.data.result.message)
+        this.$message.closeAll();
+        console.log(res.data.result.message);
       }
     },
     // 获取系统参数
-    async getClientTypeList (type) {
-      const res = await this.$http.post('/api/ServiceConfigurationList', {
+    async getClientTypeList(type) {
+      const res = await this.$http.post("/api/ServiceConfigurationList", {
         basisParameters: type
-      })
+      });
       if (res.data.result.code === 200) {
-        return res.data.result.item
+        return res.data.result.item;
       }
     }
   },
-  mounted () {
-    if (this.$route.query.id === 'signOut') this.$store.commit('removeLoginItems')
-    this.getQrCodeUrl()
+  mounted() {
+    if (this.$route.query.id === "signOut")
+      this.$store.commit("removeLoginItems");
+    this.getQrCodeUrl();
   },
-  beforeDestroy () {
-    clearInterval(this.qrTimer)
-    clearInterval(this.timer)
-    this.myWs.close()
+  beforeDestroy() {
+    clearInterval(this.qrTimer);
+    clearInterval(this.timer);
+    this.myWs.close();
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
-@import './erpLogin.less' ;
+@import "./erpLogin.less";
 // .erpLoginBox {
 //   width: 800px;
 //   height: 800px;

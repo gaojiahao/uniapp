@@ -49,7 +49,7 @@ export default {
     dataList: Array,
     isShow: Boolean
   },
-  data () {
+  data() {
     return {
       timer: null,
       theSpeed: this.speed,
@@ -57,79 +57,78 @@ export default {
       theDirection: this.direction,
       list: this.dataList.concat(this.dataList),
       showArrow: null
-    }
+    };
   },
-  created () {},
-  mounted () {
-    this.move()
+  created() {},
+  mounted() {
+    this.move();
   },
   watch: {
     dataList: {
-      handler (value) {
-        this.list = value
+      handler(value) {
+        this.list = value;
       },
       deep: true
     },
     isShow: {
-      handler (value) {
-        this.showArrow = value
+      handler(value) {
+        this.showArrow = value;
       }
     }
   },
   methods: {
-    toProductDetail (number) {
+    toProductDetail(number) {
       const href = this.$router.resolve({
-        name: 'ProductDetail',
+        name: "ProductDetail",
         params: { id: number }
-      })
-      window.open(href.href, '_blank')
+      });
+      window.open(href.href, "_blank");
     },
     //   左边
-    clickLeft () {
-      this.theDirection = 'left'
+    clickLeft() {
+      this.theDirection = "left";
     },
     // 右边
-    clickRight () {
-      this.theDirection = 'right'
+    clickRight() {
+      this.theDirection = "right";
     },
     // 移入
-    enter () {
-      this.timer = clearInterval(this.timer)
+    enter() {
+      this.timer = clearInterval(this.timer);
     },
     // 移出
-    leave () {
-      this.move()
+    leave() {
+      this.move();
     },
 
-    move () {
-      var imgBox = document.getElementsByClassName('imgBox')[0]
-      var imgDiv = document.getElementsByClassName('imgDiv')
-      const that = this
-      function autoScroll () {
+    move() {
+      var imgBox = document.getElementsByClassName("imgBox")[0];
+      const that = this;
+      function autoScroll() {
         if (imgBox.offsetLeft < -(imgBox.offsetWidth / 2)) {
           // 向左滚动
-          imgBox.style.left = 0
+          imgBox.style.left = 0;
         }
         if (imgBox.offsetLeft > 0) {
           // 向右滚动
-          imgBox.style.left = -(imgBox.offsetWidth / 2) + 'px'
+          imgBox.style.left = -(imgBox.offsetWidth / 2) + "px";
         }
-        if (that.theDirection === 'left') {
-          that.theSpeed = -Math.abs(that.theSpeed)
+        if (that.theDirection === "left") {
+          that.theSpeed = -Math.abs(that.theSpeed);
         } else {
-          that.theSpeed = Math.abs(that.theSpeed)
+          that.theSpeed = Math.abs(that.theSpeed);
         }
-        imgBox.style.left = imgBox.offsetLeft + that.theSpeed + 'px'
+        imgBox.style.left = imgBox.offsetLeft + that.theSpeed + "px";
       }
-      clearInterval(this.timer)
-      this.timer = setInterval(autoScroll, 30) // 全局变量 ，保存返回的定时器
+      clearInterval(this.timer);
+      this.timer = setInterval(autoScroll, 30); // 全局变量 ，保存返回的定时器
     }
   },
-  beforeDestroy () {
-    clearInterval(this.timer)
-    this.timer = null
+  beforeDestroy() {
+    clearInterval(this.timer);
+    this.timer = null;
   }
-}
+};
 </script>
 <style scoped lang="less">
 @deep: ~">>>";

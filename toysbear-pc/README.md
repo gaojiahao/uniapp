@@ -1,4 +1,4 @@
-# app_test
+# toysbear-pc
 
 ## Project setup
 ```

@@ -15,23 +15,23 @@
 
 <script>
 export default {
-  data () {
-    return {}
+  data() {
+    return {};
   },
   methods: {
-    changeFrameHeight () {
-      $('#myiframe').height(9750)
+    changeFrameHeight() {
+      $("#myiframe").height(9750);
     },
     // 回到顶部
-    toTop () {
-      $('#app').animate({ scrollTop: 0 })
+    toTop() {
+      $("#app").animate({ scrollTop: 0 });
     }
   },
-  created () {},
-  mounted () {
-    this.$emit('editTitle', '隐私声明')
+  created() {},
+  mounted() {
+    this.$emit("editTitle", "隐私声明");
   }
-}
+};
 </script>
 <style scoped lang="less">
 @deep: ~">>>";

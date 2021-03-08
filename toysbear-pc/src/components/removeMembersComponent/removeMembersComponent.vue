@@ -1,7 +1,11 @@
 <template>
   <!-- 发起群聊 -->
   <div class="wrapBox">
-    <div class="topLayout">选择群成员<span v-if="friendsList.length">({{friendsList.length}})</span></div>
+    <div class="topLayout">
+      选择群成员<span v-if="friendsList.length"
+        >({{ friendsList.length }})</span
+      >
+    </div>
     <!-- 发起群聊 -->
     <!-- <div class="searchBox">
       <div class="inputBox">
@@ -23,7 +27,7 @@
     >
       <div class="item" v-for="(item, i) in friendsList" :key="i">
         <el-checkbox :label="item">
-            <el-image class="img" :src="item.userImage" fit="cover">
+          <el-image class="img" :src="item.userImage" fit="cover">
             <div
               slot="error"
               class="image-slot"
@@ -36,14 +40,14 @@
                 white-space: nowrap;
               "
             >
-              {{ item.nickName?item.nickName:item.linkman }}
+              {{ item.nickName ? item.nickName : item.linkman }}
             </div>
           </el-image>
-          {{ item.nickName?item.nickName:item.linkman }}
+          {{ item.nickName ? item.nickName : item.linkman }}
           <span class="qunzhu" v-if="item.groupLeader">群主</span>
         </el-checkbox>
         <div class="companyName">
-         {{ item.nickName?item.nickName:item.linkman }}
+          {{ item.nickName ? item.nickName : item.linkman }}
         </div>
       </div>
     </el-checkbox-group>
@@ -55,7 +59,12 @@
           >
         </div>
         <div class="footerBtn">
-          <el-button type="info" @click="submitGroup" :disabled="selectUsers.length < 1" :class="{ active: selectUsers.length }" round
+          <el-button
+            type="info"
+            @click="submitGroup"
+            :disabled="selectUsers.length < 1"
+            :class="{ active: selectUsers.length }"
+            round
             >移除
             <span v-show="selectUsers.length"
               >({{ selectUsers.length }})</span
@@ -69,77 +78,82 @@
 
 <script>
 export default {
-  props: ['options'],
-  data () {
+  props: ["options"],
+  data() {
     return {
-      keyWord: '',
+      keyWord: "",
       currentPage: 1,
       pageSize: 20,
       totalCount: 0,
       selectUsers: [],
       friendsList: []
-    }
+    };
   },
   methods: {
     // 提交移除群成员
-    async submitGroup () {
-      const groupUsers = this.selectUsers.map(v => ({ userId: v.id, companyId: v.companyId }))
+    async submitGroup() {
+      const groupUsers = this.selectUsers.map(v => ({
+        userId: v.id,
+        companyId: v.companyId
+      }));
       // 添加新成员
-      console.log(this.options, groupUsers)
+      console.log(this.options, groupUsers);
       const fd = {
         groupNumber: this.options.groupNumber,
         delType: 0,
         groupUsers: groupUsers
-      }
-      const res = await this.$http.post('/api/DeleteMessageMember', fd)
+      };
+      const res = await this.$http.post("/api/DeleteMessageMember", fd);
       if (res.data.result.code === 200) {
-        this.$root.eventHub.$emit('resetGroupList')
+        this.$root.eventHub.$emit("resetGroupList");
         const data = {
           isGroup: true,
           groupNumber: this.options.groupNumber,
           linkName: this.options.linkName,
-          componentName: 'personalChatComponent'
-        }
-        this.$emit('openTwoView', data)
+          componentName: "personalChatComponent"
+        };
+        this.$emit("openTwoView", data);
       } else {
-        this.$message.error(res.data.result.msg)
+        this.$message.error(res.data.result.msg);
       }
     },
     // 发送群聊点击后半部分公司事件
-    driveCheckbox (item) {
-      const list = this.$refs.multipleTable.value
-      let flag = false
+    driveCheckbox(item) {
+      const list = this.$refs.multipleTable.value;
+      let flag = false;
       for (let i = 0; i < list.length; i++) {
         if (list[i].id === item.id) {
-          flag = true
-          this.selectUsers.pop()
+          flag = true;
+          this.selectUsers.pop();
         }
       }
       if (!flag) {
-        this.selectUsers.push(item)
-        console.log(this.selectUsers)
+        this.selectUsers.push(item);
+        console.log(this.selectUsers);
       }
     },
     // 搜索
-    search () {
-      this.currentPage = 1
-      this.getGroupUserByGroupNumber()
+    search() {
+      this.currentPage = 1;
+      this.getGroupUserByGroupNumber();
     },
     // 获取群成员列表
-    async getGroupUserByGroupNumber () {
-      const res = await this.$http.post('/api/GetGroupUserByGroupNumber', { groupNumber: this.options.groupNumber })
+    async getGroupUserByGroupNumber() {
+      const res = await this.$http.post("/api/GetGroupUserByGroupNumber", {
+        groupNumber: this.options.groupNumber
+      });
       if (res.data.result.code === 200) {
-        this.friendsList = res.data.result.item.personnels
+        this.friendsList = res.data.result.item.personnels;
       }
     }
   },
-  created () {},
-  mounted () {
-    this.getGroupUserByGroupNumber()
+  created() {},
+  mounted() {
+    this.getGroupUserByGroupNumber();
   }
-}
+};
 </script>
-<style scoped lang='less'>
+<style scoped lang="less">
 @deep: ~">>>";
 .wrapBox {
   width: 100%;
@@ -264,11 +278,11 @@ export default {
   .myCheckBox {
     height: calc(100% - 111px);
     overflow: auto;
-    .qunzhu{
-        font-size: 12px;
-        color: #999;
-        margin-left: 5px;
-        transform: scale(0.8)
+    .qunzhu {
+      font-size: 12px;
+      color: #999;
+      margin-left: 5px;
+      transform: scale(0.8);
     }
     .item {
       height: 60px;

@@ -1,8 +1,15 @@
 <template>
   <div>
     <div class="wanjuquanTop">
-      <h4>玩具圈 <span v-if="findCount" style="color:#f56c6c;">{{findCount}}</span></h4>
-      <el-badge :hidden="findCount===0" :value="findCount" @click.native="openInfoList">
+      <h4>
+        玩具圈
+        <span v-if="findCount" style="color:#f56c6c;">{{ findCount }}</span>
+      </h4>
+      <el-badge
+        :hidden="findCount === 0"
+        :value="findCount"
+        @click.native="openInfoList"
+      >
         <div class="infoList"></div>
       </el-badge>
     </div>
@@ -151,7 +158,12 @@
     <!-- 回到顶部 -->
     <el-backtop target=".findListAll" :right="1200" :bottom="100"></el-backtop>
     <!-- 评论 -->
-    <el-dialog :title="pinglunTitle" :visible.sync="dialogPinglun" destroy-on-close width="30%">
+    <el-dialog
+      :title="pinglunTitle"
+      :visible.sync="dialogPinglun"
+      destroy-on-close
+      width="30%"
+    >
       <el-form label-position="left" label-width="80px">
         <el-form-item label="评论内容">
           <el-input v-model="pinglunValue" autocomplete="off"></el-input>
@@ -163,7 +175,12 @@
       </span>
     </el-dialog>
     <!-- 举报 -->
-    <el-dialog title="举报" :visible.sync="dialogjubao" destroy-on-close width="30%">
+    <el-dialog
+      title="举报"
+      :visible.sync="dialogjubao"
+      destroy-on-close
+      width="30%"
+    >
       <ul class="selectJubaoInfo">
         <li
           v-for="(item, i) in ['政治敏感', '欺诈骗钱', '其他']"
@@ -193,82 +210,82 @@ export default {
       default: 0
     }
   },
-  data () {
+  data() {
     return {
       jubaoItem: null,
       jubaoActive: null,
       selectJubaoValue: null,
       dialogjubao: false,
       gongsiIcon: {
-        Ordinary: require('@/assets/images/公.png'),
-        Purchase: require('@/assets/images/采.png'),
-        Supply: require('@/assets/images/供.png')
+        Ordinary: require("@/assets/images/公.png"),
+        Purchase: require("@/assets/images/采.png"),
+        Supply: require("@/assets/images/供.png")
       },
       showActive: null,
       active: null,
-      replyToUserName: '',
-      pinglunTitle: '',
-      huifuPinglun: '',
-      pinglunForm: '',
-      pinglunValue: '',
+      replyToUserName: "",
+      pinglunTitle: "",
+      huifuPinglun: "",
+      pinglunForm: "",
+      pinglunValue: "",
       dialogPinglun: false,
       currentPage: 1,
       loading: false,
       pageSize: 10,
       total: null,
       findList: []
-    }
+    };
   },
   computed: {
-    noMore () {
-      return this.findList.length >= this.total
+    noMore() {
+      return this.findList.length >= this.total;
     },
-    busy () {
-      return this.loading || this.noMore
+    busy() {
+      return this.loading || this.noMore;
     },
-    userInfo () {
-      return this.$store.state.userInfo
+    userInfo() {
+      return this.$store.state.userInfo;
     }
   },
-  mounted () {
-    this.getDataList()
-    this.$emit('openOneView', {
-      componentName: 'myAnnouncementComponent'
-    })
-    this.$root.eventHub.$on('UpdateFind', async () => {
-      this.currentPage = 1
-      this.getDataList()
-    })
+  mounted() {
+    this.getDataList();
+    this.$emit("openOneView", {
+      componentName: "myAnnouncementComponent"
+    });
+    this.$root.eventHub.$on("UpdateFind", async () => {
+      this.currentPage = 1;
+      this.getDataList();
+    });
   },
-  beforeDestroy () {
-    this.$root.eventHub.$off('UpdateFind')
+  beforeDestroy() {
+    this.$root.eventHub.$off("UpdateFind");
   },
   methods: {
-    show3Active (i) {
-      this.showActive === i ? (this.showActive = null) : (this.showActive = i)
+    show3Active(i) {
+      this.showActive === i ? (this.showActive = null) : (this.showActive = i);
     },
     // 打开回复评论
-    async openReplyComment (val, replyToUserName) {
+    async openReplyComment(val, replyToUserName) {
       if (
         val.createdBy ===
         (this.$store.state.userInfo.userInfo &&
           this.$store.state.userInfo.userInfo.id)
       ) {
-        this.$message.error('不能回复自己哦')
-        return false
+        this.$message.error("不能回复自己哦");
+        return false;
       }
-      this.pinglunTitle = '回复评论'
-      this.dialogPinglun = true
-      this.huifuPinglun = val
-      this.replyToUserName = replyToUserName
+      this.pinglunTitle = "回复评论";
+      this.dialogPinglun = true;
+      this.huifuPinglun = val;
+      this.replyToUserName = replyToUserName;
     },
     // 评论
-    async addComment () {
-      let data
-      if (this.pinglunTitle === '回复评论') {
+    async addComment() {
+      let data;
+      if (this.pinglunTitle === "回复评论") {
         data = {
           noticeNumber: this.huifuPinglun.noticeNumber,
-          interactionType: 'Reply',
+          interactionType: "Reply",
           userName: this.userInfo.userInfo.linkman,
           comment: this.pinglunValue,
           replyCompanyID: this.replyToUserName
@@ -278,229 +295,228 @@ export default {
             ? this.huifuPinglun.replyToUser
             : this.huifuPinglun.createdBy,
           replyToUserName: this.replyToUserName || this.huifuPinglun.userName
-        }
+        };
       } else {
         data = {
           noticeNumber: this.pinglunForm.bearNotice.noticeNumber,
           companyID: this.userInfo.userInfo.id,
           userName: this.userInfo.userInfo.linkman,
-          interactionType: 'Comment',
+          interactionType: "Comment",
           comment: this.pinglunValue
-        }
+        };
       }
 
-      const res = await this.$http.post('/api/CreateNoticeInteraction', data)
+      const res = await this.$http.post("/api/CreateNoticeInteraction", data);
       if (res.data.result.code === 200) {
-        this.currentPage = 1
-        this.pageSize = this.findList.length >= 100 ? 10 : this.findList.length
-        this.getDataList()
-        this.dialogPinglun = false
-        this.$message.success('评论成功')
+        this.currentPage = 1;
+        this.pageSize = this.findList.length >= 100 ? 10 : this.findList.length;
+        this.getDataList();
+        this.dialogPinglun = false;
+        this.$message.success("评论成功");
       }
-      this.pinglunValue = ''
-      this.pinglunTitle = ''
+      this.pinglunValue = "";
+      this.pinglunTitle = "";
     },
     // 打开评论
-    openPinglun (value) {
-      this.pinglunTitle = '评论'
-      this.dialogPinglun = true
-      this.pinglunForm = value
+    openPinglun(value) {
+      this.pinglunTitle = "评论";
+      this.dialogPinglun = true;
+      this.pinglunForm = value;
     },
     // 点赞
-    async dianZan (val) {
-      const res = await this.$http.post('/api/UpdateBearNotice', {
+    async dianZan(val) {
+      const res = await this.$http.post("/api/UpdateBearNotice", {
         noticeNumber: val.bearNotice.noticeNumber,
-        NoticeType: 'Upvote',
+        NoticeType: "Upvote",
         id: val.bearNotice.id
-      })
+      });
       if (res.data.result.code === 200) {
         if (res.data.result.item.collectTotal) {
-          this.$message.success('点赞成功')
+          this.$message.success("点赞成功");
         } else {
-          this.$message.warning('取消点赞成功')
+          this.$message.warning("取消点赞成功");
         }
-        val.isLike = !val.isLike
+        val.isLike = !val.isLike;
         val.isLike
           ? val.bearNotice.upvoteTotal++
-          : val.bearNotice.upvoteTotal--
+          : val.bearNotice.upvoteTotal--;
       }
     },
-    openInfoList () {
-      console.log('openInfoList')
+    openInfoList() {
+      console.log("openInfoList");
     },
     // 下拉加载
-    loadMore () {
-      this.loading = true
+    loadMore() {
+      this.loading = true;
       setTimeout(async () => {
-        this.currentPage++
-        this.pageSize = 10
-        await this.getDataList(true)
-        this.loading = false
-      }, 500)
+        this.currentPage++;
+        this.pageSize = 10;
+        await this.getDataList(true);
+        this.loading = false;
+      }, 500);
     },
     // 获取公告列表
-    async getDataList (flag) {
-      const res = await this.$http.post('/api/BearNoticePage', {
+    async getDataList(flag) {
+      const res = await this.$http.post("/api/BearNoticePage", {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize
-      })
+      });
       if (res.data.result.code === 200) {
-        this.$emit('getNoticeUnreadTotal')
+        this.$emit("getNoticeUnreadTotal");
         if (flag) {
           this.findList = this.findList.concat(
             res.data.result.item.result.items
-          )
+          );
         } else {
-          this.findList = res.data.result.item.result.items
-          this.loading = false
+          this.findList = res.data.result.item.result.items;
+          this.loading = false;
         }
-        this.total = res.data.result.item.result.totalCount
+        this.total = res.data.result.item.result.totalCount;
       } else {
-        this.$message.error(res.data.result.msg)
+        this.$message.error(res.data.result.msg);
       }
     },
     // 公告打开聊天窗户
-    showSendChuang (item) {
-      this.$emit('showFindLiaotian', {
+    showSendChuang(item) {
+      this.$emit("showFindLiaotian", {
         item: item.userInfo
-      })
+      });
     },
     // 点击打开公告聊天
-    openTopLayout (bearNoticeId, item) {
-      console.log(item.userInfo.userId, this.$store.state.userInfo.userInfo.id)
+    openTopLayout(bearNoticeId, item) {
+      console.log(item.userInfo.userId, this.$store.state.userInfo.userInfo.id);
       if (
         item.userInfo.userId ===
         (this.$store.state.userInfo.userInfo &&
           this.$store.state.userInfo.userInfo.id)
       ) {
-        this.active = null
-        this.$message.error('不能给自己发消息哦')
-        return false
+        this.active = null;
+        this.$message.error("不能给自己发消息哦");
+        return false;
       }
-      this.$emit('cancelSendGonggao')
+      this.$emit("cancelSendGonggao");
       this.active && this.active === bearNoticeId
         ? (this.active = null)
-        : (this.active = bearNoticeId)
+        : (this.active = bearNoticeId);
     },
     /*
      * 时间戳显示为多少分钟前，多少天前的处理
      * console.log(dateDiff(1411111111111));  // 2014年09月19日
      */
-    dateDiff (time) {
-      let timestamp = Number(new Date(time))
-      const arrTimestamp = (timestamp + '').split('')
+    dateDiff(time) {
+      let timestamp = Number(new Date(time));
+      const arrTimestamp = (timestamp + "").split("");
       for (var start = 0; start < 13; start++) {
         if (!arrTimestamp[start]) {
-          arrTimestamp[start] = '0'
+          arrTimestamp[start] = "0";
         }
       }
-      timestamp = arrTimestamp.join('') * 1
+      timestamp = arrTimestamp.join("") * 1;
 
-      var minute = 1000 * 60
-      var hour = minute * 60
-      var day = hour * 24
-      var halfamonth = day * 15
-      var month = day * 30
-      var now = new Date().getTime()
-      var diffValue = now - timestamp
+      var minute = 1000 * 60;
+      var hour = minute * 60;
+      var day = hour * 24;
+      var month = day * 30;
+      var now = new Date().getTime();
+      var diffValue = now - timestamp;
 
       // 如果本地时间反而小于变量时间
       if (diffValue < 0) {
-        return '不久前'
+        return "不久前";
       }
 
       // 计算差异时间的量级
-      var monthC = diffValue / month
-      var weekC = diffValue / (7 * day)
-      var dayC = diffValue / day
-      var hourC = diffValue / hour
-      var minC = diffValue / minute
+      var monthC = diffValue / month;
+      var weekC = diffValue / (7 * day);
+      var dayC = diffValue / day;
+      var hourC = diffValue / hour;
+      var minC = diffValue / minute;
 
       // 数值补0方法
-      var zero = function (value) {
+      var zero = function(value) {
         if (value < 10) {
-          return '0' + value
+          return "0" + value;
         }
-        return value
-      }
+        return value;
+      };
 
       // 使用
       if (monthC > 12) {
         // 超过1年，直接显示年月日
-        return (function () {
-          var date = new Date(timestamp)
+        return (function() {
+          var date = new Date(timestamp);
           return (
             date.getFullYear() +
-            '年' +
+            "年" +
             zero(date.getMonth() + 1) +
-            '月' +
+            "月" +
             zero(date.getDate()) +
-            '日'
-          )
-        })()
+            "日"
+          );
+        })();
       } else if (monthC >= 1) {
-        return parseInt(monthC) + '月前'
+        return parseInt(monthC) + "月前";
       } else if (weekC >= 1) {
-        return parseInt(weekC) + '周前'
+        return parseInt(weekC) + "周前";
       } else if (dayC >= 1) {
-        return parseInt(dayC) + '天前'
+        return parseInt(dayC) + "天前";
       } else if (hourC >= 1) {
-        return parseInt(hourC) + '小时前'
+        return parseInt(hourC) + "小时前";
       } else if (minC >= 1) {
-        return parseInt(minC) + '分钟前'
+        return parseInt(minC) + "分钟前";
       }
-      return '刚刚'
+      return "刚刚";
     },
     // 屏蔽公告
-    async pingbiEvent (item) {
-      const res = await this.$http.post('/api/CreateMessageReport', {
+    async pingbiEvent(item) {
+      const res = await this.$http.post("/api/CreateMessageReport", {
         messageID: item.bearNotice.id,
         reportState: true,
-        reportType: 'Shield'
-      })
+        reportType: "Shield"
+      });
       if (res.data.result.code === 200) {
-        this.$message.success('屏蔽公告成功')
-        this.getDataList()
+        this.$message.success("屏蔽公告成功");
+        this.getDataList();
       } else {
-        this.$message.error('屏蔽公告失败，请检查网路')
+        this.$message.error("屏蔽公告失败，请检查网路");
       }
-      this.showActive = null
+      this.showActive = null;
     },
     // 打开举报公告
-    openjubaoEvent (item) {
-      this.dialogjubao = true
-      this.jubaoActive = null
-      this.selectJubaoValue = null
-      this.jubaoItem = item
+    openjubaoEvent(item) {
+      this.dialogjubao = true;
+      this.jubaoActive = null;
+      this.selectJubaoValue = null;
+      this.jubaoItem = item;
     },
     // 举报
-    async jubaoEvent () {
+    async jubaoEvent() {
       if (!this.selectJubaoValue) {
-        this.$message.error('请选择举报原因')
-        return
+        this.$message.error("请选择举报原因");
+        return;
       }
-      const res = await this.$http.post('/api/CreateMessageReport', {
+      const res = await this.$http.post("/api/CreateMessageReport", {
         messageID: this.jubaoItem.bearNotice.id,
         reportState: false,
-        reportType: 'Report',
+        reportType: "Report",
         reportRemark: this.selectJubaoValue
-      })
+      });
       if (res.data.result.code === 200) {
-        this.$message.success('举报公告成功')
-        this.getDataList()
-        this.dialogjubao = false
-        this.showActive = null
+        this.$message.success("举报公告成功");
+        this.getDataList();
+        this.dialogjubao = false;
+        this.showActive = null;
       } else {
-        this.$message.error('举报公告失败，请检查网路')
+        this.$message.error("举报公告失败，请检查网路");
       }
     },
     // 点击选择举报信息
-    checkJubaoInfo (e, item) {
-      this.jubaoActive = item
-      this.selectJubaoValue = e.target.innerText
+    checkJubaoInfo(e, item) {
+      this.jubaoActive = item;
+      this.selectJubaoValue = e.target.innerText;
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>

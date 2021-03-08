@@ -4,16 +4,22 @@
     <h3 class="infoListTitle">
       <span class="item"></span>
       <span class="item title">{{ signalROptions.toLinkName }}</span>
-      <span class="item"><i class="el-icon-more" v-show="!signalROptions.isErp" @click="moreEvent"></i></span>
+      <span class="item"
+        ><i
+          class="el-icon-more"
+          v-show="!signalROptions.isErp"
+          @click="moreEvent"
+        ></i
+      ></span>
     </h3>
     <div
       class="isOrder"
       @click="isOrderShowEvent"
       v-if="
         isOrderShow &&
-        $store.state.userInfo.commparnyList &&
-        $store.state.userInfo.commparnyList[0] &&
-        $store.state.userInfo.commparnyList[0].companyType === 'Supplier'
+          $store.state.userInfo.commparnyList &&
+          $store.state.userInfo.commparnyList[0] &&
+          $store.state.userInfo.commparnyList[0].companyType === 'Supplier'
       "
     >
       <div class="wenzitxt">
@@ -30,9 +36,9 @@
       @click="isOrderShowEvent"
       v-else-if="
         isOrderShow &&
-        $store.state.userInfo.commparnyList &&
-        $store.state.userInfo.commparnyList[0] &&
-        $store.state.userInfo.commparnyList[0].companyType !== 'Supplier'
+          $store.state.userInfo.commparnyList &&
+          $store.state.userInfo.commparnyList[0] &&
+          $store.state.userInfo.commparnyList[0].companyType !== 'Supplier'
       "
     >
       <div class="left">
@@ -81,8 +87,12 @@
               <center style="font-size: 12px; color: #ccc;margin:5px 0;">
                 {{ item.createdOn && dateDiff(item.createdOn) }}
               </center>
-                <p style="padding: 5px 20px;border-radius:20px;background-color:#d7d7d7;display: inline-block;font-size: 12px; color: #fff">{{item.content}}</p>
-              </center>
+              <p
+                style="padding: 5px 20px;border-radius:20px;background-color:#d7d7d7;display: inline-block;font-size: 12px; color: #fff"
+              >
+                {{ item.content }}
+              </p>
+            </center>
             <div v-else-if="item.fromUserId === signalROptions.orgUserID">
               <center style="font-size: 12px; color: #ccc">
                 {{ item.createdOn && dateDiff(item.createdOn) }}
@@ -90,7 +100,7 @@
               <!-- 我的消息 -->
               <div class="myInfo">
                 <div class="myAvatarImg">
-                    <!-- :src="$store.state.userInfo.userInfo.userImage" -->
+                  <!-- :src="$store.state.userInfo.userInfo.userImage" -->
                   <el-image
                     class="img"
                     :src="signalROptions.orgUserImage"
@@ -150,7 +160,9 @@
                           <div class="context">
                             {{ item.content || item.attachment }}
                           </div>
-                          <a class="see" :href="item.content" target="_blank"><i class="el-icon-view"></i>查看详情</a>
+                          <a class="see" :href="item.content" target="_blank"
+                            ><i class="el-icon-view"></i>查看详情</a
+                          >
                           <div class="copy" @click="copyLink(item.id)">
                             <i class="el-icon-link"></i>复制链接
                           </div>
@@ -510,7 +522,7 @@
         v-show="!isShowRec"
         @contextmenu.prevent.stop="OpenPaste"
       >
-      <!-- type="textarea"
+        <!-- type="textarea"
           :rows="2"
           resize="none"
           autocomplete="off" -->
@@ -519,7 +531,10 @@
           ref="sendMessageRef"
           class="sendValue"
           @keyup.native.prevent="sendMessage"
-          :maxlength="globalJson.MessageRestriction && globalJson.MessageRestriction[6].itemCode"
+          :maxlength="
+            globalJson.MessageRestriction &&
+              globalJson.MessageRestriction[6].itemCode
+          "
         ></el-input>
         <div class="pasteIten" v-show="isPaste" @click="pasteInfo($event)">
           粘贴
@@ -552,13 +567,13 @@
           class="fileInput"
           :accept="
             globalJson.MessageRestriction &&
-            globalJson.MessageRestriction[2].itemCode +
-              ',' +
-              globalJson.MessageRestriction[3].itemCode +
-              ',' +
-              globalJson.MessageRestriction[4].itemCode +
-              ',' +
-              globalJson.MessageRestriction[0].itemCode
+              globalJson.MessageRestriction[2].itemCode +
+                ',' +
+                globalJson.MessageRestriction[3].itemCode +
+                ',' +
+                globalJson.MessageRestriction[4].itemCode +
+                ',' +
+                globalJson.MessageRestriction[0].itemCode
           "
         />
       </i>
@@ -578,15 +593,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import VueQr from 'vue-qr'
-import Recorder from 'recorder-core/recorder.mp3.min'
+import VueQr from "vue-qr";
+import Recorder from "recorder-core/recorder.mp3.min";
 export default {
-  props: ['options', 'signalROptions', 'Json'],
+  props: ["options", "signalROptions", "Json"],
   components: {
     VueQr
   },
-  data () {
+  data() {
     return {
       globalJson: {},
       MessageUnreadCount: [],
@@ -601,190 +615,190 @@ export default {
       isOrderShow: false,
       loadText: null,
       noScrollTop: false
-    }
+    };
   },
   methods: {
     // 初始化消息立即沟通
-    async showLiaotianr () {
-      this.$store.commit('clearWsMsg')
+    async showLiaotianr() {
+      this.$store.commit("clearWsMsg");
       if (this.options) {
-        this.signalROptions.isGroup = this.options.isGroup
-        this.signalROptions.toLinkName = this.options.linkName || this.options.linkman
-        this.signalROptions.toUserImage = this.options.userImage || this.signalROptions.toUserImage
-        this.signalROptions.toUserID = this.options.toUserID || this.options.id
-        this.signalROptions.toCompanyID = this.options.companyId || this.options.companyID
-        this.signalROptions.groupNumber = this.options.groupNumber
-        this.signalROptions.orderNumber = this.options.orderNumber
-        this.signalROptions.msgType = 'Text'
-        this.isOrderShow = this.options.isOrderShow || false
+        this.signalROptions.isGroup = this.options.isGroup;
+        this.signalROptions.toLinkName =
+          this.options.linkName || this.options.linkman;
+        this.signalROptions.toUserImage =
+          this.options.userImage || this.signalROptions.toUserImage;
+        this.signalROptions.toUserID = this.options.toUserID || this.options.id;
+        this.signalROptions.toCompanyID =
+          this.options.companyId || this.options.companyID;
+        this.signalROptions.groupNumber = this.options.groupNumber;
+        this.signalROptions.orderNumber = this.options.orderNumber;
+        this.signalROptions.msgType = "Text";
+        this.isOrderShow = this.options.isOrderShow || false;
       }
       // 适配全局系统参数
       if (this.Json) {
-        this.globalJson = (this.Json ? this.Json : this.$store.state.globalJson.Json)
+        this.globalJson = this.Json
+          ? this.Json
+          : this.$store.state.globalJson.Json;
       }
-      console.log(this.options, this.signalROptions, 999)
       try {
-        this.addChannel() // 加入深网频道
+        this.addChannel(); // 加入深网频道
       } catch (error) {
-        this.$message.warning('断线重连')
+        this.$message.warning("断线重连");
       }
       // 连接ws
       if (this.signalROptions.groupNumber) {
-        if (this.$setWs.$ws) this.$setWs.$ws.close()
-        this.$store.commit('setWsId', this.signalROptions.groupNumber)
-        this.$setWs.initWebSocket()
-        console.log(this.$setWs)
+        if (this.$setWs.$ws) this.$setWs.$ws.close();
+        this.$store.commit("setWsId", this.signalROptions.groupNumber);
+        this.$setWs.initWebSocket();
+        console.log(this.$setWs);
       }
       // 获取聊天记录
-      const res = await this.getInstantMessageByNumber()
+      const res = await this.getInstantMessageByNumber();
       if (res.data.result.code === 200) {
-        this.signalROptions.showmsg = res.data.result.item.items
-        this.chatHistoryTotal = res.data.result.item.totalCount
+        this.signalROptions.showmsg = res.data.result.item.items;
+        this.chatHistoryTotal = res.data.result.item.totalCount;
       } else {
-        this.CompanyDetail = []
+        this.CompanyDetail = [];
       }
-      this.$root.eventHub.$emit('resetAllMessagesCount')
-      this.$root.eventHub.$emit('resetData')
+      this.$root.eventHub.$emit("resetAllMessagesCount");
+      this.$root.eventHub.$emit("resetData");
     },
     // 撤回消息
-    async withdrawInfo (item) {
+    async withdrawInfo(item) {
       try {
-        const res = await this.$http.post('/api/UpdateWithdrawMessage', {
+        await this.$http.post("/api/UpdateWithdrawMessage", {
           id: item.id,
           isDelete: true,
           groupNumber: item.groupNumber,
           isWithdraw: true,
           companyID: item.companyId,
           fromUserID: item.fromUserId
-        })
+        });
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
     // 转发消息
-    forwardInfo (item) {
-      console.log(item)
+    forwardInfo(item) {
+      console.log(item);
     },
     // 打开编辑聊天消息
-    openEditInfo (e, id) {
-      this.noScrollTop = true
-      this.isPaste = null
-      this.isChehui = id
-      const x = e.layerX // 鼠标left位置
-      const y = e.layerY // 鼠标top位置
-      this.copyDOM = $(e.target).offsetParent()
+    openEditInfo(e, id) {
+      this.noScrollTop = true;
+      this.isPaste = null;
+      this.isChehui = id;
+      const x = e.layerX; // 鼠标left位置
+      const y = e.layerY; // 鼠标top位置
+      this.copyDOM = $(e.target).offsetParent();
       this.copyDOM
         .offsetParent()
-        .children('.myChehui')
-        .css({ left: x, top: y })
+        .children(".myChehui")
+        .css({ left: x, top: y });
     },
     // 复制消息
-    copyInfo (item) {
+    copyInfo(item) {
       switch (item.messageType) {
-        case 'Text':
-          this.copyContact()
-          break
+        case "Text":
+          this.copyContact();
+          break;
       }
     },
     // 复制文字方法
-    copyContact (contat) {
-      window.getSelection().removeAllRanges()
-      const range = document.createRange()
-      range.selectNode(this.copyDOM[0])
-      this.copyText = this.copyDOM[0].innerText
-      window.getSelection().addRange(range)
+    copyContact() {
+      window.getSelection().removeAllRanges();
+      const range = document.createRange();
+      range.selectNode(this.copyDOM[0]);
+      this.copyText = this.copyDOM[0].innerText;
+      window.getSelection().addRange(range);
       try {
-        const successful = document.execCommand('copy')
-        if (successful) this.$message.success('复制成功')
-        else this.$message.error('复制失败')
+        const successful = document.execCommand("copy");
+        if (successful) this.$message.success("复制成功");
+        else this.$message.error("复制失败");
       } catch (error) {
-        this.$message.error('复制失败')
+        this.$message.error("复制失败");
       }
     },
     // 打开粘贴
-    OpenPaste (e) {
-      this.isChehui = null
-      this.isPaste = true
-      const x = e.layerX // 鼠标left位置
-      const y = e.layerY // 鼠标top位置
+    OpenPaste(e) {
+      this.isChehui = null;
+      this.isPaste = true;
+      const x = e.layerX; // 鼠标left位置
+      const y = e.layerY; // 鼠标top位置
       $(e.target)
         .offsetParent()
-        .children('.pasteIten')
-        .css({ left: x, top: y })
+        .children(".pasteIten")
+        .css({ left: x, top: y });
     },
     // 粘贴
-    pasteInfo () {
+    pasteInfo() {
       if (window.clipboardData) {
-        this.signalROptions.value = window.clipboardData.getData('Text')
+        this.signalROptions.value = window.clipboardData.getData("Text");
       } else {
-        this.signalROptions.value = this.copyText
-        // clipboardData.setData("Text", range.text);
-        // document.all.pp.value = clipboardData.getData("Text");
+        this.signalROptions.value = this.copyText;
       }
     },
     // 判断单聊群聊 查看明细
-    moreEvent () {
-      const option = this.$_.cloneDeepWith(this.signalROptions)
-      option.componentName = 'chatSettingsComponent' // 单聊
-      if (this.signalROptions.isGroup) { // 群聊
-        option.componentName = 'chatInformationComponent'
+    moreEvent() {
+      const option = this.$_.cloneDeepWith(this.signalROptions);
+      option.componentName = "chatSettingsComponent"; // 单聊
+      if (this.signalROptions.isGroup) {
+        // 群聊
+        option.componentName = "chatInformationComponent";
       }
-      this.$emit('openTwoView', option)
+      this.$emit("openTwoView", option);
     },
     // 深网加入频道
-    async addChannel () {
+    async addChannel() {
       if (!this.signalROptions.groupNumber) {
-        return false
+        return false;
       }
       if (this.signalROptions.creatChannel) {
-        this.signalROptions.creatChannel.leave()
+        this.signalROptions.creatChannel.leave();
       }
       try {
         // 创建频道
         this.signalROptions.creatChannel = this.signalROptions.client.createChannel(
           this.signalROptions.groupNumber // 此处传入频道 ID// 加入频道
-        )
-        const error = await this.signalROptions.creatChannel.join()
+        );
+        const error = await this.signalROptions.creatChannel.join();
         if (error) {
           /* 加入频道失败的处理逻辑 */
-          console.log('加入频道失败', error)
-          this.$root.eventHub.$emit('resetLogin') // 重新登录
-          this.$nextTick(() => this.addChannel())
+          console.log("加入频道失败", error);
+          this.$root.eventHub.$emit("resetLogin"); // 重新登录
+          this.$nextTick(() => this.addChannel());
         } else {
           /* 加入频道成功的处理逻辑 */
-          console.log('加入频道成功')
-          await this.getMembers()
+          console.log("加入频道成功");
+          await this.getMembers();
         }
         // 接收频道消息
-        this.signalROptions.creatChannel.on(
-          'ChannelMessage',
-          async ({ text }, senderId) => {
-            // text 为收到的频道消息文本，senderId 为发送方的 User ID
-            /* 远端用户收到消息的处理逻辑 */
-            // this.$message.success("我收到了频道消息");
-            console.log('我收到了频道消息啊哈哈哈哈')
-            this.chatHistoryCurrentPage = 1
-            const res = await this.getInstantMessageByNumber(
-              this.signalROptions.groupNumber
-            )
-            if (res.data.result.code === 200) {
-              this.signalROptions.showmsg = res.data.result.item.items
-              this.chatHistoryTotal = res.data.result.item.totalCount
-            } else {
-              // 订单点击立即沟通拿不到groupNumber，所以没有聊天记录
-              this.CompanyDetail = []
-            }
-            this.$root.eventHub.$emit('resetData')
+        this.signalROptions.creatChannel.on("ChannelMessage", async () => {
+          // text 为收到的频道消息文本，senderId 为发送方的 User ID
+          /* 远端用户收到消息的处理逻辑 */
+          // this.$message.success("我收到了频道消息");
+          console.log("我收到了频道消息啊哈哈哈哈");
+          this.chatHistoryCurrentPage = 1;
+          const res = await this.getInstantMessageByNumber(
+            this.signalROptions.groupNumber
+          );
+          if (res.data.result.code === 200) {
+            this.signalROptions.showmsg = res.data.result.item.items;
+            this.chatHistoryTotal = res.data.result.item.totalCount;
+          } else {
+            // 订单点击立即沟通拿不到groupNumber，所以没有聊天记录
+            this.CompanyDetail = [];
           }
-        )
+          this.$root.eventHub.$emit("resetData");
+        });
       } catch (err) {
-        this.$message.closeAll()
-        this.$root.eventHub.$emit('resetRTM')
-        this.$message.success('断线重连成功')
+        this.$message.closeAll();
+        this.$root.eventHub.$emit("resetRTM");
+        this.$message.success("断线重连成功");
       }
     },
     // 根据GroupNumber 查询所有的聊天记录
-    async getInstantMessageByNumber () {
+    async getInstantMessageByNumber() {
       const fd = {
         skipCount: this.chatHistoryCurrentPage,
         maxResultCount: this.chatHistoryPageSize,
@@ -793,115 +807,119 @@ export default {
         ToUserId: this.signalROptions.toUserID,
         isGroup: this.signalROptions.isGroup,
         orderNumber: this.signalROptions.orderNumber
-      }
+      };
       for (const key in fd) {
-        if (!fd[key]) delete fd[key]
+        if (!fd[key]) delete fd[key];
       }
-      return await this.$http.post('/api/GetInstantMessageByNumber', fd)
+      return await this.$http.post("/api/GetInstantMessageByNumber", fd);
     },
     // 聊天窗口订单事件
-    isOrderShowEvent () {
-      var fd = this.$_.cloneDeepWith(this.options)
-      fd.componentName = 'orderDetailComponent'
-      this.$emit('openTwoView', fd)
+    isOrderShowEvent() {
+      var fd = this.$_.cloneDeepWith(this.options);
+      fd.componentName = "orderDetailComponent";
+      this.$emit("openTwoView", fd);
     },
     // 深网获取群成员
-    async getMembers () {
-      this.signalROptions.channelMember = await this.signalROptions.creatChannel.getMembers()
-      console.log(this.signalROptions.channelMember, 111)
+    async getMembers() {
+      this.signalROptions.channelMember = await this.signalROptions.creatChannel.getMembers();
+      console.log(this.signalROptions.channelMember, 111);
     },
     // 深网退出频道
-    signChannel () {
-      this.signalROptions && this.signalROptions.creatChannel && this.signalROptions.creatChannel.leave()
+    signChannel() {
+      this.signalROptions &&
+        this.signalROptions.creatChannel &&
+        this.signalROptions.creatChannel.leave();
     },
     // 即时通讯发消息
-    async sendMessage (e) {
+    async sendMessage(e) {
       if (e.ctrlKey && e.keyCode === 13) {
-        this.signalROptions.value += '\n' // 换行
-      } else if (e.key === 'Enter' || e.code === 'Enter' || e.keyCode === 13) {
-        this.noScrollTop = false
+        this.signalROptions.value += "\n"; // 换行
+      } else if (e.key === "Enter" || e.code === "Enter" || e.keyCode === 13) {
+        this.noScrollTop = false;
         if (
-          this.signalROptions.msgType === 'Text' &&
+          this.signalROptions.msgType === "Text" &&
           !this.signalROptions.value
         ) {
-          this.signalROptions.value = null
-          this.$message.error('发送内容不能为空')
-          return
+          this.signalROptions.value = null;
+          this.$message.error("发送内容不能为空");
+          return;
         }
         // 判断是不是发送的链接http带头
-        if (/^(http:\/\/)|(https:\/\/)|(www\.)/.test(this.signalROptions.value)) {
-          this.signalROptions.msgType = 'Product'
-          this.signalROptions.attachment = this.signalROptions.value
+        if (
+          /^(http:\/\/)|(https:\/\/)|(www\.)/.test(this.signalROptions.value)
+        ) {
+          this.signalROptions.msgType = "Product";
+          this.signalROptions.attachment = this.signalROptions.value;
         }
         try {
-          const res = await this.createMessageAccept()
-          this.signalROptions.showmsg.push(res.data.result.item)
-          this.signalROptions.value = ''
+          const res = await this.createMessageAccept();
+          this.signalROptions.showmsg.push(res.data.result.item);
+          this.signalROptions.value = "";
 
           if (res.data.result.code === 200) {
-            this.signalROptions.groupNumber = res.data.result.item.groupNumber
+            this.signalROptions.groupNumber = res.data.result.item.groupNumber;
             // 加入深网频道
             try {
-              await this.getMembers()
+              await this.getMembers();
             } catch (error) {
-              await this.addChannel()
+              await this.addChannel();
             }
-            const re = await this.$http.post('/api/UpdateMessageMemberActivate', {
+            await this.$http.post("/api/UpdateMessageMemberActivate", {
               GroupNumber: this.signalROptions.groupNumber,
               UIDList: this.signalROptions.channelMember
-            })
-            this.sendMsg(res.data.result.item) // 深网发消息
+            });
+            this.sendMsg(res.data.result.item); // 深网发消息
           } else {
-            this.signalROptions.showmsg.pop()
-            this.$message.error(res.data.result.msg)
-            return false
+            this.signalROptions.showmsg.pop();
+            this.$message.error(res.data.result.msg);
+            return false;
           }
-          this.$root.eventHub.$emit('resetData')
+          this.$root.eventHub.$emit("resetData");
         } catch (error) {
-          this.$root.eventHub.$emit('resetRTM')
-          this.$message.success('断线重连成功Two')
+          this.$root.eventHub.$emit("resetRTM");
+          this.$message.success("断线重连成功Two");
         }
 
-        this.signalROptions.value = null
-        this.signalROptions.attachment = null
-        this.signalROptions.msgType = 'Text'
-        this.$refs.refFileInput.value = ''
-        e.preventDefault()
+        this.signalROptions.value = null;
+        this.signalROptions.attachment = null;
+        this.signalROptions.msgType = "Text";
+        this.$refs.refFileInput.value = "";
+        e.preventDefault();
       }
     },
     // 个推送
-    async GeSendPush (item, toUserID, number) {
+    async GeSendPush(item, toUserID, number) {
       const obj = {
         callType: number,
         channelId: item.groupNumber,
         userAvatar: item.userImage,
         userId: toUserID,
         userName: item.linkName
-      }
+      };
       try {
-        const res = await this.$http.post('/api/GeSendPush', {
+        const res = await this.$http.post("/api/GeSendPush", {
           UserId: toUserID,
-          Title: '您有一条新的消息',
+          Title: "您有一条新的消息",
           Description: item.content || item.attachment,
           ExtraBody: item.content || item.attachment,
           ActionData: JSON.stringify(obj)
-        })
+        });
         if (res.data.result.code === 200) {
-          console.log('推送成功')
+          console.log("推送成功");
         } else {
-          this.$message.error(res.data.result.message)
+          this.$message.error(res.data.result.message);
         }
       } catch (error) {
-        console.log('推送失败')
+        console.log("推送失败");
       }
     },
     // 发送点对点或频道消息
-    sendMsg (item) {
+    sendMsg(item) {
       // 加入频道成功后可发送频道消息
       if (item) {
-        item.linkName = this.signalROptions.orgLinkName
-        item.userImage = this.signalROptions.orgUserImage
-        let toUserIDList = []
+        item.linkName = this.signalROptions.orgLinkName;
+        item.userImage = this.signalROptions.orgUserImage;
+        let toUserIDList = [];
         for (let i = 0; i < item.toUserList.length; i++) {
           // 判断如果不在频道内
           if (
@@ -910,18 +928,18 @@ export default {
             // 如果不在频道内并且有uid
             if (item.toUserList[i].uid) {
               // 发送点对点消息
-              console.log('发送了点对点')
-              this.sendPeerToPeer(JSON.stringify(item), item.toUserList[i].uid)
+              console.log("发送了点对点");
+              this.sendPeerToPeer(JSON.stringify(item), item.toUserList[i].uid);
             }
           } else {
             // 在频道内的
-            toUserIDList.push(item.toUserList[i].toUserID)
+            toUserIDList.push(item.toUserList[i].toUserID);
           }
         }
         // 先去重 后去掉在频道内的
-        const newobj = {}
+        const newobj = {};
         const arr = item.toUserList.reduce((preVal, curVal) => {
-        /* eslint-disable */
+          /* eslint-disable */
           newobj[curVal.toUserID]
             ? ''
             : (newobj[curVal.toUserID] = preVal.push(curVal))
@@ -999,7 +1017,7 @@ export default {
           } catch (error) {
             await this.addChannel()
           }
-          const re = await this.$http.post('/api/UpdateMessageMemberActivate', {
+          await this.$http.post('/api/UpdateMessageMemberActivate', {
             GroupNumber: this.signalROptions.groupNumber,
             UIDList: this.signalROptions.channelMember
           })
@@ -1276,7 +1294,6 @@ export default {
       var minute = 1000 * 60
       var hour = minute * 60
       var day = hour * 24
-      var halfamonth = day * 15
       var month = day * 30
       var now = new Date().getTime()
       var diffValue = now - timestamp
@@ -1563,7 +1580,6 @@ export default {
     -ms-scroll-rails: none;
     -ms-content-zoom-limit-min: 100%;
     -ms-content-zoom-limit-max: 500%;
-    -ms-scroll-snap-type: proximity;
     -ms-scroll-snap-points-x: snapList(100%, 200%, 300%, 400%, 500%);
     -ms-overflow-style: none;
     &::-webkit-scrollbar {

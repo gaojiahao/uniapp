@@ -6,14 +6,14 @@
 
 <script>
 export default {
-  data () {
-    return {}
+  data() {
+    return {};
   },
   methods: {},
-  created () {},
-  mounted () {
-    this.$emit('editTitle', '服务条款')
+  created() {},
+  mounted() {
+    this.$emit("editTitle", "服务条款");
   }
-}
+};
 </script>
 <style scoped lang="less"></style>

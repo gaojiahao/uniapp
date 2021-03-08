@@ -44,20 +44,20 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       formInline: {
-        keyWord: '',
-        startDate: '',
-        endDate: ''
+        keyWord: "",
+        startDate: "",
+        endDate: ""
       }
-    }
+    };
   },
   methods: {
-    search () {},
-    addData () {}
+    search() {},
+    addData() {}
   }
-}
+};
 </script>
 
 <style lang="less" scoped>

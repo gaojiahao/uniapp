@@ -1,142 +1,139 @@
 <template>
-<div class="wrapBox">
-<div class="sendFind">
-  <div
-    class="sendFindItem"
-    @click="openTwoView(item.type)"
-    v-for="item in titleList"
-    :key="item.id"
-  >
-    <div class="iconImg">
-      <img :src="item.path" :key="item.path" alt />
+  <div class="wrapBox">
+    <div class="sendFind">
+      <div
+        class="sendFindItem"
+        @click="openTwoView(item.type)"
+        v-for="item in titleList"
+        :key="item.id"
+      >
+        <div class="iconImg">
+          <img :src="item.path" :key="item.path" alt />
+        </div>
+        <div class="txt">{{ item.text }}</div>
+      </div>
     </div>
-    <div class="txt">{{ item.text }}</div>
-  </div>
-</div>
-<div
-  class="findItems"
-  v-infinite-scroll="loadMore"
-  infinite-scroll-disabled="disabled"
->
-  <div class="findItem" v-for="(item, i) in dataList" :key="i">
-    <template v-if="item">
-      <div class="topLayout">
-        <div class="img">
-          <el-image
-            :src="item.userInfo.image"
-            class="findImage"
-            fit="cover"
-          >
-            <div
-              slot="error"
-              class="image-slot"
-              style="width:100%;height:100%;display:flex;align-items:center;justify-content:left;white-space: nowrap;"
-            >
-              {{ item.userInfo.niceName }}
-            </div>
-          </el-image>
-        </div>
-        <div class="title">
-          <p>{{ item.userInfo.niceName }}</p>
-        </div>
-      </div>
-      <p class="ContentText">
-        <em>{{ item.bearNotice.notice }}</em>
-      </p>
-      <div class="imgComtent" v-if="item.video">
-        <div class="demo1-video">
-          <video
-            width="100%"
-            height="100%"
-            class="video-js vjs-default-skin vjs-big-play-centered"
-            controls
-            style="object-fit:contain"
-          >
-            <source :src="item.video" type="video/mp4" />
-          </video>
-        </div>
-      </div>
-      <template v-else-if="item.imgList.length > 1">
-        <div class="imgComtent">
-          <el-image
-            v-for="(val, index) in item.imgList.split(',')"
-            :key="index"
-            class="img"
-            :src="val"
-            alt
-            :preview-src-list="item.imgList.split(',')"
-          ></el-image>
-        </div>
-      </template>
-      <div class="dateInDelet">
-        <div>
-          <span>{{ dateDiff(item.bearNotice.publishDate) }}</span>
-          <el-popconfirm
-            class="deleteBtn"
-            title="确定要删除这条公告吗？"
-            @onConfirm="deleteCement(item, i)"
-          >
-            <span slot="reference">删除</span>
-          </el-popconfirm>
-        </div>
-
-        <div class="like">
-          <span @click="dianZan(item)">
-            <i
-              class="iconfont icon-love_icon"
-              v-show="!item.isLike"
-            ></i>
-            <i
-              class="iconfont icon-aixin"
-              v-show="item.isLike"
-              style="color:#fb6055;"
-            ></i>
-            <em>{{ item.bearNotice.upvoteTotal }}</em>
-          </span>
-          <span class="pinglun" @click="openPinglun(item)">
-            <i class="iconfont icon-xiaoxi1"></i>
-            <em>{{ item.bearNotice.review }}</em>
-          </span>
-        </div>
-      </div>
-      <!-- 评论 -->
-      <div class="reply" v-if="item.noticeInteraction.length > 0">
-        <template v-for="(item1, i) in item.noticeInteraction">
-          <p :key="i">
-            <span
-              style="cursor: pointer;"
-              @click="openReplyComment(item1)"
-              >{{ item1.userName }}</span
-            >
-            <em v-if="item1.replyToUserName">
-              回复
-              <span
-                @click="openReplyComment(item1, item1.replyToUserName)"
-                style="padding-right:5px;cursor: pointer;"
-                >{{ item1.replyToUserName }}</span
+    <div
+      class="findItems"
+      v-infinite-scroll="loadMore"
+      infinite-scroll-disabled="disabled"
+    >
+      <div class="findItem" v-for="(item, i) in dataList" :key="i">
+        <template v-if="item">
+          <div class="topLayout">
+            <div class="img">
+              <el-image
+                :src="item.userInfo.image"
+                class="findImage"
+                fit="cover"
               >
-            </em>
-            ：{{ item1.comment }}
+                <div
+                  slot="error"
+                  class="image-slot"
+                  style="width:100%;height:100%;display:flex;align-items:center;justify-content:left;white-space: nowrap;"
+                >
+                  {{ item.userInfo.niceName }}
+                </div>
+              </el-image>
+            </div>
+            <div class="title">
+              <p>{{ item.userInfo.niceName }}</p>
+            </div>
+          </div>
+          <p class="ContentText">
+            <em>{{ item.bearNotice.notice }}</em>
           </p>
+          <div class="imgComtent" v-if="item.video">
+            <div class="demo1-video">
+              <video
+                width="100%"
+                height="100%"
+                class="video-js vjs-default-skin vjs-big-play-centered"
+                controls
+                style="object-fit:contain"
+              >
+                <source :src="item.video" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+          <template v-else-if="item.imgList.length > 1">
+            <div class="imgComtent">
+              <el-image
+                v-for="(val, index) in item.imgList.split(',')"
+                :key="index"
+                class="img"
+                :src="val"
+                alt
+                :preview-src-list="item.imgList.split(',')"
+              ></el-image>
+            </div>
+          </template>
+          <div class="dateInDelet">
+            <div>
+              <span>{{ dateDiff(item.bearNotice.publishDate) }}</span>
+              <el-popconfirm
+                class="deleteBtn"
+                title="确定要删除这条公告吗？"
+                @onConfirm="deleteCement(item, i)"
+              >
+                <span slot="reference">删除</span>
+              </el-popconfirm>
+            </div>
+
+            <div class="like">
+              <span @click="dianZan(item)">
+                <i class="iconfont icon-love_icon" v-show="!item.isLike"></i>
+                <i
+                  class="iconfont icon-aixin"
+                  v-show="item.isLike"
+                  style="color:#fb6055;"
+                ></i>
+                <em>{{ item.bearNotice.upvoteTotal }}</em>
+              </span>
+              <span class="pinglun" @click="openPinglun(item)">
+                <i class="iconfont icon-xiaoxi1"></i>
+                <em>{{ item.bearNotice.review }}</em>
+              </span>
+            </div>
+          </div>
+          <!-- 评论 -->
+          <div class="reply" v-if="item.noticeInteraction.length > 0">
+            <template v-for="(item1, i) in item.noticeInteraction">
+              <p :key="i">
+                <span
+                  style="cursor: pointer;"
+                  @click="openReplyComment(item1)"
+                  >{{ item1.userName }}</span
+                >
+                <em v-if="item1.replyToUserName">
+                  回复
+                  <span
+                    @click="openReplyComment(item1, item1.replyToUserName)"
+                    style="padding-right:5px;cursor: pointer;"
+                    >{{ item1.replyToUserName }}</span
+                  >
+                </em>
+                ：{{ item1.comment }}
+              </p>
+            </template>
+          </div>
         </template>
       </div>
-    </template>
-  </div>
-  <center
-    style="padding:10px 0;background-color:#eeeeed;margin:10px 0 0 0;position: relative;"
-  >
-    <p v-if="loading">加载中...</p>
-    <p v-if="noMore">没有更多了</p>
-    <!-- <div
+      <center
+        style="padding:10px 0;background-color:#eeeeed;margin:10px 0 0 0;position: relative;"
+      >
+        <p v-if="loading">加载中...</p>
+        <p v-if="noMore">没有更多了</p>
+        <!-- <div
       class="huidaodingbu el-icon-caret-top"
       v-show="dataList.length > 9"
       @click="toTop"
     ></div> -->
-  </center>
-</div>
-<!-- 回到顶部 -->
-<el-backtop target=".findItems" :right="800" :bottom="100"></el-backtop>
-<!-- 评论 -->
+      </center>
+    </div>
+    <!-- 回到顶部 -->
+    <el-backtop target=".findItems" :right="800" :bottom="100"></el-backtop>
+    <!-- 评论 -->
     <el-dialog :title="pinglunTitle" :visible.sync="dialogPinglun" width="30%">
       <el-form label-position="left" label-width="80px">
         <el-form-item label="评论内容">
@@ -148,14 +145,14 @@
         <el-button type="primary" @click="addComment">确 定</el-button>
       </span>
     </el-dialog>
-</div>
+  </div>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-      pinglunTitle: '',
+      pinglunTitle: "",
       pinglunValue: null,
       pinglunForm: null,
       dialogPinglun: false,
@@ -167,46 +164,46 @@ export default {
       titleList: [
         {
           id: 1,
-          text: '普通公告',
-          type: 'Ordinary',
-          path: require('@/assets/images/gonggao1.png')
+          text: "普通公告",
+          type: "Ordinary",
+          path: require("@/assets/images/gonggao1.png")
         },
         {
           id: 2,
-          text: '采购公告',
-          type: 'Purchase',
-          path: require('@/assets/images/gonggao2.png')
+          text: "采购公告",
+          type: "Purchase",
+          path: require("@/assets/images/gonggao2.png")
         },
         {
           id: 3,
-          text: '供应公告',
-          type: 'Supply',
-          path: require('@/assets/images/gonggao3.png')
+          text: "供应公告",
+          type: "Supply",
+          path: require("@/assets/images/gonggao3.png")
         }
       ]
-    }
+    };
   },
   methods: {
     // 打开发布公告第三窗口
-    openTwoView (item) {
-      this.$emit('openTwoView', {
-        componentName: 'sendNoticeComponent',
+    openTwoView(item) {
+      this.$emit("openTwoView", {
+        componentName: "sendNoticeComponent",
         type: item
-      })
+      });
     },
     // 打开评论
-    openPinglun (value) {
-      this.pinglunTitle = '评论'
-      this.dialogPinglun = true
-      this.pinglunForm = value
+    openPinglun(value) {
+      this.pinglunTitle = "评论";
+      this.dialogPinglun = true;
+      this.pinglunForm = value;
     },
     // 评论
-    async addComment () {
-      let data
-      if (this.pinglunTitle === '回复评论') {
+    async addComment() {
+      let data;
+      if (this.pinglunTitle === "回复评论") {
         data = {
           noticeNumber: this.huifuPinglun.noticeNumber,
-          interactionType: 'Reply',
+          interactionType: "Reply",
           userName: this.userInfo.userInfo.linkman,
           comment: this.pinglunValue,
           replyCompanyID: this.replyToUserName
@@ -216,87 +213,87 @@ export default {
             ? this.huifuPinglun.replyToUser
             : this.huifuPinglun.createdBy,
           replyToUserName: this.replyToUserName || this.huifuPinglun.userName
-        }
+        };
       } else {
         data = {
           noticeNumber: this.pinglunForm.bearNotice.noticeNumber,
           companyID: this.userInfo.userInfo.id,
           userName: this.userInfo.userInfo.linkman,
-          interactionType: 'Comment',
+          interactionType: "Comment",
           comment: this.pinglunValue
-        }
+        };
       }
-      const res = await this.$http.post('/api/CreateNoticeInteraction', data)
+      const res = await this.$http.post("/api/CreateNoticeInteraction", data);
       if (res.data.result.code === 200) {
-        this.skipCount = 1
+        this.skipCount = 1;
         this.maxResultCount =
-          this.dataList.length >= 100 ? 10 : this.dataList.length
-        this.getDataList()
+          this.dataList.length >= 100 ? 10 : this.dataList.length;
+        this.getDataList();
         // 重新调用子路由查看公告
-        this.$root.eventHub.$emit('UpdateFind')
-        this.dialogPinglun = false
-        this.$message.success('评论成功')
+        this.$root.eventHub.$emit("UpdateFind");
+        this.dialogPinglun = false;
+        this.$message.success("评论成功");
       }
-      this.pinglunValue = ''
-      this.pinglunTitle = ''
+      this.pinglunValue = "";
+      this.pinglunTitle = "";
     },
     // 下拉加载
-    loadMore () {
-      this.loading = true
+    loadMore() {
+      this.loading = true;
       setTimeout(async () => {
-        this.currentPage++
-        this.pageSize = 20
-        await this.getDataList(true)
-        this.loading = false
-      }, 500)
+        this.currentPage++;
+        this.pageSize = 20;
+        await this.getDataList(true);
+        this.loading = false;
+      }, 500);
     },
     // 打开回复评论
-    async openReplyComment (val, replyToUserName) {
+    async openReplyComment(val, replyToUserName) {
       if (
         val.createdBy ===
         (this.$store.state.userInfo.userInfo &&
           this.$store.state.userInfo.userInfo.id)
       ) {
-        this.$message.error('不能回复自己哦')
-        return false
+        this.$message.error("不能回复自己哦");
+        return false;
       }
-      this.pinglunTitle = '回复评论'
-      this.dialogPinglun = true
-      this.huifuPinglun = val
-      this.replyToUserName = replyToUserName
+      this.pinglunTitle = "回复评论";
+      this.dialogPinglun = true;
+      this.huifuPinglun = val;
+      this.replyToUserName = replyToUserName;
     },
     // 点赞
-    async dianZan (val) {
-      const res = await this.$http.post('/api/UpdateBearNotice', {
+    async dianZan(val) {
+      const res = await this.$http.post("/api/UpdateBearNotice", {
         noticeNumber: val.bearNotice.noticeNumber,
-        NoticeType: 'Upvote',
+        NoticeType: "Upvote",
         id: val.bearNotice.id
-      })
+      });
       if (res.data.result.code === 200) {
         if (res.data.result.item.collectTotal) {
-          this.$message.success('点赞成功')
+          this.$message.success("点赞成功");
         } else {
-          this.$message.warning('取消点赞成功')
+          this.$message.warning("取消点赞成功");
         }
-        val.isLike = !val.isLike
+        val.isLike = !val.isLike;
         val.isLike
           ? val.bearNotice.upvoteTotal++
-          : val.bearNotice.upvoteTotal--
-        this.$root.eventHub.$emit('UpdateFind')
+          : val.bearNotice.upvoteTotal--;
+        this.$root.eventHub.$emit("UpdateFind");
       }
     },
     // 删除公告
-    async deleteCement (val, i) {
-      const res = await this.$http.post('/api/DeleteBearBotice', {
+    async deleteCement(val, i) {
+      const res = await this.$http.post("/api/DeleteBearBotice", {
         id: val.bearNotice.id
-      })
+      });
       if (res.data.result.code === 200) {
-        this.$message.success('删除成功')
-        this.dataList.splice(i, 1)
+        this.$message.success("删除成功");
+        this.dataList.splice(i, 1);
         // 重新调用子路由查看公告
-        this.$root.eventHub.$emit('UpdateFind')
+        this.$root.eventHub.$emit("UpdateFind");
       } else {
-        this.$message.error(res.data.result.msg)
+        this.$message.error(res.data.result.msg);
       }
     },
     // 回到顶部事件
@@ -316,119 +313,116 @@ export default {
     //   $('.findItems').animate({ scrollTop: 0 })
     // },
     // 获取我发布的公告
-    async getDataList (flag) {
-      const res = await this.$http.post('/api/BearNoticePage', {
+    async getDataList(flag) {
+      const res = await this.$http.post("/api/BearNoticePage", {
         skipCount: this.skipCount,
         maxResultCount: this.maxResultCount,
         publisher: this.userInfo.userInfo.id
-      })
+      });
       if (res.data.result.code === 200) {
         if (flag) {
           this.dataList = this.dataList.concat(
             res.data.result.item.result.items
-          )
+          );
         } else {
-          this.dataList = res.data.result.item.result.items
-          this.loading = false
+          this.dataList = res.data.result.item.result.items;
+          this.loading = false;
         }
-        this.total = res.data.result.item.result.totalCount
+        this.total = res.data.result.item.result.totalCount;
       } else {
-        this.$message.error(res.data.result.msg)
+        this.$message.error(res.data.result.msg);
       }
     },
     /*
      * 时间戳显示为多少分钟前，多少天前的处理
      * console.log(dateDiff(1411111111111));  // 2014年09月19日
      */
-    dateDiff (time) {
-      let timestamp = Number(new Date(time))
-      const arrTimestamp = (timestamp + '').split('')
+    dateDiff(time) {
+      let timestamp = Number(new Date(time));
+      const arrTimestamp = (timestamp + "").split("");
       for (var start = 0; start < 13; start++) {
         if (!arrTimestamp[start]) {
-          arrTimestamp[start] = '0'
+          arrTimestamp[start] = "0";
         }
       }
-      timestamp = arrTimestamp.join('') * 1
+      timestamp = arrTimestamp.join("") * 1;
 
-      var minute = 1000 * 60
-      var hour = minute * 60
-      var day = hour * 24
-      var halfamonth = day * 15
-      var month = day * 30
-      var now = new Date().getTime()
-      var diffValue = now - timestamp
+      var minute = 1000 * 60;
+      var hour = minute * 60;
+      var day = hour * 24;
+      var month = day * 30;
+      var now = new Date().getTime();
+      var diffValue = now - timestamp;
 
       // 如果本地时间反而小于变量时间
       if (diffValue < 0) {
-        return '不久前'
+        return "不久前";
       }
 
       // 计算差异时间的量级
-      var monthC = diffValue / month
-      var weekC = diffValue / (7 * day)
-      var dayC = diffValue / day
-      var hourC = diffValue / hour
-      var minC = diffValue / minute
+      var monthC = diffValue / month;
+      var weekC = diffValue / (7 * day);
+      var dayC = diffValue / day;
+      var hourC = diffValue / hour;
+      var minC = diffValue / minute;
 
       // 数值补0方法
-      var zero = function (value) {
+      var zero = function(value) {
         if (value < 10) {
-          return '0' + value
+          return "0" + value;
         }
-        return value
-      }
+        return value;
+      };
 
       // 使用
       if (monthC > 12) {
         // 超过1年，直接显示年月日
-        return (function () {
-          var date = new Date(timestamp)
+        return (function() {
+          var date = new Date(timestamp);
           return (
             date.getFullYear() +
-            '年' +
+            "年" +
             zero(date.getMonth() + 1) +
-            '月' +
+            "月" +
             zero(date.getDate()) +
-            '日'
-          )
-        })()
+            "日"
+          );
+        })();
       } else if (monthC >= 1) {
-        return parseInt(monthC) + '月前'
+        return parseInt(monthC) + "月前";
       } else if (weekC >= 1) {
-        return parseInt(weekC) + '周前'
+        return parseInt(weekC) + "周前";
       } else if (dayC >= 1) {
-        return parseInt(dayC) + '天前'
+        return parseInt(dayC) + "天前";
       } else if (hourC >= 1) {
-        return parseInt(hourC) + '小时前'
+        return parseInt(hourC) + "小时前";
       } else if (minC >= 1) {
-        return parseInt(minC) + '分钟前'
+        return parseInt(minC) + "分钟前";
       }
-      return '刚刚'
+      return "刚刚";
     }
   },
-  created () {
-
+  created() {},
+  mounted() {
+    this.$root.eventHub.$on("UpdateFind", async () => {
+      this.currentPage = 1;
+      this.getDataList();
+    });
   },
-  mounted () {
-    this.$root.eventHub.$on('UpdateFind', async () => {
-      this.currentPage = 1
-      this.getDataList()
-    })
-  },
-  beforeDestroy () {
-    this.$root.eventHub.$off('UpdateFind')
+  beforeDestroy() {
+    this.$root.eventHub.$off("UpdateFind");
   },
   computed: {
-    noMore () {
-      return this.dataList.length >= this.total
+    noMore() {
+      return this.dataList.length >= this.total;
     },
-    disabled () {
-      return this.loading || this.noMore
+    disabled() {
+      return this.loading || this.noMore;
     }
   }
-}
+};
 </script>
-<style scoped lang='less'>
+<style scoped lang="less">
 @deep: ~">>>";
 .wrapBox {
   width: 100%;

@@ -164,11 +164,16 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       allCount: 0,
       ws: null,
-      wsBaseUrl: process.env.NODE_ENV === 'production' ? ('wss://impush.toysbear.com/ws?UserId=' + this.$store.state.userInfo.userInfo.id) : ('ws://139.9.71.135:8090/ws?UserId=' + this.$store.state.userInfo.userInfo.id),
+      wsBaseUrl:
+        process.env.NODE_ENV === "production"
+          ? "wss://impush.toysbear.com/ws?UserId=" +
+            this.$store.state.userInfo.userInfo.id
+          : "ws://139.9.71.135:8090/ws?UserId=" +
+            this.$store.state.userInfo.userInfo.id,
       lockReturn: false,
       timeout: 280000,
       // timeout: 1000,
@@ -183,169 +188,169 @@ export default {
       companyType: {
         type: this.$store.state.userInfo.commparnyList[0].companyType,
         hall: {
-          time: '',
+          time: "",
           count: 0
         },
         sales: {
-          time: '',
+          time: "",
           count: 0
         },
         supplier: {
-          time: '',
+          time: "",
           count: 0
         }
       }
-    }
+    };
   },
   methods: {
     // 初始化 webSocket
-    initWebSocket () {
-      if (typeof WebSocket === 'undefined') {
-        this.$message.error('您的浏览器不支持WebSocket')
+    initWebSocket() {
+      if (typeof WebSocket === "undefined") {
+        this.$message.error("您的浏览器不支持WebSocket");
       } else {
         // 初始化weosocket
-        this.ws = new WebSocket(this.wsBaseUrl)
+        this.ws = new WebSocket(this.wsBaseUrl);
         // 监听webSocket连接
-        this.ws.onopen = this.websocketonopen
+        this.ws.onopen = this.websocketonopen;
         // 监听webSocket错误信息
-        this.ws.onerror = this.websocketonerror
+        this.ws.onerror = this.websocketonerror;
         // 监听webSocket消息
-        this.ws.onmessage = this.websocketonmessage
+        this.ws.onmessage = this.websocketonmessage;
         // 监听webSocket退出
-        this.ws.onclose = this.websocketclose
+        this.ws.onclose = this.websocketclose;
       }
     },
     // webSocket 连接成功
-    websocketonopen () {
+    websocketonopen() {
       // 开始websocket心跳
-      this.startWsHeartbeat()
-      console.log('订单WebSocket连接成功')
+      this.startWsHeartbeat();
+      console.log("订单WebSocket连接成功");
     },
     // webSocket 连接错误
-    websocketonerror (e) {
-      console.log(e, '订单WebSocket连接发生错误')
+    websocketonerror(e) {
+      console.log(e, "订单WebSocket连接发生错误");
     },
     // webSocket 数据接收
-    websocketonmessage (e) {
+    websocketonmessage(e) {
       // 每次接收到服务端消息后 重置websocket心跳
-      this.resetHeartbeat()
-      const redata = JSON.parse(e.data)
-      console.log('订单WebSocket接收到数据', redata)
-      if (redata.action === 'OrderUnreadCount') {
-        this.getOrderMessageCount()
-        this.$store.commit('setWsOrderMsg', JSON.parse(redata.content))
+      this.resetHeartbeat();
+      const redata = JSON.parse(e.data);
+      console.log("订单WebSocket接收到数据", redata);
+      if (redata.action === "OrderUnreadCount") {
+        this.getOrderMessageCount();
+        this.$store.commit("setWsOrderMsg", JSON.parse(redata.content));
       }
     },
     // webSocket 数据发送
-    websocketsend (agentData) {
-      this.ws.send(agentData)
+    websocketsend(agentData) {
+      this.ws.send(agentData);
     },
     // 关闭 webSocket
-    websocketclose (e) {
-      console.log(e, '订单退出websocket了')
+    websocketclose(e) {
+      console.log(e, "订单退出websocket了");
     },
     // webSocket 心跳
-    startWsHeartbeat () {
-      this.timeoutID && clearInterval(this.timeoutID)
-      this.serverTimeoutObj && clearTimeout(this.serverTimeoutObj)
+    startWsHeartbeat() {
+      this.timeoutID && clearInterval(this.timeoutID);
+      this.serverTimeoutObj && clearTimeout(this.serverTimeoutObj);
       this.timeoutID = setInterval(() => {
-        console.log('订单socket开始心跳')
+        console.log("订单socket开始心跳");
         // 判断websocket当前状态
         if (this.ws.readyState !== 1) {
-          this.reconnect()
+          this.reconnect();
         } else {
-          this.websocketsend('')
+          this.websocketsend("");
         }
-      }, this.timeout)
+      }, this.timeout);
     },
     // 重启websocket
-    reconnect () {
-      console.log(this.lockReturn)
-      if (this.lockReturn) return
-      this.lockReturn = true
-      this.timeoutNum && clearTimeout(this.timeoutNum)
+    reconnect() {
+      console.log(this.lockReturn);
+      if (this.lockReturn) return;
+      this.lockReturn = true;
+      this.timeoutNum && clearTimeout(this.timeoutNum);
       this.timeoutNum = setTimeout(() => {
-        this.initWebSocket()
-        this.lockReturn = false
-      }, 2000)
+        this.initWebSocket();
+        this.lockReturn = false;
+      }, 2000);
     },
     // 重置websocket心跳
-    resetHeartbeat () {
-      this.lockReturn = false
-      clearInterval(this.timeoutID)
-      clearTimeout(this.serverTimeoutObj)
-      this.startWsHeartbeat()
+    resetHeartbeat() {
+      this.lockReturn = false;
+      clearInterval(this.timeoutID);
+      clearTimeout(this.serverTimeoutObj);
+      this.startWsHeartbeat();
     },
     // 打开公司排号
-    openOrderCompanyList (item) {
-      item.componentName = 'companyNumberComponent'
-      console.log(item)
-      this.$emit('openOneView', item)
+    openOrderCompanyList(item) {
+      item.componentName = "companyNumberComponent";
+      console.log(item);
+      this.$emit("openOneView", item);
     },
     // 打开聊天界面
-    openLiaotiao (item) {
-      this.$emit('openOneView', {
+    openLiaotiao(item) {
+      this.$emit("openOneView", {
         ...item,
-        componentName: 'personalChatComponent'
-      })
-      this.getOrderMessageCount()
+        componentName: "personalChatComponent"
+      });
+      this.getOrderMessageCount();
     },
     // 打开公司订单列表
-    openOrder (item) {
-      console.log(item)
-      this.$emit('openOneView', {
+    openOrder(item) {
+      console.log(item);
+      this.$emit("openOneView", {
         companyType: item,
-        componentName: 'companyBusinessComponent'
-      })
+        componentName: "companyBusinessComponent"
+      });
     },
     // 获取订单通知数量
-    async getOrderMessageCount () {
-      const res = await this.$http.post('/api/GetOrderMessageCount', {})
+    async getOrderMessageCount() {
+      const res = await this.$http.post("/api/GetOrderMessageCount", {});
       if (res.data.result.code === 200) {
-        const list = res.data.result.item.result
+        const list = res.data.result.item.result;
         for (let i = 0; i < list.length; i++) {
-          this.allCount += list[i].count
-          if (list[i].sampleFrom === 'HALL') {
-            this.companyType.hall.count = list[i].count
-            this.companyType.hall.time = list[i].latesTime
-          } else if (list[i].sampleFrom === 'SALES') {
-            this.companyType.sales.count = list[i].count
-            this.companyType.sales.time = list[i].latesTime
-          } else if (list[i].sampleFrom === 'SUPPLIER') {
-            this.companyType.supplier.count = list[i].count
-            this.companyType.supplier.time = list[i].latesTime
+          this.allCount += list[i].count;
+          if (list[i].sampleFrom === "HALL") {
+            this.companyType.hall.count = list[i].count;
+            this.companyType.hall.time = list[i].latesTime;
+          } else if (list[i].sampleFrom === "SALES") {
+            this.companyType.sales.count = list[i].count;
+            this.companyType.sales.time = list[i].latesTime;
+          } else if (list[i].sampleFrom === "SUPPLIER") {
+            this.companyType.supplier.count = list[i].count;
+            this.companyType.supplier.time = list[i].latesTime;
           }
         }
         // this.$emit('orderInfoCount', allCount)
       }
     },
     // 获取消息列表
-    async getInfoList () {
+    async getInfoList() {
       try {
-        const res = await this.$http.post('/api/MessageAcceptPage', {
+        const res = await this.$http.post("/api/MessageAcceptPage", {
           skipCount: this.currentPage,
           maxResultCount: this.pageSize
-        })
+        });
         if (res.data.result.code === 200) {
-          this.infoList = res.data.result.item.items
-          this.total = res.data.result.item.totalCount
+          this.infoList = res.data.result.item.items;
+          this.total = res.data.result.item.totalCount;
         }
       } catch (error) {
         // this.$message.closeAll();
         this.$message.error(
-          '请求/api/MessageAcceptPage 时出错，报500，请联系管理员'
-        )
-        this.infoList = []
-        this.total = 0
+          "请求/api/MessageAcceptPage 时出错，报500，请联系管理员"
+        );
+        this.infoList = [];
+        this.total = 0;
       }
     },
     // 获取消息公司列表
-    async getOrderCompanyList () {
-      const res = await this.$http.post('/api/GetOrderCompanyList', {})
+    async getOrderCompanyList() {
+      const res = await this.$http.post("/api/GetOrderCompanyList", {});
       if (res.data.result.code === 200) {
-        this.orderCompanyList = res.data.result.item.items
+        this.orderCompanyList = res.data.result.item.items;
         for (let i = 0; i < this.orderCompanyList.length; i++) {
-          this.allCount += this.orderCompanyList[i].count
+          this.allCount += this.orderCompanyList[i].count;
         }
       }
     },
@@ -353,123 +358,122 @@ export default {
      * 时间戳显示为多少分钟前，多少天前的处理
      * console.log(dateDiff(1411111111111));  // 2014年09月19日
      */
-    dateDiff (time) {
-      let timestamp = Number(new Date(time))
-      const arrTimestamp = (timestamp + '').split('')
+    dateDiff(time) {
+      let timestamp = Number(new Date(time));
+      const arrTimestamp = (timestamp + "").split("");
       for (var start = 0; start < 13; start++) {
         if (!arrTimestamp[start]) {
-          arrTimestamp[start] = '0'
+          arrTimestamp[start] = "0";
         }
       }
-      timestamp = arrTimestamp.join('') * 1
-      var minute = 1000 * 60
-      var hour = minute * 60
-      var day = hour * 24
-      var halfamonth = day * 15
-      var month = day * 30
-      var now = new Date().getTime()
-      var diffValue = now - timestamp
+      timestamp = arrTimestamp.join("") * 1;
+      var minute = 1000 * 60;
+      var hour = minute * 60;
+      var day = hour * 24;
+      var month = day * 30;
+      var now = new Date().getTime();
+      var diffValue = now - timestamp;
       // 如果本地时间反而小于变量时间
       if (diffValue < 0) {
-        return '不久前'
+        return "不久前";
       }
       // 计算差异时间的量级
-      var monthC = diffValue / month
-      var weekC = diffValue / (7 * day)
-      var dayC = diffValue / day
-      var hourC = diffValue / hour
-      var minC = diffValue / minute
+      var monthC = diffValue / month;
+      var weekC = diffValue / (7 * day);
+      var dayC = diffValue / day;
+      var hourC = diffValue / hour;
+      var minC = diffValue / minute;
       // 数值补0方法
-      var zero = function (value) {
+      var zero = function(value) {
         if (value < 10) {
-          return '0' + value
+          return "0" + value;
         }
-        return value
-      }
+        return value;
+      };
       // 使用
       if (monthC > 12) {
         // 超过1年，直接显示年月日
-        return (function () {
-          var date = new Date(timestamp)
+        return (function() {
+          var date = new Date(timestamp);
           return (
             date.getFullYear() +
-            '年' +
+            "年" +
             zero(date.getMonth() + 1) +
-            '月' +
+            "月" +
             zero(date.getDate()) +
-            '日'
-          )
-        })()
+            "日"
+          );
+        })();
       } else if (monthC >= 1) {
-        return parseInt(monthC) + '月前'
+        return parseInt(monthC) + "月前";
       } else if (weekC >= 1) {
-        return parseInt(weekC) + '周前'
+        return parseInt(weekC) + "周前";
       } else if (dayC >= 1) {
-        return parseInt(dayC) + '天前'
+        return parseInt(dayC) + "天前";
       } else if (hourC >= 1) {
-        return parseInt(hourC) + '小时前'
+        return parseInt(hourC) + "小时前";
       } else if (minC >= 1) {
-        return parseInt(minC) + '分钟前'
+        return parseInt(minC) + "分钟前";
       }
-      return '刚刚'
+      return "刚刚";
     }
   },
   filters: {
-    messageFilter (item) {
-      let msg
+    messageFilter(item) {
+      let msg;
       switch (item.msgType) {
-        case 'Text':
-        case 'Product':
-        case 'SystemPrompt':
-          msg = item.content
-          break
-        case 'Video':
-          msg = '[视频]'
-          break
-        case 'Picture':
-          msg = '[图片]'
-          break
-        case 'Voice':
-          msg = '[语音]'
-          break
-        case 'file':
-          msg = '[文件]'
-          break
-        case 'InstantVoice':
-          msg = '[即时语音]'
-          break
-        case 'TimeVideo':
-          msg = '[即时视频]'
-          break
+        case "Text":
+        case "Product":
+        case "SystemPrompt":
+          msg = item.content;
+          break;
+        case "Video":
+          msg = "[视频]";
+          break;
+        case "Picture":
+          msg = "[图片]";
+          break;
+        case "Voice":
+          msg = "[语音]";
+          break;
+        case "file":
+          msg = "[文件]";
+          break;
+        case "InstantVoice":
+          msg = "[即时语音]";
+          break;
+        case "TimeVideo":
+          msg = "[即时视频]";
+          break;
       }
-      return msg
+      return msg;
     }
   },
-  mounted () {
-    this.$store.commit('clearWsOrderMsg')
-    this.initWebSocket()
-    this.getInfoList()
-    this.getOrderCompanyList()
-    this.getOrderMessageCount()
-    this.$root.eventHub.$on('resetData', () => {
-      this.getInfoList()
-    })
+  mounted() {
+    this.$store.commit("clearWsOrderMsg");
+    this.initWebSocket();
+    this.getInfoList();
+    this.getOrderCompanyList();
+    this.getOrderMessageCount();
+    this.$root.eventHub.$on("resetData", () => {
+      this.getInfoList();
+    });
   },
   watch: {
-    allCount (val) {
-      if (val) this.$emit('orderInfoCount', val)
+    allCount(val) {
+      if (val) this.$emit("orderInfoCount", val);
     }
   },
-  beforeDestroy () {
-    this.ws.close()
-    this.lockReturn = true
-    this.timeoutID && clearInterval(this.timeoutID)
-    this.timeoutNum && clearTimeout(this.timeoutNum)
-    this.serverTimeoutObj && clearTimeout(this.serverTimeoutObj)
-    this.$root.eventHub.$off('resetData')
-    this.$root.eventHub.$off('resetCompany')
+  beforeDestroy() {
+    this.ws.close();
+    this.lockReturn = true;
+    this.timeoutID && clearInterval(this.timeoutID);
+    this.timeoutNum && clearTimeout(this.timeoutNum);
+    this.serverTimeoutObj && clearTimeout(this.serverTimeoutObj);
+    this.$root.eventHub.$off("resetData");
+    this.$root.eventHub.$off("resetCompany");
   }
-}
+};
 </script>
 
 <style lang="less" scoped>

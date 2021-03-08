@@ -3,22 +3,38 @@
     <div class="productwrap">
       <div class="content">
         <div class="filterTitle">
-          <p>搜索内容： <span class="colorGreen">{{ $store.state.httpContent }}</span></p><p>用时： <span class="colorGreen">{{ $store.state.httpTime | dataFormat }}</span>  秒</p>
+          <p>
+            搜索内容：
+            <span class="colorGreen">{{ $store.state.httpContent }}</span>
+          </p>
+          <p>
+            用时：
+            <span class="colorGreen">{{
+              $store.state.httpTime | dataFormat
+            }}</span>
+            秒
+          </p>
         </div>
         <template
           v-if="!productList || (productList && productList.length < 1)"
         >
-        <div class="preview" v-if="$store.state.beforeSearchImgPreview">
-          <div class="miniImg">
+          <div class="preview" v-if="$store.state.beforeSearchImgPreview">
+            <div class="miniImg">
+              <el-image
+                @click.native.stop.prevent="
+                  openCubeImg($store.state.beforeSearchImgPreview.img)
+                "
+                :src="$store.state.beforeSearchImgPreview.img"
+                fit="contain"
+              ></el-image>
+            </div>
             <el-image
-            @click.native.stop.prevent="openCubeImg($store.state.beforeSearchImgPreview.img)"
-            :src="$store.state.beforeSearchImgPreview.img"
-            fit="contain"></el-image>
-          </div>
-            <el-image
-            :src="$store.state.beforeSearchImgPreview.baseImg"
-            @click.native.stop.prevent="openCubeImg($store.state.beforeSearchImgPreview.baseImg)"
-            fit="contain"></el-image>
+              :src="$store.state.beforeSearchImgPreview.baseImg"
+              @click.native.stop.prevent="
+                openCubeImg($store.state.beforeSearchImgPreview.baseImg)
+              "
+              fit="contain"
+            ></el-image>
             <div class="title"><span>搜索产品</span></div>
           </div>
           <div class="zanwuchanpin"></div>
@@ -26,15 +42,21 @@
         <template v-else>
           <div class="preview" v-if="$store.state.beforeSearchImgPreview">
             <div class="miniImg">
+              <el-image
+                @click.native="
+                  openCubeImg($store.state.beforeSearchImgPreview.img)
+                "
+                :src="$store.state.beforeSearchImgPreview.img"
+                fit="contain"
+              ></el-image>
+            </div>
             <el-image
-            @click.native="openCubeImg($store.state.beforeSearchImgPreview.img)"
-            :src="$store.state.beforeSearchImgPreview.img"
-            fit="contain"></el-image>
-          </div>
-            <el-image
-            @click.native="openCubeImg($store.state.beforeSearchImgPreview.baseImg)"
-            :src="$store.state.beforeSearchImgPreview.baseImg"
-            fit="contain"></el-image>
+              @click.native="
+                openCubeImg($store.state.beforeSearchImgPreview.baseImg)
+              "
+              :src="$store.state.beforeSearchImgPreview.baseImg"
+              fit="contain"
+            ></el-image>
             <div class="title"><span>搜索产品</span></div>
           </div>
           <ul class="productList">
@@ -44,7 +66,11 @@
               :key="index"
               @click="toProductDetail(item)"
             >
-              <div class="img">
+              <gonggeProductItem
+                :item="item"
+                @handlerShopping="handlerShopping(item)"
+              />
+              <!-- <div class="img">
                 <el-image fit="contain" :src="item.img" lazy>
                   <div
                     slot="placeholder"
@@ -71,21 +97,19 @@
                 </el-image>
                 <i
                   v-show="item.isFavorite"
-                    class="iconClient iconfont icon-wujiaoxing-"
-                    @click.stop="addCollect(item)"
-                  ></i>
-                  <i
+                  class="iconClient iconfont icon-wujiaoxing-"
+                  @click.stop="addCollect(item)"
+                ></i>
+                <i
                   v-show="!item.isFavorite"
-                    class="iconClient iconfont icon-wujiaoxingkong"
-                    @click.stop="addCollect(item)"
-                  ></i>
+                  class="iconClient iconfont icon-wujiaoxingkong"
+                  @click.stop="addCollect(item)"
+                ></i>
               </div>
               <div class="title">产品名称：{{ item.name }}</div>
               <div class="details">
                 <ul>
-                  <li>
-                    出厂货号：{{ item.fa_no === 0 ? "???" : item.fa_no }}
-                  </li>
+                  <li>出厂货号：{{ item.fa_no === 0 ? "???" : item.fa_no }}</li>
                   <li>包装：{{ item.fa_no === 0 ? "???" : item.ch_pa }}</li>
                   <li>
                     产品规格：{{
@@ -148,35 +172,73 @@
                         : item.gr_we + "/" + item.ne_we + "(kg)"
                     }}
                   </li>
-                   <!-- 厂商角色 -->
-                    <el-tag type="success" v-if="$store.state.userInfo.commparnyList && $store.state.userInfo.commparnyList[0] && $store.state.userInfo.commparnyList[0].companyType === 'Supplier'"
-                      >来源：{{ item.supplierNumber == ($store.state.userInfo.commparnyList && $store.state.userInfo.commparnyList[0] && $store.state.userInfo.commparnyList[0].companyNumber) ? item.supplierName : item.exhibitionName }}
-                    </el-tag>
-                    <!-- 展厅角色 | 管理员角色 -->
-                    <el-tag type="success" v-else-if="(($store.state.userInfo.commparnyList && $store.state.userInfo.commparnyList[0] && $store.state.userInfo.commparnyList[0].companyType) === 'Exhibition') || (($store.state.userInfo.commparnyList && $store.state.userInfo.commparnyList[0] && $store.state.userInfo.commparnyList[0].companyType) === 'Admin')"
-                      >来源：{{ item.supplierName }}
-                    </el-tag>
-                    <!-- 游客角色 | 公司角色-->
-                    <el-tag type="success" v-else>来源：{{ item.isIntegral ? item.supplierName : item.exhibitionName }}</el-tag>
+                  厂商角色
+                  <el-tag
+                    type="success"
+                    v-if="
+                      $store.state.userInfo.commparnyList &&
+                        $store.state.userInfo.commparnyList[0] &&
+                        $store.state.userInfo.commparnyList[0].companyType ===
+                          'Supplier'
+                    "
+                    >来源：{{
+                      item.supplierNumber ==
+                      ($store.state.userInfo.commparnyList &&
+                        $store.state.userInfo.commparnyList[0] &&
+                        $store.state.userInfo.commparnyList[0].companyNumber)
+                        ? item.supplierName
+                        : item.exhibitionName
+                    }}
+                  </el-tag>
+                  展厅角色 | 管理员角色
+                  <el-tag
+                    type="success"
+                    v-else-if="
+                      ($store.state.userInfo.commparnyList &&
+                        $store.state.userInfo.commparnyList[0] &&
+                        $store.state.userInfo.commparnyList[0].companyType) ===
+                        'Exhibition' ||
+                        ($store.state.userInfo.commparnyList &&
+                          $store.state.userInfo.commparnyList[0] &&
+                          $store.state.userInfo.commparnyList[0]
+                            .companyType) === 'Admin'
+                    "
+                    >来源：{{ item.supplierName }}
+                  </el-tag>
+                  游客角色 | 公司角色
+                  <el-tag type="success" v-else
+                    >来源：{{
+                      item.isIntegral ? item.supplierName : item.exhibitionName
+                    }}</el-tag
+                  >
                 </ul>
-              </div>
+              </div> -->
             </li>
             <li class="pink"></li>
             <li class="pink"></li>
             <li class="pink"></li>
             <div class="itemBox" v-show="isShowHistoryName">
-                <el-tooltip v-for="(item, i) in historyNames" :key="i" effect="dark" :content="item" placement="top">
-                  <li class="item" @click="clickHistory(item)">
+              <el-tooltip
+                v-for="(item, i) in historyNames"
+                :key="i"
+                effect="dark"
+                :content="item"
+                placement="top"
+              >
+                <li class="item" @click="clickHistory(item)">
                   {{ item }}
-                  </li>
-                </el-tooltip>
+                </li>
+              </el-tooltip>
             </div>
             <div class="historyBox" slot="reference" @click="showHistoryNameE">
               <div class="historyItem"><i class="el-icon-time"></i></div>
               <div class="historyItem">查询记录</div>
             </div>
           </ul>
-          <center style="margin:20px;"  v-show="!$store.state.beforeSearchImgPreview">
+          <center
+            style="margin:20px;"
+            v-show="!$store.state.beforeSearchImgPreview"
+          >
             <el-pagination
               background
               layout="total, sizes, prev, pager, next, jumper"
@@ -195,9 +257,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from "vuex";
+import gonggeProductItem from "@/components/gonggeProductItem/gonggeProductItem.vue";
 export default {
-  data () {
+  components: {
+    gonggeProductItem
+  },
+  data() {
     return {
       scrollable: false,
       isShowHistoryName: false,
@@ -205,107 +271,122 @@ export default {
       pageSize: 10,
       totalCount: 0,
       productList: null
-    }
+    };
   },
   methods: {
-    clickHistory (value) {
-      this.currentPage = 1
-      this.beforeSearch.name = value
-      this.getProductList()
+    clickHistory(value) {
+      this.currentPage = 1;
+      this.beforeSearch.name = value;
+      this.getProductList();
     },
     // 显示
-    showHistoryNameE () {
-      this.isShowHistoryName = !this.isShowHistoryName
-      if (this.historyNames.length === 0) this.isShowHistoryName = false
+    showHistoryNameE() {
+      this.isShowHistoryName = !this.isShowHistoryName;
+      if (this.historyNames.length === 0) this.isShowHistoryName = false;
     },
     // 重新切图
-    openCubeImg (img) {
-      this.$emit('handlerCubeImgEvent', img)
+    openCubeImg(img) {
+      this.$emit("handlerCubeImgEvent", img);
     },
     // 产品收藏
-    async addCollect (item) {
-      const res = await this.$http.post('/api/CreateProductCollection', {
+    async addCollect(item) {
+      const res = await this.$http.post("/api/CreateProductCollection", {
         productNumber: item.productNumber
-      })
+      });
       if (res.data.result.code === 200) {
-        this.$message.closeAll()
+        this.$message.closeAll();
         if (item.isFavorite) {
-          this.$message.success('取消收藏成功')
+          this.$message.success("取消收藏成功");
         } else {
-          this.$message.success('收藏成功')
+          this.$message.success("收藏成功");
         }
-        item.isFavorite = !item.isFavorite
+        item.isFavorite = !item.isFavorite;
       }
     },
     // 查看詳情
-    toProductDetail (item) {
-      this.$emit('showProductDetail', item)
+    toProductDetail(item) {
+      this.$emit("showProductDetail", item);
     },
     // 文字搜索产品
-    async getProductList () {
+    async getProductList() {
       if (this.beforeSearch.name) {
-        this.$store.commit('addHistoryNames', this.beforeSearch.name)
+        this.$store.commit("addHistoryNames", this.beforeSearch.name);
       }
       const fd = {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         ...this.beforeSearch
-      }
+      };
       for (const key in fd) {
-        if (fd[key] === null || fd[key] === undefined || fd[key] === '') delete fd[key]
+        if (fd[key] === null || fd[key] === undefined || fd[key] === "")
+          delete fd[key];
       }
       try {
-        const res = await this.$http.post('/api/SearchBearProductPage', fd)
-        if (res.data.result.code === 200 && res.data.result.item) {
-          this.productList = res.data.result.item.items
-          this.totalCount = res.data.result.item.totalCount
+        const res = await this.$http.post("/api/SearchBearProductPage", fd);
+        const { code, item, msg } = res.data.result;
+        if (code === 200) {
+          if (this.shoppingList) {
+            for (let i = 0; i < item.items.length; i++) {
+              for (let j = 0; j < this.shoppingList.length; j++) {
+                if (
+                  item.items[i].productNumber ===
+                  this.shoppingList[j].productNumber
+                )
+                  item.items[i].isShopping = true;
+              }
+            }
+          }
+          this.productList = item.items;
+          this.totalCount = item.totalCount;
         } else {
-          this.totalCount = 0
-          this.productList = []
-          this.$message.error(res.data.result.msg + '，请登录后查看')
+          this.totalCount = 0;
+          this.$message.error(msg);
         }
-        $('.rootApp').animate({ scrollTop: 0 }) // 回到顶部
+        $(".rootApp").animate({ scrollTop: 0 }); // 回到顶部
       } catch (error) {
-        this.totalCount = 0
+        this.totalCount = 0;
       }
     },
     // 分页
-    changePage (currentPage) {
-      this.currentPage = currentPage
-      this.getProductList()
+    changePage(currentPage) {
+      this.currentPage = currentPage;
+      this.getProductList();
     },
     // 切換頁容量
-    handleSizeChange (pageSize) {
-      this.pageSize = pageSize
-      if (this.currentPage * pageSize > this.totalCount) return false
-      this.getProductList()
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+      if (this.currentPage * pageSize > this.totalCount) return false;
+      this.getProductList();
     }
   },
-  created () {
-    if (this.$store.state.beforeSearchImg) this.productList = this.$store.state.beforeSearchImg
-    else this.getProductList()
+  created() {
+    if (this.$store.state.beforeSearchImg)
+      this.productList = this.$store.state.beforeSearchImg;
+    else this.getProductList();
   },
-  mounted () {
-  },
+  mounted() {},
   computed: {
-    ...mapState(['historyNames']),
-    ...mapState(['beforeSearchImg']),
-    ...mapState(['beforeSearch'])
+    ...mapGetters({
+      shoppingList: "myShoppingList"
+    }),
+    ...mapState(["historyNames"]),
+    ...mapState(["beforeSearchImg"]),
+    ...mapState(["beforeSearch"])
   },
   filters: {
-    dataFormat (value) {
-      return value / 1000
+    dataFormat(value) {
+      return value / 1000;
     }
   },
   watch: {
-    beforeSearchImg (val) {
-      this.productList = val
+    beforeSearchImg(val) {
+      this.productList = val;
     }
   },
-  beforeDestroy () {
-    this.$store.commit('handlerBeforeSearchKeyWord', null)
+  beforeDestroy() {
+    this.$store.commit("handlerBeforeSearchKeyWord", null);
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -393,31 +474,31 @@ export default {
       }
     }
     .filterTitle {
-        display: flex;
-        justify-content: flex-end;
-        p{
-          margin: 0 10px;
-          .colorGreen{
-            color: #3872f8;
-          }
+      display: flex;
+      justify-content: flex-end;
+      p {
+        margin: 0 10px;
+        .colorGreen {
+          color: #3872f8;
         }
       }
-      .preview{
-        width: 400px;
-        height: 200px;
-        margin: 0 auto;
-        box-sizing: border-box;
-        position: relative;
-        .miniImg{
-          position: absolute;
-          right: 0;
-          top: 0;
-          width: 100px;
-          height: 100px;
-          box-shadow: 0px 3px 9px 0px rgba(0, 59, 199, 0.2);
-          background-color: #fff;
-          z-index: 1;
-          .el-image{
+    }
+    .preview {
+      width: 400px;
+      height: 200px;
+      margin: 0 auto;
+      box-sizing: border-box;
+      position: relative;
+      .miniImg {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 100px;
+        height: 100px;
+        box-shadow: 0px 3px 9px 0px rgba(0, 59, 199, 0.2);
+        background-color: #fff;
+        z-index: 1;
+        .el-image {
           width: 100%;
           height: 100%;
           cursor: pointer;
@@ -431,61 +512,61 @@ export default {
             }
           }
         }
+      }
+      .title {
+        text-align: center;
+        color: #aaa;
+        position: relative;
+        &::before {
+          position: absolute;
+          content: "";
+          left: 50%;
+          width: 200px;
+          height: 3px;
+          top: 50%;
+          background-color: #ddd;
+          transform: translate(-50%, -50%);
         }
-        .title{
-          text-align: center;
-          color: #aaa;
-          position: relative;
-          &::before{
-            position: absolute;
-            content: '';
-            left: 50%;
-            width: 200px;
-            height: 3px;
-            top: 50%;
-            background-color: #ddd;
-            transform: translate(-50%,-50%);
-            }
-          span{
+        span {
           position: relative;
           background-color: #fff;
           padding: 0 10px;
-          }
         }
-        .el-image{
-          width: 100%;
-          height: 184px;
-          cursor: pointer;
-          @{deep} img {
-            transition: all 1s;
-            &:hover {
-              -webkit-transform: scale(1.1);
-              -moz-transform: scale(1.1);
-              -ms-transform: scale(1.1);
-              transform: scale(1.1);
-            }
+      }
+      .el-image {
+        width: 100%;
+        height: 184px;
+        cursor: pointer;
+        @{deep} img {
+          transition: all 1s;
+          &:hover {
+            -webkit-transform: scale(1.1);
+            -moz-transform: scale(1.1);
+            -ms-transform: scale(1.1);
+            transform: scale(1.1);
           }
         }
       }
-      .pink{
-        width: 230px;
-      }
+    }
+    .pink {
+      width: 230px;
+    }
     .productList {
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
       font-size: 10px;
       position: relative;
-      .itemBox{
+      .itemBox {
         position: absolute;
         bottom: 80px;
         width: 80px;
         right: -100px;
         box-shadow: 0px 3px 9px 0px rgba(0, 59, 199, 0.2);
-        padding-bottom:  5px;
+        padding-bottom: 5px;
         text-align: center;
-        &::after{
-          content: '';
+        &::after {
+          content: "";
           display: block;
           position: absolute;
           bottom: -5px;
@@ -496,51 +577,51 @@ export default {
           border-right: 6px solid transparent;
           border-top: 6px solid #fff;
         }
-        .item{
+        .item {
           padding: 5px;
           cursor: pointer;
           width: 100%;
           box-sizing: border-box;
           border-top: 1px solid #ccc;
-          white-space:nowrap;
+          white-space: nowrap;
           overflow: hidden;
-          white-space: nowrap;/*不换行*/
-          text-overflow:ellipsis;/*超出部分文字以...显示*/
-          &:first-of-type{
+          white-space: nowrap; /*不换行*/
+          text-overflow: ellipsis; /*超出部分文字以...显示*/
+          &:first-of-type {
             border-top: 1px solid transparent;
           }
-          &:hover{
+          &:hover {
             background-color: #eaeefb;
           }
         }
       }
-    .historyBox {
-      position: absolute;
-      bottom: 0px;
-      right: -100px;
-      width: 80px;
-      height: 70px;
-      border-radius: 3px;
-      box-shadow: 0px 3px 9px 0px rgba(0, 59, 199, 0.2);
-      display: flex;
-      flex-wrap: wrap;
-      .historyItem{
-        width: 100%;
-        box-sizing: border-box;
-        padding: 2px 0;
+      .historyBox {
+        position: absolute;
+        bottom: 0px;
+        right: -100px;
+        width: 80px;
+        height: 70px;
+        border-radius: 3px;
+        box-shadow: 0px 3px 9px 0px rgba(0, 59, 199, 0.2);
         display: flex;
-        justify-content: center;
-        &:first-of-type {
-          align-items: flex-end;
-          font-size: 18px;
+        flex-wrap: wrap;
+        .historyItem {
+          width: 100%;
+          box-sizing: border-box;
+          padding: 2px 0;
+          display: flex;
+          justify-content: center;
+          &:first-of-type {
+            align-items: flex-end;
+            font-size: 18px;
+          }
+        }
+        cursor: pointer;
+        &:hover {
+          color: #fff;
+          background-color: #3872f8;
         }
       }
-      cursor: pointer;
-      &:hover{
-        color: #fff;
-        background-color: #3872f8;
-      }
-    }
       .productItems {
         width: 230px;
         margin-top: 20px;
@@ -551,13 +632,13 @@ export default {
           width: 100%;
           height: 150px;
           position: relative;
-           .iconClient {
-              position: absolute;
-              right: 5px;
-              bottom: 5px;
-              color: #fb6055;
-              cursor: pointer;
-            }
+          .iconClient {
+            position: absolute;
+            right: 5px;
+            bottom: 5px;
+            color: #fb6055;
+            cursor: pointer;
+          }
           @{deep} .el-image {
             width: 100%;
             height: 150px;

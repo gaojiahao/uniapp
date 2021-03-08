@@ -1,5 +1,5 @@
 <template>
-<!-- 添加好友 -->
+  <!-- 添加好友 -->
   <div class="wrapBox">
     <div class="topLayout">添加好友</div>
     <div class="searchBox">
@@ -13,18 +13,16 @@
           placeholder="请输入完整号码搜索用户"
         >
         </el-input>
-        <el-button type="primary" @click="getUserByPhoneOrNamePage" round>搜索</el-button>
+        <el-button type="primary" @click="getUserByPhoneOrNamePage" round
+          >搜索</el-button
+        >
       </div>
     </div>
     <div class="contentList">
       <!-- 好友item -->
       <div class="itemBox" v-for="(item, i) in friendList" :key="i">
         <div class="left">
-          <el-image
-            fit="contain"
-            :src="item.userImage"
-            lazy
-          >
+          <el-image fit="contain" :src="item.userImage" lazy>
             <div
               slot="placeholder"
               class="image-slot"
@@ -41,9 +39,9 @@
             </div>
           </el-image>
           <div class="middle">
-          <div class="name">{{item.linkman}}</div>
-          <div class="company">{{ item.companyName }}</div>
-        </div>
+            <div class="name">{{ item.linkman }}</div>
+            <div class="company">{{ item.companyName }}</div>
+          </div>
         </div>
         <div class="right">
           <el-button
@@ -62,53 +60,53 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       search: null,
       pageSize: 20,
       currentPage: 1,
       totalCount: 0,
       friendList: []
-    }
+    };
   },
   methods: {
-    async getUserByPhoneOrNamePage () {
-      const res = await this.$http.post('/api/GetUserByPhoneOrNamePage', {
+    async getUserByPhoneOrNamePage() {
+      const res = await this.$http.post("/api/GetUserByPhoneOrNamePage", {
         maxResultCount: this.pageSize,
         skipCount: this.currentPage,
         keyWord: this.search
-      })
+      });
       if (res.data.result.code === 200) {
-        this.friendList = res.data.result.item.items
-        this.totalCount = res.data.result.item.totalCount
+        this.friendList = res.data.result.item.items;
+        this.totalCount = res.data.result.item.totalCount;
       }
     },
-    openAddFriend (item) {
-      this.$emit('openTwoView', {
-        componentName: 'friendVerificationComponent',
+    openAddFriend(item) {
+      this.$emit("openTwoView", {
+        componentName: "friendVerificationComponent",
         ...item,
-        source: '搜索'
-      })
+        source: "搜索"
+      });
     }
   },
-  created () {},
-  mounted () {
-    this.getUserByPhoneOrNamePage()
+  created() {},
+  mounted() {
+    this.getUserByPhoneOrNamePage();
   }
-}
+};
 </script>
-<style scoped lang='less'>
+<style scoped lang="less">
 @deep: ~">>>";
 .wrapBox {
   width: 100%;
   height: 827px;
   box-sizing: border-box;
-  .topLayout{
-      height: 50px;
-      text-align: center;
-      line-height: 50px;
-      border-bottom: 1px solid #f5f5f5;
-    }
+  .topLayout {
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    border-bottom: 1px solid #f5f5f5;
+  }
   .searchBox {
     background-color: #fff;
     box-sizing: border-box;
@@ -153,36 +151,36 @@ export default {
         flex: 1;
         display: flex;
         align-items: center;
-          .el-image {
+        .el-image {
+          width: 40px;
+          height: 40px;
+          img {
             width: 40px;
             height: 40px;
-            img {
-              width: 40px;
-              height: 40px;
-            }
           }
-        .middle{
+        }
+        .middle {
           height: 40px;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
           align-items: flex-start;
           box-sizing: border-box;
-        .name {
-          width: 200px;
-          color: #1b1b1b;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-        .company {
-          width: 200px;
-          font-size: 12px;
-          color: #165af8;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
+          .name {
+            width: 200px;
+            color: #1b1b1b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          .company {
+            width: 200px;
+            font-size: 12px;
+            color: #165af8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
         }
       }
       .right {

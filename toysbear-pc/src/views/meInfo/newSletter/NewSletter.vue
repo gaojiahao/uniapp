@@ -12,7 +12,7 @@
               class="item"
               @click="
                 openOneView({
-                  componentName: 'addFriendComponent',
+                  componentName: 'addFriendComponent'
                 })
               "
             >
@@ -50,7 +50,7 @@
             class="parent"
             @click="
               openOneView({
-                componentName: 'newFriendComponent',
+                componentName: 'newFriendComponent'
               })
             "
           >
@@ -93,11 +93,17 @@
       >
         <div
           class="parent"
-          @click="openOneView({ componentName: 'hallContactComponent', companyType:'Exhibition', id: userInfo.commparnyList[0].commparnyId })"
+          @click="
+            openOneView({
+              componentName: 'hallContactComponent',
+              companyType: 'Exhibition',
+              id: userInfo.commparnyList[0].commparnyId
+            })
+          "
           v-show="
             this.userInfo.commparnyList &&
-            this.userInfo.commparnyList.length &&
-            this.userInfo.commparnyList[0].companyType !== 'Exhibition'
+              this.userInfo.commparnyList.length &&
+              this.userInfo.commparnyList[0].companyType !== 'Exhibition'
           "
         >
           <el-avatar
@@ -108,11 +114,17 @@
         </div>
         <div
           class="parent"
-          @click="openOneView({ componentName: 'hallContactComponent', companyType:'Supplier', id: userInfo.commparnyList[0].commparnyId })"
+          @click="
+            openOneView({
+              componentName: 'hallContactComponent',
+              companyType: 'Supplier',
+              id: userInfo.commparnyList[0].commparnyId
+            })
+          "
           v-show="
             this.userInfo.commparnyList &&
-            this.userInfo.commparnyList.length &&
-            this.userInfo.commparnyList[0].companyType !== 'Supplier'
+              this.userInfo.commparnyList.length &&
+              this.userInfo.commparnyList[0].companyType !== 'Supplier'
           "
         >
           <el-avatar
@@ -123,11 +135,17 @@
         </div>
         <div
           class="parent"
-          @click="openOneView({ componentName: 'hallContactComponent', companyType:'Sales', id: userInfo.commparnyList[0].commparnyId })"
+          @click="
+            openOneView({
+              componentName: 'hallContactComponent',
+              companyType: 'Sales',
+              id: userInfo.commparnyList[0].commparnyId
+            })
+          "
           v-show="
             this.userInfo.commparnyList &&
-            this.userInfo.commparnyList.length &&
-            this.userInfo.commparnyList[0].companyType !== 'Sales'
+              this.userInfo.commparnyList.length &&
+              this.userInfo.commparnyList[0].companyType !== 'Sales'
           "
         >
           <el-avatar
@@ -153,7 +171,7 @@
                   :class="{
                     'el-icon-arrow-down': true,
                     Colleagues: true,
-                    rotateColleagues: showCollapse,
+                    rotateColleagues: showCollapse
                   }"
                 ></i>
               </p>
@@ -204,15 +222,15 @@
       >
         <div class="left">
           <el-image
-          :src="item.userImage"
-          class="myAvatar"
-          :key="item.userImage"
-          fit="cover"
-        >
-          <div
-            slot="error"
-            class="image-slot"
-            style="
+            :src="item.userImage"
+            class="myAvatar"
+            :key="item.userImage"
+            fit="cover"
+          >
+            <div
+              slot="error"
+              class="image-slot"
+              style="
               width: 100%;
               height: 100%;
               display: flex;
@@ -220,13 +238,13 @@
               justify-content: center;
               white-space: nowrap;
             "
-          >
-            {{ item.remarkName?item.remarkName:item.userName }}
-          </div>
-          <div
-            slot="placeholder"
-            class="image-slot"
-            style="
+            >
+              {{ item.remarkName ? item.remarkName : item.userName }}
+            </div>
+            <div
+              slot="placeholder"
+              class="image-slot"
+              style="
               width: 100%;
               height: 100%;
               display: flex;
@@ -234,14 +252,14 @@
               justify-content: center;
               white-space: nowrap;
             "
-          >
-            {{ item.remarkName?item.remarkName:item.userName }}
-          </div>
-        </el-image>
-        <em>{{ item.remarkName?item.remarkName:item.userName }}</em>
+            >
+              {{ item.remarkName ? item.remarkName : item.userName }}
+            </div>
+          </el-image>
+          <em>{{ item.remarkName ? item.remarkName : item.userName }}</em>
         </div>
         <div class="right">
-          {{item.companyName}}
+          {{ item.companyName }}
         </div>
       </div>
     </div>
@@ -250,46 +268,50 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       regularTotalCount: 0,
       showAddFriendDialog: false,
       showCollapse: false,
       currentPage: 1,
       pageSize: 10,
-      search: '',
+      search: "",
       Organization: {},
       orgList: [],
       regularContact: []
-    }
+    };
   },
   computed: {
-    userInfo () {
-      return this.$store.state.userInfo
+    userInfo() {
+      return this.$store.state.userInfo;
     }
   },
   methods: {
     // 打开对应联系公司列表
-    showCompanyList (val) {
-      this.$emit('showCompanyList', {
+    showCompanyList(val) {
+      this.$emit("showCompanyList", {
         listType: val,
-        type: 'showCompanyList',
+        type: "showCompanyList",
         active: 1,
         id: this.userInfo.commparnyList[0].commparnyId
-      })
+      });
     },
     // 打开同事详情
-    openColleague (item) {
-      const fd = { userId: item.id, companyId: this.Organization.id, componentName: 'personalDataComponent' }
-      this.$emit('openOneView', fd)
+    openColleague(item) {
+      const fd = {
+        userId: item.id,
+        companyId: this.Organization.id,
+        componentName: "personalDataComponent"
+      };
+      this.$emit("openOneView", fd);
     },
     // 点击添加好友|发起群聊事件
-    openOneView (item) {
-      this.$emit('openOneView', item)
+    openOneView(item) {
+      this.$emit("openOneView", item);
     },
     // 打开同事通讯录折叠
-    openCollapse () {
-      this.showCollapse = !this.showCollapse
+    openCollapse() {
+      this.showCollapse = !this.showCollapse;
     },
     // showorganizationItem (val) {
     //   this.show3 = !this.show3
@@ -303,13 +325,13 @@ export default {
     //     active: 1
     //   })
     // },
-    handleNodeClick (data) {},
+    handleNodeClick() {},
     // 获取组织架构
-    async getOrgList () {
-      const res = await this.$http.post('/api/OrgList', {})
+    async getOrgList() {
+      const res = await this.$http.post("/api/OrgList", {});
       if (res.data.result.code === 200) {
-        this.Organization = res.data.result.item.orgCompany
-        this.orgList = res.data.result.item.personnes
+        this.Organization = res.data.result.item.orgCompany;
+        this.orgList = res.data.result.item.personnes;
       }
     },
     // 获取对应联系公司
@@ -320,40 +342,44 @@ export default {
     //   });
     // },
     // 获取我的好友
-    async getFriendAddressBooksPage () {
-      const res = await this.$http.post('/api/GetFriendAddressBooksPage', {
+    async getFriendAddressBooksPage() {
+      const res = await this.$http.post("/api/GetFriendAddressBooksPage", {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize
-      })
+      });
       if (res.data.result.code === 200) {
-        this.regularContact = res.data.result.item.items
-        this.regularTotalCount = res.data.result.item.totalCount
+        this.regularContact = res.data.result.item.items;
+        this.regularTotalCount = res.data.result.item.totalCount;
       }
     },
     // 点击我的好友
-    sendInfo (item) {
-      const fd = { userId: item.friendPersonnelId, companyId: item.friendCompanyId, componentName: 'personalDataComponent' }
-      this.$emit('openOneView', fd)
+    sendInfo(item) {
+      const fd = {
+        userId: item.friendPersonnelId,
+        companyId: item.friendCompanyId,
+        componentName: "personalDataComponent"
+      };
+      this.$emit("openOneView", fd);
     }
   },
-  mounted () {
-    this.getOrgList()
-    this.getFriendAddressBooksPage()
-    this.$root.eventHub.$on('UpdateOrgPersonnel', () => {
-      this.currentPage = 1
-      this.getOrgList()
-      this.getFriendAddressBooksPage()
-    })
-    this.$root.eventHub.$on('resetMyFriends', () => {
-      this.currentPage = 1
-      this.getFriendAddressBooksPage()
-    })
+  mounted() {
+    this.getOrgList();
+    this.getFriendAddressBooksPage();
+    this.$root.eventHub.$on("UpdateOrgPersonnel", () => {
+      this.currentPage = 1;
+      this.getOrgList();
+      this.getFriendAddressBooksPage();
+    });
+    this.$root.eventHub.$on("resetMyFriends", () => {
+      this.currentPage = 1;
+      this.getFriendAddressBooksPage();
+    });
   },
-  beforeDestroy () {
-    this.$root.eventHub.$off('UpdateOrgPersonnel')
-    this.$root.eventHub.$off('resetMyFriends')
+  beforeDestroy() {
+    this.$root.eventHub.$off("UpdateOrgPersonnel");
+    this.$root.eventHub.$off("resetMyFriends");
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -627,10 +653,10 @@ export default {
     justify-content: space-between;
     box-sizing: border-box;
     cursor: pointer;
-    .left{
+    .left {
       display: flex;
       align-items: center;
-        .myAvatar {
+      .myAvatar {
         color: white;
         background-color: #165af7;
         transition: all 1s;
@@ -653,7 +679,7 @@ export default {
         margin: 0 10px;
       }
     }
-    .right{
+    .right {
       font-size: 12px;
       color: #666666;
     }

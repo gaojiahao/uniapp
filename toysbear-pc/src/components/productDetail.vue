@@ -5,40 +5,44 @@
         @back="changeIsDetail"
         content="产品详情"
       ></el-page-header>
-      <span class="backtrack" @click="changeIsDetail"><i class="backtrackIcon iconfont icon-fanhui"></i> 返回</span>
+      <span class="backtrack" @click="changeIsDetail"
+        ><i class="backtrackIcon iconfont icon-fanhui"></i> 返回</span
+      >
     </div>
     <div class="Graphic" v-if="productDetail">
       <div class="left">
         <div class="swiperList">
           <el-image
             fit="contain"
-            :src="productDetail && productDetail.bearProduct && productDetail.bearProduct.imageUrl"
+            :src="
+              productDetail &&
+                productDetail.bearProduct &&
+                productDetail.bearProduct.imageUrl
+            "
             :preview-src-list="
               productDetail.imglist &&
                 productDetail.imglist.map(
                   val => val && val.imgUrl.replace(/_MiddlePic/, '_Photo')
-                )">
+                )
+            "
+          >
             <div slot="placeholder" class="image-slot">
               <img class="errorImg" src="~@/assets/images/imgError.png" alt />
             </div>
             <div slot="error" class="image-slot">
-              <img
-                class="errorImg"
-                src="~@/assets/images/imgError.png"
-                alt
-              />
+              <img class="errorImg" src="~@/assets/images/imgError.png" alt />
             </div>
           </el-image>
           <i
             v-show="productDetail.isFavorite"
-              class="iconClient iconfont icon-wujiaoxing-"
-              @click.stop="addCollect(productDetail)"
-            ></i>
-            <i
+            class="iconClient iconfont icon-wujiaoxing-"
+            @click.stop="addCollect(productDetail)"
+          ></i>
+          <i
             v-show="!productDetail.isFavorite"
-              class="iconClient iconfont icon-wujiaoxingkong"
-              @click.stop="addCollect(productDetail)"
-            ></i>
+            class="iconClient iconfont icon-wujiaoxingkong"
+            @click.stop="addCollect(productDetail)"
+          ></i>
         </div>
       </div>
       <!-- 产品内容 -->
@@ -58,11 +62,23 @@
             <h2>{{ productDetail.bearProduct.name }}</h2>
           </div>
           <ul class="productParams">
-            <li v-if="$store.state.userInfo && $store.state.userInfo.commparnyList && $store.state.userInfo.commparnyList[0].companyType === 'Sales'">
-              参考单价：<span  :class="{ price : true}">{{ (integralTotal > 0 ?  productDetail.cu_de + productDetail.bearProduct.price : '积分查看价格') }}</span>
+            <li
+              v-if="
+                $store.state.userInfo &&
+                  $store.state.userInfo.commparnyList &&
+                  $store.state.userInfo.commparnyList[0].companyType === 'Sales'
+              "
+            >
+              参考单价：<span :class="{ price: true }">{{
+                integralTotal > 0
+                  ? productDetail.cu_de + productDetail.bearProduct.price
+                  : "积分查看价格"
+              }}</span>
             </li>
             <li v-else>
-              参考单价：<span  class="price">{{ productDetail.cu_de + productDetail.bearProduct.price.toFixed(2) }}</span>
+              参考单价：<span class="price">{{
+                productDetail.cu_de + productDetail.bearProduct.price.toFixed(2)
+              }}</span>
             </li>
             <li>
               出厂货号：{{
@@ -103,17 +119,17 @@
               }}
             </li>
             <li>
-                    包装规格：{{
-                      productDetail.bearProduct.fa_no === 0
-                        ? "???"
-                        : productDetail.bearProduct.in_le +
-                          " X " +
-                          productDetail.bearProduct.in_wi +
-                          " X " +
-                          productDetail.bearProduct.in_hi +
-                          "(CM)"
-                    }}
-                  </li>
+              包装规格：{{
+                productDetail.bearProduct.fa_no === 0
+                  ? "???"
+                  : productDetail.bearProduct.in_le +
+                    " X " +
+                    productDetail.bearProduct.in_wi +
+                    " X " +
+                    productDetail.bearProduct.in_hi +
+                    "(CM)"
+              }}
+            </li>
             <li>
               装箱量：{{
                 productDetail.bearProduct.fa_no === 0
@@ -147,17 +163,46 @@
             </li>
             <div class="tagBox">
               <!-- 厂商角色 -->
-              <el-tag type="success" v-if="$store.state.userInfo.commparnyList && $store.state.userInfo.commparnyList[0] && $store.state.userInfo.commparnyList[0].companyType === 'Supplier'"
-                   @click="openSupplierDetail(productDetail)"
-                >来源：{{ productDetail.supplierNumber == $store.state.userInfo.commparnyList[0].companyNumber ? productDetail.supplierName : productDetail.exhibitionName }}
+              <el-tag
+                type="success"
+                v-if="
+                  $store.state.userInfo.commparnyList &&
+                    $store.state.userInfo.commparnyList[0] &&
+                    $store.state.userInfo.commparnyList[0].companyType ===
+                      'Supplier'
+                "
+                @click="openSupplierDetail(productDetail)"
+                >来源：{{
+                  productDetail.supplierNumber ==
+                  $store.state.userInfo.commparnyList[0].companyNumber
+                    ? productDetail.supplierName
+                    : productDetail.exhibitionName
+                }}
               </el-tag>
               <!-- 展厅角色 | 管理员角色 -->
-              <el-tag type="success" v-else-if="$store.state.userInfo.commparnyList && $store.state.userInfo.commparnyList[0] && $store.state.userInfo.commparnyList[0].companyType === 'Exhibition' || $store.state.userInfo.commparnyList[0].companyType === 'Admin'"
-                   @click="openExhibitionDetail(productDetail)"
+              <el-tag
+                type="success"
+                v-else-if="
+                  ($store.state.userInfo.commparnyList &&
+                    $store.state.userInfo.commparnyList[0] &&
+                    $store.state.userInfo.commparnyList[0].companyType ===
+                      'Exhibition') ||
+                    $store.state.userInfo.commparnyList[0].companyType ===
+                      'Admin'
+                "
+                @click="openExhibitionDetail(productDetail)"
                 >来源：{{ productDetail.supplierName }}
               </el-tag>
               <!-- 游客角色 | 公司角色-->
-              <el-tag type="success" v-else @click="openSalesDetail(productDetail)">来源：{{ productDetail.isIntegral ? productDetail.supplierName : productDetail.exhibitionName }}
+              <el-tag
+                type="success"
+                v-else
+                @click="openSalesDetail(productDetail)"
+                >来源：{{
+                  productDetail.isIntegral
+                    ? productDetail.supplierName
+                    : productDetail.exhibitionName
+                }}
               </el-tag>
               <!-- 来源模态框 -->
               <div class="box" v-show="isShowSourceDetail">
@@ -171,7 +216,9 @@
                 <div class="content">
                   <div class="left">
                     <li>
-                      <span class="title" v-if="companyType === 'Exhibition'">厂商名称：</span>
+                      <span class="title" v-if="companyType === 'Exhibition'"
+                        >厂商名称：</span
+                      >
                       <span class="title" v-else>展厅名称：</span>
                       <span class="myText">{{
                         companyData && companyData.companyName
@@ -216,7 +263,9 @@
                       }}</span>
                     </li>
                     <li>
-                      <span class="title" v-if="companyType === 'Exhibition'">厂商地址：</span>
+                      <span class="title" v-if="companyType === 'Exhibition'"
+                        >厂商地址：</span
+                      >
                       <span class="title" v-else>展厅地址：</span>
                       <span class="myText">{{
                         companyData && companyData.address
@@ -238,7 +287,7 @@ export default {
   props: {
     number: String
   },
-  data () {
+  data() {
     return {
       companyType: this.$store.state.userInfo.commparnyList[0].companyType,
       integralTotal: null,
@@ -248,103 +297,112 @@ export default {
       myMargin: 0,
       productDetail: null,
       companyData: null
-    }
+    };
   },
   methods: {
     // 查积分
-    async getIntegralTotal () {
-      const res = await this.$http.post('/api/GetIntegralTotal', {})
+    async getIntegralTotal() {
+      const res = await this.$http.post("/api/GetIntegralTotal", {});
       if (res.data.result.code === 200) {
-        this.integralTotal = res.data.result.item
+        this.integralTotal = res.data.result.item;
       } else {
-        this.$message.error(res.data.result.msg)
+        this.$message.error(res.data.result.msg);
       }
     },
     // 收藏
-    async addCollect (item) {
-      const res = await this.$http.post('/api/CreateProductCollection', {
+    async addCollect(item) {
+      const res = await this.$http.post("/api/CreateProductCollection", {
         productNumber: item.bearProduct.productNumber
-      })
+      });
       if (res.data.result.code === 200) {
-        this.$message.closeAll()
+        this.$message.closeAll();
         if (item.isFavorite) {
-          this.$message.success('取消收藏成功')
+          this.$message.success("取消收藏成功");
         } else {
-          this.$message.success('收藏成功')
+          this.$message.success("收藏成功");
         }
-        item.isFavorite = !item.isFavorite
+        item.isFavorite = !item.isFavorite;
       }
     },
-    async getProductByNumber () {
-      const res = await this.$http.post('/api/BearProductByNumber', {
+    async getProductByNumber() {
+      const res = await this.$http.post("/api/BearProductByNumber", {
         productNumber: this.number
-      })
+      });
       if (res.data.result.code === 200) {
-        this.productDetail = res.data.result.item
+        this.productDetail = res.data.result.item;
         this.imagesList = res.data.result.item.imglist
           ? res.data.result.item.imglist
-          : []
+          : [];
       }
     },
-    changeIsDetail () {
-      this.$emit('changeIsDetail', this.productDetail)
+    changeIsDetail() {
+      this.$emit("changeIsDetail", this.productDetail);
     },
     // 展厅 | 管理员 角色打开来源详情
-    async openExhibitionDetail (item) {
+    async openExhibitionDetail(item) {
       if (!this.isShowSourceDetail) {
-        const res = await this.$http.post('/api/CompanyByID', {
+        const res = await this.$http.post("/api/CompanyByID", {
           companyNumber: item.supplierNumber
-        })
+        });
         if (res.data.result.code === 200) {
-          this.companyData = res.data.result.item
+          this.companyData = res.data.result.item;
         } else {
-          this.isShowSourceDetail = true
+          this.isShowSourceDetail = true;
         }
       }
-      this.isShowSourceDetail = !this.isShowSourceDetail
+      this.isShowSourceDetail = !this.isShowSourceDetail;
     },
     // 公司角色打开来源详情
-    async openSalesDetail (item) {
+    async openSalesDetail(item) {
       if (!this.isShowSourceDetail) {
-        const res = await this.$http.post('/api/CompanyByID', {
-          companyNumber: item.bearProduct.isIntegral ? item.supplierNumber : item.exhibitionNumber
-        })
+        const res = await this.$http.post("/api/CompanyByID", {
+          companyNumber: item.bearProduct.isIntegral
+            ? item.supplierNumber
+            : item.exhibitionNumber
+        });
         if (res.data.result.code === 200) {
-          this.companyData = res.data.result.item
+          this.companyData = res.data.result.item;
         } else {
-          this.isShowSourceDetail = true
+          this.isShowSourceDetail = true;
         }
       }
-      this.isShowSourceDetail = !this.isShowSourceDetail
+      this.isShowSourceDetail = !this.isShowSourceDetail;
     },
     // 工厂角色打开来源详情
-    async openSupplierDetail (item) {
+    async openSupplierDetail(item) {
       if (!this.isShowSourceDetail) {
-        const res = await this.$http.post('/api/CompanyByID', {
-          companyNumber: item.supplierNumber === (this.$store.state.userInfo.commparnyList && this.$store.state.userInfo.commparnyList[0] && this.$store.state.userInfo.commparnyList[0].supplierNumber) ? item.supplierName : item.exhibitionNumber
-        })
+        const res = await this.$http.post("/api/CompanyByID", {
+          companyNumber:
+            item.supplierNumber ===
+            (this.$store.state.userInfo.commparnyList &&
+              this.$store.state.userInfo.commparnyList[0] &&
+              this.$store.state.userInfo.commparnyList[0].supplierNumber)
+              ? item.supplierName
+              : item.exhibitionNumber
+        });
         if (res.data.result.code === 200) {
-          this.companyData = res.data.result.item
+          this.companyData = res.data.result.item;
         } else {
-          this.isShowSourceDetail = true
+          this.isShowSourceDetail = true;
         }
       }
-      this.isShowSourceDetail = !this.isShowSourceDetail
+      this.isShowSourceDetail = !this.isShowSourceDetail;
     }
   },
   filters: {
-    createdOn (val) {
-      return val.split('.')[0].replace(/t/gi, ' ')
+    createdOn(val) {
+      return val.split(".")[0].replace(/t/gi, " ");
     }
   },
-  created () {
-    if (this.$store.state.userInfo.commparnyList[0].companyType === 'Sales') this.getIntegralTotal()
+  created() {
+    if (this.$store.state.userInfo.commparnyList[0].companyType === "Sales")
+      this.getIntegralTotal();
   },
-  mounted () {
+  mounted() {
     // this.getUpdateIntegral()
-    this.getProductByNumber()
+    this.getProductByNumber();
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -361,7 +419,7 @@ export default {
   @{deep} .el-page-header__left:hover {
     color: #409eff;
   }
-  .backtrack{
+  .backtrack {
     font-weight: normal;
     cursor: pointer;
     display: flex;
@@ -369,7 +427,7 @@ export default {
     &:hover {
       color: #409eff;
     }
-    i{
+    i {
       margin-right: 10px;
     }
   }
@@ -385,15 +443,15 @@ export default {
       height: 500px;
       border: 1px solid #ededed;
       cursor: pointer;
-      position:relative;
+      position: relative;
       .iconClient {
-              position: absolute;
-              font-size: 30px;
-              right: 10px;
-              top: 10px;
-              color: #fb6055;
-              cursor: pointer;
-            }
+        position: absolute;
+        font-size: 30px;
+        right: 10px;
+        top: 10px;
+        color: #fb6055;
+        cursor: pointer;
+      }
       @{deep} .el-image {
         width: 100%;
         height: 100%;
@@ -447,7 +505,7 @@ export default {
         position: relative;
         li {
           line-height: 40px;
-          .price{
+          .price {
             color: #ff0000;
             font-size: 22px;
           }

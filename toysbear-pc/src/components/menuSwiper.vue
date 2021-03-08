@@ -48,21 +48,21 @@
 
 <script>
 export default {
-  props: ['dataList'],
-  data () {
+  props: ["dataList"],
+  data() {
     return {
       activeIndex: 0
-    }
+    };
   },
   methods: {
-    changeIndex (i) {
-      this.activeIndex = i
+    changeIndex(i) {
+      this.activeIndex = i;
     },
-    setActiveItem (i) {
-      this.$refs.carousel.setActiveItem(i)
+    setActiveItem(i) {
+      this.$refs.carousel.setActiveItem(i);
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -138,7 +138,7 @@ export default {
     }
   }
 }
-.errorImg{
-   object-fit: contain;
+.errorImg {
+  object-fit: contain;
 }
 </style>

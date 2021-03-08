@@ -1,7 +1,9 @@
 <template>
-    <!-- 发起群聊 -->
+  <!-- 发起群聊 -->
   <div class="wrapBox">
-    <div class="topLayout">群成员 <span v-if="personList.length > 0">({{ personList.length }})</span></div>
+    <div class="topLayout">
+      群成员 <span v-if="personList.length > 0">({{ personList.length }})</span>
+    </div>
     <!-- 发起群聊 -->
     <div class="searchBox">
       <div class="inputBox">
@@ -11,7 +13,8 @@
           v-model="keyWord"
           @keyup.enter.native="search"
           clearable
-          placeholder="请输入关键词">
+          placeholder="请输入关键词"
+        >
         </el-input>
         <el-button type="primary" @click="search" round>搜索</el-button>
       </div>
@@ -19,12 +22,14 @@
     <!-- 下拉列表 -->
     <div class="contentList">
       <!-- 群item -->
-      <div class="itemBox" v-for="(item, i) in personList" :key="i" @click="openPerson(item)">
-          <div class="left">
-            <el-image
-            fit="contain"
-            :src="item.userImage"
-            lazy>
+      <div
+        class="itemBox"
+        v-for="(item, i) in personList"
+        :key="i"
+        @click="openPerson(item)"
+      >
+        <div class="left">
+          <el-image fit="contain" :src="item.userImage" lazy>
             <div
               slot="placeholder"
               class="image-slot"
@@ -40,14 +45,14 @@
               <img class="errorImg" src="~@/assets/images/imgError.png" alt />
             </div>
           </el-image>
-          </div>
-          <div class="middle">
-            <div class="name">{{item.linkman}}</div>
-            <div class="company">{{item.companyName}}</div>
-          </div>
-          <div class="right" v-if="item.groupLeader">
-            群主
-          </div>
+        </div>
+        <div class="middle">
+          <div class="name">{{ item.linkman }}</div>
+          <div class="company">{{ item.companyName }}</div>
+        </div>
+        <div class="right" v-if="item.groupLeader">
+          群主
+        </div>
       </div>
     </div>
   </div>
@@ -55,32 +60,30 @@
 
 <script>
 export default {
-  props: ['options'],
-  data () {
+  props: ["options"],
+  data() {
     return {
       personList: this.$_.cloneDeep(this.options.personnels),
-      keyWord: ''
-    }
+      keyWord: ""
+    };
   },
   methods: {
     // 打开个人资料
-    openPerson (item) {
-      console.log(item)
+    openPerson(item) {
+      console.log(item);
     },
     // 本地搜索
-    search () {
-      this.personList = this.options.personnels.filter(val => val.linkman.includes(this.keyWord))
+    search() {
+      this.personList = this.options.personnels.filter(val =>
+        val.linkman.includes(this.keyWord)
+      );
     }
   },
-  created () {
-
-  },
-  mounted () {
-
-  }
-}
+  created() {},
+  mounted() {}
+};
 </script>
-<style scoped lang='less'>
+<style scoped lang="less">
 @deep: ~">>>";
 .wrapBox {
   width: 100%;
@@ -132,7 +135,7 @@ export default {
       cursor: pointer;
       justify-content: space-between;
       box-sizing: border-box;
-      .left{
+      .left {
         .el-image {
           width: 40px;
           height: 40px;
@@ -142,7 +145,7 @@ export default {
           }
         }
       }
-      .middle{
+      .middle {
         flex: 1;
         white-space: nowrap;
         overflow: hidden;
@@ -160,10 +163,10 @@ export default {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-         }
+        }
       }
-      .right{
-        color: #165AF8;
+      .right {
+        color: #165af8;
         font-size: 12px;
       }
     }

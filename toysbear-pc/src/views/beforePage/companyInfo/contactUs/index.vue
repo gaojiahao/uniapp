@@ -40,83 +40,80 @@
       </div>
     </header>
     <footer>
-      <BMapComponent
-        :addr="noticeData"
-        v-if="noticeData"
-      ></BMapComponent>
+      <BMapComponent :addr="noticeData" v-if="noticeData"></BMapComponent>
     </footer>
   </div>
 </template>
 
 <script>
-import BMapComponent from '@/components/map.vue'
+import BMapComponent from "@/components/map.vue";
 export default {
   components: { BMapComponent },
-  data () {
+  data() {
     return {
       noticeData: {
-        address: '深圳市龙岗区坂田街道民乐科技大厦205室',
+        address: "深圳市龙岗区坂田街道民乐科技大厦205室",
         appLoginCount: 0,
-        audit_state: '1',
+        audit_state: "1",
         companyAPI: null,
         companyKeyCode: null,
-        companyLogo: require('@/assets/images/imgError.png'),
-        companyName: '深圳宏煌网络科技有限公司',
-        companyNumber: 'HS0010552',
-        companyType: 'Exhibition',
-        contactsMan: '陈总',
-        country: '测试展厅',
+        companyLogo: require("@/assets/images/imgError.png"),
+        companyName: "深圳宏煌网络科技有限公司",
+        companyNumber: "HS0010552",
+        companyType: "Exhibition",
+        contactsMan: "陈总",
+        country: "测试展厅",
         createdBy: null,
-        createdOn: '2020-09-08T14:06:46.5104435+08:00',
+        createdOn: "2020-09-08T14:06:46.5104435+08:00",
         deleteBy: null,
-        deleteTime: '0001-01-01T00:00:00',
-        e_mail: '864281822@qq.com',
+        deleteTime: "0001-01-01T00:00:00",
+        e_mail: "864281822@qq.com",
         erpLoginCount: 0,
         fax: null,
         groupNumber: null,
         homepage: null,
-        id: '0048f79f-1350-4c4b-8445-dabd5adb6a3a',
+        id: "0048f79f-1350-4c4b-8445-dabd5adb6a3a",
         isDelete: false,
         modifyBy: null,
-        modifyOn: '0001-01-01T00:00:00',
+        modifyOn: "0001-01-01T00:00:00",
         msn: null,
-        phoneNumber: '15817965444',
-        qq: '864281822',
+        phoneNumber: "15817965444",
+        qq: "864281822",
         remark: null,
         skype: null,
         telephoneNumber: null
       },
-      myAttress: ''
-    }
+      myAttress: ""
+    };
   },
   methods: {
     // 回到顶部
-    toTop () {
-      $('#app').animate({ scrollTop: 0 })
+    toTop() {
+      $("#app").animate({ scrollTop: 0 });
     },
-    async getAttrs () {
+    async getAttrs() {
       const res = await $.ajax({
-        type: 'get',
-        url: 'https://api.map.baidu.com/geocoding/v3/',
+        type: "get",
+        url: "https://api.map.baidu.com/geocoding/v3/",
         data: {
           address: this.noticeData.address,
-          output: 'json',
-          ak: 'rUWcCk2v5nZCx864jziBKuy1klV2YtrK'
+          output: "json",
+          ak: "rUWcCk2v5nZCx864jziBKuy1klV2YtrK"
         },
-        dataType: 'jsonp'
-      })
+        dataType: "jsonp"
+      });
       if (res.status === 0) {
-        this.myAttress = res.result.location
-        console.log(this.myAttress)
+        this.myAttress = res.result.location;
+        console.log(this.myAttress);
       }
     }
   },
-  created () {},
-  mounted () {
-    this.getAttrs()
-    this.$emit('editTitle', '联系我们')
+  created() {},
+  mounted() {
+    this.getAttrs();
+    this.$emit("editTitle", "联系我们");
   }
-}
+};
 </script>
 <style scoped lang="less">
 @deep: ~">>>";

@@ -6,15 +6,16 @@
           <el-image
             style="width: 76px; height: 76px"
             :src="require('@/assets/images/logo.png')"
-            fit="contain"></el-image>
-            <div class="titleBox">
-              <div class="chTitle">
-                小竹熊订单同步管理
-              </div>
-              <div class="enTitle">
-                Shenzhen Little Bamboo Bear Technology co.,Ltd.
-              </div>
+            fit="contain"
+          ></el-image>
+          <div class="titleBox">
+            <div class="chTitle">
+              小竹熊订单同步管理
             </div>
+            <div class="enTitle">
+              Shenzhen Little Bamboo Bear Technology co.,Ltd.
+            </div>
+          </div>
         </div>
         <div class="right">
           <div class="shouyeBox">
@@ -28,12 +29,19 @@
             </span>
           </div>
           <div class="signOutBox" v-if="$store.state.isLogin">
-            <el-image class="userImg" :src="$store.state.userInfo.userInfo.userImage">
+            <el-image
+              class="userImg"
+              :src="$store.state.userInfo.userInfo.userImage"
+            >
               <div slot="error" class="image-slot">
-                <img style="width: 40px; height: 40px; borderRadius: 50%;" :src="require('@/assets/images/logo.png')" alt />
+                <img
+                  style="width: 40px; height: 40px; borderRadius: 50%;"
+                  :src="require('@/assets/images/logo.png')"
+                  alt
+                />
               </div>
             </el-image>
-            <span  class="signOut" @click="signOut">退出</span>
+            <span class="signOut" @click="signOut">退出</span>
           </div>
           <div v-else class="loginBtn" @click="toLogins">登录系统</div>
         </div>
@@ -43,24 +51,35 @@
       <div class="bannerContext">
         <div class="contentBox">
           <p class="title">小竹熊订单同步宏升erp</p>
-          <p class="explain">让办公更快捷  更畅通  更高效</p>
+          <p class="explain">让办公更快捷 更畅通 更高效</p>
         </div>
       </div>
     </div>
     <div class="floorBox">
       <div class="flootTitle">
         <span>宏升合作展厅</span>
-        <span class="more">更多合作展厅<i class="el-icon-arrow-right moreIcon"></i></span>
+        <span class="more"
+          >更多合作展厅<i class="el-icon-arrow-right moreIcon"></i
+        ></span>
       </div>
       <div class="exhibitionList">
         <div class="bigExhibitions">
           <div class="bigExhibitionItem" v-for="(item, i) in bigHalls" :key="i">
             <div class="imgBox">
-              <el-image class="hallLogo" fit="contain" :preview-src-list="[item.bgImg]" :src="item.bgImg">
-              <div slot="error" class="image-slot">
-                <img style="width: 273px; height: 121px; object-fit: contain;" src="~@/assets/images/logo.png" alt />
-              </div>
-            </el-image>
+              <el-image
+                class="hallLogo"
+                fit="contain"
+                :preview-src-list="[item.bgImg]"
+                :src="item.bgImg"
+              >
+                <div slot="error" class="image-slot">
+                  <img
+                    style="width: 273px; height: 121px; object-fit: contain;"
+                    src="~@/assets/images/logo.png"
+                    alt
+                  />
+                </div>
+              </el-image>
             </div>
             <div class="hallName">
               {{ item.companyName }}
@@ -68,13 +87,22 @@
           </div>
         </div>
         <div class="minExhibitions">
-           <div class="minExhibitionItem" v-for="(item, i) in minHalls" :key="i">
+          <div class="minExhibitionItem" v-for="(item, i) in minHalls" :key="i">
             <div class="imgBox">
-              <el-image class="hallLogo" fit="contain" :preview-src-list="[item.bgImg]" :src="item.bgImg">
-              <div slot="error" class="image-slot">
-                <img style="width: 127px; height: 70px; object-fit: contain;" src="~@/assets/images/logo.png" alt />
-              </div>
-            </el-image>
+              <el-image
+                class="hallLogo"
+                fit="contain"
+                :preview-src-list="[item.bgImg]"
+                :src="item.bgImg"
+              >
+                <div slot="error" class="image-slot">
+                  <img
+                    style="width: 127px; height: 70px; object-fit: contain;"
+                    src="~@/assets/images/logo.png"
+                    alt
+                  />
+                </div>
+              </el-image>
             </div>
             <div class="hallName">
               {{ item.companyName || item.adTitle }}
@@ -98,31 +126,42 @@
     <div class="floorBox">
       <div class="flootTitle">
         <span>新品推荐</span>
-        <span class="more">更多新品<i class="el-icon-arrow-right moreIcon"></i></span>
+        <span class="more"
+          >更多新品<i class="el-icon-arrow-right moreIcon"></i
+        ></span>
       </div>
       <div class="newArrivals">
         <div class="itemBox" v-for="(item, i) in newProductList" :key="i">
           <div class="imgBox">
-              <el-image class="hallLogo" :src="item.img">
+            <el-image class="hallLogo" :src="item.img">
               <div slot="error" class="image-slot">
-                <img style="width: 180px; height: 136px" src="~@/assets/images/logo.png" alt />
+                <img
+                  style="width: 180px; height: 136px"
+                  src="~@/assets/images/logo.png"
+                  alt
+                />
               </div>
             </el-image>
+          </div>
+          <div class="contentText">
+            <div class="hallName">
+              <p class="name">{{ item.name }}</p>
+              <p class="textItem">
+                出厂货号：<span>{{ item.fa_no }}</span>
+              </p>
+              <p class="textItem">
+                参考单价：<span class="price"
+                  >{{ item.cu_de }} {{ item.price }}</span
+                >
+              </p>
             </div>
-            <div class="contentText">
-              <div class="hallName">
-                <p class="name">{{item.name}}</p>
-                <p class="textItem">出厂货号：<span>{{item.fa_no}}</span></p>
-                <p class="textItem">参考单价：<span class="price">{{ item.cu_de }} {{ item.price }}</span>
-                </p>
-              </div>
-            </div>
+          </div>
         </div>
-         <div class="itemBox"></div>
-         <div class="itemBox"></div>
-         <div class="itemBox"></div>
-         <div class="itemBox"></div>
-         <div class="itemBox"></div>
+        <div class="itemBox"></div>
+        <div class="itemBox"></div>
+        <div class="itemBox"></div>
+        <div class="itemBox"></div>
+        <div class="itemBox"></div>
       </div>
     </div>
     <!-- 广告层 -->
@@ -215,72 +254,72 @@
 </template>
 
 <script>
-import erweimaComponent from './erweimaComponent'
+import erweimaComponent from "./erweimaComponent";
 export default {
   components: {
     erweimaComponent
     // swiper
   },
-  data () {
+  data() {
     return {
       advertList: [],
-      jiaerweima: require('@/assets/images/erweimaicon@2x.png'),
+      jiaerweima: require("@/assets/images/erweimaicon@2x.png"),
       isActive: false,
       isShow: false,
       currentPage: 1,
       pageSize: 10,
-      direction: 'left',
+      direction: "left",
       newProductList: [],
       token: null,
       bigHalls: [],
       minHalls: []
-    }
+    };
   },
   methods: {
     // 去订单页
-    isErpOrder () {
-      if (this.$store.state.isLogin) this.$router.push('/erpOrder')
-      else this.$router.push('/erpLogin')
+    isErpOrder() {
+      if (this.$store.state.isLogin) this.$router.push("/erpOrder");
+      else this.$router.push("/erpLogin");
     },
-    hoverLogo () {
-      this.isActive = true
-      this.jiaerweima = require('@/assets/images/erweima2.png')
+    hoverLogo() {
+      this.isActive = true;
+      this.jiaerweima = require("@/assets/images/erweima2.png");
     },
-    hoverIsLogo () {
-      this.jiaerweima = require('@/assets/images/erweimaicon@2x.png')
-      this.isActive = false
+    hoverIsLogo() {
+      this.jiaerweima = require("@/assets/images/erweimaicon@2x.png");
+      this.isActive = false;
     },
     // 获取新品推荐
-    async getProductsByTypePage () {
-      const res = await this.$http.post('/api/GetProductsByTypePage', {
+    async getProductsByTypePage() {
+      const res = await this.$http.post("/api/GetProductsByTypePage", {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         typeId: 2
-      })
+      });
       if (res.data.result.code === 200) {
-        this.newProductList = res.data.result.item.items
+        this.newProductList = res.data.result.item.items;
       }
     },
     // 获取小广告
-    async getAdvertisementPage () {
-      const res = await this.$http.post('/api/GetAdvertisementPage', {
+    async getAdvertisementPage() {
+      const res = await this.$http.post("/api/GetAdvertisementPage", {
         adPosition: 4,
         maxResultCount: 8,
-        platform: 'PC',
+        platform: "PC",
         skipCount: 1
-      })
+      });
       if (res.data.result.code === 200) {
-        this.advertList = res.data.result.item.items
+        this.advertList = res.data.result.item.items;
       }
     },
     // 获取大小展厅
-    async getOrgCompany () {
-      const res = await this.$http.post('/api/GetExhibitionList', {
-        companyType: 'Exhibition'
-      })
+    async getOrgCompany() {
+      const res = await this.$http.post("/api/GetExhibitionList", {
+        companyType: "Exhibition"
+      });
       if (res.data.result.code === 200) {
-        this.bigHalls = res.data.result.item.bigHallList
-        this.minHalls = res.data.result.item.smallHallList
+        this.bigHalls = res.data.result.item.bigHallList;
+        this.minHalls = res.data.result.item.smallHallList;
       }
     },
     // 去公司
@@ -292,26 +331,26 @@ export default {
     //   window.open(href.href, '_blank')
     // },
     // 退出登录
-    signOut () {
-      this.$router.push('/erpLogin?id=signOut')
+    signOut() {
+      this.$router.push("/erpLogin?id=signOut");
     },
     // 去登录页
-    toLogins () {
-      this.$router.push('/erpLogin')
+    toLogins() {
+      this.$router.push("/erpLogin");
     },
-    boxEnter () {
-      this.isShow = true
+    boxEnter() {
+      this.isShow = true;
     },
-    boxleave () {
-      this.isShow = false
+    boxleave() {
+      this.isShow = false;
     }
   },
-  mounted () {
-    this.getProductsByTypePage()
+  mounted() {
+    this.getProductsByTypePage();
     // this.getAdvertisementPage()
-    this.getOrgCompany()
+    this.getOrgCompany();
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -319,7 +358,7 @@ export default {
 [v-cloak] {
   display: none;
 }
-@import './erpHome.less';
+@import "./erpHome.less";
 //  旧版样式
 // .erpHomeBox {
 //   width: 800px;

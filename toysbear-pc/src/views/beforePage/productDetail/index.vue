@@ -5,7 +5,11 @@
         <div class="swiperList">
           <el-image
             fit="contain"
-            :src="productDetail && productDetail.bearProduct && productDetail.bearProduct.imageUrl"
+            :src="
+              productDetail &&
+                productDetail.bearProduct &&
+                productDetail.bearProduct.imageUrl
+            "
             :preview-src-list="
               productDetail.imglist &&
                 productDetail.imglist.map(
@@ -14,30 +18,22 @@
             "
           >
             <div slot="placeholder" class="image-slot">
-              <img
-                class="errorImg"
-                src="~@/assets/images/imgError.png"
-                alt
-              />
+              <img class="errorImg" src="~@/assets/images/imgError.png" alt />
             </div>
             <div slot="error" class="image-slot">
-              <img
-                class="errorImg"
-                src="~@/assets/images/imgError.png"
-                alt
-              />
+              <img class="errorImg" src="~@/assets/images/imgError.png" alt />
             </div>
           </el-image>
           <i
-                  v-show="productDetail.isFavorite"
-                    class="iconClient iconfont icon-wujiaoxing-"
-                    @click.stop="addCollect(productDetail)"
-                  ></i>
-                  <i
-                  v-show="!productDetail.isFavorite"
-                    class="iconClient iconfont icon-wujiaoxingkong"
-                    @click.stop="addCollect(productDetail)"
-                  ></i>
+            v-show="productDetail.isFavorite"
+            class="iconClient iconfont icon-wujiaoxing-"
+            @click.stop="addCollect(productDetail)"
+          ></i>
+          <i
+            v-show="!productDetail.isFavorite"
+            class="iconClient iconfont icon-wujiaoxingkong"
+            @click.stop="addCollect(productDetail)"
+          ></i>
         </div>
       </div>
       <!-- 产品内容 -->
@@ -52,37 +48,46 @@
         </p>
         <div class="priceInfo">
           <div class="productName">
-            <h2>{{ productDetail.bearProduct && productDetail.bearProduct.name }}</h2>
+            <h2>
+              {{ productDetail.bearProduct && productDetail.bearProduct.name }}
+            </h2>
             <div class="createDate">
               发布时间：
-              <span>{{ productDetail.bearProduct && productDetail.bearProduct.createdOn | createdOn }}</span>
+              <span>{{
+                productDetail.bearProduct &&
+                  productDetail.bearProduct.createdOn | createdOn
+              }}</span>
             </div>
           </div>
           <ul class="productParams" v-if="productDetail.bearProduct">
             <li>
-            参考单价：<span  class="price">{{productDetail.cu_de +
-              (productDetail.bearProduct.price === 0
-                ? "???"
-                : productDetail.bearProduct.price)
-            }}</span>
+              参考单价：<span class="price">{{
+                productDetail.cu_de +
+                  (productDetail.bearProduct.price === 0
+                    ? "???"
+                    : productDetail.bearProduct.price)
+              }}</span>
             </li>
             <li>
               出厂货号：{{
-                (productDetail.bearProduct && productDetail.bearProduct.fa_no) === 0
+                (productDetail.bearProduct &&
+                  productDetail.bearProduct.fa_no) === 0
                   ? "???"
-                  : (productDetail.bearProduct && productDetail.bearProduct.fa_no)
+                  : productDetail.bearProduct && productDetail.bearProduct.fa_no
               }}
             </li>
             <li>
               包装：{{
-                (productDetail.bearProduct && productDetail.bearProduct.fa_no) === 0
+                (productDetail.bearProduct &&
+                  productDetail.bearProduct.fa_no) === 0
                   ? "???"
-                  : (productDetail.bearProduct && productDetail.bearProduct.ch_pa)
+                  : productDetail.bearProduct && productDetail.bearProduct.ch_pa
               }}
             </li>
             <li>
               样品规格：{{
-                (productDetail.bearProduct && productDetail.bearProduct.fa_no) === 0
+                (productDetail.bearProduct &&
+                  productDetail.bearProduct.fa_no) === 0
                   ? "???"
                   : productDetail.bearProduct.pr_le +
                     " X " +
@@ -94,7 +99,8 @@
             </li>
             <li>
               外箱规格：{{
-                (productDetail.bearProduct && productDetail.bearProduct.fa_no) === 0
+                (productDetail.bearProduct &&
+                  productDetail.bearProduct.fa_no) === 0
                   ? "???"
                   : productDetail.bearProduct.ou_le +
                     " X " +
@@ -106,7 +112,8 @@
             </li>
             <li>
               装箱量：{{
-                (productDetail.bearProduct && productDetail.bearProduct.fa_no) === 0
+                (productDetail.bearProduct &&
+                  productDetail.bearProduct.fa_no) === 0
                   ? "???"
                   : productDetail.bearProduct.in_en +
                     "/" +
@@ -229,7 +236,7 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       isShowSourceDetail: false,
       companyData: null,
@@ -238,78 +245,78 @@ export default {
       myMargin: 0,
       productDetail: null,
       imagesList: []
-    }
+    };
   },
   methods: {
     // 收藏
-    async addCollect (item) {
-      const res = await this.$http.post('/api/CreateProductCollection', {
+    async addCollect(item) {
+      const res = await this.$http.post("/api/CreateProductCollection", {
         productNumber: item.bearProduct.productNumber
-      })
+      });
       if (res.data.result.code === 200) {
-        this.$message.closeAll()
+        this.$message.closeAll();
         if (item.isFavorite) {
-          this.$message.success('取消收藏成功')
+          this.$message.success("取消收藏成功");
         } else {
-          this.$message.success('收藏成功')
+          this.$message.success("收藏成功");
         }
-        item.isFavorite = !item.isFavorite
+        item.isFavorite = !item.isFavorite;
       } else {
-        this.$message.closeAll()
+        this.$message.closeAll();
         if (item.isFavorite) {
-          this.$message.error('取消收藏失败')
+          this.$message.error("取消收藏失败");
         } else {
-          this.$message.error('收藏失败')
+          this.$message.error("收藏失败");
         }
       }
     },
-    async getProductByNumber () {
-      const id = this.$route.params.id
-      const res = await this.$http.post('/api/BearProductByNumber', {
+    async getProductByNumber() {
+      const id = this.$route.params.id;
+      const res = await this.$http.post("/api/BearProductByNumber", {
         productNumber: id
-      })
+      });
       if (res.data.result.code === 200) {
-        this.productDetail = res.data.result.item
-        console.log(res)
+        this.productDetail = res.data.result.item;
+        console.log(res);
         this.imagesList = res.data.result.item.imglist
           ? res.data.result.item.imglist
-          : []
+          : [];
       }
     },
     // 打开来源详情
-    async openSourceDetail (item) {
-      let number
+    async openSourceDetail(item) {
+      let number;
       if (
         this.$store.state.userInfo.commparnyList &&
         this.$store.state.userInfo.commparnyList[0] &&
-        this.$store.state.userInfo.commparnyList[0].companyType === 'Exhibition'
+        this.$store.state.userInfo.commparnyList[0].companyType === "Exhibition"
       ) {
-        number = item.supplierNumber
+        number = item.supplierNumber;
       } else {
-        number = item.exhibitionNumber
+        number = item.exhibitionNumber;
       }
       if (!this.isShowSourceDetail) {
-        const res = await this.$http.post('/api/CompanyByID', {
+        const res = await this.$http.post("/api/CompanyByID", {
           companyNumber: number
-        })
+        });
         if (res.data.result.code === 200) {
-          this.companyData = res.data.result.item
+          this.companyData = res.data.result.item;
         } else {
-          this.isShowSourceDetail = true
+          this.isShowSourceDetail = true;
         }
       }
-      this.isShowSourceDetail = !this.isShowSourceDetail
+      this.isShowSourceDetail = !this.isShowSourceDetail;
     }
   },
   filters: {
-    createdOn (val) {
-      if (val) return val.split('.')[0].replace(/t/gi, ' ')
+    createdOn(val) {
+      if (val) return val.split(".")[0].replace(/t/gi, " ");
     }
   },
-  mounted () {
-    this.getProductByNumber()
+  mounted() {
+    this.getProductByNumber();
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -330,15 +337,15 @@ export default {
       height: 500px;
       border: 1px solid #ededed;
       cursor: pointer;
-      position:relative;
+      position: relative;
       .iconClient {
         font-size: 30px;
-              position: absolute;
-              right: 10px;
-              top: 10px;
-              color: #fb6055;
-              cursor: pointer;
-            }
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        color: #fb6055;
+        cursor: pointer;
+      }
       @{deep} .el-image {
         width: 100%;
         height: 100%;

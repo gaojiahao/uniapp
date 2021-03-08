@@ -5,7 +5,9 @@
       <span class="item"></span>
       <span class="item">好友验证</span>
       <span class="item itemBtn">
-        <el-button type="primary" @click="createFriendApply" size="mini" round>发送</el-button>
+        <el-button type="primary" @click="createFriendApply" size="mini" round
+          >发送</el-button
+        >
       </span>
     </div>
     <div class="line">发送好友请求</div>
@@ -59,37 +61,43 @@
 
 <script>
 export default {
-  props: ['options'],
-  data () {
+  props: ["options"],
+  data() {
     return {
       content: null,
       remarkName: null,
       showdialogVerification: false
-    }
+    };
   },
   methods: {
-    async createFriendApply () {
-      const fd = { recipientCompanyId: this.options.companyId, recipientPersonnelId: this.options.id, source: this.options.source, content: this.content, remarkName: this.remarkName }
-      const res = await this.$http.post('/api/CreateFriendApply', fd)
+    async createFriendApply() {
+      const fd = {
+        recipientCompanyId: this.options.companyId,
+        recipientPersonnelId: this.options.id,
+        source: this.options.source,
+        content: this.content,
+        remarkName: this.remarkName
+      };
+      const res = await this.$http.post("/api/CreateFriendApply", fd);
       if (res.data.result.code === 200) {
-        this.$message.success('发送添加好友请求成功')
+        this.$message.success("发送添加好友请求成功");
       } else {
-        this.$message.error(res.data.result.msg)
+        this.$message.error(res.data.result.msg);
       }
     }
   },
-  created () {},
-  mounted () {
-    console.log(this.options)
+  created() {},
+  mounted() {
+    console.log(this.options);
   }
-}
+};
 </script>
-<style scoped lang='less'>
+<style scoped lang="less">
 @deep: ~">>>";
 // 好友验证
-.wrapBox{
+.wrapBox {
   background-color: #f6f6f6;
-  .topLayoutTwo{
+  .topLayoutTwo {
     display: flex;
     height: 50px;
     align-items: center;
@@ -98,41 +106,41 @@ export default {
     border-bottom: 1px solid #f5f5f5;
     box-sizing: border-box;
     padding: 0 10px;
-    .item{
+    .item {
       flex: 1;
       text-align: center;
-      &.itemBtn{
+      &.itemBtn {
         text-align: right;
-        .el-button{
+        .el-button {
           background-color: #165af7;
         }
       }
     }
   }
-  .line{
+  .line {
     height: 40px;
     line-height: 40px;
     padding: 0 10px;
     font-size: 14px;
     color: #999;
   }
-  @{deep} .roleConText{
+  @{deep} .roleConText {
     font-size: 16px;
-    .el-textarea__inner{
+    .el-textarea__inner {
       border: none;
       outline: none;
       padding: 5px 10px;
     }
   }
-  @{deep} .cateFriends{
+  @{deep} .cateFriends {
     width: 100%;
     font-size: 16px;
-    input{
+    input {
       border: none;
       outline: none;
     }
   }
-  .addFriendsDialog{
+  .addFriendsDialog {
     width: 100%;
     max-height: 400px;
   }

@@ -50,19 +50,19 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       title: null
-    }
+    };
   },
   methods: {
-    editTitle (val) {
-      this.title = val
+    editTitle(val) {
+      this.title = val;
     }
   },
-  created () {},
-  mounted () {}
-}
+  created() {},
+  mounted() {}
+};
 </script>
 <style scoped lang="less">
 .box {

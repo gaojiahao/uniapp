@@ -1,6 +1,6 @@
-/* eslint-disable vue/require-v-for-key */
 <template>
   <div class="home">
+    <!-- <beforeTop class="beforeTop"></beforeTop> -->
     <div class="homeBox">
       <div class="downloadCode">
         <div class="downloadContent">
@@ -288,23 +288,24 @@
 </template>
 
 <script>
-import { VueCropper } from 'vue-cropper'
+import { VueCropper } from "vue-cropper";
+// import beforeTop from "@/components/beforeTop";
 export default {
   components: {
     VueCropper
   },
-  data () {
+  data() {
     return {
       productNumber: null,
       isProductDetail: false,
       packingList: [],
       dateList: [
-        { label: '全部', value: '' },
-        { label: '当天', value: 'today' },
-        { label: '一周', value: 'lastOneWeek' },
-        { label: '一个月', value: 'lastOneMonth' },
-        { label: '三个月', value: 'lastThreeMonth' },
-        { label: '六个月', value: 'lastHalfYear' }
+        { label: "全部", value: "" },
+        { label: "当天", value: "today" },
+        { label: "一周", value: "lastOneWeek" },
+        { label: "一个月", value: "lastOneMonth" },
+        { label: "三个月", value: "lastThreeMonth" },
+        { label: "六个月", value: "lastHalfYear" }
       ],
       packingDatetime: null,
       packingOptions: {
@@ -332,16 +333,16 @@ export default {
       dialogVisible: false,
       baseImg: null,
       fileinfo: null,
-      searchValue: '',
+      searchValue: "",
       hotWords: [],
       keywordActive: null,
       // 裁剪组件的基础配置option
       option: {
-        img: '', // 裁剪图片的地址
+        img: "", // 裁剪图片的地址
         info: true, // 裁剪框的大小信息
         full: false, // 是否输出原图比例的截图
         outputSize: 0.8, // 裁剪生成图片的质量
-        outputType: 'jpeg', // 裁剪生成图片的格式
+        outputType: "jpeg", // 裁剪生成图片的格式
         canScale: false, // 图片是否允许滚轮缩放
         autoCrop: true, // 是否默认生成截图框
         autoCropWidth: 1000, // 默认生成截图框宽度
@@ -355,52 +356,54 @@ export default {
         centerBox: true, // 截图框是否被限制在图片里面
         infoTrue: false // true 为展示真实输出图片宽高 false 展示看到的截图框宽高
       }
-    }
+    };
   },
   methods: {
     // 打开高级搜索
-    showAdvanced () {
-      this.isAdvanced = !this.isAdvanced
-      if (this.packingList.length < 1) this.getProductChpaList()
+    showAdvanced() {
+      this.isAdvanced = !this.isAdvanced;
+      if (this.packingList.length < 1) this.getProductChpaList();
     },
     // 詳情返回事件
-    changeIsDetail (productDetail) {
-      this.isProductDetail = false
-      this.$refs.childrenProduct.productList.forEach((item) => {
-        if (item.productNumber === this.productNumber) { item.isFavorite = productDetail.isFavorite }
-      })
+    changeIsDetail(productDetail) {
+      this.isProductDetail = false;
+      this.$refs.childrenProduct.productList.forEach(item => {
+        if (item.productNumber === this.productNumber) {
+          item.isFavorite = productDetail.isFavorite;
+        }
+      });
     },
     // 打開產品詳情
-    showProductDetail (item) {
+    showProductDetail(item) {
       if (!item.productNumber) {
-        this.$message.error('该产品没有产品编号')
+        this.$message.error("该产品没有产品编号");
       } else {
-        this.productNumber = item.productNumber
-        this.isProductDetail = true
+        this.productNumber = item.productNumber;
+        this.isProductDetail = true;
       }
     },
     // 點擊熱詞搜索
-    handlerHotKey (i, name) {
-      this.keywordActive = i
-      this.packingOptions.name = name
-      this.subSearch(true)
+    handlerHotKey(i, name) {
+      this.keywordActive = i;
+      this.packingOptions.name = name;
+      this.subSearch(true);
     },
     // 二次圖搜
-    handlerCubeImgEvent (img) {
-      this.isShowCropper = true
-      this.option.img = img
+    handlerCubeImgEvent(img) {
+      this.isShowCropper = true;
+      this.option.img = img;
     },
     // 提交搜索
-    subSearch (flag) {
-      if (flag !== true) this.keywordActive = null
-      this.$store.commit('handlerBeforeSearchImg', null)
-      this.$store.commit('handlerBeforeSearchImgPreview', null)
-      this.$store.commit('handlerBeforeSearch', this.packingOptions)
-      this.$router.push('/beforeIndex/product')
+    subSearch(flag) {
+      if (flag !== true) this.keywordActive = null;
+      this.$store.commit("handlerBeforeSearchImg", null);
+      this.$store.commit("handlerBeforeSearchImgPreview", null);
+      this.$store.commit("handlerBeforeSearch", this.packingOptions);
+      this.$router.push("/beforeIndex/product");
     },
     // 重置选项
-    resetOptions () {
-      this.packingDatetime = null
+    resetOptions() {
+      this.packingDatetime = null;
       this.packingOptions = {
         name: null,
         minPrice: null,
@@ -419,148 +422,148 @@ export default {
         isUpInsetImg: null,
         startTime: null,
         endTime: null
-      }
-      this.$store.commit('handlerBeforeSearch', this.packingOptions)
+      };
+      this.$store.commit("handlerBeforeSearch", this.packingOptions);
     },
     // 格式化时间
-    formatTime (param) {
-      const y = param.getFullYear()
-      let m = param.getMonth() + 1
-      let d = param.getDate()
-      m = m < 10 ? '0' + m : m
-      d = d < 10 ? '0' + d : d
-      return y + '-' + m + '-' + d
+    formatTime(param) {
+      const y = param.getFullYear();
+      let m = param.getMonth() + 1;
+      let d = param.getDate();
+      m = m < 10 ? "0" + m : m;
+      d = d < 10 ? "0" + d : d;
+      return y + "-" + m + "-" + d;
     },
     // 选择时间
-    getDateList (code) {
+    getDateList(code) {
       if (code) {
-        const date = new Date()
-        const endTime = this.formatTime(date)
-        const date1 = Date.parse(date)
-        let start = ''
-        const oneDay = 1000 * 3600 * 24
+        const date = new Date();
+        const endTime = this.formatTime(date);
+        const date1 = Date.parse(date);
+        let start = "";
+        const oneDay = 1000 * 3600 * 24;
 
         switch (code) {
           // 今天
-          case 'today':
-            start = new Date()
-            break
+          case "today":
+            start = new Date();
+            break;
           // 最近1周
-          case 'lastOneWeek':
-            start = date1 - oneDay * 7
-            break
+          case "lastOneWeek":
+            start = date1 - oneDay * 7;
+            break;
           // 最近1月
-          case 'lastOneMonth':
-            start = new Date()
-            start.setMonth(start.getMonth() - 1)
-            break
+          case "lastOneMonth":
+            start = new Date();
+            start.setMonth(start.getMonth() - 1);
+            break;
           // 最近3月
-          case 'lastThreeMonth':
-            start = new Date()
-            start.setMonth(start.getMonth() - 3)
-            break
+          case "lastThreeMonth":
+            start = new Date();
+            start.setMonth(start.getMonth() - 3);
+            break;
           // 最近半年
-          case 'lastHalfYear':
-            start = date1 - oneDay * 183
-            break
+          case "lastHalfYear":
+            start = date1 - oneDay * 183;
+            break;
         }
         this.packingOptions.startTime =
-          this.formatTime(new Date(start)) + 'T00:00:00'
-        this.packingOptions.endTime = endTime + 'T23:59:59'
+          this.formatTime(new Date(start)) + "T00:00:00";
+        this.packingOptions.endTime = endTime + "T23:59:59";
       } else {
-        this.packingOptions.startTime = null
-        this.packingOptions.endTime = null
+        this.packingOptions.startTime = null;
+        this.packingOptions.endTime = null;
       }
-      console.log(this.packingOptions)
+      console.log(this.packingOptions);
     },
     // 获取包装方式list
-    async getProductChpaList () {
-      const fd = {}
-      const res = await this.$http.post('/api/GetProductChpaList', fd)
+    async getProductChpaList() {
+      const fd = {};
+      const res = await this.$http.post("/api/GetProductChpaList", fd);
       if (res.data.result.code === 200) {
-        this.packingList = res.data.result.item
+        this.packingList = res.data.result.item;
       } else {
-        this.$message.error(res.data.result.msg)
+        this.$message.error(res.data.result.msg);
       }
     },
     // 获取搜索热词
-    async getHotWord () {
-      const res = await this.$http.post('/api/GetHotWord', {})
+    async getHotWord() {
+      const res = await this.$http.post("/api/GetHotWord", {});
       if (res.data.result.code === 200) {
-        this.hotWords = res.data.result.item
+        this.hotWords = res.data.result.item;
       } else {
-        this.$message.error(res.data.result.item.message)
+        this.$message.error(res.data.result.item.message);
       }
     },
     // 选择图片搜索
-    changeUpload (e) {
-      this.fileinfo = e.target.files[0]
-      const isLt5M = this.fileinfo.size / 1024 / 1024 < 3
+    changeUpload(e) {
+      this.fileinfo = e.target.files[0];
+      const isLt5M = this.fileinfo.size / 1024 / 1024 < 3;
       if (!isLt5M) {
-        this.$message.error('上传文件大小不能超过 3MB!')
-        this.option.img = ''
-        this.$refs.uploadRef.value = ''
-        return false
+        this.$message.error("上传文件大小不能超过 3MB!");
+        this.option.img = "";
+        this.$refs.uploadRef.value = "";
+        return false;
       }
-      this.isShowCropper = true
+      this.isShowCropper = true;
       // 上传成功后将图片地址赋值给裁剪框显示图片
       this.$nextTick(() => {
-        const f = window.URL.createObjectURL(this.fileinfo)
-        this.baseImg = this.option.img = f
-        this.dialogVisible = true
-      })
+        const f = window.URL.createObjectURL(this.fileinfo);
+        this.baseImg = this.option.img = f;
+        this.dialogVisible = true;
+      });
     },
     // 确定裁剪图片
-    onCubeImg () {
-      this.loading = true
+    onCubeImg() {
+      this.loading = true;
       // 获取cropper的截图的 数据
-      this.$refs.cropper.getCropBlob(async (file) => {
-        const urlPreView = URL.createObjectURL(file)
-        this.option.img = urlPreView
-        this.$store.commit('handlerBeforeSearchImgPreview', {
+      this.$refs.cropper.getCropBlob(async file => {
+        const urlPreView = URL.createObjectURL(file);
+        this.option.img = urlPreView;
+        this.$store.commit("handlerBeforeSearchImgPreview", {
           img: urlPreView,
           baseImg: this.baseImg
-        })
+        });
         // 上传
         const companyNumber = this.$store.state.userInfo.commparnyList
           ? this.$store.state.userInfo.commparnyList[0].companyNumber
-          : 'Tourist'
-        const fd = new FormData()
-        fd.append('companynumber', companyNumber)
-        fd.append('file', file)
+          : "Tourist";
+        const fd = new FormData();
+        fd.append("companynumber", companyNumber);
+        fd.append("file", file);
         try {
-          const res = await this.$http.post('/api/File/SearchPicture', fd)
+          const res = await this.$http.post("/api/File/SearchPicture", fd);
           if (res.data.result.code === 200) {
-            this.cropperCancel()
+            this.cropperCancel();
             this.$store.commit(
-              'handlerBeforeSearchImg',
+              "handlerBeforeSearchImg",
               res.data.result.object
-            )
-            this.$router.push('/beforeIndex/product')
+            );
+            this.$router.push("/beforeIndex/product");
           } else {
-            this.cropperCancel()
-            this.$store.commit('handlerBeforeSearchImg', null)
-            this.$message.error(res.data.result.message)
+            this.cropperCancel();
+            this.$store.commit("handlerBeforeSearchImg", null);
+            this.$message.error(res.data.result.message);
           }
         } catch (error) {
-          this.cropperCancel()
+          this.cropperCancel();
         }
-      })
+      });
     },
     // 取消裁剪
-    cropperCancel () {
-      this.$refs.cropper.clearCrop()
-      this.isShowCropper = false
-      this.loading = false
-      this.option.img = ''
-      this.$refs.uploadRef && (this.$refs.uploadRef.value = '')
+    cropperCancel() {
+      this.$refs.cropper.clearCrop();
+      this.isShowCropper = false;
+      this.loading = false;
+      this.option.img = "";
+      this.$refs.uploadRef && (this.$refs.uploadRef.value = "");
     }
   },
-  created () {
-    this.getHotWord()
+  created() {
+    this.getHotWord();
   },
-  mounted () {}
-}
+  mounted() {}
+};
 </script>
 <style lang="less" scoped>
 @deep: ~">>>";
@@ -684,6 +687,7 @@ export default {
           .uploadIcon {
             width: 32px;
             height: 32px;
+            min-width: 32px;
             border-radius: 50%;
             background-color: #3872f8;
             color: #fff;
@@ -826,11 +830,11 @@ export default {
     height: 500px;
   }
 }
-.baozhuang{
-  .el-scrollbar{
-    .el-select-dropdown__wrap{
-      .el-scrollbar__view{
-        .el-select-dropdown__item{
+.baozhuang {
+  .el-scrollbar {
+    .el-select-dropdown__wrap {
+      .el-scrollbar__view {
+        .el-select-dropdown__item {
           width: 190px;
         }
       }

@@ -3,7 +3,7 @@
     <div class="DetailLogo"></div>
     <div class="navBar">
       <div class="navBarTitle">
-        {{$route.params.title}}
+        {{ $route.params.title }}
       </div>
     </div>
     <div class="contactTable">
@@ -69,25 +69,25 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       noticeData: null
-    }
+    };
   },
   methods: {
-    async getCompanyByNumber () {
-      const res = await this.$http.post('/api/CompanyByID', {
+    async getCompanyByNumber() {
+      const res = await this.$http.post("/api/CompanyByID", {
         companyNumber: this.$route.params.id
-      })
+      });
       if (res.data.result.code === 200) {
-        this.noticeData = res.data.result.item
+        this.noticeData = res.data.result.item;
       }
     }
   },
-  mounted () {
-    this.getCompanyByNumber()
+  mounted() {
+    this.getCompanyByNumber();
   }
-}
+};
 </script>
 <style scoped lang="less">
 .DetailLogo {

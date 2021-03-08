@@ -1,33 +1,32 @@
 <template>
-<div>
-  <topComponent :title="topTitle" :companyInfo="companyInfo" />
-  <div style="max-width:1200px;margin: 0 auto;">
-    <div class="berad">
-      <el-page-header
-        @back="changeIsDetail"
-        content="产品详情"
-      ></el-page-header>
-      <span class="backtrack" @click="changeIsDetail"><i class="backtrackIcon iconfont icon-fanhui"></i> 返回</span>
-    </div>
-    <div class="Graphic" v-if="productDetail">
-      <div class="left">
-        <div class="swiperList">
-          <el-image
-            fit="contain"
-            :src="productDetail.img"
-            :preview-src-list="productDetail.imgUrlList">
-            <div slot="placeholder" class="image-slot">
-              <img class="errorImg" src="~@/assets/images/imgError.png" alt />
-            </div>
-            <div slot="error" class="image-slot">
-              <img
-                class="errorImg"
-                src="~@/assets/images/imgError.png"
-                alt
-              />
-            </div>
-          </el-image>
-          <!-- <i
+  <div>
+    <topComponent :title="topTitle" :companyInfo="companyInfo" />
+    <div style="max-width:1200px;margin: 0 auto;">
+      <div class="berad">
+        <el-page-header
+          @back="changeIsDetail"
+          content="产品详情"
+        ></el-page-header>
+        <span class="backtrack" @click="changeIsDetail"
+          ><i class="backtrackIcon iconfont icon-fanhui"></i> 返回</span
+        >
+      </div>
+      <div class="Graphic" v-if="productDetail">
+        <div class="left">
+          <div class="swiperList">
+            <el-image
+              fit="contain"
+              :src="productDetail.img"
+              :preview-src-list="productDetail.imgUrlList"
+            >
+              <div slot="placeholder" class="image-slot">
+                <img class="errorImg" src="~@/assets/images/imgError.png" alt />
+              </div>
+              <div slot="error" class="image-slot">
+                <img class="errorImg" src="~@/assets/images/imgError.png" alt />
+              </div>
+            </el-image>
+            <!-- <i
             v-show="productDetail.isFavorite"
               class="iconClient iconfont icon-wujiaoxing-"
               @click.stop="addCollect(productDetail)"
@@ -37,102 +36,101 @@
               class="iconClient iconfont icon-wujiaoxingkong"
               @click.stop="addCollect(productDetail)"
             ></i> -->
+          </div>
         </div>
-      </div>
-      <!-- 产品内容 -->
-      <div class="right">
-        <div class="priceInfo">
-          <div class="createDate">
-            发布时间：
-            <span>
-              {{ productDetail.createdOn | createdOn }}
-            </span>
-          </div>
-          <div class="productName">
-            <h2>{{ productDetail.name }}</h2>
-          </div>
-          <ul class="productParams">
-            <li v-if="$store.state.userInfo && $store.state.userInfo.commparnyList && $store.state.userInfo.commparnyList[0].companyType === 'Sales'">
-              参考单价：<span  :class="{ price : true}">{{ (integralTotal > 0 ?  productDetail.cu_de + productDetail.price : '积分查看价格') }}</span>
-            </li>
-            <li v-else>
-              参考单价：<span  class="price">{{ productDetail.cu_de + productDetail.price }}</span>
-            </li>
-            <li>
-              出厂货号：{{
-                productDetail.fa_no
-              }}
-            </li>
-            <li>
-              包装：{{
-                productDetail.ch_pa
-              }}
-            </li>
-            <li>
-              产品规格：{{
-                    productDetail.pr_le +
+        <!-- 产品内容 -->
+        <div class="right">
+          <div class="priceInfo">
+            <div class="createDate">
+              发布时间：
+              <span>
+                {{ productDetail.createdOn | createdOn }}
+              </span>
+            </div>
+            <div class="productName">
+              <h2>{{ productDetail.name }}</h2>
+            </div>
+            <ul class="productParams">
+              <li
+                v-if="
+                  $store.state.userInfo &&
+                    $store.state.userInfo.commparnyList &&
+                    $store.state.userInfo.commparnyList[0].companyType ===
+                      'Sales'
+                "
+              >
+                参考单价：<span :class="{ price: true }">{{
+                  integralTotal > 0
+                    ? productDetail.cu_de + productDetail.price
+                    : "积分查看价格"
+                }}</span>
+              </li>
+              <li v-else>
+                参考单价：<span class="price">{{
+                  productDetail.cu_de + productDetail.price
+                }}</span>
+              </li>
+              <li>出厂货号：{{ productDetail.fa_no }}</li>
+              <li>包装：{{ productDetail.ch_pa }}</li>
+              <li>
+                产品规格：{{
+                  productDetail.pr_le +
                     " X " +
                     productDetail.pr_wi +
                     " X " +
                     productDetail.pr_hi +
                     "(CM)"
-              }}
-            </li>
-            <li>
-              外箱规格：{{
-                    productDetail.ou_le +
+                }}
+              </li>
+              <li>
+                外箱规格：{{
+                  productDetail.ou_le +
                     " X " +
                     productDetail.ou_wi +
                     " X " +
                     productDetail.ou_hi +
                     "(CM)"
-              }}
-            </li>
-            <li>
-                    包装规格：{{
-                      productDetail.in_le +
-                          " X " +
-                          productDetail.in_wi +
-                          " X " +
-                          productDetail.in_hi +
-                          "(CM)"
-                    }}
-                  </li>
-            <li>
-              装箱量：{{
-                productDetail.in_en +
-                    "/" +
-                    productDetail.ou_lo +
-                    "(PCS)"
-              }}
-            </li>
-            <li>
-              体积/材积：{{
-                 productDetail.bulk_stere +
+                }}
+              </li>
+              <li>
+                包装规格：{{
+                  productDetail.in_le +
+                    " X " +
+                    productDetail.in_wi +
+                    " X " +
+                    productDetail.in_hi +
+                    "(CM)"
+                }}
+              </li>
+              <li>
+                装箱量：{{
+                  productDetail.in_en + "/" + productDetail.ou_lo + "(PCS)"
+                }}
+              </li>
+              <li>
+                体积/材积：{{
+                  productDetail.bulk_stere +
                     "(CBM)" +
                     "/" +
                     productDetail.bulk_feet +
                     "(CUFT)"
-              }}
-            </li>
-            <li>
-              毛重/净重：{{
-                productDetail.gr_we +
-                    "/" +
-                    productDetail.ne_we +
-                    "(kg)"
-              }}
-            </li>
-          </ul>
+                }}
+              </li>
+              <li>
+                毛重/净重：{{
+                  productDetail.gr_we + "/" + productDetail.ne_we + "(kg)"
+                }}
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
-import topComponent from '@/components/shareFactoryTopComponent/shareFactoryTopComponent.vue'
+import topComponent from "@/components/shareFactoryTopComponent/shareFactoryTopComponent.vue";
 export default {
   components: {
     topComponent
@@ -140,10 +138,10 @@ export default {
   props: {
     number: String
   },
-  data () {
+  data() {
     return {
       companyInfo: {},
-      topTitle: '产品详情',
+      topTitle: "产品详情",
       productDetail: {},
       integralTotal: null,
       isShowSourceDetail: false,
@@ -151,25 +149,24 @@ export default {
       hoverActive: false,
       myMargin: 0,
       companyData: null
-    }
+    };
   },
   methods: {
-    changeIsDetail () {
-      this.$router.go(-1)
+    changeIsDetail() {
+      this.$router.go(-1);
     }
   },
   filters: {
-    createdOn (val) {
-      return val ? val.split('.')[0].replace(/t/gi, ' ') : ''
+    createdOn(val) {
+      return val ? val.split(".")[0].replace(/t/gi, " ") : "";
     }
   },
-  created () {
-    this.productDetail = JSON.parse(sessionStorage.getItem('currentProduct'))
-    console.log(this.productDetail)
+  created() {
+    this.productDetail = JSON.parse(sessionStorage.getItem("currentProduct"));
+    console.log(this.productDetail);
   },
-  mounted () {
-  }
-}
+  mounted() {}
+};
 </script>
 
 <style lang="less" scoped>
@@ -186,7 +183,7 @@ export default {
   @{deep} .el-page-header__left:hover {
     color: #409eff;
   }
-  .backtrack{
+  .backtrack {
     font-weight: normal;
     cursor: pointer;
     display: flex;
@@ -194,7 +191,7 @@ export default {
     &:hover {
       color: #409eff;
     }
-    i{
+    i {
       margin-right: 10px;
     }
   }
@@ -210,15 +207,15 @@ export default {
       height: 500px;
       border: 1px solid #ededed;
       cursor: pointer;
-      position:relative;
+      position: relative;
       .iconClient {
-              position: absolute;
-              font-size: 30px;
-              right: 10px;
-              top: 10px;
-              color: #fb6055;
-              cursor: pointer;
-            }
+        position: absolute;
+        font-size: 30px;
+        right: 10px;
+        top: 10px;
+        color: #fb6055;
+        cursor: pointer;
+      }
       @{deep} .el-image {
         width: 100%;
         height: 100%;
@@ -272,7 +269,7 @@ export default {
         position: relative;
         li {
           line-height: 40px;
-          .price{
+          .price {
             color: #ff0000;
             font-size: 22px;
           }
