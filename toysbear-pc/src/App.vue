@@ -64,7 +64,7 @@ export default {
   methods: {
     // 去购物车
     toMyShoppingCart() {
-      console.log(123);
+      this.$router.push("/shoppingCart");
     },
     // 初始化IM
     // initIM() {
