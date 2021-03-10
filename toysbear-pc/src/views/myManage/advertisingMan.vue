@@ -174,7 +174,7 @@
                 <el-popconfirm
                   style="margin-left: 10px"
                   title="确定要删除这条广告吗？"
-                  @onConfirm="handleDelete(scope.row)"
+                  @confirm="handleDelete(scope.row)"
                 >
                   <el-button size="mini" type="danger" slot="reference"
                     >删除</el-button

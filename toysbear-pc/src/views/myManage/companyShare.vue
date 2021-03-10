@@ -122,7 +122,7 @@
                 >
                 <el-popconfirm
                   title="确定要删除这个版本吗？"
-                  @onConfirm="handleDelete(scope.row)"
+                  @confirm="handleDelete(scope.row)"
                 >
                   <el-button
                     size="mini"
