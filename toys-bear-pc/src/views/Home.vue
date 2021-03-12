@@ -10,19 +10,25 @@
 
 <script>
 import { _POST, getToken } from "@/request/api";
+import { onMounted, getCurrentInstance } from "vue";
+import { useStore } from "vuex";
 export default {
   name: "Home",
-  mounted() {
-    _POST(getToken, {
-      companyNum: "LittleBearWeb",
-      platForm: "PC"
-    })
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        console.log(err);
+  setup() {
+    const _that = getCurrentInstance().appContext.config.globalProperties;
+    const store = useStore();
+    async function getTokenFunc() {
+      const res = await _POST(getToken, {
+        companyNum: "LittleBearWeb",
+        platForm: "PC"
       });
+      const { code, item, msg } = res.result;
+      console.log(store.state.userInfo.accessToken);
+      if (code) _that.$message.success(msg, item);
+    }
+    onMounted(() => {
+      getTokenFunc();
+    });
   }
 };
 </script>

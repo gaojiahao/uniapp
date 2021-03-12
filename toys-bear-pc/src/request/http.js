@@ -22,7 +22,7 @@ const options = {
   retry: 1, // 超时再次请求次数
   retryDelay: 1000 // 请求间隙
 };
-if (env == "production") options.baseURL = target; // 接口统一域名
+if (env == "production") options.baseURL = target; // 如果是生产环境，接口统一域名
 const instance = axios.create(options);
 
 // 请求拦截
