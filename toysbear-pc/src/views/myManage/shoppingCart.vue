@@ -27,7 +27,7 @@
           <i v-show="isCTNS === 0" class="el-icon-d-caret"></i>
           <i class="el-icon-caret-bottom" v-show="isCTNS === 1"></i>
           <i v-show="isCTNS === 2" class="el-icon-caret-top"></i>
-        </p> -->
+        </p>
         <p
           :class="{ sortID: true, active: isTotalQTY !== 0 }"
           @click="sortTotalQTY"
@@ -45,7 +45,7 @@
           <i v-show="isTotalAmount === 0" class="el-icon-d-caret"></i>
           <i class="el-icon-caret-bottom" v-show="isTotalAmount === 1"></i>
           <i v-show="isTotalAmount === 2" class="el-icon-caret-top"></i>
-        </p>
+        </p> -->
       </div>
       <!-- 表格 -->
       <div class="tableBoxWrap">

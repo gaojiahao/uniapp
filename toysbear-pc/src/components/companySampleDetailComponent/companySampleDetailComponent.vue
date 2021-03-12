@@ -48,6 +48,7 @@
         <template slot-scope="scope">
           <el-image
             fit="contain"
+            :z-index="9999"
             style="width: 60px; height:60px;"
             :preview-src-list="scope.row.imgUrlList"
             :src="scope.row.img"
