@@ -1,11 +1,10 @@
 import http from "./http";
+import loginModel from "./login/loginApi";
 
 /**
  * 登录模块
  */
-export const loginUrl = {
-  login: "/api/Authenticate" // 验证码登录
-};
+export const loginApi = loginModel;
 
 // post方法以及传参
 export function _POST(api, params) {
