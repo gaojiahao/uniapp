@@ -16,40 +16,58 @@ switch (env) {
     target = devEnv.hosturl;
     break;
 }
-const myAxios = {};
-myAxios.install = function(Vue) {
-  const instance = axios.create({
-    baseURL: target, // 接口统一域名
-    timeout: 20000, // 设置超时
-    retry: 1, // 超时再次请求次数
-    retryDelay: 1000 // 请求间隙
-  });
+const instance = axios.create({
+  baseURL: target, // 接口统一域名
+  timeout: 20000, // 设置超时
+  retry: 1, // 超时再次请求次数
+  retryDelay: 1000 // 请求间隙
+});
 
-  // 请求拦截
-  instance.interceptors.request.use(
-    // 使用axios请求拦截器统一设置请求头
-    config => {
-      config.headers.Utoken = store.state.userInfo.accessToken;
-      config.headers["content-type"] = "application/json";
-      return config;
-    },
-    err => {
-      // 对请求错误做些什么
-      return Promise.reject(err);
-    }
-  );
+// 请求拦截
+instance.interceptors.request.use(
+  // 使用axios请求拦截器统一设置请求头
+  config => {
+    config.headers.Utoken = store.state.userInfo.accessToken;
+    config.headers["content-type"] = "application/json";
+    return config;
+  },
+  err => {
+    // 对请求错误做些什么
+    return Promise.reject(err);
+  }
+);
 
-  // 响应拦截器
-  instance.interceptors.response.use(
-    res => {
-      return res.data;
-    },
-    err => {
-      // 对响应错误做点什么
-      console.log("拦截器报错");
-      return Promise.reject(err);
-    }
-  );
-  Vue.prototype.$http = instance;
+// 响应拦截器
+instance.interceptors.response.use(
+  res => {
+    return res.data;
+  },
+  err => {
+    // 对响应错误做点什么
+    console.log("拦截器报错");
+    return Promise.reject(err);
+  }
+);
+/**
+ * 使用es6的export default导出了一个函数，导出的函数代替axios去帮我们请求数据，
+ * 函数的参数及返回值如下：
+ * @param {String} method  请求的方法：get、post、delete、put
+ * @param {String} url     请求的url:
+ * @param {Object} data    请求的参数
+ * @returns {Promise}     返回一个promise对象，其实就相当于axios请求数据的返回值
+ */
+const http = function(method, url, data = {}) {
+  method = method.toLowerCase();
+  if (method == "post") {
+    return instance.post(url, data);
+  } else if (method == "get") {
+    return instance.get(url, { params: data });
+  } else if (method == "delete") {
+    return instance.delete(url, { params: data });
+  } else if (method == "put") {
+    return instance.put(url, data);
+  } else {
+    return Promise.reject("未知的method" + method);
+  }
 };
-export default myAxios;
+export default http;
