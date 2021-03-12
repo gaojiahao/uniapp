@@ -2,7 +2,10 @@ import { createStore } from "vuex";
 
 export default createStore({
   state: {
-    userInfo: {}
+    userInfo: {
+      accessToken:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJMaXR0bGVCZWFyIiwianRpIjoiNGM0NTFjNmItNzdjMS00OGQwLTk2ZTAtYzJjMTY0ZjBhNDJjIiwiaWF0IjoxNjE1NTM5MDQ1LCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMTc2MDMwMzM0NTgiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zeXN0ZW0iOiJQQyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6ImU2Yzg5ODllLTUyMGEtNGEyOS05Y2Y1LTAwZDAyNmVmZDBhMiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NwbiI6IjI1ZTIwY2UzLWU3MzMtNGRhMC04Nzc1LTZlOGVkMmJmMTYwNSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2Fub255bW91cyI6IkhTMDAyMTM0NiIsIm5iZiI6MTYxNTUzOTA0NSwiZXhwIjoxNjE1NjI1NDQ1LCJpc3MiOiJMaXR0bGVCZWFyIiwiYXVkIjoiTGl0dGxlQmVhciJ9.HDUt4_Q9JZskvKjp_S4nYLFlkpTe_RGry0cdJSYcjB8"
+    }
   },
   mutations: {},
   actions: {},

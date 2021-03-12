@@ -9,11 +9,20 @@
 </template>
 
 <script>
-import { loginApi } from "@/request/api";
+import { _POST, getToken } from "@/request/api";
 export default {
   name: "Home",
   mounted() {
-    console.log(loginApi);
+    _POST(getToken, {
+      companyNum: "LittleBearWeb",
+      platForm: "PC"
+    })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 };
 </script>

@@ -16,12 +16,14 @@ switch (env) {
     target = devEnv.hosturl;
     break;
 }
-const instance = axios.create({
-  baseURL: target, // 接口统一域名
+console.log(target);
+const options = {
   timeout: 20000, // 设置超时
   retry: 1, // 超时再次请求次数
   retryDelay: 1000 // 请求间隙
-});
+};
+if (env == "production") options.baseURL = target; // 接口统一域名
+const instance = axios.create(options);
 
 // 请求拦截
 instance.interceptors.request.use(
@@ -43,6 +45,7 @@ instance.interceptors.response.use(
     return res.data;
   },
   err => {
+    console.log(err);
     // 对响应错误做点什么
     console.log("拦截器报错");
     return Promise.reject(err);
@@ -56,7 +59,7 @@ instance.interceptors.response.use(
  * @param {Object} data    请求的参数
  * @returns {Promise}     返回一个promise对象，其实就相当于axios请求数据的返回值
  */
-const http = function(method, url, data = {}) {
+const http = (method, url, data = {}) => {
   method = method.toLowerCase();
   if (method == "post") {
     return instance.post(url, data);
