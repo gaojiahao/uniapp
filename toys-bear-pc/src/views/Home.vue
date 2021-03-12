@@ -1,34 +1,79 @@
 <template>
   <div class="home">
-    <el-button type="primary">主要按钮</el-button>
+    <h1>{{ id }}</h1>
+    <el-button type="primary" @click="addId">加加</el-button>
     <el-button type="success">成功按钮</el-button>
     <el-button type="info">信息按钮</el-button>
     <el-button type="warning">警告按钮</el-button>
     <el-button type="danger">危险按钮</el-button>
+    <div style="display: flex; flex-wrap: wrap;">
+      <div
+        style="margin: 10px;"
+        class="block"
+        v-for="item in productList"
+        :key="item.productNumber"
+      >
+        <el-image
+          style="width: 100px; height: 100px"
+          :src="item.img"
+          lazy
+          fit="contain"
+        >
+        </el-image>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { _POST, getToken } from "@/request/api";
-import { onMounted, getCurrentInstance } from "vue";
+import { onMounted, getCurrentInstance, ref, toRef } from "vue";
+import { _POST, getToken, getProduct } from "@/request/api";
 import { useStore } from "vuex";
 export default {
   name: "Home",
-  setup() {
+  props: {
+    title: String,
+    id: Number
+  },
+  setup(props, { emit }) {
+    const title = toRef(props, "title");
+    const id = toRef(props, "id");
+    console.log(title.value, id.value);
     const _that = getCurrentInstance().appContext.config.globalProperties;
     const store = useStore();
+    const productList = ref([]);
+    console.log(store);
     async function getTokenFunc() {
       const res = await _POST(getToken, {
         companyNum: "LittleBearWeb",
         platForm: "PC"
       });
       const { code, item, msg } = res.result;
-      console.log(store.state.userInfo.accessToken);
-      if (code) _that.$message.success(msg, item);
+      console.log(item);
+      if (code === 200) _that.$message.success(msg);
+    }
+    async function getProductListFunc() {
+      const res = await _POST(getProduct, {
+        maxResultCount: 10,
+        skipCount: 1
+      });
+      const { code, item, msg } = res.result;
+      if (code === 200) {
+        _that.$message.success(msg, item);
+        productList.value = item.items;
+      }
+    }
+    function addId() {
+      emit("changeId");
     }
     onMounted(() => {
       getTokenFunc();
+      getProductListFunc();
     });
+    return {
+      productList,
+      addId
+    };
   }
 };
 </script>

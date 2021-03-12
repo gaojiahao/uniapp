@@ -45,9 +45,8 @@ instance.interceptors.response.use(
     return res.data;
   },
   err => {
-    console.log(err);
     // 对响应错误做点什么
-    console.log("拦截器报错");
+    console.log("响应拦截器报错", err);
     return Promise.reject(err);
   }
 );

@@ -10,6 +10,11 @@ export const login = "/api/Authenticate";
  */
 export const getToken = "/api/GetToken";
 
+/**
+ * 产品API模块
+ */
+export const getProduct = "/api/SearchBearProductPage";
+
 // post方法以及传参
 export function _POST(api, params) {
   return http("post", api, params);

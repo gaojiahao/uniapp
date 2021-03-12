@@ -1,7 +1,7 @@
 module.exports = {
   devEnv: {
     NODE_ENV: "development", // 本地环境
-    hosturl: "http://139.9.71.135:8080"
+    hosturl: "https://api.toysbear.com"
   },
   testEnv: {
     NODE_ENV: "test", // 测试环境
