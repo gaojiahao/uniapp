@@ -2,15 +2,18 @@
   <router-view @changeId="changeId" :id="id" />
 </template>
 
-<style lang="scss"></style>
 <script>
-import { ref } from "vue";
+import { ref, provide } from "vue";
 export default {
   setup() {
     const id = ref(1);
     function changeId() {
       id.value++;
     }
+    const onRefresh = () => {
+      console.log(123456789);
+    };
+    provide("reload", onRefresh);
     return {
       id,
       changeId
@@ -18,3 +21,4 @@ export default {
   }
 };
 </script>
+<style lang="scss"></style>

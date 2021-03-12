@@ -2,7 +2,7 @@
   <div class="home">
     <h1>{{ id }}</h1>
     <el-button type="primary" @click="addId">加加</el-button>
-    <el-button type="success">成功按钮</el-button>
+    <el-button type="success" @click="myProvide">成功按钮</el-button>
     <el-button type="info">信息按钮</el-button>
     <el-button type="warning">警告按钮</el-button>
     <el-button type="danger">危险按钮</el-button>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { onMounted, getCurrentInstance, ref, toRef } from "vue";
+import { onMounted, getCurrentInstance, ref, toRef, inject } from "vue";
 import { _POST, getToken, getProduct } from "@/request/api";
 import { useStore } from "vuex";
 export default {
@@ -66,13 +66,18 @@ export default {
     function addId() {
       emit("changeId");
     }
+    const onRefresh = inject("reload");
+    function myProvide() {
+      onRefresh();
+    }
     onMounted(() => {
       getTokenFunc();
       getProductListFunc();
     });
     return {
       productList,
-      addId
+      addId,
+      myProvide
     };
   }
 };
