@@ -1,4 +1,4 @@
-# toys-bear-pc
+# toys-bear-pc-2.0
 
 ## Project setup
 ```
