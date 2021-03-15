@@ -24,7 +24,7 @@ export default {
   }
 };
 </script>
-<style scoped lang="scss">
+<style scoped lang="less">
 .myFooter {
   width: 100%;
   background-color: #fff;

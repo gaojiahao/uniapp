@@ -33,8 +33,16 @@ const router = new VueRouter({
 });
 export async function getMenuFuc() {
   const list = store.state.routers;
-  const routers = await setMenuTree(list);
-  routers.length && router.addRoute(routers);
+  await setMenuTree(list, router);
+  // console.log(router.options, router.options.routes[3]);
+  // if (routers.length) {
+  //   for (let i = 0; i < routers.length; i++) {
+  //     router.addRoute(routers[i]);
+  //   }
+  //   // router.addRoutes(routers);
+  //   // router.options.routes = routers;
+  //   // console.log(router, 999, router.options, routers);
+  // }
 }
 // 拦截
 router.beforeEach(async (to, from, next) => {

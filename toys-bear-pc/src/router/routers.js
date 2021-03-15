@@ -6,6 +6,8 @@ import bsRouters from "./bsRouter/bsRouter";
 const BsIndex = () => import("@/views/bsPage/BsIndex.vue");
 /** 404模块 */
 import _404 from "@/router/404/index";
+/** 后台首页模块 */
+import bsHome from "@/router/bsRouter/bsHome/index";
 /** ERP模块 */
 // import ERP from "@/router/ERP/index";
 /** 不需要loadding的模块 */
@@ -19,31 +21,30 @@ import _404 from "@/router/404/index";
 /** 静态路由 */
 export const staticRouters = [
   ...loginRouters,
-  ...bsRouters,
   _404,
   {
     path: "/bsIndex",
-    name: "BsIndex",
+    name: "bsIndex",
     component: BsIndex,
-    children: []
+    children: [bsHome]
   },
   {
     path: "/",
     redirect: "/login"
   }
 ];
-export async function setMenuTree(menuTree) {
-  const routerList = [];
+export async function setMenuTree(menuTree, router) {
   if (menuTree) {
     for (let i = 0; i < menuTree.length; i++) {
-      for (let j = 0; j < menuTree[i].children.length; j++) {
-        for (const value of bsRouters) {
-          if (value.path === menuTree[i].children[j].linkUrl) {
-            routerList.push(value);
+      if (menuTree[i].children) {
+        for (let j = 0; j < menuTree[i].children.length; j++) {
+          for (const value of bsRouters) {
+            if (value.path === menuTree[i].children[j].linkUrl) {
+              router.addRoute("bsIndex", value);
+            }
           }
         }
       }
     }
   }
-  return routerList;
 }

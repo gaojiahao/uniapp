@@ -21,7 +21,7 @@ export default {
   mounted() {}
 };
 </script>
-<style scoped lang="scss">
+<style scoped lang="less">
 .loginTop {
   width: 100%;
   height: 100%;

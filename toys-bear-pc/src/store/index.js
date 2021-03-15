@@ -15,6 +15,7 @@ function myForEach(oList, yList) {
 }
 export default new Vuex.Store({
   state: {
+    bsMenuLabels: [],
     historyNames: [],
     httpTime: 0, // 请求时长
     httpContent: "", // 请求内容
@@ -51,6 +52,14 @@ export default new Vuex.Store({
     currentComparnyId: null
   },
   mutations: {
+    // 添加路由历史记录
+    handlerBsMenuLabels(state, payLoad) {
+      let flag = false;
+      for (let i = 0; i < state.bsMenuLabels.length; i++) {
+        if (state.bsMenuLabels[i].linkUrl === payLoad.linkUrl) flag = true;
+      }
+      if (!flag) state.bsMenuLabels.push(payLoad);
+    },
     initShoppingCart(state, payLoad) {
       const key = state.userInfo.uid;
       Vue.prototype.$set(state, key, payLoad);

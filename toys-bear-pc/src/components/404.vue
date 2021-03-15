@@ -6,7 +6,7 @@
 export default {};
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .box404 {
   position: fixed;
   left: 0;

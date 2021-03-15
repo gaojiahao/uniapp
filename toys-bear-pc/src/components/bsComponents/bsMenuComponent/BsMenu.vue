@@ -1,0 +1,90 @@
+<template>
+  <div class="bsMenu">
+    <el-scrollbar style="height: 100%;">
+      <el-menu
+        unique-opened
+        :default-active="$route.path"
+        class="el-menu-vertical-demo"
+        mode="vertical"
+        router
+        @open="handleOpen"
+        :collapse="isCollapse"
+      >
+        <el-menu-item
+          @click="
+            addRouterEvent({
+              linkUrl: '/bsIndex/bsHome',
+              name: '后台首页'
+            })
+          "
+          index="/bsIndex/bsHome"
+        >
+          <i class="el-icon-location"></i>
+          <span slot="title">后台首页</span>
+        </el-menu-item>
+        <el-submenu
+          v-for="item in routers"
+          :key="item.parent.id"
+          :index="item.parent.linkUrl"
+        >
+          <template slot="title">
+            <i class="el-icon-menu"></i>
+            <span slot="title">{{ item.parent.name }}</span>
+          </template>
+          <el-menu-item
+            @click="addRouterEvent(item)"
+            v-for="item in item.children"
+            :key="item.id"
+            :index="item.linkUrl"
+            >{{ item.name }}</el-menu-item
+          >
+        </el-submenu>
+      </el-menu>
+    </el-scrollbar>
+  </div>
+</template>
+
+<script>
+import { mapState } from "vuex";
+export default {
+  props: {
+    isCollapse: {
+      type: Boolean
+    }
+  },
+  data() {
+    return {};
+  },
+  methods: {
+    // 展开菜单事件
+    handleOpen(route) {
+      this.$router.push(route);
+      for (let i = 0; i < this.routers.length; i++) {
+        if (this.routers[i].children) {
+          for (let j = 0; j < this.routers[i].children.length; j++) {
+            if (this.routers[i].children[j].linkUrl === route) {
+              console.log(this.routers[i].children[j]);
+              this.$store.commit(
+                "handlerBsMenuLabels",
+                this.routers[i].children[j]
+              );
+            }
+          }
+        }
+      }
+    },
+    // 点击菜单时间
+    addRouterEvent(route) {
+      this.$store.commit("handlerBsMenuLabels", route);
+    }
+  },
+  created() {},
+  mounted() {},
+  computed: {
+    ...mapState(["routers"])
+  }
+};
+</script>
+<style scoped lang="less">
+@import "./BsMenu.less";
+</style>

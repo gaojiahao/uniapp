@@ -1,0 +1,47 @@
+@deep: ~">>>";
+.bsMenu {
+  max-width: 220px;
+  height: 100%;
+    .el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: 220px;
+    height: 100%;
+    .el-menu-item {
+      &.is-active {
+        color: #3368a9;
+      }
+    }
+  }
+  .el-menu--collapse {
+    height: 100%;
+  }
+}
+@{deep} .el-scrollbar__wrap {
+  overflow-x: hidden;
+  .el-scrollbar__view {
+    height: 100%;
+  }
+}
+@{deep} .el-submenu {
+  &.is-active {
+    &.is-opened {
+      .el-submenu__title {
+        color: #3368a9;
+        i {
+          color: #3368a9;
+        }
+      }
+    }
+  }
+}
+@{deep} .el-submenu {
+  .el-menu-item {
+    text-indent: 15px;
+    &.is-active {
+      background-color: #3368a9;
+      color: #fff !important;
+      .el-submenu__title, .el-icon-menu {
+        color: #fff;
+      }
+    }
+  }
+}

@@ -124,7 +124,7 @@ export default {
         // 登录成功获取菜单
         try {
           const re = await this.$http.post("/api/GetUserRoleMenu", {});
-          if (re.data.result.code === 200 && re.data.result.item) {
+          if (re.data.result.code === 200) {
             this.$store.commit("handlerLogin", true);
             this.$store.commit(
               "setRouters",
@@ -140,8 +140,9 @@ export default {
           // location =
           //   "http://127.0.0.1:8081/#/meInfo/infoList?id=" +token
         } catch (error) {
-          this.$store.commit("updateAppLoading", false);
-          this.$message.error("获取菜单失败，请检查网络");
+          console.log(error);
+          // this.$store.commit("updateAppLoading", false);
+          // this.$message.error("获取菜单失败，请检查网络");
         }
       }
     }
@@ -156,7 +157,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .confirmBox {
   width: 100%;
   height: 100vh;
