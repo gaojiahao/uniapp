@@ -28,9 +28,12 @@
           </div>
         </div>
         <div class="views">
-          <div class="viewWrap">
-            <router-view></router-view>
-          </div>
+          <el-collapse-transition>
+            <div class="positionSearchBox" v-show="showSearch">
+              <bsProductSearch />
+            </div>
+          </el-collapse-transition>
+          <router-view></router-view>
         </div>
       </div>
     </div>
@@ -40,15 +43,18 @@
 <script>
 import bsTop from "@/components/bsComponents/bsTopComponent/BsTop";
 import bsMenu from "@/components/bsComponents/bsMenuComponent/BsMenu";
+import bsProductSearch from "@/components/bsComponents/bsProductSearchComponent/searchBox";
 import { mapState } from "vuex";
 export default {
   components: {
     bsTop,
-    bsMenu
+    bsMenu,
+    bsProductSearch
   },
   data() {
     return {
-      isCollapse: false
+      isCollapse: false,
+      showSearch: false
     };
   },
   methods: {
@@ -231,6 +237,16 @@ export default {
         box-sizing: border-box;
         height: calc(100% - 50px);
         background-color: #f1f3f6;
+        position: relative;
+        .positionSearchBox {
+          width: 100%;
+          align-items: center;
+          justify-content: space-between;
+          position: absolute;
+          left: 0;
+          top: 0;
+          box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
+        }
         .viewWrap {
           background: #fff;
           height: 100%;
