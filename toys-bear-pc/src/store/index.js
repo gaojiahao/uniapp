@@ -52,6 +52,10 @@ export default new Vuex.Store({
     currentComparnyId: null
   },
   mutations: {
+    // 清空路由
+    clearAllTab(state, payLoad) {
+      state.bsMenuLabels = payLoad;
+    },
     // 添加路由历史记录
     handlerBsMenuLabels(state, payLoad) {
       let flag = false;
@@ -59,6 +63,13 @@ export default new Vuex.Store({
         if (state.bsMenuLabels[i].linkUrl === payLoad.linkUrl) flag = true;
       }
       if (!flag) state.bsMenuLabels.push(payLoad);
+    },
+    // 关闭页签
+    subBsMenuLabels(state, payLoad) {
+      for (let i = 0; i < state.bsMenuLabels.length; i++) {
+        if (state.bsMenuLabels[i].linkUrl === payLoad.linkUrl)
+          state.bsMenuLabels.splice(i, 1);
+      }
     },
     initShoppingCart(state, payLoad) {
       const key = state.userInfo.uid;

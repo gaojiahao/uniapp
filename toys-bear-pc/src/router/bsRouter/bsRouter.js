@@ -1,9 +1,21 @@
 /** 产品查询模块 */
-import BsProductSearchIndex from "./bsProductSearch/index";
-// /** 系统管理模块 */
-// import systemManage from "../bsRouter/systemManage/index";
-// /** 个人管理模块 */
-// import myManage from "../bsRouter/myManage/index";
-// ...productSearch, ...systemManage, ...myManage
+import BsProductSearchModel from "./bsProductSearch/index";
+/** 我的消息模块 */
+import BsMyInfoModel from "./bsMyInfo/index";
+/** 业务管理模块 */
+import BsBusinessManageModel from "./bsBusinessManage/index";
+/** 站点分享模块 */
+import BsSiteSharingModel from "./bsSiteSharing/index";
+/** 个人管理模块 */
+import BsPersonalManageModel from "./bsPersonalManage/index";
+/** 我的客户模块 */
+import BsMyClientsModel from "./bsMyClients/index";
 
-export default [...BsProductSearchIndex];
+export default [
+  ...BsProductSearchModel,
+  ...BsMyInfoModel,
+  ...BsBusinessManageModel,
+  ...BsSiteSharingModel,
+  ...BsPersonalManageModel,
+  ...BsMyClientsModel
+];

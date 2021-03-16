@@ -7,7 +7,6 @@
         class="el-menu-vertical-demo"
         mode="vertical"
         router
-        @open="handleOpen"
         :collapse="isCollapse"
       >
         <el-menu-item
@@ -19,7 +18,7 @@
           "
           index="/bsIndex/bsHome"
         >
-          <i class="el-icon-location"></i>
+          <i class="homeIcon"></i>
           <span slot="title">后台首页</span>
         </el-menu-item>
         <el-submenu
@@ -28,7 +27,21 @@
           :index="item.parent.linkUrl"
         >
           <template slot="title">
-            <i class="el-icon-menu"></i>
+            <i
+              :class="{
+                icon: true,
+                productSearchIcon:
+                  item.parent.linkUrl === '/bsIndex/bsProductSearchIndex',
+                myInfoIcon: item.parent.linkUrl === '/bsIndex/bsInfo',
+                businessManageIcon:
+                  item.parent.linkUrl === '/bsIndex/bsBusinessManage',
+                bsSiteSharingIcon:
+                  item.parent.linkUrl === '/bsIndex/bsSiteSharing',
+                bsPersonalManageIcon:
+                  item.parent.linkUrl === '/bsIndex/bsPersonalManage',
+                bsMyClientsIcon: item.parent.linkUrl === '/bsIndex/bsMyClients'
+              }"
+            ></i>
             <span slot="title">{{ item.parent.name }}</span>
           </template>
           <el-menu-item
@@ -57,22 +70,22 @@ export default {
   },
   methods: {
     // 展开菜单事件
-    handleOpen(route) {
-      this.$router.push(route);
-      for (let i = 0; i < this.routers.length; i++) {
-        if (this.routers[i].children) {
-          for (let j = 0; j < this.routers[i].children.length; j++) {
-            if (this.routers[i].children[j].linkUrl === route) {
-              console.log(this.routers[i].children[j]);
-              this.$store.commit(
-                "handlerBsMenuLabels",
-                this.routers[i].children[j]
-              );
-            }
-          }
-        }
-      }
-    },
+    // handleOpen(route) {
+    //   this.$router.push(route);
+    //   for (let i = 0; i < this.routers.length; i++) {
+    //     if (this.routers[i].children) {
+    //       for (let j = 0; j < this.routers[i].children.length; j++) {
+    //         if (this.routers[i].children[j].linkUrl === route) {
+    //           console.log(this.routers[i].children[j]);
+    //           this.$store.commit(
+    //             "handlerBsMenuLabels",
+    //             this.routers[i].children[j]
+    //           );
+    //         }
+    //       }
+    //     }
+    //   }
+    // },
     // 点击菜单时间
     addRouterEvent(route) {
       this.$store.commit("handlerBsMenuLabels", route);

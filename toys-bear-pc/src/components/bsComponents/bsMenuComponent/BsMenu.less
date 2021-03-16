@@ -6,8 +6,26 @@
     width: 220px;
     height: 100%;
     .el-menu-item {
+      font-size: 15px !important;
+      .homeIcon {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background: url("~@/assets/images/bsHomeIcon.png") no-repeat center;
+        background-size: contain;
+      }
+      .homeIcon {
+        margin-right: 20px;
+      }
       &.is-active {
         color: #3368a9;
+        .homeIcon {
+          display: inline-block;
+          width: 20px;
+          height: 20px;
+          background: url("~@/assets/images/bsHomeActiveIcon.png") no-repeat center;
+          background-size: contain;
+        }
       }
     }
   }
@@ -22,12 +40,71 @@
   }
 }
 @{deep} .el-submenu {
+  .el-submenu__title {
+    font-size: 15px !important;
+    .icon {
+      margin-right: 20px;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+    }
+    .productSearchIcon {
+      background: url("~@/assets/images/bsProductSearchIcon.png") no-repeat center;
+      background-size: contain;
+    }
+    .myInfoIcon {
+      background: url("~@/assets/images/bsMyInfoIcon.png") no-repeat center;
+      background-size: contain;
+    }
+    .businessManageIcon {
+      background: url("~@/assets/images/bsBusinessManageIcon.png") no-repeat center;
+      background-size: contain;
+    }
+    .bsSiteSharingIcon {
+      background: url("~@/assets/images/bsSiteSharingIcon.png") no-repeat center;
+      background-size: contain;
+    }
+    .bsPersonalManageIcon {
+      background: url("~@/assets/images/bsPersonalManageIcon.png") no-repeat center;
+      background-size: contain;
+    }
+    .bsMyClientsIcon {
+      background: url("~@/assets/images/bsMyClientsIcon.png") no-repeat center;
+      background-size: contain;
+    }
+  }
   &.is-active {
     &.is-opened {
       .el-submenu__title {
         color: #3368a9;
         i {
-          color: #3368a9;
+          display: inline-block;
+          width: 20px;
+          height: 20px;
+        }
+        .productSearchIcon {
+          background: url("~@/assets/images/bsProductSearchActiveIcon.png") no-repeat center;
+          background-size: contain;
+        }
+        .myInfoIcon {
+          background: url("~@/assets/images/bsMyInfoActiveIcon.png") no-repeat center;
+          background-size: contain;
+        }
+        .businessManageIcon {
+          background: url("~@/assets/images/bsBusinessManageActiveIcon.png") no-repeat center;
+          background-size: contain;
+        }
+        .bsSiteSharingIcon {
+          background: url("~@/assets/images/bsSiteSharingActiveIcon.png") no-repeat center;
+          background-size: contain;
+        }
+        .bsPersonalManageIcon {
+          background: url("~@/assets/images/bsPersonalManageActiveIcon.png") no-repeat center;
+          background-size: contain;
+        }
+        .bsMyClientsIcon {
+          background: url("~@/assets/images/bsMyClientsActiveIcon.png") no-repeat center;
+          background-size: contain;
         }
       }
     }
@@ -35,7 +112,10 @@
 }
 @{deep} .el-submenu {
   .el-menu-item {
-    text-indent: 15px;
+    font-size: 15px !important;
+    height: 40px;
+    line-height: 40px;
+    text-indent: 28px;
     &.is-active {
       background-color: #3368a9;
       color: #fff !important;

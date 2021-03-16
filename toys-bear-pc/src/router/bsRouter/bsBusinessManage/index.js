@@ -1,0 +1,37 @@
+// 展厅择样
+const BsHallSample = () =>
+  import("@/views/bsPage/bsBusinessManage/bsHallSample/BsHallSample.vue");
+// 购物车
+const BsShoppingCart = () =>
+  import("@/views/bsPage/bsBusinessManage/bsShoppingCart/BsShoppingCart.vue");
+// 找样报价
+const BsSampleQuotation = () =>
+  import(
+    "@/views/bsPage/bsBusinessManage/bsSampleQuotation/BsSampleQuotation.vue"
+  );
+// 采购订单
+const BsPurchaseOrder = () =>
+  import("@/views/bsPage/bsBusinessManage/bsPurchaseOrder/BsPurchaseOrder.vue");
+
+export default [
+  {
+    path: "/bsIndex/bsHallSample",
+    name: "bsHallSample",
+    component: BsHallSample
+  },
+  {
+    path: "/bsIndex/bsShoppingCart",
+    name: "bsShoppingCart",
+    component: BsShoppingCart
+  },
+  {
+    path: "/bsIndex/bsSampleQuotation",
+    name: "bsSampleQuotation",
+    component: BsSampleQuotation
+  },
+  {
+    path: "/bsIndex/bsPurchaseOrder",
+    name: "bsPurchaseOrder",
+    component: BsPurchaseOrder
+  }
+];

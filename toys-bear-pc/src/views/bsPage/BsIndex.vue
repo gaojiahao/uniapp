@@ -7,7 +7,25 @@
       </div>
       <div class="rightContent">
         <div class="menuLabels">
-          {{ bsMenuLabels }}
+          <el-scrollbar style="height: 58px;">
+            <div
+              :class="{ tab: true, isActive: item.linkUrl === $route.path }"
+              v-for="item in bsMenuLabels"
+              @click="switchTab(item)"
+              :key="item.linkUrl"
+            >
+              <div class="tabItem">
+                <span class="tabName">{{ item.name }}</span>
+                <i
+                  class="closeTab el-icon-error"
+                  @click.stop="closeTabEvent(item)"
+                ></i>
+              </div>
+            </div>
+          </el-scrollbar>
+          <div class="clearAll" @click="closeAll">
+            <i class="el-icon-close"></i>
+          </div>
         </div>
         <div class="views">
           <div class="viewWrap">
@@ -34,18 +52,80 @@ export default {
     };
   },
   methods: {
+    // 关闭所有tab标签
+    closeAll() {
+      this.$confirm("此操作将关闭所有标签页, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "关闭成功!"
+          });
+          this.$store.commit("clearAllTab", [
+            {
+              linkUrl: "/bsIndex/bsHome",
+              name: "后台首页"
+            }
+          ]);
+        })
+        .catch(() => {
+          this.$message({
+            type: "warning",
+            message: "已取消删除"
+          });
+        });
+    },
+    // 展开菜单
     handlerIsCollapse() {
       this.isCollapse = !this.isCollapse;
+    },
+    // 切换页签
+    switchTab(item) {
+      this.$router.push(item.linkUrl);
+    },
+    // 关闭tab页签
+    closeTabEvent(item) {
+      if (
+        this.bsMenuLabels.length === 1 &&
+        item.linkUrl === "/bsIndex/bsHome"
+      ) {
+        return false;
+      }
+      this.$store.commit("subBsMenuLabels", item);
+      if (this.$route.path === item.linkUrl) {
+        if (this.bsMenuLabels.length) {
+          const routerLink = this.bsMenuLabels[this.bsMenuLabels.length - 1]
+            .linkUrl;
+          this.$router.push(routerLink);
+        } else {
+          this.$router.push("/bsIndex/bsHome");
+          this.$store.commit("handlerBsMenuLabels", {
+            linkUrl: "/bsIndex/bsHome",
+            name: "后台首页"
+          });
+        }
+      }
     }
   },
   computed: {
     ...mapState(["bsMenuLabels"])
   },
   created() {},
-  mounted() {}
+  mounted() {
+    if (!this.bsMenuLabels.length) {
+      this.$store.commit("handlerBsMenuLabels", {
+        linkUrl: "/bsIndex/bsHome",
+        name: "后台首页"
+      });
+    }
+  }
 };
 </script>
 <style scoped lang="less">
+@deep: ~">>>";
 .bsIndex {
   width: 100%;
   height: 100%;
@@ -65,8 +145,86 @@ export default {
       .menuLabels {
         height: 50px;
         width: 100%;
-        overflow: hidden;
+        box-sizing: border-box;
         background-color: #fff;
+        box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
+        display: flex;
+        .el-scrollbar {
+          flex: 1;
+          overflow: hidden;
+          padding-right: 2px;
+        }
+        .clearAll {
+          width: 50px;
+          min-width: 50px;
+          height: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 15px;
+          box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
+          cursor: pointer;
+        }
+        @{deep} .el-scrollbar__wrap {
+          width: 100%;
+          overflow-x: hidden;
+          overflow-y: hidden;
+          .el-scrollbar__view {
+            width: 100%;
+            padding-left: 20px;
+            height: 100%;
+            white-space: nowrap;
+          }
+        }
+        .tab {
+          display: inline-block;
+          width: 110px;
+          height: 40px;
+          opacity: 1;
+          background: #ffffff;
+          border: 1px solid #dcdfe6;
+          border-bottom-color: transparent;
+          margin-right: 10px;
+          margin-top: 8px;
+          text-align: center;
+          cursor: pointer;
+          &.isActive {
+            border-top-width: 2px;
+            border-top-color: #3368a9;
+            font-weight: 700;
+            .tabItem {
+              .tabName {
+                color: #3368a9;
+              }
+            }
+          }
+          .tabItem {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            .tabName {
+              display: block;
+              padding: 0 5px;
+              line-height: 40px;
+              box-sizing: border-box;
+              width: 100%;
+              height: 100%;
+              overflow: hidden; /*超出部分隐藏*/
+              white-space: nowrap; /*不换行*/
+              text-overflow: ellipsis; /*超出部分文字以...显示*/
+            }
+            .closeTab {
+              font-size: 16px;
+              position: absolute;
+              right: -7px;
+              top: -5px;
+              color: #b9b9b9;
+              &:hover {
+                color: #3368a9;
+              }
+            }
+          }
+        }
       }
       .views {
         padding: 20px;
