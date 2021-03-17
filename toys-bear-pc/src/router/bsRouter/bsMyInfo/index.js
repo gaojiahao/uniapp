@@ -11,16 +11,25 @@ export default [
   {
     path: "/bsIndex/bsInfo",
     name: "bsInfo",
-    component: BsMyInfo
+    component: BsMyInfo,
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/bsIndex/bsMyFriends",
     name: "bsMyFriends",
-    component: BsMyFriends
+    component: BsMyFriends,
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/bsIndex/bsToyCircle",
     name: "bsToyCircle",
-    component: BsToyCircle
+    component: BsToyCircle,
+    meta: {
+      keepAlive: true
+    }
   }
 ];

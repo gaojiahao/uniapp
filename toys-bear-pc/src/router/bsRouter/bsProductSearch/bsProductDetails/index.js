@@ -5,5 +5,8 @@ const BsProductDetails = () =>
 export default {
   path: "/bsIndex/bsProductDetails",
   name: "bsProductDetails",
-  component: BsProductDetails
+  component: BsProductDetails,
+  meta: {
+    keepAlive: true
+  }
 };

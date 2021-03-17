@@ -69,7 +69,7 @@ myAxios.install = function(Vue) {
     baseURL: target,
     timeout: 20000, // 超时时间
     retry: 1, // 请求次数
-    retryDelay: 1000, // 请求间隙
+    retryDelay: 500, // 请求间隙
     startDate: 0, // 请求开始时间
     endDate: 0 // 请求结束时间
   });
@@ -87,6 +87,7 @@ myAxios.install = function(Vue) {
       config.headers.Utoken =
         $Store.state.userInfo && $Store.state.userInfo.accessToken;
       config.headers["content-type"] = "application/json";
+      $Store.commit("updateAppLoading", true);
       return config;
     },
     error => {
@@ -129,6 +130,7 @@ myAxios.install = function(Vue) {
       config.headers.Utoken =
         $Store.state.userInfo && $Store.state.userInfo.accessToken;
       config.headers["content-type"] = "application/json";
+      $Store.commit("updateAppLoading", true);
       return config;
     },
     error => {
@@ -167,6 +169,7 @@ myAxios.install = function(Vue) {
   // 响应拦截
   instance.interceptors.response.use(
     res => {
+      $Store.commit("updateAppLoading", false);
       /** 全局设置请求时长和请求内容 */
       const myUrl = res.config.url;
       let httpDate;

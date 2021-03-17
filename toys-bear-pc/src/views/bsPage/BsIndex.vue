@@ -33,7 +33,20 @@
               <bsProductSearch />
             </div>
           </el-collapse-transition>
-          <router-view></router-view>
+          <el-scrollbar style="height: 100%;" ref="elscrollbar">
+            <keep-alive>
+              <router-view
+                v-if="$route.meta.keepAlive"
+                v-infinite-scroll="scrollLoad"
+                :infinite-scroll-distance="200"
+              ></router-view>
+            </keep-alive>
+            <router-view
+              v-if="!$route.meta.keepAlive"
+              v-infinite-scroll="scrollLoad"
+              :infinite-scroll-distance="200"
+            ></router-view>
+          </el-scrollbar>
         </div>
       </div>
     </div>
@@ -58,6 +71,15 @@ export default {
     };
   },
   methods: {
+    // 滚动事件
+    scrollLoad() {
+      if (this.$route.path === "/bsIndex/bsProductSearchIndex") {
+        const scrTop = this.$refs["elscrollbar"].wrap.scrollTop;
+        console.log(scrTop);
+        if (scrTop >= 200) this.showSearch = true;
+        else this.showSearch = false;
+      }
+    },
     // 关闭所有tab标签
     closeAll() {
       this.$confirm("此操作将关闭所有标签页, 是否继续?", "提示", {
@@ -238,6 +260,8 @@ export default {
         height: calc(100% - 50px);
         background-color: #f1f3f6;
         position: relative;
+        overflow: hidden;
+        box-sizing: border-box;
         .positionSearchBox {
           width: 100%;
           align-items: center;
@@ -245,6 +269,7 @@ export default {
           position: absolute;
           left: 0;
           top: 0;
+          z-index: 8888;
           box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
         }
         .viewWrap {
@@ -254,5 +279,14 @@ export default {
       }
     }
   }
+}
+@{deep} .el-scrollbar__wrap {
+  overflow-x: hidden;
+  // .el-scrollbar__view {
+  //   width: 100%;
+  //   padding-left: 20px;
+  //   height: 100%;
+  //   white-space: nowrap;
+  // }
 }
 </style>

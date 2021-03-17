@@ -4,17 +4,57 @@
       <bsProductSearch />
       <div class="standardScreening">
         <span class="myLabel">标准筛选:</span>
+        <el-checkbox
+          v-model="synthesis"
+          @change="handleSynthesis"
+          style="margin-right: 30px;"
+        >
+          综合
+        </el-checkbox>
+        <el-checkbox
+          @change="handleCheckedScreensChange"
+          v-model="searchForm.fa_no"
+        >
+          货号
+        </el-checkbox>
+        <el-checkbox
+          @change="handleCheckedScreensChange"
+          v-model="searchForm.name"
+        >
+          名称
+        </el-checkbox>
+        <el-checkbox
+          @change="handleCheckedScreensChange"
+          v-model="searchForm.number"
+        >
+          编号
+        </el-checkbox>
+        <el-checkbox
+          @change="handleCheckedScreensChange"
+          v-model="searchForm.packName"
+        >
+          包装
+        </el-checkbox>
       </div>
       <div class="productClass">
         <span class="myLabel">产品分类:</span>
         <div :class="{ tags: true, showOneCate: isOneDownCate }">
           <div
-            @click="oneTagEvent(i)"
-            :class="{ itemTag: true, isActive: currentOneTag === i }"
-            v-for="(item, i) in cateList"
-            :key="i"
+            @click="oneTagEvent(null)"
+            :class="{ itemTag: true, isActive: oneCurrentTag === null }"
           >
-            {{ item }}
+            全部
+          </div>
+          <div
+            @click="oneTagEvent(item)"
+            :class="{
+              itemTag: true,
+              isActive: oneCurrentTag && oneCurrentTag.id === item.id
+            }"
+            v-for="item in categoryList"
+            :key="item.id"
+          >
+            {{ item.name }}
           </div>
         </div>
         <div class="develop" @click="handlerOneCateLabel">
@@ -23,16 +63,22 @@
           <i v-show="!isOneDownCate" class="el-icon-arrow-up"></i>
         </div>
       </div>
-      <div class="twoLevelClass">
+      <div class="twoLevelClass" v-if="oneCurrentTag">
         <span class="myLabel">二级分类:</span>
         <div :class="{ tags: true, showTwoCate: isTwoDownCate }">
           <div
-            @click="twoTagEvent(i)"
-            :class="{ itemTag: true, isActive: currentTwoTag === i }"
-            v-for="(item, i) in cateList"
-            :key="i"
+            @click="twoTagEvent(null)"
+            :class="{ itemTag: true, isActive: currentTwoTag === null }"
           >
-            {{ item }}
+            全部
+          </div>
+          <div
+            @click="twoTagEvent(item.id)"
+            :class="{ itemTag: true, isActive: currentTwoTag === item.id }"
+            v-for="item in oneCurrentTag.children"
+            :key="item.id"
+          >
+            {{ item.name }}
           </div>
         </div>
         <div class="develop" @click="handlerTwoCateLabel">
@@ -45,36 +91,40 @@
     <div class="productsWrap">
       <div class="screenBox">
         <div class="left">
-          <div class="screenItem">
-            <span :class="{ screenLabel: true, active: isScreen === '综合' }"
+          <div class="screenItem" @click="sortTypeEvent(null)">
+            <span :class="{ screenLabel: true, active: sortOrder === null }"
               >综合</span
             >
           </div>
-          <div class="screenItem">
-            <span :class="{ screenLabel: true, active: isScreen === '热度' }"
+          <div class="screenItem" @click="sortTypeEvent(3)">
+            <span :class="{ screenLabel: true, active: sortOrder === 3 }"
               >热度</span
             >
-            <i class="xiajiantouIcon"></i>
+            <i v-show="isRedu === null" class="jiantou xiajiantouIcon"></i>
+            <i v-show="isRedu === 1" class="jiantou xiaActiveIcon"></i>
+            <i v-show="isRedu === 2" class="jiantou shangActiveIcon"></i>
           </div>
-          <div class="screenItem">
-            <span :class="{ screenLabel: true, active: isScreen === '单价' }"
+          <div class="screenItem" @click="sortTypeEvent(1)">
+            <span :class="{ screenLabel: true, active: sortOrder === 1 }"
               >单价</span
             >
-            <i class="xiajiantouIcon"></i>
+            <i v-show="isPrice === null" class="jiantou xiajiantouIcon"></i>
+            <i v-show="isPrice === 1" class="jiantou xiaActiveIcon"></i>
+            <i v-show="isPrice === 2" class="jiantou shangActiveIcon"></i>
           </div>
-          <div class="screenItem">
-            <span :class="{ screenLabel: true, active: isScreen === '时间' }"
-              >时间</span
-            >
-            <i class="xiajiantouIcon"></i>
+          <div class="screenItem" @click="sortTypeEvent(2)">
+            <span :class="{ screenLabel: true, active: sortOrder === 2 }">
+              时间
+            </span>
+            <i v-show="isTime === null" class="jiantou xiajiantouIcon"></i>
+            <i v-show="isTime === 1" class="jiantou xiaActiveIcon"></i>
+            <i v-show="isTime === 2" class="jiantou shangActiveIcon"></i>
           </div>
-          <div class="screenItem">
-            <span
-              :class="{ screenLabel: true, active: isScreen === '上架时间' }"
-              >上架时间</span
-            >
+          <div class="screenItem dateTime">
+            <span class="screenLabel">上架时间</span>
             <el-date-picker
               size="mini"
+              value-format="yyyy-MM-ddTHH:mm:ss"
               v-model="searchForm.time"
               type="daterange"
               range-separator="-"
@@ -83,11 +133,8 @@
             >
             </el-date-picker>
           </div>
-          <div class="screenItem">
-            <span
-              :class="{ screenLabel: true, active: isScreen === '价格区间' }"
-              >价格区间</span
-            >
+          <div class="screenItem priceUnit">
+            <span class="screenLabel">价格区间</span>
             <div class="intervalPrice">
               <el-input
                 size="mini"
@@ -102,7 +149,12 @@
               ></el-input>
             </div>
           </div>
-          <el-button type="primary" style="margin-left: 10px;" size="mini">
+          <el-button
+            @click="getProductList"
+            type="primary"
+            style="margin-left: 10px;"
+            size="mini"
+          >
             确定
           </el-button>
         </div>
@@ -120,7 +172,7 @@
             <span class="totalCountText">{{ totalCount }}</span>
             <span>条数据</span>
           </div>
-          <div class="myPagination">
+          <div class="myMinPagination">
             <div @click="firstEvent" class="first el-icon-arrow-left"></div>
             <div class="count">
               <span class="pageIndex">{{ currentPage }}</span>
@@ -134,6 +186,19 @@
       <div class="productListBox">
         <!-- 产品列表 -->
         <component :is="isGrid" :productList="productList"></component>
+        <!-- 分页 -->
+        <center class="myPagination">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[12, 24, 36, 48]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalCount"
+          >
+          </el-pagination>
+        </center>
       </div>
     </div>
   </div>
@@ -143,6 +208,7 @@
 import bsProductSearch from "@/components/bsComponents/bsProductSearchComponent/searchBox";
 import bsColumnComponent from "@/components/bsComponents/bsProductSearchComponent/bsColumnComponent";
 import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/bsGridComponent";
+import eventBus from "@/assets/js/common/eventBus";
 export default {
   components: {
     bsProductSearch,
@@ -151,94 +217,191 @@ export default {
   },
   data() {
     return {
-      productList: [{}, {}, {}, {}, {}, {}, {}, {}, {}],
+      oneCurrentTag: null,
+      cateChildren: [],
+      shoppingList: [],
+      categoryList: [],
+      isPrice: null,
+      isTime: null,
+      isRedu: null,
+      sortOrder: null,
+      sortType: null,
+      synthesis: true,
+      productList: [],
       isGrid: "bsGridComponent",
       currentPage: 1,
-      pageSize: 10,
+      pageSize: 12,
       totalCount: 0,
-      isScreen: "综合",
       searchForm: {
         keyword: "",
         minPrice: "",
         maxPrice: "",
-        time: []
+        categoryNumber: null,
+        time: [],
+        fa_no: 0,
+        number: 0,
+        name: 0,
+        packName: 0
       },
-      currentTwoTag: 0,
-      currentOneTag: 0,
+      currentTwoTag: null,
       isOneDownCate: true,
-      isTwoDownCate: true,
-      cateList: [
-        "全部",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具",
-        "电动玩具"
-      ]
+      isTwoDownCate: true
     };
   },
   methods: {
+    // 过滤类型
+    sortTypeEvent(type) {
+      this.sortOrder = type;
+      switch (type) {
+        case 1:
+          this.sortType = this.isPrice =
+            this.isPrice === null ? 1 : this.isPrice === 1 ? 2 : null;
+          this.sortType = null;
+          this.isTime = null;
+          this.isRedu = null;
+          this.sortType = this.isPrice;
+          this.sortType === null && (this.sortOrder = null);
+          break;
+        case 2:
+          this.isTime = this.isTime === null ? 1 : this.isTime === 1 ? 2 : null;
+          this.sortType = null;
+          this.isPrice = null;
+          this.isRedu = null;
+          this.sortType = this.isTime;
+          this.sortType === null && (this.sortOrder = null);
+          break;
+        case 3:
+          this.isRedu = this.isRedu === null ? 1 : this.isRedu === 1 ? 2 : null;
+          this.sortType = null;
+          this.isPrice = null;
+          this.isTime = null;
+          this.sortType = this.isRedu;
+          this.sortType === null && (this.sortOrder = null);
+          break;
+        default:
+          this.isPrice = null;
+          this.isTime = null;
+          this.isRedu = null;
+          this.sortType = null;
+          this.sortOrder = null;
+          break;
+      }
+      this.getProductList();
+    },
+    // 获取产品列表请求
+    async getProductList() {
+      const fd = {
+        name: this.searchForm.keyword,
+        skipCount: this.currentPage,
+        maxResultCount: this.pageSize,
+        categoryNumber: this.searchForm.categoryNumber,
+        minPrice: this.searchForm.minPrice,
+        maxPrice: this.searchForm.maxPrice,
+        startTime: this.searchForm.time.length ? this.searchForm.time[0] : null,
+        endTime: this.searchForm.time.length ? this.searchForm.time[1] : null,
+        precisionSearch: JSON.stringify({
+          fa_no: this.searchForm.fa_no ? 1 : 0,
+          number: this.searchForm.number ? 1 : 0,
+          name: this.searchForm.name ? 1 : 0,
+          packName: this.searchForm.packName ? 1 : 0
+        }),
+        sortOrder: this.sortOrder,
+        sortType: this.sortType
+      };
+      for (const key in fd) {
+        if (fd[key] === null || fd[key] === undefined || fd[key] === "")
+          delete fd[key];
+      }
+      const res = await this.$http.post("/api/SearchBearProductPage", fd);
+      const { code, item, msg } = res.data.result;
+      if (code === 200) {
+        if (this.shoppingList) {
+          for (let i = 0; i < item.items.length; i++) {
+            for (let j = 0; j < this.shoppingList.length; j++) {
+              if (
+                item.items[i].productNumber ===
+                this.shoppingList[j].productNumber
+              )
+                item.items[i].isShopping = true;
+            }
+          }
+        }
+        this.productList = item.items;
+        this.totalCount = item.totalCount;
+      } else {
+        this.totalCount = 0;
+        this.$message.error(msg);
+      }
+    },
+    // 切換頁容量
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+      if (this.currentPage * pageSize > this.totalCount) return false;
+      this.getProductList();
+    },
+    // 修改当前页
+    handleCurrentChange(page) {
+      this.currentPage = page;
+      this.getProductList();
+    },
+    // 获取产品类目列表
+    async getProductCategoryList() {
+      const res = await this.$http.post("/api/ProductCategoryList", {});
+      if (res.data.result.code === 200) {
+        this.categoryList = res.data.result.item;
+      } else {
+        this.$message.error(res.data.result.msg);
+      }
+    },
+    // 选择综合
+    handleSynthesis(flag) {
+      if (flag) {
+        this.searchForm.fa_no = 0;
+        this.searchForm.number = 0;
+        this.searchForm.name = 0;
+        this.searchForm.packName = 0;
+      }
+    },
+    // 选择筛选
+    handleCheckedScreensChange(flag) {
+      if (flag) {
+        this.synthesis = null;
+      }
+    },
     // 切换产品列表样式
     handerIsGrid(type) {
       this.isGrid = type;
     },
     // 上一页
     firstEvent() {
-      console.log(123);
+      if (this.currentPage === 1) {
+        this.$message.error("已经是第一页了");
+        return false;
+      }
+      this.currentPage--;
+      this.getProductList();
     },
     // 下一页
     nextEvent() {
-      console.log(123);
+      const totalPage = Math.ceil(this.totalCount / this.pageSize);
+      if (totalPage <= this.currentPage) {
+        this.$message.error("已经是第最后一页了");
+        return false;
+      }
+      this.currentPage++;
+      this.getProductList();
     },
     // 一级分类点击事件
-    oneTagEvent(i) {
-      this.currentOneTag = i;
+    oneTagEvent(item) {
+      this.currentTwoTag = null;
+      this.oneCurrentTag = item;
+      this.cateChildren = item ? item.children : [];
+      this.searchForm.categoryNumber = item.id || null;
     },
     // 二级分类点击事件
-    twoTagEvent(i) {
-      this.currentTwoTag = i;
+    twoTagEvent(id) {
+      this.currentTwoTag = id;
+      this.searchForm.categoryNumber = id;
     },
     // 展开一级分类
     handlerOneCateLabel() {
@@ -248,21 +411,38 @@ export default {
     handlerTwoCateLabel() {
       this.isTwoDownCate = !this.isTwoDownCate;
     },
-    // 搜索
-    searchProducts() {
-      console.log(123);
+    clearRootEvent() {
+      eventBus.$off("searchProducts");
+      eventBus.$off("openUpload");
     }
   },
-  created() {},
-  mounted() {}
+  created() {
+    this.getProductCategoryList();
+    this.getProductList();
+  },
+  mounted() {
+    // 点击搜索-文字搜索
+    eventBus.$on("searchProducts", form => {
+      this.searchForm.keyword = form.keyword;
+      this.currentPage = 1;
+      this.getProductList();
+    });
+    // 图搜
+    eventBus.$on("openUpload", file => {
+      console.log(file);
+    });
+  },
+  beforeDestroy() {
+    this.clearRootEvent();
+  }
 };
 </script>
 <style scoped lang="less">
+@deep: ~">>>";
 .productSearch {
   .advancedSearchBox {
     background-color: #fff;
     width: 100%;
-    min-height: 263px;
     .standardScreening,
     .productClass,
     .twoLevelClass {
@@ -270,6 +450,17 @@ export default {
       padding-top: 0;
       .myLabel {
         margin-right: 15px;
+      }
+    }
+    @{deep} .standardScreening {
+      display: flex;
+      .el-checkbox {
+        .el-checkbox__input {
+          border-radius: 50%;
+          .el-checkbox__inner {
+            border-radius: 50%;
+          }
+        }
       }
     }
     .productClass,
@@ -335,17 +526,31 @@ export default {
           align-items: center;
           cursor: pointer;
           padding: 5px;
+          &.priceUnit,
+          &.dateTime {
+            cursor: default;
+          }
           .screenLabel {
             margin-right: 10px;
             &.active {
               color: #3368a9;
             }
           }
-          .xiajiantouIcon {
+          .jiantou {
             width: 9px;
             height: 16px;
             opacity: 1;
+          }
+          .xiajiantouIcon {
             background: url("~@/assets/images/xiajiantou.png") no-repeat center;
+            background-size: contain;
+          }
+          .xiaActiveIcon {
+            background: url("~@/assets/images/xiaActive.png") no-repeat center;
+            background-size: contain;
+          }
+          .shangActiveIcon {
+            background: url("~@/assets/images/shangActive.png") no-repeat center;
             background-size: contain;
           }
           .el-date-editor {
@@ -362,7 +567,7 @@ export default {
         }
       }
       .right {
-        width: 350px;
+        width: 340px;
         height: 100%;
         display: flex;
         align-items: center;
@@ -404,7 +609,7 @@ export default {
             color: #eb1515;
           }
         }
-        .myPagination {
+        .myMinPagination {
           width: 110px;
           display: flex;
           align-items: center;
@@ -428,6 +633,9 @@ export default {
       padding: 20px;
       padding-bottom: 0;
       box-sizing: border-box;
+      .myPagination {
+        padding: 30px 0;
+      }
     }
   }
 }

@@ -18,16 +18,25 @@ export default [
   {
     path: "/bsIndex/bsAccountSettings",
     name: "bsAccountSettings",
-    component: BsAccountSettings
+    component: BsAccountSettings,
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/bsIndex/bsQuotationSettings",
     name: "bsQuotationSettings",
-    component: BsQuotationSettings
+    component: BsQuotationSettings,
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/bsIndex/bsPushSettings",
     name: "bsPushSettings",
-    component: BsPushSettings
+    component: BsPushSettings,
+    meta: {
+      keepAlive: true
+    }
   }
 ];

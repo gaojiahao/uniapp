@@ -10,6 +10,22 @@
         v-model="searchForm.keyword"
         clearable
       >
+        <template slot="prefix">
+          <el-upload
+            :auto-upload="false"
+            ref="uploadRef"
+            accept=".jpg,.jpeg,.png,.ico,.bmp,.JPG,.JPEG,.PNG,.ICO,.BMP"
+            class="upload-demo"
+            action="/api/WebsiteShare/SearchProductsByPicture"
+            :show-file-list="false"
+            :on-change="openUpload"
+          >
+            <i
+              style="font-size: 20px;"
+              class="el-input__icon el-icon-camera-solid"
+            ></i>
+          </el-upload>
+        </template>
       </el-input>
       <el-button
         size="medium"
@@ -19,7 +35,7 @@
         >搜 索</el-button
       >
     </div>
-    <el-button type="warning" size="medium">
+    <el-button type="warning" size="medium" @click="toShoppingCart">
       <i class="whiteCart"></i>
       <span>购物车</span>
       <span>(2)</span>
@@ -28,6 +44,7 @@
 </template>
 
 <script>
+import eventBus from "@/assets/js/common/eventBus";
 export default {
   data() {
     return {
@@ -37,9 +54,18 @@ export default {
     };
   },
   methods: {
+    // 选择图片-图搜
+    openUpload(file) {
+      // this.$emit("openUpload", file);
+      eventBus.$emit("openUpload", file);
+    },
     // 文本搜索产品
     searchProducts() {
-      console.log(this.searchForm);
+      eventBus.$emit("searchProducts", this.searchForm);
+    },
+    // 去购物车
+    toShoppingCart() {
+      console.log("toShoppingCart");
     }
   },
   created() {},

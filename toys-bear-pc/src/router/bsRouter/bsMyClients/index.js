@@ -10,11 +10,17 @@ export default [
   {
     path: "/bsIndex/bsMyClients",
     name: "bsMyClients",
-    component: BsMyClients
+    component: BsMyClients,
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/bsIndex/bsVendorQuery",
     name: "bsVendorQuery",
-    component: BsVendorQuery
+    component: BsVendorQuery,
+    meta: {
+      keepAlive: true
+    }
   }
 ];

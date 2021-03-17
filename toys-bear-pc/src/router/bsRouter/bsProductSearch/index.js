@@ -25,26 +25,41 @@ export default [
   {
     path: "/bsIndex/bsProductSearchIndex",
     name: "bsProductSearchIndex",
-    component: BsProductSearchIndex
+    component: BsProductSearchIndex,
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/bsIndex/bsMyCollection",
     name: "bsMyCollection",
-    component: BsMyCollection
+    component: BsMyCollection,
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/bsIndex/bsLatestProducts",
     name: "bsLatestProducts",
-    component: BsLatestProducts
+    component: BsLatestProducts,
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/bsIndex/bsSpotProducts",
     name: "bsSpotProducts",
-    component: BsSpotProducts
+    component: BsSpotProducts,
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/bsIndex/bsVIPProducts",
     name: "bsVIPProducts",
-    component: BsVIPProducts
+    component: BsVIPProducts,
+    meta: {
+      keepAlive: true
+    }
   }
 ];

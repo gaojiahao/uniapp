@@ -44,7 +44,6 @@ export const staticRouters = [
   }
 ];
 export async function setMenuTree(menuTree, router) {
-  console.log(menuTree);
   if (menuTree) {
     for (let i = 0; i < menuTree.length; i++) {
       if (menuTree[i].children) {

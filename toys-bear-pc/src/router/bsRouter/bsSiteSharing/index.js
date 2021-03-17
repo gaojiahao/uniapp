@@ -14,16 +14,25 @@ export default [
   {
     path: "/bsIndex/bsSiteLlis",
     name: "bsSiteLlis",
-    component: BsSiteLlis
+    component: BsSiteLlis,
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/bsIndex/bsCustomerOrder",
     name: "bsCustomerOrder",
-    component: BsCustomerOrder
+    component: BsCustomerOrder,
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/bsIndex/bsBrowsingHistory",
     name: "bsBrowsingHistory",
-    component: BsBrowsingHistory
+    component: BsBrowsingHistory,
+    meta: {
+      keepAlive: true
+    }
   }
 ];

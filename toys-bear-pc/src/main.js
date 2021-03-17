@@ -15,5 +15,8 @@ Vue.use(myAxios);
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
+  data: {
+    eventHub: new Vue()
+  }
 }).$mount("#app");

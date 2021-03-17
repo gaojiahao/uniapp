@@ -17,21 +17,33 @@ export default [
   {
     path: "/bsIndex/bsHallSample",
     name: "bsHallSample",
-    component: BsHallSample
+    component: BsHallSample,
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/bsIndex/bsShoppingCart",
     name: "bsShoppingCart",
-    component: BsShoppingCart
+    component: BsShoppingCart,
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/bsIndex/bsSampleQuotation",
     name: "bsSampleQuotation",
-    component: BsSampleQuotation
+    component: BsSampleQuotation,
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/bsIndex/bsPurchaseOrder",
     name: "bsPurchaseOrder",
-    component: BsPurchaseOrder
+    component: BsPurchaseOrder,
+    meta: {
+      keepAlive: true
+    }
   }
 ];

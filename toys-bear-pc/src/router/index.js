@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "@/store/index";
 import axios from "axios";
+import { Message } from "element-ui";
 import { staticRouters, setMenuTree } from "./routers";
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
@@ -48,12 +49,16 @@ export async function getMenuFuc() {
 router.beforeEach(async (to, from, next) => {
   // 如果没有登录token
   if (!store.state.userInfo || !store.state.userInfo.accessToken) {
-    const res = await getToken();
-    const obj =
-      typeof res === "string" && res.constructor === String
-        ? { accessToken: res }
-        : null;
-    store.commit("setToken", obj);
+    try {
+      const res = await getToken();
+      const obj =
+        typeof res === "string" && res.constructor === String
+          ? { accessToken: res }
+          : null;
+      store.commit("setToken", obj);
+    } catch (error) {
+      if (error) Message.error("请求失败，请求接口为/api/GetToken");
+    }
     if (
       to.path.includes("/beforeIndex") ||
       to.path.includes("/erp") ||

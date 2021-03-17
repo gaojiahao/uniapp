@@ -33,7 +33,8 @@ export default {
   justify-content: space-between;
   flex-wrap: wrap;
   .kong {
-    width: 19%;
+    width: 16%;
+    min-width: 200px;
     border: 1px solid transparent;
   }
 }
