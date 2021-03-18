@@ -1,6 +1,10 @@
 <template>
   <div class="bsGridComponent">
-    <bsGridItem v-for="item in productList" :key="item.id" :item="item" />
+    <bsGridItem
+      v-for="item in productList"
+      :key="item.productNumber"
+      :item="item"
+    />
     <div class="kong"></div>
     <div class="kong"></div>
     <div class="kong"></div>
