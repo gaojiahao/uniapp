@@ -1,8 +1,6 @@
 <template>
   <div class="bsMyCollection">
-    <div class="title">
-      我的收藏 (3)
-    </div>
+    <div class="title">我的收藏 ({{ totalCount }})</div>
     <div class="searchBox">
       <div class="item">
         <span class="label">关键字：</span>
@@ -10,6 +8,7 @@
           type="text"
           size="medium"
           v-model="keyword"
+          placeholder="请输入关键词"
           @keyup.native.enter="search"
         ></el-input>
       </div>
@@ -42,7 +41,7 @@
         :data="tableData"
         style="width: 100%"
         ref="collecTable"
-        :header-cell-style="{ 'font-size': '14px' }"
+        :header-cell-style="{ 'font-size': '14px', color: '#666' }"
       >
         <el-table-column prop="img" label="产品" align="center" width="300">
           <template slot-scope="scope">
@@ -133,19 +132,21 @@
           width="100"
         >
           <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="warning"
-              @click="handleDelete(scope.row)"
-              >取消收藏</el-button
+            <el-popconfirm
+              title="确定要取消收藏吗？"
+              @confirm="handleDelete(scope.row)"
             >
+              <el-button size="mini" type="warning" @click.stop slot="reference"
+                >取消收藏</el-button
+              >
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
-      <center style="margin-top:20px;">
+      <center style="padding:20px 0;">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
-          :page-sizes="[10, 20, 30, 60]"
+          :page-sizes="[10, 20, 30, 40]"
           background
           :total="totalCount"
           :page-size="pageSize"
@@ -202,6 +203,17 @@ export default {
       } else {
         this.$message.error(res.data.result.msg);
       }
+    },
+    // 切換頁容量
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+      if (this.currentPage * pageSize > this.totalCount) return false;
+      this.getCollectList();
+    },
+    // 修改当前页
+    handleCurrentChange(page) {
+      this.currentPage = page;
+      this.getCollectList();
     },
     // 搜索
     search() {

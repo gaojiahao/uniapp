@@ -6,7 +6,7 @@
         size="medium"
         @keyup.native.enter="searchProducts"
         style="width: 340px; margin: 0 15px;"
-        placeholder="请输入搜索内容"
+        placeholder="请输入关键词"
         v-model="searchForm.keyword"
         clearable
       >

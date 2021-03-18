@@ -205,7 +205,7 @@
 </template>
 
 <script>
-import bsProductSearch from "@/components/bsComponents/bsProductSearchComponent/searchBox";
+import bsProductSearch from "@/components/bsComponents/bsProductSearchComponent/bsProductSearch";
 import bsColumnComponent from "@/components/bsComponents/bsProductSearchComponent/bsColumnComponent";
 import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/bsGridComponent";
 import eventBus from "@/assets/js/common/eventBus";

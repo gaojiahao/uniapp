@@ -48,7 +48,7 @@
 <script>
 import bsTop from "@/components/bsComponents/bsTopComponent/BsTop";
 import bsMenu from "@/components/bsComponents/bsMenuComponent/BsMenu";
-import bsProductSearch from "@/components/bsComponents/bsProductSearchComponent/searchBox";
+import bsProductSearch from "@/components/bsComponents/bsProductSearchComponent/bsProductSearch";
 import { mapState } from "vuex";
 export default {
   components: {
