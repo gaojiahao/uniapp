@@ -122,6 +122,10 @@ export default {
         this.tableData = res.data.result.item.items;
       }
     },
+    // 去购物车
+    toShoppingCart() {
+      console.log(123);
+    },
     // 切换产品列表样式
     handerIsGrid(type) {
       this.isGrid = type;

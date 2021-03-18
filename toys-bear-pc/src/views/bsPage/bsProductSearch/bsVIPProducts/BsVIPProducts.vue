@@ -1,13 +1,36 @@
 <template>
   <div class="bsMyCollection">
     <div class="title">
-      <div class="left">现货产品 ({{ totalCount }})</div>
+      <div class="left">
+        <div
+          :class="{ tabs: true, active: isDiyu === 0 }"
+          @click="checkTabs(0)"
+        >
+          地域专区
+        </div>
+        <div
+          :class="{ tabs: true, active: isDiyu === 1 }"
+          @click="checkTabs(1)"
+        >
+          品牌专区
+        </div>
+      </div>
       <div class="right">
         <el-button type="warning" size="medium" @click="toShoppingCart">
           <i class="whiteCart"></i>
           <span>购物车</span>
           <span>(2)</span>
         </el-button>
+      </div>
+    </div>
+    <div class="brandBox">
+      <div class="title">{{ isDiyu == 0 ? "地域：" : "品牌：" }}</div>
+      <div class="myLabels">
+        <span class="lable">全部</span>
+        <span class="lable">全部</span>
+        <span class="lable">全部</span>
+        <span class="lable">全部</span>
+        <span class="lable">全部</span>
       </div>
     </div>
     <div class="searchBox">
@@ -94,6 +117,7 @@ export default {
       isGrid: "bsGridComponent",
       keyword: null,
       dateTime: null,
+      isDiyu: 0,
       tableData: [],
       totalCount: 0,
       pageSize: 12,
@@ -101,6 +125,25 @@ export default {
     };
   },
   methods: {
+    // 获取品牌和专区
+    async getVipRegions() {
+      const res = await this.$http.post("/api/getVipRegions", {});
+      if (res.data.result.code === 200) {
+        this.banners = res.data.result.item.images;
+        this.floorList = res.data.result.item.vipRegionItem;
+        console.log(res.data.result.item);
+      } else {
+        this.$message.error(res.data.result.msg);
+      }
+    },
+    // 去购物车
+    toShoppingCart() {
+      console.log(123);
+    },
+    // 切换专区
+    checkTabs(num) {
+      this.isDiyu = num;
+    },
     // 获取列表
     async getProductsList() {
       const fd = {
@@ -145,6 +188,7 @@ export default {
   },
   created() {
     this.getProductsList();
+    this.getVipRegions();
   },
   mounted() {}
 };
@@ -159,22 +203,33 @@ export default {
     height: 55px;
     font-size: 15px;
     font-weight: 700;
-    padding-left: 15px;
+    // padding-left: 15px;
     box-sizing: border-box;
     position: relative;
     border-bottom: 1px solid #e5e5e5;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    &::before {
-      width: 4px;
-      height: 14px;
-      background-color: #3368a9;
-      position: absolute;
-      left: 0;
-      top: 50%;
-      content: "";
-      transform: translate(0, -50%);
+    .left {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      .tabs {
+        width: 100px;
+        height: 55px;
+        box-sizing: border-box;
+        border-bottom: 2px solid transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        cursor: pointer;
+        &.active {
+          font-weight: 700;
+          border-color: #3368a9;
+          color: #3368a9;
+        }
+      }
     }
     .right {
       .whiteCart {
@@ -185,6 +240,35 @@ export default {
         background: url("~@/assets/images/whiteCart.png") no-repeat center;
         background-size: contain;
         margin-right: 10px;
+      }
+    }
+  }
+  .brandBox {
+    display: flex;
+    padding-top: 20px;
+    box-sizing: border-box;
+    color: #333333;
+    min-width: 70px;
+    font-weight: 400;
+    .title {
+      width: 70px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      font-weight: 400;
+    }
+    .myLabels {
+      display: flex;
+      .lable {
+        padding: 8px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        &.active {
+          background: #3368a9;
+          color: #fff;
+        }
       }
     }
   }

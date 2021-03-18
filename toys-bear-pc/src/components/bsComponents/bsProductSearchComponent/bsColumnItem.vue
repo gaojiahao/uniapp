@@ -14,6 +14,18 @@
           <img :src="require('@/assets/images/imgError.png')" />
         </div>
       </el-image>
+      <div
+        class="spotProductIcon"
+        v-if="$route.path === '/bsIndex/bsSpotProducts'"
+      ></div>
+      <div
+        class="newProductIcon"
+        v-if="$route.path === '/bsIndex/bsLatestProducts'"
+      ></div>
+      <div
+        class="vipProductIcon"
+        v-if="$route.path === '/bsIndex/bsVIPProducts'"
+      ></div>
     </div>
     <div class="content">
       <div class="productName">
@@ -159,6 +171,29 @@ export default {
         image-rendering: crisp-edges;
         -ms-interpolation-mode: nearest-neighbor;
       }
+    }
+    .spotProductIcon,
+    .newProductIcon,
+    .vipProductIcon {
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      width: 45px;
+      height: 45px;
+    }
+    .spotProductIcon {
+      width: 40px;
+      height: 40px;
+      background: url("~@/assets/images/spotProductIcon.png") center no-repeat;
+      background-size: contain;
+    }
+    .newProductIcon {
+      background: url("~@/assets/images/newProductIcon.png") center no-repeat;
+      background-size: contain;
+    }
+    .vipProductIcon {
+      background: url("~@/assets/images/vipProductIcon.png") center no-repeat;
+      background-size: contain;
     }
   }
   .content {
