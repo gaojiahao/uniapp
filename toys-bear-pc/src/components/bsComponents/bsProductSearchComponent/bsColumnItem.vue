@@ -1,5 +1,5 @@
 <template>
-  <div class="bsGridItem">
+  <div class="bsGridItem" @click="toProductDetails">
     <div class="itemImg">
       <el-image
         style="width:222px;height:166px;"
@@ -106,7 +106,26 @@ export default {
       isShopping: false
     };
   },
-  methods: {},
+  methods: {
+    async toProductDetails() {
+      const res = await this.$http.post("/api/UpdateIntegral", {
+        integraType: 1,
+        productNumber: this.item.productNumber
+      });
+      const { code, msg } = res.data.result;
+      if (code === 200) {
+        this.$message.success("积分扣除成功");
+      } else {
+        this.$message.error(msg);
+      }
+      sessionStorage.setItem("productDetail", JSON.stringify(this.item));
+      this.$store.commit("handlerBsMenuLabels", {
+        linkUrl: "/bsIndex/bsProductDetails",
+        name: "产品详情"
+      });
+      this.$router.push("/bsIndex/bsProductDetails");
+    }
+  },
   created() {},
   mounted() {}
 };

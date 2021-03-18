@@ -39,8 +39,16 @@
         </div>
         <div class="line"></div>
         <div class="infoItem">
-          <div class="userIcon"></div>
-          <span class="content userName">小竹熊云科技公司</span>
+          <div class="userIcon">
+            <el-avatar
+              style="background-color: #3368a9;"
+              :size="30"
+              :src="userInfo.userInfo.userImage"
+            >
+              {{ userInfo.userInfo.linkman }}
+            </el-avatar>
+          </div>
+          <span class="content userName">{{ userInfo.userInfo.linkman }}</span>
         </div>
         <div class="moreBox">
           <i class="moreIcon"></i>
@@ -51,6 +59,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   props: {
     isCollapse: {
@@ -62,7 +71,10 @@ export default {
   },
   methods: {},
   created() {},
-  mounted() {}
+  mounted() {},
+  computed: {
+    ...mapState(["userInfo"])
+  }
 };
 </script>
 <style scoped lang="less">

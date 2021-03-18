@@ -5,27 +5,20 @@
     .el-menu-vertical-demo:not(.el-menu--collapse) {
     width: 220px;
     height: 100%;
-    .el-menu-item {
-      font-size: 15px !important;
+    .icon {
+      margin-right: 20px;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+    }
+    .homeIcon {
+      background: url("~@/assets/images/bsHomeIcon.png") no-repeat center;
+      background-size: contain;
+    }
+    .is-active {
       .homeIcon {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        background: url("~@/assets/images/bsHomeIcon.png") no-repeat center;
+        background: url("~@/assets/images/bsHomeActiveIcon.png") no-repeat center;
         background-size: contain;
-      }
-      .homeIcon {
-        margin-right: 20px;
-      }
-      &.is-active {
-        color: #3368a9;
-        .homeIcon {
-          display: inline-block;
-          width: 20px;
-          height: 20px;
-          background: url("~@/assets/images/bsHomeActiveIcon.png") no-repeat center;
-          background-size: contain;
-        }
       }
     }
   }
@@ -33,6 +26,26 @@
     height: 100%;
   }
 }
+@{deep} .el-tooltip {
+    .icon {
+      margin-right: 20px;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+    }
+    .homeIcon {
+      background: url("~@/assets/images/bsHomeIcon.png") no-repeat center;
+      background-size: contain;
+    }
+  }
+  .is-active {
+    .el-tooltip {
+      .homeIcon {
+        background: url("~@/assets/images/bsHomeActiveIcon.png") no-repeat center;
+        background-size: contain;
+      }
+    }
+  }
 @{deep} .el-scrollbar__wrap {
   overflow-x: hidden;
   .el-scrollbar__view {
@@ -47,6 +60,10 @@
       display: inline-block;
       width: 20px;
       height: 20px;
+    }
+    .homeIcon {
+      background: url("~@/assets/images/bsHomeIcon.png") no-repeat center;
+      background-size: contain;
     }
     .productSearchIcon {
       background: url("~@/assets/images/bsProductSearchIcon.png") no-repeat center;
@@ -106,6 +123,40 @@
           background: url("~@/assets/images/bsMyClientsActiveIcon.png") no-repeat center;
           background-size: contain;
         }
+      }
+    }
+  }
+  &.is-active {
+    .el-submenu__title {
+      color: #3368a9;
+      i {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+      }
+      .productSearchIcon {
+        background: url("~@/assets/images/bsProductSearchActiveIcon.png") no-repeat center;
+        background-size: contain;
+      }
+      .myInfoIcon {
+        background: url("~@/assets/images/bsMyInfoActiveIcon.png") no-repeat center;
+        background-size: contain;
+      }
+      .businessManageIcon {
+        background: url("~@/assets/images/bsBusinessManageActiveIcon.png") no-repeat center;
+        background-size: contain;
+      }
+      .bsSiteSharingIcon {
+        background: url("~@/assets/images/bsSiteSharingActiveIcon.png") no-repeat center;
+        background-size: contain;
+      }
+      .bsPersonalManageIcon {
+        background: url("~@/assets/images/bsPersonalManageActiveIcon.png") no-repeat center;
+        background-size: contain;
+      }
+      .bsMyClientsIcon {
+        background: url("~@/assets/images/bsMyClientsActiveIcon.png") no-repeat center;
+        background-size: contain;
       }
     }
   }

@@ -9,16 +9,8 @@
         router
         :collapse="isCollapse"
       >
-        <el-menu-item
-          @click="
-            addRouterEvent({
-              linkUrl: '/bsIndex/bsHome',
-              name: '后台首页'
-            })
-          "
-          index="/bsIndex/bsHome"
-        >
-          <i class="homeIcon"></i>
+        <el-menu-item index="/bsIndex/bsHome">
+          <i class="icon homeIcon"></i>
           <span slot="title">后台首页</span>
         </el-menu-item>
         <el-submenu

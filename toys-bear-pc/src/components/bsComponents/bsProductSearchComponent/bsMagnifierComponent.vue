@@ -8,20 +8,8 @@
         @mouseleave="boxMouseLeave"
         @click="openBigImg(middleImg.url)"
       >
-        <!-- 产品图片 -->
-        <!-- :style="{
-            width: middleImgWidth - 2 + 'px',
-            height: middleImgHeight + 'px'
-          }" -->
-        <!-- <img
-          :style="{
-            width: middleImgWidth - 2 + 'px',
-            height: middleImgHeight + 'px'
-          }"
-          v-if="middleImg.type === 'img'"
-          :src="middleImg.url"
-          alt=""
-        /> -->
+        <!-- 3D -->
+        <i class="threeIcon" @click="open3D"></i>
         <el-image
           v-if="middleImg.type === 'img'"
           fit="contain"
@@ -297,6 +285,11 @@ export default {
     });
   },
   methods: {
+    // 打开3D效果
+    open3D() {
+      this.$message.warning("敬请期待");
+      console.log("3d");
+    },
     touchEnd(e) {
       e = e || window.event;
       e.preventDefault();
@@ -500,6 +493,17 @@ export default {
   border: 1px solid #d2d2d2;
   box-sizing: border-box;
   position: relative;
+  .threeIcon {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    width: 36px;
+    height: 36px;
+    background: url("~@/assets/images/3Dicon.png") no-repeat center;
+    background-size: contain;
+    cursor: pointer;
+    z-index: 1;
+  }
 }
 .left_contaner .shade {
   background-color: rgba(135, 206, 235, 0.5);

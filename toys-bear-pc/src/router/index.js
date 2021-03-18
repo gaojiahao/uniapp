@@ -56,8 +56,10 @@ router.beforeEach(async (to, from, next) => {
           ? { accessToken: res }
           : null;
       store.commit("setToken", obj);
+      next();
     } catch (error) {
       if (error) Message.error("请求失败，请求接口为/api/GetToken");
+      next();
     }
     if (
       to.path.includes("/beforeIndex") ||

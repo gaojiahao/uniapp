@@ -73,8 +73,10 @@ myAxios.install = function(Vue) {
       ) {
         $Store.commit("updateAppLoading", true);
       }
-      config.headers.Utoken =
-        $Store.state.userInfo && $Store.state.userInfo.accessToken;
+      if (!config.url.includes("GetToken")) {
+        config.headers.Utoken =
+          $Store.state.userInfo && $Store.state.userInfo.accessToken;
+      }
       config.headers["content-type"] = "application/json";
       return config;
     },

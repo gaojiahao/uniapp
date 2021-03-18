@@ -33,19 +33,11 @@
               <bsProductSearch />
             </div>
           </el-collapse-transition>
-          <el-scrollbar style="height: 100%;" ref="elscrollbar">
+          <el-scrollbar style="height: 100%;" ref="scrollbar">
             <keep-alive>
-              <router-view
-                v-if="$route.meta.keepAlive"
-                v-infinite-scroll="scrollLoad"
-                :infinite-scroll-distance="200"
-              ></router-view>
+              <router-view v-if="$route.meta.keepAlive"></router-view>
             </keep-alive>
-            <router-view
-              v-if="!$route.meta.keepAlive"
-              v-infinite-scroll="scrollLoad"
-              :infinite-scroll-distance="200"
-            ></router-view>
+            <router-view v-if="!$route.meta.keepAlive"></router-view>
           </el-scrollbar>
         </div>
       </div>
@@ -72,12 +64,16 @@ export default {
   },
   methods: {
     // 滚动事件
-    scrollLoad() {
+    handleScroll() {
       if (this.$route.path === "/bsIndex/bsProductSearchIndex") {
-        const scrTop = this.$refs["elscrollbar"].wrap.scrollTop;
-        console.log(scrTop);
-        if (scrTop >= 200) this.showSearch = true;
-        else this.showSearch = false;
+        let scrollbarEl = this.$refs.scrollbar.wrap;
+        scrollbarEl.onscroll = () => {
+          if (scrollbarEl.scrollTop >= 200) {
+            this.showSearch = true;
+          } else {
+            this.showSearch = false;
+          }
+        };
       }
     },
     // 关闭所有tab标签
@@ -98,6 +94,7 @@ export default {
               name: "后台首页"
             }
           ]);
+          this.$router.push("/bsIndex/bsHome");
         })
         .catch(() => {
           this.$message({
@@ -123,6 +120,7 @@ export default {
         return false;
       }
       this.$store.commit("subBsMenuLabels", item);
+      console.log(this.$route.path, item.linkUrl);
       if (this.$route.path === item.linkUrl) {
         if (this.bsMenuLabels.length) {
           const routerLink = this.bsMenuLabels[this.bsMenuLabels.length - 1]
@@ -149,6 +147,7 @@ export default {
         name: "后台首页"
       });
     }
+    this.handleScroll();
   }
 };
 </script>
@@ -282,11 +281,9 @@ export default {
 }
 @{deep} .el-scrollbar__wrap {
   overflow-x: hidden;
-  // .el-scrollbar__view {
-  //   width: 100%;
-  //   padding-left: 20px;
-  //   height: 100%;
-  //   white-space: nowrap;
-  // }
+  .el-scrollbar__view {
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>
