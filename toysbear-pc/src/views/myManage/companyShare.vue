@@ -121,7 +121,7 @@
                   >编辑</el-button
                 >
                 <el-popconfirm
-                  title="确定要删除这个版本吗？"
+                  title="确定要删除这个分享吗？"
                   @confirm="handleDelete(scope.row)"
                 >
                   <el-button

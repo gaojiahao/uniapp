@@ -330,9 +330,7 @@
             <el-button type="primary" @click="subProcessingLog"
               >提 交</el-button
             >
-            <el-button type="danger" @click="addClienDialog = false"
-              >取 消</el-button
-            >
+            <el-button plain @click="addClienDialog = false">取 消</el-button>
           </template>
         </center>
       </el-form>
@@ -377,7 +375,7 @@
         <center>
           <template>
             <el-button type="primary" @click="subMyClient">提 交</el-button>
-            <el-button type="danger" @click="addMyClientDialog = false"
+            <el-button plain @click="addMyClientDialog = false"
               >取 消</el-button
             >
           </template>
@@ -503,16 +501,17 @@ export default {
         this.$message.error(res.data.result.msg);
       }
     },
-    // 取消收藏
+    // 删除分享
     async handleDelete(row) {
-      const res = await this.$http.post("/api/CreateProductCollection", {
-        productNumber: row.productNumber
-      });
+      const res = await this.$http.post(
+        "/api/DeleteWebsiteShareInfo?id=" + row.id,
+        {}
+      );
       if (res.data.result.code === 200) {
-        this.$message.success("取消收藏成功");
-        this.getDataList();
+        this.$message.success("删除成功");
+        this.getSearchWebsiteShareInfosPage();
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$message.error("删除失败,请检查网络！");
       }
     },
     // 切換頁容量
