@@ -340,7 +340,6 @@
       title="新增客户"
       top="30vh"
       :close-on-click-modal="false"
-      append-to-body
       :visible.sync="addMyClientDialog"
       destroy-on-close
       width="50%"

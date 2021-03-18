@@ -48,8 +48,8 @@
             <span>{{ item.fa_no }}</span>
           </p>
         </div>
-        <div class="right">
-          <i v-if="isShopping" class="shoppingCartActive"></i>
+        <div class="right" @click.stop="handlerShopping(item)">
+          <i v-if="item.isShopping" class="shoppingCartActive"></i>
           <i v-else class="shoppingCart"></i>
         </div>
       </div>
@@ -78,9 +78,7 @@ export default {
     }
   },
   data() {
-    return {
-      isShopping: false
-    };
+    return {};
   },
   methods: {
     async toProductDetails() {
@@ -100,6 +98,23 @@ export default {
         name: "产品详情"
       });
       this.$router.push("/bsIndex/bsProductDetails");
+    },
+    // 加购
+    handlerShopping(item) {
+      // this.$set(item, "isShopping", !item.isShopping);
+      item.isShopping = !item.isShopping;
+      if (item.isShopping) {
+        item.shoppingCount = 1;
+        this.$store.commit("pushShopping", item);
+        this.$message.closeAll();
+        this.$message.success("加购成功");
+      } else {
+        item.shoppingCount = 0;
+        this.$message.closeAll();
+        this.$store.commit("popShopping", item);
+        this.$message.warning("删除成功");
+      }
+      this.$forceUpdate();
     }
   },
   created() {},
