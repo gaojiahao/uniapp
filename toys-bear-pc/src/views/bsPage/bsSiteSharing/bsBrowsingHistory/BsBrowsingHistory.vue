@@ -21,9 +21,9 @@
           placeholder="请选择"
         >
           <el-option
-            v-for="item in []"
+            v-for="item in sitesList"
             :key="item.value"
-            :label="item.label"
+            :label="item.key"
             :value="item.value"
           >
           </el-option>
@@ -55,54 +55,27 @@
     </div>
     <div class="tableBox">
       <el-table :data="tableData" style="width:100%;">
-        <el-table-column prop="orderNumber" label="订单编号">
+        <el-table-column label="客户" align="center">
           <template slot-scope="scope">
-            <div class="orderNumberBox">
-              <i class="el-icon-tickets"></i>
-              <span>{{ scope.row.orderNumber }}</span>
-            </div>
+            <i class="el-icon-view"></i>
+            <span style="margin-left: 15px;">{{ scope.row.customerName }}</span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="orderNumber"
-          width="150"
+          prop="siteRegion"
           label="站点"
           align="center"
         ></el-table-column>
-        <el-table-column prop="orderNumber" label="网址"></el-table-column>
         <el-table-column
-          prop="companyName"
-          label="客户"
-          align="center"
-          width="100"
+          prop="shareUrl"
+          width="350"
+          label="网址"
         ></el-table-column>
-        <el-table-column
-          prop="companyName"
-          label="订单总数"
-          width="100"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="totalAmount"
-          label="总价"
-          width="100"
-          align="center"
-        >
+        <el-table-column prop="email" label="登录邮箱"></el-table-column>
+        <el-table-column prop="createdOn" label="登录时间" align="center">
           <template slot-scope="scope">
-            <span style="color:#ff0b00;">
-              {{ scope.row.totalAmount }}
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="totalAmount"
-          label="下单时间"
-          width="150"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <span style="color:#ff0b00;">
-              {{ scope.row.totalAmount }}
+            <span>
+              {{ scope.row.createdOn.replace(/T/, " ") }}
             </span>
           </template>
         </el-table-column>
@@ -142,6 +115,7 @@ export default {
       keyword: null,
       dateTime: null,
       tableData: [],
+      sitesList: [],
       totalCount: 0,
       pageSize: 10,
       currentPage: 1
@@ -154,6 +128,7 @@ export default {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         keyword: this.keyword,
+        url: this.zhandian,
         startTime: this.dateTime && this.dateTime[0],
         endTime: this.dateTime && this.dateTime[1]
       };
@@ -162,23 +137,10 @@ export default {
           delete fd[key];
         }
       }
-      const res = await this.$http.post(
-        "/api/SearchCompanyShareOrdersPage",
-        fd
-      );
+      const res = await this.$http.post("/api/SearchLoginLogPage", fd);
       if (res.data.result.code === 200) {
         this.totalCount = res.data.result.item.totalCount;
         this.tableData = res.data.result.item.items;
-      }
-    },
-    // 取消收藏
-    async handleDelete(row) {
-      const res = await this.$http.post("/api/CreateProductCollection", {
-        productNumber: row.productNumber
-      });
-      if (res.data.result.code === 200) {
-        this.$message.success("取消收藏成功");
-        this.getSearchCompanyShareOrdersPage();
       } else {
         this.$message.error(res.data.result.msg);
       }
@@ -194,6 +156,18 @@ export default {
       this.currentPage = page;
       this.getSearchCompanyShareOrdersPage();
     },
+    // 获取站点列表
+    async getDefaultSites() {
+      const res = await this.$http.post("/api/GetDefaultSites", {});
+      if (res.data.result.code === 200) {
+        this.sitesList = [
+          { key: "全部", value: null },
+          ...res.data.result.item
+        ];
+      } else {
+        this.$message.error(res.data.result.msg);
+      }
+    },
     // 搜索
     search() {
       this.currentPage = 1;
@@ -201,6 +175,7 @@ export default {
     }
   },
   created() {
+    this.getDefaultSites();
     this.getSearchCompanyShareOrdersPage();
   },
   mounted() {}

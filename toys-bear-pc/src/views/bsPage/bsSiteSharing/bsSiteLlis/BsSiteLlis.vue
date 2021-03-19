@@ -43,7 +43,8 @@
         <el-table-column
           label="站点"
           align="center"
-          width="80"
+          width="100"
+          prop="siteRegion"
         ></el-table-column>
         <el-table-column prop="shareUrl" min-width="200" label="网址">
           <template slot-scope="scope">
@@ -52,7 +53,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="复制/扫码" align="center" min-width="100">
+        <el-table-column label="复制/扫码" align="center" min-width="160">
           <template slot-scope="scope">
             <el-button
               size="mini"

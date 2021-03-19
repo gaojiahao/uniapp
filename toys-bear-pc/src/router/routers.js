@@ -7,9 +7,7 @@ const BsIndex = () => import("@/views/bsPage/BsIndex.vue");
 /** 404模块 */
 import _404 from "@/router/404/index";
 /** 后台首页模块 */
-import bsHome from "@/router/bsRouter/bsHome/index";
-/** 产品详情模块 */
-import bsProductDetails from "@/router/bsRouter/bsProductSearch/bsProductDetails/index";
+import bsStaticModels from "@/router/bsRouter/bsStaticModels/index";
 
 /** ERP模块 */
 // import ERP from "@/router/ERP/index";
@@ -29,14 +27,7 @@ export const staticRouters = [
     path: "/bsIndex",
     name: "bsIndex",
     component: BsIndex,
-    children: [
-      bsHome,
-      bsProductDetails,
-      {
-        path: "/bsIndex",
-        redirect: "/bsIndex/bsHome"
-      }
-    ]
+    children: bsStaticModels
   },
   {
     path: "/",

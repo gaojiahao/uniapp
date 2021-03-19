@@ -45,8 +45,8 @@
                     <el-tooltip
                       class="item"
                       effect="dark"
-                      :content="scope.row.supplierPhone"
-                      placement="right"
+                      :content="scope.row.supplierPhone || '暂时没有厂商电话'"
+                      placement="top"
                     >
                       <div class="cartPhoneIcon"></div>
                     </el-tooltip>
@@ -69,7 +69,7 @@
         ></ex-table-column>
         <ex-table-column :autoFit="true" prop="ch_pa" label="包装">
         </ex-table-column>
-        <ex-table-column :autoFit="true" label="产品规格">
+        <ex-table-column :autoFit="true" label="产品规格" min-width="100">
           <template slot-scope="scope">
             <span>
               {{ scope.row.pr_le }}x{{ scope.row.pr_wi }}x{{
@@ -96,7 +96,7 @@
             </span>
           </template>
         </ex-table-column>
-        <ex-table-column :autoFit="true" label="体积/材积" min-width="100">
+        <ex-table-column :autoFit="true" label="体积/材积" min-width="150">
           <template slot-scope="scope">
             <span>
               {{ scope.row.bulk_stere }}(cbm)/{{ scope.row.bulk_feet }}(cuft)

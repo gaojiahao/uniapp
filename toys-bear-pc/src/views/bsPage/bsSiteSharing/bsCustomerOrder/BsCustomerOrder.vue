@@ -21,9 +21,9 @@
           placeholder="请选择"
         >
           <el-option
-            v-for="item in []"
+            v-for="item in sitesList"
             :key="item.value"
-            :label="item.label"
+            :label="item.key"
             :value="item.value"
           >
           </el-option>
@@ -55,39 +55,38 @@
     </div>
     <div class="tableBox">
       <el-table :data="tableData" style="width:100%;">
-        <el-table-column prop="orderNumber" label="订单编号">
+        <el-table-column prop="orderNumber" label="订单编号" width="200">
           <template slot-scope="scope">
-            <div class="orderNumberBox">
+            <div class="orderNumberBox" @click="toOrderDetails(scope.row)">
               <i class="el-icon-tickets"></i>
-              <span>{{ scope.row.orderNumber }}</span>
+              <span style="margin-left: 15px;">
+                {{ scope.row.orderNumber }}
+              </span>
             </div>
           </template>
         </el-table-column>
         <el-table-column
-          prop="orderNumber"
-          width="150"
+          prop="siteRegion"
           label="站点"
+          width="100"
           align="center"
         ></el-table-column>
-        <el-table-column prop="orderNumber" label="网址"></el-table-column>
         <el-table-column
-          prop="companyName"
+          prop="shareUrl"
+          width="350"
+          label="网址"
+        ></el-table-column>
+        <el-table-column
+          prop="customerName"
           label="客户"
           align="center"
-          width="100"
         ></el-table-column>
         <el-table-column
-          prop="companyName"
-          label="订单总数"
-          width="100"
+          prop="totalKuanshu"
+          label="订单款数"
           align="center"
         ></el-table-column>
-        <el-table-column
-          prop="totalAmount"
-          label="总价"
-          width="100"
-          align="center"
-        >
+        <el-table-column prop="totalAmount" label="总价" align="center">
           <template slot-scope="scope">
             <span style="color:#ff0b00;">
               {{ scope.row.totalAmount }}
@@ -95,14 +94,14 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="totalAmount"
+          prop="createdOn"
           label="下单时间"
           width="150"
           align="center"
         >
           <template slot-scope="scope">
-            <span style="color:#ff0b00;">
-              {{ scope.row.totalAmount }}
+            <span>
+              {{ scope.row.createdOn.replace(/T/, " ") }}
             </span>
           </template>
         </el-table-column>
@@ -142,6 +141,7 @@ export default {
       keyword: null,
       dateTime: null,
       tableData: [],
+      sitesList: [],
       totalCount: 0,
       pageSize: 10,
       currentPage: 1
@@ -154,6 +154,7 @@ export default {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         keyword: this.keyword,
+        url: this.zhandian,
         startTime: this.dateTime && this.dateTime[0],
         endTime: this.dateTime && this.dateTime[1]
       };
@@ -171,17 +172,26 @@ export default {
         this.tableData = res.data.result.item.items;
       }
     },
-    // 取消收藏
-    async handleDelete(row) {
-      const res = await this.$http.post("/api/CreateProductCollection", {
-        productNumber: row.productNumber
-      });
+    // 获取站点列表
+    async getDefaultSites() {
+      const res = await this.$http.post("/api/GetDefaultSites", {});
       if (res.data.result.code === 200) {
-        this.$message.success("取消收藏成功");
-        this.getSearchCompanyShareOrdersPage();
+        this.sitesList = [
+          { key: "全部", value: null },
+          ...res.data.result.item
+        ];
       } else {
         this.$message.error(res.data.result.msg);
       }
+    },
+    // 查看订单详情
+    toOrderDetails(row) {
+      sessionStorage.setItem("orderDetails", JSON.stringify(row));
+      this.$store.commit("handlerBsMenuLabels", {
+        linkUrl: "/bsIndex/bsClientOrderDetails",
+        name: row.orderNumber
+      });
+      this.$router.push("/bsIndex/bsClientOrderDetails");
     },
     // 切換頁容量
     handleSizeChange(pageSize) {
@@ -201,6 +211,7 @@ export default {
     }
   },
   created() {
+    this.getDefaultSites();
     this.getSearchCompanyShareOrdersPage();
   },
   mounted() {}
@@ -250,6 +261,10 @@ export default {
   @{deep} .tableBox {
     .el-table {
       font-size: 13px;
+      .orderNumberBox {
+        color: #3368a9;
+        cursor: pointer;
+      }
       .imgBox {
         text-align: left;
         display: flex;
