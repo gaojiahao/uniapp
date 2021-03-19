@@ -38,13 +38,14 @@
     <el-button type="warning" size="medium" @click="toShoppingCart">
       <i class="whiteCart"></i>
       <span>购物车</span>
-      <span>(2)</span>
+      <span>({{ shoppingList.length }})</span>
     </el-button>
   </div>
 </template>
 
 <script>
 import eventBus from "@/assets/js/common/eventBus";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -65,11 +66,20 @@ export default {
     },
     // 去购物车
     toShoppingCart() {
-      console.log("toShoppingCart");
+      this.$store.commit("handlerBsMenuLabels", {
+        linkUrl: "/bsIndex/bsShoppingCart",
+        name: "购物车"
+      });
+      this.$router.push("/bsIndex/bsShoppingCart");
     }
   },
   created() {},
-  mounted() {}
+  mounted() {},
+  computed: {
+    ...mapGetters({
+      shoppingList: "myShoppingList"
+    })
+  }
 };
 </script>
 <style scoped lang="less">

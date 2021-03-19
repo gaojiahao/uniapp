@@ -25,10 +25,7 @@ export default [
   {
     path: "/bsIndex/bsShoppingCart",
     name: "bsShoppingCart",
-    component: BsShoppingCart,
-    meta: {
-      keepAlive: true
-    }
+    component: BsShoppingCart
   },
   {
     path: "/bsIndex/bsSampleQuotation",

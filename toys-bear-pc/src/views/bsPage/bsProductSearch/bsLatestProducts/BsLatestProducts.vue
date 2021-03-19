@@ -6,7 +6,7 @@
         <el-button type="warning" size="medium" @click="toShoppingCart">
           <i class="whiteCart"></i>
           <span>购物车</span>
-          <span>(2)</span>
+          <span>({{ shoppingList.length }})</span>
         </el-button>
       </div>
     </div>
@@ -84,6 +84,7 @@
 <script>
 import bsColumnComponent from "@/components/bsComponents/bsProductSearchComponent/bsColumnComponent";
 import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/bsGridComponent";
+import { mapGetters } from "vuex";
 export default {
   components: {
     bsColumnComponent,
@@ -118,13 +119,29 @@ export default {
       }
       const res = await this.$http.post("/api/GetProductsByTypePage", fd);
       if (res.data.result.code === 200) {
+        if (this.shoppingList) {
+          const item = res.data.result.item;
+          for (let i = 0; i < item.items.length; i++) {
+            for (let j = 0; j < this.shoppingList.length; j++) {
+              if (
+                item.items[i].productNumber ===
+                this.shoppingList[j].productNumber
+              )
+                item.items[i].isShopping = true;
+            }
+          }
+        }
         this.totalCount = res.data.result.item.totalCount;
         this.tableData = res.data.result.item.items;
       }
     },
     // 去购物车
     toShoppingCart() {
-      console.log(123);
+      this.$store.commit("handlerBsMenuLabels", {
+        linkUrl: "/bsIndex/bsShoppingCart",
+        name: "购物车"
+      });
+      this.$router.push("/bsIndex/bsShoppingCart");
     },
     // 切换产品列表样式
     handerIsGrid(type) {
@@ -150,7 +167,12 @@ export default {
   created() {
     this.getProductsList();
   },
-  mounted() {}
+  mounted() {},
+  computed: {
+    ...mapGetters({
+      shoppingList: "myShoppingList"
+    })
+  }
 };
 </script>
 <style scoped lang="less">

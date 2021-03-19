@@ -5,12 +5,19 @@
       <el-table
         :data="tableData"
         style="width: 100%"
-        ref="collecTable"
+        ref="myTableRef"
         size="mini"
+        @selection-change="selectionChange"
+        :cell-style="{ padding: 0, margin: 0 }"
         :header-cell-style="{ 'font-size': '14px', color: '#666' }"
       >
-        <el-table-column type="selection" width="50"></el-table-column>
-        <el-table-column label="产品" width="300">
+        <ex-table-column
+          :autoFit="true"
+          width="30"
+          lable="选择"
+          type="selection"
+        ></ex-table-column>
+        <ex-table-column :autoFit="true" label="产品" width="300">
           <template slot-scope="scope">
             <div class="imgBox">
               <el-image
@@ -31,26 +38,38 @@
                   {{ scope.row.name }}
                 </div>
                 <div class="factory">
-                  {{ scope.row.supplierName }}
+                  <div class="fcatoryName">
+                    {{ scope.row.supplierName }}
+                  </div>
+                  <div class="icons">
+                    <el-tooltip
+                      class="item"
+                      effect="dark"
+                      :content="scope.row.supplierPhone"
+                      placement="right"
+                    >
+                      <div class="cartPhoneIcon"></div>
+                    </el-tooltip>
+                    <div class="cartInfoIcon"></div>
+                  </div>
                 </div>
               </div>
             </div>
           </template>
-        </el-table-column>
-        <el-table-column label="资料来源" align="center">
+        </ex-table-column>
+        <ex-table-column :autoFit="true" label="资料来源">
           <template slot-scope="scope">
             {{ scope.row.exhibitionName }}
           </template>
-        </el-table-column>
-        <el-table-column
+        </ex-table-column>
+        <ex-table-column
+          :autoFit="true"
           prop="fa_no"
           label="出厂货号"
-          width="100"
-          align="center"
-        ></el-table-column>
-        <el-table-column prop="ch_pa" label="包装" align="center" width="100">
-        </el-table-column>
-        <el-table-column label="产品规格" align="center">
+        ></ex-table-column>
+        <ex-table-column :autoFit="true" prop="ch_pa" label="包装">
+        </ex-table-column>
+        <ex-table-column :autoFit="true" label="产品规格">
           <template slot-scope="scope">
             <span>
               {{ scope.row.pr_le }}x{{ scope.row.pr_wi }}x{{
@@ -58,8 +77,8 @@
               }}(cm)
             </span>
           </template>
-        </el-table-column>
-        <el-table-column label="包装规格" align="center">
+        </ex-table-column>
+        <ex-table-column :autoFit="true" label="包装规格" min-width="100">
           <template slot-scope="scope">
             <span>
               {{ scope.row.in_le }}x{{ scope.row.in_wi }}x{{
@@ -67,8 +86,8 @@
               }}(cm)
             </span>
           </template>
-        </el-table-column>
-        <el-table-column label="外箱规格" align="center">
+        </ex-table-column>
+        <ex-table-column :autoFit="true" label="外箱规格" min-width="100">
           <template slot-scope="scope">
             <span>
               {{ scope.row.ou_le }}x{{ scope.row.ou_wi }}x{{
@@ -76,25 +95,25 @@
               }}(cm)
             </span>
           </template>
-        </el-table-column>
-        <el-table-column label="体积/材积" align="center">
+        </ex-table-column>
+        <ex-table-column :autoFit="true" label="体积/材积" min-width="100">
           <template slot-scope="scope">
             <span>
               {{ scope.row.bulk_stere }}(cbm)/{{ scope.row.bulk_feet }}(cuft)
             </span>
           </template>
-        </el-table-column>
-        <el-table-column label="毛重/净重" align="center" width="100">
+        </ex-table-column>
+        <ex-table-column :autoFit="true" label="毛重/净重">
           <template slot-scope="scope">
             <span> {{ scope.row.gr_we }}/{{ scope.row.ne_we }}(kg) </span>
           </template>
-        </el-table-column>
-        <el-table-column label="装箱量" align="center" width="100">
+        </ex-table-column>
+        <ex-table-column :autoFit="true" label="装箱量">
           <template slot-scope="scope">
             <span> {{ scope.row.in_en }}/{{ scope.row.ou_lo }}(pcs) </span>
           </template>
-        </el-table-column>
-        <el-table-column label="箱量" align="center" width="100">
+        </ex-table-column>
+        <ex-table-column :autoFit="true" label="箱量">
           <template slot-scope="scope">
             <input
               class="inputNumber"
@@ -105,15 +124,15 @@
               v-model="scope.row.shoppingCount"
             />
           </template>
-        </el-table-column>
-        <el-table-column prop="price" label="单价" align="center" width="100">
+        </ex-table-column>
+        <ex-table-column :autoFit="true" prop="price" label="单价">
           <template slot-scope="scope">
             <span style="color:#f56c6c">
               {{ scope.row.cu_de + scope.row.price }}
             </span>
           </template>
-        </el-table-column>
-        <el-table-column width="120" label="总价" align="center">
+        </ex-table-column>
+        <ex-table-column :autoFit="true" width="100" label="总价">
           <template slot-scope="scope">
             <p class="item price">
               <span>{{ scope.row.cu_de }}</span>
@@ -128,9 +147,242 @@
               </span>
             </p>
           </template>
-        </el-table-column>
+        </ex-table-column>
       </el-table>
+      <div class="totalBox">
+        <div class="left">
+          <el-checkbox
+            :indeterminate="isIndeterminate"
+            v-model="checkAll"
+            @change="handleCheckAllChange"
+          >
+            全选
+          </el-checkbox>
+          <el-popconfirm
+            class="deleteBtn"
+            title="确定要删除选中的产品吗？"
+            @confirm="removeMyShoppingCart"
+          >
+            <el-button
+              slot="reference"
+              type="primary"
+              :disabled="
+                $refs.myTableRef && $refs.myTableRef.selection.length < 1
+              "
+              style="margin-left: 20px;"
+              size="small"
+              plain
+              >删除</el-button
+            >
+          </el-popconfirm>
+        </div>
+        <div class="right">
+          <p class="item">
+            <span class="itemTitle">总款数：</span>
+            <span>{{ tableData.length }}</span>
+          </p>
+          <p class="item">
+            <span class="itemTitle">总箱数：</span>
+            <span>{{ myTotalQuantity(tableData) }}</span>
+          </p>
+          <p class="item">
+            <span class="itemTitle">总体积/总材积：</span>
+            <span
+              >{{ myTotalVolume(tableData).outerBoxStere }}/{{
+                myTotalVolume(tableData).outerBoxFeet
+              }}</span
+            >
+          </p>
+          <p class="item">
+            <span class="itemTitle">总毛重/总净重：</span>
+            <span>{{ totalMaozhong() }}/{{ totalJingzhong() }}(kg)</span>
+          </p>
+          <p class="item">
+            <span class="itemTitle">总金额：</span>
+            <span class="price">￥{{ myTotalPrice(tableData) }}</span>
+          </p>
+          <el-button
+            type="warning"
+            @click="openSubOrder"
+            style="margin-left: 10px;"
+            size="small"
+            >生成报价</el-button
+          >
+        </div>
+      </div>
     </div>
+    <!-- 提交信息 -->
+    <el-dialog title="生成报价" :visible.sync="subDialogVisible" width="40%">
+      <div class="contactInfoBox">
+        <div class="userInfoBox">
+          <el-form
+            label-position="right"
+            label-width="100px"
+            :model="clienFormData"
+          >
+            <el-form-item label="默认公式：">
+              <el-select
+                v-model="defaultFormula"
+                style="width:100%;"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="(item, i) in customerTemplate"
+                  :key="i"
+                  :label="item.name"
+                  :value="JSON.stringify(item)"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <div class="wrapBox">
+              <div class="left">
+                <el-form-item label="报价方式：" prop="offerMethod">
+                  <el-input
+                    maxlength="30"
+                    v-model="clienFormData.offerMethod"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item label="币种：" prop="cu_de">
+                  <el-select
+                    style="width:100%;"
+                    v-model="clienFormData.cu_de"
+                    placeholder="请选择币种"
+                  >
+                    <el-option
+                      v-for="(item, i) in options.cu_deList"
+                      :key="i"
+                      :label="item.itemCode"
+                      :value="item.parameter"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="汇率：" prop="exchange">
+                  <el-input
+                    maxlength="30"
+                    v-model="clienFormData.exchange"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item label="小数位数：" prop="decimalPlaces">
+                  <el-select
+                    style="width:100%;"
+                    v-model="clienFormData.decimalPlaces"
+                    placeholder="请选择小数位数"
+                  >
+                    <el-option
+                      v-for="(item, i) in options.decimalPlaces"
+                      :key="i"
+                      :label="item.itemCode"
+                      :value="item.parameter"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </div>
+              <div class="right">
+                <el-form-item label="利润率：" prop="profit">
+                  <el-input maxlength="30" v-model="clienFormData.profit">
+                    <span slot="suffix">%</span>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="总费用：" prop="totalCost">
+                  <el-input
+                    v-model="clienFormData.totalCost"
+                    clearable
+                    placeholder="请输入总费用"
+                  >
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="每车尺码：" prop="size">
+                  <el-select
+                    v-model="clienFormData.size"
+                    style="width:100%;"
+                    placeholder="请选择尺码"
+                  >
+                    <el-option
+                      v-for="(item, i) in options.size"
+                      :key="i"
+                      :label="item.itemCode"
+                      :value="item.parameter"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="取舍方式：" prop="rejectionMethod">
+                  <el-select
+                    v-model="clienFormData.rejectionMethod"
+                    style="width:100%;"
+                    placeholder="请选择取舍方式"
+                  >
+                    <el-option
+                      v-for="(item, i) in options.rejectionMethod"
+                      :key="i"
+                      :label="item.itemCode"
+                      :value="item.parameter"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </div>
+            </div>
+            <div class="lessThanPrice">
+              <div class="left">
+                <el-form-item label="价格小于：" prop="miniPrice">
+                  <el-input
+                    v-model="clienFormData.miniPrice"
+                    clearable
+                    placeholder="请输入"
+                  >
+                  </el-input>
+                </el-form-item>
+              </div>
+              <div class="right">
+                <!-- xiaoshuweishu -->
+                <el-form-item label="小数位数：" prop="miniPriceDecimalPlaces">
+                  <el-select
+                    v-model="clienFormData.miniPriceDecimalPlaces"
+                    style="width:100%;"
+                    placeholder="请选择取舍方式"
+                  >
+                    <el-option
+                      v-for="(item, i) in options.decimalPlaces"
+                      :key="i"
+                      :label="item.itemCode"
+                      :value="item.parameter"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </div>
+            </div>
+            <el-form-item label="报价备注：">
+              <el-input
+                maxlength="255"
+                v-model="clienFormData.remark"
+              ></el-input>
+            </el-form-item>
+          </el-form>
+          <center>
+            <el-button
+              size="medium"
+              @click="submitOrder"
+              style="width:120px;"
+              type="primary"
+            >
+              确定
+            </el-button>
+            <el-button
+              size="medium"
+              @click="closeSub"
+              style="width:120px;margin-left: 24px;"
+            >
+              取消
+            </el-button>
+          </center>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -139,7 +391,34 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      tableData: []
+      options: {
+        // 报价配置项
+        cu_deList: [],
+        decimalPlaces: [],
+        offerMethod: [],
+        rejectionMethod: [],
+        size: []
+      },
+      clienFormData: {
+        quotationProductList: [],
+        profit: 0,
+        offerMethod: "汕头",
+        cu_de: "¥",
+        cu_deName: "RMB",
+        totalCost: "0",
+        exchange: 0,
+        size: "24",
+        decimalPlaces: 3,
+        rejectionMethod: "四舍五入",
+        miniPrice: 0,
+        miniPriceDecimalPlaces: 1
+      },
+      defaultFormula: null,
+      customerTemplate: [],
+      isIndeterminate: false,
+      checkAll: false,
+      tableData: [],
+      subDialogVisible: false
     };
   },
   methods: {
@@ -236,18 +515,18 @@ export default {
       return this.operation(a, b, digits, "divide");
     },
     // 单个产品总价
-    priceCount(price, outerBoxLo, shoppingCount) {
-      return this.multiply(this.multiply(price, outerBoxLo), shoppingCount);
+    priceCount(price, ou_lo, shoppingCount) {
+      return this.multiply(this.multiply(price, ou_lo), shoppingCount);
     },
     // 计算总个数量
     myTotalGe() {
       let number = 0;
-      for (let i = 0; i < this.dataList.length; i++) {
+      for (let i = 0; i < this.tableData.length; i++) {
         number = this.add(
           number,
           this.multiply(
-            this.dataList[i].shoppingCount,
-            this.dataList[i].outerBoxLo
+            this.tableData[i].shoppingCount,
+            this.tableData[i].ou_lo
           )
         );
       }
@@ -256,12 +535,12 @@ export default {
     // 计算总毛重
     totalMaozhong() {
       let number = 0;
-      for (let i = 0; i < this.dataList.length; i++) {
+      for (let i = 0; i < this.tableData.length; i++) {
         number = this.add(
           number,
           this.multiply(
-            this.dataList[i].shoppingCount,
-            this.dataList[i].outerBoxWeight
+            this.tableData[i].shoppingCount,
+            this.tableData[i].gr_we
           )
         );
       }
@@ -270,12 +549,12 @@ export default {
     // 计算总净重
     totalJingzhong() {
       let number = 0;
-      for (let i = 0; i < this.dataList.length; i++) {
+      for (let i = 0; i < this.tableData.length; i++) {
         number = this.add(
           number,
           this.multiply(
-            this.dataList[i].shoppingCount,
-            this.dataList[i].outerBoxNetWeight
+            this.tableData[i].shoppingCount,
+            this.tableData[i].ne_we
           )
         );
       }
@@ -284,22 +563,10 @@ export default {
     // 计算总箱数量
     myTotalQuantity() {
       let number = 0;
-      for (let i = 0; i < this.dataList.length; i++) {
-        number = this.add(number, this.dataList[i].shoppingCount || 0);
+      for (let i = 0; i < this.tableData.length; i++) {
+        number = this.add(number, this.tableData[i].shoppingCount || 0);
       }
       return number;
-    },
-    // 删除购物车中的某项
-    handleDelete(row) {
-      this.$store.commit("popShopping", row);
-      this.dataList.forEach((val, i) => {
-        if (val.id === row.id) {
-          this.dataList.splice(i, 1);
-          this.$message.error(this.publicLang.deleteSuccessful);
-        }
-      });
-      console.log(123);
-      this.$root.eventHub.$emit("resetProductsForeach", this.dataList);
     },
     // 计算总价
     myTotalPrice(list) {
@@ -309,7 +576,7 @@ export default {
           price,
           this.multiply(
             this.multiply(list[i].price, list[i].shoppingCount),
-            list[i].outerBoxLo
+            list[i].ou_lo
           )
         );
       }
@@ -322,11 +589,11 @@ export default {
       for (let i = 0; i < list.length; i++) {
         outerBoxStere = this.add(
           outerBoxStere,
-          this.multiply(list[i].outerBoxStere, list[i].shoppingCount)
+          this.multiply(list[i].bulk_stere, list[i].shoppingCount)
         );
         outerBoxFeet = this.add(
           outerBoxFeet,
-          this.multiply(list[i].outerBoxFeet, list[i].shoppingCount)
+          this.multiply(list[i].bulk_feet, list[i].shoppingCount)
         );
       }
       return {
@@ -334,8 +601,24 @@ export default {
         outerBoxFeet
       };
     },
+    // 删除购物车
+    removeMyShoppingCart() {
+      const selectProducts = this.$refs.myTableRef.selection;
+      for (let i = 0; i < selectProducts.length; i++) {
+        for (let j = 0; j < this.tableData.length; j++) {
+          if (
+            selectProducts[i].productNumber === this.tableData[j].productNumber
+          ) {
+            this.tableData.splice(j, 1);
+          }
+        }
+      }
+      this.$message.success("删除成功");
+      this.$store.commit("resetShoppingCart", selectProducts);
+    },
     // 修改购物车数量
     changeInputNumber(e, val) {
+      console.log(e, val);
       const re = /^[0-9]+.?[0-9]*/;
       if (!re.test(e.target.value)) {
         e.target.value = 0;
@@ -347,11 +630,30 @@ export default {
         e.target.value = e.target.value.slice(1, 5);
       }
       val.shoppingCount = Number(e.target.value);
-      this.$store.commit("replaceShoppingCartValueCount", this.dataList);
+      this.$store.commit("replaceShoppingCartValueCount", this.tableData);
     },
-    // 点击选中输入框中的所有值
+    // 点击全选
+    handleCheckAllChange(val) {
+      if (val) this.$refs.myTableRef.toggleAllSelection();
+      else this.$refs.myTableRef.clearSelection();
+      this.isIndeterminate = false;
+    },
+    // 点击箱数选中输入框中的所有值
     selectInputValue(e) {
       e.currentTarget.select();
+    },
+    // table勾选发生变化事件
+    selectionChange(selection) {
+      console.log(selection);
+      if (selection.length) {
+        if (selection.length === this.shoppingList.length) {
+          this.isIndeterminate = false;
+          this.checkAll = true;
+        } else this.isIndeterminate = true;
+      } else {
+        this.isIndeterminate = false;
+        this.checkAll = false;
+      }
     },
     // 点击上下键盘
     nextInput(e) {
@@ -386,9 +688,90 @@ export default {
         e.returnValue = false;
         e.cancelBubble = true;
       }
+    },
+    // 打开提交订单
+    openSubOrder() {
+      const selectProducts = this.$refs.myTableRef.selection;
+      if (selectProducts.length < 1) {
+        this.$message.error("请选择要提交的产品");
+        return false;
+      }
+      this.subDialogVisible = true;
+    },
+    // 提交订单
+    async submitOrder() {
+      const selectProducts = this.$refs.myTableRef.selection;
+      this.clienFormData.quotationProductList = selectProducts.map(val => {
+        return {
+          productNumber: val.productNumber,
+          boxNumber: val.shoppingCount
+        };
+      });
+      const res = await this.$http.post(
+        "/api/CreateProductOffer",
+        this.clienFormData
+      );
+      console.log(res);
+      const { code, msg } = res.data.result;
+      if (code === 200) {
+        this.$message.success("提交成功");
+        for (let i = 0; i < this.tableData.length; i++) {
+          for (let j = 0; j < selectProducts.length; j++) {
+            if (
+              this.tableData[i].productNumber ===
+              selectProducts[j].productNumber
+            )
+              this.tableData.splice(i, 1);
+          }
+        }
+        this.$store.commit("resetShoppingCart", selectProducts);
+        this.subDialogVisible = false;
+      } else {
+        this.$message.error(msg);
+      }
+    },
+    // 关闭提交订单
+    closeSub() {
+      this.clienFormData = {
+        quotationProductList: [],
+        profit: 0,
+        offerMethod: "汕头",
+        cu_de: "¥",
+        cu_deName: "RMB",
+        totalCost: "0",
+        exchange: 0,
+        size: "24",
+        decimalPlaces: 3,
+        rejectionMethod: "四舍五入",
+        miniPrice: 0,
+        miniPriceDecimalPlaces: 0
+      };
+      this.defaultFormula = null;
+      this.subDialogVisible = false;
+    },
+    // 获取客户报价模板
+    async getSelectProductOfferFormulaList() {
+      const res = await this.$http.post(
+        "/api/SelectProductOfferFormulaList",
+        {}
+      );
+      if (res.data.result.code === 200) {
+        this.customerTemplate = res.data.result.item;
+      } else this.$message.error(res.data.result.msg);
+    },
+    // 获取系统配置项
+    async getSelectCompanyOffer() {
+      const res = await this.$http.post("/api/GetSelectCompanyOffer", {
+        basisParameters: "CompanyProductOffer"
+      });
+      if (res.data.result.code === 200) this.options = res.data.result.item;
+      else this.$message.error(res.data.result.msg);
     }
   },
-  created() {},
+  created() {
+    this.getSelectProductOfferFormulaList();
+    this.getSelectCompanyOffer();
+  },
   mounted() {
     this.tableData = this.shoppingList
       ? JSON.parse(JSON.stringify(this.shoppingList))
@@ -398,6 +781,35 @@ export default {
     ...mapGetters({
       shoppingList: "myShoppingList"
     })
+  },
+  watch: {
+    defaultFormula: {
+      deep: true,
+      handler(newVal) {
+        if (newVal) {
+          const obj = JSON.parse(newVal);
+          this.clienFormData.profit = obj.profit;
+          this.clienFormData.offerMethod = obj.offerMethod;
+          this.clienFormData.cu_de = obj.cu_de;
+          this.clienFormData.cu_deName = obj.cu_deName;
+          this.clienFormData.exchange = obj.exchange;
+          this.clienFormData.size = obj.size;
+          this.clienFormData.decimalPlaces = obj.decimalPlaces;
+          this.clienFormData.rejectionMethod = obj.rejectionMethod;
+        }
+      }
+    },
+    "clienFormData.cu_de": {
+      deep: true,
+      handler(newVal) {
+        if (newVal) {
+          this.options.cu_deList.forEach(val => {
+            if (val.parameter === newVal)
+              this.clienFormData.cu_deName = val.itemCode;
+          });
+        }
+      }
+    }
   }
 };
 </script>
@@ -429,7 +841,14 @@ export default {
   }
   .tableBox {
     @{deep} .el-table {
-      font-size: 13px;
+      .el-table__header-wrapper .el-checkbox {
+        display: none;
+      }
+      .cell {
+        white-space: nowrap;
+        width: fit-content;
+      }
+      font-size: 12px;
       .inputNumber {
         width: 50px;
         outline: none;
@@ -469,9 +888,66 @@ export default {
           }
           .factory {
             color: #3368a9;
+            display: flex;
+            align-items: center;
+            .fcatoryName {
+              width: 100px;
+              max-width: 100px;
+              overflow: hidden; /*超出部分隐藏*/
+              white-space: nowrap; /*不换行*/
+              text-overflow: ellipsis; /*超出部分文字以...显示*/
+            }
+            .icons {
+              display: flex;
+              .cartPhoneIcon,
+              .cartInfoIcon {
+                width: 20px;
+                height: 20px;
+                margin-left: 15px;
+                cursor: pointer;
+              }
+              .cartPhoneIcon {
+                background: url("~@/assets/images/cartPhoneIcon.png") no-repeat
+                  center;
+                background-size: contain;
+              }
+              .cartInfoIcon {
+                background: url("~@/assets/images/cartInfoIcon.png") no-repeat
+                  center;
+                background-size: contain;
+              }
+            }
           }
           .name {
             margin-top: 8px;
+          }
+        }
+      }
+    }
+    .totalBox {
+      display: flex;
+      align-items: center;
+      height: 80px;
+      padding-left: 10px;
+      box-sizing: border-box;
+      .left {
+        min-width: 130px;
+      }
+      .right {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        .item {
+          margin-right: 15px;
+          display: flex;
+          align-items: center;
+          // .itemTitle {
+          // }
+          .price {
+            color: #eb1515;
+            font-weight: 700;
+            font-size: 18px;
           }
         }
       }
@@ -480,6 +956,24 @@ export default {
       img {
         width: 80px;
         height: 60px;
+      }
+    }
+  }
+  .contactInfoBox {
+    box-sizing: border-box;
+    .userInfoBox {
+      padding-right: 20px;
+      .wrapBox,
+      .lessThanPrice {
+        display: flex;
+        .left,
+        .right {
+          flex: 1;
+        }
+      }
+      .lessThanPrice {
+        padding-top: 20px;
+        border-top: 1px solid #dcdfe6;
       }
     }
   }

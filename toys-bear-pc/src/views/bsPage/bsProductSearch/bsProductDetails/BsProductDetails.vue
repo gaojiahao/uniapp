@@ -83,7 +83,7 @@
             <i class="myCartIcon"></i>
             <span>加入购物车</span>
           </div>
-          <div class="myShoucang" @click="handlerShopping(item)">
+          <div class="myShoucang" @click="addCollect(item)">
             <i class="shoucangActiveIcon" v-if="item.isFavorite"></i>
             <i class="shoucangIcon" v-else></i>
             <span>产品收藏</span>
@@ -114,15 +114,22 @@
             <i class="factoryIcon"></i>
             <span>{{ item.supplierName }}</span>
           </p>
-          <p class="item">
+          <p class="item myHover">
             <i class="infoIcon"></i>
             <span>在线咨询</span>
           </p>
-          <p class="item">
-            <i class="phoneIcon"></i>
-            <span>联系电话</span>
-          </p>
-          <p class="item">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="item.supplierPhone || item.exhibitionPhone"
+            placement="top"
+          >
+            <p class="item myHover">
+              <i class="phoneIcon"></i>
+              <span>联系电话</span>
+            </p>
+          </el-tooltip>
+          <p class="item myHover">
             <i class="shopIcon"></i>
             <span>厂商店铺</span>
           </p>
@@ -147,7 +154,7 @@
     <div class="productDetails">
       <div class="title">产品资料</div>
       <div class="content">
-        <div v-for="imgItem in item.imgUrlList" :key="imgItem">
+        <div class="imgItem" v-for="imgItem in item.imgUrlList" :key="imgItem">
           <img style="margin: 0 auto;" :src="imgItem" alt="" />
         </div>
       </div>
@@ -175,12 +182,27 @@ export default {
         item.shoppingCount = 1;
         this.$store.commit("pushShopping", item);
         this.$message.closeAll();
-        // this.$message.success(this.publicLang.successfulPurchase);
+        this.$message.success("加购成功");
       } else {
         item.shoppingCount = 0;
         this.$message.closeAll();
         this.$store.commit("popShopping", item);
-        // this.$message.warning(this.publicLang.cancelSuccessfully);
+        this.$message.warning("取消加购成功");
+      }
+    },
+    // 收藏
+    async addCollect(item) {
+      const res = await this.$http.post("/api/CreateProductCollection", {
+        productNumber: item.productNumber
+      });
+      if (res.data.result.code === 200) {
+        this.$message.closeAll();
+        if (item.isFavorite) {
+          this.$message.warning("取消收藏成功");
+        } else {
+          this.$message.success("收藏成功");
+        }
+        item.isFavorite = !item.isFavorite;
       }
     }
   },
@@ -366,6 +388,9 @@ export default {
           display: flex;
           align-items: center;
           color: #666;
+          &.myHover {
+            cursor: pointer;
+          }
           .factoryIcon {
             min-width: 18px;
             width: 18px;
@@ -456,6 +481,13 @@ export default {
         top: 50%;
         content: "";
         transform: translate(0, -50%);
+      }
+    }
+    .content {
+      width: 100%;
+      .imgItem {
+        width: 100%;
+        text-align: center;
       }
     }
   }

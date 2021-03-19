@@ -8,6 +8,9 @@ import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import "@/assets/css/theme/index.css";
 import { getMenuFuc } from "@/router/index";
+import ExTableColumn from "ex-table-column";
+
+Vue.component(ExTableColumn.name, ExTableColumn);
 Vue.config.productionTip = false;
 getMenuFuc();
 Vue.use(ElementUI);

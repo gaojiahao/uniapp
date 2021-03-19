@@ -2,12 +2,9 @@
   <div class="magnify">
     <!-- 左边产品图片区域 -->
     <div class="left_contaner">
-      <div
-        class="middle_img"
-        @mouseover="boxMouseOver"
-        @mouseleave="boxMouseLeave"
-        @click="openBigImg(middleImg.url)"
-      >
+      <!-- @mouseover="boxMouseOver"
+        @mouseleave="boxMouseLeave" -->
+      <div class="middle_img" @click="openBigImg(middleImg.url)">
         <!-- 3D -->
         <i class="threeIcon" @click="open3D"></i>
         <el-image

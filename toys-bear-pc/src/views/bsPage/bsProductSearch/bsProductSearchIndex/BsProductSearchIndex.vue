@@ -209,6 +209,7 @@ import bsProductSearch from "@/components/bsComponents/bsProductSearchComponent/
 import bsColumnComponent from "@/components/bsComponents/bsProductSearchComponent/bsColumnComponent";
 import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/bsGridComponent";
 import eventBus from "@/assets/js/common/eventBus";
+import { mapGetters } from "vuex";
 export default {
   components: {
     bsProductSearch,
@@ -219,7 +220,6 @@ export default {
     return {
       oneCurrentTag: null,
       cateChildren: [],
-      shoppingList: [],
       categoryList: [],
       isPrice: null,
       isTime: null,
@@ -431,6 +431,11 @@ export default {
     eventBus.$on("openUpload", file => {
       console.log(file);
     });
+  },
+  computed: {
+    ...mapGetters({
+      shoppingList: "myShoppingList"
+    })
   },
   beforeDestroy() {
     this.clearRootEvent();

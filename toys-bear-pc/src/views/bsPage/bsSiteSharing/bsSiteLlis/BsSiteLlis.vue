@@ -45,14 +45,14 @@
           align="center"
           width="80"
         ></el-table-column>
-        <el-table-column prop="shareUrl" label="网址">
+        <el-table-column prop="shareUrl" min-width="200" label="网址">
           <template slot-scope="scope">
             <div :id="scope.row.id">
               {{ scope.row.shareUrl }}
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="复制/扫码" align="center" width="180">
+        <el-table-column label="复制/扫码" align="center" min-width="100">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -76,7 +76,7 @@
           align="center"
           width="180"
         ></el-table-column>
-        <el-table-column label="登录码" align="center" width="80">
+        <el-table-column label="登录码" align="center">
           <template slot-scope="scope">
             <div>
               <span>
@@ -90,12 +90,12 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="创建时间" align="center" width="100">
+        <el-table-column label="创建时间" align="center">
           <template slot-scope="scope">
             <span> {{ scope.row.createdOn.replace(/T.*/, "") }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="有效期" align="center" width="100">
+        <el-table-column label="有效期" align="center">
           <template slot-scope="scope">
             {{
               (scope.row.expireTime && scope.row.expireTime.split("T")[0]) ||
