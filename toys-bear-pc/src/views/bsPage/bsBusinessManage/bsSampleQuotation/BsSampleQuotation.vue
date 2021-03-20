@@ -3,11 +3,21 @@
     <div class="title">找样报价 ({{ totalCount }})</div>
     <div class="searchBox">
       <div class="item">
-        <span class="label">关键字：</span>
+        <span class="label">报价单号：</span>
         <el-input
           type="text"
           size="medium"
           v-model="keyword"
+          placeholder="请输入关键词"
+          @keyup.native.enter="search"
+        ></el-input>
+      </div>
+      <div class="item">
+        <span class="label">客户名称：</span>
+        <el-input
+          type="text"
+          size="medium"
+          v-model="clientName"
           placeholder="请输入关键词"
           @keyup.native.enter="search"
         ></el-input>
@@ -43,9 +53,9 @@
         ref="collecTable"
         :header-cell-style="{ 'font-size': '14px', color: '#666' }"
       >
-        <el-table-column label="报价单号" align="center">
+        <el-table-column label="报价单号" align="center" min-width="150">
           <template slot-scope="scope">
-            {{ scope.row.exhibitionName }}
+            <span style="color:#3368A9;">{{ scope.row.sampleNumber }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -122,15 +132,23 @@
           label="操作"
           header-align="center"
           align="center"
-          width="100"
+          width="300"
         >
           <template slot-scope="scope">
+            <el-button size="mini" type="success">编辑</el-button>
+            <el-button size="mini" type="info">推送</el-button>
+            <el-button size="mini" type="warning">导出</el-button>
             <el-popconfirm
-              title="确定要取消收藏吗？"
+              title="确定要此报价吗？"
               @confirm="handleDelete(scope.row)"
             >
-              <el-button size="mini" type="warning" @click.stop slot="reference"
-                >取消收藏</el-button
+              <el-button
+                style="margin-left: 10px;"
+                size="mini"
+                type="danger"
+                @click.stop
+                slot="reference"
+                >删除</el-button
               >
             </el-popconfirm>
           </template>
