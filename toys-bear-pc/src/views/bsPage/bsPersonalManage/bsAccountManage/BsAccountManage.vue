@@ -146,16 +146,33 @@
     >
       <bsAddStaff @closeAdd="closeAdd" />
     </el-dialog>
+    <!-- 绑定员工 -->
+    <el-dialog
+      width="50%"
+      title="绑定员工"
+      v-if="bindEmployDialog"
+      :visible.sync="bindEmployDialog"
+      destroy-on-close
+    >
+      <bsBindStaff
+        :phoneNumber="currentRow.phoneNumber"
+        :companyNumber="myInfo.companyNumber"
+        :id="currentRow.id"
+        @close="close"
+      />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import bsAddStaff from "@/components/bsComponents/bsPersonalManageComponent/bsAddStaff";
+import bsBindStaff from "@/components/bsComponents/bsPersonalManageComponent/bsBindStaff";
 export default {
   name: "bsAccountSettings",
   components: {
-    bsAddStaff
+    bsAddStaff,
+    bsBindStaff
   },
   data() {
     return {
@@ -163,7 +180,9 @@ export default {
       myInfo: {},
       tableData: [],
       yuangongTitle: "新增员工",
-      addEmployDialog: false
+      addEmployDialog: false,
+      bindEmployDialog: false,
+      currentRow: {}
     };
   },
   methods: {
@@ -175,6 +194,8 @@ export default {
     // 打开绑定员工
     openBind(row) {
       console.log(row);
+      this.currentRow = row;
+      this.bindEmployDialog = true;
     },
     // 打开编辑员工
     openEdit(row) {
@@ -184,6 +205,11 @@ export default {
     // 关闭编辑员工
     closeAdd() {
       this.addEmployDialog = false;
+      this.bindEmployDialog = false;
+    },
+    // 打开绑定员工
+    async openBindEmployees(row) {
+      this.getPersinnelList(row.phoneNumber);
     },
     // 删除员工
     handleDelete(row) {

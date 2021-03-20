@@ -68,7 +68,7 @@
     </el-form>
     <center>
       <el-button type="primary" @click="submit">保存</el-button>
-      <el-button type="danger" @click="$emit('closeAdd')">取消</el-button>
+      <el-button type="danger" @click="$emit('close')">取消</el-button>
     </center>
   </div>
 </template>
