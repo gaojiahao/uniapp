@@ -130,19 +130,9 @@
           <el-button @click="openEdit(scope.row)" size="mini" type="success">
             编辑
           </el-button>
-          <el-popconfirm
-            title="确定要该员工吗？"
-            @confirm="handleDelete(scope.row)"
+          <el-button size="mini" type="danger" @click="handleDelete(scope.row)"
+            >删除</el-button
           >
-            <el-button
-              style="margin-left: 10px;"
-              size="mini"
-              type="danger"
-              @click.stop
-              slot="reference"
-              >删除</el-button
-            >
-          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -179,7 +169,6 @@ export default {
   methods: {
     // 打开添加员工
     openAdd() {
-      console.log("addStaff");
       this.yuangongTitle = "新增员工";
       this.addEmployDialog = true;
     },
@@ -198,7 +187,24 @@ export default {
     },
     // 删除员工
     handleDelete(row) {
-      console.log(row);
+      this.$confirm("确定要删除该员工吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(async () => {
+          const res = await this.$http.post("/api/DeleteCompanyUser", {
+            OrgCompanyID: this.myInfo.id,
+            OrgPersonnelID: row.id
+          });
+          if (res.data.result.code === 200) {
+            this.$message.success("删除成功");
+            this.getCompanyUserList();
+          } else this.$message.error(res.data.result.msg);
+        })
+        .catch(() => {
+          this.$message.warning("已取消删除");
+        });
     },
     // 获取个人信息中的个人信息和员工列表
     async getCompanyUserList() {
