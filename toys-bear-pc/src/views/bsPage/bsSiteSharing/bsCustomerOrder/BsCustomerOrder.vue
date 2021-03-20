@@ -135,6 +135,7 @@
 
 <script>
 export default {
+  name: "bsCustomerOrder",
   data() {
     return {
       zhandian: null,

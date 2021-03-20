@@ -10,6 +10,7 @@ import { proEnv } from "@/assets/js/config/config.js";
 const env = process.env.NODE_ENV;
 let target = "";
 let push_target = "";
+let export_target = "";
 // 默认是本地环境
 switch (env) {
   case "production": // 生产环境
@@ -44,7 +45,28 @@ switch (env) {
     push_target = push_devEnv.hosturl;
     break;
 }
-console.log(push_target, target);
+/**
+ * 推送BaseURL
+ */
+import {
+  export_devEnv,
+  export_testEnv,
+  export_proEnv
+} from "@/assets/js/config/exportConfig.js";
+// 默认是本地环境
+switch (env) {
+  case "production": // 生产环境
+    export_target = export_proEnv.hosturl;
+    break;
+  case "test": // 测试环境
+    export_target = export_testEnv.hosturl;
+    break;
+  default:
+    // 本地环境
+    export_target = export_devEnv.hosturl;
+    break;
+}
+console.log(push_target, target, export_target);
 const createLogRecord = async function(obj) {
   if (obj.Url.includes("CreateLogRecord")) {
     Message.closeAll();
@@ -64,7 +86,7 @@ const createLogRecord = async function(obj) {
 };
 const myAxios = {};
 myAxios.install = function(Vue) {
-  // 统一设置初始API
+  // 基础实例
   const instance = axios.create({
     baseURL: target,
     timeout: 20000, // 超时时间
@@ -73,8 +95,18 @@ myAxios.install = function(Vue) {
     startDate: 0, // 请求开始时间
     endDate: 0 // 请求结束时间
   });
+  // 推送实例
   const push_instance = axios.create({
     baseURL: push_target,
+    timeout: 20000, // 超时时间
+    retry: 1, // 请求次数
+    retryDelay: 1000, // 请求间隙
+    startDate: 0, // 请求开始时间
+    endDate: 0 // 请求结束时间
+  });
+  // 导出实例
+  const export_instance = axios.create({
+    baseURL: export_target,
     timeout: 20000, // 超时时间
     retry: 1, // 请求次数
     retryDelay: 1000, // 请求间隙
@@ -363,8 +395,9 @@ myAxios.install = function(Vue) {
     }
   );
   Vue.prototype.$http = instance;
-  Vue.prototype.$push_http = push_instance;
+  Vue.prototype.$push = push_instance;
+  Vue.prototype.$export = export_instance;
   // Vue.prototype.baseAPI = target;
-  Vue.prototype.baseAPI = "";
+  // Vue.prototype.baseAPI = "";
 };
 export default myAxios;

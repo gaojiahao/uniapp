@@ -398,6 +398,7 @@
 <script>
 import VueQr from "vue-qr";
 export default {
+  name: "bsSiteLlis",
   components: {
     VueQr
   },

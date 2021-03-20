@@ -211,6 +211,7 @@ import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/
 import eventBus from "@/assets/js/common/eventBus";
 import { mapGetters } from "vuex";
 export default {
+  name: "bsProductSearchIndex",
   components: {
     bsProductSearch,
     bsColumnComponent,

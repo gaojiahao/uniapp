@@ -23,6 +23,16 @@
         ></el-input>
       </div>
       <div class="item">
+        <span class="label">人员：</span>
+        <el-input
+          type="text"
+          size="medium"
+          v-model="clientName"
+          placeholder="请输入关键词"
+          @keyup.native.enter="search"
+        ></el-input>
+      </div>
+      <div class="item">
         <span class="label">时间段：</span>
         <el-date-picker
           size="medium"
@@ -55,71 +65,62 @@
       >
         <el-table-column label="报价单号" align="center" min-width="150">
           <template slot-scope="scope">
-            <span style="color:#3368A9;">{{ scope.row.sampleNumber }}</span>
+            <span style="color:#3368A9;cursor: pointer;">
+              {{ scope.row.offerNumber }}
+            </span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="fa_no"
+          prop="linkman"
           label="客户名称"
           width="100"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="ch_pa"
+          prop="createdOn"
+          width="150"
           label="报价时间"
           align="center"
+        >
+          <template slot-scope="scope">
+            {{ scope.row.createdOn.replace(/T/, " ") }}
+          </template>
+        </el-table-column>
+        <el-table-column width="200" align="center" label="操作人员">
+          <template slot-scope="scope">
+            <span>
+              {{ scope.row.companyName }}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="报价总数"
+          prop="total"
           width="100"
-        >
-        </el-table-column>
-        <el-table-column
-          label="操作人员
-"
           align="center"
         >
-          <template slot-scope="scope">
-            <span>
-              {{ scope.row.ou_le }}x{{ scope.row.ou_wi }}x{{
-                scope.row.ou_hi
-              }}(cm)
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="报价总数
-"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <span>
-              {{ scope.row.in_le }}x{{ scope.row.in_wi }}x{{
-                scope.row.in_hi
-              }}(cm)
-            </span>
-          </template>
         </el-table-column>
         <el-table-column label="总金额" align="center" width="100">
           <template slot-scope="scope">
-            <span> {{ scope.row.in_en }}/{{ scope.row.ou_lo }}(pcs) </span>
+            <span style="color:#EB1515;">
+              {{ scope.row.cu_de }}
+            </span>
+            <span style="color:#EB1515;">{{ scope.row.totalCost }}</span>
           </template>
         </el-table-column>
         <el-table-column label="币种" align="center">
           <template slot-scope="scope">
             <span>
-              {{ scope.row.bulk_stere }}(cbm)/{{ scope.row.bulk_feet }}(cuft)
+              {{ scope.row.cu_deName }}
             </span>
           </template>
         </el-table-column>
         <el-table-column label="汇率" align="center" width="100">
           <template slot-scope="scope">
-            <span> {{ scope.row.gr_we }}/{{ scope.row.ne_we }}(kg) </span>
+            <span>{{ scope.row.exchange }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="price" label="利润" align="center" width="100">
-          <template slot-scope="scope">
-            <span style="color:#f56c6c">
-              {{ scope.row.number }}
-            </span>
-          </template>
+        <el-table-column prop="profit" label="利润" align="center" width="100">
         </el-table-column>
         <el-table-column prop="price" label="状态" align="center" width="100">
           <template slot-scope="scope">
@@ -197,7 +198,7 @@ export default {
           delete fd[key];
         }
       }
-      const res = await this.$http.post("/api/companySamplelistPage", fd);
+      const res = await this.$http.post("/api/HistoryOfferSharPage", fd);
       if (res.data.result.code === 200) {
         this.totalCount = res.data.result.item.totalCount;
         this.tableData = res.data.result.item.items;
@@ -271,11 +272,11 @@ export default {
     .item {
       display: flex;
       align-items: center;
-      max-width: 258px;
+      max-width: 250px;
       margin-right: 20px;
       .label {
-        width: 58px;
-        min-width: 58px;
+        width: 70px;
+        min-width: 70px;
       }
     }
   }

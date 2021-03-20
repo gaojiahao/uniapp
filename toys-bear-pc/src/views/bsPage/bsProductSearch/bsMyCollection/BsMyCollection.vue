@@ -161,6 +161,7 @@
 
 <script>
 export default {
+  name: "bsMyCollection",
   data() {
     return {
       keyword: null,

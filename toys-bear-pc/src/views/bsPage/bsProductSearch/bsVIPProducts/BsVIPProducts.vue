@@ -109,6 +109,7 @@ import bsColumnComponent from "@/components/bsComponents/bsProductSearchComponen
 import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/bsGridComponent";
 import { mapGetters } from "vuex";
 export default {
+  name: "bsVIPProducts",
   components: {
     bsColumnComponent,
     bsGridComponent

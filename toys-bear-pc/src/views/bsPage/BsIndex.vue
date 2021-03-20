@@ -34,7 +34,7 @@
             </div>
           </el-collapse-transition>
           <el-scrollbar style="height: 100%;" ref="scrollbar">
-            <keep-alive>
+            <keep-alive :include="keepAliveArr">
               <router-view v-if="$route.meta.keepAlive"></router-view>
             </keep-alive>
             <router-view v-if="!$route.meta.keepAlive"></router-view>
@@ -49,7 +49,7 @@
 import bsTop from "@/components/bsComponents/bsTopComponent/BsTop";
 import bsMenu from "@/components/bsComponents/bsMenuComponent/BsMenu";
 import bsProductSearch from "@/components/bsComponents/bsProductSearchComponent/bsProductSearch";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 export default {
   components: {
     bsTop,
@@ -137,7 +137,8 @@ export default {
     }
   },
   computed: {
-    ...mapState(["bsMenuLabels"])
+    ...mapState(["bsMenuLabels"]),
+    ...mapGetters(["keepAliveArr"])
   },
   created() {},
   mounted() {

@@ -215,6 +215,15 @@ export default new Vuex.Store({
         return [];
       }
       return state[state.userInfo.uid];
+    },
+    keepAliveArr(state) {
+      console.log(state.bsMenuLabels);
+      return state.bsMenuLabels.map(val => {
+        if (val) {
+          const list = val.linkUrl.split("/");
+          return list[list.length - 1];
+        }
+      });
     }
   },
   modules: {

@@ -109,6 +109,7 @@
 
 <script>
 export default {
+  name: "bsBrowsingHistory",
   data() {
     return {
       zhandian: null,

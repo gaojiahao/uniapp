@@ -44,13 +44,27 @@
       </div>
     </ul>
     <div class="tableBox">
+      <div class="tableTitle">
+        <div class="titleText">
+          <span class="title">商品列表</span>
+          ({{ totalCount }})
+        </div>
+        <el-button size="medium" @click="openSelectTemplate" type="warning">
+          <i class="iconfont icon-daochujinruchukou"></i>
+          导出列表
+        </el-button>
+      </div>
       <el-table
         :data="tableData"
         style="width: 100%"
         ref="myTableRef"
         size="mini"
-        :cell-style="{ padding: 0, margin: 0 }"
-        :header-cell-style="{ 'font-size': '14px', color: '#666' }"
+        :header-cell-style="{
+          'font-size': '14px',
+          color: '#666',
+          backgroundColor: '#f9fafc',
+          'font-weight': '400'
+        }"
       >
         <ex-table-column :autoFit="true" label="产品" width="300">
           <template slot-scope="scope">
@@ -179,11 +193,20 @@
         </p>
         <p class="item">
           <span class="itemTitle">总毛重/总净重：</span>
-          <!-- <span>{{ totalMaozhong() }}/{{ totalJingzhong() }}(kg)</span> -->
+          <span
+            >{{ options.totalGrossWeight }}/{{
+              options.totalNetWeight
+            }}(kg)</span
+          >
         </p>
         <p class="item">
           <span class="itemTitle">总出厂价/总金额：</span>
-          <!-- <span class="price">￥{{ myTotalPrice(tableData) }}</span> -->
+          <span class="price" style="margin-right:5px;">
+            {{ options.currencyType }}
+          </span>
+          <span class="price">{{ options.totalCostPrice }}</span>
+          <span class="price">/</span>
+          <span class="price">{{ options.totalAmount }}</span>
         </p>
       </div>
     </div>
@@ -204,7 +227,6 @@
     <transition name="el-zoom-in-center">
       <el-dialog
         title="订单模板"
-        append-to-body
         v-show="exportTemplateDialog"
         :visible.sync="exportTemplateDialog"
         top="60px"
@@ -310,7 +332,6 @@
 <script>
 import { getCurrentTime } from "@/assets/js/common/common.js";
 export default {
-  components: {},
   data() {
     return {
       exportTemplateDialog: false,
@@ -356,19 +377,34 @@ export default {
           }
         });
     },
-    // 点击关闭预览模板
-    closeViewer() {
-      this.showViewer = false;
-    },
     // 打开预览模板
     openViewer(url) {
       console.log(url);
       this.viewerImgList = [url];
-      this.showViewer = true;
+      this.$PreviewPic({
+        zIndex: 9999, // 组件的zIndex值 默认为2000
+        index: 0, // 展示第几张图片 默认为0
+        list: [url], // 需要展示图片list
+        onClose: i => {
+          // 关闭时的回调
+          console.log(i);
+        },
+        onSelect: i => {
+          // 点击某张图片的回调
+          console.log(i);
+        }
+      });
     },
     // 打开选择导出模板
     openSelectTemplate() {
       this.exportTemplateDialog = true;
+      // const str = "http://139.9.71.135:8087/ConversationListIcon.rar";
+      // const link = document.createElement("a");
+      // link.href = str;
+      // link.style.display = "none";
+      // document.body.appendChild(link);
+      // link.click();
+      // document.body.removeChild(link); // 释放元素
     },
     // 获取分享客户订单
     async getSearchCompanyShareOrderDetailsPage() {
@@ -456,6 +492,20 @@ export default {
     }
   }
   .tableBox {
+    .tableTitle {
+      padding-bottom: 18px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 15px;
+      .titleText {
+        .title {
+          font-weight: 700;
+          border: none;
+        }
+      }
+    }
     @{deep} .el-table {
       .el-table__header-wrapper .el-checkbox {
         display: none;
