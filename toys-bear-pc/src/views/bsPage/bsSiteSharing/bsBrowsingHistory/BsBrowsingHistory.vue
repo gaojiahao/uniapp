@@ -72,22 +72,16 @@
           label="网址"
         ></el-table-column>
         <el-table-column prop="email" label="登录邮箱"></el-table-column>
-        <el-table-column prop="createdOn" label="登录时间" align="center">
+        <el-table-column
+          prop="createdOn"
+          label="登录时间"
+          width="150"
+          align="center"
+        >
           <template slot-scope="scope">
             <span>
               {{ scope.row.createdOn.replace(/T/, " ") }}
             </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" align="center" width="150">
-          <template slot-scope="scope">
-            <el-button
-              style="margin-right:10px;"
-              size="mini"
-              type="primary"
-              @click="openOrderDetail(scope.row)"
-              >导出</el-button
-            >
           </template>
         </el-table-column>
       </el-table>

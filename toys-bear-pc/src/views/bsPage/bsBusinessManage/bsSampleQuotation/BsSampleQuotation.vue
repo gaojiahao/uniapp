@@ -7,7 +7,7 @@
         <el-input
           type="text"
           size="medium"
-          v-model="keyword"
+          v-model="searchForm.orderNumber"
           placeholder="请输入关键词"
           @keyup.native.enter="search"
         ></el-input>
@@ -17,7 +17,7 @@
         <el-input
           type="text"
           size="medium"
-          v-model="clientName"
+          v-model="searchForm.clientName"
           placeholder="请输入关键词"
           @keyup.native.enter="search"
         ></el-input>
@@ -27,7 +27,7 @@
         <el-input
           type="text"
           size="medium"
-          v-model="clientName"
+          v-model="searchForm.contacts"
           placeholder="请输入关键词"
           @keyup.native.enter="search"
         ></el-input>
@@ -37,7 +37,7 @@
         <el-date-picker
           size="medium"
           value-format="yyyy-MM-ddTHH:mm:ss"
-          v-model="dateTime"
+          v-model="searchForm.dateTime"
           type="daterange"
           range-separator="-"
           start-placeholder="开始日期"
@@ -122,11 +122,9 @@
         </el-table-column>
         <el-table-column prop="profit" label="利润" align="center" width="100">
         </el-table-column>
-        <el-table-column prop="price" label="状态" align="center" width="100">
+        <el-table-column prop="status" label="状态" align="center" width="100">
           <template slot-scope="scope">
-            <span style="color:#f56c6c">
-              {{ scope.row.number }}
-            </span>
+            {{ scope.row.status }}
           </template>
         </el-table-column>
         <el-table-column
@@ -175,8 +173,12 @@
 export default {
   data() {
     return {
-      keyword: null,
-      dateTime: null,
+      searchForm: {
+        orderNumber: null,
+        clientName: null,
+        contacts: null,
+        dateTime: null
+      },
       tableData: [],
       totalCount: 0,
       pageSize: 10,

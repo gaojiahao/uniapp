@@ -966,14 +966,12 @@ export default {
       .wrapBox,
       .lessThanPrice {
         display: flex;
+        padding-top: 20px;
+        border-top: 1px solid #dcdfe6;
         .left,
         .right {
           flex: 1;
         }
-      }
-      .lessThanPrice {
-        padding-top: 20px;
-        border-top: 1px solid #dcdfe6;
       }
     }
   }

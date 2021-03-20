@@ -86,7 +86,12 @@
           label="订单款数"
           align="center"
         ></el-table-column>
-        <el-table-column prop="totalAmount" label="总价" align="center">
+        <el-table-column
+          prop="totalAmount"
+          label="总价"
+          width="150"
+          align="center"
+        >
           <template slot-scope="scope">
             <span style="color:#ff0b00;">
               {{ scope.row.totalAmount }}
@@ -111,7 +116,7 @@
               style="margin-right:10px;"
               size="mini"
               type="primary"
-              @click="openOrderDetail(scope.row)"
+              @click="openSelectTemplate(scope.row)"
               >导出</el-button
             >
           </template>
@@ -130,14 +135,136 @@
         ></el-pagination>
       </center>
     </div>
+    <!-- 导出订单模板dialog -->
+    <transition name="el-zoom-in-center">
+      <el-dialog
+        title="订单模板"
+        v-show="exportTemplateDialog"
+        :visible.sync="exportTemplateDialog"
+        top="60px"
+        width="80%"
+      >
+        <el-card class="box-card">
+          <div
+            slot="header"
+            style="display:flex; align-items:center; justify-content:space-between"
+          >
+            <span class="headerTitle">报出价(带工厂信息)</span>
+            <div>
+              <el-button
+                type="primary"
+                @click="openViewer(require('@/assets/images/mode1.png'))"
+                >预览</el-button
+              >
+              <el-button type="success" @click="exportOrder(1)">导出</el-button>
+            </div>
+          </div>
+          <div class="modeImgBox">
+            <el-image
+              fit="contain"
+              class="myImg"
+              :src="require('@/assets/images/mode1.png')"
+            ></el-image>
+          </div>
+        </el-card>
+        <el-card class="box-card">
+          <div
+            slot="header"
+            style="display:flex; align-items:center; justify-content:space-between"
+          >
+            <span class="headerTitle">报出价(不带工厂信息)</span>
+            <div>
+              <el-button
+                type="primary"
+                @click="openViewer(require('@/assets/images/mode2.png'))"
+                >预览</el-button
+              >
+              <el-button type="success" @click="exportOrder(2)">导出</el-button>
+            </div>
+          </div>
+          <div class="modeImgBox">
+            <el-image
+              fit="contain"
+              class="myImg"
+              :src="require('@/assets/images/mode2.png')"
+            ></el-image>
+          </div>
+        </el-card>
+        <el-card class="box-card">
+          <div
+            slot="header"
+            style="display:flex; align-items:center; justify-content:space-between"
+          >
+            <span class="headerTitle">出厂价(带工厂信息)</span>
+            <div>
+              <el-button
+                type="primary"
+                @click="openViewer(require('@/assets/images/mode3.png'))"
+                >预览</el-button
+              >
+              <el-button type="success" @click="exportOrder(3)">导出</el-button>
+            </div>
+          </div>
+          <div class="modeImgBox">
+            <el-image
+              fit="contain"
+              class="myImg"
+              :src="require('@/assets/images/mode3.png')"
+            ></el-image>
+          </div>
+        </el-card>
+        <el-card class="box-card">
+          <div
+            slot="header"
+            style="display:flex; align-items:center; justify-content:space-between"
+          >
+            <span class="headerTitle">出厂价+报出价+工厂信息</span>
+            <div>
+              <el-button
+                type="primary"
+                @click="openViewer(require('@/assets/images/mode4.png'))"
+                >预览</el-button
+              >
+              <el-button type="success" @click="exportOrder(4)">导出</el-button>
+            </div>
+          </div>
+          <div class="modeImgBox">
+            <el-image
+              fit="contain"
+              class="myImg"
+              :src="require('@/assets/images/mode4.png')"
+            ></el-image>
+          </div>
+        </el-card>
+      </el-dialog>
+    </transition>
+    <!-- 导出订单模板dialog -->
+    <transition name="el-zoom-in-center">
+      <el-dialog
+        title="订单模板"
+        v-show="exportTemplateDialog"
+        :visible.sync="exportTemplateDialog"
+        top="60px"
+        width="80%"
+      >
+        <bsExportOrder
+          :orderNumber="currentOrder.orderNumber"
+          :customerName="currentOrder.customerName"
+        />
+      </el-dialog>
+    </transition>
   </div>
 </template>
 
 <script>
+import bsExportOrder from "@/components/bsComponents/bsSiteSharingComponent/bsExportOrder";
 export default {
   name: "bsCustomerOrder",
+  components: { bsExportOrder },
   data() {
     return {
+      exportTemplateDialog: false,
+      currentOrder: {},
       zhandian: null,
       keyword: null,
       dateTime: null,
@@ -204,6 +331,18 @@ export default {
     handleCurrentChange(page) {
       this.currentPage = page;
       this.getSearchCompanyShareOrdersPage();
+    },
+    // 打开选择导出模板
+    openSelectTemplate(row) {
+      this.currentOrder = row;
+      this.exportTemplateDialog = true;
+      // const str = "http://139.9.71.135:8087/ConversationListIcon.rar";
+      // const link = document.createElement("a");
+      // link.href = str;
+      // link.style.display = "none";
+      // document.body.appendChild(link);
+      // link.click();
+      // document.body.removeChild(link); // 释放元素
     },
     // 搜索
     search() {

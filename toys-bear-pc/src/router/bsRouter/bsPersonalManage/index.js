@@ -1,8 +1,6 @@
-// 账号设置
-const BsAccountSettings = () =>
-  import(
-    "@/views/bsPage/bsPersonalManage/bsAccountSettings/BsAccountSettings.vue"
-  );
+// 账号管理
+const BsAccountManage = () =>
+  import("@/views/bsPage/bsPersonalManage/bsAccountManage/BsAccountManage.vue");
 
 // 报价设置
 const BsQuotationSettings = () =>
@@ -16,9 +14,9 @@ const BsPushSettings = () =>
 
 export default [
   {
-    path: "/bsIndex/bsAccountSettings",
-    name: "bsAccountSettings",
-    component: BsAccountSettings,
+    path: "/bsIndex/bsAccountManage",
+    name: "bsAccountManage",
+    component: BsAccountManage,
     meta: {
       keepAlive: true
     }

@@ -217,7 +217,6 @@ export default new Vuex.Store({
       return state[state.userInfo.uid];
     },
     keepAliveArr(state) {
-      console.log(state.bsMenuLabels);
       return state.bsMenuLabels.map(val => {
         if (val) {
           const list = val.linkUrl.split("/");

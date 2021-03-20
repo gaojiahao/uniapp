@@ -43,9 +43,19 @@
         <el-table-column
           label="站点"
           align="center"
-          width="100"
+          width="150"
           prop="siteRegion"
-        ></el-table-column>
+        >
+          <template slot-scope="scope">
+            <div>
+              <i
+                style="color: #3368A9; margin-right: 15px;"
+                class="iconfont icon-hulianwang"
+              ></i>
+              <span>{{ scope.row.siteRegion }}</span>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column prop="shareUrl" min-width="200" label="网址">
           <template slot-scope="scope">
             <div :id="scope.row.id">
@@ -147,6 +157,7 @@
       :title="dialogTitle"
       :visible.sync="addClienDialog"
       :close-on-click-modal="false"
+      top="50px"
       width="40%"
     >
       <el-form
@@ -316,6 +327,35 @@
             </el-select>
           </el-form-item>
         </div>
+        <div class="lessThanPrice">
+          <div class="left">
+            <el-form-item label="价格小于：" prop="miniPrice">
+              <el-input
+                v-model="clienFormData.miniPrice"
+                clearable
+                placeholder="请输入"
+              >
+              </el-input>
+            </el-form-item>
+          </div>
+          <div class="right">
+            <!-- xiaoshuweishu -->
+            <el-form-item label="小数位数：" prop="miniPriceDecimalPlaces">
+              <el-select
+                v-model="clienFormData.miniPriceDecimalPlaces"
+                placeholder="请选择取舍方式"
+              >
+                <el-option
+                  v-for="(item, i) in options.decimalPlaces"
+                  :key="i"
+                  :label="item.itemCode"
+                  :value="item.parameter"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </div>
+        </div>
         <el-form-item label="过期时间：" prop="expireTime">
           <el-date-picker
             v-model="clienFormData.expireTime"
@@ -428,6 +468,8 @@ export default {
       dialogTitle: "新增分享",
       defaultShareDomain: [],
       clienFormData: {
+        miniPrice: 0,
+        miniPriceDecimalPlaces: 1,
         url: null,
         isExportExcel: false,
         profit: 0,
@@ -475,6 +517,10 @@ export default {
         ],
         rejectionMethod: [
           { required: true, message: "请选择取舍方式", trigger: "blur" }
+        ],
+        miniPrice: [{ required: true, message: "请输入价格", trigger: "blur" }],
+        miniPriceDecimalPlaces: [
+          { required: true, message: "请选择小数位数", trigger: "change" }
         ]
       }
     };
@@ -510,7 +556,7 @@ export default {
       );
       if (res.data.result.code === 200) {
         this.$message.success("删除成功");
-        this.getSearchWebsiteShareInfosPage();
+        this.getDataList();
       } else {
         this.$message.error("删除失败,请检查网络！");
       }
@@ -801,6 +847,12 @@ export default {
   .formItemBox {
     display: flex;
     justify-content: space-between;
+  }
+  .lessThanPrice {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 20px;
+    border-top: 1px solid #dcdfe6;
   }
 }
 </style>
