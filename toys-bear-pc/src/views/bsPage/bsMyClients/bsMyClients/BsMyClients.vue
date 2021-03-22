@@ -152,7 +152,6 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      tableData: [],
       totalCount: 0,
       pageSize: 12,
       currentPage: 1,
