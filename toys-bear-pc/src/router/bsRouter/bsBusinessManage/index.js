@@ -1,6 +1,9 @@
 // 展厅择样
 const BsHallSample = () =>
   import("@/views/bsPage/bsBusinessManage/bsHallSample/BsHallSample.vue");
+// 展厅业务
+const BsHallBusiness = () =>
+  import("@/views/bsPage/bsBusinessManage/bsHallBusiness/BsHallBusiness.vue");
 // 购物车
 const BsShoppingCart = () =>
   import("@/views/bsPage/bsBusinessManage/bsShoppingCart/BsShoppingCart.vue");
@@ -18,6 +21,14 @@ export default [
     path: "/bsIndex/bsHallSample",
     name: "bsHallSample",
     component: BsHallSample,
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/bsIndex/bsHallBusiness",
+    name: "bsHallBusiness",
+    component: BsHallBusiness,
     meta: {
       keepAlive: true
     }
