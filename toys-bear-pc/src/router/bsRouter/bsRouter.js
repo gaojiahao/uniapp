@@ -1,7 +1,7 @@
 /** 产品查询模块 */
 import BsProductSearchModel from "./bsProductSearch/index";
 /** 我的消息模块 */
-import BsMyInfoModel from "./bsMyInfo/index";
+import BsMyNewsModel from "./bsMyNews/index";
 /** 业务管理模块 */
 import BsBusinessManageModel from "./bsBusinessManage/index";
 /** 站点分享模块 */
@@ -13,7 +13,7 @@ import BsMyClientsModel from "./bsMyClients/index";
 
 export default [
   ...BsProductSearchModel,
-  ...BsMyInfoModel,
+  ...BsMyNewsModel,
   ...BsBusinessManageModel,
   ...BsSiteSharingModel,
   ...BsPersonalManageModel,

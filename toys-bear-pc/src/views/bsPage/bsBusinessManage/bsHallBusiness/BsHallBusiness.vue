@@ -17,7 +17,7 @@
         <el-input
           type="text"
           size="medium"
-          v-model="searchForm.type"
+          v-model="searchForm.messageModel"
           placeholder="请输入关键词"
           @keyup.native.enter="search"
         ></el-input>
@@ -158,7 +158,7 @@ export default {
     return {
       searchForm: {
         keyword: null,
-        type: null,
+        messageModel: null,
         hallName: null,
         state: null,
         person: null,
@@ -174,9 +174,12 @@ export default {
     // 获取列表
     async getTableDataList() {
       const fd = {
+        readStatus: "-1",
+        sampleFrom: "hall",
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         keyword: this.searchForm.keyword,
+        messageModel: this.searchForm.messageModel,
         startTime: this.searchForm.dateTime && this.searchForm.dateTime[0],
         endTime: this.searchForm.dateTime && this.searchForm.dateTime[1]
       };
@@ -185,7 +188,7 @@ export default {
           delete fd[key];
         }
       }
-      const res = await this.$http.post("/api/ProductCollectionPage", fd);
+      const res = await this.$http.post("/api/GetERPOrderListByPage", fd);
       if (res.data.result.code === 200) {
         this.totalCount = res.data.result.item.totalCount;
         this.tableData = res.data.result.item.items;

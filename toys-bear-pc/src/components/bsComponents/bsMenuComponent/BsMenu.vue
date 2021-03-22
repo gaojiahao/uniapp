@@ -24,7 +24,7 @@
                 icon: true,
                 productSearchIcon:
                   item.parent.linkUrl === '/bsIndex/bsProductSearchIndex',
-                myInfoIcon: item.parent.linkUrl === '/bsIndex/bsInfo',
+                myInfoIcon: item.parent.linkUrl === '/bsIndex/bsMyNews',
                 businessManageIcon:
                   item.parent.linkUrl === '/bsIndex/bsBusinessManage',
                 bsSiteSharingIcon:
