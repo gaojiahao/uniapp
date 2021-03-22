@@ -7,7 +7,7 @@
         <el-input
           type="text"
           size="medium"
-          v-model="keyword"
+          v-model="searchForm.keyword"
           placeholder="请输入关键词"
           @keyup.native.enter="search"
         ></el-input>
@@ -17,7 +17,7 @@
         <el-input
           type="text"
           size="medium"
-          v-model="keyword"
+          v-model="searchForm.type"
           placeholder="请输入关键词"
           @keyup.native.enter="search"
         ></el-input>
@@ -27,7 +27,7 @@
         <el-input
           type="text"
           size="medium"
-          v-model="keyword"
+          v-model="searchForm.hallName"
           placeholder="请输入关键词"
           @keyup.native.enter="search"
         ></el-input>
@@ -37,7 +37,7 @@
         <el-input
           type="text"
           size="medium"
-          v-model="keyword"
+          v-model="searchForm.state"
           placeholder="请输入关键词"
           @keyup.native.enter="search"
         ></el-input>
@@ -47,17 +47,17 @@
         <el-input
           type="text"
           size="medium"
-          v-model="keyword"
+          v-model="searchForm.person"
           placeholder="请输入关键词"
           @keyup.native.enter="search"
         ></el-input>
       </div>
-      <div class="item">
+      <div class="item date">
         <span class="label">时间段：</span>
         <el-date-picker
           size="medium"
           value-format="yyyy-MM-ddTHH:mm:ss"
-          v-model="dateTime"
+          v-model="searchForm.dateTime"
           type="daterange"
           range-separator="-"
           start-placeholder="开始日期"
@@ -83,86 +83,39 @@
         ref="collecTable"
         :header-cell-style="{ 'font-size': '14px', color: '#666' }"
       >
-        <el-table-column prop="img" label="产品" align="center" width="300">
+        <el-table-column label="择样单号">
           <template slot-scope="scope">
-            <div class="imgBox">
-              <el-image
-                fit="contain"
-                style="width:80px;height:60px;"
-                :src="scope.row.img"
-                :preview-src-list="scope.row.imgUrlList"
-              >
-                <div slot="placeholder" class="errorImg">
-                  <img src="~@/assets/images/imgError.png" alt />
-                </div>
-                <div slot="error" class="errorImg">
-                  <img src="~@/assets/images/imgError.png" alt />
-                </div>
-              </el-image>
-              <div class="productName">
-                <div class="name">
-                  {{ scope.row.name }}
-                </div>
-                <div class="factory">
-                  {{ scope.row.supplierName }}
-                </div>
-              </div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="来源" align="center">
-          <template slot-scope="scope">
-            {{ scope.row.exhibitionName }}
+            {{ scope.row.orderNumber }}
           </template>
         </el-table-column>
         <el-table-column
           prop="fa_no"
-          label="出厂货号"
-          width="100"
+          label="择样类型"
           align="center"
         ></el-table-column>
-        <el-table-column prop="ch_pa" label="包装" align="center" width="100">
+        <el-table-column
+          prop="ch_pa"
+          label="本次代号"
+          align="center"
+          width="100"
+        >
         </el-table-column>
-        <el-table-column label="外箱规格" align="center">
+        <el-table-column label="择样日期" align="center">
           <template slot-scope="scope">
             <span>
-              {{ scope.row.ou_le }}x{{ scope.row.ou_wi }}x{{
-                scope.row.ou_hi
-              }}(cm)
+              {{ scope.row.createOn }}
             </span>
           </template>
         </el-table-column>
-        <el-table-column label="包装规格" align="center">
-          <template slot-scope="scope">
-            <span>
-              {{ scope.row.in_le }}x{{ scope.row.in_wi }}x{{
-                scope.row.in_hi
-              }}(cm)
-            </span>
-          </template>
+        <el-table-column prop="zhekou" label="折扣" align="center" width="100">
         </el-table-column>
-        <el-table-column label="装箱量" align="center" width="100">
-          <template slot-scope="scope">
-            <span> {{ scope.row.in_en }}/{{ scope.row.ou_lo }}(pcs) </span>
-          </template>
+        <el-table-column prop="hallName" label="展厅名称" align="center">
         </el-table-column>
-        <el-table-column label="体积/材积" align="center">
-          <template slot-scope="scope">
-            <span>
-              {{ scope.row.bulk_stere }}(cbm)/{{ scope.row.bulk_feet }}(cuft)
-            </span>
-          </template>
+        <el-table-column prop="remove" label="备注" align="center">
         </el-table-column>
-        <el-table-column label="毛重/净重" align="center" width="100">
+        <el-table-column prop="state" label="状态" align="center" width="100">
           <template slot-scope="scope">
-            <span> {{ scope.row.gr_we }}/{{ scope.row.ne_we }}(kg) </span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="price" label="单价" align="center" width="100">
-          <template slot-scope="scope">
-            <span style="color:#f56c6c">
-              {{ scope.row.cu_de + scope.row.price.toFixed(2) }}
-            </span>
+            <span style="color:#f56c6c"> {{ scope.row.cu_de }} 未查看 </span>
           </template>
         </el-table-column>
         <el-table-column
@@ -172,14 +125,13 @@
           width="100"
         >
           <template slot-scope="scope">
-            <el-popconfirm
-              title="确定要取消收藏吗？"
-              @confirm="handleDelete(scope.row)"
+            <el-button
+              size="mini"
+              type="warning"
+              @click="handleDelete(scope.row)"
             >
-              <el-button size="mini" type="warning" @click.stop slot="reference"
-                >取消收藏</el-button
-              >
-            </el-popconfirm>
+              导出
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -204,8 +156,14 @@ export default {
   name: "bsMyCollection",
   data() {
     return {
-      keyword: null,
-      dateTime: null,
+      searchForm: {
+        keyword: null,
+        type: null,
+        hallName: null,
+        state: null,
+        person: null,
+        dateTime: null
+      },
       tableData: [],
       totalCount: 0,
       pageSize: 10,
@@ -214,13 +172,13 @@ export default {
   },
   methods: {
     // 获取列表
-    async getCollectList() {
+    async getTableDataList() {
       const fd = {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
-        keyword: this.keyword,
-        startTime: this.dateTime && this.dateTime[0],
-        endTime: this.dateTime && this.dateTime[1]
+        keyword: this.searchForm.keyword,
+        startTime: this.searchForm.dateTime && this.searchForm.dateTime[0],
+        endTime: this.searchForm.dateTime && this.searchForm.dateTime[1]
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -234,36 +192,28 @@ export default {
       }
     },
     // 取消收藏
-    async handleDelete(row) {
-      const res = await this.$http.post("/api/CreateProductCollection", {
-        productNumber: row.productNumber
-      });
-      if (res.data.result.code === 200) {
-        this.$message.success("取消收藏成功");
-        this.getCollectList();
-      } else {
-        this.$message.error(res.data.result.msg);
-      }
+    handleDelete(row) {
+      console.log(row);
     },
     // 切換頁容量
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
       if (this.currentPage * pageSize > this.totalCount) return false;
-      this.getCollectList();
+      this.getTableDataList();
     },
     // 修改当前页
     handleCurrentChange(page) {
       this.currentPage = page;
-      this.getCollectList();
+      this.getTableDataList();
     },
     // 搜索
     search() {
       this.currentPage = 1;
-      this.getCollectList();
+      this.getTableDataList();
     }
   },
   created() {
-    this.getCollectList();
+    this.getTableDataList();
   },
   mounted() {}
 };
@@ -303,9 +253,12 @@ export default {
       align-items: center;
       max-width: 200px;
       margin-right: 20px;
+      &.date {
+        min-width: 300px;
+      }
       .label {
-        width: 58px;
-        min-width: 58px;
+        width: 70px;
+        min-width: 70px;
       }
     }
   }
