@@ -1,7 +1,9 @@
 <template>
   <div class="bsMyCollection">
     <div class="title">
-      <div class="left">最新产品 ({{ totalCount }})</div>
+      <div class="titleLeft">
+        <span>最新产品 ({{ totalCount }})</span>
+      </div>
       <div class="right">
         <el-button type="warning" size="medium" @click="toShoppingCart">
           <i class="whiteCart"></i>
@@ -193,6 +195,9 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    .titleLeft {
+      flex: 1;
+    }
     &::before {
       width: 4px;
       height: 14px;

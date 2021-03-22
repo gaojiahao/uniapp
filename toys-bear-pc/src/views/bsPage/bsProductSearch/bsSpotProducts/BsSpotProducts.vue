@@ -193,6 +193,9 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    .left {
+      flex: 1;
+    }
     &::before {
       width: 4px;
       height: 14px;
