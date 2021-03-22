@@ -42,9 +42,16 @@
         </el-table-column>
         <el-table-column align="center" prop="phone" label="手机" width="180">
         </el-table-column>
-        <el-table-column align="center" prop="tel" label="电话" width="180"> </el-table-column>
-        <el-table-column align="center" prop="site" label="地址"> </el-table-column>
-        <el-table-column align="center" prop="product" label="产品数量" width="200">
+        <el-table-column align="center" prop="tel" label="电话" width="180">
+        </el-table-column>
+        <el-table-column align="center" prop="site" label="地址">
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="product"
+          label="产品数量"
+          width="200"
+        >
         </el-table-column>
       </el-table>
       <!-- 分页 -->

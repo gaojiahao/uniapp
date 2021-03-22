@@ -53,13 +53,21 @@
     <div class="tableBox">
       <!-- 客户列表 -->
       <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column align="center" prop="name" label="客户姓名" width="180">
+        <el-table-column
+          align="center"
+          prop="name"
+          label="客户姓名"
+          width="180"
+        >
         </el-table-column>
-        <el-table-column align="center" prop="tel" label="电话" width="180"> </el-table-column>
+        <el-table-column align="center" prop="tel" label="电话" width="180">
+        </el-table-column>
         <el-table-column align="center" prop="emai" label="邮箱" width="180">
         </el-table-column>
-        <el-table-column align="center" prop="time" label="创建时间"> </el-table-column>
-        <el-table-column align="center" prop="remark" label="备注"> </el-table-column>
+        <el-table-column align="center" prop="time" label="创建时间">
+        </el-table-column>
+        <el-table-column align="center" prop="remark" label="备注">
+        </el-table-column>
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
             <el-button
@@ -104,7 +112,7 @@
         :model="clients"
         :rules="rules"
       >
-        <el-form-item label="客户姓名"  prop="name" >
+        <el-form-item label="客户姓名" prop="name">
           <el-input
             placeholder="请输入客户姓名"
             v-model="clients.name"
@@ -144,7 +152,6 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      tableData: [],
       totalCount: 0,
       pageSize: 12,
       currentPage: 1,
@@ -191,10 +198,10 @@ export default {
     //点击弹框事件
     handleClose(done) {
       this.$confirm("确认关闭？")
-        .then(_ => {
+        .then(() => {
           done();
         })
-        .catch(_ => {});
+        .catch(() => {});
     },
     //编辑客户
     handleEdit(index, row) {
