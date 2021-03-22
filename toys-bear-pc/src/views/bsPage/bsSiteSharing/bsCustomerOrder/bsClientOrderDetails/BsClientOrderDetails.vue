@@ -204,8 +204,8 @@
           <span class="price" style="margin-right:5px;">
             {{ options.currencyType }}
           </span>
-          <span class="price">{{ options.totalCostPrice }}</span>
-          <span class="price">/</span>
+          <span style="color: #3368A9;">{{ options.totalCostPrice }}</span>
+          <span>/</span>
           <span class="price">{{ options.totalAmount }}</span>
         </p>
       </div>
