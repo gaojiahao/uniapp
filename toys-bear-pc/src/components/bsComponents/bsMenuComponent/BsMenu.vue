@@ -61,23 +61,6 @@ export default {
     return {};
   },
   methods: {
-    // 展开菜单事件
-    // handleOpen(route) {
-    //   this.$router.push(route);
-    //   for (let i = 0; i < this.routers.length; i++) {
-    //     if (this.routers[i].children) {
-    //       for (let j = 0; j < this.routers[i].children.length; j++) {
-    //         if (this.routers[i].children[j].linkUrl === route) {
-    //           console.log(this.routers[i].children[j]);
-    //           this.$store.commit(
-    //             "handlerBsMenuLabels",
-    //             this.routers[i].children[j]
-    //           );
-    //         }
-    //       }
-    //     }
-    //   }
-    // },
     // 点击菜单时间
     addRouterEvent(route) {
       this.$store.commit("handlerBsMenuLabels", route);
