@@ -389,6 +389,7 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
+  name: "bsShoppingCart",
   data() {
     return {
       options: {

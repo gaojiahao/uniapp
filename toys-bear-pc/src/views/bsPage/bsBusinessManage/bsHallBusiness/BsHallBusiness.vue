@@ -153,7 +153,7 @@
 
 <script>
 export default {
-  name: "bsMyCollection",
+  name: "bsHallBusiness",
   data() {
     return {
       searchForm: {

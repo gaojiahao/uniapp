@@ -171,6 +171,7 @@
 
 <script>
 export default {
+  name: "bsSampleQuotation",
   data() {
     return {
       searchForm: {

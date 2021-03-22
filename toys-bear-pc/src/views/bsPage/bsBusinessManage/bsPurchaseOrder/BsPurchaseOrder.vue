@@ -4,6 +4,7 @@
 
 <script>
 export default {
+  name: "bsPurchaseOrder",
   data() {
     return {};
   },

@@ -169,7 +169,7 @@ import { mapState } from "vuex";
 import bsAddStaff from "@/components/bsComponents/bsPersonalManageComponent/bsAddStaff";
 import bsBindStaff from "@/components/bsComponents/bsPersonalManageComponent/bsBindStaff";
 export default {
-  name: "bsAccountSettings",
+  name: "bsAccountManage",
   components: {
     bsAddStaff,
     bsBindStaff
