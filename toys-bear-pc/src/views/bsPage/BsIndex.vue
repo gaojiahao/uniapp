@@ -120,7 +120,6 @@ export default {
         return false;
       }
       this.$store.commit("subBsMenuLabels", item);
-      console.log(this.$route.path, item.linkUrl);
       if (this.$route.path === item.linkUrl) {
         if (this.bsMenuLabels.length) {
           const routerLink = this.bsMenuLabels[this.bsMenuLabels.length - 1]
@@ -165,6 +164,7 @@ export default {
     .leftMenu {
       height: 100%;
       overflow: hidden;
+      // box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
     }
     .rightContent {
       flex: 1;
@@ -181,6 +181,7 @@ export default {
           flex: 1;
           overflow: hidden;
           padding-right: 2px;
+          box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
         }
         .clearAll {
           width: 50px;
@@ -190,7 +191,6 @@ export default {
           align-items: center;
           justify-content: center;
           font-size: 15px;
-          box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
           cursor: pointer;
         }
         @{deep} .el-scrollbar__wrap {
@@ -201,6 +201,7 @@ export default {
             width: 100%;
             padding-left: 20px;
             height: 100%;
+            box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
             white-space: nowrap;
           }
         }

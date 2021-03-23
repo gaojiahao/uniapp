@@ -20,7 +20,7 @@ const config = {
   lintOnSave: true // 是否在开发环境下每次保存代码时都启用 eslint验证
 };
 
-if (env != "production")
+if (env == "development")
   config.devServer = {
     open: true, // 开启自动打开浏览器
     disableHostCheck: true,

@@ -10,6 +10,7 @@ import "@/assets/css/theme/index.css";
 import { getMenuFuc } from "@/router/index";
 import ExTableColumn from "ex-table-column";
 import PreviewPic from "vue-preview-pictures"; // 预览
+import waterfall from "vue-waterfall2";
 
 Vue.component(ExTableColumn.name, ExTableColumn);
 Vue.prototype.$PreviewPic = PreviewPic;
@@ -17,6 +18,8 @@ Vue.config.productionTip = false;
 getMenuFuc();
 Vue.use(ElementUI);
 Vue.use(myAxios);
+Vue.use(waterfall);
+
 new Vue({
   router,
   store,

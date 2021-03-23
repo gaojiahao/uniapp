@@ -40,7 +40,7 @@
               <span class="price">{{ item.price }}</span>
             </template>
             <template v-else>
-              积分查看价格
+              <span class="price lookPrice">积分查看</span>
             </template>
           </p>
           <p class="item">
@@ -170,13 +170,14 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  cursor: pointer;
+  border-radius: 4px;
   .itemImg {
     position: relative;
     display: flex;
     justify-content: center;
     box-sizing: border-box;
     padding: 16px;
+    cursor: pointer;
     .el-image {
       img {
         width: 100%;
@@ -240,6 +241,9 @@ export default {
           }
           .price {
             color: #eb1515;
+            &.lookPrice {
+              cursor: pointer;
+            }
           }
         }
       }
@@ -251,10 +255,11 @@ export default {
         align-items: center;
         justify-content: center;
         box-sizing: border-box;
+        cursor: pointer;
         .shoppingCart {
           width: 36px;
           height: 36px;
-          transition: all 1s;
+          transition: all 0.3s;
           background: url("~@/assets/images/shoppingCartIcon.png") no-repeat
             center;
           background-size: contain;
@@ -262,23 +267,25 @@ export default {
         .shoppingCartActive {
           width: 36px;
           height: 36px;
-          transition: all 1s;
+          transition: all 0.3s;
           background: url("~@/assets/images/shoppingCartActiveIcon.png")
             no-repeat center;
           background-size: contain;
         }
         &:hover {
           .shoppingCart {
-            -webkit-transform: scale(1.2);
-            -moz-transform: scale(1.2);
-            -ms-transform: scale(1.2);
-            transform: scale(1.2);
+            -webkit-transform: scale(1.2) rotate(360deg);
+            -moz-transform: scale(1.2) rotate(360deg);
+            -ms-transform: scale(1.2) rotate(360deg);
+            transform: scale(1.2) rotate(360deg);
+            margin-bottom: 5px;
           }
           .shoppingCartActive {
-            -webkit-transform: scale(1.2);
-            -moz-transform: scale(1.2);
-            -ms-transform: scale(1.2);
-            transform: scale(1.2);
+            -webkit-transform: scale(1.2) rotate(360deg);
+            -moz-transform: scale(1.2) rotate(360deg);
+            -ms-transform: scale(1.2) rotate(360deg);
+            transform: scale(1.2) rotate(360deg);
+            margin-bottom: 5px;
           }
         }
       }
@@ -301,6 +308,12 @@ export default {
       margin-top: 10px;
       display: flex;
       align-items: center;
+      cursor: pointer;
+      &:hover {
+        .text {
+          color: #3368a9;
+        }
+      }
       .sourceIcon {
         width: 18px;
         min-width: 18px;

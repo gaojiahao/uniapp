@@ -144,7 +144,11 @@
       :visible.sync="addEmployDialog"
       destroy-on-close
     >
-      <bsAddStaff @closeAdd="closeAdd" />
+      <bsAddStaff
+        :isEdit="isEdit"
+        :currentEditRow="currentEditRow"
+        @closeAdd="closeAdd"
+      />
     </el-dialog>
     <!-- 绑定员工 -->
     <el-dialog
@@ -178,10 +182,12 @@ export default {
     return {
       totalCount: 0,
       myInfo: {},
+      currentEditRow: {},
       tableData: [],
       yuangongTitle: "新增员工",
       addEmployDialog: false,
       bindEmployDialog: false,
+      isEdit: false,
       currentRow: {}
     };
   },
@@ -189,6 +195,7 @@ export default {
     // 打开添加员工
     openAdd() {
       this.yuangongTitle = "新增员工";
+      this.isEdit = false;
       this.addEmployDialog = true;
     },
     // 打开绑定员工
@@ -199,8 +206,10 @@ export default {
     },
     // 打开编辑员工
     openEdit(row) {
+      this.isEdit = true;
+      this.currentEditRow = row;
       this.yuangongTitle = "编辑员工";
-      console.log(row);
+      this.addEmployDialog = true;
     },
     // 关闭编辑员工
     closeAdd() {

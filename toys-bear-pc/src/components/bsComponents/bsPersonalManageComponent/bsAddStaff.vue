@@ -10,6 +10,7 @@
           :on-change="changeUpload"
           :on-preview="handlePictureCardPreview"
           :http-request="successUpload"
+          :file-list="editImages"
           accept=".jpg,.jpeg,.png,.ico,.bmp,.JPG,.JPEG,.PNG,.ICO,.BMP"
         >
           <i class="el-icon-plus"></i>
@@ -79,11 +80,15 @@ export default {
     isEdit: {
       type: Boolean,
       default: false
+    },
+    currentEditRow: {
+      type: Object
     }
   },
   data() {
     return {
       file: null,
+      editImages: [], // 编辑员工时的头像预览
       addEmployeeForm: {
         // 新增员工表单
         personnelNo: null,
@@ -96,7 +101,7 @@ export default {
         birthday: "",
         userImage: "",
         linkman: null,
-        CompanyId: null,
+        companyId: null,
         newPassword: null // 编辑时的密码
       },
       addRules: {
@@ -152,6 +157,18 @@ export default {
         }
       });
     },
+    // 获取当前日期
+    getCurrentDate() {
+      var now = new Date();
+      var year = now.getFullYear(); // 得到年份
+      var month = now.getMonth(); // 得到月份
+      var date = now.getDate(); // 得到日期
+      month = month + 1;
+      month = month.toString().padStart(2, "0");
+      date = date.toString().padStart(2, "0");
+      var defaultDate = `${year}-${month}-${date}`;
+      this.$set(this.addEmployeeForm, "birthday", defaultDate);
+    },
     // 上传头像
     async successUpload() {
       const fd = new FormData();
@@ -161,7 +178,7 @@ export default {
     },
     // 提交添加员工
     async submit() {
-      this.addEmployeeForm.CompanyId = this.meInfo.id;
+      this.addEmployeeForm.companyId = this.meInfo.id;
       const imgRes = await this.successUpload();
       if (imgRes.data.result.code === 200) {
         this.addEmployeeForm.userImage =
@@ -187,8 +204,6 @@ export default {
               this.addEmployeeDialog = false;
               const msg = this.isEdit ? "编辑成功" : "新增成功";
               this.$message.success(msg);
-              this.getCurrentDate();
-              this.getCompanyUserList();
             } else {
               this.$message.error(res.data.result.msg);
               this.addEmployeeForm.password = "";
@@ -208,8 +223,6 @@ export default {
             if (res.data.result.code === 200) {
               this.addEmployeeDialog = false;
               this.$message.success("新增员工成功");
-              this.getCurrentDate();
-              this.getCompanyUserList();
             } else {
               this.$message.error(res.data.result.msg);
               this.addEmployeeForm.password = "";
@@ -220,7 +233,16 @@ export default {
     }
   },
   created() {},
-  mounted() {}
+  mounted() {
+    if (this.isEdit) {
+      this.getCurrentDate();
+      for (const key in this.currentEditRow) {
+        this.addEmployeeForm[key] = this.currentEditRow[key];
+      }
+      if (this.currentEditRow.userImage)
+        this.$set(this, "editImages", [{ url: this.currentEditRow.userImage }]);
+    }
+  }
 };
 </script>
 <style scoped lang="less">

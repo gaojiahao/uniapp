@@ -6,7 +6,7 @@ import { Message } from "element-ui";
 /**
  * apiBaseURL
  */
-import { proEnv } from "@/assets/js/config/config.js";
+import { proEnv, testEnv } from "@/assets/js/config/config.js";
 const env = process.env.NODE_ENV;
 let target = "";
 let push_target = "";
@@ -17,7 +17,7 @@ switch (env) {
     target = proEnv.hosturl;
     break;
   case "test": // 测试环境
-    target = "";
+    target = testEnv.hosturl;
     break;
   default:
     // 本地环境
