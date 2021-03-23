@@ -40,7 +40,7 @@
                   <el-avatar
                     style="background-color:#E4EFFF;"
                     :size="50"
-                    :src="item.userInfo.companyLogo"
+                    :src="item.userInfo.image"
                   >
                     <p class="errText">
                       {{ item.userInfo.companyName }}
@@ -75,8 +75,9 @@ export default {
   name: "bsToyCircle",
   data() {
     return {
+      fullWidth: document.documentElement.clientWidth,
       findList: [],
-      col: 3
+      col: document.documentElement.clientWidth < 1920 ? 2 : 3
     };
   },
   methods: {
@@ -109,14 +110,19 @@ export default {
   },
   created() {},
   mounted() {
+    const that = this;
+    window.onresize = () => {
+      return (() => {
+        window.fullWidth = document.documentElement.clientWidth;
+        that.fullWidth = window.fullWidth;
+      })();
+    };
     this.getDataList();
   },
-  computed: {
-    itemWidth() {
-      return 138 * 0.5 * (document.documentElement.clientWidth / 375); // #rem布局 计算宽度
-    },
-    gutterWidth() {
-      return 9 * 0.5 * (document.documentElement.clientWidth / 375); // #rem布局 计算x轴方向margin(y轴方向的margin自定义在css中即可)
+  watch: {
+    fullWidth(val) {
+      if (val < 1920) this.col = 2;
+      this.fullWidth = val;
     }
   }
 };
@@ -242,7 +248,9 @@ export default {
       }
     }
     .cell-item-box {
-      width: 100%;
+      // width: 100%;
+      width: 540px;
+      min-width: 540px;
       padding-left: 20px;
       padding-top: 20px;
       border-radius: 6px;
@@ -254,6 +262,8 @@ export default {
       border-radius: 4px;
       box-sizing: border-box;
       padding: 20px;
+      width: 520px;
+      min-width: 520px;
       .item-top {
         height: 60px;
         display: flex;
@@ -264,7 +274,6 @@ export default {
           height: 100%;
         }
         .itemTopRight {
-          
         }
       }
     }

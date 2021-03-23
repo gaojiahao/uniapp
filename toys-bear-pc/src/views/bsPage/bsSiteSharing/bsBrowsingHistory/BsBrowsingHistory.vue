@@ -1,6 +1,6 @@
 <template>
   <div class="bsMyCollection">
-    <div class="title">我的收藏 ({{ totalCount }})</div>
+    <div class="title">浏览记录 ({{ totalCount }})</div>
     <div class="searchBox">
       <div class="item">
         <span class="label">关键字：</span>

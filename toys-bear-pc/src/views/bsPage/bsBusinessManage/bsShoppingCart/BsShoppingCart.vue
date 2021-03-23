@@ -63,6 +63,7 @@
           </template>
         </ex-table-column>
         <ex-table-column
+          min-width="100"
           :autoFit="true"
           prop="fa_no"
           label="出厂货号"
@@ -845,9 +846,15 @@ export default {
       .el-table__header-wrapper .el-checkbox {
         display: none;
       }
+      .el-table__header-wrapper {
+        .cell {
+          padding: 10px 0;
+        }
+      }
       .cell {
         white-space: nowrap;
         width: fit-content;
+        padding: 14px 0;
       }
       font-size: 12px;
       .inputNumber {
