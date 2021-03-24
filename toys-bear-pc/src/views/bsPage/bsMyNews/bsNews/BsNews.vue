@@ -53,7 +53,14 @@
       <div>
         <h3 style=" border-bottom: 1px solid #e5e5e5;">其他消息</h3>
         <ul class="exhibition">
-          <li v-for="list in msgList" :key="list.id">
+          <li
+            v-for="list in msgList"
+            :key="list.id"
+            @click="
+              handerIsGrid('bsNewsMessageList');
+              handerMsgList(list);
+            "
+          >
             <div class="exhibition_left">
               <div class="_leftImg">
                 <img :src="list.img" alt="" />
@@ -67,8 +74,11 @@
         </ul>
       </div>
     </div>
-
-    <component style="min-height: 400px;" :is="isGrid"></component>
+    <component
+      style="min-height: 400px;"
+      :is="isGrid"
+      :dataName="dataList"
+    ></component>
   </div>
 </template>
 
@@ -81,19 +91,23 @@ import bsNewsCompany from "@/components/bsComponents/bsNewsComponent/bsNewsCompa
 import bsNewsSystemMsg from "@/components/bsComponents/bsNewsComponent/bsNewsSystemMsg";
 //厂商业务
 import bsNewsFirm from "@/components/bsComponents/bsNewsComponent/bsNewsFirm";
+//消息列表
+import bsNewsMessageList from "@/components/bsComponents/bsNewsComponent/bsNewsMessageList";
 export default {
   name: "bsNews",
   components: {
     bsNewsExhibition,
     bsNewsCompany,
     bsNewsSystemMsg,
-    bsNewsFirm
+    bsNewsFirm,
+    bsNewsMessageList
   },
   data() {
     return {
       colorId: "2",
-      isGrid: "bsNewsExhibition",
+      isGrid: "bsNewsMessageList",
       isDiyu: "0",
+      dataList: [],
       msgList: [
         {
           id: 1,
@@ -120,6 +134,11 @@ export default {
     // 切换专区
     handerIsGrid(type) {
       this.isGrid = type;
+    },
+    handerMsgList(val) {
+      console.log(val, "22222s");
+      console.log(typeof val);
+      // this.dataList = val;
     }
   },
   created() {},
@@ -132,11 +151,12 @@ export default {
   background-color: #f1f2f6;
   display: flex;
   .bsNewsLeft {
-    width: 20%;
-    position: relative;
     margin-right: 20px;
     background-color: #fff;
-    border-radius: 4px;
+    width: 300px;
+    height: 780px;
+    opacity: 1;
+    border-radius: 6px;
     h3 {
       height: 55px;
       font-size: 15px;
@@ -157,7 +177,6 @@ export default {
       padding-left: 20px;
       .exhibition_left {
         width: 20%;
-        height: 80px;
         display: flex;
         justify-content: center;
         align-items: center;

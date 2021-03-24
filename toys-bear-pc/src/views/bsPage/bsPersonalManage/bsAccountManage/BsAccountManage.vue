@@ -117,7 +117,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="createOn"
+        prop="createdOn"
         label="添加时间"
         min-width="150"
         align="center"
