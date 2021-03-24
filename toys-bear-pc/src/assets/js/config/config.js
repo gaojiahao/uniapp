@@ -12,7 +12,9 @@ module.exports = {
   },
   proEnv: {
     NODE_ENV: "production", // 生产环境
-    hosturl: "https://api.toysbear.com",
-    wsBaseUrl: "wss://impush.toysbear.com/ws?UserId="
+    hosturl: "http://139.9.71.135:8080",
+    // hosturl: "https://api.toysbear.com",
+    wsBaseUrl: "ws://139.9.71.135:8090/ws?UserId="
+    // wsBaseUrl: "wss://impush.toysbear.com/ws?UserId="
   }
 };

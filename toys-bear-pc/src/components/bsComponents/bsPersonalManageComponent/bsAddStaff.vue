@@ -184,7 +184,6 @@ export default {
     },
     // 提交添加员工
     async submit() {
-      this.addEmployeeForm.companyId = this.id;
       const imgRes = await this.successUpload();
       if (imgRes.data.result.code === 200) {
         this.addEmployeeForm.userImage =
