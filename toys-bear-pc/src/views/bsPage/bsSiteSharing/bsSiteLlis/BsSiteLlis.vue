@@ -444,6 +444,9 @@ export default {
   },
   data() {
     return {
+      clientCurrentPage: 1,
+      clientPageSize: 99,
+      clientKeyword: "",
       keyword: null,
       defaultFormula: null,
       tableData: [],

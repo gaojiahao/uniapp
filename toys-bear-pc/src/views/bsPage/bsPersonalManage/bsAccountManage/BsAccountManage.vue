@@ -145,14 +145,16 @@
       destroy-on-close
     >
       <bsAddStaff
+        @submit="submitAddStaff"
         :isEdit="isEdit"
+        :companyId="myInfo.id"
         :currentEditRow="currentEditRow"
-        @closeAdd="closeAdd"
+        @close="close"
       />
     </el-dialog>
     <!-- 绑定员工 -->
     <el-dialog
-      width="50%"
+      width="70%"
       title="绑定员工"
       v-if="bindEmployDialog"
       :visible.sync="bindEmployDialog"
@@ -192,6 +194,24 @@ export default {
     };
   },
   methods: {
+    // 提交新增员工
+    async submitAddStaff(fd) {
+      let url = "/api/CreateOrgPersonnel";
+      if (this.isEdit) url = "/api/UpdateOrgPersonnel";
+      const res = await this.$http.post(url, fd);
+      if (res.data.result.code === 200) {
+        this.yuangongTitle = "新增员工";
+        this.isEdit = false;
+        this.addEmployDialog = false;
+        const msg = this.isEdit ? "编辑成功" : "新增成功";
+        this.$message.success(msg);
+        this.getCompanyUserList();
+      } else {
+        this.$message.error(res.data.result.msg);
+        this.isEdit = false;
+        this.addEmployDialog = false;
+      }
+    },
     // 打开添加员工
     openAdd() {
       this.yuangongTitle = "新增员工";
@@ -200,7 +220,6 @@ export default {
     },
     // 打开绑定员工
     openBind(row) {
-      console.log(row);
       this.currentRow = row;
       this.bindEmployDialog = true;
     },
@@ -212,16 +231,16 @@ export default {
       this.addEmployDialog = true;
     },
     // 关闭编辑员工
-    closeAdd() {
+    close() {
       this.addEmployDialog = false;
       this.bindEmployDialog = false;
     },
-    // 打开绑定员工
-    async openBindEmployees(row) {
-      this.getPersinnelList(row.phoneNumber);
-    },
     // 删除员工
-    handleDelete(row) {
+    async handleDelete(row) {
+      if (row.isMain) {
+        this.$message.error("不能删除主账号");
+        return;
+      }
       this.$confirm("确定要删除该员工吗?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -235,11 +254,18 @@ export default {
           if (res.data.result.code === 200) {
             this.$message.success("删除成功");
             this.getCompanyUserList();
-          } else this.$message.error(res.data.result.msg);
+          }
         })
         .catch(() => {
-          this.$message.warning("已取消删除");
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
         });
+    },
+    // 打开绑定员工
+    async openBindEmployees(row) {
+      this.getPersinnelList(row.phoneNumber);
     },
     // 获取个人信息中的个人信息和员工列表
     async getCompanyUserList() {

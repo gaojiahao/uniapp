@@ -221,6 +221,31 @@
             label-width="100px"
             :model="clienFormData"
           >
+            <el-form-item label="报价客户：" prop="customerInfoId">
+              <div class="formItemBox">
+                <el-select
+                  v-model="clienFormData.customerInfoId"
+                  :filter-method="filterMethod"
+                  filterable
+                  clearable
+                  placeholder="请 输入/选择 客户"
+                >
+                  <el-option
+                    v-for="item in clientList"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  >
+                  </el-option>
+                </el-select>
+                <el-button
+                  style="margin-left:10px;"
+                  type="primary"
+                  @click.stop="openAddMyClient"
+                  >新增客户</el-button
+                >
+              </div>
+            </el-form-item>
             <el-form-item label="默认公式：">
               <el-select
                 v-model="defaultFormula"
@@ -393,6 +418,10 @@ export default {
   name: "bsShoppingCart",
   data() {
     return {
+      clientList: [],
+      clientCurrentPage: 1,
+      clientPageSize: 99,
+      clientKeyword: "",
       options: {
         // 报价配置项
         cu_deList: [],
@@ -402,6 +431,7 @@ export default {
         size: []
       },
       clienFormData: {
+        customerInfoId: null,
         quotationProductList: [],
         profit: 0,
         offerMethod: "汕头",
@@ -603,6 +633,36 @@ export default {
         outerBoxFeet
       };
     },
+    // 搜索客户
+    filterMethod(val) {
+      this.clientKeyword = val;
+      console.log(this.clientKeyword);
+      if (this.timer) {
+        // 如果存在延时器就清除
+        clearTimeout(this.timer);
+      }
+      this.timer = setTimeout(() => {
+        this.getClientList();
+      }, 1000);
+    },
+    // 获取客户列表
+    async getClientList() {
+      const fd = {
+        keyword: this.clientKeyword,
+        skipCount: this.clientCurrentPage,
+        maxResultCount: this.clientPageSize
+      };
+      for (const key in fd) {
+        if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
+          delete fd[key];
+        }
+      }
+      const res = await this.$http.post("/api/SearchCustomerInfosPage", fd);
+      if (res.data.result.code === 200) {
+        this.clientList = res.data.result.item.items;
+        this.clientListTotalCount = res.data.result.item.totalCount;
+      }
+    },
     // 删除购物车
     removeMyShoppingCart() {
       const selectProducts = this.$refs.myTableRef.selection;
@@ -775,6 +835,7 @@ export default {
     this.getSelectCompanyOffer();
   },
   mounted() {
+    this.getClientList();
     this.tableData = this.shoppingList
       ? JSON.parse(JSON.stringify(this.shoppingList))
       : [];
@@ -982,6 +1043,13 @@ export default {
         }
       }
     }
+  }
+}
+.formItemBox {
+  display: flex;
+  justify-content: space-between;
+  .el-select {
+    flex: 1;
   }
 }
 </style>

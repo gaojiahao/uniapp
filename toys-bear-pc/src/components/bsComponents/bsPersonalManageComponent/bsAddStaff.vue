@@ -81,6 +81,12 @@ export default {
       type: Boolean,
       default: false
     },
+    id: {
+      type: String
+    },
+    companyId: {
+      type: String
+    },
     currentEditRow: {
       type: Object
     }
@@ -157,6 +163,13 @@ export default {
         }
       });
     },
+    // 上传头像
+    async successUpload() {
+      const fd = new FormData();
+      fd.append("BusinessType", "Head");
+      fd.append("file", this.file);
+      return await this.$http.post("/api/File/InsertPic", fd);
+    },
     // 获取当前日期
     getCurrentDate() {
       var now = new Date();
@@ -169,16 +182,9 @@ export default {
       var defaultDate = `${year}-${month}-${date}`;
       this.$set(this.addEmployeeForm, "birthday", defaultDate);
     },
-    // 上传头像
-    async successUpload() {
-      const fd = new FormData();
-      fd.append("BusinessType", "Head");
-      fd.append("file", this.file);
-      return await this.$http.post("/api/File/InsertPic", fd);
-    },
     // 提交添加员工
     async submit() {
-      this.addEmployeeForm.companyId = this.meInfo.id;
+      this.addEmployeeForm.companyId = this.id;
       const imgRes = await this.successUpload();
       if (imgRes.data.result.code === 200) {
         this.addEmployeeForm.userImage =
@@ -189,53 +195,59 @@ export default {
         this.$messsage.error("头像上传失败");
         return false;
       }
-
-      if (this.isEdit) {
-        this.$refs.addEmployeeRef.validate(async valid => {
-          if (valid) {
-            this.addEmployeeForm.password = this.addEmployeeForm.newPassword
-              ? this.$md5("LitterBear" + this.addEmployeeForm.newPassword)
-              : this.addEmployeeForm.password;
-            const res = await this.$http.post(
-              "/api/UpdateOrgPersonnel",
-              this.addEmployeeForm
-            );
-            if (res.data.result.code === 200) {
-              this.addEmployeeDialog = false;
-              const msg = this.isEdit ? "编辑成功" : "新增成功";
-              this.$message.success(msg);
-            } else {
-              this.$message.error(res.data.result.msg);
-              this.addEmployeeForm.password = "";
-            }
-          }
-        });
-      } else {
-        this.$refs.addEmployeeRef.validate(async valid => {
-          if (valid) {
-            this.addEmployeeForm.password = this.$md5(
-              "LitterBear" + this.addEmployeeForm.password
-            );
-            const res = await this.$http.post(
-              "/api/CreateOrgPersonnel",
-              this.addEmployeeForm
-            );
-            if (res.data.result.code === 200) {
-              this.addEmployeeDialog = false;
-              this.$message.success("新增员工成功");
-            } else {
-              this.$message.error(res.data.result.msg);
-              this.addEmployeeForm.password = "";
-            }
-          }
-        });
-      }
+      this.$refs.addEmployeeRef.validate(async valid => {
+        if (valid) {
+          this.addEmployeeForm.companyId = this.companyId;
+          this.addEmployeeForm.password = this.addEmployeeForm.newPassword
+            ? this.$md5("LitterBear" + this.addEmployeeForm.newPassword)
+            : this.addEmployeeForm.password;
+          this.$emit("submit", this.addEmployeeForm);
+        }
+      });
+      //     if (valid) {
+      //       this.addEmployeeForm.password = this.addEmployeeForm.newPassword
+      //         ? this.$md5("LitterBear" + this.addEmployeeForm.newPassword)
+      //         : this.addEmployeeForm.password;
+      //       const res = await this.$http.post(
+      //         "/api/UpdateOrgPersonnel",
+      //         this.addEmployeeForm
+      //       );
+      //       if (res.data.result.code === 200) {
+      //         this.addEmployeeDialog = false;
+      //         const msg = this.isEdit ? "编辑成功" : "新增成功";
+      //         this.$message.success(msg);
+      //       } else {
+      //         this.$message.error(res.data.result.msg);
+      //         this.addEmployeeForm.password = "";
+      //       }
+      //     }
+      //   });
+      // } else {
+      //   this.$refs.addEmployeeRef.validate(async valid => {
+      //     if (valid) {
+      //       this.addEmployeeForm.password = this.$md5(
+      //         "LitterBear" + this.addEmployeeForm.password
+      //       );
+      //       const res = await this.$http.post(
+      //         "/api/CreateOrgPersonnel",
+      //         this.addEmployeeForm
+      //       );
+      //       if (res.data.result.code === 200) {
+      //         this.addEmployeeDialog = false;
+      //         this.$message.success("新增员工成功");
+      //       } else {
+      //         this.$message.error(res.data.result.msg);
+      //         this.addEmployeeForm.password = "";
+      //       }
+      //     }
+      //   });
+      // }
     }
   },
   created() {},
   mounted() {
+    this.getCurrentDate();
     if (this.isEdit) {
-      this.getCurrentDate();
       for (const key in this.currentEditRow) {
         this.addEmployeeForm[key] = this.currentEditRow[key];
       }
