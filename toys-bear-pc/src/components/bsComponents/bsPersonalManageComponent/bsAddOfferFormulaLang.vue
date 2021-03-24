@@ -7,26 +7,26 @@
       :model="formData"
       class="addDialogClass"
     >
-      <el-form-item label="主题：" prop="zhuti">
+      <el-form-item label="主题：" prop="title">
         <el-input
           placeholder="请输入内容"
-          v-model="formData.zhuti"
+          v-model="formData.title"
           clearable
         ></el-input>
       </el-form-item>
-      <el-form-item label="排序：" prop="paixu">
+      <el-form-item label="排序：" prop="sort">
         <el-input
           placeholder="请输入内容"
-          v-model="formData.paixu"
+          v-model="formData.sort"
           clearable
         ></el-input>
       </el-form-item>
-      <el-form-item label="内容：" prop="neirong">
+      <el-form-item label="内容：" prop="content">
         <el-input
           type="textarea"
           :rows="2"
           placeholder="请输入内容"
-          v-model="formData.neirong"
+          v-model="formData.content"
         >
         </el-input>
       </el-form-item>

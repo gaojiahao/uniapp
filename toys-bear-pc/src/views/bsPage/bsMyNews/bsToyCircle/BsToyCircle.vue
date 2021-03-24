@@ -264,7 +264,6 @@ export default {
           height: 100%;
         }
         .itemTopRight {
-          
         }
       }
     }

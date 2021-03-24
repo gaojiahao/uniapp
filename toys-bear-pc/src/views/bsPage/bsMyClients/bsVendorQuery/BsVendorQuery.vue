@@ -30,25 +30,55 @@
     <div class="clientList">
       <div class="titleLeft">
         <p>客户列表</p>
-        <p>( {{ clienSum }} )</p>
+        <p>( {{ ProductCount }} )</p>
       </div>
     </div>
     <div class="tableBox">
       <!-- 客户列表 -->
       <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column align="center" prop="user" label="厂商" width="180">
-        </el-table-column>
-        <el-table-column align="center" prop="name" label="联系人" width="180">
-        </el-table-column>
-        <el-table-column align="center" prop="phone" label="手机" width="180">
-        </el-table-column>
-        <el-table-column align="center" prop="tel" label="电话" width="180">
-        </el-table-column>
-        <el-table-column align="center" prop="site" label="地址">
+        <el-table-column label="厂商">
+          <template slot-scope="scope">
+            <div class="nameBox">
+              <el-avatar
+                style="background-color:#E4EFFF;"
+                :size="40"
+                :src="scope.row.companyLogo"
+              >
+                <p class="errText">
+                  {{ scope.row.linkman }}
+                </p>
+              </el-avatar>
+              <span class="name">{{ scope.row.companyName }}</span>
+              <span class="isMain" v-if="scope.row.isMain"><i>主账号</i></span>
+            </div>
+          </template>
         </el-table-column>
         <el-table-column
           align="center"
-          prop="product"
+          prop="companyId"
+          label="联系人"
+          width="180"
+        >
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="createdOn"
+          label="手机"
+          width="180"
+        >
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="phoneNumber"
+          label="电话"
+          width="180"
+        >
+        </el-table-column>
+        <el-table-column align="center" prop="Address" label="地址">
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="ProductCount"
           label="产品数量"
           width="200"
         >
@@ -76,52 +106,53 @@ export default {
   name: "bsVendorQuery",
   data() {
     return {
-      clienSum: "5000",
+      ProductCount: "0",
       totalCount: 0,
       pageSize: 12,
       currentPage: 1,
       keyword: null,
       dateTime: null,
-      tableData: [
-        {
-          user: "厂商",
-          name: "王小虎",
-          phone: "114",
-          tel: "110",
-          site: "上海市普陀区金沙江路 1518",
-          product: "22"
-        },
-        {
-          user: "厂商",
-          name: "王小虎",
-          phone: "119",
-          tel: "110",
-          site: "上海市普陀区金沙江路 1517 ",
-          product: "11"
-        }
-      ]
+      tableData: []
     };
   },
   methods: {
+    async getVendorListPage() {
+      const fd = {
+        skipCount: this.currentPage,
+        maxResultCount: this.pageSize,
+        keyword: this.keyword
+      };
+      for (const key in fd) {
+        if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
+          delete fd[key];
+        }
+      }
+      const res = await this.$http.post("/api/ContactsCompanyListByID", { fd });
+      if (res.data.result.code === 200) {
+        this.tableData = res.data.result.item.items;
+      }
+    },
     // 搜索
     search() {
       this.currentPage = 1;
-      // this.getClientsList();
+      this.getVendorListPage();
     },
     // 切換頁容量
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
       if (this.currentPage * pageSize > this.totalCount) return false;
-      this.getProductsList();
+      this.getVendorListPage();
     },
     // 修改当前页
     handleCurrentChange(page) {
       this.currentPage = page;
-      this.getProductsList();
+      this.getVendorListPage();
     }
   },
   created() {},
-  mounted() {}
+  mounted() {
+    this.getVendorListPage();
+  }
 };
 </script>
 <style scoped lang="less">
@@ -155,6 +186,28 @@ export default {
     height: 76px;
     display: flex;
     align-items: center;
+    .name {
+      margin-left: 16px;
+    }
+    .isMain {
+      margin-left: 10px;
+      width: 44px;
+      height: 18px;
+      text-align: center;
+      background: #ff4848;
+      border-radius: 9px;
+      color: #fff;
+      font-size: 12px;
+      i {
+        display: block;
+        position: relative;
+        top: -3px;
+        -webkit-transform: scale(0.7);
+        -moz-transform: scale(0.7);
+        -ms-transform: scale(0.7);
+        transform: scale(0.7);
+      }
+    }
     .left {
       flex: 1;
       display: flex;

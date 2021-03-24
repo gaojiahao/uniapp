@@ -22,12 +22,13 @@
         :header-cell-style="{ 'font-size': '14px', color: '#666' }"
       >
         <el-table-column
-          prop="number"
+          align="center"
+          prop="sort"
           label="排序"
           width="100"
         ></el-table-column>
-        <el-table-column prop="zhuti" label="主题"></el-table-column>
-        <el-table-column prop="neirong" label="内容"></el-table-column>
+        <el-table-column prop="title" label="主题"></el-table-column>
+        <el-table-column prop="content" label="内容"></el-table-column>
         <el-table-column
           label="操作"
           header-align="center"
@@ -95,6 +96,7 @@ export default {
     return {
       currentRow: {},
       isEdit: false,
+      editRow: {},
       dialogTitle: "新增常用语",
       addLangDialog: false,
       totalCount: 0,
@@ -104,9 +106,40 @@ export default {
     };
   },
   methods: {
+    async getPushSettingsPage() {
+      const fd = {
+        skipCount: this.currentPage,
+        maxResultCount: this.pageSize,
+        keyword: this.keyword,
+        startTime: this.dateTime && this.dateTime[0],
+        endTime: this.dateTime && this.dateTime[1]
+      };
+      for (const key in fd) {
+        if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
+          delete fd[key];
+        }
+      }
+      const res = await this.$http.post("/api/PushSettings/ListByPage", { fd });
+      if (res.data.result.code === 200) {
+        this.tableData = res.data.result.item.items;
+      }
+    },
+    // 搜索
+    search() {
+      this.currentPage = 1;
+      this.getPushSettingsPage();
+    },
     // 提交新增或编辑
-    submit(form) {
+    async submit(form) {
       console.log(form);
+      const res = await this.$http.post("/api/PushSettings/Create", form);
+      if (res.data.result.code === 200) {
+        this.$message.success("新增成功");
+        this.close();
+        this.getPushSettingsPage();
+      } else {
+        this.$message.error(res.data.result.msg);
+      }
     },
     // 关闭新增或编辑
     close() {
@@ -126,8 +159,18 @@ export default {
       this.addLangDialog = true;
     },
     // 删除推送
-    handleDelete(row) {
+    async handleDelete(row) {
       console.log(row);
+      const res = await this.$http.post("/api/PushSettings/Delete", {
+        id: row.id
+      });
+      console.log(res.data, "回调");
+      if (res.data.result.code === 200) {
+        this.$message.success("删除成功");
+        this.getPushSettingsPage();
+      } else {
+        this.$message.error(res.data.result.msg);
+      }
     },
     // 切換頁容量
     handleSizeChange(pageSize) {
@@ -142,7 +185,9 @@ export default {
     }
   },
   created() {},
-  mounted() {}
+  mounted() {
+    this.getPushSettingsPage();
+  }
 };
 </script>
 <style scoped lang="less">
