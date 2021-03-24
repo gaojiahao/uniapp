@@ -55,17 +55,13 @@
     </div>
     <div class="tableBox">
       <el-table :data="tableData" style="width:100%;">
-        <el-table-column label="客户" align="center">
+        <el-table-column label="客户">
           <template slot-scope="scope">
             <i class="el-icon-view"></i>
             <span style="margin-left: 15px;">{{ scope.row.customerName }}</span>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="siteRegion"
-          label="站点"
-          align="center"
-        ></el-table-column>
+        <el-table-column prop="siteRegion" label="站点"></el-table-column>
         <el-table-column
           prop="shareUrl"
           width="350"

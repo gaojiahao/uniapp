@@ -161,10 +161,13 @@ export default {
     height: calc(100% - 70px);
     display: flex;
     min-width: 1350px;
+    background-color: #fff;
     .leftMenu {
       height: 100%;
-      overflow: hidden;
-      // box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
+      box-sizing: border-box;
+      position: relative;
+      z-index: 2;
+      // box-shadow: 0px 3px 0px 0px rgba(42,69,116,0.16);
     }
     .rightContent {
       flex: 1;
@@ -175,13 +178,14 @@ export default {
         width: 100%;
         box-sizing: border-box;
         background-color: #fff;
-        box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
+        box-shadow: 0px 0px 2px 0px rgba(42, 69, 116, 0.16);
+        position: relative;
+        z-index: 1;
         display: flex;
         .el-scrollbar {
           flex: 1;
           overflow: hidden;
           padding-right: 2px;
-          box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
         }
         .clearAll {
           width: 50px;
@@ -201,7 +205,6 @@ export default {
             width: 100%;
             padding-left: 20px;
             height: 100%;
-            box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
             white-space: nowrap;
           }
         }
@@ -214,7 +217,7 @@ export default {
           border: 1px solid #dcdfe6;
           border-bottom-color: transparent;
           margin-right: 10px;
-          margin-top: 8px;
+          margin-top: 7px;
           text-align: center;
           cursor: pointer;
           &.isActive {
