@@ -37,29 +37,78 @@
             <div class="cell-item">
               <div class="item-top">
                 <div class="itemTopLeft">
-                  <el-avatar
-                    style="background-color:#E4EFFF;"
-                    :size="50"
-                    :src="item.userInfo.image"
-                  >
-                    <p class="errText">
-                      {{ item.userInfo.companyName }}
+                  <div class="left">
+                    <el-avatar
+                      style="background-color:#E4EFFF;"
+                      :size="50"
+                      :src="item.userInfo.image"
+                    >
+                      <p class="errText">
+                        {{ item.userInfo.niceName }}
+                      </p>
+                    </el-avatar>
+                  </div>
+                  <div class="right">
+                    <p class="name">
+                      {{ item.userInfo.niceName }}
                     </p>
-                  </el-avatar>
+                    <p class="date">
+                      {{ myDateDiff(item.bearNotice.publishDate) }}
+                    </p>
+                  </div>
                 </div>
-                <div class="itemTopRight"></div>
+                <div class="itemTopRight">
+                  <div class="box">
+                    <i class="jubaoIcon">
+                      <img :src="gongsiIcon[item.bearNotice.noticeType]" alt />
+                    </i>
+                    <span class="noticeTypeText">{{
+                      switchNoticeType(item.bearNotice.noticeType)
+                    }}</span>
+                    <span class="el-icon-more iconMore"></span>
+                  </div>
+                </div>
               </div>
               <div class="item-body">
-                <div class="item-desc">{{ item.title }}</div>
+                <div class="item-desc">
+                  <em>{{ item.bearNotice.notice }}</em>
+                </div>
+                <div class="item content">
+                  <div class="imgComtent" v-if="item.video">
+                    <div class="demo1-video">
+                      <video
+                        width="100%"
+                        height="100%"
+                        class="video-js vjs-default-skin vjs-big-play-centered"
+                        controls
+                        style="object-fit:contain"
+                      >
+                        <source :src="item.video" type="video/mp4" />
+                      </video>
+                    </div>
+                  </div>
+                  <template v-else-if="item.imgList.length > 0">
+                    <div class="imgComtent">
+                      <el-image
+                        v-for="(val, i) in item.imgList.split(',')"
+                        class="img"
+                        :key="i"
+                        :src="val"
+                        alt
+                        :preview-src-list="item.imgList.split(',')"
+                      ></el-image>
+                    </div>
+                  </template>
+                </div>
                 <div class="item-footer">
-                  <div class="footer-left">
+                  <!-- <div class="footer-left">
                     <img :src="item.videoImg" alt="" srcset="" />
                     <div class="name">{{ item.bearNotice.notice }}</div>
                   </div>
                   <div class="like">
                     <img :src="item.videoImg" alt="" />
                     <div class="like-total">{{ item.bearNotice.notice }}</div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -71,16 +120,39 @@
 </template>
 
 <script>
+import { dateDiff } from "@/assets/js/common/common";
 export default {
   name: "bsToyCircle",
   data() {
     return {
+      gongsiIcon: {
+        Ordinary: require("@/assets/images/ordinaryNoticeIcon.png"),
+        Purchase: require("@/assets/images/procurementNoticeIcon.png"),
+        Supply: require("@/assets/images/supplyNoticeIcon.png")
+      },
+      myDateDiff: dateDiff,
       fullWidth: document.documentElement.clientWidth,
       findList: [],
       col: document.documentElement.clientWidth < 1920 ? 2 : 3
     };
   },
   methods: {
+    // 过滤公告类型
+    switchNoticeType(type) {
+      let msg;
+      switch (type) {
+        case "Purchase":
+          msg = "采购公告";
+          break;
+        case "Supply":
+          msg = "供应公告";
+          break;
+        default:
+          msg = "普通公告";
+          break;
+      }
+      return msg;
+    },
     // 到底了
     loadmore() {
       console.log("到底了");
@@ -128,6 +200,7 @@ export default {
 };
 </script>
 <style scoped lang="less">
+@deep: ~">>>";
 .bsToyCircle {
   width: 100%;
   min-height: 100%;
@@ -204,13 +277,30 @@ export default {
     }
     .item-body {
       .item-desc {
-        text-align: left;
-        font-family: Roboto;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 14px;
-        line-height: 16px;
-        color: #000000;
+        opacity: 1;
+        font-size: 16px;
+        font-weight: 400;
+        color: #333333;
+      }
+      .item-content {
+        .imgComtent {
+          margin-left: 50px;
+          margin-bottom: 5px;
+          width: 300px;
+          display: flex;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          &::after {
+            content: "";
+            width: 30%;
+          }
+          .img {
+            width: 30%;
+            height: 90px;
+            margin-bottom: 10px;
+            cursor: pointer;
+          }
+        }
       }
       .item-footer {
         display: flex;
@@ -267,13 +357,72 @@ export default {
       .item-top {
         height: 60px;
         display: flex;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
         .itemTopLeft,
         .itemTopRight {
           flex: 1;
           height: 100%;
         }
+        .itemTopLeft {
+          display: flex;
+          .left {
+            height: 100%;
+            width: 65px;
+            min-width: 65px;
+            .errText {
+              color: #333;
+            }
+            @{deep} .el-avatar {
+              img {
+                width: 50px;
+                min-height: 50px;
+              }
+            }
+          }
+          .right {
+            flex: 1;
+            height: 100%;
+            max-width: 175px;
+            p {
+              width: 100%;
+              line-height: 25px;
+              overflow: hidden; /*超出部分隐藏*/
+              white-space: nowrap; /*不换行*/
+              text-overflow: ellipsis; /*超出部分文字以...显示*/
+              &.name {
+                color: #3368a9;
+                font-weight: 700;
+                font-size: 16px;
+              }
+              &.date {
+                color: #999999;
+                font-size: 13px;
+              }
+            }
+          }
+        }
         .itemTopRight {
+          .box {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            .jubaoIcon {
+              width: 16px;
+              height: 16px;
+              margin-right: 8px;
+              img {
+                width: 16px;
+                height: 16px;
+              }
+            }
+            .noticeTypeText {
+              margin-right: 30px;
+            }
+            .iconMore {
+              font-size: 16px;
+              cursor: pointer;
+            }
+          }
         }
       }
     }

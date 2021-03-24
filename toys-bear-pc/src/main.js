@@ -11,9 +11,12 @@ import { getMenuFuc } from "@/router/index";
 import ExTableColumn from "ex-table-column";
 import PreviewPic from "vue-preview-pictures"; // 预览
 import waterfall from "vue-waterfall2";
+import Video from "video.js";
+import "video.js/dist/video-js.css";
 
 Vue.component(ExTableColumn.name, ExTableColumn);
 Vue.prototype.$PreviewPic = PreviewPic;
+Vue.prototype.$video = Video;
 Vue.config.productionTip = false;
 getMenuFuc();
 Vue.use(ElementUI);

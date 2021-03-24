@@ -16,6 +16,7 @@
     "ex-table-column": "^1.1.2",
     "jquery": "^3.6.0",
     "less-loader": "^5.0.0",
+    "video.js": "^7.11.4",
     "vue": "^2.6.11",
     "vue-preview-pictures": "^0.1.7",
     "vue-qr": "^2.3.0",
