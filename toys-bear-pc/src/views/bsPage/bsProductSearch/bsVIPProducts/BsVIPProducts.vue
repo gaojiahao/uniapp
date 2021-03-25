@@ -3,16 +3,12 @@
     <div class="title">
       <div class="left">
         <div
-          :class="{ tabs: true, active: isDiyu === 0 }"
-          @click="checkTabs(0)"
+          :class="{ tabs: true, active: isDiyu === i }"
+          @click="checkTabs(i, item)"
+          v-for="(item, i) in floorList"
+          :key="i"
         >
-          地域专区
-        </div>
-        <div
-          :class="{ tabs: true, active: isDiyu === 1 }"
-          @click="checkTabs(1)"
-        >
-          品牌专区
+          {{ item.name }}
         </div>
       </div>
       <div class="right">
@@ -26,11 +22,19 @@
     <div class="brandBox">
       <div class="title">{{ isDiyu == 0 ? "地域：" : "品牌：" }}</div>
       <div class="myLabels">
-        <span class="lable">全部</span>
-        <span class="lable">全部</span>
-        <span class="lable">全部</span>
-        <span class="lable">全部</span>
-        <span class="lable">全部</span>
+        <span
+          :class="{ lable: true, active: currentChildren == null }"
+          @click="selectChildren(null)"
+          >全部</span
+        >
+        <span
+          :class="{ lable: true, active: currentChildren == item }"
+          @click="selectChildren(item)"
+          v-for="item in currentTabs.items"
+          :key="item.id"
+        >
+          {{ item.name }}
+        </span>
       </div>
     </div>
     <div class="searchBox">
@@ -116,6 +120,9 @@ export default {
   },
   data() {
     return {
+      currentChildren: null,
+      currentTabs: {},
+      floorList: [],
       isGrid: "bsGridComponent",
       keyword: null,
       dateTime: null,
@@ -131,9 +138,9 @@ export default {
     async getVipRegions() {
       const res = await this.$http.post("/api/getVipRegions", {});
       if (res.data.result.code === 200) {
-        this.banners = res.data.result.item.images;
         this.floorList = res.data.result.item.vipRegionItem;
-        console.log(res.data.result.item);
+        this.currentTabs = res.data.result.item.vipRegionItem[0];
+        this.getProductsList();
       } else {
         this.$message.error(res.data.result.msg);
       }
@@ -146,15 +153,25 @@ export default {
       });
       this.$router.push("/bsIndex/bsShoppingCart");
     },
+    // 选择子级
+    selectChildren(child) {
+      this.currentChildren = child;
+      // this.getProductsList();
+    },
     // 切换专区
-    checkTabs(num) {
+    checkTabs(num, item) {
       this.isDiyu = num;
+      this.currentTabs = item;
+      this.currentChildren = null;
+      // this.getProductsList();
     },
     // 获取列表
     async getProductsList() {
       const fd = {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
+        code: this.currentTabs.code,
+        childCode: this.currentChildren ? this.currentChildren.code : "",
         typeId: 1,
         keyword: this.keyword,
         startTime: this.dateTime && this.dateTime[0],
@@ -204,11 +221,10 @@ export default {
       this.getProductsList();
     }
   },
-  created() {
-    this.getProductsList();
+  created() {},
+  mounted() {
     this.getVipRegions();
   },
-  mounted() {},
   computed: {
     ...mapGetters({
       shoppingList: "myShoppingList"
@@ -306,7 +322,7 @@ export default {
       .item {
         display: flex;
         align-items: center;
-        max-width: 258px;
+        max-width: 300px;
         margin-right: 20px;
         .label {
           width: 58px;

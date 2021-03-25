@@ -499,8 +499,6 @@ export default {
     },
     // 回复评论
     async subHuiPinglun(item) {
-      console.log(this.pinglunValue);
-      console.log(item);
       let fd = {
         noticeNumber: item.bearNotice.noticeNumber,
         userName: this.userInfo.userInfo.linkman,
@@ -513,9 +511,7 @@ export default {
       };
       const res = await this.$http.post("/api/CreateNoticeInteraction", fd);
       if (res.data.result.code === 200) {
-        // this.currentPage = 1;
-        // this.pageSize = this.findList.length >= 100 ? 10 : this.findList.length;
-        // this.getDataList();
+        item.noticeInteraction.push(fd);
         this.$message.success("回复成功");
       }
       this.pinglunValue = "";

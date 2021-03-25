@@ -71,7 +71,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="linkman"
+          prop="customerName"
           label="客户名称"
           width="100"
           align="center"
@@ -89,7 +89,7 @@
         <el-table-column width="200" align="center" label="操作人员">
           <template slot-scope="scope">
             <span>
-              {{ scope.row.companyName }}
+              {{ scope.row.linkman }}
             </span>
           </template>
         </el-table-column>
@@ -104,6 +104,7 @@
           <template slot-scope="scope">
             <span style="color:#EB1515;">
               {{ scope.row.cu_de }}
+              {{ scope.row.offerTotalAmount }}
             </span>
             <span style="color:#EB1515;">{{ scope.row.totalCost }}</span>
           </template>
@@ -111,7 +112,7 @@
         <el-table-column label="币种" align="center">
           <template slot-scope="scope">
             <span>
-              {{ scope.row.cu_deName }}
+              {{ scope.row.cu_de }}
             </span>
           </template>
         </el-table-column>
@@ -124,7 +125,15 @@
         </el-table-column>
         <el-table-column prop="status" label="状态" align="center" width="100">
           <template slot-scope="scope">
-            {{ scope.row.status }}
+            <span style="color:#3368A9;" v-if="scope.row.status == 0"
+              >未审核</span
+            >
+            <span style="color:#3368A9;" v-else-if="scope.row.status == 1"
+              >审核通过</span
+            >
+            <span style="color:#3368A9;" v-else-if="scope.row.status == 2"
+              >审核不通过</span
+            >
           </template>
         </el-table-column>
         <el-table-column
@@ -201,19 +210,19 @@ export default {
           delete fd[key];
         }
       }
-      const res = await this.$http.post("/api/HistoryOfferSharPage", fd);
+      const res = await this.$http.post("/api/ProductOfferListByPage", fd);
       if (res.data.result.code === 200) {
         this.totalCount = res.data.result.item.totalCount;
         this.tableData = res.data.result.item.items;
       }
     },
-    // 取消收藏
+    // 删除找样报价
     async handleDelete(row) {
-      const res = await this.$http.post("/api/CreateProductCollection", {
-        productNumber: row.productNumber
+      const res = await this.$http.post("/api/DeleteProductOffer", {
+        id: row.id
       });
       if (res.data.result.code === 200) {
-        this.$message.success("取消收藏成功");
+        this.$message.success("删除成功");
         this.getCompanySamplelistPage();
       } else {
         this.$message.error(res.data.result.msg);
