@@ -170,8 +170,8 @@ export default {
       const fd = {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
-        code: this.currentTabs.code,
-        childCode: this.currentChildren ? this.currentChildren.code : "",
+        parentCode: this.currentTabs.code,
+        code: this.currentChildren ? this.currentChildren.code : "",
         typeId: 1,
         keyword: this.keyword,
         startTime: this.dateTime && this.dateTime[0],
