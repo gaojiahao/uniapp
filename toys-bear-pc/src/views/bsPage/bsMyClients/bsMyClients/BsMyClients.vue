@@ -44,7 +44,7 @@
           type="primary"
           icon="el-icon-plus"
           size="medium"
-          @click="dialogVisible = true"
+          @click.stop="openAddMyClient"
         >
           新增客户
         </el-button>
@@ -53,7 +53,12 @@
     <div class="tableBox">
       <!-- 客户列表 -->
       <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column align="center" prop="name" label="电话" width="180">
+        <el-table-column
+          align="center"
+          prop="name"
+          label="客户姓名"
+          width="180"
+        >
         </el-table-column>
         <el-table-column
           align="center"
@@ -76,12 +81,15 @@
               @click="handleEdit(scope.$index, scope.row)"
               >编辑</el-button
             >
-            <el-button
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.$index, scope.row)"
-              >删除</el-button
+            <el-popconfirm
+              style="margin-left:10px"
+              title="确定删除吗？"
+              @confirm="handleDelete(scope.$index, scope.row)"
             >
+              <el-button size="mini" type="danger" slot="reference"
+                >删除</el-button
+              >
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -113,7 +121,7 @@
         :model="formData"
         :rules="rules"
       >
-        <el-form-item label="客户姓名">
+        <el-form-item label="客户姓名" prop="name">
           <el-input
             placeholder="请输入客户姓名"
             v-model="formData.name"
@@ -145,8 +153,6 @@
       <div style="margin: 20px;"></div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">取 消</el-button>
-        <!-- <el-button type="primary" @click="handleAddUpdate">确 定</el-button> -->
-
         <el-button
           type="primary"
           @click="dialogTitle == '新增客户' ? handleAdd() : handleUpdate()"
@@ -164,7 +170,6 @@ export default {
     return {
       dialogTitle: "新增客户",
       dialogVisible: false,
-      isEdit: false,
       editRow: {},
       totalCount: 0,
       pageSize: 12,
@@ -181,10 +186,7 @@ export default {
         remark: null
       },
       rules: {
-        name: [
-          { required: true, message: "请输入客户名称", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
-        ]
+        name: [{ required: true, message: "请输入客户名称", trigger: "blur" }]
       }
     };
   },
@@ -221,78 +223,63 @@ export default {
         })
         .catch(() => {});
     },
+
     // 关闭弹框
     closeDialog() {
-      // console.log(this.formData);
       this.dialogVisible = false;
+    },
+    //新增弹框
+    openAddMyClient() {
       this.formData = {
-        name: "",
-        PhoneNumber: "",
-        email: "",
-        remark: ""
+        name: null,
+        phoneNumber: null,
+        remark: null
       };
+      this.dialogVisible = true;
     },
     //创建客户
     async handleAdd() {
-      this.formData = {
-        name: "",
-        PhoneNumber: "",
-        email: "",
-        remark: ""
-      };
-      const data = Object.assign(this.formData, {});
-      const res = await this.$http.post("/api/CreateCustomerInfo", data);
-      if (res.data.result.code === 200) {
-        this.$message.success("新增成功");
-        this.closeDialog();
-        this.getClientsListPage();
-      } else {
-        this.$message.error(res.data.result.msg);
-      }
+      this.$refs.formDataRef.validate(async valid => {
+        if (valid) {
+          console.log(valid);
+          const res = await this.$http.post(
+            "/api/CreateCustomerInfo",
+            this.formData
+          );
+          if (res.data.result.code === 200) {
+            this.getClientsListPage();
+            this.closeDialog();
+            this.$message.success("新增操作成功");
+          } else {
+            this.$message.error(res.data.result.msg);
+          }
+        }
+      });
     },
     //编辑客户
-    async handleEdit(index, row) {
-      this.formData = row;
+    handleEdit(index, row) {
+      this.formData = JSON.parse(JSON.stringify(row));
       this.dialogTitle = "编辑客户";
       this.dialogVisible = true;
-      this.isEdit = true;
     },
     //编辑客户
-
-    //逻辑还有问题，待解决
-    async handleAddUpdate() {
-      // this.$refs.formDataRef.validate(async valid => {
-      //   if (valid) {
-      //     console.log(valid);
-      //     let msg = "新增成功";
-      //     let url = "/api/CreateCustomerInfo";
-      //     if (this.isEdit) {
-      //       msg = "编辑成功";
-      //       url = "/api/UpdateCustomerInfo";
-      //     }
-      //     const res = await this.$http.post(url, this.formData);
-      //     if (res.data.result.code === 200) {
-      //       this.getClientsListPage();
-      //       this.showDialog = false;
-      //       this.$message.success(msg);
-      //     } else {
-      //       this.$message.error(res.data.result.msg);
-      //     }
-      //   }
-      // });
-
-      const res = await this.$http.post(
-        "/api/UpdateCustomerInfo",
-        this.formData
-      );
-      console.log(res.data, "回调");
-      if (res.data.result.code === 200) {
-        this.$message.success("编辑成功");
-        this.closeDialog();
-        this.getClientsListPage();
-      } else {
-        this.$message.error(res.data.result.msg);
-      }
+    async handleUpdate() {
+      this.$refs.formDataRef.validate(async valid => {
+        if (valid) {
+          console.log(this.formData);
+          const res = await this.$http.post(
+            "/api/UpdateCustomerInfo",
+            this.formData
+          );
+          if (res.data.result.code === 200) {
+            this.closeDialog();
+            this.getClientsListPage();
+            this.$message.success("编辑操作成功");
+          } else {
+            this.$message.error(res.data.result.msg);
+          }
+        }
+      });
     },
     //删除客户
     async handleDelete(index, row) {
@@ -320,11 +307,6 @@ export default {
   created() {},
   mounted() {
     this.getClientsListPage();
-    // if (this.isEdit) {
-    //   for (const key in this.editRow) {
-    //     this.formData[key] = this.editRow[key];
-    //   }
-    // }
   }
 };
 </script>

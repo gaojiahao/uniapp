@@ -120,14 +120,17 @@ export default {
       const fd = {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
-        keyword: this.keyword
+        keyword: this.keyword,
+        OppositeRole: "Supplier"
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
           delete fd[key];
         }
       }
-      const res = await this.$http.post("/api/ContactsCompanyListByID", { fd });
+      const res = await this.$http.post("/api/ContactsCompanyListByID", {
+        ...fd
+      });
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items;
       }
