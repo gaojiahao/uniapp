@@ -246,6 +246,7 @@ myAxios.install = function(Vue) {
         res.config.url.includes("LittleBearInstallDownload") ||
         res.config.url.includes("LittleBearInstallRepeatDownload") ||
         res.config.url.includes("ExportCompanySampleListToExcel") ||
+        res.config.url.includes("GetERPOrderExcel") ||
         res.config.url.includes("ExportCustomerOrderDetailToExcel")
       ) {
         return res;

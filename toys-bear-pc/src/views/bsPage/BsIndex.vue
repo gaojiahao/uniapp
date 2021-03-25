@@ -7,7 +7,7 @@
       </div>
       <div class="rightContent">
         <div class="menuLabels">
-          <el-scrollbar style="height: 58px;">
+          <el-scrollbar id="bsScrollID" style="height: 58px;">
             <div
               :class="{ tab: true, isActive: item.linkUrl === $route.path }"
               v-for="item in bsMenuLabels"
@@ -49,6 +49,7 @@
 import bsTop from "@/components/bsComponents/bsTopComponent/BsTop";
 import bsMenu from "@/components/bsComponents/bsMenuComponent/BsMenu";
 import bsProductSearch from "@/components/bsComponents/bsProductSearchComponent/bsProductSearch";
+import eventBus from "@/assets/js/common/eventBus.js";
 import { mapState, mapGetters } from "vuex";
 export default {
   components: {
@@ -65,16 +66,20 @@ export default {
   methods: {
     // 滚动事件
     handleScroll() {
-      if (this.$route.path === "/bsIndex/bsProductSearchIndex") {
-        let scrollbarEl = this.$refs.scrollbar.wrap;
-        scrollbarEl.onscroll = () => {
-          if (scrollbarEl.scrollTop >= 200) {
+      let scrollbarEl = this.$refs.scrollbar.wrap;
+      scrollbarEl.onscroll = () => {
+        if (scrollbarEl.scrollTop >= 200) {
+          if (this.$route.path === "/bsIndex/bsProductSearchIndex") {
             this.showSearch = true;
-          } else {
-            this.showSearch = false;
+            eventBus.$emit("showCart", true);
+          } else if (this.$route.path === "/bsIndex/bsProductDetails") {
+            eventBus.$emit("showCart", true);
           }
-        };
-      }
+        } else {
+          this.showSearch = false;
+          eventBus.$emit("showCart", false);
+        }
+      };
     },
     // 关闭所有tab标签
     closeAll() {

@@ -9,6 +9,7 @@
     <div class="kong"></div>
     <div class="kong"></div>
     <div class="kong"></div>
+    <div class="kong"></div>
   </div>
 </template>
 
@@ -37,9 +38,9 @@ export default {
   justify-content: space-between;
   flex-wrap: wrap;
   .kong {
-    width: 15.4%;
+    width: 250px;
     min-width: 250px;
-    border: 1px solid transparent;
+    margin: 10px;
   }
 }
 </style>
