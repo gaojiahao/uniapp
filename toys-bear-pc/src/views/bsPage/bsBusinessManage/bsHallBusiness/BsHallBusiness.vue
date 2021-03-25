@@ -151,7 +151,7 @@
             <el-button
               size="mini"
               type="warning"
-              @click="handleDelete(scope.row)"
+              @click="exportOrder(scope.row)"
             >
               导出
             </el-button>
@@ -171,14 +171,32 @@
         ></el-pagination>
       </center>
     </div>
+    <!-- 导出订单模板dialog -->
+    <transition name="el-zoom-in-center">
+      <el-dialog
+        title="订单模板"
+        v-if="exportTemplateDialog"
+        :visible.sync="exportTemplateDialog"
+        top="60px"
+        width="80%"
+      >
+        <bsExportSampleOrder :orderRow="orderRow" />
+      </el-dialog>
+    </transition>
   </div>
 </template>
 
 <script>
+import bsExportSampleOrder from "@/components/bsComponents/bsBusinessManageComponent/bsExportSampleOrder";
 export default {
   name: "bsHallBusiness",
+  components: {
+    bsExportSampleOrder
+  },
   data() {
     return {
+      exportTemplateDialog: false,
+      orderRow: {},
       typesList: [
         {
           label: "系统通知",
@@ -230,6 +248,11 @@ export default {
     };
   },
   methods: {
+    // 导出
+    exportOrder(row) {
+      this.orderRow = row;
+      this.exportTemplateDialog = true;
+    },
     // 去订单详情
     toDetails(row) {
       sessionStorage.setItem("orderDetails", JSON.stringify(row));

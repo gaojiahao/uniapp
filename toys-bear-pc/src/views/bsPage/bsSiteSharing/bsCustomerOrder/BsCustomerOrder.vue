@@ -242,7 +242,7 @@
     <transition name="el-zoom-in-center">
       <el-dialog
         title="订单模板"
-        v-show="exportTemplateDialog"
+        v-if="exportTemplateDialog"
         :visible.sync="exportTemplateDialog"
         top="60px"
         width="80%"
