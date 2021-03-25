@@ -219,6 +219,8 @@
           <el-form
             label-position="right"
             label-width="100px"
+            ref="addSubmitOrderRef"
+            :rules="addInfoRules"
             :model="clienFormData"
           >
             <el-form-item label="报价客户：" prop="customerInfoId">
@@ -246,9 +248,9 @@
                 >
               </div>
             </el-form-item>
-            <el-form-item label="默认公式：">
+            <el-form-item label="默认公式：" prop="defaultFormula">
               <el-select
-                v-model="defaultFormula"
+                v-model="clienFormData.defaultFormula"
                 style="width:100%;"
                 placeholder="请选择"
               >
@@ -487,6 +489,7 @@ export default {
         size: []
       },
       clienFormData: {
+        defaultFormula: null,
         customerInfoId: null,
         quotationProductList: [],
         profit: 0,
@@ -501,7 +504,78 @@ export default {
         miniPrice: 0,
         miniPriceDecimalPlaces: 1
       },
-      defaultFormula: null,
+      addInfoRules: {
+        customerInfoId: [
+          {
+            required: true,
+            message: "请选择客户",
+            trigger: "change"
+          }
+        ],
+        defaultFormula: [
+          {
+            required: true,
+            message: "请选择默认公式",
+            trigger: "change"
+          }
+        ],
+        offerMethod: [
+          {
+            required: true,
+            message: "请输入报价方式",
+            trigger: "blur"
+          }
+        ],
+        cu_de: [
+          {
+            required: true,
+            message: "请选择币别",
+            trigger: "change"
+          }
+        ],
+        exchange: [
+          {
+            required: true,
+            message: "请输入汇率",
+            trigger: "blur"
+          }
+        ],
+        decimalPlaces: {
+          required: true,
+          message: "请选择小数位数",
+          trigger: "change"
+        },
+        profit: {
+          required: true,
+          message: "请输入利润率",
+          trigger: "blur"
+        },
+        totalCost: {
+          required: true,
+          message: "请输入总费用",
+          trigger: "blur"
+        },
+        size: {
+          required: true,
+          message: "请选择尺码",
+          trigger: "change"
+        },
+        rejectionMethod: {
+          required: true,
+          message: "请选择取舍方式",
+          trigger: "change"
+        },
+        miniPrice: {
+          required: true,
+          message: "请输入价格",
+          trigger: "blur"
+        },
+        miniPriceDecimalPlaces: {
+          required: true,
+          message: "请选择小数位数",
+          trigger: "change"
+        }
+      },
       customerTemplate: [],
       isIndeterminate: false,
       checkAll: false,
@@ -845,39 +919,44 @@ export default {
     },
     // 提交订单
     async submitOrder() {
-      const selectProducts = this.$refs.myTableRef.selection;
-      this.clienFormData.quotationProductList = selectProducts.map(val => {
-        return {
-          productNumber: val.productNumber,
-          boxNumber: val.shoppingCount
-        };
-      });
-      const res = await this.$http.post(
-        "/api/CreateProductOffer",
-        this.clienFormData
-      );
-      console.log(res);
-      const { code, msg } = res.data.result;
-      if (code === 200) {
-        this.$message.success("提交成功");
-        for (let i = 0; i < this.tableData.length; i++) {
-          for (let j = 0; j < selectProducts.length; j++) {
-            if (
-              this.tableData[i].productNumber ===
-              selectProducts[j].productNumber
-            )
-              this.tableData.splice(i, 1);
+      this.$refs.addSubmitOrderRef.validate(async valid => {
+        if (valid) {
+          const selectProducts = this.$refs.myTableRef.selection;
+          this.clienFormData.quotationProductList = selectProducts.map(val => {
+            return {
+              productNumber: val.productNumber,
+              boxNumber: val.shoppingCount
+            };
+          });
+          const res = await this.$http.post(
+            "/api/CreateProductOffer",
+            this.clienFormData
+          );
+          console.log(res);
+          const { code, msg } = res.data.result;
+          if (code === 200) {
+            this.$message.success("提交成功");
+            for (let i = 0; i < this.tableData.length; i++) {
+              for (let j = 0; j < selectProducts.length; j++) {
+                if (
+                  this.tableData[i].productNumber ===
+                  selectProducts[j].productNumber
+                )
+                  this.tableData.splice(i, 1);
+              }
+            }
+            this.$store.commit("resetShoppingCart", selectProducts);
+            this.subDialogVisible = false;
+          } else {
+            this.$message.error(msg);
           }
         }
-        this.$store.commit("resetShoppingCart", selectProducts);
-        this.subDialogVisible = false;
-      } else {
-        this.$message.error(msg);
-      }
+      });
     },
     // 关闭提交订单
     closeSub() {
       this.clienFormData = {
+        defaultFormula: null,
         quotationProductList: [],
         profit: 0,
         offerMethod: "汕头",
@@ -891,7 +970,6 @@ export default {
         miniPrice: 0,
         miniPriceDecimalPlaces: 0
       };
-      this.defaultFormula = null;
       this.subDialogVisible = false;
     },
     // 获取客户报价模板
@@ -929,7 +1007,7 @@ export default {
     })
   },
   watch: {
-    defaultFormula: {
+    "clienFormData.defaultFormula": {
       deep: true,
       handler(newVal) {
         if (newVal) {
