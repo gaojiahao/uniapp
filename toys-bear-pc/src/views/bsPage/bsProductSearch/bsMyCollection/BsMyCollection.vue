@@ -222,10 +222,10 @@ export default {
       this.getCollectList();
     }
   },
-  created() {
+  created() {},
+  mounted() {
     this.getCollectList();
-  },
-  mounted() {}
+  }
 };
 </script>
 <style scoped lang="less">

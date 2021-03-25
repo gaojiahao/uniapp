@@ -161,11 +161,11 @@ export default {
 </script>
 <style scoped lang="less">
 .bsGridItem {
-  width: 16%;
-  min-width: 200px;
+  width: 15.4%;
+  min-width: 250px;
   background: #ffffff;
   border: 1px solid #dcdfe6;
-  margin-bottom: 20px;
+  margin: 10px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

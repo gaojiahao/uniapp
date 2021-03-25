@@ -26,6 +26,20 @@
         class="vipProductIcon"
         v-if="$route.path === '/bsIndex/bsVIPProducts'"
       ></div>
+      <div
+        class="vipProductIcon"
+        v-if="$route.path === '/bsIndex/bsVIPProducts'"
+      ></div>
+      <i
+        v-show="item.isFavorite"
+        class="iconClient iconfont icon-wujiaoxing-"
+        @click.stop="addCollect(item)"
+      ></i>
+      <i
+        v-show="!item.isFavorite"
+        class="iconClient iconfont icon-wujiaoxingkong"
+        @click.stop="addCollect(item)"
+      ></i>
     </div>
     <div class="content">
       <div class="productName">
@@ -99,6 +113,21 @@ export default {
       });
       this.$router.push("/bsIndex/bsProductDetails");
     },
+    // 收藏
+    async addCollect(item) {
+      const res = await this.$http.post("/api/CreateProductCollection", {
+        productNumber: item.productNumber
+      });
+      if (res.data.result.code === 200) {
+        this.$message.closeAll();
+        if (item.isFavorite) {
+          this.$message.warning("取消收藏成功");
+        } else {
+          this.$message.success("收藏成功");
+        }
+        item.isFavorite = !item.isFavorite;
+      }
+    },
     // 加购
     handlerShopping(item) {
       // this.$set(item, "isShopping", !item.isShopping);
@@ -123,11 +152,11 @@ export default {
 </script>
 <style scoped lang="less">
 .bsGridItem {
-  width: 16%;
-  min-width: 200px;
+  width: 15.4%;
+  min-width: 250px;
   background: #ffffff;
   border: 1px solid #dcdfe6;
-  margin-bottom: 20px;
+  margin: 10px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -140,6 +169,13 @@ export default {
     box-sizing: border-box;
     padding: 16px;
     cursor: pointer;
+    .iconClient {
+      position: absolute;
+      right: 25px;
+      top: 25px;
+      color: #fb6055;
+      cursor: pointer;
+    }
     .el-image {
       img {
         width: 100%;

@@ -636,7 +636,7 @@ export default {
     .productListBox {
       background-color: #fff;
       width: 100%;
-      padding: 20px;
+      padding: 10px;
       padding-bottom: 0;
       box-sizing: border-box;
       .myPagination {
