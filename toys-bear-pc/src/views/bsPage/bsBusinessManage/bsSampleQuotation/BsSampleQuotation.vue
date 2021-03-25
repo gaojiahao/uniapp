@@ -1,179 +1,202 @@
 <template>
-  <div class="bsMyCollection">
-    <div class="title">找样报价 ({{ totalCount }})</div>
-    <div class="searchBox">
-      <div class="item">
-        <span class="label">报价单号：</span>
-        <el-input
-          type="text"
-          size="medium"
-          v-model="searchForm.orderNumber"
-          placeholder="请输入关键词"
-          @keyup.native.enter="search"
-        ></el-input>
+  <div class="bsSampleQuotation">
+    <div class="bsMyCollection" v-if="isUpdata != 1">
+      <div class="title">找样报价 ({{ totalCount }})</div>
+      <div class="searchBox">
+        <div class="item">
+          <span class="label">报价单号：</span>
+          <el-input
+            type="text"
+            size="medium"
+            v-model="searchForm.OfferNumber"
+            placeholder="请输入关键词"
+            @keyup.native.enter="search"
+          ></el-input>
+        </div>
+        <div class="item">
+          <span class="label">客户名称：</span>
+          <el-input
+            type="text"
+            size="medium"
+            v-model="searchForm.CustomerName"
+            placeholder="请输入关键词"
+            @keyup.native.enter="search"
+          ></el-input>
+        </div>
+        <div class="item">
+          <span class="label">人员：</span>
+          <el-input
+            type="text"
+            size="medium"
+            v-model="searchForm.Linkman"
+            placeholder="请输入关键词"
+            @keyup.native.enter="search"
+          ></el-input>
+        </div>
+        <div class="item">
+          <span class="label">时间段：</span>
+          <el-date-picker
+            size="medium"
+            value-format="yyyy-MM-ddTHH:mm:ss"
+            v-model="searchForm.dateTime"
+            type="daterange"
+            range-separator="-"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          >
+          </el-date-picker>
+        </div>
+        <div class="item">
+          <el-button
+            @click="search"
+            type="primary"
+            icon="el-icon-search"
+            size="medium"
+          >
+            搜索
+          </el-button>
+        </div>
       </div>
-      <div class="item">
-        <span class="label">客户名称：</span>
-        <el-input
-          type="text"
-          size="medium"
-          v-model="searchForm.clientName"
-          placeholder="请输入关键词"
-          @keyup.native.enter="search"
-        ></el-input>
-      </div>
-      <div class="item">
-        <span class="label">人员：</span>
-        <el-input
-          type="text"
-          size="medium"
-          v-model="searchForm.contacts"
-          placeholder="请输入关键词"
-          @keyup.native.enter="search"
-        ></el-input>
-      </div>
-      <div class="item">
-        <span class="label">时间段：</span>
-        <el-date-picker
-          size="medium"
-          value-format="yyyy-MM-ddTHH:mm:ss"
-          v-model="searchForm.dateTime"
-          type="daterange"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+      <div class="tableBox">
+        <el-table
+          :data="tableData"
+          style="width: 100%"
+          ref="collecTable"
+          :header-cell-style="{ 'font-size': '14px', color: '#666' }"
         >
-        </el-date-picker>
-      </div>
-      <div class="item">
-        <el-button
-          @click="search"
-          type="primary"
-          icon="el-icon-search"
-          size="medium"
-        >
-          搜索
-        </el-button>
-      </div>
-    </div>
-    <div class="tableBox">
-      <el-table
-        :data="tableData"
-        style="width: 100%"
-        ref="collecTable"
-        :header-cell-style="{ 'font-size': '14px', color: '#666' }"
-      >
-        <el-table-column label="报价单号" align="center" min-width="150">
-          <template slot-scope="scope">
-            <span style="color:#3368A9;cursor: pointer;">
-              {{ scope.row.offerNumber }}
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="linkman"
-          label="客户名称"
-          width="100"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="createdOn"
-          width="150"
-          label="报价时间"
-          align="center"
-        >
-          <template slot-scope="scope">
-            {{ scope.row.createdOn.replace(/T/, " ") }}
-          </template>
-        </el-table-column>
-        <el-table-column width="200" align="center" label="操作人员">
-          <template slot-scope="scope">
-            <span>
-              {{ scope.row.companyName }}
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="报价总数"
-          prop="total"
-          width="100"
-          align="center"
-        >
-        </el-table-column>
-        <el-table-column label="总金额" align="center" width="100">
-          <template slot-scope="scope">
-            <span style="color:#EB1515;">
-              {{ scope.row.cu_de }}
-            </span>
-            <span style="color:#EB1515;">{{ scope.row.totalCost }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="币种" align="center">
-          <template slot-scope="scope">
-            <span>
-              {{ scope.row.cu_deName }}
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="汇率" align="center" width="100">
-          <template slot-scope="scope">
-            <span>{{ scope.row.exchange }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="profit" label="利润" align="center" width="100">
-        </el-table-column>
-        <el-table-column prop="status" label="状态" align="center" width="100">
-          <template slot-scope="scope">
-            {{ scope.row.status }}
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="操作"
-          header-align="center"
-          align="center"
-          width="300"
-        >
-          <template slot-scope="scope">
-            <el-button size="mini" type="success">编辑</el-button>
-            <el-button size="mini" type="info">推送</el-button>
-            <el-button size="mini" type="warning">导出</el-button>
-            <el-popconfirm
-              title="确定要此报价吗？"
-              @confirm="handleDelete(scope.row)"
-            >
+          <el-table-column label="报价单号" align="center" min-width="150">
+            <template slot-scope="scope">
+              <span style="color:#3368A9;cursor: pointer;">
+                {{ scope.row.offerNumber }}
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="linkman"
+            label="客户名称"
+            width="100"
+            align="center"
+          ></el-table-column>
+          <el-table-column
+            prop="createdOn"
+            width="150"
+            label="报价时间"
+            align="center"
+          >
+            <template slot-scope="scope">
+              {{ scope.row.createdOn.replace(/T/, " ") }}
+            </template>
+          </el-table-column>
+          <el-table-column width="200" align="center" label="操作人员">
+            <template slot-scope="scope">
+              <span>
+                {{ scope.row.companyName }}
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="报价总数"
+            prop="total"
+            width="100"
+            align="center"
+          >
+          </el-table-column>
+          <el-table-column label="总金额" align="center" width="100">
+            <template slot-scope="scope">
+              <span style="color:#EB1515;">
+                {{ scope.row.cu_de }}
+              </span>
+              <span style="color:#EB1515;">{{ scope.row.totalCost }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="币种" align="center">
+            <template slot-scope="scope">
+              <span>
+                {{ scope.row.cu_deName }}
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column label="汇率" align="center" width="100">
+            <template slot-scope="scope">
+              <span>{{ scope.row.exchange }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="profit"
+            label="利润"
+            align="center"
+            width="100"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="status"
+            label="状态"
+            align="center"
+            width="100"
+          >
+            <template slot-scope="scope">
+              {{ scope.row.status }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="操作"
+            header-align="center"
+            align="center"
+            width="300"
+          >
+            <template slot-scope="scope">
               <el-button
-                style="margin-left: 10px;"
                 size="mini"
-                type="danger"
-                @click.stop
-                slot="reference"
-                >删除</el-button
+                type="success"
+                @click="handleEdit(scope.$index, scope.row)"
+                >编辑</el-button
               >
-            </el-popconfirm>
-          </template>
-        </el-table-column>
-      </el-table>
-      <center style="padding:20px 0;">
-        <el-pagination
-          layout="total, sizes, prev, pager, next, jumper"
-          :page-sizes="[10, 20, 30, 40]"
-          background
-          :total="totalCount"
-          :page-size="pageSize"
-          :current-page.sync="currentPage"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange"
-        ></el-pagination>
-      </center>
+              <el-button size="mini" type="info">推送</el-button>
+              <el-button size="mini" type="warning">导出</el-button>
+              <el-popconfirm
+                title="确定要此报价吗？"
+                @confirm="handleDelete(scope.row)"
+              >
+                <el-button
+                  style="margin-left: 10px;"
+                  size="mini"
+                  type="danger"
+                  @click.stop
+                  slot="reference"
+                  >删除</el-button
+                >
+              </el-popconfirm>
+            </template>
+          </el-table-column>
+        </el-table>
+        <center style="padding:20px 0;">
+          <el-pagination
+            layout="total, sizes, prev, pager, next, jumper"
+            :page-sizes="[10, 20, 30, 40]"
+            background
+            :total="totalCount"
+            :page-size="pageSize"
+            :current-page.sync="currentPage"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+          ></el-pagination>
+        </center>
+      </div>
     </div>
+    <bsSampleUpdata v-if="isUpdata == 1"> </bsSampleUpdata>
   </div>
 </template>
 
 <script>
+import bsSampleUpdata from "@/components/bsComponents/bsSampleComponent/bsSampleUpdata";
 export default {
   name: "bsSampleQuotation",
+  components: {
+    bsSampleUpdata
+  },
   data() {
     return {
+      isUpdata: 0,
       searchForm: {
         orderNumber: null,
         clientName: null,
@@ -190,9 +213,11 @@ export default {
     // 获取列表
     async getCompanySamplelistPage() {
       const fd = {
+        OfferNumber: this.searchForm.OfferNumber,
+        CustomerName: this.searchForm.CustomerName,
+        Linkman: this.searchForm.Linkman,
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
-        keyword: this.keyword,
         startTime: this.dateTime && this.dateTime[0],
         endTime: this.dateTime && this.dateTime[1]
       };
@@ -201,7 +226,7 @@ export default {
           delete fd[key];
         }
       }
-      const res = await this.$http.post("/api/HistoryOfferSharPage", fd);
+      const res = await this.$http.post("/api/ProductOfferListByPage", fd);
       if (res.data.result.code === 200) {
         this.totalCount = res.data.result.item.totalCount;
         this.tableData = res.data.result.item.items;
@@ -230,6 +255,12 @@ export default {
       this.currentPage = page;
       this.getCompanySamplelistPage();
     },
+    //编辑报价
+    async handleEdit(index, row) {
+      this.formData = JSON.parse(JSON.stringify(row));
+      this.dialogTitle = "编辑客户";
+      this.isUpdata = 1;
+    },
     // 搜索
     search() {
       this.currentPage = 1;
@@ -244,10 +275,9 @@ export default {
 </script>
 <style scoped lang="less">
 @deep: ~">>>";
-.bsMyCollection {
+.bsSampleQuotation {
   min-height: 100%;
   background-color: #fff;
-  padding: 0 20px;
   .title {
     height: 55px;
     line-height: 55px;
