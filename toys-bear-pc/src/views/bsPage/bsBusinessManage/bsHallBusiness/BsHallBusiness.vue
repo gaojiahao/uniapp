@@ -14,40 +14,48 @@
       </div>
       <div class="item">
         <span class="label">择样类型：</span>
-        <el-input
-          type="text"
-          size="medium"
-          v-model="searchForm.messageModel"
-          placeholder="请输入关键词"
-          @keyup.native.enter="search"
-        ></el-input>
+        <el-select
+          v-model="searchForm.messageExt"
+          clearable
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="(item, i) in typesList"
+            :key="i"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
       </div>
       <div class="item">
         <span class="label">展厅名称：</span>
         <el-input
           type="text"
           size="medium"
-          v-model="searchForm.hallName"
+          v-model="searchForm.fromCompanyName"
           placeholder="请输入关键词"
           @keyup.native.enter="search"
         ></el-input>
       </div>
       <div class="item">
         <span class="label">状态：</span>
-        <el-input
-          type="text"
-          size="medium"
-          v-model="searchForm.state"
-          placeholder="请输入关键词"
-          @keyup.native.enter="search"
-        ></el-input>
+        <el-select v-model="searchForm.readStatus" placeholder="请选择">
+          <el-option
+            v-for="(item, i) in readStatusList"
+            :key="i"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
       </div>
       <div class="item">
         <span class="label">人员：</span>
         <el-input
           type="text"
           size="medium"
-          v-model="searchForm.person"
+          v-model="searchForm.orgPersonnelName"
           placeholder="请输入关键词"
           @keyup.native.enter="search"
         ></el-input>
@@ -83,39 +91,54 @@
         ref="collecTable"
         :header-cell-style="{ 'font-size': '14px', color: '#666' }"
       >
-        <el-table-column label="择样单号">
+        <el-table-column label="择样单号" min-width="180">
           <template slot-scope="scope">
-            {{ scope.row.orderNumber }}
+            <div
+              style="color:#3368A9;cursor: pointer;"
+              @click="toDetails(scope.row)"
+            >
+              {{ scope.row.orderNumber }}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="择样类型" align="center">
+          <template slot-scope="scope">
+            {{ scope.row.messageExt | switchMessageExt }}
           </template>
         </el-table-column>
         <el-table-column
-          prop="fa_no"
-          label="择样类型"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="ch_pa"
+          prop="the_nu"
           label="本次代号"
           align="center"
           width="100"
         >
         </el-table-column>
-        <el-table-column label="择样日期" align="center">
+        <el-table-column label="择样日期" align="center" min-width="150">
           <template slot-scope="scope">
             <span>
-              {{ scope.row.createOn }}
+              {{
+                scope.row.happenDate && scope.row.happenDate.replace(/T/, " ")
+              }}
             </span>
           </template>
         </el-table-column>
-        <el-table-column prop="zhekou" label="折扣" align="center" width="100">
+        <el-table-column prop="hall_na" label="展厅名称" align="center">
         </el-table-column>
-        <el-table-column prop="hallName" label="展厅名称" align="center">
-        </el-table-column>
-        <el-table-column prop="remove" label="备注" align="center">
+        <el-table-column
+          prop="pushContent"
+          label="备注"
+          align="center"
+          min-width="200"
+        >
         </el-table-column>
         <el-table-column prop="state" label="状态" align="center" width="100">
           <template slot-scope="scope">
-            <span style="color:#f56c6c"> {{ scope.row.cu_de }} 未查看 </span>
+            <span style="color:#f56c6c" v-if="scope.row.readStatus == 0">
+              未读
+            </span>
+            <span style="color:#f56c6c" v-else-if="scope.row.readStatus == 1">
+              已读
+            </span>
           </template>
         </el-table-column>
         <el-table-column
@@ -156,12 +179,48 @@ export default {
   name: "bsHallBusiness",
   data() {
     return {
+      typesList: [
+        {
+          label: "系统通知",
+          value: 0
+        },
+        {
+          label: "补样",
+          value: 3
+        },
+        {
+          label: "借样",
+          value: 5
+        },
+        {
+          label: "补样借样",
+          value: 11
+        },
+        {
+          label: "洽谈",
+          value: 12
+        }
+      ],
+      readStatusList: [
+        {
+          label: "全部",
+          value: "-1"
+        },
+        {
+          label: "未读",
+          value: 0
+        },
+        {
+          label: "已读",
+          value: 1
+        }
+      ],
       searchForm: {
         keyword: null,
-        messageModel: null,
-        hallName: null,
-        state: null,
-        person: null,
+        fromCompanyName: null,
+        orgPersonnelName: null,
+        messageExt: null,
+        readStatus: "-1",
         dateTime: null
       },
       tableData: [],
@@ -171,15 +230,26 @@ export default {
     };
   },
   methods: {
+    // 去订单详情
+    toDetails(row) {
+      sessionStorage.setItem("orderDetails", JSON.stringify(row));
+      this.$store.commit("handlerBsMenuLabels", {
+        linkUrl: "/bsIndex/bsHallBusinessOrderDetails",
+        name: row.orderNumber
+      });
+      this.$router.push("/bsIndex/bsHallBusinessOrderDetails");
+    },
     // 获取列表
     async getTableDataList() {
       const fd = {
-        readStatus: "-1",
+        readStatus: this.searchForm.readStatus,
         sampleFrom: "hall",
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         keyword: this.searchForm.keyword,
-        messageModel: this.searchForm.messageModel,
+        orgPersonnelName: this.searchForm.orgPersonnelName,
+        fromCompanyName: this.searchForm.fromCompanyName,
+        messageExt: this.searchForm.messageExt,
         startTime: this.searchForm.dateTime && this.searchForm.dateTime[0],
         endTime: this.searchForm.dateTime && this.searchForm.dateTime[1]
       };
@@ -217,6 +287,29 @@ export default {
   },
   created() {
     this.getTableDataList();
+  },
+  filters: {
+    switchMessageExt(val) {
+      let msg;
+      switch (val) {
+        case "0":
+          msg = "系统通知";
+          break;
+        case "3":
+          msg = "补样";
+          break;
+        case "5":
+          msg = "借样";
+          break;
+        case "11":
+          msg = "补样借样";
+          break;
+        case "12":
+          msg = "洽谈";
+          break;
+      }
+      return msg;
+    }
   },
   mounted() {}
 };

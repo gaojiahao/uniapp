@@ -13,6 +13,12 @@ const BsClientOrderDetails = () =>
     "@/views/bsPage/bsSiteSharing/bsCustomerOrder/bsClientOrderDetails/BsClientOrderDetails.vue"
   );
 
+/** 展厅业务订单详情 */
+const BsHallBusinessOrderDetails = () =>
+  import(
+    "@/components/bsComponents/bsBusinessManageComponent/bsHallBusinessOrderDetails.vue"
+  );
+
 export default [
   {
     path: "/bsIndex/bsHome",
@@ -28,6 +34,11 @@ export default [
     path: "/bsIndex/bsClientOrderDetails",
     name: "bsClientOrderDetails",
     component: BsClientOrderDetails
+  },
+  {
+    path: "/bsIndex/bsHallBusinessOrderDetails",
+    name: "bsHallBusinessOrderDetails",
+    component: BsHallBusinessOrderDetails
   },
   {
     path: "/bsIndex",

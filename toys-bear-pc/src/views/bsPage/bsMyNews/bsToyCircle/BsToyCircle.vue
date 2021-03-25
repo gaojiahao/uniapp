@@ -181,7 +181,7 @@
                           <el-avatar
                             style="background-color:#E4EFFF;"
                             :size="40"
-                            :src="val.image"
+                            :src="val.userImage"
                           >
                             <p class="errText">{{ val.userName }}</p>
                           </el-avatar>
@@ -212,7 +212,12 @@
                         v-show="val.createdBy != userInfo.userInfo.id"
                         @click="openHuiPinglun(item, val)"
                       >
-                        <div class="huifu">回复</div>
+                        <div
+                          class="huifu"
+                          v-if="val.interactionType == 'Comment'"
+                        >
+                          回复
+                        </div>
                       </div>
                     </div>
                     <div class="userItem"></div>
