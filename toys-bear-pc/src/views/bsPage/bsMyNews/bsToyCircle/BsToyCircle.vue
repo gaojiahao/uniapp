@@ -111,7 +111,14 @@
                         :src="val"
                         alt
                         :preview-src-list="item.imgList.split(',')"
-                      ></el-image>
+                      >
+                        <div slot="placeholder" class="image-slot">
+                          <img :src="require('@/assets/images/imgError.png')" />
+                        </div>
+                        <div slot="error" class="image-slot">
+                          <img :src="require('@/assets/images/imgError.png')" />
+                        </div>
+                      </el-image>
                     </div>
                   </template>
                 </div>
@@ -326,6 +333,9 @@ export default {
       myDateDiff: dateDiff,
       fullWidth: document.documentElement.clientWidth,
       findList: [],
+      currentPage: 1,
+      pageSize: 20,
+      totalCount: 0,
       col: document.documentElement.clientWidth < 1920 ? 2 : 3
     };
   },
@@ -515,7 +525,11 @@ export default {
     },
     // 到底了
     loadmore() {
-      console.log("到底了");
+      if (this.currentPage >= this.totalCount % this.pageSize) {
+        return false;
+      }
+      this.currentPage++;
+      this.getDataList(true);
     },
     // 获取公告列表
     async getDataList(flag) {
@@ -541,7 +555,7 @@ export default {
           console.log(this.findList);
           this.loading = false;
         }
-        this.total = res.data.result.item.result.totalCount;
+        this.totalCount = res.data.result.item.result.totalCount;
       } else {
         this.$message.error(res.data.result.msg);
       }
@@ -672,13 +686,17 @@ export default {
           }
           &::after {
             content: "";
-            width: 30%;
+            width: 32%;
           }
           .img {
-            width: 30%;
-            height: auto;
+            width: 32%;
+            height: 154px;
             margin-bottom: 10px;
             cursor: pointer;
+            img {
+              width: 100%;
+              height: 154px;
+            }
           }
         }
       }
