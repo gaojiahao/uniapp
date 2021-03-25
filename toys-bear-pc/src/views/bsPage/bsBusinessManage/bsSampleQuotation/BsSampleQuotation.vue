@@ -183,7 +183,12 @@
         </center>
       </div>
     </div>
-    <bsSampleUpdata v-if="isUpdata == 1"> </bsSampleUpdata>
+    <bsSampleUpdata
+      v-if="isUpdata == 1"
+      :rowUpdata="rowUpdata"
+      @submit="submit"
+    >
+    </bsSampleUpdata>
   </div>
 </template>
 
@@ -197,6 +202,7 @@ export default {
   data() {
     return {
       isUpdata: 0,
+      rowUpdata: {},
       searchForm: {
         orderNumber: null,
         clientName: null,
@@ -256,10 +262,12 @@ export default {
       this.getCompanySamplelistPage();
     },
     //编辑报价
-    async handleEdit(index, row) {
-      this.formData = JSON.parse(JSON.stringify(row));
-      this.dialogTitle = "编辑客户";
+    handleEdit(index, row) {
       this.isUpdata = 1;
+      this.rowUpdata = row;
+    },
+    submit(data) {
+      this.isUpdata = data;
     },
     // 搜索
     search() {

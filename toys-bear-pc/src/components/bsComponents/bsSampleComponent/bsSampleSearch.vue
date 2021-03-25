@@ -20,7 +20,7 @@
           </el-form-item>
           <el-form-item label="报价备注：">
             <el-input
-              style="width: 560px; margin: 0 15px;"
+              style="width: 586px; margin: 0 15px;"
               v-model="formInline.user"
               placeholder=" "
             ></el-input>
@@ -58,7 +58,7 @@
           </el-form-item>
           <el-form-item label="每车尺寸：">
             <el-input
-              style="width: 120px;; margin: 0 15px;"
+              style="width: 148px;; margin: 0 15px;"
               v-model="formInline.user"
               placeholder=" "
             ></el-input>
@@ -125,13 +125,22 @@
 <script>
 export default {
   name: "bsSampleSearch",
+  props: {
+    searchFormAata: {
+      type: Object
+    }
+  },
   data() {
     return {
       formInline: {
-        user: "",
-        region: ""
+       
       }
     };
+  },
+  mounted() {
+    this.formInline = this.searchFormAata;
+    // console.log(this.searchFormAata)
+     console.log(this.formInline,"formInline")
   },
   methods: {
     onSubmit() {}
