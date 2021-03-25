@@ -408,6 +408,53 @@
           </center>
         </div>
       </div>
+      <!-- 新增客户dialog -->
+      <el-dialog
+        title="新增客户"
+        top="30vh"
+        :close-on-click-modal="false"
+        :visible.sync="addMyClientDialog"
+        destroy-on-close
+        append-to-body
+        width="50%"
+      >
+        <el-form
+          ref="addMyClientRef"
+          label-width="100px"
+          :rules="addMyClientRules"
+          :model="addClientFormData"
+        >
+          <el-form-item label="客户名称" prop="name">
+            <el-input
+              v-model="addClientFormData.name"
+              placeholder="请输入客户名称"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="联系方式">
+            <el-input
+              v-model="addClientFormData.phoneNumber"
+              placeholder="请输入联系方式"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="备注" prop="remark">
+            <el-input
+              type="textarea"
+              placeholder="请输入备注信息"
+              :rows="4"
+              resize="none"
+              v-model="addClientFormData.remark"
+            ></el-input>
+          </el-form-item>
+          <center>
+            <template>
+              <el-button type="primary" @click="subMyClient">提 交</el-button>
+              <el-button plain @click="addMyClientDialog = false"
+                >取 消</el-button
+              >
+            </template>
+          </center>
+        </el-form>
+      </el-dialog>
     </el-dialog>
   </div>
 </template>
@@ -418,6 +465,15 @@ export default {
   name: "bsShoppingCart",
   data() {
     return {
+      addMyClientDialog: false,
+      addClientFormData: {
+        name: null,
+        phoneNumber: null,
+        remark: null
+      },
+      addMyClientRules: {
+        name: [{ required: true, message: "请输入客户名称", trigger: "blur" }]
+      },
       clientList: [],
       clientCurrentPage: 1,
       clientPageSize: 99,
@@ -644,6 +700,33 @@ export default {
       this.timer = setTimeout(() => {
         this.getClientList();
       }, 1000);
+    },
+    // 提交新增客户
+    subMyClient() {
+      this.$refs.addMyClientRef.validate(async valid => {
+        if (valid) {
+          const res = await this.$http.post(
+            "/api/CreateCustomerInfo",
+            this.addClientFormData
+          );
+          if (res.data.result.code === 200) {
+            this.getClientList();
+            this.addMyClientDialog = false;
+            this.$message.success("新增操作成功");
+          } else {
+            this.$message.error(res.data.result.msg);
+          }
+        }
+      });
+    },
+    // 打开新增客户
+    openAddMyClient() {
+      this.addClientFormData = {
+        name: null,
+        phoneNumber: null,
+        remark: null
+      };
+      this.addMyClientDialog = true;
     },
     // 获取客户列表
     async getClientList() {
