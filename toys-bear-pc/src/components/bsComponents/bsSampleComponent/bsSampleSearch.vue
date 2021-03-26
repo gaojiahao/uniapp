@@ -1,120 +1,167 @@
 <template>
   <div class="bsSampleSearch">
     <div class="searchBox">
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form
+        :inline="true"
+        :rules="addInfoRules"
+        :model="clienFormData"
+        class="demo-form-inline"
+      >
         <div class="left">
-          <el-form-item label="报价客户：">
+          <el-form-item label="报价客户：" prop="companyName">
             <el-select
               style="width: 190px; margin: 0 15px;"
-              v-model="formInline.region"
+              v-model="clienFormData.companyName"
               placeholder="请输入/选择客户"
             >
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+              <el-option
+                v-for="item in clientList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item style=" margin: 0 15px;">
+          <el-form-item style=" margin: 0 24px  0 24px;">
             <el-button class="el-icon-plus" type="primary" @click="onSubmit">
               新增客户</el-button
             >
           </el-form-item>
-          <el-form-item label="报价备注：">
+          <el-form-item label="报价备注：" prop="remark">
             <el-input
               style="width: 586px; margin: 0 15px;"
-              v-model="formInline.user"
+              v-model="clienFormData.remark"
               placeholder=" "
             ></el-input>
           </el-form-item>
-          <el-form-item label="默认公式：">
+          <el-form-item label="默认公式：" prop="defaultFormula">
             <el-select
               style="width: 120px; margin: 0 15px;"
-              v-model="formInline.region"
-              placeholder="请输入"
+              v-model="clienFormData.defaultFormula"
+              placeholder="请选择"
             >
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+              <el-option
+                v-for="(item, i) in customerTemplate"
+                :key="i"
+                :label="item.name"
+                :value="JSON.stringify(item)"
+              >
+              </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="利润率：">
+          <el-form-item label="利润率：" prop="profit">
             <el-input
               style="width: 120px; margin: 0 15px;"
-              v-model="formInline.user"
+              v-model="clienFormData.profit"
+              placeholder="0"
+            >
+              <span slot="suffix">%</span></el-input
+            >
+          </el-form-item>
+          <el-form-item label="汇率：" prop="exchange">
+            <el-input
+              style="width: 120px; margin: 0 15px;"
+              v-model="clienFormData.exchange"
               placeholder=" "
             ></el-input>
           </el-form-item>
-          <el-form-item label="汇率：">
-            <el-input
+          <el-form-item label="币种：" prop="cu_deName">
+            <el-select
               style="width: 120px; margin: 0 15px;"
-              v-model="formInline.user"
-              placeholder=" "
-            ></el-input>
+              v-model="clienFormData.cu_deName"
+            >
+              <el-option
+                v-for="(item, i) in options.cu_deList"
+                :key="i"
+                :label="item.itemCode"
+                :value="item.parameter"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="币种：">
-            <el-input
-              style="width: 120px; margin: 0 15px;"
-              v-model="formInline.user"
-              placeholder=" "
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="每车尺寸：">
-            <el-input
-              style="width: 148px;; margin: 0 15px;"
-              v-model="formInline.user"
-              placeholder=" "
-            ></el-input>
+          <el-form-item label="每车尺寸：" prop="size">
+            <el-select
+              v-model="clienFormData.size"
+              style="width: 134px;; margin: 0 15px;"
+              placeholder="请选择尺码"
+            >
+              <el-option
+                v-for="(item, i) in options.size"
+                :key="i"
+                :label="item.itemCode"
+                :value="item.parameter"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
 
-          <el-form-item label="报价方式：">
+          <el-form-item label="报价方式：" prop="offerMethod">
             <el-select
               style="width: 120px; margin: 0 15px;"
-              v-model="formInline.region"
-              placeholder="请输入/选择客户"
+              v-model="clienFormData.offerMethod"
+              placeholder=""
             >
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+              <el-option
+                v-for="(item, i) in options.offerMethod"
+                :key="i"
+                :label="item.itemCode"
+                :value="item.parameter"
+              >
+              </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="总费用：">
+          <el-form-item label="总费用：" prop="totalCost">
             <el-input
               style="width: 120px;; margin: 0 15px;"
-              v-model="formInline.user"
+              v-model="clienFormData.totalCost"
               placeholder=" "
             ></el-input>
           </el-form-item>
-          <el-form-item label="小数位数">
+          <el-form-item label="小数位数" prop="decimalPlaces">
             <el-input
               style="width: 120px;; margin: 0 15px;"
-              v-model="formInline.user"
+              v-model="clienFormData.decimalPlaces"
               placeholder=" "
             ></el-input>
           </el-form-item>
-          <el-form-item label="取舍尺寸：">
+          <el-form-item label="取舍方式：" prop="rejectionMethod">
             <el-select
-              style="width: 350px; margin: 0 15px;"
-              v-model="formInline.region"
-              placeholder="请输入/选择客户"
+              style="width: 345px; margin: 0 15px;"
+              v-model="clienFormData.rejectionMethod"
+              placeholder="请选择取舍方式"
             >
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+              <el-option
+                v-for="(item, i) in options.rejectionMethod"
+                :key="i"
+                :label="item.itemCode"
+                :value="item.parameter"
+              >
+              </el-option>
             </el-select>
           </el-form-item>
         </div>
         <div class="right">
-          <el-form-item label="价格小于：">
+          <el-form-item label="价格小于：" prop="miniPrice">
             <el-input
               style="width: 120px;"
-              v-model="formInline.user"
+              v-model="clienFormData.miniPrice"
               placeholder=" "
             ></el-input>
           </el-form-item>
-          <el-form-item label="小数位数：">
+          <el-form-item label="小数位数：" prop="decimalPlaces">
             <el-select
               style="width: 120px;"
-              v-model="formInline.region"
-              placeholder="请输入/选择客户"
+              v-model="clienFormData.region"
+              placeholder="decimalPlaces"
             >
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+              <el-option
+                v-for="(item, i) in options.decimalPlaces"
+                :key="i"
+                :label="item.itemCode"
+                :value="item.parameter"
+              >
+              </el-option>
             </el-select>
           </el-form-item>
         </div>
@@ -130,19 +177,120 @@ export default {
       type: Object
     }
   },
+  watch: {
+    "clienFormData.cu_de": {
+      deep: true,
+      handler(newVal) {
+        if (newVal) {
+          this.options.cu_deList.forEach(val => {
+            if (val.parameter === newVal)
+              this.clienFormData.cu_deName = val.itemCode;
+          });
+        }
+      }
+    }
+    // "clienFormData.defaultFormula": {
+    //   deep: true,
+    //   handler(newVal) {
+    //     if (newVal) {
+    //       const obj = JSON.parse(newVal);
+    //       this.clienFormData.profit = obj.profit;
+    //       this.clienFormData.offerMethod = obj.offerMethod;
+    //       this.clienFormData.cu_de = obj.cu_de;
+    //       this.clienFormData.cu_deName = obj.cu_deName;
+    //       this.clienFormData.exchange = obj.exchange;
+    //       this.clienFormData.size = obj.size;
+    //       this.clienFormData.decimalPlaces = obj.decimalPlaces;
+    //       this.clienFormData.rejectionMethod = obj.rejectionMethod;
+    //     }
+    //   }
+    // }
+  },
   data() {
     return {
-      formInline: {
-       
+      clientList: [],
+      customerTemplate: [],
+      options: {
+        // 报价配置项
+        cu_deList: [],
+        decimalPlaces: [],
+        offerMethod: [],
+        rejectionMethod: [],
+        size: []
+      },
+      clienFormData: {
+        companyName: "11",
+        defaultFormula: null,
+        customerInfoId: null,
+        quotationProductList: [],
+        profit: 0,
+        offerMethod: "出厂价",
+        cu_de: "¥",
+        cu_deName: "RMB",
+        totalCost: "0",
+        exchange: 0,
+        size: "24",
+        decimalPlaces: 3,
+        rejectionMethod: "四舍五入",
+        miniPrice: 0,
+        miniPriceDecimalPlaces: 1
+      },
+      addInfoRules: {
+        companyName: [
+          { required: true, message: "请选择客户", trigger: "change" }
+        ],
+
+        remark: [{ required: true, message: "请备注", trigger: "change" }],
+        offerMethod: [
+          { required: true, message: "请输入报价方式", trigger: "blur" }
+        ],
+        defaultFormula: [
+          { required: true, message: "请选择默认公式", trigger: "blur" }
+        ],
+        cu_deName: [
+          { required: true, message: "请输入报价方式", trigger: "blur" }
+        ],
+        cu_de: [{ required: true, message: "请选择币别", trigger: "change" }],
+        exchange: [{ required: true, message: "请输入汇率", trigger: "blur" }],
+        decimalPlaces: {
+          required: true,
+          message: "请选择小数位数",
+          trigger: "change"
+        },
+
+        profit: { required: true, message: "请输入利润率", trigger: "blur" },
+        totalCost: { required: true, message: "请输入总费用", trigger: "blur" },
+        size: { required: true, message: "请选择尺码", trigger: "change" },
+        rejectionMethod: {
+          required: true,
+          message: "请选择取舍方式",
+          trigger: "change"
+        },
+        miniPrice: { required: true, message: "请输入价格", trigger: "blur" },
+        miniPriceDecimalPlaces: {
+          required: true,
+          message: "请选择小数位数",
+          trigger: "change"
+        }
       }
     };
   },
+  created() {},
   mounted() {
-    this.formInline = this.searchFormAata;
-    // console.log(this.searchFormAata)
-     console.log(this.formInline,"formInline")
+    this.getProductOfferByNumber();
   },
   methods: {
+    //请求条件
+    async getProductOfferByNumber() {
+      const res = await this.$http.post("/api/GetProductOfferByNumber", {
+        offerNumber: this.searchFormAata.offerNumber
+      });
+      if (res.data.result.code === 200) {
+        this.clienFormData = res.data.result.item;
+      } else {
+        this.$message.error(res.data.result.msg);
+      }
+    },
     onSubmit() {}
   }
 };

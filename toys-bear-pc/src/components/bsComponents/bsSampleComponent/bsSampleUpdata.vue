@@ -5,9 +5,15 @@
     </div>
     <bsSampleSearch :searchFormAata="searchFormAata"></bsSampleSearch>
     <div class="bsSampleTable">
-      <div class="left">
-        报价商品列表
+      <div class="top">
+        <div class="left">报价商品列表({{ tableData.length }})</div>
+        <div class="right">
+          <el-button @click="handleSelect" class="el-icon-plus" type="primary">
+            选择报价商品</el-button
+          >
+        </div>
       </div>
+
       <div class="tableBox">
         <el-table
           :data="tableData"
@@ -218,6 +224,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
 import bsSampleSearch from "@/components/bsComponents/bsSampleComponent/bsSampleSearch";
 export default {
   name: "bsSampleUpdata",
@@ -229,9 +236,15 @@ export default {
       type: Object
     }
   },
+  computed: {
+    ...mapGetters({
+      shoppingList: "myShoppingList"
+    })
+  },
   watch: {
-    rowUpdata() {
-      // this.getProductOfferDetailPage();
+    rowUpdata: {
+      // deep: true,
+      // handler(newVal) {}
     }
   },
   data() {
@@ -244,7 +257,9 @@ export default {
       }
     };
   },
-  created() {},
+  created() {
+    this.searchFormAata = this.rowUpdata;
+  },
 
   mounted() {
     this.getProductOfferDetailPage();
@@ -266,6 +281,8 @@ export default {
     openSub() {
       this.$emit("submit", 0);
     },
+    //选择报价商品
+    handleSelect() {},
     isInteger(obj) {
       return Math.floor(obj) === obj;
     },
@@ -429,11 +446,12 @@ export default {
       }
       return price;
     },
+
     // 点击箱数选中输入框中的所有值
     selectInputValue(e) {
       e.currentTarget.select();
     },
-    // 修改购物车数量
+    // 修改数量
     changeInputNumber(e, val) {
       console.log(e, val);
       const re = /^[0-9]+.?[0-9]*/;
@@ -481,7 +499,7 @@ export default {
     }
   }
   .bsSampleTable {
-    .left {
+    .top {
       height: 55px;
       font-size: 15px;
       font-weight: 700;
@@ -493,6 +511,7 @@ export default {
       align-items: center;
       justify-content: space-between;
     }
+
     .tableBto {
       display: flex;
       align-items: center;
@@ -523,6 +542,19 @@ export default {
   @{deep} .tableBox {
     .el-table {
       font-size: 13px;
+      .inputNumber {
+        width: 50px;
+        outline: none;
+        -moz-appearance: textfield;
+        text-align: center;
+        color: #ff3e3e;
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          appearance: none;
+          margin: 0;
+        }
+      }
       .imgBox {
         text-align: left;
         display: flex;
