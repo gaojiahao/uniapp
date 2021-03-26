@@ -137,10 +137,15 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="total" label="总价" align="center" width="100">
+          <el-table-column
+            prop="OfferTotalAmount"
+            label="总价"
+            align="center"
+            width="100"
+          >
             <template slot-scope="scope">
               <span style="color:#f56c6c">
-                {{ scope.row.cu_de + scope.row.total }}
+                {{ scope.row.cu_de + scope.row.OfferTotalAmount }}
               </span>
             </template>
           </el-table-column>
