@@ -9,7 +9,7 @@
         router
         :collapse="isCollapse"
       >
-        <el-menu-item index="/bsIndex/bsHome">
+        <el-menu-item @click="addRouterEvent(homeLink)" index="/bsIndex/bsHome">
           <i class="icon homeIcon"></i>
           <span slot="title">后台首页</span>
         </el-menu-item>
@@ -58,12 +58,32 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      homeLink: {
+        linkUrl: "/bsIndex/bsHome",
+        name: "后台首页",
+        component: "bsHome"
+      }
+    };
   },
   methods: {
+    refresh() {
+      this.$common.refreshTab();
+    },
     // 点击菜单时间
     addRouterEvent(route) {
-      this.$store.commit("handlerBsMenuLabels", route);
+      const list = route.linkUrl.split("/");
+      const component = list[list.length - 1];
+      this.$common.judgeTab(
+        {
+          name: route.linkUrl,
+          linkUrl: route.linkUrl,
+          component: component,
+          refresh: true,
+          label: route.name
+        },
+        "tabmain"
+      );
     }
   },
   created() {},

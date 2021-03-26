@@ -166,13 +166,16 @@
 import { mapGetters } from "vuex";
 import magnifierComponent from "@/components/bsComponents/bsProductSearchComponent/bsMagnifierComponent.vue";
 export default {
+  props: {
+    item: {
+      type: Object
+    }
+  },
   components: {
     magnifierComponent
   },
   data() {
-    return {
-      item: JSON.parse(sessionStorage.getItem("productDetail"))
-    };
+    return {};
   },
   methods: {
     // 加购
