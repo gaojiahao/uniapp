@@ -6,11 +6,11 @@
         <bsMenu :isCollapse="isCollapse" />
       </div>
       <div class="rightContent">
-        <div class="menuLabels">
+        <!-- <div class="menuLabels">
           <el-scrollbar id="bsScrollID" style="height: 58px;">
             <div
               :class="{ tab: true, isActive: item.linkUrl === $route.path }"
-              v-for="item in bsMenuLabels"
+              v-for="item in tabList"
               @click="switchTab(item)"
               :key="item.linkUrl"
             >
@@ -26,7 +26,7 @@
           <div class="clearAll" @click="closeAll">
             <i class="el-icon-close"></i>
           </div>
-        </div>
+        </div> -->
         <div class="views">
           <el-collapse-transition>
             <div class="positionSearchBox" v-show="showSearch">
@@ -34,10 +34,36 @@
             </div>
           </el-collapse-transition>
           <el-scrollbar style="height: 100%;" ref="scrollbar">
-            <keep-alive :include="keepAliveArr">
+            <!-- <keep-alive :include="keepAliveArr">
               <router-view v-if="$route.meta.keepAlive"></router-view>
             </keep-alive>
-            <router-view v-if="!$route.meta.keepAlive"></router-view>
+            <router-view v-if="!$route.meta.keepAlive"></router-view> -->
+            <el-tabs
+              v-model="activeTab"
+              @tab-remove="closeTab"
+              @tab-click="triggerTab"
+              type="border-card"
+              closable
+            >
+              <el-tab-pane
+                v-for="item in tabList"
+                :key="item.name"
+                :name="item.name"
+                :label="item.label"
+              >
+                <span slot="label">
+                  <i class="el-icon-refresh" @click.stop="refresh()"></i>
+                  {{ item.label }}
+                </span>
+                <component
+                  :item="item.value"
+                  v-if="item.refresh"
+                  :is="item.component"
+                  :ref="item.name"
+                  style="padding:5px"
+                ></component>
+              </el-tab-pane>
+            </el-tabs>
           </el-scrollbar>
         </div>
       </div>
@@ -46,19 +72,115 @@
 </template>
 
 <script>
+/** 后台首页 */
+import bsHome from "@/views/bsPage/bsHome/BsHome.vue";
+
+/** 产品详情 */
+import bsProductDetails from "@/views/bsPage/bsProductSearch/bsProductDetails/BsProductDetails.vue";
+
+/** 客户订单详情 */
+import bsClientOrderDetails from "@/views/bsPage/bsSiteSharing/bsCustomerOrder/bsClientOrderDetails/BsClientOrderDetails.vue";
+
+/** 展厅业务订单详情 */
+import bsHallBusinessOrderDetails from "@/components/bsComponents/bsBusinessManageComponent/bsHallBusinessOrderDetails.vue";
+
+// 站点列表
+import bsSiteLlis from "@/views/bsPage/bsSiteSharing/bsSiteLlis/BsSiteLlis.vue";
+
+// 客户订单
+import bsCustomerOrder from "@/views/bsPage/bsSiteSharing/bsCustomerOrder/BsCustomerOrder.vue";
+
+// 浏览记录
+import bsBrowsingHistory from "@/views/bsPage/bsSiteSharing/bsBrowsingHistory/BsBrowsingHistory.vue";
+
+// 产品搜索首页
+import bsProductSearchIndex from "@/views/bsPage/bsProductSearch/bsProductSearchIndex/BsProductSearchIndex.vue";
+//  我的收藏
+import bsMyCollection from "@/views/bsPage/bsProductSearch/bsMyCollection/BsMyCollection.vue";
+
+//  最新产品
+import bsLatestProducts from "@/views/bsPage/bsProductSearch/bsLatestProducts/BsLatestProducts.vue";
+
+//  现货产品
+import bsSpotProducts from "@/views/bsPage/bsProductSearch/bsSpotProducts/BsSpotProducts.vue";
+
+//  VIP产品
+import bsVIPProducts from "@/views/bsPage/bsProductSearch/bsVIPProducts/BsVIPProducts.vue";
+
+// 账号管理
+import bsAccountManage from "@/views/bsPage/bsPersonalManage/bsAccountManage/BsAccountManage.vue";
+
+// 报价设置
+import bsQuotationSettings from "@/views/bsPage/bsPersonalManage/bsQuotationSettings/BsQuotationSettings.vue";
+
+// 推送设置
+import bsPushSettings from "@/views/bsPage/bsPersonalManage/bsPushSettings/BsPushSettings.vue";
+
+// 我的消息
+import bsNews from "@/views/bsPage/bsMyNews/bsNews/BsNews.vue";
+// 我的好友
+import bsMyGoodFriend from "@/views/bsPage/bsMyNews/bsMyGoodFriend/BsMyGoodFriend.vue";
+// 玩具圈
+import bsToyCircle from "@/views/bsPage/bsMyNews/bsToyCircle/BsToyCircle.vue";
+
+// 我的客户
+import bsMyClients from "@/views/bsPage/bsMyClients/bsMyClients/BsMyClients.vue";
+
+// 厂商查询
+import bsVendorQuery from "@/views/bsPage/bsMyClients/bsVendorQuery/BsVendorQuery.vue";
+
+// 展厅择样
+import bsHallSample from "@/views/bsPage/bsBusinessManage/bsHallSample/BsHallSample.vue";
+// 展厅业务
+import bsHallBusiness from "@/views/bsPage/bsBusinessManage/bsHallBusiness/BsHallBusiness.vue";
+// 购物车
+import bsShoppingCart from "@/views/bsPage/bsBusinessManage/bsShoppingCart/BsShoppingCart.vue";
+// 找样报价
+import bsSampleQuotation from "@/views/bsPage/bsBusinessManage/bsSampleQuotation/BsSampleQuotation.vue";
+// 采购订单
+import bsPurchaseOrder from "@/views/bsPage/bsBusinessManage/bsPurchaseOrder/BsPurchaseOrder.vue";
+
 import bsTop from "@/components/bsComponents/bsTopComponent/BsTop";
 import bsMenu from "@/components/bsComponents/bsMenuComponent/BsMenu";
 import bsProductSearch from "@/components/bsComponents/bsProductSearchComponent/bsProductSearch";
 import eventBus from "@/assets/js/common/eventBus.js";
-import { mapState, mapGetters } from "vuex";
+// import { mapState, mapGetters } from "vuex";
+import store from "@/store/index";
 export default {
   components: {
+    bsHome,
+    bsProductDetails,
+    bsClientOrderDetails,
+    bsHallBusinessOrderDetails,
+    bsSiteLlis,
+    bsCustomerOrder,
+    bsBrowsingHistory,
+    bsProductSearchIndex,
+    bsMyCollection,
+    bsLatestProducts,
+    bsSpotProducts,
+    bsVIPProducts,
+    bsAccountManage,
+    bsQuotationSettings,
+    bsPushSettings,
+    bsNews,
+    bsMyGoodFriend,
+    bsToyCircle,
+    bsMyClients,
+    bsVendorQuery,
+    bsHallSample,
+    bsHallBusiness,
+    bsShoppingCart,
+    bsSampleQuotation,
+    bsPurchaseOrder,
     bsTop,
     bsMenu,
     bsProductSearch
   },
   data() {
     return {
+      tabList: store.state.tabList,
+      activeTab: store.state.activeTab,
       isCollapse: false,
       showSearch: false
     };
@@ -80,6 +202,15 @@ export default {
           eventBus.$emit("showCart", false);
         }
       };
+    },
+    triggerTab() {},
+    // 关闭标签
+    closeTab(e) {
+      let len = this.tabList.length;
+      len > 1 && this.$store.commit("closeTab", e);
+    },
+    refresh() {
+      this.$common.refreshTab();
     },
     // 关闭所有tab标签
     closeAll() {
@@ -140,18 +271,17 @@ export default {
       }
     }
   },
-  computed: {
-    ...mapState(["bsMenuLabels"]),
-    ...mapGetters(["keepAliveArr"])
+  computed: {},
+  watch: {
+    activeTab(v) {
+      store.commit("updateActiveTab", v);
+    },
+    "$store.state.activeTab"() {
+      this.activeTab = store.state.activeTab;
+    }
   },
   created() {},
   mounted() {
-    if (!this.bsMenuLabels.length) {
-      this.$store.commit("handlerBsMenuLabels", {
-        linkUrl: "/bsIndex/bsHome",
-        name: "后台首页"
-      });
-    }
     this.handleScroll();
   }
 };

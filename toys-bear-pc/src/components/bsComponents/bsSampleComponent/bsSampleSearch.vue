@@ -132,15 +132,13 @@ export default {
   },
   data() {
     return {
-      formInline: {
-       
-      }
+      formInline: {}
     };
   },
   mounted() {
     this.formInline = this.searchFormAata;
     // console.log(this.searchFormAata)
-     console.log(this.formInline,"formInline")
+    console.log(this.formInline, "formInline");
   },
   methods: {
     onSubmit() {}

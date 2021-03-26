@@ -1,9 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import router from "../router";
 import axios from "axios";
 import createPersistedState from "vuex-persistedstate";
 import globalJson from "./Json.js";
 Vue.use(Vuex);
+const v = new Vue();
 function myForEach(oList, yList) {
   for (let i = 0; i < oList.length; i++) {
     for (let j = 0; j < yList.length; j++) {
@@ -15,7 +17,15 @@ function myForEach(oList, yList) {
 }
 export default new Vuex.Store({
   state: {
-    bsMenuLabels: [],
+    activeTab: "bsHome",
+    tabList: [
+      {
+        name: "/bsIndex/bsHome",
+        linkUrl: "/bsIndex/bsHome",
+        label: "后台首页",
+        component: "bsHome"
+      }
+    ],
     historyNames: [],
     httpTime: 0, // 请求时长
     httpContent: "", // 请求内容
@@ -193,6 +203,68 @@ export default new Vuex.Store({
       state.routers = [];
       state.isLogin = null;
       this.dispatch("getToken");
+    },
+    // 测试
+    //关闭tab页
+    closeTab(state, n) {
+      let tab = state.tabList;
+      tab.forEach((v, i) => {
+        if (v.name == n) {
+          tab.splice(i, 1);
+          this.commit("judgeClose", i);
+          n.split("-").length > 1 && this.commit("removeSession", n);
+        }
+      });
+    },
+    judgeClose(state, n) {
+      let tab = state.tabList;
+      let active = state.activeTab;
+      let flag = true;
+      for (const i of tab) {
+        if (i.name == active) {
+          flag = false;
+          break;
+        }
+      }
+      if (flag) {
+        n - 1 > -1
+          ? (state.activeTab = tab[n - 1].name)
+          : (state.activeTab = tab[n].name);
+      }
+    },
+    removeSession(state, n) {
+      let a = n.split("-");
+      let s = JSON.parse(sessionStorage.getItem(a[0]));
+      for (const i in s) {
+        if (s[i].name == n) {
+          s.splice(i, 1);
+          break;
+        }
+      }
+      s = sessionStorage.setItem(a[0], JSON.stringify(s));
+    },
+    //新增tab页
+    addTab(state, n) {
+      let tab = state.tabList;
+      n["refresh"] || (n["refresh"] = true);
+      // n.hasOwnProperty('refresh') || (n['refresh'] = true);
+      let flag = true;
+      tab.find(v => v.name == n.name) || (tab.push(n), (flag = false));
+      state.activeTab = n.name;
+      flag && v.$common.refreshTab(n.name);
+    },
+    updateActiveTab(state, n) {
+      state.activeTab = n;
+      let flag = false;
+      for (let i = 0; i < state.tabList.length; i++) {
+        if (state.tabList[i].linkUrl == n) {
+          flag = true;
+          break;
+        }
+      }
+      if (flag) {
+        router.push(n);
+      }
     }
   },
   actions: {
@@ -216,11 +288,18 @@ export default new Vuex.Store({
       }
       return state[state.userInfo.uid];
     },
-    keepAliveArr(state) {
-      return state.bsMenuLabels.map(val => {
+    tabList(state) {
+      return state.tabList.map(val => {
         if (val) {
           const list = val.linkUrl.split("/");
-          return list[list.length - 1];
+          const component = list[list.length - 1];
+          return {
+            name: val.linkUrl,
+            linkUrl: val.linkUrl,
+            component: component,
+            refresh: true,
+            label: val.name
+          };
         }
       });
     }

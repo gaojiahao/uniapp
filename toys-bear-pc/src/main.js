@@ -13,6 +13,7 @@ import PreviewPic from "vue-preview-pictures"; // 预览
 import waterfall from "vue-waterfall2";
 import Video from "video.js";
 import "video.js/dist/video-js.css";
+import common from "@/utils/common";
 
 Vue.component(ExTableColumn.name, ExTableColumn);
 Vue.prototype.$PreviewPic = PreviewPic;
@@ -22,6 +23,7 @@ getMenuFuc();
 Vue.use(ElementUI);
 Vue.use(myAxios);
 Vue.use(waterfall);
+Vue.use(common);
 
 new Vue({
   router,
