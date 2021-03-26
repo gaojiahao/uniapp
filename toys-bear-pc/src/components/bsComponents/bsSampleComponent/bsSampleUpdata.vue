@@ -115,7 +115,14 @@
           </el-table-column>
           <el-table-column label="箱数" align="center" width="100">
             <template slot-scope="scope">
-              <span> {{ scope.row.in_en }}/{{ scope.row.ou_lo }}(pcs) </span>
+              <input
+                class="inputNumber"
+                type="number"
+                @input="changeInputNumber($event, scope.row)"
+                @focus="selectInputValue($event)"
+                @keydown="nextInput($event)"
+                v-model="scope.row.shoppingCount"
+              />
             </template>
           </el-table-column>
           <el-table-column
@@ -421,6 +428,26 @@ export default {
         );
       }
       return price;
+    },
+    // 点击箱数选中输入框中的所有值
+    selectInputValue(e) {
+      e.currentTarget.select();
+    },
+    // 修改购物车数量
+    changeInputNumber(e, val) {
+      console.log(e, val);
+      const re = /^[0-9]+.?[0-9]*/;
+      if (!re.test(e.target.value)) {
+        e.target.value = 0;
+      } else if (e.target.value.length > 5) {
+        e.target.value = e.target.value.slice(0, 5);
+      } else if (!e.target.value) {
+        e.target.value = 0;
+      } else if (e.target.value.length > 1 && e.target.value[0] == 0) {
+        e.target.value = e.target.value.slice(1, 5);
+      }
+      val.shoppingCount = Number(e.target.value);
+      this.$store.commit("replaceShoppingCartValueCount", this.tableData);
     }
   }
 };
