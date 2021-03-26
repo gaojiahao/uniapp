@@ -238,13 +238,13 @@ export default {
         this.tableData = res.data.result.item.items;
       }
     },
-    // 取消收藏
+    // 删除找样报价
     async handleDelete(row) {
-      const res = await this.$http.post("/api/CreateProductCollection", {
-        productNumber: row.productNumber
+      const res = await this.$http.post("/api/DeleteProductOffer", {
+        id: row.id
       });
       if (res.data.result.code === 200) {
-        this.$message.success("取消收藏成功");
+        this.$message.success("删除成功");
         this.getCompanySamplelistPage();
       } else {
         this.$message.error(res.data.result.msg);

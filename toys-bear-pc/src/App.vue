@@ -5,10 +5,82 @@
     element-loading-spinner
     element-loading-background="rgba(200, 200, 200, 0.5)"
   >
-    <router-view />
+    <router-view ref="bsIndex" />
+    <!-- 漂浮物 -->
+    <transition name="el-zoom-in-top">
+      <div class="cartBox" v-show="isShowCartBox">
+        <div class="cart" @click="toMyShoppingCart">
+          <div class="cartIconBox">
+            <el-badge
+              :hidden="!shoppingList || shoppingList.length < 1"
+              :value="shoppingList && shoppingList.length"
+              class="item"
+            >
+              <i class="cartIcon"></i>
+            </el-badge>
+          </div>
+        </div>
+        <div class="toTop" @click="toTop">
+          <i class="toTopIcon el-icon-top"></i>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
-
+<script>
+import eventBus from "@/assets/js/common/eventBus.js";
+import { mapGetters, mapState } from "vuex";
+const cubic = value => Math.pow(value, 3);
+const easeInOutCubic = value =>
+  value < 0.5 ? cubic(value * 2) / 2 : 1 - cubic((1 - value) * 2) / 2;
+export default {
+  data() {
+    return {
+      isShowCartBox: false,
+      myScrollTop: 0
+    };
+  },
+  computed: {
+    ...mapState(["userInfo"]),
+    ...mapGetters({
+      shoppingList: "myShoppingList"
+    })
+  },
+  mounted() {
+    eventBus.$on("showCart", flag => {
+      this.isShowCartBox = flag;
+    });
+  },
+  methods: {
+    // 去购物车
+    toMyShoppingCart() {
+      this.$store.commit("handlerBsMenuLabels", {
+        linkUrl: "/bsIndex/bsShoppingCart",
+        name: "购物车"
+      });
+      this.$router.push("/bsIndex/bsShoppingCart");
+    },
+    // 回到顶部
+    toTop() {
+      const el = this.$refs.bsIndex.$refs.scrollbar.wrap;
+      const beginTime = Date.now();
+      const beginValue = el.scrollTop;
+      const rAF =
+        window.requestAnimationFrame || (func => setTimeout(func, 16));
+      const frameFunc = () => {
+        const progress = (Date.now() - beginTime) / 500;
+        if (progress < 1) {
+          el.scrollTop = beginValue * (1 - easeInOutCubic(progress));
+          rAF(frameFunc);
+        } else {
+          el.scrollTop = 0;
+        }
+      };
+      rAF(frameFunc);
+    }
+  }
+};
+</script>
 <style lang="less" scoped>
 @deep: ~">>>";
 @{deep} .el-loading-spinner .circular {
@@ -35,5 +107,72 @@
   background-size: 100px 100px;
   width: 100%;
   height: 100%;
+}
+#app {
+  position: relative;
+  .cartBox {
+    position: fixed;
+    width: 50px;
+    height: 120px;
+    right: 25px;
+    bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .cart,
+    .toTop {
+      width: 50px;
+      height: 50px;
+      position: relative;
+      cursor: pointer;
+      pointer-events: auto; // 关键点 重要 设置可以点击
+    }
+    .cart {
+      background-color: #ff760e;
+      .cartIconBox {
+        width: 50px;
+        height: 50px;
+        position: relative;
+        .el-badge {
+          width: 20px;
+          height: 20px;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
+        .cartIcon {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          display: block;
+          width: 20px;
+          height: 20px;
+          background: url("~@/assets/images/whiteCart.png") no-repeat center;
+          background-size: 100% 100%;
+        }
+        @{deep} .el-badge__content {
+          top: -10px;
+          background-color: #fff;
+          color: #ff760e;
+          border: 1px solid #ff760e;
+        }
+      }
+    }
+    .toTop {
+      background-color: rgba(0, 0, 0, 0.5);
+      .toTopIcon {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        color: #fff;
+        font-size: 20px;
+      }
+    }
+  }
 }
 </style>

@@ -480,18 +480,25 @@ export default {
       };
       const res = await this.$http.post("/api/CreateNoticeInteraction", fd);
       if (res.data.result.code === 200) {
-        this.currentPage = 1;
-        this.pageSize = this.findList.length >= 100 ? 10 : this.findList.length;
-        this.getDataList();
+        // this.currentPage = 1;
+        // this.pageSize = this.findList.length >= 100 ? 10 : this.findList.length;
+        // this.getDataList();
         this.$message.success("评论成功");
+        item.noticeInteraction.push({
+          userImage: this.userInfo.userInfo.userImage,
+          userName: this.userInfo.userInfo.linkman,
+          interactionType: "Comment",
+          comment: this.pinglunValue,
+          companyID: this.currentComparnyId,
+          createdBy: this.userInfo.userInfo.id
+        });
       }
+      console.log(item);
       this.pinglunValue = "";
       item.isPinglun = false;
     },
     // 回复评论
     async subHuiPinglun(item) {
-      console.log(this.pinglunValue);
-      console.log(item);
       let fd = {
         noticeNumber: item.bearNotice.noticeNumber,
         userName: this.userInfo.userInfo.linkman,
@@ -504,9 +511,7 @@ export default {
       };
       const res = await this.$http.post("/api/CreateNoticeInteraction", fd);
       if (res.data.result.code === 200) {
-        // this.currentPage = 1;
-        this.pageSize = this.findList.length >= 100 ? 10 : this.findList.length;
-        this.getDataList();
+        item.noticeInteraction.push(fd);
         this.$message.success("回复成功");
       }
       this.pinglunValue = "";
@@ -579,7 +584,8 @@ export default {
     this.getDataList();
   },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(["userInfo"]),
+    ...mapState(["currentComparnyId"])
   },
   watch: {
     fullWidth(val) {
@@ -672,6 +678,7 @@ export default {
         font-size: 16px;
         font-weight: 400;
         color: #333333;
+        word-wrap: break-word;
       }
       .item-content {
         padding: 16px 0;
