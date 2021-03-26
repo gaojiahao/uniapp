@@ -123,11 +123,11 @@ export default {
     exportOrder(type) {
       const fd = {
         templateType: type,
-        sampleNumber: this.orderRow.orderNumber,
+        orderNumber: this.orderRow.orderNumber,
         the_nu: this.orderRow.the_nu
       };
       this.$http
-        .post("/api/GetERPOrderExcel", fd, {
+        .post("/api/GetSampleOrderExcel", fd, {
           responseType: "blob"
         })
         .then(res => {

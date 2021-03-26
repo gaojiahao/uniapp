@@ -348,7 +348,7 @@ export default {
                 this.$message.error(re.data.result.msg);
                 this.$store.commit("removeLoginItems");
               }
-              this.$router.push("/me");
+              this.$router.push("/bsIndex/bsHome");
             } else if (res.data.result.commparnyList.length > 1) {
               // 多个角色
               this.$store.commit("setToken", res.data.result);
