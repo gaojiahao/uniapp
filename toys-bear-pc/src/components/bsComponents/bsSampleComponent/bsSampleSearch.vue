@@ -326,6 +326,7 @@ export default {
     padding: 20px;
     form {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       .left {
         flex: 1;
