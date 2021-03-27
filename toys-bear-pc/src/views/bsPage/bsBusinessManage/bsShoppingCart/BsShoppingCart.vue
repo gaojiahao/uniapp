@@ -223,10 +223,11 @@
             :rules="addInfoRules"
             :model="clienFormData"
           >
-            <el-form-item label="报价客户：" prop="customerInfoId">
+            <el-form-item label="报价客户：" prop="customerId">
               <div class="formItemBox">
                 <el-select
-                  v-model="clienFormData.customerInfoId"
+                  @change="changeCustomer"
+                  v-model="clienFormData.customerId"
                   :filter-method="filterMethod"
                   filterable
                   clearable
@@ -490,7 +491,8 @@ export default {
       },
       clienFormData: {
         defaultFormula: null,
-        customerInfoId: null,
+        customerId: null,
+        customerName: null,
         quotationProductList: [],
         profit: 0,
         offerMethod: "汕头",
@@ -505,7 +507,7 @@ export default {
         miniPriceDecimalPlaces: 1
       },
       addInfoRules: {
-        customerInfoId: [
+        customerId: [
           {
             required: true,
             message: "请选择客户",
@@ -775,6 +777,14 @@ export default {
         this.getClientList();
       }, 1000);
     },
+    // 选择客户
+    changeCustomer(val) {
+      for (let i = 0; i < this.clientList.length; i++) {
+        if (this.clientList[i].id == val) {
+          this.clienFormData.customerName = this.clientList[i].name;
+        }
+      }
+    },
     // 提交新增客户
     subMyClient() {
       this.$refs.addMyClientRef.validate(async valid => {
@@ -925,7 +935,8 @@ export default {
           this.clienFormData.quotationProductList = selectProducts.map(val => {
             return {
               productNumber: val.productNumber,
-              boxNumber: val.shoppingCount
+              boxNumber: val.shoppingCount,
+              offerAmount: val.price
             };
           });
           const res = await this.$http.post(

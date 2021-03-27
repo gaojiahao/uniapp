@@ -344,7 +344,7 @@ export default {
             margin-right: 15px;
             width: 18px;
             height: 18px;
-            background: url("~@/assets/images/shoucangActiveIcon.png") no-repeat
+            background: url("~@/assets/images/collectionActive.png") no-repeat
               center;
             background-size: 100% 100%;
           }

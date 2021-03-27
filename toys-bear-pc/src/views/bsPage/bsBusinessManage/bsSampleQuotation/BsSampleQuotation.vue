@@ -72,7 +72,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="linkman"
+            prop="customerName"
             label="客户名称"
             width="100"
             align="center"
@@ -90,7 +90,7 @@
           <el-table-column width="200" align="center" label="操作人员">
             <template slot-scope="scope">
               <span>
-                {{ scope.row.companyName }}
+                {{ scope.row.linkman }}
               </span>
             </template>
           </el-table-column>
@@ -106,7 +106,9 @@
               <span style="color:#EB1515;">
                 {{ scope.row.cu_de }}
               </span>
-              <span style="color:#EB1515;">{{ scope.row.totalCost }}</span>
+              <span style="color:#EB1515;">
+                {{ scope.row.offerTotalAmount }}
+              </span>
             </template>
           </el-table-column>
           <el-table-column label="币种" align="center">
@@ -205,6 +207,9 @@ export default {
       rowUpdata: {},
       searchForm: {
         orderNumber: null,
+        OfferNumber: null,
+        CustomerName: null,
+        Linkman: null,
         clientName: null,
         contacts: null,
         dateTime: null
