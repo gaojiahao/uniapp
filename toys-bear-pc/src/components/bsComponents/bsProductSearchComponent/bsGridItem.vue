@@ -101,27 +101,10 @@ export default {
         linkUrl: "/bsIndex/bsProductDetails",
         component: "bsProductDetails",
         refresh: true,
-        noPush: true,
-        label: this.item.productNumber,
+        label: this.item.fa_no || "产品详情",
         value: this.item
       };
       this.$common.judgeTab(fd, "tabmain");
-      // const res = await this.$http.post("/api/UpdateIntegral", {
-      //   integraType: 1,
-      //   productNumber: this.item.productNumber
-      // });
-      // const { code, msg } = res.data.result;
-      // if (code === 200) {
-      //   this.$message.success("积分扣除成功");
-      // } else {
-      //   this.$message.error(msg);
-      // }
-      // sessionStorage.setItem("productDetail", JSON.stringify(this.item));
-      // this.$store.commit("handlerBsMenuLabels", {
-      //   linkUrl: "/bsIndex/bsProductDetails",
-      //   name: "产品详情"
-      // });
-      // this.$router.push("/bsIndex/bsProductDetails");
     },
     // 收藏
     async addCollect(item) {
