@@ -245,8 +245,7 @@ export default {
         ],
         content: [
           { required: true, message: "请输入公告内容", trigger: "blur" }
-        ],
-        fileList: [{ required: true }]
+        ]
       },
       type: "",
       fileType: "",
@@ -333,12 +332,13 @@ export default {
           if (result.data.result.code === 200) {
             this.$message.success("发布公告成功");
             // 刷新公告列表
-            this.$root.eventHub.$emit("UpdateFind");
+            this.$emit("close", true);
             this.skipCount = 1;
             this.maxResultCount = 10;
             // this.ruleForm.GonggaoText = null
             this.formData.fileList = [];
           } else {
+            this.$emit("close", false);
             this.$message.error(result.data.result.msg);
           }
         }
@@ -430,7 +430,19 @@ export default {
         temp.push(tempImgList.shift());
       }
       this.viewerImgList = tempImgList.concat(temp);
-      console.log(this.viewerImgList);
+      this.$PreviewPic({
+        zIndex: 9999, // 组件的zIndex值 默认为2000
+        index: 0, // 展示第几张图片 默认为0
+        list: this.viewerImgList, // 需要展示图片list
+        onClose: i => {
+          // 关闭时的回调
+          console.log(i);
+        },
+        onSelect: i => {
+          // 点击某张图片的回调
+          console.log(i);
+        }
+      });
     },
     // 点击关闭预览发公告大图
     closeViewer() {

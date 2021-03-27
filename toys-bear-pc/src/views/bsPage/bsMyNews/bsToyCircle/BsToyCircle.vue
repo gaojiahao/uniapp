@@ -301,12 +301,12 @@
     </el-dialog>
     <!-- 发布公告 -->
     <el-dialog
-      title="举报"
+      title="发布公告"
       :visible.sync="sendNoticeDialog"
       v-if="sendNoticeDialog"
       width="40%"
     >
-      <bsSendNotice />
+      <bsSendNotice @close="closeSendNotice" />
     </el-dialog>
   </div>
 </template>
@@ -345,6 +345,14 @@ export default {
     };
   },
   methods: {
+    // 关闭发布公告
+    closeSendNotice(flag) {
+      if (flag) {
+        this.currentPage = 1;
+        this.getDataList();
+      }
+      this.sendNoticeDialog = false;
+    },
     // 打开发布公告
     openSendNotice() {
       this.sendNoticeDialog = true;
