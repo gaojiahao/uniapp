@@ -209,6 +209,18 @@ export default {
     triggerTab() {},
     // 关闭标签
     closeTab(e) {
+      console.log(e);
+      for (let i = 0; i < this.tabList.length; i++) {
+        if (this.tabList[i].name == e) {
+          console.log(this.tabList[i].component == "bsProductDetails");
+          switch (this.tabList[i].component) {
+            case "bsProductDetails":
+              this.$router.push("/bsIndex/bsProductSearchIndex");
+              break;
+          }
+          break;
+        }
+      }
       let len = this.tabList.length;
       len > 1 && this.$store.commit("closeTab", e);
     },

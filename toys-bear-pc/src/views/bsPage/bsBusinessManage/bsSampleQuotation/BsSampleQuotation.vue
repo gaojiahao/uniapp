@@ -191,7 +191,6 @@ export default {
   name: "bsSampleQuotation",
   data() {
     return {
-      isUpdata: "",
       rowUpdata: {},
       searchForm: {
         orderNumber: null,
@@ -263,9 +262,6 @@ export default {
         value: row
       };
       this.$common.judgeTab(fd, "tabmain");
-    },
-    submit(data) {
-      this.isUpdata = data;
     },
     // 搜索
     search() {

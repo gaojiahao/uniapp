@@ -285,7 +285,6 @@ export default {
       });
       if (res.data.result.code === 200) {
         this.clienFormData = res.data.result.item;
-        console.log(this.clienFormData);
       } else {
         this.$message.error(res.data.result.msg);
       }
