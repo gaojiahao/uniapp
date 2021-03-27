@@ -212,7 +212,14 @@ export default new Vuex.Store({
       tab.forEach((v, i) => {
         if (v.name == n) {
           tab.splice(i, 1);
-          this.commit("judgeClose", i);
+          switch (v.component) {
+            case "bsProductDetails":
+              state.activeTab = "/bsIndex/bsProductSearchIndex";
+              break;
+            default:
+              this.commit("judgeClose", i);
+          }
+
           n.split("-").length > 1 && this.commit("removeSession", n);
         }
       });

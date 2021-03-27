@@ -142,6 +142,8 @@ import bsHallBusiness from "@/views/bsPage/bsBusinessManage/bsHallBusiness/BsHal
 import bsShoppingCart from "@/views/bsPage/bsBusinessManage/bsShoppingCart/BsShoppingCart.vue";
 // 找样报价
 import bsSampleQuotation from "@/views/bsPage/bsBusinessManage/bsSampleQuotation/BsSampleQuotation.vue";
+// 找样报价-编辑详情
+import bsSampleUpdata from "@/components/bsComponents/bsSampleComponent/bsSampleUpdata";
 // 采购订单
 import bsPurchaseOrder from "@/views/bsPage/bsBusinessManage/bsPurchaseOrder/BsPurchaseOrder.vue";
 
@@ -177,6 +179,7 @@ export default {
     bsHallBusiness,
     bsShoppingCart,
     bsSampleQuotation,
+    bsSampleUpdata,
     bsPurchaseOrder,
     bsTop,
     bsMenu,
@@ -214,6 +217,18 @@ export default {
     triggerTab() {},
     // 关闭标签
     closeTab(e) {
+      console.log(e);
+      for (let i = 0; i < this.tabList.length; i++) {
+        if (this.tabList[i].name == e) {
+          console.log(this.tabList[i].component == "bsProductDetails");
+          switch (this.tabList[i].component) {
+            case "bsProductDetails":
+              this.$router.push("/bsIndex/bsProductSearchIndex");
+              break;
+          }
+          break;
+        }
+      }
       let len = this.tabList.length;
       len > 1 && this.$store.commit("closeTab", e);
     },
