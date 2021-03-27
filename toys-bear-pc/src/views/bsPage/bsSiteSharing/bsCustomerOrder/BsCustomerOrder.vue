@@ -323,7 +323,7 @@ export default {
         label: row.orderNumber,
         value: row
       };
-      this.$common.judgeTab(fd, "tabmain");
+      this.$store.commit("myAddTab", fd);
 
       // sessionStorage.setItem("orderDetails", JSON.stringify(row));
       // this.$store.commit("handlerBsMenuLabels", {

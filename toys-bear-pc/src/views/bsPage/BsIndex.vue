@@ -125,8 +125,7 @@ import bsTop from "@/components/bsComponents/bsTopComponent/BsTop";
 import bsMenu from "@/components/bsComponents/bsMenuComponent/BsMenu";
 import bsProductSearch from "@/components/bsComponents/bsProductSearchComponent/bsProductSearch";
 import eventBus from "@/assets/js/common/eventBus.js";
-// import { mapState, mapGetters } from "vuex";
-import store from "@/store/index";
+import { mapState } from "vuex";
 export default {
   components: {
     bsHome,
@@ -161,8 +160,6 @@ export default {
   },
   data() {
     return {
-      tabList: store.state.tabList,
-      activeTab: store.state.activeTab,
       isCollapse: false,
       showSearch: false
     };
@@ -194,10 +191,8 @@ export default {
     triggerTab() {},
     // 关闭标签
     closeTab(e) {
-      console.log(e);
       for (let i = 0; i < this.tabList.length; i++) {
         if (this.tabList[i].name == e) {
-          console.log(this.tabList[i].component);
           switch (this.tabList[i].component) {
             case "bsProductDetails":
               this.$router.push("/bsIndex/bsProductSearchIndex");
@@ -220,18 +215,13 @@ export default {
     },
     // 关闭所有tab标签
     closeAll() {
-      const that = this;
       this.$confirm("此操作将关闭所有标签页, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          // this.tabList.forEach((item, i) => {
-          //   console.log(item);
-          // });
           this.$store.commit("closeTabAll");
-          console.log(this.tabList);
           this.$message({
             type: "success",
             message: "关闭成功!"
@@ -249,28 +239,26 @@ export default {
       this.isCollapse = !this.isCollapse;
     }
   },
-  computed: {},
-  watch: {
-    activeTab(v) {
-      store.commit("updateActiveTab", v);
+  computed: {
+    activeTab: {
+      get() {
+        return this.$store.state.activeTab;
+      },
+      set(val) {
+        this.$store.commit("setActiveTab", val);
+      }
     },
-    "$store.state.activeTab"() {
-      this.showSearch = false;
-      this.activeTab = store.state.activeTab;
-    }
+    ...mapState(["tabList"])
+  },
+  watch: {
+    // "$store.state.activeTab"() {
+    //   this.showSearch = false;
+    //   // this.activeTab = store.state.activeTab;
+    // }
   },
   created() {},
   mounted() {
-    const fd = {
-      component: "bsHome",
-      label: "后台首页",
-      linkUrl: "/bsIndex/bsHome",
-      name: "/bsIndex/bsHome",
-      refresh: true
-    };
-    this.$common.judgeTab(fd, "tabmain");
-
-    this.handleScroll();
+    // this.handleScroll();
   }
 };
 </script>

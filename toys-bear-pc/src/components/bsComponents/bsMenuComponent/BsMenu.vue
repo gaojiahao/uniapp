@@ -71,20 +71,18 @@ export default {
     refresh() {
       this.$common.refreshTab();
     },
-    // 点击菜单时间
+    // 点击菜单事件
     addRouterEvent(route) {
       const list = route.linkUrl.split("/");
       const component = list[list.length - 1];
-      this.$common.judgeTab(
-        {
-          name: route.linkUrl,
-          linkUrl: route.linkUrl,
-          component: component,
-          refresh: true,
-          label: route.name
-        },
-        "tabmain"
-      );
+      const fd = {
+        name: route.linkUrl,
+        linkUrl: route.linkUrl,
+        component: component,
+        refresh: true,
+        label: route.name
+      };
+      this.$store.commit("myAddTab", fd);
     }
   },
   created() {},

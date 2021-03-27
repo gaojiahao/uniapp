@@ -17,8 +17,16 @@ function myForEach(oList, yList) {
 }
 export default new Vuex.Store({
   state: {
-    activeTab: "bsHome",
-    tabList: [],
+    activeTab: "/bsIndex/bsHome",
+    tabList: [
+      {
+        component: "bsHome",
+        label: "后台首页",
+        linkUrl: "/bsIndex/bsHome",
+        name: "/bsIndex/bsHome",
+        refresh: true
+      }
+    ],
     historyNames: [],
     httpTime: 0, // 请求时长
     httpContent: "", // 请求内容
@@ -197,22 +205,26 @@ export default new Vuex.Store({
       state.isLogin = null;
       this.dispatch("getToken");
     },
+    setActiveTab(state, a) {
+      state.activeTab = a;
+    },
     // 测试
-    //关闭全部tab页 
+    //关闭全部tab页
     closeTabAll(state) {
-      console.log(11111)
-      let tab = state.tabList;
-      state.activeTab = tab[0].name;
-      tab.forEach((v, i) => {
-        this.commit('judgeClose', i)
-        console.log(v.name.split("-"), v.name.split("-").length > 1)
-        v.name.split("-").length > 1 && this.commit("removeSession", v.name);
-      })
+      v.$set(state, "tabList", []);
+      const fd = {
+        component: "bsHome",
+        label: "后台首页",
+        linkUrl: "/bsIndex/bsHome",
+        name: "/bsIndex/bsHome",
+        refresh: true
+      };
+      state.tabList.push(fd);
+      state.activeTab = "/bsIndex/bsHome";
     },
 
     //关闭tab页
     closeTab(state, n) {
-      console.log(n, "名字");
       let tab = state.tabList;
       tab.forEach((v, i) => {
         if (v.name == n) {
@@ -228,46 +240,15 @@ export default new Vuex.Store({
               state.activeTab = "/bsIndex/bsCustomerOrder";
               break;
             default:
-              this.commit("judgeClose", i);
+              state.activeTab = tab[tab.length - 1].name;
           }
-          console.log(n);
-          n && this.commit("removeSession", n);
         }
       });
     },
-    judgeClose(state, n) {
-      let tab = state.tabList;
-      let active = state.activeTab;
-      let flag = true;
-      for (const i of tab) {
-        if (i.name == active) {
-          flag = false;
-          break;
-        }
-      }
-      if (flag) {
-        n - 1 > -1
-          ? (state.activeTab = tab[n - 1].name)
-          : (state.activeTab = tab[n].name);
-      }
-    },
-    removeSession(state, n) {
-      let a = n.split("-");
-      let s = JSON.parse(sessionStorage.getItem(a[0]));
-      console.log(n)
-      for (const i in s) {
-        if (s[i].name == n) {
-          s.splice(i, 1);
-          break;
-        }
-      }
-      s = sessionStorage.setItem(a[0], JSON.stringify(s));
-    },
     //新增tab页
-    addTab(state, n) {
+    myAddTab(state, n) {
       let tab = state.tabList;
       n["refresh"] || (n["refresh"] = true);
-      // n.hasOwnProperty('refresh') || (n['refresh'] = true);
       let flag = true;
       tab.find(v => v.name == n.name) || (tab.push(n), (flag = false));
       state.activeTab = n.name;

@@ -266,7 +266,7 @@ export default {
         label: row.offerNumber,
         value: row
       };
-      this.$common.judgeTab(fd, "tabmain");
+      this.$store.commit("myAddTab", fd);
     },
     // 搜索
     search() {

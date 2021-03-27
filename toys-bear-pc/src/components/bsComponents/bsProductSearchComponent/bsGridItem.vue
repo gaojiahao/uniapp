@@ -104,7 +104,7 @@ export default {
         label: this.item.fa_no || "产品详情",
         value: this.item
       };
-      this.$common.judgeTab(fd, "tabmain");
+      this.$store.commit("myAddTab", fd);
     },
     // 收藏
     async addCollect(item) {
