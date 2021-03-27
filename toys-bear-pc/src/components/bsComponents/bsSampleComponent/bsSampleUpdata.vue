@@ -241,12 +241,7 @@ export default {
       shoppingList: "myShoppingList"
     })
   },
-  watch: {
-    rowUpdata: {
-      // deep: true,
-      // handler(newVal) {}
-    }
-  },
+  watch: {},
   data() {
     return {
       searchFormData: {},

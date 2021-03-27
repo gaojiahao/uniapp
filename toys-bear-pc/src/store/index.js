@@ -216,10 +216,15 @@ export default new Vuex.Store({
             case "bsProductDetails":
               state.activeTab = "/bsIndex/bsProductSearchIndex";
               break;
+            case "bsSampleUpdata":
+              state.activeTab = "/bsIndex/bsSampleQuotation";
+              break;
+            case "bsClientOrderDetails":
+              state.activeTab = "/bsIndex/bsCustomerOrder";
+              break;
             default:
               this.commit("judgeClose", i);
           }
-
           n.split("-").length > 1 && this.commit("removeSession", n);
         }
       });

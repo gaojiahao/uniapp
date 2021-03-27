@@ -313,13 +313,24 @@ export default {
       }
     },
     // 查看订单详情
-    toOrderDetails(row) {
-      sessionStorage.setItem("orderDetails", JSON.stringify(row));
-      this.$store.commit("handlerBsMenuLabels", {
+    async toOrderDetails(row) {
+      const fd = {
+        name: row.orderNumber,
         linkUrl: "/bsIndex/bsClientOrderDetails",
-        name: row.orderNumber
-      });
-      this.$router.push("/bsIndex/bsClientOrderDetails");
+        component: "bsClientOrderDetails",
+        refresh: true,
+        noPush: true,
+        label: row.orderNumber,
+        value: row
+      };
+      this.$common.judgeTab(fd, "tabmain");
+
+      // sessionStorage.setItem("orderDetails", JSON.stringify(row));
+      // this.$store.commit("handlerBsMenuLabels", {
+      //   linkUrl: "/bsIndex/bsClientOrderDetails",
+      //   name: row.orderNumber
+      // });
+      // this.$router.push("/bsIndex/bsClientOrderDetails");
     },
     // 切換頁容量
     handleSizeChange(pageSize) {

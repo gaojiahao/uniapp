@@ -245,6 +245,11 @@
 import bsExportOrder from "@/components/bsComponents/bsSiteSharingComponent/bsExportOrder";
 export default {
   components: { bsExportOrder },
+  props: {
+    item: {
+      type: Object
+    }
+  },
   data() {
     return {
       exportTemplateDialog: false,
@@ -256,6 +261,13 @@ export default {
       totalCount: 0,
       orderOption: {}
     };
+  },
+  created() {
+    console.log(this.item, "客户详情");
+  },
+  mounted() {
+    // this.orderOption = JSON.parse(sessionStorage.getItem("orderDetails"));
+    // this.getSearchCompanyShareOrderDetailsPage();
   },
   methods: {
     // 打开选择导出模板
@@ -276,7 +288,7 @@ export default {
         {
           skipCount: this.currentPage,
           maxResultCount: this.pageSize,
-          shareOrderNumber: this.orderOption.orderNumber
+          shareOrderNumber: this.item.orderNumber
         }
       );
       if (res.data.result.code === 200) {
@@ -299,11 +311,6 @@ export default {
       if (this.currentPage * pageSize > this.totalCount) return false;
       this.getSearchCompanyShareOrderDetailsPage();
     }
-  },
-  created() {},
-  mounted() {
-    this.orderOption = JSON.parse(sessionStorage.getItem("orderDetails"));
-    this.getSearchCompanyShareOrderDetailsPage();
   }
 };
 </script>

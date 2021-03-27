@@ -220,10 +220,16 @@ export default {
       console.log(e);
       for (let i = 0; i < this.tabList.length; i++) {
         if (this.tabList[i].name == e) {
-          console.log(this.tabList[i].component == "bsProductDetails");
+          console.log(this.tabList[i].component);
           switch (this.tabList[i].component) {
             case "bsProductDetails":
               this.$router.push("/bsIndex/bsProductSearchIndex");
+              break;
+            case "bsSampleUpdata":
+              this.$router.push("/bsIndex/bsSampleQuotation");
+              break;
+            case "bsClientOrderDetails":
+              this.$router.push("/bsIndex/bsCustomerOrder");
               break;
           }
           break;
