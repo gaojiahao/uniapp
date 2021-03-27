@@ -281,7 +281,7 @@ export default {
     //请求条件
     async getProductOfferByNumber() {
       const res = await this.$http.post("/api/GetProductOfferByNumber", {
-        offerNumber: this.searchFormAata.offerNumber
+        offerNumber: this.searchFormData.offerNumber
       });
       if (res.data.result.code === 200) {
         this.clienFormData = res.data.result.item;
