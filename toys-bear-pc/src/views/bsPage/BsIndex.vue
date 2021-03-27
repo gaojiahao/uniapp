@@ -302,10 +302,12 @@ export default {
   height: 100%;
   .content {
     width: 100%;
-    height: calc(100% - 70px);
+    height: calc(100% - 72px);
     display: flex;
     min-width: 1350px;
     background-color: #fff;
+    box-sizing: border-box;
+    // overflow: hidden;
     .leftMenu {
       height: 100%;
       box-sizing: border-box;
@@ -322,10 +324,10 @@ export default {
         height: 100%;
         position: relative;
         .positionSearchBox {
-          width: 100%;
+          width: calc(100% - 1px);
           background-color: #fff;
           position: absolute;
-          left: 0;
+          left: 1px;
           top: 50px;
           z-index: 1;
         }
@@ -407,6 +409,7 @@ export default {
             box-sizing: border-box;
             background-color: #f1f3f6;
             overflow: hidden;
+            box-sizing: border-box;
             .el-tab-pane {
               height: 100%;
               padding: 0;
