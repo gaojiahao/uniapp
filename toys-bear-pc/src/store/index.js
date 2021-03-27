@@ -18,15 +18,7 @@ function myForEach(oList, yList) {
 export default new Vuex.Store({
   state: {
     activeTab: "bsHome",
-    tabList: [
-      {
-        label: "后台首页",
-        linkUrl: "/bsIndex/bsHome",
-        name: "bsHome",
-        refresh: true,
-        component: "bsHome"
-      }
-    ],
+    tabList: [],
     historyNames: [],
     httpTime: 0, // 请求时长
     httpContent: "", // 请求内容
@@ -206,8 +198,21 @@ export default new Vuex.Store({
       this.dispatch("getToken");
     },
     // 测试
+    //关闭全部tab页 
+    closeTabAll(state) {
+      console.log(11111)
+      let tab = state.tabList;
+      state.activeTab = tab[0].name;
+      tab.forEach((v, i) => {
+        this.commit('judgeClose', i)
+        console.log(v.name.split("-"), v.name.split("-").length > 1)
+        v.name.split("-").length > 1 && this.commit("removeSession", v.name);
+      })
+    },
+
     //关闭tab页
     closeTab(state, n) {
+      console.log(n, "名字");
       let tab = state.tabList;
       tab.forEach((v, i) => {
         if (v.name == n) {
@@ -225,7 +230,8 @@ export default new Vuex.Store({
             default:
               this.commit("judgeClose", i);
           }
-          n.split("-").length > 1 && this.commit("removeSession", n);
+          console.log(n);
+          n && this.commit("removeSession", n);
         }
       });
     },
@@ -248,6 +254,7 @@ export default new Vuex.Store({
     removeSession(state, n) {
       let a = n.split("-");
       let s = JSON.parse(sessionStorage.getItem(a[0]));
+      console.log(n)
       for (const i in s) {
         if (s[i].name == n) {
           s.splice(i, 1);

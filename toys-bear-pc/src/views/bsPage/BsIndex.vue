@@ -243,23 +243,22 @@ export default {
     },
     // 关闭所有tab标签
     closeAll() {
+      const that = this;
       this.$confirm("此操作将关闭所有标签页, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
+          // this.tabList.forEach((item, i) => {
+          //   console.log(item);
+          // });
+          this.$store.commit("closeTabAll");
+          console.log(this.tabList);
           this.$message({
             type: "success",
             message: "关闭成功!"
           });
-          this.$store.commit("clearAllTab", [
-            {
-              linkUrl: "/bsIndex/bsHome",
-              name: "后台首页"
-            }
-          ]);
-          this.$router.push("/bsIndex/bsHome");
         })
         .catch(() => {
           this.$message({
@@ -312,6 +311,15 @@ export default {
   },
   created() {},
   mounted() {
+    const fd = {
+      component: "bsHome",
+      label: "后台首页",
+      linkUrl: "/bsIndex/bsHome",
+      name: "/bsIndex/bsHome",
+      refresh: true
+    };
+    this.$common.judgeTab(fd, "tabmain");
+
     this.handleScroll();
   }
 };

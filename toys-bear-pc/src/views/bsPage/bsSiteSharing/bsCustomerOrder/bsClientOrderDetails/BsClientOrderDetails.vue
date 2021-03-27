@@ -266,7 +266,6 @@ export default {
     console.log(this.item, "客户详情");
   },
   mounted() {
-    // this.orderOption = JSON.parse(sessionStorage.getItem("orderDetails"));
     // this.getSearchCompanyShareOrderDetailsPage();
   },
   methods: {
