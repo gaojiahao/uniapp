@@ -338,7 +338,7 @@ export default {
             border: none;
             padding-right: 50px;
             box-sizing: border-box;
-            box-shadow: 0px 0px 3px 0px rgba(42,69,116,0.16);
+            box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
             .el-tabs__nav-wrap {
               .el-tabs__nav-prev,
               .el-tabs__nav-next {
