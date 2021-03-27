@@ -59,11 +59,7 @@
     </div>
     <div class="tableBox">
       <!-- 产品列表 -->
-      <component
-        style="min-height: 400px;"
-        :is="isGrid"
-        :productList="tableData"
-      ></component>
+      <component :is="isGrid" :productList="tableData"></component>
       <!-- 分页 -->
       <center style="padding:20px 0;">
         <el-pagination

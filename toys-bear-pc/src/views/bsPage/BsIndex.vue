@@ -6,38 +6,12 @@
         <bsMenu :isCollapse="isCollapse" />
       </div>
       <div class="rightContent">
-        <!-- <div class="menuLabels">
-          <el-scrollbar id="bsScrollID" style="height: 58px;">
-            <div
-              :class="{ tab: true, isActive: item.linkUrl === $route.path }"
-              v-for="item in tabList"
-              @click="switchTab(item)"
-              :key="item.linkUrl"
-            >
-              <div class="tabItem">
-                <span class="tabName">{{ item.name }}</span>
-                <i
-                  class="closeTab el-icon-error"
-                  @click.stop="closeTabEvent(item)"
-                ></i>
-              </div>
-            </div>
-          </el-scrollbar>
-          <div class="clearAll" @click="closeAll">
-            <i class="el-icon-close"></i>
-          </div>
-        </div> -->
         <div class="views">
           <el-collapse-transition>
             <div class="positionSearchBox" v-show="showSearch">
               <bsProductSearch />
             </div>
           </el-collapse-transition>
-          <!--  -->
-          <!-- <keep-alive :include="keepAliveArr">
-              <router-view v-if="$route.meta.keepAlive"></router-view>
-            </keep-alive>
-            <router-view v-if="!$route.meta.keepAlive"></router-view> -->
           <el-tabs
             v-model="activeTab"
             @tab-remove="closeTab"
@@ -205,6 +179,9 @@ export default {
               eventBus.$emit("showCart", true);
             }
           } else {
+            if (this.$route.path === "/bsIndex/bsProductDetails") {
+              eventBus.$emit("showCart", true);
+            }
             this.showSearch = false;
             eventBus.$emit("showCart", false);
           }
@@ -250,33 +227,6 @@ export default {
     // 展开菜单
     handlerIsCollapse() {
       this.isCollapse = !this.isCollapse;
-    },
-    // 切换页签
-    switchTab(item) {
-      this.$router.push(item.linkUrl);
-    },
-    // 关闭tab页签
-    closeTabEvent(item) {
-      if (
-        this.bsMenuLabels.length === 1 &&
-        item.linkUrl === "/bsIndex/bsHome"
-      ) {
-        return false;
-      }
-      this.$store.commit("subBsMenuLabels", item);
-      if (this.$route.path === item.linkUrl) {
-        if (this.bsMenuLabels.length) {
-          const routerLink = this.bsMenuLabels[this.bsMenuLabels.length - 1]
-            .linkUrl;
-          this.$router.push(routerLink);
-        } else {
-          this.$router.push("/bsIndex/bsHome");
-          this.$store.commit("handlerBsMenuLabels", {
-            linkUrl: "/bsIndex/bsHome",
-            name: "后台首页"
-          });
-        }
-      }
     }
   },
   computed: {},
