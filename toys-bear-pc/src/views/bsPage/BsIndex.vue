@@ -6,38 +6,12 @@
         <bsMenu :isCollapse="isCollapse" />
       </div>
       <div class="rightContent">
-        <!-- <div class="menuLabels">
-          <el-scrollbar id="bsScrollID" style="height: 58px;">
-            <div
-              :class="{ tab: true, isActive: item.linkUrl === $route.path }"
-              v-for="item in tabList"
-              @click="switchTab(item)"
-              :key="item.linkUrl"
-            >
-              <div class="tabItem">
-                <span class="tabName">{{ item.name }}</span>
-                <i
-                  class="closeTab el-icon-error"
-                  @click.stop="closeTabEvent(item)"
-                ></i>
-              </div>
-            </div>
-          </el-scrollbar>
-          <div class="clearAll" @click="closeAll">
-            <i class="el-icon-close"></i>
-          </div>
-        </div> -->
         <div class="views">
           <el-collapse-transition>
             <div class="positionSearchBox" v-show="showSearch">
               <bsProductSearch />
             </div>
           </el-collapse-transition>
-          <!--  -->
-          <!-- <keep-alive :include="keepAliveArr">
-              <router-view v-if="$route.meta.keepAlive"></router-view>
-            </keep-alive>
-            <router-view v-if="!$route.meta.keepAlive"></router-view> -->
           <el-tabs
             v-model="activeTab"
             @tab-remove="closeTab"
@@ -208,6 +182,9 @@ export default {
               eventBus.$emit("showCart", true);
             }
           } else {
+            if (this.$route.path === "/bsIndex/bsProductDetails") {
+              eventBus.$emit("showCart", true);
+            }
             this.showSearch = false;
             eventBus.$emit("showCart", false);
           }
@@ -270,33 +247,6 @@ export default {
     // 展开菜单
     handlerIsCollapse() {
       this.isCollapse = !this.isCollapse;
-    },
-    // 切换页签
-    switchTab(item) {
-      this.$router.push(item.linkUrl);
-    },
-    // 关闭tab页签
-    closeTabEvent(item) {
-      if (
-        this.bsMenuLabels.length === 1 &&
-        item.linkUrl === "/bsIndex/bsHome"
-      ) {
-        return false;
-      }
-      this.$store.commit("subBsMenuLabels", item);
-      if (this.$route.path === item.linkUrl) {
-        if (this.bsMenuLabels.length) {
-          const routerLink = this.bsMenuLabels[this.bsMenuLabels.length - 1]
-            .linkUrl;
-          this.$router.push(routerLink);
-        } else {
-          this.$router.push("/bsIndex/bsHome");
-          this.$store.commit("handlerBsMenuLabels", {
-            linkUrl: "/bsIndex/bsHome",
-            name: "后台首页"
-          });
-        }
-      }
     }
   },
   computed: {},
@@ -331,10 +281,12 @@ export default {
   height: 100%;
   .content {
     width: 100%;
-    height: calc(100% - 70px);
+    height: calc(100% - 72px);
     display: flex;
     min-width: 1350px;
     background-color: #fff;
+    box-sizing: border-box;
+    // overflow: hidden;
     .leftMenu {
       height: 100%;
       box-sizing: border-box;
@@ -351,10 +303,10 @@ export default {
         height: 100%;
         position: relative;
         .positionSearchBox {
-          width: 100%;
+          width: calc(100% - 1px);
           background-color: #fff;
           position: absolute;
-          left: 0;
+          left: 1px;
           top: 50px;
           z-index: 1;
         }
@@ -436,6 +388,7 @@ export default {
             box-sizing: border-box;
             background-color: #f1f3f6;
             overflow: hidden;
+            box-sizing: border-box;
             .el-tab-pane {
               height: 100%;
               padding: 0;

@@ -74,11 +74,7 @@
         </ul>
       </div>
     </div>
-    <component
-      style="min-height: 400px;"
-      :is="isGrid"
-      :dataName="dataList"
-    ></component>
+    <component :is="isGrid" :dataName="dataList"></component>
   </div>
 </template>
 

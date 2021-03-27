@@ -124,18 +124,19 @@ export default {
         integraType: 1,
         productNumber: this.item.productNumber
       });
-      const { code, msg } = res.data.result;
+      const { code } = res.data.result;
       if (code === 200) {
         this.$message.success("积分扣除成功");
-      } else {
-        this.$message.error(msg);
       }
-      sessionStorage.setItem("productDetail", JSON.stringify(this.item));
-      this.$store.commit("handlerBsMenuLabels", {
+      const fd = {
+        name: this.item.productNumber,
         linkUrl: "/bsIndex/bsProductDetails",
-        name: "产品详情"
-      });
-      this.$router.push("/bsIndex/bsProductDetails");
+        component: "bsProductDetails",
+        refresh: true,
+        label: this.item.fa_no || "产品详情",
+        value: this.item
+      };
+      this.$common.judgeTab(fd, "tabmain");
     },
     // 加购
     handlerShopping(item) {
