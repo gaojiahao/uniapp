@@ -133,6 +133,7 @@ export default {
         .then(res => {
           const time = getCurrentTime();
           const fileName = this.orderRow.orderNumber + "_" + time + ".xls";
+          console.log(res);
           const blob = res.data;
           if (window.navigator && window.navigator.msSaveOrOpenBlob) {
             // 兼容IE

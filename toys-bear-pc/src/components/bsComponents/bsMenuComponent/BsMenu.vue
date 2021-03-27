@@ -62,7 +62,8 @@ export default {
       homeLink: {
         linkUrl: "/bsIndex/bsHome",
         name: "后台首页",
-        component: "bsHome"
+        component: "bsHome",
+        refresh: true
       }
     };
   },

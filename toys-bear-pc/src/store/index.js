@@ -20,9 +20,10 @@ export default new Vuex.Store({
     activeTab: "bsHome",
     tabList: [
       {
-        name: "/bsIndex/bsHome",
-        linkUrl: "/bsIndex/bsHome",
         label: "后台首页",
+        linkUrl: "/bsIndex/bsHome",
+        name: "bsHome",
+        refresh: true,
         component: "bsHome"
       }
     ],

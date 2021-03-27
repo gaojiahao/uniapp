@@ -343,7 +343,7 @@
             <el-form-item label="小数位数：" prop="miniPriceDecimalPlaces">
               <el-select
                 v-model="clienFormData.miniPriceDecimalPlaces"
-                placeholder="请选择取舍方式"
+                placeholder="请选择小数位数"
               >
                 <el-option
                   v-for="(item, i) in options.decimalPlaces"

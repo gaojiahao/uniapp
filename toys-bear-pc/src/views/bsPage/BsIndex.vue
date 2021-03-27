@@ -33,28 +33,30 @@
               <bsProductSearch />
             </div>
           </el-collapse-transition>
-          <el-scrollbar style="height: 100%;" ref="scrollbar">
-            <!-- <keep-alive :include="keepAliveArr">
+          <!--  -->
+          <!-- <keep-alive :include="keepAliveArr">
               <router-view v-if="$route.meta.keepAlive"></router-view>
             </keep-alive>
             <router-view v-if="!$route.meta.keepAlive"></router-view> -->
-            <el-tabs
-              v-model="activeTab"
-              @tab-remove="closeTab"
-              @tab-click="triggerTab"
-              type="border-card"
-              closable
+          <el-tabs
+            v-model="activeTab"
+            @tab-remove="closeTab"
+            @tab-click="triggerTab"
+            ref="elTabsRef"
+            type="border-card"
+            closable
+          >
+            <el-tab-pane
+              v-for="item in tabList"
+              :key="item.name"
+              :name="item.name"
+              :label="item.label"
             >
-              <el-tab-pane
-                v-for="item in tabList"
-                :key="item.name"
-                :name="item.name"
-                :label="item.label"
-              >
-                <span slot="label">
-                  <i class="el-icon-refresh" @click.stop="refresh()"></i>
-                  {{ item.label }}
-                </span>
+              <span slot="label">
+                <i class="el-icon-refresh" @click.stop="refresh()"></i>
+                {{ item.label }}
+              </span>
+              <el-scrollbar style="height: 100%;" ref="myScrollbar">
                 <component
                   :item="item.value"
                   v-if="item.refresh"
@@ -62,9 +64,12 @@
                   :ref="item.name"
                   style="padding:5px"
                 ></component>
-              </el-tab-pane>
-            </el-tabs>
-          </el-scrollbar>
+              </el-scrollbar>
+            </el-tab-pane>
+          </el-tabs>
+          <div class="closeAll" @click="closeAll">
+            <i class="el-icon-close"></i>
+          </div>
         </div>
       </div>
     </div>
@@ -188,20 +193,23 @@ export default {
   methods: {
     // 滚动事件
     handleScroll() {
-      let scrollbarEl = this.$refs.scrollbar.wrap;
-      scrollbarEl.onscroll = () => {
-        if (scrollbarEl.scrollTop >= 200) {
-          if (this.$route.path === "/bsIndex/bsProductSearchIndex") {
-            this.showSearch = true;
-            eventBus.$emit("showCart", true);
-          } else if (this.$route.path === "/bsIndex/bsProductDetails") {
-            eventBus.$emit("showCart", true);
+      const myScrollbarList = this.$refs.myScrollbar;
+      myScrollbarList.forEach(val => {
+        let scrollbarEl = val.wrap;
+        scrollbarEl.onscroll = () => {
+          if (scrollbarEl.scrollTop >= 200) {
+            if (this.$route.path === "/bsIndex/bsProductSearchIndex") {
+              this.showSearch = true;
+              eventBus.$emit("showCart", true);
+            } else if (this.$route.path === "/bsIndex/bsProductDetails") {
+              eventBus.$emit("showCart", true);
+            }
+          } else {
+            this.showSearch = false;
+            eventBus.$emit("showCart", false);
           }
-        } else {
-          this.showSearch = false;
-          eventBus.$emit("showCart", false);
-        }
-      };
+        };
+      });
     },
     triggerTab() {},
     // 关闭标签
@@ -277,6 +285,7 @@ export default {
       store.commit("updateActiveTab", v);
     },
     "$store.state.activeTab"() {
+      this.showSearch = false;
       this.activeTab = store.state.activeTab;
     }
   },
@@ -304,117 +313,186 @@ export default {
       z-index: 2;
       // box-shadow: 0px 3px 0px 0px rgba(42,69,116,0.16);
     }
-    .rightContent {
+    @{deep} .rightContent {
       flex: 1;
       height: 100%;
       width: 800px;
-      .menuLabels {
-        height: 50px;
-        width: 100%;
-        box-sizing: border-box;
-        background-color: #fff;
-        box-shadow: 0px 0px 2px 0px rgba(42, 69, 116, 0.16);
+      background-color: #f1f3f6;
+      .views {
+        height: 100%;
         position: relative;
-        z-index: 1;
-        display: flex;
-        .el-scrollbar {
-          flex: 1;
-          overflow: hidden;
-          padding-right: 2px;
+        .positionSearchBox {
+          width: 100%;
+          background-color: #fff;
+          position: absolute;
+          left: 0;
+          top: 50px;
+          z-index: 1;
         }
-        .clearAll {
+        .el-tabs {
+          height: 100%;
+          .el-tabs__header {
+            overflow: inherit;
+            box-sizing: border-box;
+            background-color: #fff;
+            border: none;
+            padding-right: 50px;
+            box-sizing: border-box;
+            box-shadow: 0px 0px 3px 0px rgba(42,69,116,0.16);
+            .el-tabs__nav-wrap {
+              .el-tabs__nav-prev,
+              .el-tabs__nav-next {
+                text-align: center;
+                margin-top: 11px;
+                width: 20px;
+                height: 39px;
+                line-height: 39px;
+                border: 1px solid #dcdfe6;
+                background-color: #fff;
+                border-bottom: none;
+                box-sizing: border-box;
+                z-index: 1;
+              }
+              .el-tabs__nav-scroll {
+                height: 50px;
+                box-sizing: border-box;
+                padding-top: 10px;
+                .el-tabs__nav {
+                  height: 40px;
+                  .el-tabs__item {
+                    width: 110px;
+                    margin: 0 5px;
+                    border: 1px solid #dcdfe6;
+                    border-bottom: none;
+                    color: #333;
+                    padding: 0;
+                    text-align: center;
+                    position: relative;
+                    &.is-active {
+                      border-top: 2px solid #3368a9;
+                      color: #3368a9;
+                    }
+                    .el-icon-refresh {
+                      display: none;
+                    }
+                    span {
+                      &:first-of-type {
+                        width: 110px;
+                        box-sizing: border-box;
+                        padding: 0 10px;
+                        display: block;
+                        overflow: hidden;
+                        white-space: nowrap; /*不换行*/
+                        text-overflow: ellipsis; /*超出部分文字以...显示*/
+                      }
+                    }
+                    .el-icon-close {
+                      position: absolute;
+                      right: -6px;
+                      top: -5px;
+                      background-color: #b9b9b9;
+                      color: #fff;
+                      font-size: 14px;
+                      &:hover {
+                        background-color: #3368a9;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          .el-tabs__content {
+            height: calc(100% - 50px);
+            box-sizing: border-box;
+            background-color: #f1f3f6;
+            overflow: hidden;
+            .el-tab-pane {
+              height: 100%;
+              padding: 0;
+            }
+          }
+        }
+        .closeAll {
+          position: absolute;
+          right: 0;
           width: 50px;
-          min-width: 50px;
           height: 50px;
+          top: 0;
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 15px;
-          cursor: pointer;
-        }
-        @{deep} .el-scrollbar__wrap {
-          width: 100%;
-          overflow-x: hidden;
-          overflow-y: hidden;
-          .el-scrollbar__view {
-            width: 100%;
-            padding-left: 20px;
-            height: 100%;
-            white-space: nowrap;
-          }
-        }
-        .tab {
-          display: inline-block;
-          width: 110px;
-          height: 40px;
-          opacity: 1;
-          background: #ffffff;
           border: 1px solid #dcdfe6;
-          border-bottom-color: transparent;
-          margin-right: 10px;
-          margin-top: 7px;
-          text-align: center;
+          box-sizing: border-box;
+          border-bottom: none;
           cursor: pointer;
-          &.isActive {
-            border-top-width: 2px;
-            border-top-color: #3368a9;
-            font-weight: 700;
-            .tabItem {
-              .tabName {
-                color: #3368a9;
-              }
-            }
-          }
-          .tabItem {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            .tabName {
-              display: block;
-              padding: 0 5px;
-              line-height: 40px;
-              box-sizing: border-box;
-              width: 100%;
-              height: 100%;
-              overflow: hidden; /*超出部分隐藏*/
-              white-space: nowrap; /*不换行*/
-              text-overflow: ellipsis; /*超出部分文字以...显示*/
-            }
-            .closeTab {
-              font-size: 16px;
-              position: absolute;
-              right: -7px;
-              top: -5px;
-              color: #b9b9b9;
-              &:hover {
-                color: #3368a9;
-              }
-            }
+          &:hover {
+            color: #3368a9;
+            font-weight: bold;
+            background-color: #f3f3f5;
+            font-size: 15px;
           }
         }
-      }
-      .views {
-        padding: 20px;
-        box-sizing: border-box;
-        height: calc(100% - 50px);
-        background-color: #f1f3f6;
-        position: relative;
-        overflow: hidden;
-        box-sizing: border-box;
-        .positionSearchBox {
-          width: 100%;
-          align-items: center;
-          justify-content: space-between;
-          position: absolute;
-          left: 0;
-          top: 0;
-          z-index: 8888;
-          box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
-        }
-        .viewWrap {
-          background: #fff;
-          height: 100%;
-        }
+        // .clearAll {
+        //   width: 50px;
+        //   min-width: 50px;
+        //   height: 50px;
+        //   display: flex;
+        //   align-items: center;
+        //   justify-content: center;
+        //   font-size: 15px;
+        //   cursor: pointer;
+        // }
+        // .tab {
+        //   display: inline-block;
+        //   width: 110px;
+        //   height: 40px;
+        //   opacity: 1;
+        //   background: #ffffff;
+        //   border: 1px solid #dcdfe6;
+        //   border-bottom-color: transparent;
+        //   margin-right: 10px;
+        //   margin-top: 7px;
+        //   text-align: center;
+        //   cursor: pointer;
+        //   &.isActive {
+        //     border-top-width: 2px;
+        //     border-top-color: #3368a9;
+        //     font-weight: 700;
+        //     .tabItem {
+        //       .tabName {
+        //         color: #3368a9;
+        //       }
+        //     }
+        //   }
+        //   .tabItem {
+        //     width: 100%;
+        //     height: 100%;
+        //     position: relative;
+        //     .tabName {
+        //       display: block;
+        //       padding: 0 5px;
+        //       line-height: 40px;
+        //       box-sizing: border-box;
+        //       width: 100%;
+        //       height: 100%;
+        //       overflow: hidden; /*超出部分隐藏*/
+        //       white-space: nowrap; /*不换行*/
+        //       text-overflow: ellipsis; /*超出部分文字以...显示*/
+        //     }
+        //     .closeTab {
+        //       font-size: 16px;
+        //       position: absolute;
+        //       right: -7px;
+        //       top: -5px;
+        //       color: #b9b9b9;
+        //       &:hover {
+        //         color: #3368a9;
+        //       }
+        //     }
+        //   }
+        // }
       }
     }
   }
