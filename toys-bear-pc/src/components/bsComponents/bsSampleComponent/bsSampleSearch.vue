@@ -8,10 +8,10 @@
         class="demo-form-inline"
       >
         <div class="left">
-          <el-form-item label="报价客户：" prop="companyName">
+          <el-form-item label="报价客户：" prop="linkman">
             <el-select
               style="width: 190px; margin: 0 15px;"
-              v-model="clienFormData.companyName"
+              v-model="clienFormData.linkman"
               placeholder="请输入/选择客户"
             >
               <el-option
@@ -173,7 +173,7 @@
 export default {
   name: "bsSampleSearch",
   props: {
-    searchFormAata: {
+    searchFormData: {
       type: Object
     }
   },
@@ -236,9 +236,7 @@ export default {
         miniPriceDecimalPlaces: 1
       },
       addInfoRules: {
-        companyName: [
-          { required: true, message: "请选择客户", trigger: "change" }
-        ],
+        linkman: [{ required: true, message: "请选择客户", trigger: "change" }],
 
         remark: [{ required: true, message: "请备注", trigger: "change" }],
         offerMethod: [
@@ -287,6 +285,7 @@ export default {
       });
       if (res.data.result.code === 200) {
         this.clienFormData = res.data.result.item;
+        console.log(this.clienFormData);
       } else {
         this.$message.error(res.data.result.msg);
       }

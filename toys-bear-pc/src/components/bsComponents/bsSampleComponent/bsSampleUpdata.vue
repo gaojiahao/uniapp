@@ -3,7 +3,7 @@
     <div class="title">
       <div class="left">报价详情</div>
     </div>
-    <bsSampleSearch :searchFormAata="searchFormAata"></bsSampleSearch>
+    <bsSampleSearch :searchFormData="searchFormData"></bsSampleSearch>
     <div class="bsSampleTable">
       <div class="top">
         <div class="left">报价商品列表({{ tableData.length }})</div>
@@ -232,7 +232,7 @@ export default {
     bsSampleSearch
   },
   props: {
-    rowUpdata: {
+    item: {
       type: Object
     }
   },
@@ -249,16 +249,12 @@ export default {
   },
   data() {
     return {
-      searchFormAata: {},
-      tableData: [],
-      formInline: {
-        user: "",
-        region: ""
-      }
+      searchFormData: {},
+      tableData: []
     };
   },
   created() {
-    this.searchFormAata = this.rowUpdata;
+    this.searchFormData = this.item;
   },
 
   mounted() {
@@ -269,7 +265,7 @@ export default {
     async getProductOfferDetailPage() {
       const res = await this.$http.post(
         "/api/ProductOfferDetailPage",
-        this.rowUpdata
+        this.item
       );
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items;

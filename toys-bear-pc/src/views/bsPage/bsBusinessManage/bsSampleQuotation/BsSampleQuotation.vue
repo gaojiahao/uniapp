@@ -1,6 +1,6 @@
 <template>
   <div class="bsSampleQuotation">
-    <div class="bsMyCollection" v-if="isUpdata != 1">
+    <div class="bsMyCollection">
       <div class="title">找样报价 ({{ totalCount }})</div>
       <div class="searchBox">
         <div class="item">
@@ -183,25 +183,15 @@
         </center>
       </div>
     </div>
-    <bsSampleUpdata
-      v-if="isUpdata == 1"
-      :rowUpdata="rowUpdata"
-      @submit="submit"
-    >
-    </bsSampleUpdata>
   </div>
 </template>
 
 <script>
-import bsSampleUpdata from "@/components/bsComponents/bsSampleComponent/bsSampleUpdata";
 export default {
   name: "bsSampleQuotation",
-  components: {
-    bsSampleUpdata
-  },
   data() {
     return {
-      isUpdata: 0,
+      isUpdata: "",
       rowUpdata: {},
       searchForm: {
         orderNumber: null,
@@ -261,10 +251,18 @@ export default {
       this.currentPage = page;
       this.getCompanySamplelistPage();
     },
-    //编辑报价
-    handleEdit(index, row) {
-      this.isUpdata = 1;
-      this.rowUpdata = row;
+    //编辑报价  跳转
+    async handleEdit(index, row) {
+      const fd = {
+        name: row.offerNumber,
+        linkUrl: "/bsIndex/bsSampleUpdata",
+        component: "bsSampleUpdata",
+        refresh: true,
+        noPush: true,
+        label: row.offerNumber,
+        value: row
+      };
+      this.$common.judgeTab(fd, "tabmain");
     },
     submit(data) {
       this.isUpdata = data;
