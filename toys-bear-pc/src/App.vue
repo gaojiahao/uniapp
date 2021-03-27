@@ -54,11 +54,16 @@ export default {
   methods: {
     // 去购物车
     toMyShoppingCart() {
-      this.$store.commit("handlerBsMenuLabels", {
-        linkUrl: "/bsIndex/bsShoppingCart",
-        name: "购物车"
-      });
-      this.$router.push("/bsIndex/bsShoppingCart");
+      this.$common.judgeTab(
+        {
+          name: "bsShoppingCart",
+          linkUrl: "/bsIndex/bsShoppingCart",
+          component: "bsShoppingCart",
+          refresh: true,
+          label: "购物车"
+        },
+        "tabmain"
+      );
     },
     // 回到顶部
     toTop() {
