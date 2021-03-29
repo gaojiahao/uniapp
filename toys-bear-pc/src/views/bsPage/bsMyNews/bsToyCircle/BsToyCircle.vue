@@ -70,11 +70,11 @@
                       switchNoticeType(item.bearNotice.noticeType)
                     }}</span>
                     <span
-                      @click="show3Active(index)"
+                      @click="show3Active(item.bearNotice.id)"
                       class="el-icon-more iconMore"
                     ></span>
                     <transition name="el-zoom-in-top">
-                      <div class="jubaoBox" v-show="showActive === index">
+                      <div class="jubaoBox" v-show="showActive === item.bearNotice.id">
                         <p @click="pingbiEvent(item)">
                           <i class="icon el-icon-remove"></i>
                           <span>屏蔽</span>
@@ -766,8 +766,8 @@ export default {
             object-fit: none;
             box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
             img {
-              width: 100%;
-              object-fit: none;
+              width: 152px;
+              object-fit: contain;
             }
           }
           .multiT {
