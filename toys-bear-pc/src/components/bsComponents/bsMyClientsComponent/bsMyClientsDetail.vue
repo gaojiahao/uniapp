@@ -1,0 +1,414 @@
+<template>
+  <div class="bsMyClientsDetail">
+    <div class="hander">
+      <div class="handerBg"></div>
+      <div class="handerTitle">
+        <div class="top">
+          <div class="clientsImg">
+            <img :src="item.companyLogo" alt="" />
+          </div>
+          <div class="clientsData">
+            <div class="name">{{ item.companyName }}</div>
+            <div class="tel">
+              <p>联系人：{{ item.companyName }}</p>
+              <p>电话：{{ item.phoneNumber }}</p>
+              <p>手机：{{ item.phoneNumber }}</p>
+              <p>地址：{{ item.Address }}</p>
+              <p>在线咨询</p>
+            </div>
+          </div>
+        </div>
+        <div class="headTop">
+          <div
+            :class="{ tabs: true, active: isDiyu === 0 }"
+            @click="checkTabsAll(0)"
+          >
+            所有产品
+          </div>
+          <div
+            :class="{ tabs: true, active: isDiyu === 1 }"
+            @click="checkTabsEcommend(1)"
+          >
+            推荐产品
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tableBox">
+      <div class="screenBox">
+        <div class="left">
+          <div class="screenItem" @click="sortTypeEvent(null)">
+            <span :class="{ screenLabel: true, active: sortOrder === null }"
+              >综合</span
+            >
+          </div>
+          <div class="screenItem" @click="sortTypeEvent(3)">
+            <span :class="{ screenLabel: true, active: sortOrder === 3 }"
+              >热度</span
+            >
+            <i v-show="isRedu === null" class="jiantou xiajiantouIcon"></i>
+            <i v-show="isRedu === 1" class="jiantou xiaActiveIcon"></i>
+            <i v-show="isRedu === 2" class="jiantou shangActiveIcon"></i>
+          </div>
+          <div class="screenItem" @click="sortTypeEvent(1)">
+            <span :class="{ screenLabel: true, active: sortOrder === 1 }"
+              >单价</span
+            >
+            <i v-show="isPrice === null" class="jiantou xiajiantouIcon"></i>
+            <i v-show="isPrice === 1" class="jiantou xiaActiveIcon"></i>
+            <i v-show="isPrice === 2" class="jiantou shangActiveIcon"></i>
+          </div>
+          <div class="screenItem" @click="sortTypeEvent(2)">
+            <span :class="{ screenLabel: true, active: sortOrder === 2 }">
+              时间
+            </span>
+            <i v-show="isTime === null" class="jiantou xiajiantouIcon"></i>
+            <i v-show="isTime === 1" class="jiantou xiaActiveIcon"></i>
+            <i v-show="isTime === 2" class="jiantou shangActiveIcon"></i>
+          </div>
+          <div class="item" style="margin-left:30px">
+            <span class="label">关键词搜索:</span>
+            <el-input
+              type="text"
+              size="medium"
+              v-model="keyword"
+              placeholder="请输入关键词"
+              @keyup.native.enter="search"
+            ></el-input>
+          </div>
+          <div class="item">
+            <el-button @click="search" type="primary" size="medium">
+              搜索
+            </el-button>
+          </div>
+        </div>
+      </div>
+      <div class="productListBox">
+        <!-- 产品列表 -->
+        <component :is="isGrid" :productList="productList"></component>
+        <!-- 分页 -->
+        <center class="myPagination">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[12, 24, 36, 48]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalCount"
+          >
+          </el-pagination>
+        </center>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/bsGridComponent";
+export default {
+  name: "bsMyClientsDetail",
+  components: {
+    bsGridComponent
+  },
+  props: {
+    item: {
+      type: Object
+    }
+  },
+  data() {
+    return {
+      isDiyu: 0,
+      isPrice: null,
+      isTime: null,
+      isRedu: null,
+      sortOrder: null,
+      sortType: null,
+      keyword: null,
+      isGrid: "bsGridComponent",
+      currentPage: 1,
+      pageSize: 12,
+      totalCount: 0,
+      productList: []
+    };
+  },
+  created() {},
+  mounted() {
+    this.getProductListPageAll();
+  },
+  methods: {
+    //所有产品接口
+    async getProductListPageAll() {
+      const fd = {
+        PageIndex: this.currentPage,
+        PageSize: this.pageSize,
+        CompanyNumber: this.item.CompanyNumber
+      };
+      for (const key in fd) {
+        if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
+          delete fd[key];
+        }
+      }
+      const res = await this.$http.post("/api/SupplierProduct", fd);
+      if (res.data.result.code === 200) {
+        this.totalCount = res.data.result.item.totalCount;
+        this.productList = res.data.result.item.items;
+      }
+    },
+    //推荐产品接口
+    async getProductListPageEcommend() {
+      const fd = {
+        PageIndex: 1,
+        PageSize: 12,
+        CompanyNumber: this.item.CompanyNumber
+      };
+      for (const key in fd) {
+        if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
+          delete fd[key];
+        }
+      }
+      const res = await this.$http.post("/api/RecommendProductPage", fd);
+      if (res.data.result.code === 200) {
+        this.productList = res.data.result.item.items;
+      }
+    },
+    //切换所有产品
+    checkTabsAll(num) {
+      this.isDiyu = num;
+      this.getProductListPageAll();
+    },
+    //切换推荐产品
+    checkTabsEcommend(num) {
+      this.isDiyu = num;
+      this.getProductListPageEcommend();
+    },
+    // 切換頁容量
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+      if (this.currentPage * pageSize > this.totalCount) return false;
+      this.getProductList();
+    },
+    // 修改当前页
+    handleCurrentChange(page) {
+      this.currentPage = page;
+      this.getProductList();
+    },
+    // 搜索
+    search() {
+      this.currentPage = 1;
+      this.getTableDataList();
+    },
+    // 过滤类型
+    sortTypeEvent(type) {
+      this.sortOrder = type;
+      switch (type) {
+        case 1:
+          this.sortType = this.isPrice =
+            this.isPrice === null ? 1 : this.isPrice === 1 ? 2 : null;
+          this.sortType = null;
+          this.isTime = null;
+          this.isRedu = null;
+          this.sortType = this.isPrice;
+          this.sortType === null && (this.sortOrder = null);
+          break;
+        case 2:
+          this.isTime = this.isTime === null ? 1 : this.isTime === 1 ? 2 : null;
+          this.sortType = null;
+          this.isPrice = null;
+          this.isRedu = null;
+          this.sortType = this.isTime;
+          this.sortType === null && (this.sortOrder = null);
+          break;
+        case 3:
+          this.isRedu = this.isRedu === null ? 1 : this.isRedu === 1 ? 2 : null;
+          this.sortType = null;
+          this.isPrice = null;
+          this.isTime = null;
+          this.sortType = this.isRedu;
+          this.sortType === null && (this.sortOrder = null);
+          break;
+        default:
+          this.isPrice = null;
+          this.isTime = null;
+          this.isRedu = null;
+          this.sortType = null;
+          this.sortOrder = null;
+          break;
+      }
+      //   this.getProductList();
+    }
+  }
+};
+</script>
+<style scoped lang="less">
+.bsMyClientsDetail {
+  min-height: 100%;
+  background-color: #fff;
+  .hander {
+    .handerBg {
+      height: 160px;
+      opacity: 1;
+      background: rgba(0, 0, 0, 0);
+      border-radius: 4px;
+      background: url("~@/assets/images/clientsBg.png") no-repeat center;
+      background-size: 100% 100%;
+    }
+    .handerTitle {
+      padding-left: 57px;
+      height: 140px;
+      background: #ffffff;
+      .top {
+        height: 90px;
+        display: flex;
+        .clientsImg {
+          transform: translateY(-30px);
+          width: 120px;
+          height: 120px;
+          border-radius: 50%;
+          margin-right: 15px;
+          img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+          }
+        }
+        .clientsData {
+          padding-top: 20px;
+          flex: 1;
+          .name {
+            width: 120px;
+            height: 31px;
+            font-size: 24px;
+            font-family: Microsoft YaHei, Microsoft YaHei-Regular;
+            font-weight: 400;
+            text-align: left;
+            color: #333333;
+            line-height: 34px;
+          }
+          .tel {
+            display: flex;
+            height: 19px;
+            font-size: 14px;
+            font-family: Microsoft YaHei, Microsoft YaHei-Regular;
+            font-weight: 400;
+            text-align: left;
+            color: #666666;
+            line-height: 34px;
+            p {
+              margin-right: 48px;
+            }
+          }
+        }
+      }
+      .headTop {
+        height: 50px;
+        font-size: 15px;
+        box-sizing: border-box;
+        background-color: #fff;
+        padding-left: 20px;
+        display: flex;
+        border-radius: 4px;
+        .tabs {
+          width: 100px;
+          height: 50px;
+          box-sizing: border-box;
+          border-bottom: 2px solid transparent;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 15px;
+          cursor: pointer;
+          &.active {
+            font-weight: 700;
+            border-color: #3368a9;
+            color: #3368a9;
+          }
+        }
+      }
+    }
+  }
+  .tableBox {
+    padding: 30px 20px 0;
+    background-color: #f9fafc;
+    min-height: 100%;
+    .screenBox {
+      width: 100%;
+      height: 50px;
+      background-color: #f9fafc;
+      display: flex;
+      align-items: center;
+      .left {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        .item {
+          display: flex;
+          align-items: center;
+          margin-right: 20px;
+          &.date {
+            min-width: 300px;
+          }
+          .label {
+            width: 80px;
+            min-width: 80px;
+          }
+        }
+        .screenItem {
+          margin-left: 30px;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          padding: 5px;
+          &.priceUnit,
+          &.dateTime {
+            cursor: default;
+          }
+          .screenLabel {
+            margin-right: 10px;
+            &.active {
+              color: #3368a9;
+            }
+          }
+          .jiantou {
+            width: 9px;
+            height: 16px;
+            opacity: 1;
+          }
+          .xiajiantouIcon {
+            background: url("~@/assets/images/xiajiantou.png") no-repeat center;
+            background-size: contain;
+          }
+          .xiaActiveIcon {
+            background: url("~@/assets/images/xiaActive.png") no-repeat center;
+            background-size: contain;
+          }
+          .shangActiveIcon {
+            background: url("~@/assets/images/shangActive.png") no-repeat center;
+            background-size: contain;
+          }
+          .el-date-editor {
+            width: 210px;
+          }
+          .intervalPrice {
+            width: 130px;
+            display: flex;
+            align-items: center;
+            .line {
+              margin: 0 5px;
+            }
+          }
+        }
+      }
+    }
+  }
+  .productListBox {
+    width: 100%;
+    padding: 10px;
+    padding-bottom: 0;
+    box-sizing: border-box;
+    .myPagination {
+      padding: 30px 0;
+    }
+  }
+}
+</style>
