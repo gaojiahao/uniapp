@@ -106,7 +106,10 @@
                     <div class="imgComtent">
                       <el-image
                         v-for="(val, i) in item.imgList.split(',')"
-                        class="img"
+                        :class="{
+                          img: item.imgList.split(',').length > 1,
+                          multiT: item.imgList.split(',').length == 1
+                        }"
                         :key="i"
                         :src="val"
                         alt
@@ -716,6 +719,16 @@ export default {
             img {
               width: 100%;
               height: 154px;
+            }
+          }
+          .multiT {
+            width: 252px;
+            height: 322px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            img {
+              width: 252px;
+              height: 322px;
             }
           }
         }

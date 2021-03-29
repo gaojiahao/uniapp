@@ -332,7 +332,8 @@ export default {
           {
             exportWay: this.exportWay,
             templateType: type,
-            sampleNumber: this.sampleNumber.sampleNumber
+            sampleNumber: "SO2021030619031632"
+            // sampleNumber: this.sampleNumber.sampleNumber
           },
           { responseType: "blob" }
         )
@@ -341,15 +342,19 @@ export default {
           const fileName = this.sampleNumber.companyName
             ? this.sampleNumber.companyName + "_" + getCurrentTime() + ".xlsx"
             : getCurrentTime() + ".xlsx";
+          const zipName = this.sampleNumber.companyName
+            ? this.sampleNumber.companyName + "_" + getCurrentTime() + ".zip"
+            : getCurrentTime() + ".zip";
+          const myName = this.exportWay == 1 ? fileName : zipName;
           const blob = res.data;
           if (window.navigator && window.navigator.msSaveOrOpenBlob) {
             // 兼容IE
-            window.navigator.msSaveOrOpenBlob(blob, fileName);
+            window.navigator.msSaveOrOpenBlob(blob, myName);
           } else {
             // 兼容Google及fireFox
             const link = document.createElement("a");
             link.style.display = "none";
-            link.download = fileName;
+            link.download = myName;
             link.href = URL.createObjectURL(blob);
             document.body.appendChild(link);
             link.click();

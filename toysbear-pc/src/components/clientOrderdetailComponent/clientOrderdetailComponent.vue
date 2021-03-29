@@ -363,18 +363,26 @@ export default {
         })
         .then(res => {
           const time = getCurrentTime();
+          console.log(this.shareOrderNumber);
           const fileName = this.tableData.customerName
             ? this.tableData.customerName + "_" + time + ".xlsx"
             : time + ".xlsx";
+          const zipName = this.shareOrderNumber.companyName
+            ? this.shareOrderNumber.companyName +
+              "_" +
+              getCurrentTime() +
+              ".zip"
+            : getCurrentTime() + ".zip";
+          const myName = this.exportWay == 1 ? fileName : zipName;
           const blob = res.data;
           if (window.navigator && window.navigator.msSaveOrOpenBlob) {
             // 兼容IE
-            window.navigator.msSaveOrOpenBlob(blob, fileName);
+            window.navigator.msSaveOrOpenBlob(blob, myName);
           } else {
             // 兼容Google及fireFox
             const link = document.createElement("a");
             link.style.display = "none";
-            link.download = fileName;
+            link.download = myName;
             link.href = URL.createObjectURL(blob);
             document.body.appendChild(link);
             link.click();
