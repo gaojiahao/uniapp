@@ -176,6 +176,11 @@
           >
             <span class="headerTitle">报出价(带工厂信息)</span>
             <div>
+              <el-radio-group class="myExportWay" v-model="exportWay">
+                <el-radio :label="1">不带图片导出</el-radio>
+                <el-radio :label="2">带图片导出</el-radio>
+                <el-radio :label="3">按厂商带图片导出</el-radio>
+              </el-radio-group>
               <el-button
                 type="primary"
                 @click="openViewer(require('@/assets/images/mode1.png'))"
@@ -199,6 +204,11 @@
           >
             <span class="headerTitle">报出价(不带工厂信息)</span>
             <div>
+              <el-radio-group class="myExportWay" v-model="exportWay">
+                <el-radio :label="1">不带图片导出</el-radio>
+                <el-radio :label="2">带图片导出</el-radio>
+                <el-radio :label="3">按厂商带图片导出</el-radio>
+              </el-radio-group>
               <el-button
                 type="primary"
                 @click="openViewer(require('@/assets/images/mode2.png'))"
@@ -222,6 +232,11 @@
           >
             <span class="headerTitle">出厂价(带工厂信息)</span>
             <div>
+              <el-radio-group class="myExportWay" v-model="exportWay">
+                <el-radio :label="1">不带图片导出</el-radio>
+                <el-radio :label="2">带图片导出</el-radio>
+                <el-radio :label="3">按厂商带图片导出</el-radio>
+              </el-radio-group>
               <el-button
                 type="primary"
                 @click="openViewer(require('@/assets/images/mode3.png'))"
@@ -245,6 +260,11 @@
           >
             <span class="headerTitle">出厂价+报出价+工厂信息</span>
             <div>
+              <el-radio-group class="myExportWay" v-model="exportWay">
+                <el-radio :label="1">不带图片导出</el-radio>
+                <el-radio :label="2">带图片导出</el-radio>
+                <el-radio :label="3">按厂商带图片导出</el-radio>
+              </el-radio-group>
               <el-button
                 type="primary"
                 @click="openViewer(require('@/assets/images/mode4.png'))"
@@ -290,6 +310,7 @@ export default {
   },
   data() {
     return {
+      exportWay: 1,
       showViewer: false,
       exportTemplateDialog: false,
       isOrderDetailDialog: false,
@@ -306,6 +327,7 @@ export default {
         .post(
           "/api/ExportCompanySampleListToExcel",
           {
+            exportWay: this.exportWay,
             templateType: type,
             sampleNumber: this.item.sampleNumber
           },
@@ -474,5 +496,8 @@ export default {
       font-weight: bold;
     }
   }
+}
+.myExportWay {
+  margin-right: 20px;
 }
 </style>
