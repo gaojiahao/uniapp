@@ -67,7 +67,7 @@ export default {
     // 去购物车
     toShoppingCart() {
       const fd = {
-        name: "bsShoppingCart",
+        name: "/bsIndex/bsShoppingCart",
         linkUrl: "/bsIndex/bsShoppingCart",
         component: "bsShoppingCart",
         refresh: true,

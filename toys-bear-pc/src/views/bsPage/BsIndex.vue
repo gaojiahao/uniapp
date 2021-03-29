@@ -262,6 +262,7 @@ export default {
         return this.$store.state.activeTab;
       },
       set(val) {
+        this.showSearch = false;
         this.$store.commit("setActiveTab", val);
       }
     },
