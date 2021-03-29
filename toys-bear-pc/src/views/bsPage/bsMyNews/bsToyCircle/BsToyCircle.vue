@@ -18,6 +18,10 @@
           <i class="icon supply"></i>
           <span>供应公告</span>
         </div>
+        <div class="tagItem" @click="searchMyNotice">
+          <i class="icon myNotice"></i>
+          <span>我的公告</span>
+        </div>
       </div>
       <div class="topRight">
         <el-button type="primary" size="medium" @click="openSendNotice">
@@ -78,6 +82,16 @@
                         <p @click="openjubaoEvent(item)">
                           <i class="icon iconfont icon-jubao"></i>
                           举报
+                        </p>
+                        <p
+                          @click="deleteMyNotice(item)"
+                          v-if="
+                            item.userInfo.companyId == currentComparnyId &&
+                              item.userInfo.userId == userInfo.userInfo.id
+                          "
+                        >
+                          <i class="el-icon-delete-solid"></i>
+                          删除
                         </p>
                       </div>
                     </transition>
@@ -325,6 +339,7 @@ export default {
   data() {
     return {
       sendNoticeDialog: false,
+      publisher: null,
       noticeType: null,
       jubaoItem: null,
       jubaoActive: null,
@@ -349,6 +364,31 @@ export default {
     };
   },
   methods: {
+    // 查看我的公告
+    searchMyNotice() {
+      this.noticeType = null;
+      this.publisher = this.userInfo.userInfo.id;
+      this.currentPage = 1;
+      this.getDataList();
+    },
+    // 删除我的公告
+    async deleteMyNotice(val) {
+      const res = await this.$http.post("/api/DeleteBearBotice", {
+        id: val.bearNotice.id
+      });
+      if (res.data.result.code === 200) {
+        this.$message.success("删除成功");
+        for (let i = 0; i < this.findList.length; i++) {
+          if (val.bearNotice.id == this.findList[i].bearNotice.id) {
+            this.findList.splice(i, 1);
+            this.showActive = false;
+            break;
+          }
+        }
+      } else {
+        this.$message.error(res.data.result.msg);
+      }
+    },
     // 关闭发布公告
     closeSendNotice(flag) {
       if (flag) {
@@ -364,6 +404,7 @@ export default {
     // 根据类型搜索公告
     searchNotice(type) {
       this.noticeType = type;
+      this.publisher = null;
       this.getDataList();
     },
     // 举报
@@ -558,6 +599,7 @@ export default {
       const fd = {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
+        publisher: this.publisher,
         noticeType: this.noticeType
       };
       for (const key in fd) {
@@ -649,6 +691,9 @@ export default {
         .home {
           background: url("~@/assets/images/noticeHomeIcon.png") no-repeat
             center;
+        }
+        .myNotice {
+          background: url("~@/assets/images/yonghu.png") no-repeat center;
         }
         .ordinary {
           background: url("~@/assets/images/ordinaryNoticeIcon.png") no-repeat
@@ -913,8 +958,8 @@ export default {
       // width: 100%;
       width: 540px;
       min-width: 540px;
-      padding-left: 20px;
-      padding-top: 20px;
+      // padding-left: 20px;
+      // padding-top: 20px;
       border-radius: 6px;
       overflow: hidden;
       box-sizing: border-box;
@@ -999,24 +1044,25 @@ export default {
             .jubaoBox {
               background-color: #656565;
               width: 100px;
-              height: 80px;
+              // height: 80px;
               position: absolute;
-              bottom: -95px;
+              top: 25px;
               left: 140px;
               border-radius: 5px;
               z-index: 1;
               color: white;
-              overflow: hidden;
               p {
                 padding: 5px 0;
                 line-height: 28px;
                 display: flex;
                 align-items: center;
+                border-radius: 5px;
                 justify-content: center;
                 // border-radius: 5px;
                 border-bottom-left-radius: 5px;
-                &:last-child {
-                  border-top: 2px solid rgba(255, 255, 255, 0.18);
+                border-top: 2px solid rgba(255, 255, 255, 0.18);
+                &:first-of-type {
+                  border: none;
                 }
                 &:hover {
                   background-color: #767676;
@@ -1028,6 +1074,10 @@ export default {
                   &.icon-jubao {
                     font-size: 18px;
                   }
+                }
+                .el-icon-delete-solid {
+                  margin-right: 13px;
+                  font-size: 16px;
                 }
               }
               &::before {
