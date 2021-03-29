@@ -35,7 +35,12 @@
     </div>
     <div class="tableBox">
       <!-- 客户列表 -->
-      <el-table :data="tableData" stripe style="width: 100%">
+      <el-table
+        :data="tableData"
+        stripe
+        style="width: 100%"
+        @row-click="handleDetail"
+      >
         <el-table-column label="厂商">
           <template slot-scope="scope">
             <div class="nameBox">
@@ -128,12 +133,23 @@ export default {
           delete fd[key];
         }
       }
-      const res = await this.$http.post("/api/ContactsCompanyListByID", {
-        ...fd
-      });
+      const res = await this.$http.post("/api/ContactsCompanyListByID", fd);
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items;
       }
+    },
+    //点击详情
+    handleDetail(e) {
+      const fd = {
+        name: e.companyName,
+        linkUrl: "/bsIndex/bsVendorQuery",
+        component: "bsMyClientsDetail",
+        refresh: true,
+        noPush: true,
+        label: e.companyName,
+        value: e
+      };
+      this.$store.commit("myAddTab", fd);
     },
     // 搜索
     search() {

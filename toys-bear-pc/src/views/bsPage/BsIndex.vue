@@ -36,7 +36,6 @@
                   v-if="item.refresh"
                   :is="item.component"
                   :ref="item.name"
-                  style="padding:5px"
                 ></component>
               </el-scrollbar>
             </el-tab-pane>
@@ -107,6 +106,8 @@ import bsMyClients from "@/views/bsPage/bsMyClients/bsMyClients/BsMyClients.vue"
 
 // 厂商查询
 import bsVendorQuery from "@/views/bsPage/bsMyClients/bsVendorQuery/BsVendorQuery.vue";
+// 厂商查询-详情页
+import bsMyClientsDetail from "@/components/bsComponents/bsMyClientsComponent/bsMyClientsDetail.vue";
 
 // 展厅择样
 import bsHallSample from "@/views/bsPage/bsBusinessManage/bsHallSample/BsHallSample.vue";
@@ -148,6 +149,7 @@ export default {
     bsToyCircle,
     bsMyClients,
     bsVendorQuery,
+    bsMyClientsDetail,
     bsHallSample,
     bsHallBusiness,
     bsShoppingCart,
@@ -202,6 +204,9 @@ export default {
               break;
             case "bsClientOrderDetails":
               this.$router.push("/bsIndex/bsCustomerOrder");
+              break;
+            case "bsMyClientsDetail":
+              this.$router.push("/bsIndex/bsVendorQuery");
               break;
           }
           break;
