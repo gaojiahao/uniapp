@@ -106,6 +106,7 @@
                   :on-change="changeFile"
                   class="imgsItem"
                   :auto-upload="false"
+                  :on-exceed="onExceed"
                   :accept="uploadAccept"
                 >
                   <i slot="default" class="el-icon-plus"></i>
@@ -447,6 +448,10 @@ export default {
     // 点击关闭预览发公告大图
     closeViewer() {
       this.showViewer = false;
+    },
+    // 图片或视频超出时的回调
+    onExceed() {
+      this.$message.error("最多只能选择" + this.imgAndVideoNum + "个文件呢");
     },
     // 发公告选择图片
     changeFile(file, fileList) {

@@ -56,7 +56,7 @@
             >
               <div class="imgBox">
                 <video
-                  style="border: 1px solid #b1b1b1;"
+                  style="border: 1px solid #dcdfe6;"
                   id="example_video"
                   :width="thumbnailWidth"
                   :height="thumbnailHeight"
@@ -487,8 +487,9 @@ export default {
   height: 100%;
 }
 .left_contaner .middle_img {
-  border: 1px solid #d2d2d2;
+  border: 1px solid #dcdfe6;
   box-sizing: border-box;
+  border-radius: 4px;
   position: relative;
   .threeIcon {
     position: absolute;
@@ -547,17 +548,17 @@ export default {
   width: 25px;
   display: flex;
   align-items: center;
-  border-radius: 5px;
+  border-radius: 6px;
   font-size: 30px;
-  border: 1px solid #d2d2d2;
+  border: 1px solid #dcdfe6;
 }
 .left_contaner .carousel .right_arrow {
   width: 25px;
   display: flex;
   align-items: center;
   font-size: 30px;
-  border-radius: 5px;
-  border: 1px solid #d2d2d2;
+  border-radius: 6px;
+  border: 1px solid #dcdfe6;
 }
 .left_contaner .carousel .picture_container {
   height: 100%;
@@ -582,22 +583,23 @@ export default {
   justify-content: center;
 }
 .left_contaner .picture_container .picture_item .imgBox img {
-  border: 1px solid #b1b1b1;
-  box-sizing: border-box;
+  // box-sizing: border-box;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
   cursor: pointer;
   object-fit: contain;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: -o-crisp-edges;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-  -ms-interpolation-mode: nearest-neighbor;
+  // image-rendering: -moz-crisp-edges;
+  // image-rendering: -o-crisp-edges;
+  // image-rendering: -webkit-optimize-contrast;
+  // image-rendering: crisp-edges;
+  // -ms-interpolation-mode: nearest-neighbor;
 }
 .right_contanier {
   overflow: hidden;
   position: absolute;
   top: 0;
   background-color: #fff;
-  border: 1px solid #eee;
+  // border: 1px solid #dcdfe6;
   /* border: 1px solid #d2d2d2; */
 }
 .right_contanier .big_img {
