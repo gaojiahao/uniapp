@@ -166,6 +166,7 @@
       <div class="tableBox">
         <div class="tableWrap">
           <el-table
+            @sort-change="sort_change"
             :header-cell-style="{ backgroundColor: '#2D60B3', color: '#fff' }"
             :data="tableList"
             id="myTable"
@@ -196,7 +197,12 @@
               label="择样编号"
               align="center"
             ></el-table-column>
-            <el-table-column prop="happenDate" label="择样时间" align="center">
+            <el-table-column
+              prop="happenDate"
+              label="择样时间"
+              sortable="custom"
+              align="center"
+            >
               <template slot-scope="scope">
                 {{
                   scope.row.happenDate &&
@@ -348,6 +354,8 @@ export default {
   },
   data() {
     return {
+      sortOrder: null,
+      sortType: null,
       dateTile: null,
       searchFD: {
         keyword: null,
@@ -412,6 +420,24 @@ export default {
     }
   },
   methods: {
+    // 时间排序
+    sort_change(column) {
+      this.sortOrder = 2;
+      switch (column.order) {
+        case "descending": // 降序
+          this.sortType = 1;
+          break;
+        case "ascending": // 升序
+          this.sortType = 2;
+          break;
+        default:
+          this.sortOrder = null;
+          this.sortType = null;
+          break;
+      }
+      this.currentPage = 1;
+      this.getOrderList();
+    },
     resetSample() {
       this.isOrderDetial = false;
       this.myOrderSample = "我的订单";
@@ -471,10 +497,13 @@ export default {
       this.currentPage = 1;
       this.getOrderList();
     },
+    // 获取列表
     async getOrderList() {
       const fd = {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
+        sortOrder: this.sortOrder,
+        sortType: this.sortType,
         ...this.searchFD
       };
       if (this.dateTile) {
@@ -732,4 +761,18 @@ export default {
 //     }
 //   }
 // }
+@{deep} .sort-caret {
+  &.descending {
+    border-top-color: #c0c4cc;
+  }
+  &.ascending {
+    border-bottom-color: #c0c4cc;
+  }
+}
+@{deep} .el-table .descending .sort-caret.descending {
+  border-top-color: #fff;
+}
+@{deep} .el-table .ascending .sort-caret.ascending {
+  border-bottom-color: #fff;
+}
 </style>
