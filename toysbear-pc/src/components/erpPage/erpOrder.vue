@@ -475,7 +475,6 @@ export default {
       const fd = {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
-        orderType: "Sample",
         ...this.searchFD
       };
       if (this.dateTile) {

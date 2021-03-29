@@ -178,10 +178,10 @@ export default {
   methods: {
     // 获取详情列表
     async getOrderDetail() {
-      const res = await this.$http.post("/api/SampleOrderDetailPage", {
+      const res = await this.$http.post("/api/SampleOrderDetailPageThree", {
         maxResultCount: this.pageSize,
         skipCount: this.currentPage,
-        id: this.option.erpOrderID,
+        orderType: this.option.orderType,
         sampleNumber: this.option.orderNumber
       });
       if (res.data.result.code === 200) {
