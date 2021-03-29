@@ -5,16 +5,30 @@
       <div class="handerTitle">
         <div class="top">
           <div class="clientsImg">
-            <img :src="item.companyLogo" alt="" />
+            <el-image
+              style=" width: 120px;
+            height: 120px;
+            border-radius: 50%;;"
+              fit="contain"
+              :src="item.companyLogo"
+              lazy
+            >
+              <div slot="placeholder" class="image-slot">
+                <img :src="require('@/assets/images/logo.png')" />
+              </div>
+              <div slot="error" class="image-slot">
+                <img :src="require('@/assets/images/logo.png')" />
+              </div>
+            </el-image>
           </div>
           <div class="clientsData">
             <div class="name">{{ item.companyName }}</div>
             <div class="tel">
-              <p>联系人：{{ item.companyName }}</p>
+              <p>联系人：{{ item.ContactsMan }}</p>
               <p>电话：{{ item.phoneNumber }}</p>
               <p>手机：{{ item.phoneNumber }}</p>
-              <p>地址：{{ item.Address }}</p>
-              <p>在线咨询</p>
+              <p>地址：{{ item.address }}</p>
+              <p><img src="~@/assets/images/consult.png" alt /> 在线咨询</p>
             </div>
           </div>
         </div>
@@ -36,7 +50,45 @@
     </div>
     <div class="tableBox">
       <div class="screenBox">
-        <div class="left">
+        <div class="left" v-if="isDiyu === 0">
+          <div class="item">
+            <span class="label">关键字：</span>
+            <el-input
+              type="text"
+              size="medium"
+              v-model="searchForm.keyword"
+              placeholder="请输入关键词"
+              @keyup.native.enter="search"
+            ></el-input>
+          </div>
+          <div class="item">
+            <span class="label">所在展厅：</span>
+            <el-select
+              v-model="searchForm.messageExt"
+              clearable
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="(item, i) in typesList"
+                :key="i"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </div>
+          <div class="item">
+            <el-button
+              @click="search"
+              type="primary"
+              icon="el-icon-search"
+              size="medium"
+            >
+              搜索
+            </el-button>
+          </div>
+        </div>
+        <div class="left" v-if="isDiyu === 1">
           <div class="screenItem" @click="sortTypeEvent(null)">
             <span :class="{ screenLabel: true, active: sortOrder === null }"
               >综合</span
@@ -44,7 +96,7 @@
           </div>
           <div class="screenItem" @click="sortTypeEvent(3)">
             <span :class="{ screenLabel: true, active: sortOrder === 3 }"
-              >热度</span
+              >推荐</span
             >
             <i v-show="isRedu === null" class="jiantou xiajiantouIcon"></i>
             <i v-show="isRedu === 1" class="jiantou xiaActiveIcon"></i>
@@ -129,11 +181,16 @@ export default {
       currentPage: 1,
       pageSize: 12,
       totalCount: 0,
-      productList: []
+      productList: [],
+      searchForm: {
+        keyword: ""
+      },
+      typesList: []
     };
   },
   created() {},
   mounted() {
+    console.log(this.item);
     this.getProductListPageAll();
   },
   methods: {
@@ -160,15 +217,19 @@ export default {
       const fd = {
         PageIndex: 1,
         PageSize: 12,
-        CompanyNumber: this.item.CompanyNumber
+        companyNumber: this.item.companyNumber
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
           delete fd[key];
         }
       }
-      const res = await this.$http.post("/api/RecommendProductPage", fd);
+      const res = await this.$http.post(
+        "/api/RecommendProductByNumberPage",
+        fd
+      );
       if (res.data.result.code === 200) {
+        this.totalCount = res.data.result.item.totalCount;
         this.productList = res.data.result.item.items;
       }
     },
@@ -180,6 +241,7 @@ export default {
     //切换推荐产品
     checkTabsEcommend(num) {
       this.isDiyu = num;
+
       this.getProductListPageEcommend();
     },
     // 切換頁容量
@@ -191,12 +253,16 @@ export default {
     // 修改当前页
     handleCurrentChange(page) {
       this.currentPage = page;
-      this.getProductList();
+      if (this.isDiyu === 0) {
+        this.getProductListPageAll();
+      } else {
+        this.getProductListPageEcommend();
+      }
     },
     // 搜索
     search() {
       this.currentPage = 1;
-      this.getTableDataList();
+      this.getProductListPageAll();
     },
     // 过滤类型
     sortTypeEvent(type) {
@@ -266,10 +332,18 @@ export default {
           height: 120px;
           border-radius: 50%;
           margin-right: 15px;
-          img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
+          cursor: pointer;
+          .el-image {
+            img {
+              width: 120px;
+              height: 120px;
+              object-fit: contain;
+              image-rendering: -moz-crisp-edges;
+              image-rendering: -o-crisp-edges;
+              image-rendering: -webkit-optimize-contrast;
+              image-rendering: crisp-edges;
+              -ms-interpolation-mode: nearest-neighbor;
+            }
           }
         }
         .clientsData {
@@ -287,7 +361,7 @@ export default {
           }
           .tel {
             display: flex;
-            height: 19px;
+            height: 31px;
             font-size: 14px;
             font-family: Microsoft YaHei, Microsoft YaHei-Regular;
             font-weight: 400;
@@ -295,7 +369,14 @@ export default {
             color: #666666;
             line-height: 34px;
             p {
+              display: flex;
+              align-content: center;
               margin-right: 48px;
+              img {
+                margin-right: 10px;
+                width: 28px;
+                height: 28px;
+              }
             }
           }
         }
@@ -335,8 +416,6 @@ export default {
       width: 100%;
       height: 50px;
       background-color: #f9fafc;
-      display: flex;
-      align-items: center;
       .left {
         flex: 1;
         display: flex;
@@ -354,7 +433,7 @@ export default {
           }
         }
         .screenItem {
-          margin-left: 30px;
+          margin-right: 30px;
           display: flex;
           align-items: center;
           cursor: pointer;

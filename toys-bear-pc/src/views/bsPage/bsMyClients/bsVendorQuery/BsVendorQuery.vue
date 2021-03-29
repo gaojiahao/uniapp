@@ -39,6 +39,7 @@
         :data="tableData"
         stripe
         style="width: 100%"
+        :header-cell-style="{ background: '#f1f3f6' }"
         @row-click="handleDetail"
       >
         <el-table-column label="厂商">
@@ -53,21 +54,23 @@
                   {{ scope.row.linkman }}
                 </p>
               </el-avatar>
-              <span class="name">{{ scope.row.companyName }}</span>
+              <span style="margin-left:10px" class="name">{{
+                scope.row.companyName
+              }}</span>
               <span class="isMain" v-if="scope.row.isMain"><i>主账号</i></span>
             </div>
           </template>
         </el-table-column>
         <el-table-column
           align="center"
-          prop="companyId"
+          prop="ContactsMan"
           label="联系人"
           width="180"
         >
         </el-table-column>
         <el-table-column
           align="center"
-          prop="createdOn"
+          prop="phoneNumber"
           label="手机"
           width="180"
         >
@@ -79,7 +82,7 @@
           width="180"
         >
         </el-table-column>
-        <el-table-column align="center" prop="Address" label="地址">
+        <el-table-column align="center" prop="address" label="地址">
         </el-table-column>
         <el-table-column
           align="center"
@@ -175,6 +178,22 @@ export default {
 };
 </script>
 <style scoped lang="less">
+@deep: ~">>>";
+@{deep} .el-table {
+  color: #666;
+  .nameBox {
+    width: 300px;
+    display: flex;
+    align-items: center;
+    .el-avatar {
+      color: #3368a9;
+      img {
+        width: 40px;
+        min-height: 40px;
+      }
+    }
+  }
+}
 .bsVendorQuery {
   min-height: 100%;
   background-color: #fff;
@@ -254,7 +273,6 @@ export default {
       padding-left: 15px;
       box-sizing: border-box;
       position: relative;
-      border-bottom: 1px solid #e5e5e5;
       display: flex;
       align-items: center;
       p:nth-child(2) {

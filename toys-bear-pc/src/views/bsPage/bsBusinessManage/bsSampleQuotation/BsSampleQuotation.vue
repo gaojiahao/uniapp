@@ -66,7 +66,10 @@
         >
           <el-table-column label="报价单号" align="center" min-width="150">
             <template slot-scope="scope">
-              <span style="color:#3368A9;cursor: pointer;">
+              <span
+                @click="goDetails(scope.row)"
+                style="color:#3368A9;cursor: pointer;"
+              >
                 {{ scope.row.offerNumber }}
               </span>
             </template>
@@ -137,7 +140,13 @@
             width="100"
           >
             <template slot-scope="scope">
-              {{ scope.row.status }}
+              {{
+                scope.row.status === 0
+                  ? "未审核"
+                  : scope.row.status === 1
+                  ? "审核通过"
+                  : "审核不通过"
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -280,8 +289,22 @@ export default {
       this.currentPage = page;
       this.getCompanySamplelistPage();
     },
-    //编辑报价  跳转
-    async handleEdit(index, row) {
+    // 报价详情跳转
+    goDetails(row) {
+      console.log(row.offerNumber);
+      const fd = {
+        name: row.offerNumber,
+        linkUrl: "/bsIndex/bsSampleQuotationDetails",
+        component: "bsSampleQuotationDetails",
+        refresh: true,
+        noPush: true,
+        label: row.offerNumber,
+        value: row
+      };
+      this.$store.commit("myAddTab", fd);
+    },
+    //编辑报价跳转
+    handleEdit(index, row) {
       const fd = {
         name: row.offerNumber,
         linkUrl: "/bsIndex/bsSampleUpdata",
