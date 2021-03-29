@@ -9,7 +9,7 @@
         size="mini"
         @selection-change="selectionChange"
         :cell-style="{ padding: 0, margin: 0 }"
-        :header-cell-style="{ 'font-size': '14px', color: '#666' }"
+        :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
         <ex-table-column
           :autoFit="true"
@@ -463,7 +463,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 export default {
   name: "bsShoppingCart",
   data() {
@@ -939,6 +939,9 @@ export default {
               offerAmount: val.price
             };
           });
+          if (this.userInfo.commparnyList[0].companyType == "Sales") {
+            this.clienFormData.productOfferType = "company";
+          }
           const res = await this.$http.post(
             "/api/CreateProductOffer",
             this.clienFormData
@@ -1011,11 +1014,15 @@ export default {
     this.tableData = this.shoppingList
       ? JSON.parse(JSON.stringify(this.shoppingList))
       : [];
+    this.$nextTick(() => {
+      this.$refs.myTableRef.toggleAllSelection();
+    });
   },
   computed: {
     ...mapGetters({
       shoppingList: "myShoppingList"
-    })
+    }),
+    ...mapState(["userInfo"])
   },
   watch: {
     "clienFormData.defaultFormula": {
@@ -1169,7 +1176,6 @@ export default {
       display: flex;
       align-items: center;
       height: 80px;
-      padding-left: 10px;
       box-sizing: border-box;
       .left {
         min-width: 130px;

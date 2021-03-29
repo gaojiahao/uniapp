@@ -154,7 +154,9 @@
                 >编辑</el-button
               >
               <el-button size="mini" type="info">推送</el-button>
-              <el-button size="mini" type="warning">导出</el-button>
+              <el-button size="mini" @click="exportOrder" type="warning">
+                导出
+              </el-button>
               <el-popconfirm
                 title="确定要此报价吗？"
                 @confirm="handleDelete(scope.row)"
@@ -185,14 +187,32 @@
         </center>
       </div>
     </div>
+    <!-- 导出订单模板dialog -->
+    <transition name="el-zoom-in-center">
+      <el-dialog
+        title="订单模板"
+        v-if="exportTemplateDialog"
+        :visible.sync="exportTemplateDialog"
+        top="60px"
+        width="80%"
+      >
+        <bsExportSampleOrder :orderRow="orderRow" />
+      </el-dialog>
+    </transition>
   </div>
 </template>
 
 <script>
+import bsExportSampleOrder from "@/components/bsComponents/bsBusinessManageComponent/bsExportSampleOrder";
 export default {
   name: "bsSampleQuotation",
+  components: {
+    bsExportSampleOrder
+  },
   data() {
     return {
+      orderRow: {},
+      exportTemplateDialog: false,
       rowUpdata: {},
       searchForm: {
         orderNumber: null,
@@ -210,6 +230,11 @@ export default {
     };
   },
   methods: {
+    // 导出找样
+    exportOrder(row) {
+      this.orderRow = row;
+      this.exportTemplateDialog = true;
+    },
     // 获取列表
     async getCompanySamplelistPage() {
       const fd = {

@@ -192,7 +192,17 @@ export default {
         };
       });
     },
-    triggerTab() {},
+    triggerTab() {
+      for (let i = 0; i < this.tabList.length; i++) {
+        if (this.activeTab == this.tabList[i].name) {
+          this.$router.push(this.tabList[i].linkUrl);
+          if (this.tabList[i].linkUrl == "/bsIndex/bsProductDetails") {
+            eventBus.$emit("showCart", true);
+          }
+          break;
+        }
+      }
+    },
     // 关闭标签
     closeTab(e) {
       for (let i = 0; i < this.tabList.length; i++) {
