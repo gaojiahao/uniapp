@@ -105,6 +105,7 @@
                   <template v-else-if="item.imgList.length > 0">
                     <div class="imgComtent">
                       <el-image
+                        fit="cover"
                         v-for="(val, i) in item.imgList.split(',')"
                         :class="{
                           img: item.imgList.split(',').length > 1,
@@ -546,7 +547,7 @@ export default {
     },
     // 到底了
     loadmore() {
-      if (this.currentPage >= this.totalCount % this.pageSize) {
+      if (this.currentPage >= this.totalCount / this.pageSize) {
         return false;
       }
       this.currentPage++;
@@ -702,9 +703,10 @@ export default {
           flex-wrap: wrap;
           @{deep} .demo1-video {
             width: 100%;
+            height: 277px;
             .video-js {
               width: 100%;
-              height: auto;
+              height: 277px;
             }
           }
           &::after {
@@ -716,19 +718,21 @@ export default {
             height: 154px;
             margin-bottom: 10px;
             cursor: pointer;
+            object-fit: none;
+            box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
             img {
               width: 100%;
-              height: 154px;
+              object-fit: none;
             }
           }
           .multiT {
             width: 252px;
-            height: 322px;
             margin-bottom: 10px;
+            max-height: 322px;
+            box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
             cursor: pointer;
             img {
               width: 252px;
-              height: 322px;
             }
           }
         }
