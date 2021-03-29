@@ -32,7 +32,7 @@ export default new Vuex.Store({
     httpContent: "", // 请求内容
     screenWidth: document.documentElement.clientWidth, // 屏幕宽度
     wsOrderMsg: null,
-    beforeSearchImgPreview: null,
+    searchImgPreview: null,
     wsId: "",
     wsMsg: null,
     isLogin: false,
@@ -154,8 +154,8 @@ export default new Vuex.Store({
     handlerhotSearchImg(state, value) {
       state.hotSearchImg = value;
     },
-    handlerBeforeSearchImgPreview(state, value) {
-      state.beforeSearchImgPreview = value;
+    handlerSearchImgPreview(state, value) {
+      state.searchImgPreview = value;
     },
     handlerBeforeSearchImg(state, value) {
       state.beforeSearchImg = value;
@@ -163,8 +163,8 @@ export default new Vuex.Store({
     updateAppLoading(state, value) {
       state.AppLoading = value;
     },
-    searchValues(state, value) {
-      state.imageSearchValue = value;
+    searchValues(state, list) {
+      state.imageSearchValue = list;
     },
     searchTxtValues(state, value) {
       state.searchValue = value;

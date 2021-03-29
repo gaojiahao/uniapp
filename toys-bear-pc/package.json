@@ -18,6 +18,7 @@
     "less-loader": "^5.0.0",
     "video.js": "^7.11.4",
     "vue": "^2.6.11",
+    "vue-cropper": "^0.5.6",
     "vue-preview-pictures": "^0.1.7",
     "vue-qr": "^2.3.0",
     "vue-router": "^3.2.0",

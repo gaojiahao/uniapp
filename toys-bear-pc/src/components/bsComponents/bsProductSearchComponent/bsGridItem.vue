@@ -48,7 +48,7 @@
       <div class="addCartBox">
         <div class="left">
           <p class="item">
-            <span>参考单价：</span>
+            <span class="title">参考单价：</span>
             <template v-if="item.isIntegral">
               <span class="price">{{ item.cu_de }}</span>
               <span class="price">{{ item.price }}</span>
@@ -58,7 +58,7 @@
             </template>
           </p>
           <p class="item">
-            <span>出厂货号：</span>
+            <span class="title">出厂货号：</span>
             <span>{{ item.fa_no }}</span>
           </p>
         </div>
@@ -104,6 +104,7 @@ export default {
         label: this.item.fa_no || "产品详情",
         value: this.item
       };
+      this.$router.push("/bsIndex/bsProductDetails");
       this.$store.commit("myAddTab", fd);
     },
     // 收藏
@@ -149,7 +150,7 @@ export default {
   min-width: 250px;
   background: #ffffff;
   border: 1px solid #dcdfe6;
-  margin: 10px;
+  margin-top: 20px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -206,10 +207,12 @@ export default {
     }
   }
   .content {
+    color: #333;
     .productName {
       color: #000;
       padding: 4px 0;
       padding: 0 16px;
+      font-weight: bold;
       box-sizing: border-box;
       overflow: hidden; /*超出部分隐藏*/
       white-space: nowrap; /*不换行*/
@@ -226,7 +229,9 @@ export default {
           overflow: hidden; /*超出部分隐藏*/
           white-space: nowrap; /*不换行*/
           text-overflow: ellipsis; /*超出部分文字以...显示*/
-          color: #666;
+          .title {
+            color: #999;
+          }
           .price {
             color: #eb1515;
             &.lookPrice {
@@ -286,12 +291,8 @@ export default {
       margin-top: 10px;
       display: flex;
       align-items: center;
+      color: #3368a9;
       cursor: pointer;
-      &:hover {
-        .text {
-          color: #3368a9;
-        }
-      }
       .sourceIcon {
         width: 18px;
         min-width: 18px;

@@ -26,6 +26,16 @@
         class="vipProductIcon"
         v-if="$route.path === '/bsIndex/bsVIPProducts'"
       ></div>
+      <i
+        v-show="item.isFavorite"
+        class="iconClient iconfont icon-wujiaoxing-"
+        @click.stop="addCollect(item)"
+      ></i>
+      <i
+        v-show="!item.isFavorite"
+        class="iconClient iconfont icon-wujiaoxingkong"
+        @click.stop="addCollect(item)"
+      ></i>
     </div>
     <div class="content">
       <div class="productName">
@@ -138,6 +148,21 @@ export default {
       };
       this.$store.commit("myAddTab", fd);
     },
+    // 收藏
+    async addCollect(item) {
+      const res = await this.$http.post("/api/CreateProductCollection", {
+        productNumber: item.productNumber
+      });
+      if (res.data.result.code === 200) {
+        this.$message.closeAll();
+        if (item.isFavorite) {
+          this.$message.warning("取消收藏成功");
+        } else {
+          this.$message.success("收藏成功");
+        }
+        item.isFavorite = !item.isFavorite;
+      }
+    },
     // 加购
     handlerShopping(item) {
       // this.$set(item, "isShopping", !item.isShopping);
@@ -166,7 +191,7 @@ export default {
   min-width: 250px;
   background: #ffffff;
   border: 1px solid #dcdfe6;
-  margin: 10px;
+  margin-top: 20px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -179,6 +204,13 @@ export default {
     box-sizing: border-box;
     padding: 16px;
     cursor: pointer;
+    .iconClient {
+      position: absolute;
+      right: 25px;
+      top: 25px;
+      color: #fb6055;
+      cursor: pointer;
+    }
     .el-image {
       img {
         width: 100%;
@@ -217,9 +249,11 @@ export default {
   }
   .content {
     font-size: 13px;
+    color: #333;
     .productName {
       font-size: 14px;
       color: #000;
+      font-weight: bold;
       padding: 4px 16px;
       box-sizing: border-box;
       overflow: hidden; /*超出部分隐藏*/
@@ -238,7 +272,7 @@ export default {
           white-space: nowrap; /*不换行*/
           text-overflow: ellipsis; /*超出部分文字以...显示*/
           .title {
-            color: #666;
+            color: #999;
           }
           .price {
             color: #eb1515;
@@ -298,7 +332,7 @@ export default {
       white-space: nowrap; /*不换行*/
       text-overflow: ellipsis; /*超出部分文字以...显示*/
       .title {
-        color: #666;
+        color: #999;
       }
     }
     .sourceBox {
@@ -310,11 +344,7 @@ export default {
       display: flex;
       align-items: center;
       cursor: pointer;
-      &:hover {
-        .text {
-          color: #3368a9;
-        }
-      }
+      color: #3368a9;
       .sourceIcon {
         width: 18px;
         min-width: 18px;

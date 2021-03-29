@@ -146,7 +146,7 @@
           </p>
           <p class="item">
             摊位号：
-            <span>{{ item.booth_nu_pro }}</span>
+            <span>{{ item.fa_no }}</span>
           </p>
         </div>
       </div>
@@ -165,6 +165,7 @@
 <script>
 import { mapGetters } from "vuex";
 import magnifierComponent from "@/components/bsComponents/bsProductSearchComponent/bsMagnifierComponent.vue";
+import eventBus from "@/assets/js/common/eventBus.js";
 export default {
   props: {
     item: {
@@ -210,7 +211,9 @@ export default {
     }
   },
   created() {},
-  mounted() {},
+  mounted() {
+    eventBus.$emit("showCart", true);
+  },
   computed: {
     ...mapGetters({
       shoppingList: "myShoppingList"

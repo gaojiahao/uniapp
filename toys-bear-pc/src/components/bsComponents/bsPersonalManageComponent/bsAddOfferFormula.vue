@@ -142,7 +142,7 @@
             <el-select
               v-model="addDefaultForm.miniPriceDecimalPlaces"
               style="width:100%;"
-              placeholder="请选择取舍方式"
+              placeholder="请选择"
             >
               <template v-for="item in configList">
                 <el-option

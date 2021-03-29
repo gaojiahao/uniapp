@@ -66,11 +66,14 @@ export default {
     },
     // 去购物车
     toShoppingCart() {
-      this.$store.commit("handlerBsMenuLabels", {
+      const fd = {
+        name: "bsShoppingCart",
         linkUrl: "/bsIndex/bsShoppingCart",
-        name: "购物车"
-      });
-      this.$router.push("/bsIndex/bsShoppingCart");
+        component: "bsShoppingCart",
+        refresh: true,
+        label: "购物车"
+      };
+      this.$store.commit("myAddTab", fd);
     }
   },
   created() {},

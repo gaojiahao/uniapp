@@ -36,7 +36,6 @@
                   v-if="item.refresh"
                   :is="item.component"
                   :ref="item.name"
-                  style="padding:5px"
                 ></component>
               </el-scrollbar>
             </el-tab-pane>
@@ -181,9 +180,11 @@ export default {
           } else {
             if (this.$route.path === "/bsIndex/bsProductDetails") {
               eventBus.$emit("showCart", true);
+              this.showSearch = false;
+            } else {
+              this.showSearch = false;
+              eventBus.$emit("showCart", false);
             }
-            this.showSearch = false;
-            eventBus.$emit("showCart", false);
           }
         };
       });
@@ -250,15 +251,9 @@ export default {
     },
     ...mapState(["tabList"])
   },
-  watch: {
-    // "$store.state.activeTab"() {
-    //   this.showSearch = false;
-    //   // this.activeTab = store.state.activeTab;
-    // }
-  },
   created() {},
   mounted() {
-    // this.handleScroll();
+    this.handleScroll();
   }
 };
 </script>
@@ -376,6 +371,8 @@ export default {
             box-sizing: border-box;
             background-color: #f1f3f6;
             overflow: hidden;
+            box-sizing: border-box;
+            padding: 20px;
             box-sizing: border-box;
             .el-tab-pane {
               height: 100%;

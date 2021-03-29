@@ -54,16 +54,14 @@ export default {
   methods: {
     // 去购物车
     toMyShoppingCart() {
-      this.$common.judgeTab(
-        {
-          name: "bsShoppingCart",
-          linkUrl: "/bsIndex/bsShoppingCart",
-          component: "bsShoppingCart",
-          refresh: true,
-          label: "购物车"
-        },
-        "tabmain"
-      );
+      const fd = {
+        name: "bsShoppingCart",
+        linkUrl: "/bsIndex/bsShoppingCart",
+        component: "bsShoppingCart",
+        refresh: true,
+        label: "购物车"
+      };
+      this.$store.commit("myAddTab", fd);
     },
     // 回到顶部
     toTop() {

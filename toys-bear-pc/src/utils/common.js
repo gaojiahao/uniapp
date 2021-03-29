@@ -14,7 +14,6 @@ export default {
         v.$set(i, "refresh", false);
         v.$nextTick(() => {
           v.$set(i, "refresh", true);
-          v.$message.success(`${i.label}，刷新成功`);
         });
         break;
       }
