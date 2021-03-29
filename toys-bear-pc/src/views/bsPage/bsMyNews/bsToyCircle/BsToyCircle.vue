@@ -74,7 +74,10 @@
                       class="el-icon-more iconMore"
                     ></span>
                     <transition name="el-zoom-in-top">
-                      <div class="jubaoBox" v-show="showActive === item.bearNotice.id">
+                      <div
+                        class="jubaoBox"
+                        v-show="showActive === item.bearNotice.id"
+                      >
                         <p @click="pingbiEvent(item)">
                           <i class="icon el-icon-remove"></i>
                           <span>屏蔽</span>
