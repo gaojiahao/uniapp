@@ -41,6 +41,7 @@
     <div class="tableBox">
       <div class="tableWrap">
         <el-table
+          @sort-change="sort_change"
           :header-cell-style="{ backgroundColor: '#2D60B3', color: '#fff' }"
           size="mini"
           :data="tableData"
@@ -86,7 +87,12 @@
           </el-table-column>
           <el-table-column prop="fa_pr" align="center" label="出厂价">
           </el-table-column>
-          <el-table-column align="center" prop="ha_in_qu" label="价格">
+          <el-table-column
+            align="center"
+            sortable="custom"
+            prop="ha_in_qu"
+            label="价格"
+          >
           </el-table-column>
           <el-table-column label="包装" align="center">
             <el-table-column prop="in_le" label="长" align="center">
@@ -153,6 +159,8 @@ export default {
   props: ["option"],
   data() {
     return {
+      sortOrder: null,
+      sortType: null,
       totalCount: 0,
       pageSize: 10,
       currentPage: 1,
@@ -176,14 +184,38 @@ export default {
     }
   },
   methods: {
+    sort_change(column) {
+      this.sortOrder = 1;
+      switch (column.order) {
+        case "descending": // 降序
+          this.sortType = 1;
+          break;
+        case "ascending": // 升序
+          this.sortType = 2;
+          break;
+        default:
+          this.sortOrder = null;
+          this.sortType = null;
+          break;
+      }
+      this.currentPage = 1;
+      this.getOrderDetail();
+    },
     // 获取详情列表
     async getOrderDetail() {
-      const res = await this.$http.post("/api/SampleOrderDetailPageThree", {
+      const fd = {
         maxResultCount: this.pageSize,
         skipCount: this.currentPage,
         orderType: this.option.orderType,
+        sortOrder: this.sortOrder,
+        sortType: this.sortType,
         sampleNumber: this.option.orderNumber
-      });
+      };
+      for (const key in fd) {
+        if (fd[key] === null || fd[key] === undefined || fd[key] === "")
+          delete fd[key];
+      }
+      const res = await this.$http.post("/api/SampleOrderDetailPageThree", fd);
       if (res.data.result.code === 200) {
         this.totalCount = res.data.result.item.totalCount;
         this.tableData = res.data.result.item.items;
