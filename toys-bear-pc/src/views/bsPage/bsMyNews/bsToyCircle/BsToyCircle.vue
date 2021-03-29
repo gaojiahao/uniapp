@@ -343,6 +343,7 @@ export default {
     return {
       sendNoticeDialog: false,
       publisher: null,
+      issuedCompanyID: null,
       noticeType: null,
       jubaoItem: null,
       jubaoActive: null,
@@ -371,6 +372,7 @@ export default {
     searchMyNotice() {
       this.noticeType = null;
       this.publisher = this.userInfo.userInfo.id;
+      this.issuedCompanyID = this.currentComparnyId;
       this.currentPage = 1;
       this.getDataList();
     },
@@ -406,8 +408,10 @@ export default {
     },
     // 根据类型搜索公告
     searchNotice(type) {
+      this.currentPage = 1;
       this.noticeType = type;
       this.publisher = null;
+      this.issuedCompanyID = null;
       this.getDataList();
     },
     // 举报
@@ -603,6 +607,7 @@ export default {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         publisher: this.publisher,
+        issuedCompanyID: this.issuedCompanyID,
         noticeType: this.noticeType
       };
       for (const key in fd) {
