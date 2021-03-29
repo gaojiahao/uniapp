@@ -117,6 +117,8 @@ import bsHallBusiness from "@/views/bsPage/bsBusinessManage/bsHallBusiness/BsHal
 import bsShoppingCart from "@/views/bsPage/bsBusinessManage/bsShoppingCart/BsShoppingCart.vue";
 // 找样报价
 import bsSampleQuotation from "@/views/bsPage/bsBusinessManage/bsSampleQuotation/BsSampleQuotation.vue";
+// 找样报价-报价详情
+import bsSampleQuotationDetails from "@/components/bsComponents/bsSampleComponent/bsSampleQuotationDetails";
 // 找样报价-编辑详情
 import bsSampleUpdata from "@/components/bsComponents/bsSampleComponent/bsSampleUpdata";
 // 采购订单
@@ -154,6 +156,7 @@ export default {
     bsHallBusiness,
     bsShoppingCart,
     bsSampleQuotation,
+    bsSampleQuotationDetails,
     bsSampleUpdata,
     bsPurchaseOrder,
     bsTop,
