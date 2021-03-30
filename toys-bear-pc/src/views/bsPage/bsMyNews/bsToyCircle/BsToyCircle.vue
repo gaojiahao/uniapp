@@ -513,7 +513,6 @@ export default {
           type: "danger"
         });
       }
-      this.getDataList();
     },
     // 点赞
     async openDianZan(val) {
@@ -536,6 +535,25 @@ export default {
           });
         }
         val.isLike = !val.isLike;
+        let flag = true;
+        for (let i = 0; i < val.upvoteUserList.length; i++) {
+          if (
+            val.upvoteUserList[i].companyId == this.currentComparnyId &&
+            val.upvoteUserList[i].userId == this.userInfo.userInfo.id
+          ) {
+            flag = false;
+            val.upvoteUserList.splice(i, 1);
+            break;
+          }
+        }
+        if (flag) {
+          val.upvoteUserList.push({
+            companyId: this.currentComparnyId,
+            image: this.userInfo.userInfo.userImage,
+            niceName: this.userInfo.userInfo.linkman,
+            userId: this.userInfo.userInfo.id
+          });
+        }
       }
     },
     // 打开回复评论
