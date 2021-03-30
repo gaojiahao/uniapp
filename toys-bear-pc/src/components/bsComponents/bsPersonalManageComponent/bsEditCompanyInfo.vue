@@ -185,7 +185,9 @@
             $store.state.globalJson.Json.UserRestrictions[0].itemCode
           }}</span
           >字，当前输入
-          <span>{{ editClientForm.remark && editClientForm.remark.length }}</span
+          <span>{{
+            editClientForm.remark && editClientForm.remark.length
+          }}</span
           >，还可输入
           <span>{{
             $store.state.globalJson.Json.UserRestrictions[0].itemCode -
