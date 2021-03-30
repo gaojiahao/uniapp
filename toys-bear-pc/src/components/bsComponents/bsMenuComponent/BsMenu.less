@@ -58,6 +58,7 @@
 @{deep} .el-submenu {
   .el-submenu__title {
     font-size: 15px !important;
+    height: 50px;
     .icon {
       margin-right: 20px;
       display: inline-block;
@@ -169,13 +170,17 @@
     font-size: 15px !important;
     height: 40px;
     line-height: 40px;
-    text-indent: 28px;
+    text-indent: 15px;
+    background-color: #f9fafc;
     &.is-active {
       background-color: #3368a9;
       color: #fff !important;
       .el-submenu__title, .el-icon-menu {
         color: #fff;
       }
+    }
+    &:hover {
+      background-color: #ebf0f6 !important;
     }
   }
 }

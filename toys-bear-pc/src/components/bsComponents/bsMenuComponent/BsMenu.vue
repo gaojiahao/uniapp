@@ -41,8 +41,10 @@
             v-for="item in item.children"
             :key="item.id"
             :index="item.linkUrl"
-            >{{ item.name }}</el-menu-item
           >
+            <i class="iconfont icon-dian"></i>
+            <span> {{ item.name }}</span>
+          </el-menu-item>
         </el-submenu>
       </el-menu>
     </el-scrollbar>

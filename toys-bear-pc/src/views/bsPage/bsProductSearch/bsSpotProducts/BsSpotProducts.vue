@@ -105,6 +105,7 @@ export default {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         typeId: 3,
+        parentCode: "all",
         keyword: this.keyword,
         startTime: this.dateTime && this.dateTime[0],
         endTime: this.dateTime && this.dateTime[1]

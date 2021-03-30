@@ -290,7 +290,8 @@ export default {
         })
         .then(res => {
           const time = getCurrentTime();
-          const fileName = this.currentOrder.customerName + "_" + time + ".xlsx";
+          const fileName =
+            this.currentOrder.customerName + "_" + time + ".xlsx";
           const blob = res.data;
           if (window.navigator && window.navigator.msSaveOrOpenBlob) {
             // 兼容IE

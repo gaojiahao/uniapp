@@ -59,16 +59,16 @@ export default {
         margin-right: 12px;
         font-size: 30px;
         &.success {
-          color: #33A96A;
+          color: #33a96a;
         }
         &.danger {
-          color: #FF4848;
+          color: #ff4848;
         }
         &.primary {
-          color: #3591EE;
+          color: #3591ee;
         }
         &.warning {
-          color: #F9723E;
+          color: #f9723e;
         }
       }
     }

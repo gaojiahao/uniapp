@@ -155,14 +155,14 @@ export default {
     // 选择子级
     selectChildren(child) {
       this.currentChildren = child;
-      // this.getProductsList();
+      this.getProductsList();
     },
     // 切换专区
     checkTabs(num, item) {
       this.isDiyu = num;
       this.currentTabs = item;
       this.currentChildren = null;
-      // this.getProductsList();
+      this.getProductsList();
     },
     // 获取列表
     async getProductsList() {
