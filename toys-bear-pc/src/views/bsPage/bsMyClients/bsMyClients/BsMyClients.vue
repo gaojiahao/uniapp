@@ -204,7 +204,7 @@ export default {
           delete fd[key];
         }
       }
-      const res = await this.$http.post("/api/SearchCustomerInfosPage", { fd });
+      const res = await this.$http.post("/api/SearchCustomerInfosPage", fd);
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items;
       }

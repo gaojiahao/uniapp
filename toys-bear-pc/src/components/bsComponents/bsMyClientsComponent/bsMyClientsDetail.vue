@@ -350,7 +350,6 @@ export default {
           padding-top: 20px;
           flex: 1;
           .name {
-            width: 120px;
             height: 31px;
             font-size: 24px;
             font-family: Microsoft YaHei, Microsoft YaHei-Regular;
