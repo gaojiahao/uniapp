@@ -217,6 +217,9 @@ export default {
             case "bsSampleUpdata":
               this.$router.push("/bsIndex/bsSampleQuotation");
               break;
+            case "bsSampleQuotationDetails":
+              this.$router.push("/bsIndex/bsSampleQuotation");
+              break;
             case "bsClientOrderDetails":
               this.$router.push("/bsIndex/bsCustomerOrder");
               break;

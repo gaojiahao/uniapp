@@ -290,7 +290,7 @@ export default {
       this.getCompanySamplelistPage();
     },
     // 报价详情跳转
-    goDetails(row) {
+    async goDetails(row) {
       console.log(row.offerNumber);
       const fd = {
         name: row.offerNumber,
@@ -301,19 +301,21 @@ export default {
         label: row.offerNumber,
         value: row
       };
+      this.$router.push("/bsIndex/bsSampleQuotationDetails");
       this.$store.commit("myAddTab", fd);
     },
     //编辑报价跳转
-    handleEdit(index, row) {
+    async handleEdit(index, row) {
       const fd = {
-        name: row.offerNumber,
+        name: "编辑" + row.offerNumber,
         linkUrl: "/bsIndex/bsSampleUpdata",
         component: "bsSampleUpdata",
         refresh: true,
         noPush: true,
-        label: row.offerNumber,
+        label: "编辑" + row.offerNumber,
         value: row
       };
+      this.$router.push("/bsIndex/bsSampleUpdata");
       this.$store.commit("myAddTab", fd);
     },
     // 搜索
@@ -331,6 +333,7 @@ export default {
 <style scoped lang="less">
 @deep: ~">>>";
 .bsSampleQuotation {
+  padding: 0 20px;
   min-height: 100%;
   background-color: #fff;
   .title {

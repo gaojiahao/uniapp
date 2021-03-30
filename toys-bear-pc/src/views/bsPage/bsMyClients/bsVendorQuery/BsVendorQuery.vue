@@ -142,16 +142,17 @@ export default {
       }
     },
     //点击详情
-    handleDetail(e) {
+    async handleDetail(e) {
       const fd = {
         name: e.companyName,
-        linkUrl: "/bsIndex/bsVendorQuery",
+        linkUrl: "/bsIndex/bsMyClientsDetail",
         component: "bsMyClientsDetail",
         refresh: true,
         noPush: true,
         label: e.companyName,
         value: e
       };
+      this.$router.push("/bsIndex/bsMyClientsDetail");
       this.$store.commit("myAddTab", fd);
     },
     // 搜索
