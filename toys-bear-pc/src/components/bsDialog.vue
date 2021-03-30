@@ -55,7 +55,7 @@ export default {
       get() {
         return this.visible;
       },
-      set(val) {}
+      set() {}
     }
   },
 
