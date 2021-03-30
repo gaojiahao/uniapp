@@ -37,7 +37,7 @@
       </div>
       <div class="handerTab">
         <el-table
-          :header-cell-style="{ background: '#f1f3f6' }"
+          :header-cell-style="{ backgroundColor: '#f9fafc' }"
           :data="handerTabData"
           style="width: 100%"
           row-key="id"

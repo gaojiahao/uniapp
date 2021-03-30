@@ -40,6 +40,16 @@ export default {
       store.commit("handlerShowGlobalMsg", false);
     }, option.time || 2000);
   },
+
+  //全局dialog组件事件
+  handlerDialogState(data) {
+    store.commit("handlerDialogShow", false);
+    Vue.prototype.$nextTick(() => {
+      store.commit("handlerDialogShow", true);
+      store.commit("handlerDialogData", data);
+    });
+  },
+
   // 新增tab页
   addTab(n) {
     store.commit("myAddTab", n);

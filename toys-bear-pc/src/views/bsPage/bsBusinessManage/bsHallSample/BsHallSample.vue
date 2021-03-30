@@ -13,6 +13,7 @@
       @submitPopupData="submitPopupData"
     >
     </bsDialog>
+    <el-button type="danger" @click="www">取 消</el-button>
   </div>
 </template>
 
@@ -34,8 +35,12 @@ export default {
       }
     };
   },
-  methods: {},
+  created() {},
+  mounted() {},
   methods: {
+    www() {
+      this.$common.handlerDialogState("handlerDialogShow", true);
+    },
     // 点击取消事件
     resetPopupData() {
       //  这里可重置数据
@@ -43,13 +48,14 @@ export default {
     },
     // 点击确定的按钮
     async submitPopupData(data) {
+      this.$common.handlerMsgState({
+        msg: "只能上传图片或视频的其中一种文件格式",
+        type: "danger"
+      });
       console.log(data);
-      this.dialogVisible = false;
+      // this.dialogVisible = false;
     }
-  },
-  created() {},
-  mounted() {}
+  }
 };
 </script>
-<style scoped lang="less">
-</style>
+<style scoped lang="less"></style>

@@ -157,11 +157,12 @@
               placeholder=" "
             ></el-input>
           </el-form-item>
-          <el-form-item label="小数位数：" prop="decimalPlaces">
+          <!-- 小数位数： -->
+          <el-form-item label="小数位数：" prop="miniPriceDecimalPlaces">
             <el-select
+              v-model="clienFormData.miniPriceDecimalPlaces"
               style="width: 120px;"
-              v-model="clienFormData.region"
-              placeholder="decimalPlaces"
+              placeholder="请选择小数位数："
             >
               <el-option
                 v-for="(item, i) in options.decimalPlaces"
@@ -183,6 +184,7 @@
       :visible.sync="addMyClientDialog"
       destroy-on-close
       width="50%"
+      :header-cell-style="{ backgroundColor: '#f9fafc' }"
     >
       <el-form
         ref="addMyClientRef"
@@ -339,7 +341,6 @@ export default {
   created() {},
   mounted() {
     this.getProductOfferByNumber();
-    console.log(this.clienFormData);
   },
   methods: {
     //请求条件
@@ -414,7 +415,7 @@ export default {
   .searchBox {
     width: 100%;
     box-sizing: border-box;
-    padding: 20px;
+    padding: 20px 0;
     form {
       display: flex;
       flex-wrap: wrap;
