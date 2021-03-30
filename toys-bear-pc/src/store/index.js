@@ -236,8 +236,15 @@ export default new Vuex.Store({
             case "bsSampleUpdata":
               state.activeTab = "/bsIndex/bsSampleQuotation";
               break;
+
+            case "bsSampleQuotationDetails":
+              state.activeTab = "/bsIndex/bsSampleQuotation";
+              break;
             case "bsClientOrderDetails":
               state.activeTab = "/bsIndex/bsCustomerOrder";
+              break;
+            case "bsMyClientsDetail":
+              state.activeTab = "/bsIndex/bsVendorQuery";
               break;
             default:
               state.activeTab = tab[tab.length - 1].name;
