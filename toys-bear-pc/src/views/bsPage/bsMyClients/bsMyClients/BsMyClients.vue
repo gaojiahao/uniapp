@@ -52,7 +52,7 @@
     </div>
     <div class="tableBox">
       <!-- 客户列表 -->
-      <el-table :data="tableData" stripe style="width: 100%">
+      <el-table :data="tableData" stripe style="width: 100%" :header-cell-style="{ backgroundColor: '#f9fafc' }">
         <el-table-column
           align="center"
           prop="name"

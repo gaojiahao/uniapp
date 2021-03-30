@@ -52,7 +52,7 @@
         :data="tableData"
         style="width: 100%"
         ref="collecTable"
-        :header-cell-style="{ 'font-size': '14px', color: '#666' }"
+        :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
         <el-table-column label="模板名称" align="center" prop="name">
         </el-table-column>

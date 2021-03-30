@@ -39,7 +39,7 @@
         :data="tableData"
         stripe
         style="width: 100%"
-        :header-cell-style="{ background: '#f1f3f6' }"
+        :header-cell-style="{ backgroundColor: '#f9fafc' }"
         @row-click="handleDetail"
       >
         <el-table-column label="厂商">

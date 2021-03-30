@@ -288,6 +288,7 @@ export default {
       if (code === 200) {
         this.myInfo = item;
         this.tableData = item.personnels;
+        this.totalCount = item.personnels.length;
       } else {
         this.$common.handlerMsgState({
           msg: msg,

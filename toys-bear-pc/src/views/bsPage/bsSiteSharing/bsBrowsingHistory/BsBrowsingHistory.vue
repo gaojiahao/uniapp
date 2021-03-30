@@ -54,7 +54,11 @@
       </div>
     </div>
     <div class="tableBox">
-      <el-table :data="tableData" style="width:100%;">
+      <el-table
+        :data="tableData"
+        style="width:100%;"
+        :header-cell-style="{ backgroundColor: '#f9fafc' }"
+      >
         <el-table-column label="客户">
           <template slot-scope="scope">
             <i class="el-icon-view"></i>

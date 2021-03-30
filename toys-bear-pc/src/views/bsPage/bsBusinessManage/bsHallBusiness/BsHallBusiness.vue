@@ -89,7 +89,7 @@
         :data="tableData"
         style="width: 100%"
         ref="collecTable"
-        :header-cell-style="{ 'font-size': '14px', color: '#666' }"
+        :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
         <el-table-column label="择样单号" min-width="180">
           <template slot-scope="scope">
