@@ -2,7 +2,7 @@
 import axios from "axios";
 import $Store from "@/store";
 import router from "@/router/index.js";
-import { handlerMsgState } from "@/utils/common";
+import v from "vue";
 /**
  * apiBaseURL
  */
@@ -69,7 +69,7 @@ switch (env) {
 console.log(push_target, target, export_target);
 const createLogRecord = async function(obj) {
   if (obj.Url.includes("CreateLogRecord")) {
-    handlerMsgState({
+    v.prototype.$common.handlerMsgState({
       msg: obj.Message,
       type: "danger"
     });
@@ -82,7 +82,7 @@ const createLogRecord = async function(obj) {
       res.data.result.code +
       "," +
       res.data.result.message;
-    handlerMsgState({
+    v.prototype.$common.handlerMsgState({
       msg: msg,
       type: "danger"
     });
@@ -138,7 +138,7 @@ myAxios.install = function(Vue) {
       // Check if we've maxed out the total number of retries
       if (config.__retryCount >= push_instance.defaults.retry) {
         $Store.commit("updateAppLoading", false);
-        handlerMsgState({
+        v.prototype.$common.handlerMsgState({
           msg: "请求超时，请检查网络",
           type: "danger"
         });
@@ -182,7 +182,7 @@ myAxios.install = function(Vue) {
       // Check if we've maxed out the total number of retries
       if (config.__retryCount >= instance.defaults.retry) {
         $Store.commit("updateAppLoading", false);
-        handlerMsgState({
+        v.prototype.$common.handlerMsgState({
           msg: "请求超时，请检查网络",
           type: "danger"
         });
@@ -251,6 +251,7 @@ myAxios.install = function(Vue) {
       }
       // 屏蔽不需要验证code的请求，如下载导出等
       if (
+        res.config.url.includes("GetProductOfferOrderExcel") ||
         res.config.url.includes("LittleBearInstallDownload") ||
         res.config.url.includes("LittleBearInstallRepeatDownload") ||
         res.config.url.includes("ExportCompanySampleListToExcel") ||
@@ -261,7 +262,7 @@ myAxios.install = function(Vue) {
       } else {
         if (res.data.result.code === 401 || res.data.result.code === 403) {
           $Store.commit("updateAppLoading", false);
-          handlerMsgState({
+          v.prototype.$common.handlerMsgState({
             msg: "登录过期，请重新登录",
             type: "danger"
           });
@@ -299,7 +300,7 @@ myAxios.install = function(Vue) {
         switch (error.response.status) {
           case 401:
             $Store.commit("updateAppLoading", false);
-            handlerMsgState({
+            v.prototype.$common.handlerMsgState({
               msg: "登录过期，请重新登录",
               type: "danger"
             });
@@ -344,7 +345,7 @@ myAxios.install = function(Vue) {
               Url: error.response.config.url,
               Parameters: error.response.config.data
             });
-            handlerMsgState({
+            v.prototype.$common.handlerMsgState({
               msg:
                 "请求失败" +
                 error.response.statusText +
@@ -381,7 +382,7 @@ myAxios.install = function(Vue) {
             Url: config.url,
             Parameters: config.data
           });
-          handlerMsgState({
+          v.prototype.$common.handlerMsgState({
             msg:
               "接口：" +
               config.url +

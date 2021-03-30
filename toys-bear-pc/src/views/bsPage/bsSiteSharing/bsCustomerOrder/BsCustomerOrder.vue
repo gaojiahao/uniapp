@@ -138,9 +138,9 @@
     <!-- 导出订单模板dialog -->
     <transition name="el-zoom-in-center">
       <el-dialog
-        title="订单模板"
-        v-show="exportTemplateDialog"
-        :visible.sync="exportTemplateDialog"
+        title="选择模板"
+        v-if="exportDialog"
+        :visible.sync="exportDialog"
         top="60px"
         width="80%"
       >
@@ -241,7 +241,7 @@
     <!-- 导出订单模板dialog -->
     <transition name="el-zoom-in-center">
       <el-dialog
-        title="订单模板"
+        title="客户订单"
         v-if="exportTemplateDialog"
         :visible.sync="exportTemplateDialog"
         top="60px"
@@ -258,12 +258,14 @@
 
 <script>
 import bsExportOrder from "@/components/bsComponents/bsSiteSharingComponent/bsExportOrder";
+import { getCurrentTime } from "@/assets/js/common/common.js";
 export default {
   name: "bsCustomerOrder",
   components: { bsExportOrder },
   data() {
     return {
       exportTemplateDialog: false,
+      exportDialog: false,
       currentOrder: {},
       zhandian: null,
       keyword: null,
@@ -276,6 +278,52 @@ export default {
     };
   },
   methods: {
+    // 导出模板
+    exportOrder(type) {
+      const fd = {
+        templateType: type,
+        shareOrderNumber: this.currentOrder.orderNumber
+      };
+      this.$http
+        .post("/api/ExportCustomerOrderDetailToExcel", fd, {
+          responseType: "blob"
+        })
+        .then(res => {
+          const time = getCurrentTime();
+          const fileName = this.currentOrder.customerName + "_" + time + ".xlsx";
+          const blob = res.data;
+          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            // 兼容IE
+            window.navigator.msSaveOrOpenBlob(blob, fileName);
+          } else {
+            // 兼容Google及fireFox
+            const link = document.createElement("a");
+            link.style.display = "none";
+            link.download = fileName;
+            link.href = URL.createObjectURL(blob);
+            document.body.appendChild(link);
+            link.click();
+            URL.revokeObjectURL(link.href); // 释放URL 对象
+            document.body.removeChild(link);
+          }
+        });
+    },
+    // 预览导出模板
+    openViewer(url) {
+      this.$PreviewPic({
+        zIndex: 9999, // 组件的zIndex值 默认为2000
+        index: 0, // 展示第几张图片 默认为0
+        list: [url], // 需要展示图片list
+        onClose: i => {
+          // 关闭时的回调
+          console.log(i);
+        },
+        onSelect: i => {
+          // 点击某张图片的回调
+          console.log(i);
+        }
+      });
+    },
     // 获取列表
     async getSearchCompanyShareOrdersPage() {
       const fd = {
@@ -349,14 +397,7 @@ export default {
     // 打开选择导出模板
     openSelectTemplate(row) {
       this.currentOrder = row;
-      this.exportTemplateDialog = true;
-      // const str = "http://139.9.71.135:8087/ConversationListIcon.rar";
-      // const link = document.createElement("a");
-      // link.href = str;
-      // link.style.display = "none";
-      // document.body.appendChild(link);
-      // link.click();
-      // document.body.removeChild(link); // 释放元素
+      this.exportDialog = true;
     },
     // 搜索
     search() {

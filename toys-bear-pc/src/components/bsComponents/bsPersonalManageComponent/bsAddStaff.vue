@@ -179,7 +179,7 @@ export default {
       month = month + 1;
       month = month.toString().padStart(2, "0");
       date = date.toString().padStart(2, "0");
-      var defaultDate = `${year}-${month}-${date}`;
+      var defaultDate = year + "-" + month + "-" + date;
       this.$set(this.addEmployeeForm, "birthday", defaultDate);
     },
     // 提交添加员工

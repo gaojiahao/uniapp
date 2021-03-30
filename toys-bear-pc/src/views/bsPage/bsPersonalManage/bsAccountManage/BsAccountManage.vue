@@ -38,7 +38,7 @@
         </div>
       </div>
       <!-- v-show="myInfo.isMain" -->
-      <div class="editOperation">
+      <div class="editOperation" v-show="myInfo.isMain">
         <span class="editItem">修改公司资料</span>
         <span class="line">|</span>
         <span class="editItem">绑定公司</span>

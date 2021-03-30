@@ -8,6 +8,7 @@
           <el-input
             type="text"
             size="medium"
+            clearable
             v-model="searchForm.OfferNumber"
             placeholder="请输入关键词"
             @keyup.native.enter="search"
@@ -17,6 +18,7 @@
           <span class="label">客户名称：</span>
           <el-input
             type="text"
+            clearable
             size="medium"
             v-model="searchForm.CustomerName"
             placeholder="请输入关键词"
@@ -28,6 +30,7 @@
           <el-input
             type="text"
             size="medium"
+            clearable
             v-model="searchForm.Linkman"
             placeholder="请输入关键词"
             @keyup.native.enter="search"
@@ -163,7 +166,11 @@
                 >编辑</el-button
               >
               <el-button size="mini" type="info">推送</el-button>
-              <el-button size="mini" @click="exportOrder" type="warning">
+              <el-button
+                size="mini"
+                @click="exportOrder(scope.row)"
+                type="warning"
+              >
                 导出
               </el-button>
               <el-popconfirm
@@ -205,18 +212,18 @@
         top="60px"
         width="80%"
       >
-        <bsExportSampleOrder :orderRow="orderRow" />
+        <bsExportOrder :options="orderRow" />
       </el-dialog>
     </transition>
   </div>
 </template>
 
 <script>
-import bsExportSampleOrder from "@/components/bsComponents/bsBusinessManageComponent/bsExportSampleOrder";
+import bsExportOrder from "@/components/commonComponent/exportOrderComponent";
 export default {
   name: "bsSampleQuotation",
   components: {
-    bsExportSampleOrder
+    bsExportOrder
   },
   data() {
     return {
@@ -241,7 +248,13 @@ export default {
   methods: {
     // 导出找样
     exportOrder(row) {
-      this.orderRow = row;
+      console.log(row);
+      this.orderRow = {
+        orderNumber: row.offerNumber,
+        name: row.customerName,
+        api: "/api/GetProductOfferOrderExcel"
+      };
+      console.log(this.orderRow);
       this.exportTemplateDialog = true;
     },
     // 获取列表
@@ -252,8 +265,8 @@ export default {
         Linkman: this.searchForm.Linkman,
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
-        startTime: this.dateTime && this.dateTime[0],
-        endTime: this.dateTime && this.dateTime[1]
+        startTime: this.searchForm.dateTime && this.searchForm.dateTime[0],
+        endTime: this.searchForm.dateTime && this.searchForm.dateTime[1]
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {

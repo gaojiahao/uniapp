@@ -130,7 +130,7 @@
         <el-form-item label="客户电话">
           <el-input
             placeholder="请输入客户电话"
-            v-model="formData.PhoneNumber"
+            v-model="formData.phoneNumber"
           ></el-input>
         </el-form-item>
         <el-form-item label="邮箱">
@@ -204,7 +204,7 @@ export default {
           delete fd[key];
         }
       }
-      const res = await this.$http.post("/api/SearchCustomerInfosPage", { fd });
+      const res = await this.$http.post("/api/SearchCustomerInfosPage", fd);
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items;
       }
