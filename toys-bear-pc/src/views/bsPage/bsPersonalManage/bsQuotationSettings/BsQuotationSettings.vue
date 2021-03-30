@@ -89,9 +89,6 @@
           align="center"
           width="100"
         >
-          <template slot-scope="scope">
-            {{ scope.row.gr_we }}
-          </template>
         </el-table-column>
         <el-table-column
           prop="price"
@@ -196,9 +193,15 @@ export default {
       if (res.data.result.code === 200) {
         this.getOfferFormula();
         this.showDialog = false;
-        this.$message.success(msg);
+        this.$common.handlerMsgState({
+          msg: msg,
+          type: "success"
+        });
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     // 删除报价公式
@@ -208,10 +211,16 @@ export default {
         id: row.id
       });
       if (res.data.result.code === 200) {
-        this.$message.success("删除成功");
+        this.$common.handlerMsgState({
+          msg: "删除成功",
+          type: "success"
+        });
         this.getOfferFormula();
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     // 关闭新增报价公式
@@ -249,7 +258,12 @@ export default {
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items;
         this.totalCount = res.data.result.item.totalCount;
-      } else this.$message.error(res.data.result.msg);
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
     },
     // 切換頁容量
     handleSizeChange(pageSize) {

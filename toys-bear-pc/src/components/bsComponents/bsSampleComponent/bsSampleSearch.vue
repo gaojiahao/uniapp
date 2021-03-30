@@ -286,7 +286,10 @@ export default {
       if (res.data.result.code === 200) {
         this.clienFormData = res.data.result.item;
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     onSubmit() {}

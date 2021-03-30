@@ -18,6 +18,9 @@ function myForEach(oList, yList) {
 export default new Vuex.Store({
   state: {
     activeTab: "/bsIndex/bsHome",
+    showGlobalMsg: false,
+    msgType: "primary",
+    globalMsg: "",
     tabList: [
       {
         component: "bsHome",
@@ -63,6 +66,15 @@ export default new Vuex.Store({
     currentComparnyId: null
   },
   mutations: {
+    // 修改全局msg样式
+    handlerMsgType(state, payLoad) {
+      state.msgType = payLoad.type;
+      state.globalMsg = payLoad.msg;
+    },
+    // 修改全局msg状态
+    handlerShowGlobalMsg(state, payLoad) {
+      state.showGlobalMsg = payLoad;
+    },
     // 清空路由
     clearAllTab(state, payLoad) {
       state.bsMenuLabels = payLoad;

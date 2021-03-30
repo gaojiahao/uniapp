@@ -133,7 +133,10 @@ export default {
         this.totalCount = res.data.result.item.totalCount;
         this.tableData = res.data.result.item.items;
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     // 切換頁容量
@@ -156,7 +159,10 @@ export default {
           ...res.data.result.item
         ];
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     // 搜索

@@ -19,6 +19,27 @@ export default {
       }
     }
   },
+  /**
+   * 修改全局msg状态
+   */
+  //  this.$common.handlerMsgState({ msg: "测试msg", type: "success" });
+  timeID: null,
+  handlerMsgState(option) {
+    if (this.timeID) {
+      clearTimeout(this.timeID);
+      store.commit("handlerShowGlobalMsg", false);
+      Vue.prototype.$nextTick(() => {
+        store.commit("handlerShowGlobalMsg", true);
+        store.commit("handlerMsgType", option);
+      });
+    } else {
+      store.commit("handlerShowGlobalMsg", true);
+      store.commit("handlerMsgType", option);
+    }
+    this.timeID = setTimeout(() => {
+      store.commit("handlerShowGlobalMsg", false);
+    }, option.time || 2000);
+  },
   // 新增tab页
   addTab(n) {
     store.commit("myAddTab", n);

@@ -284,7 +284,10 @@ export default {
   methods: {
     // 打开3D效果
     open3D() {
-      this.$message.warning("敬请期待");
+      this.$common.handlerMsgState({
+        msg: "敬请期待",
+        type: "warning"
+      });
       console.log("3d");
     },
     touchEnd(e) {

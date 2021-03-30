@@ -129,7 +129,7 @@
               <span>联系电话</span>
             </p>
           </el-tooltip>
-          <p class="item myHover">
+          <p class="item myHover" @click="toFactory(item)">
             <i class="shopIcon"></i>
             <span>厂商店铺</span>
           </p>
@@ -179,19 +179,45 @@ export default {
     return {};
   },
   methods: {
+    // 去厂商
+    toFactory(item) {
+      console.log(item);
+      const fd = {
+        name: item.supplierName,
+        linkUrl: "/bsIndex/bsMyClientsDetail",
+        component: "bsMyClientsDetail",
+        refresh: true,
+        noPush: true,
+        label: item.supplierName,
+        value: {
+          companyNumber: item.supplierNumber,
+          companyLogo: item.supplierPersonnelLogo,
+          companyName: item.supplierName,
+          contactsMan: item.supplierPersonnelName,
+          phoneNumber: item.supplierPhone,
+          address: item.supplierAddres || item.supplierAddress
+        }
+      };
+      this.$router.push("/bsIndex/bsMyClientsDetail");
+      this.$store.commit("myAddTab", fd);
+    },
     // 加购
     handlerShopping(item) {
       item.isShopping = !item.isShopping;
       if (item.isShopping) {
         item.shoppingCount = 1;
         this.$store.commit("pushShopping", item);
-        this.$message.closeAll();
-        this.$message.success("加购成功");
+        this.$common.handlerMsgState({
+          msg: "加购成功",
+          type: "success"
+        });
       } else {
         item.shoppingCount = 0;
-        this.$message.closeAll();
         this.$store.commit("popShopping", item);
-        this.$message.warning("取消加购成功");
+        this.$common.handlerMsgState({
+          msg: "取消加购成功",
+          type: "warning"
+        });
       }
     },
     // 收藏
@@ -200,11 +226,16 @@ export default {
         productNumber: item.productNumber
       });
       if (res.data.result.code === 200) {
-        this.$message.closeAll();
         if (item.isFavorite) {
-          this.$message.warning("取消收藏成功");
+          this.$common.handlerMsgState({
+            msg: "取消收藏成功",
+            type: "warning"
+          });
         } else {
-          this.$message.success("收藏成功");
+          this.$common.handlerMsgState({
+            msg: "收藏成功",
+            type: "success"
+          });
         }
         item.isFavorite = !item.isFavorite;
       }
@@ -394,6 +425,7 @@ export default {
           display: flex;
           align-items: center;
           color: #666;
+          cursor: pointer;
           &.myHover {
             cursor: pointer;
           }

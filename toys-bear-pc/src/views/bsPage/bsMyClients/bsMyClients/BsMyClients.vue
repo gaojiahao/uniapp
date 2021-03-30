@@ -249,9 +249,15 @@ export default {
           if (res.data.result.code === 200) {
             this.getClientsListPage();
             this.closeDialog();
-            this.$message.success("新增操作成功");
+            this.$common.handlerMsgState({
+              msg: "新增操作成功",
+              type: "success"
+            });
           } else {
-            this.$message.error(res.data.result.msg);
+            this.$common.handlerMsgState({
+              msg: res.data.result.msg,
+              type: "danger"
+            });
           }
         }
       });
@@ -274,9 +280,15 @@ export default {
           if (res.data.result.code === 200) {
             this.closeDialog();
             this.getClientsListPage();
-            this.$message.success("编辑操作成功");
+            this.$common.handlerMsgState({
+              msg: "编辑操作成功",
+              type: "success"
+            });
           } else {
-            this.$message.error(res.data.result.msg);
+            this.$common.handlerMsgState({
+              msg: res.data.result.msg,
+              type: "danger"
+            });
           }
         }
       });
@@ -286,10 +298,16 @@ export default {
       const res = await this.$http.post("/api/DeleteCustomerInfo?id=" + row.id);
       console.log(res.data, "回调");
       if (res.data.result.code === 200) {
-        this.$message.success("删除成功");
+        this.$common.handlerMsgState({
+          msg: "删除成功",
+          type: "danger"
+        });
         this.getClientsListPage();
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     // 切換頁容量

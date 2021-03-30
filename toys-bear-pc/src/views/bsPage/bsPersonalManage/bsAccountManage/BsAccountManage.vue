@@ -204,10 +204,16 @@ export default {
         this.isEdit = false;
         this.addEmployDialog = false;
         const msg = this.isEdit ? "编辑成功" : "新增成功";
-        this.$message.success(msg);
+        this.$common.handlerMsgState({
+          msg: msg,
+          type: "success"
+        });
         this.getCompanyUserList();
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
         this.isEdit = false;
         this.addEmployDialog = false;
       }
@@ -238,7 +244,10 @@ export default {
     // 删除员工
     async handleDelete(row) {
       if (row.isMain) {
-        this.$message.error("不能删除主账号");
+        this.$common.handlerMsgState({
+          msg: "不能删除主账号",
+          type: "danger"
+        });
         return;
       }
       this.$confirm("确定要删除该员工吗?", "提示", {
@@ -252,14 +261,17 @@ export default {
             OrgPersonnelID: row.id
           });
           if (res.data.result.code === 200) {
-            this.$message.success("删除成功");
+            this.$common.handlerMsgState({
+              msg: "删除成功",
+              type: "success"
+            });
             this.getCompanyUserList();
           }
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
+          this.$common.handlerMsgState({
+            msg: "已取消删除",
+            type: "warning"
           });
         });
     },
@@ -276,7 +288,12 @@ export default {
       if (code === 200) {
         this.myInfo = item;
         this.tableData = item.personnels;
-      } else this.$message.error(msg);
+      } else {
+        this.$common.handlerMsgState({
+          msg: msg,
+          type: "danger"
+        });
+      }
     }
   },
   created() {},

@@ -15,6 +15,11 @@ import Video from "video.js";
 import "video.js/dist/video-js.css";
 import common from "@/utils/common";
 
+/**
+ * 全局组件集合
+ */
+import MessageComponent from "@/components/commonComponent/messageComponent/main.js";
+
 Vue.component(ExTableColumn.name, ExTableColumn);
 Vue.prototype.$PreviewPic = PreviewPic;
 Vue.prototype.$video = Video;
@@ -24,6 +29,7 @@ Vue.use(ElementUI);
 Vue.use(myAxios);
 Vue.use(waterfall);
 Vue.use(common);
+Vue.use(MessageComponent);
 
 new Vue({
   router,

@@ -132,7 +132,10 @@ export default {
             );
             await getMenuFuc();
           } else {
-            this.$message.error(re.data.result.msg);
+            this.$common.handlerMsgState({
+              msg: re.data.result.msg,
+              type: "danger"
+            });
             this.$store.commit("removeLoginItems");
           }
           this.$router.push("/bsIndex");
@@ -142,7 +145,6 @@ export default {
         } catch (error) {
           console.log(error);
           // this.$store.commit("updateAppLoading", false);
-          // this.$message.error("获取菜单失败，请检查网络");
         }
       }
     }

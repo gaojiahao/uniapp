@@ -548,7 +548,10 @@ export default {
         this.defaultShareDomain = res.data.result.item.defaultShareDomain;
         console.log(this.tableData);
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     // 删除分享
@@ -558,10 +561,16 @@ export default {
         {}
       );
       if (res.data.result.code === 200) {
-        this.$message.success("删除成功");
+        this.$common.handlerMsgState({
+          msg: "删除成功",
+          type: "success"
+        });
         this.getDataList();
       } else {
-        this.$message.error("删除失败,请检查网络！");
+        this.$common.handlerMsgState({
+          msg: "删除失败,请联系管理员！",
+          type: "danger"
+        });
       }
     },
     // 切換頁容量
@@ -580,7 +589,12 @@ export default {
       const res = await this.$http.post("/api/RefreshVerifyCode?id=" + row.id);
       const { code, item, msg } = res.data.result;
       if (code === 200) row.verifyCode = item;
-      else this.$message.error(msg);
+      else {
+        this.$common.handlerMsgState({
+          msg: msg,
+          type: "danger"
+        });
+      }
     },
     // 打开新增分享
     openAddClien() {
@@ -601,7 +615,12 @@ export default {
       );
       if (res.data.result.code === 200) {
         this.customerTemplate = res.data.result.item;
-      } else this.$message.error(res.data.result.msg);
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
     },
     // 打开编辑分享
     openEdit(row) {
@@ -639,8 +658,10 @@ export default {
         console.warn("none");
       }
       document.execCommand("Copy"); // 执行浏览器复制命令
-      // console.warn('none')
-      this.$message.success("已复制好，可贴粘。");
+      this.$common.handlerMsgState({
+        msg: "已复制好，可贴粘。",
+        type: "success"
+      });
     },
     // 打开新增客户
     openAddMyClient() {
@@ -662,9 +683,15 @@ export default {
           if (res.data.result.code === 200) {
             this.getClientList();
             this.addMyClientDialog = false;
-            this.$message.success("新增操作成功");
+            this.$common.handlerMsgState({
+              msg: "新增操作成功",
+              type: "success"
+            });
           } else {
-            this.$message.error(res.data.result.msg);
+            this.$common.handlerMsgState({
+              msg: res.data.result.msg,
+              type: "danger"
+            });
           }
         }
       });
@@ -692,9 +719,15 @@ export default {
           if (res.data.result.code === 200) {
             this.addClienDialog = false;
             this.getDataList();
-            this.$message.success("操作成功");
+            this.$common.handlerMsgState({
+              msg: "操作成功",
+              type: "success"
+            });
           } else {
-            this.$message.error(res.data.result.msg);
+            this.$common.handlerMsgState({
+              msg: res.data.result.msg,
+              type: "danger"
+            });
           }
         }
       });

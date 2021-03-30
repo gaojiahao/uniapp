@@ -138,7 +138,10 @@ export default {
         this.currentTabs = res.data.result.item.vipRegionItem[0];
         this.getProductsList();
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     // 去购物车

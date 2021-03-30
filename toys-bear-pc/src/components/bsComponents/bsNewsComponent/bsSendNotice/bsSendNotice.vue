@@ -267,7 +267,10 @@ export default {
     // 放大预览
     handlePictureCardPreview(file) {
       if (file.raw.type.split(/\//)[0] === "video") {
-        this.$message.error("功能暂未开放");
+        this.$common.handlerMsgState({
+          msg: "功能暂未开放",
+          type: "danger"
+        });
       } else {
         this.dialogImageUrl = file.url;
         this.dialogVisibleImg = true;
@@ -297,8 +300,10 @@ export default {
                 };
               });
             } else {
-              // imgFlag = true
-              this.$message.error(res.data.result.msg);
+              this.$common.handlerMsgState({
+                msg: res.data.result.msg,
+                type: "danger"
+              });
             }
             this.fileType = this.formData.fileList[0].raw.type.split("/")[0];
           }
@@ -331,7 +336,10 @@ export default {
                 : "" // 文件类型 img video
           });
           if (result.data.result.code === 200) {
-            this.$message.success("发布公告成功");
+            this.$common.handlerMsgState({
+              msg: "发布公告成功",
+              type: "success"
+            });
             // 刷新公告列表
             this.$emit("close", true);
             this.skipCount = 1;
@@ -340,7 +348,10 @@ export default {
             this.formData.fileList = [];
           } else {
             this.$emit("close", false);
-            this.$message.error(result.data.result.msg);
+            this.$common.handlerMsgState({
+              msg: res.data.result.msg,
+              type: "danger"
+            });
           }
         }
       });
@@ -359,7 +370,10 @@ export default {
           // 刷新公告
           this.$root.eventHub.$emit("UpdateFind");
         } else {
-          this.$message.error(res.data.result.message);
+          this.$common.handlerMsgState({
+            msg: res.data.result.message,
+            type: "danger"
+          });
         }
       } catch (error) {
         console.log(error);
@@ -451,18 +465,23 @@ export default {
     },
     // 图片或视频超出时的回调
     onExceed() {
-      this.$message.error("最多只能选择" + this.imgAndVideoNum + "个文件呢");
+      this.$common.handlerMsgState({
+        msg: "最多只能选择" + this.imgAndVideoNum + "个文件呢",
+        type: "danger"
+      });
     },
     // 发公告选择图片
     changeFile(file, fileList) {
       if (fileList[0].raw.type.split(/\//)[0] === "video") {
         this.imgAndVideoNum = 1;
         if (file.size > this.globalJson.NoticeRestrictions[1].itemCode) {
-          this.$message.error(
-            "上传视频大小不能超过 " +
+          this.$common.handlerMsgState({
+            msg:
+              "上传视频大小不能超过 " +
               this.globalJson.NoticeRestrictions[1].itemCode / 1024 / 1024 +
-              "MB"
-          );
+              "MB",
+            type: "danger"
+          });
           fileList.pop();
           return false;
         }
@@ -472,15 +491,20 @@ export default {
         );
         if (file.raw.type.split(/\//)[0] === "video") {
           fileList.pop();
-          this.$message.error("只能上传图片或视频的其中一种文件格式");
+          this.$common.handlerMsgState({
+            msg: "只能上传图片或视频的其中一种文件格式",
+            type: "danger"
+          });
           return false;
         }
         if (file.size > this.globalJson.NoticeRestrictions[5].itemCode) {
-          this.$message.error(
-            "上传图片大小不能超过 " +
+          this.$common.handlerMsgState({
+            msg:
+              "上传图片大小不能超过 " +
               this.globalJson.NoticeRestrictions[5].itemCode / 1024 / 1024 +
-              "MB"
-          );
+              "MB",
+            type: "danger"
+          });
           fileList.pop();
           return false;
         }

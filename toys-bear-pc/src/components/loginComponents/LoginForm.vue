@@ -133,7 +133,10 @@ export default {
     // 初始化 webSocket
     initWebSocket() {
       if (typeof WebSocket === "undefined") {
-        this.$message.error("您的浏览器不支持WebSocket");
+        this.$common.handlerMsgState({
+          msg: "您的浏览器不支持WebSocket",
+          type: "danger"
+        });
       } else {
         // 初始化weosocket
         // 正式
@@ -229,12 +232,18 @@ export default {
             this.$store.commit("globalJson/setGlobalJson", Json);
             this.$router.push("/bsIndex");
           } else {
-            this.$message.error(re.data.result.msg);
+            this.$common.handlerMsgState({
+              msg: re.data.result.msg,
+              type: "danger"
+            });
             this.$store.commit("removeLoginItems");
           }
         } catch (error) {
           this.$store.commit("updateAppLoading", false);
-          this.$message.error("获取菜单失败，请检查该角色是否有公司类型");
+          this.$common.handlerMsgState({
+            msg: "获取菜单失败，请检查该角色是否有公司类型",
+            type: "danger"
+          });
         }
       }
     },
@@ -345,7 +354,10 @@ export default {
                 );
                 await getMenuFuc();
               } else {
-                this.$message.error(re.data.result.msg);
+                this.$common.handlerMsgState({
+                  msg: re.data.result.msg,
+                  type: "danger"
+                });
                 this.$store.commit("removeLoginItems");
               }
               this.$router.push("/bsIndex/bsHome");
@@ -358,7 +370,10 @@ export default {
               });
             }
           } else {
-            this.$message.error(res.data.result.message);
+            this.$common.handlerMsgState({
+              msg: res.data.result.message,
+              type: "danger"
+            });
           }
         }
       });
@@ -370,7 +385,10 @@ export default {
           this.loginforms.username
         )
       ) {
-        this.$message.error("请输入手机号");
+        this.$common.handlerMsgState({
+          msg: "请输入手机号",
+          type: "danger"
+        });
         return;
       }
       const res = await this.$http.post("/api/SendSMS", {
@@ -378,7 +396,10 @@ export default {
         MessageType: "SignIn"
       });
       if (res.data.result.code !== 200) {
-        this.$message.error(res.data.result.message);
+        this.$common.handlerMsgState({
+          msg: res.data.result.message,
+          type: "danger"
+        });
         return;
       }
       const TIME_COUNT = 60;

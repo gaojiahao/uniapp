@@ -199,10 +199,16 @@ export default {
         productNumber: row.productNumber
       });
       if (res.data.result.code === 200) {
-        this.$message.success("取消收藏成功");
+        this.$common.handlerMsgState({
+          msg: "取消收藏成功",
+          type: "success"
+        });
         this.getCollectList();
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     // 切換頁容量

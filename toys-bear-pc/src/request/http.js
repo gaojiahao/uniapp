@@ -2,7 +2,7 @@
 import axios from "axios";
 import $Store from "@/store";
 import router from "@/router/index.js";
-import { Message } from "element-ui";
+import { handlerMsgState } from "@/utils/common";
 /**
  * apiBaseURL
  */
@@ -69,19 +69,23 @@ switch (env) {
 console.log(push_target, target, export_target);
 const createLogRecord = async function(obj) {
   if (obj.Url.includes("CreateLogRecord")) {
-    Message.closeAll();
-    Message.error(obj.Message);
+    handlerMsgState({
+      msg: obj.Message,
+      type: "danger"
+    });
     return false;
   }
   const res = await axios.post("api/CreateLogRecord", obj);
   if (res.data.result.code !== 200) {
-    Message.closeAll();
-    Message.error(
+    const msg =
       "api/CreateLogRecord报错code=" +
-        res.data.result.code +
-        "," +
-        res.data.result.message
-    );
+      res.data.result.code +
+      "," +
+      res.data.result.message;
+    handlerMsgState({
+      msg: msg,
+      type: "danger"
+    });
   }
 };
 const myAxios = {};
@@ -134,8 +138,10 @@ myAxios.install = function(Vue) {
       // Check if we've maxed out the total number of retries
       if (config.__retryCount >= push_instance.defaults.retry) {
         $Store.commit("updateAppLoading", false);
-        Message.closeAll();
-        Message.error("请求超时，请检查网络");
+        handlerMsgState({
+          msg: "请求超时，请检查网络",
+          type: "danger"
+        });
         // Reject with the error
         return Promise.reject(error);
       }
@@ -176,8 +182,10 @@ myAxios.install = function(Vue) {
       // Check if we've maxed out the total number of retries
       if (config.__retryCount >= instance.defaults.retry) {
         $Store.commit("updateAppLoading", false);
-        Message.closeAll();
-        Message.error("请求超时，请检查网络");
+        handlerMsgState({
+          msg: "请求超时，请检查网络",
+          type: "danger"
+        });
         // Reject with the error
         return Promise.reject(error);
       }
@@ -252,9 +260,11 @@ myAxios.install = function(Vue) {
         return res;
       } else {
         if (res.data.result.code === 401 || res.data.result.code === 403) {
-          Message.closeAll();
           $Store.commit("updateAppLoading", false);
-          Message.error("登录过期，请重新登录");
+          handlerMsgState({
+            msg: "登录过期，请重新登录",
+            type: "danger"
+          });
           router.push({
             path: "/login?id=signOut"
           });
@@ -288,9 +298,11 @@ myAxios.install = function(Vue) {
         // console.log('响应失败拦截', error.response)
         switch (error.response.status) {
           case 401:
-            Message.closeAll();
             $Store.commit("updateAppLoading", false);
-            Message.error("登录过期，请重新登录");
+            handlerMsgState({
+              msg: "登录过期，请重新登录",
+              type: "danger"
+            });
             createLogRecord({
               Message:
                 "接口" +
@@ -309,7 +321,6 @@ myAxios.install = function(Vue) {
             });
             break;
           default:
-            Message.closeAll();
             if (
               // 不需要loading的请求
               !error.response.config.url.includes("GetHotWord") &&
@@ -333,9 +344,15 @@ myAxios.install = function(Vue) {
               Url: error.response.config.url,
               Parameters: error.response.config.data
             });
-            Message.error(
-              `请求失败${error.response.statusText},${error.response.status}，请联系管理员`
-            );
+            handlerMsgState({
+              msg:
+                "请求失败" +
+                error.response.statusText +
+                "," +
+                error.response.status +
+                ",请联系管理员",
+              type: "danger"
+            });
             break;
         }
         return Promise.reject(error);
@@ -364,16 +381,17 @@ myAxios.install = function(Vue) {
             Url: config.url,
             Parameters: config.data
           });
-          Message.closeAll();
-          Message.error(
-            "接口：" +
+          handlerMsgState({
+            msg:
+              "接口：" +
               config.url +
               "，超时时长为=" +
               config.timeout +
               "毫秒，超时次数为=" +
               (instance.defaults.retry + 1) +
-              "次"
-          );
+              "次",
+            type: "danger"
+          });
           // Reject with the error
           return Promise.reject(error);
         }

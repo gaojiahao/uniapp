@@ -86,7 +86,12 @@ export default {
       });
       if (res.data.result.code === 200) {
         this.persinnelList = res.data.result.item;
-      } else this.$message.error(res.data.result.msg);
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
     },
     // 绑定员工
     async bindEmployee() {

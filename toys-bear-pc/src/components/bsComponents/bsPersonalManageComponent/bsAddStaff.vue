@@ -214,9 +214,7 @@ export default {
       //       if (res.data.result.code === 200) {
       //         this.addEmployeeDialog = false;
       //         const msg = this.isEdit ? "编辑成功" : "新增成功";
-      //         this.$message.success(msg);
       //       } else {
-      //         this.$message.error(res.data.result.msg);
       //         this.addEmployeeForm.password = "";
       //       }
       //     }
@@ -233,9 +231,7 @@ export default {
       //       );
       //       if (res.data.result.code === 200) {
       //         this.addEmployeeDialog = false;
-      //         this.$message.success("新增员工成功");
       //       } else {
-      //         this.$message.error(res.data.result.msg);
       //         this.addEmployeeForm.password = "";
       //       }
       //     }

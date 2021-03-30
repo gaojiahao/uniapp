@@ -5,6 +5,13 @@
     element-loading-spinner
     element-loading-background="rgba(200, 200, 200, 0.5)"
   >
+    <transition name="el-zoom-in-center">
+      <message-component
+        :type="msgType"
+        :msg="globalMsg"
+        v-if="showGlobalMsg"
+      ></message-component>
+    </transition>
     <router-view ref="bsIndex" />
     <!-- 漂浮物 -->
     <transition name="el-zoom-in-top">
@@ -37,11 +44,15 @@ export default {
   data() {
     return {
       isShowCartBox: false,
-      myScrollTop: 0
+      myScrollTop: 0,
+      timeID: null
     };
   },
   computed: {
     ...mapState(["userInfo"]),
+    ...mapState(["showGlobalMsg"]),
+    ...mapState(["msgType"]),
+    ...mapState(["globalMsg"]),
     ...mapGetters({
       shoppingList: "myShoppingList"
     })
@@ -65,21 +76,24 @@ export default {
     },
     // 回到顶部
     toTop() {
-      const el = this.$refs.bsIndex.$refs.scrollbar.wrap;
-      const beginTime = Date.now();
-      const beginValue = el.scrollTop;
-      const rAF =
-        window.requestAnimationFrame || (func => setTimeout(func, 16));
-      const frameFunc = () => {
-        const progress = (Date.now() - beginTime) / 500;
-        if (progress < 1) {
-          el.scrollTop = beginValue * (1 - easeInOutCubic(progress));
-          rAF(frameFunc);
-        } else {
-          el.scrollTop = 0;
-        }
-      };
-      rAF(frameFunc);
+      // console.log(this.$refs.bsIndex.$refs.myScrollbar);
+      this.$refs.bsIndex.$refs.myScrollbar.forEach(val => {
+        const el = val.wrap;
+        const beginTime = Date.now();
+        const beginValue = el.scrollTop;
+        const rAF =
+          window.requestAnimationFrame || (func => setTimeout(func, 16));
+        const frameFunc = () => {
+          const progress = (Date.now() - beginTime) / 500;
+          if (progress < 1) {
+            el.scrollTop = beginValue * (1 - easeInOutCubic(progress));
+            rAF(frameFunc);
+          } else {
+            el.scrollTop = 0;
+          }
+        };
+        rAF(frameFunc);
+      });
     }
   }
 };

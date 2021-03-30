@@ -136,7 +136,10 @@ export default {
       });
       const { code } = res.data.result;
       if (code === 200) {
-        this.$message.success("积分扣除成功");
+        this.$common.handlerMsgState({
+          msg: "积分扣除成功",
+          type: "success"
+        });
       }
       const fd = {
         name: this.item.productNumber,
@@ -154,11 +157,16 @@ export default {
         productNumber: item.productNumber
       });
       if (res.data.result.code === 200) {
-        this.$message.closeAll();
         if (item.isFavorite) {
-          this.$message.warning("取消收藏成功");
+          this.$common.handlerMsgState({
+            msg: "取消收藏成功",
+            type: "warning"
+          });
         } else {
-          this.$message.success("收藏成功");
+          this.$common.handlerMsgState({
+            msg: "收藏成功",
+            type: "success"
+          });
         }
         item.isFavorite = !item.isFavorite;
       }
@@ -170,13 +178,17 @@ export default {
       if (item.isShopping) {
         item.shoppingCount = 1;
         this.$store.commit("pushShopping", item);
-        this.$message.closeAll();
-        this.$message.success("加购成功");
+        this.$common.handlerMsgState({
+          msg: "加购成功",
+          type: "success"
+        });
       } else {
         item.shoppingCount = 0;
-        this.$message.closeAll();
         this.$store.commit("popShopping", item);
-        this.$message.warning("删除成功");
+        this.$common.handlerMsgState({
+          msg: "删除成功",
+          type: "warning"
+        });
       }
       this.$forceUpdate();
     }

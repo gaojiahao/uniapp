@@ -309,7 +309,10 @@ export default {
           ...res.data.result.item
         ];
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     // 查看订单详情

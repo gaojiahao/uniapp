@@ -24,7 +24,7 @@
           <div class="clientsData">
             <div class="name">{{ item.companyName }}</div>
             <div class="tel">
-              <p>联系人：{{ item.ContactsMan }}</p>
+              <p>联系人：{{ item.contactsMan }}</p>
               <p>电话：{{ item.phoneNumber }}</p>
               <p>手机：{{ item.phoneNumber }}</p>
               <p>地址：{{ item.address }}</p>
@@ -199,7 +199,7 @@ export default {
       const fd = {
         PageIndex: this.currentPage,
         PageSize: this.pageSize,
-        CompanyNumber: this.item.CompanyNumber
+        CompanyNumber: this.item.companyNumber
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {

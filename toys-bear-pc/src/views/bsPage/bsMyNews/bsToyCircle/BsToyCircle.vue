@@ -382,7 +382,10 @@ export default {
         id: val.bearNotice.id
       });
       if (res.data.result.code === 200) {
-        this.$message.success("删除成功");
+        this.$common.handlerMsgState({
+          msg: "删除成功",
+          type: "success"
+        });
         for (let i = 0; i < this.findList.length; i++) {
           if (val.bearNotice.id == this.findList[i].bearNotice.id) {
             this.findList.splice(i, 1);
@@ -391,7 +394,10 @@ export default {
           }
         }
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     // 关闭发布公告
@@ -417,7 +423,10 @@ export default {
     // 举报
     async jubaoEvent() {
       if (!this.selectJubaoValue) {
-        this.$message.error("请选择举报原因");
+        this.$common.handlerMsgState({
+          msg: "请选择举报原因",
+          type: "danger"
+        });
         return;
       }
       const res = await this.$http.post("/api/CreateMessageReport", {
@@ -427,12 +436,18 @@ export default {
         reportRemark: this.selectJubaoValue
       });
       if (res.data.result.code === 200) {
-        this.$message.success("举报公告成功");
+        this.$common.handlerMsgState({
+          msg: "举报公告成功",
+          type: "success"
+        });
         this.getDataList();
         this.dialogjubao = false;
         this.showActive = null;
       } else {
-        this.$message.error("举报公告失败，请检查网路");
+        this.$common.handlerMsgState({
+          msg: "举报公告失败，请联系管理员",
+          type: "danger"
+        });
       }
     },
     // 屏蔽公告
@@ -443,10 +458,16 @@ export default {
         reportType: "Shield"
       });
       if (res.data.result.code === 200) {
-        this.$message.success("屏蔽公告成功");
+        this.$common.handlerMsgState({
+          msg: "屏蔽公告成功",
+          type: "success"
+        });
         this.getDataList();
       } else {
-        this.$message.error("屏蔽公告失败，请检查网路");
+        this.$common.handlerMsgState({
+          msg: "屏蔽公告失败，请联系管理员",
+          type: "danger"
+        });
       }
       this.showActive = null;
     },
@@ -475,9 +496,23 @@ export default {
       const { code, msg } = res.data.result;
       if (code === 200) {
         row.isCollection = !row.isCollection;
-        if (row.isCollection) this.$message.success("收藏成功");
-        else this.$message.warning("取消收藏成功");
-      } else this.$message.error(msg);
+        if (row.isCollection) {
+          this.$common.handlerMsgState({
+            msg: "收藏成功",
+            type: "success"
+          });
+        } else {
+          this.$common.handlerMsgState({
+            msg: "取消收藏成功",
+            type: "warning"
+          });
+        }
+      } else {
+        this.$common.handlerMsgState({
+          msg: msg,
+          type: "danger"
+        });
+      }
       this.getDataList();
     },
     // 点赞
@@ -489,9 +524,17 @@ export default {
         id: val.bearNotice.id
       });
       if (res.data.result.code === 200) {
-        if (res.data.result.item.collectTotal)
-          this.$message.success("点赞成功");
-        else this.$message.warning("取消点赞成功");
+        if (res.data.result.item.collectTotal) {
+          this.$common.handlerMsgState({
+            msg: "点赞成功",
+            type: "success"
+          });
+        } else {
+          this.$common.handlerMsgState({
+            msg: "取消点赞成功",
+            type: "warning"
+          });
+        }
         val.isLike = !val.isLike;
       }
     },
@@ -543,7 +586,10 @@ export default {
         // this.currentPage = 1;
         // this.pageSize = this.findList.length >= 100 ? 10 : this.findList.length;
         // this.getDataList();
-        this.$message.success("评论成功");
+        this.$common.handlerMsgState({
+          msg: "评论成功",
+          type: "success"
+        });
         item.noticeInteraction.push({
           userImage: this.userInfo.userInfo.userImage,
           userName: this.userInfo.userInfo.linkman,
@@ -572,7 +618,10 @@ export default {
       const res = await this.$http.post("/api/CreateNoticeInteraction", fd);
       if (res.data.result.code === 200) {
         item.noticeInteraction.push(fd);
-        this.$message.success("回复成功");
+        this.$common.handlerMsgState({
+          msg: "回复成功",
+          type: "success"
+        });
       }
       this.pinglunValue = "";
       item.isHuiPinglun = false;
@@ -629,7 +678,10 @@ export default {
         }
         this.totalCount = res.data.result.item.result.totalCount;
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
       this.noticeType = null;
     }

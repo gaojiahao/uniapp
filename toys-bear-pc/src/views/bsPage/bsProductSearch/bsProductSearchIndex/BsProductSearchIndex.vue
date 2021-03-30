@@ -427,7 +427,10 @@ export default {
       console.log(file);
       const isLt5M = file.size / 1024 / 1024 < 3;
       if (!isLt5M) {
-        this.$message.error("上传文件大小不能超过 3MB!");
+        this.$common.handlerMsgState({
+          msg: "上传文件大小不能超过 3MB!",
+          type: "danger"
+        });
         this.option.img = "";
         this.$refs.uploadRef.value = "";
         return false;
@@ -476,7 +479,10 @@ export default {
           } else {
             this.$store.commit("searchValues", []);
             this.cropperCancel();
-            this.$message.error(res.data.result.message);
+            this.$common.handlerMsgState({
+              msg: res.data.result.message,
+              type: "danger"
+            });
           }
         } catch (error) {
           this.cropperCancel();
@@ -572,7 +578,10 @@ export default {
         this.totalCount = item.totalCount;
       } else {
         this.totalCount = 0;
-        this.$message.error(msg);
+        this.$common.handlerMsgState({
+          msg: msg,
+          type: "danger"
+        });
       }
     },
     // 切換頁容量
@@ -592,7 +601,10 @@ export default {
       if (res.data.result.code === 200) {
         this.categoryList = res.data.result.item;
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     // 选择综合
@@ -617,7 +629,10 @@ export default {
     // 上一页
     firstEvent() {
       if (this.currentPage === 1) {
-        this.$message.error("已经是第一页了");
+        this.$common.handlerMsgState({
+          msg: "已经是第一页了",
+          type: "danger"
+        });
         return false;
       }
       this.currentPage--;
@@ -627,7 +642,10 @@ export default {
     nextEvent() {
       const totalPage = Math.ceil(this.totalCount / this.pageSize);
       if (totalPage <= this.currentPage) {
-        this.$message.error("已经是第最后一页了");
+        this.$common.handlerMsgState({
+          msg: "已经是第最后一页了",
+          type: "danger"
+        });
         return false;
       }
       this.currentPage++;

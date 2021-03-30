@@ -134,11 +134,17 @@ export default {
       console.log(form);
       const res = await this.$http.post("/api/PushSettings/Create", form);
       if (res.data.result.code === 200) {
-        this.$message.success("新增成功");
+        this.$common.handlerMsgState({
+          msg: "新增成功",
+          type: "success"
+        });
         this.close();
         this.getPushSettingsPage();
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     // 关闭新增或编辑
@@ -166,10 +172,16 @@ export default {
       });
       console.log(res.data, "回调");
       if (res.data.result.code === 200) {
-        this.$message.success("删除成功");
+        this.$common.handlerMsgState({
+          msg: "删除成功",
+          type: "success"
+        });
         this.getPushSettingsPage();
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     // 切換頁容量

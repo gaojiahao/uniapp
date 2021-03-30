@@ -796,9 +796,15 @@ export default {
           if (res.data.result.code === 200) {
             this.getClientList();
             this.addMyClientDialog = false;
-            this.$message.success("新增操作成功");
+            this.$common.handlerMsgState({
+              msg: "新增操作成功",
+              type: "success"
+            });
           } else {
-            this.$message.error(res.data.result.msg);
+            this.$common.handlerMsgState({
+              msg: res.data.result.msg,
+              type: "danger"
+            });
           }
         }
       });
@@ -842,7 +848,10 @@ export default {
           }
         }
       }
-      this.$message.success("删除成功");
+      this.$common.handlerMsgState({
+        msg: "删除成功",
+        type: "success"
+      });
       this.$store.commit("resetShoppingCart", selectProducts);
     },
     // 修改购物车数量
@@ -922,7 +931,10 @@ export default {
     openSubOrder() {
       const selectProducts = this.$refs.myTableRef.selection;
       if (selectProducts.length < 1) {
-        this.$message.error("请选择要提交的产品");
+        this.$common.handlerMsgState({
+          msg: "请选择要提交的产品",
+          type: "danger"
+        });
         return false;
       }
       this.subDialogVisible = true;
@@ -949,7 +961,10 @@ export default {
           console.log(res);
           const { code, msg } = res.data.result;
           if (code === 200) {
-            this.$message.success("提交成功");
+            this.$common.handlerMsgState({
+              msg: "提交成功",
+              type: "success"
+            });
             for (let i = 0; i < this.tableData.length; i++) {
               for (let j = 0; j < selectProducts.length; j++) {
                 if (
@@ -962,7 +977,10 @@ export default {
             this.$store.commit("resetShoppingCart", selectProducts);
             this.subDialogVisible = false;
           } else {
-            this.$message.error(msg);
+            this.$common.handlerMsgState({
+              msg: msg,
+              type: "danger"
+            });
           }
         }
       });
@@ -994,7 +1012,12 @@ export default {
       );
       if (res.data.result.code === 200) {
         this.customerTemplate = res.data.result.item;
-      } else this.$message.error(res.data.result.msg);
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
     },
     // 获取系统配置项
     async getSelectCompanyOffer() {
@@ -1002,7 +1025,12 @@ export default {
         basisParameters: "CompanyProductOffer"
       });
       if (res.data.result.code === 200) this.options = res.data.result.item;
-      else this.$message.error(res.data.result.msg);
+      else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
     }
   },
   created() {

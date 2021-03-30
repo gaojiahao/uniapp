@@ -276,7 +276,10 @@ export default {
       if (res.data.result.code === 200) {
         this.options = res.data.result.item;
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     // 获取分享客户订单
@@ -290,7 +293,10 @@ export default {
         this.tableData = res.data.result.item.items;
         this.totalCount = res.data.result.item.totalCount;
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     // 切换当前页

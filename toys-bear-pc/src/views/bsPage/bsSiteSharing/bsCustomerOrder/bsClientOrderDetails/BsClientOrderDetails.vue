@@ -296,7 +296,10 @@ export default {
         console.log(this.options);
         this.totalCount = res.data.result.item.shareOrderDetails.totalCount;
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     // 切换当前页

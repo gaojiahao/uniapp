@@ -265,7 +265,10 @@ export default {
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items;
       } else {
-        this.$message.error(res.data.result.msg);
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     //确定提交

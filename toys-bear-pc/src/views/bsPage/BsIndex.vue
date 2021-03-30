@@ -201,6 +201,8 @@ export default {
           this.$router.push(this.tabList[i].linkUrl);
           if (this.tabList[i].linkUrl == "/bsIndex/bsProductDetails") {
             eventBus.$emit("showCart", true);
+          } else {
+            eventBus.$emit("showCart", false);
           }
           break;
         }
@@ -245,15 +247,15 @@ export default {
       })
         .then(() => {
           this.$store.commit("closeTabAll");
-          this.$message({
-            type: "success",
-            message: "关闭成功!"
+          this.$common.handlerMsgState({
+            msg: "关闭成功!",
+            type: "success"
           });
         })
         .catch(() => {
-          this.$message({
-            type: "warning",
-            message: "已取消删除"
+          this.$common.handlerMsgState({
+            msg: "已取消删除!",
+            type: "warning"
           });
         });
     },
