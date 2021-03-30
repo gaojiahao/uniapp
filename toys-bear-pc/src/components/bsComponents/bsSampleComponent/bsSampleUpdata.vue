@@ -63,7 +63,7 @@
           </el-table-column>
           <el-table-column label="资料来源" align="center">
             <template slot-scope="scope">
-              {{ scope.row.supplierName }}
+              {{ scope.row.companyName }}
             </template>
           </el-table-column>
           <el-table-column
@@ -127,7 +127,7 @@
                 @input="changeInputNumber($event, scope.row)"
                 @focus="selectInputValue($event)"
                 @keydown="nextInput($event)"
-                v-model="scope.row.shoppingCount"
+                v-model="scope.row.boxNumber"
               />
             </template>
           </el-table-column>
@@ -137,6 +137,11 @@
             align="center"
             width="100"
           >
+            <template slot-scope="scope">
+              <span>
+                {{ sumPriceCount(scope.row.boxNumber, scope.row.ou_lo) }}
+              </span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="unitPrice"
@@ -150,18 +155,22 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="OfferTotalAmount"
-            label="总价"
-            align="center"
-            width="100"
-          >
+          <ex-table-column :autoFit="true" width="100" label="总价">
             <template slot-scope="scope">
-              <span style="color:#f56c6c">
-                {{ scope.row.cu_de + scope.row.OfferTotalAmount }}
-              </span>
+              <p class="item price">
+                <span>{{ scope.row.cu_de }}</span>
+                <span>
+                  {{
+                    priceCount(
+                      scope.row.unitPrice,
+                      scope.row.ou_lo,
+                      scope.row.boxNumber
+                    )
+                  }}
+                </span>
+              </p>
             </template>
-          </el-table-column>
+          </ex-table-column>
           <el-table-column
             label="操作"
             header-align="center"
@@ -275,6 +284,25 @@ export default {
     openSub() {
       this.$emit("submit", 0);
     },
+    //确定删除
+    async handleDelete(row) {
+      console.log(row.id);
+      const res = await this.$http.post("/api/UpdateProductOfferDetail", {
+        id: row.id
+      });
+      if (res.data.result.code === 200) {
+        this.$common.handlerMsgState({
+          msg: "删除成功",
+          type: "danger"
+        });
+        this.getProductOfferDetailPage();
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          error: "danger"
+        });
+      }
+    },
     //选择报价商品
     handleSelect() {},
     isInteger(obj) {
@@ -366,23 +394,13 @@ export default {
     divide(a, b, digits) {
       return this.operation(a, b, digits, "divide");
     },
-    // 单个产品总价
-    priceCount(price, ou_lo, shoppingCount) {
-      return this.multiply(this.multiply(price, ou_lo), shoppingCount);
+    // 总数量
+    sumPriceCount(boxNumber, ou_lo) {
+      return this.multiply(boxNumber, ou_lo);
     },
-    // 计算总净重
-    totalJingzhong() {
-      let number = 0;
-      for (let i = 0; i < this.tableData.length; i++) {
-        number = this.add(
-          number,
-          this.multiply(
-            this.tableData[i].shoppingCount,
-            this.tableData[i].ne_we
-          )
-        );
-      }
-      return number;
+    // 单个产品总价
+    priceCount(unitPrice, ou_lo, boxNumber) {
+      return this.multiply(this.multiply(unitPrice, ou_lo), boxNumber);
     },
     // 计算总体积材积
     myTotalVolume(list) {
@@ -391,11 +409,11 @@ export default {
       for (let i = 0; i < list.length; i++) {
         outerBoxStere = this.add(
           outerBoxStere,
-          this.multiply(list[i].bulk_stere, list[i].shoppingCount)
+          this.multiply(list[i].bulk_stere, list[i].boxNumber)
         );
         outerBoxFeet = this.add(
           outerBoxFeet,
-          this.multiply(list[i].bulk_feet, list[i].shoppingCount)
+          this.multiply(list[i].bulk_feet, list[i].boxNumber)
         );
       }
       return {
@@ -403,16 +421,24 @@ export default {
         outerBoxFeet
       };
     },
+    // 计算总净重
+    totalJingzhong() {
+      let number = 0;
+      for (let i = 0; i < this.tableData.length; i++) {
+        number = this.add(
+          number,
+          this.multiply(this.tableData[i].boxNumber, this.tableData[i].ne_we)
+        );
+      }
+      return number;
+    },
     // 计算总毛重
     totalMaozhong() {
       let number = 0;
       for (let i = 0; i < this.tableData.length; i++) {
         number = this.add(
           number,
-          this.multiply(
-            this.tableData[i].shoppingCount,
-            this.tableData[i].gr_we
-          )
+          this.multiply(this.tableData[i].boxNumber, this.tableData[i].gr_we)
         );
       }
       return number;
@@ -422,7 +448,7 @@ export default {
     myTotalQuantity() {
       let number = 0;
       for (let i = 0; i < this.tableData.length; i++) {
-        number = this.add(number, this.tableData[i].shoppingCount || 0);
+        number = this.add(number, this.tableData[i].boxNumber || 0);
       }
       return number;
     },
@@ -433,7 +459,7 @@ export default {
         price = this.add(
           price,
           this.multiply(
-            this.multiply(list[i].unitPrice, list[i].shoppingCount),
+            this.multiply(list[i].unitPrice, list[i].boxNumber),
             list[i].ou_lo
           )
         );
@@ -447,7 +473,6 @@ export default {
     },
     // 修改数量
     changeInputNumber(e, val) {
-      console.log(e, val);
       const re = /^[0-9]+.?[0-9]*/;
       if (!re.test(e.target.value)) {
         e.target.value = 0;
@@ -460,6 +485,40 @@ export default {
       }
       val.shoppingCount = Number(e.target.value);
       this.$store.commit("replaceShoppingCartValueCount", this.tableData);
+    },
+    // 点击上下键盘
+    nextInput(e) {
+      if (e.keyCode === 40) {
+        const inputs = document.getElementsByClassName("inputNumber");
+        for (let i = 0; i < inputs.length; i++) {
+          // 如果是最后一个，则焦点回到第一个
+          if (i == inputs.length - 1) {
+            inputs[0].focus();
+          } else if (e.target == inputs[i]) {
+            inputs[i + 1].focus();
+            break; //不加最后一行eles就直接回到第一个输入框
+          }
+        }
+        e.stopPropagation();
+        e.preventDefault();
+        e.returnValue = false;
+        e.cancelBubble = true;
+      } else if (e.keyCode === 38) {
+        const inputs = document.getElementsByClassName("inputNumber");
+        for (let i = 0; i < inputs.length; i++) {
+          // 如果是最后一个，则焦点回到第一个
+          if (i === 0) {
+            inputs[inputs.length - 1].focus();
+          } else if (e.target == inputs[i]) {
+            inputs[i - 1].focus();
+            break; //不加最后一行eles就直接回到第一个输入框
+          }
+        }
+        e.stopPropagation();
+        e.preventDefault();
+        e.returnValue = false;
+        e.cancelBubble = true;
+      }
     }
   }
 };

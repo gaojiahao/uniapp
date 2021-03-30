@@ -118,12 +118,20 @@
               placeholder=" "
             ></el-input>
           </el-form-item>
-          <el-form-item label="小数位数" prop="decimalPlaces">
-            <el-input
-              style="width: 120px;; margin: 0 15px;"
+          <el-form-item label="小数位数：" prop="decimalPlaces">
+            <el-select
+              style="width:100%;"
               v-model="clienFormData.decimalPlaces"
-              placeholder=" "
-            ></el-input>
+              placeholder="请选择小数位数"
+            >
+              <el-option
+                v-for="(item, i) in options.decimalPlaces"
+                :key="i"
+                :label="item.itemCode"
+                :value="item.parameter"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="取舍方式：" prop="rejectionMethod">
             <el-select
@@ -167,6 +175,52 @@
         </div>
       </el-form>
     </div>
+    <!-- 新增客户dialog -->
+    <el-dialog
+      title="新增客户"
+      top="30vh"
+      :close-on-click-modal="false"
+      :visible.sync="addMyClientDialog"
+      destroy-on-close
+      width="50%"
+    >
+      <el-form
+        ref="addMyClientRef"
+        label-width="100px"
+        :rules="addMyClientRules"
+        :model="addClientFormData"
+      >
+        <el-form-item label="客户名称" prop="name">
+          <el-input
+            v-model="addClientFormData.name"
+            placeholder="请输入客户名称"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="联系方式">
+          <el-input
+            v-model="addClientFormData.phoneNumber"
+            placeholder="请输入联系方式"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input
+            type="textarea"
+            placeholder="请输入备注信息"
+            :rows="4"
+            resize="none"
+            v-model="addClientFormData.remark"
+          ></el-input>
+        </el-form-item>
+        <center>
+          <template>
+            <el-button type="primary" @click="subMyClient">提 交</el-button>
+            <el-button plain @click="addMyClientDialog = false"
+              >取 消</el-button
+            >
+          </template>
+        </center>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -188,26 +242,27 @@ export default {
           });
         }
       }
+    },
+    "clienFormData.defaultFormula": {
+      deep: true,
+      handler(newVal) {
+        if (newVal) {
+          const obj = JSON.parse(newVal);
+          this.clienFormData.profit = obj.profit;
+          this.clienFormData.offerMethod = obj.offerMethod;
+          this.clienFormData.cu_de = obj.cu_de;
+          this.clienFormData.cu_deName = obj.cu_deName;
+          this.clienFormData.exchange = obj.exchange;
+          this.clienFormData.size = obj.size;
+          this.clienFormData.decimalPlaces = obj.decimalPlaces;
+          this.clienFormData.rejectionMethod = obj.rejectionMethod;
+        }
+      }
     }
-    // "clienFormData.defaultFormula": {
-    //   deep: true,
-    //   handler(newVal) {
-    //     if (newVal) {
-    //       const obj = JSON.parse(newVal);
-    //       this.clienFormData.profit = obj.profit;
-    //       this.clienFormData.offerMethod = obj.offerMethod;
-    //       this.clienFormData.cu_de = obj.cu_de;
-    //       this.clienFormData.cu_deName = obj.cu_deName;
-    //       this.clienFormData.exchange = obj.exchange;
-    //       this.clienFormData.size = obj.size;
-    //       this.clienFormData.decimalPlaces = obj.decimalPlaces;
-    //       this.clienFormData.rejectionMethod = obj.rejectionMethod;
-    //     }
-    //   }
-    // }
   },
   data() {
     return {
+      addMyClientDialog: false,
       clientList: [],
       customerTemplate: [],
       options: {
@@ -217,6 +272,11 @@ export default {
         offerMethod: [],
         rejectionMethod: [],
         size: []
+      },
+      addClientFormData: {
+        name: null,
+        phoneNumber: null,
+        remark: null
       },
       clienFormData: {
         companyName: "11",
@@ -234,6 +294,9 @@ export default {
         rejectionMethod: "四舍五入",
         miniPrice: 0,
         miniPriceDecimalPlaces: 1
+      },
+      addMyClientRules: {
+        name: [{ required: true, message: "请输入客户名称", trigger: "blur" }]
       },
       addInfoRules: {
         linkman: [{ required: true, message: "请选择客户", trigger: "change" }],
@@ -276,6 +339,7 @@ export default {
   created() {},
   mounted() {
     this.getProductOfferByNumber();
+    console.log(this.clienFormData);
   },
   methods: {
     //请求条件
@@ -292,7 +356,33 @@ export default {
         });
       }
     },
-    onSubmit() {}
+    // 新增客户
+    onSubmit() {
+      this.addClientFormData = {
+        name: null,
+        phoneNumber: null,
+        remark: null
+      };
+      this.addMyClientDialog = true;
+    },
+    // 提交新增客户
+    subMyClient() {
+      this.$refs.addMyClientRef.validate(async valid => {
+        if (valid) {
+          // const res = await this.$http.post(
+          //   "/api/CreateCustomerInfo",
+          //   this.addClientFormData
+          // );
+          // if (res.data.result.code === 200) {
+          //   this.getClientList();
+          //   this.addMyClientDialog = false;
+          //   this.$message.success("新增操作成功");
+          // } else {
+          //   this.$message.error(res.data.result.msg);
+          // }
+        }
+      });
+    }
   }
 };
 </script>
