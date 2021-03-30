@@ -478,6 +478,7 @@ export default {
         if (row.isCollection) this.$message.success("收藏成功");
         else this.$message.warning("取消收藏成功");
       } else this.$message.error(msg);
+      this.getDataList();
     },
     // 点赞
     async openDianZan(val) {

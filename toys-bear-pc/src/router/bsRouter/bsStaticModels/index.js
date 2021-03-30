@@ -22,17 +22,18 @@ const BsHallBusinessOrderDetails = () =>
 // 找样报价-报价详情
 const BsSampleQuotationDetails = () =>
   import(
-    "@/components/bsComponents/bsSampleComponent/bsSampleQuotationDetails.vue");
+    "@/components/bsComponents/bsSampleComponent/bsSampleQuotationDetails.vue"
+  );
 
 // 找样报价-编辑详情
 const BsSampleUpdata = () =>
-  import(
-    "@/components/bsComponents/bsSampleComponent/bsSampleUpdata.vue");
+  import("@/components/bsComponents/bsSampleComponent/bsSampleUpdata.vue");
 
 // 查询厂商详情页
 const BsMyClientsDetail = () =>
   import(
-    "@/components/bsComponents/bsMyClientsComponent/bsMyClientsDetail.vue");
+    "@/components/bsComponents/bsMyClientsComponent/bsMyClientsDetail.vue"
+  );
 
 export default [
   {
@@ -62,17 +63,16 @@ export default [
   {
     path: "/bsIndex/bsSampleQuotationDetails",
     name: "bsSampleQuotationDetails",
-    component: BsSampleQuotationDetails,
-
+    component: BsSampleQuotationDetails
   },
   {
     path: "/bsIndex/bsSampleUpdata",
     name: "bsSampleUpdata",
-    component: BsSampleUpdata,
+    component: BsSampleUpdata
   },
   {
     path: "/bsIndex/bsMyClientsDetail",
     name: "bsMyClientsDetail",
-    component: BsMyClientsDetail,
+    component: BsMyClientsDetail
   }
 ];

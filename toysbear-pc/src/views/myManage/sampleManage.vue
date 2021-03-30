@@ -332,8 +332,7 @@ export default {
           {
             exportWay: this.exportWay,
             templateType: type,
-            sampleNumber: "SO2021030619031632"
-            // sampleNumber: this.sampleNumber.sampleNumber
+            sampleNumber: this.sampleNumber.sampleNumber
           },
           { responseType: "blob" }
         )
