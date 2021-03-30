@@ -375,7 +375,8 @@ export default {
         // 选中的值
         token:
           this.$store.state.userInfo && this.$store.state.userInfo.accessToken,
-        number: null
+        number: null,
+        orderType: null
       },
       tableList: [],
       totalCount: 0,
@@ -536,6 +537,7 @@ export default {
           }
         });
         this.currentSelectItem.number = row.orderNumber;
+        this.currentSelectItem.orderType = row.orderType;
       }
     }
   },

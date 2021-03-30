@@ -482,8 +482,6 @@ export default {
   }
   .productListBox {
     width: 100%;
-    padding: 10px;
-    padding-bottom: 0;
     box-sizing: border-box;
     .myPagination {
       padding: 30px 0;

@@ -40,7 +40,6 @@ export default {
   .kong {
     width: 250px;
     min-width: 250px;
-    margin: 10px;
   }
 }
 </style>

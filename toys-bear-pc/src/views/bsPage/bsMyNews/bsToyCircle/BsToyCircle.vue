@@ -466,7 +466,7 @@ export default {
     show3Active(i) {
       this.showActive === i ? (this.showActive = null) : (this.showActive = i);
     },
-    // 点赞
+    // 收藏
     async openShoucang(row) {
       const res = await this.$http.post("/api/CtreteCollection", {
         relatedID: row.bearNotice.id,
@@ -493,7 +493,6 @@ export default {
           this.$message.success("点赞成功");
         else this.$message.warning("取消点赞成功");
         val.isLike = !val.isLike;
-        this.getDataList();
       }
     },
     // 打开回复评论

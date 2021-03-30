@@ -187,7 +187,7 @@ export default {
 </script>
 <style scoped lang="less">
 .bsGridItem {
-  width: 15.4%;
+  width: 250px;
   min-width: 250px;
   background: #ffffff;
   border: 1px solid #dcdfe6;
