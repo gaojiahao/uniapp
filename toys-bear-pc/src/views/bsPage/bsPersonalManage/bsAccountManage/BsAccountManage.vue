@@ -38,8 +38,8 @@
         </div>
       </div>
       <!-- v-show="myInfo.isMain" -->
-      <div class="editOperation">
-        <span class="editItem">修改公司资料</span>
+      <div class="editOperation" v-show="myInfo.isMain">
+        <span class="editItem" @click="openEditCompany">修改公司资料</span>
         <span class="line">|</span>
         <span class="editItem">绑定公司</span>
       </div>
@@ -49,6 +49,7 @@
       <div class="right">
         <!-- v-show="myInfo.isMain" -->
         <el-button
+          v-show="myInfo.isMain"
           type="primary"
           icon="el-icon-plus"
           size="medium"
@@ -124,13 +125,27 @@
       ></el-table-column>
       <el-table-column label="操作" min-width="250" align="center">
         <template slot-scope="scope">
-          <el-button @click="openBind(scope.row)" size="mini" type="primary">
+          <el-button
+            :disabled="!myInfo.isMain"
+            @click="openBind(scope.row)"
+            size="mini"
+            type="primary"
+          >
             绑定员工
           </el-button>
-          <el-button @click="openEdit(scope.row)" size="mini" type="success">
+          <el-button
+            :disabled="!myInfo.isMain"
+            @click="openEdit(scope.row)"
+            size="mini"
+            type="success"
+          >
             编辑
           </el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(scope.row)"
+          <el-button
+            :disabled="!myInfo.isMain"
+            size="mini"
+            type="danger"
+            @click="handleDelete(scope.row)"
             >删除</el-button
           >
         </template>
@@ -167,6 +182,17 @@
         @close="close"
       />
     </el-dialog>
+    <!-- 编辑公司 -->
+    <el-dialog
+      top="0"
+      width="70%"
+      title="编辑公司"
+      v-if="editCompanyDialog"
+      :visible.sync="editCompanyDialog"
+      destroy-on-close
+    >
+      <bsEditCompanyInfo :editClientForm="myInfo" @close="close" />
+    </el-dialog>
   </div>
 </template>
 
@@ -174,14 +200,17 @@
 import { mapState } from "vuex";
 import bsAddStaff from "@/components/bsComponents/bsPersonalManageComponent/bsAddStaff";
 import bsBindStaff from "@/components/bsComponents/bsPersonalManageComponent/bsBindStaff";
+import bsEditCompanyInfo from "@/components/bsComponents/bsPersonalManageComponent/bsEditCompanyInfo";
 export default {
   name: "bsAccountManage",
   components: {
     bsAddStaff,
-    bsBindStaff
+    bsBindStaff,
+    bsEditCompanyInfo
   },
   data() {
     return {
+      editCompanyDialog: false,
       totalCount: 0,
       myInfo: {},
       currentEditRow: {},
@@ -194,6 +223,10 @@ export default {
     };
   },
   methods: {
+    // 修改公司资料
+    openEditCompany() {
+      this.editCompanyDialog = true;
+    },
     // 提交新增员工
     async submitAddStaff(fd) {
       let url = "/api/CreateOrgPersonnel";
@@ -240,6 +273,7 @@ export default {
     close() {
       this.addEmployDialog = false;
       this.bindEmployDialog = false;
+      this.editCompanyDialog = false;
     },
     // 删除员工
     async handleDelete(row) {
