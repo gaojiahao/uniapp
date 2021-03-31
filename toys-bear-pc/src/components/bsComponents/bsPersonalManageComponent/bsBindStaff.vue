@@ -3,6 +3,7 @@
     <el-table
       :data="persinnelList"
       style="width: 100%; min-height: 300px"
+      :header-cell-style="{ backgroundColor: '#f9fafc', color: '#666' }"
       :default-sort="{ prop: 'createdOn', order: 'descending' }"
     >
       <el-table-column prop="client_acc_nu" label="员工账号"></el-table-column>

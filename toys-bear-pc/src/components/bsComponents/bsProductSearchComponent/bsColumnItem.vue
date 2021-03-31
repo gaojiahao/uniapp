@@ -186,7 +186,7 @@ export default {
         item.shoppingCount = 0;
         this.$store.commit("popShopping", item);
         this.$common.handlerMsgState({
-          msg: "删除成功",
+          msg: "取消加购成功",
           type: "warning"
         });
       }

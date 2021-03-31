@@ -76,13 +76,13 @@ export default {
         .then(() => {
           this.$message({
             type: "success",
-            message: "删除成功!"
+            message: "点击确认的回调!"
           });
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "已取消删除"
+            type: "warning",
+            message: "点击取消或删除的回调"
           });
         });
     },
@@ -99,7 +99,6 @@ export default {
     },
     // 回到顶部
     toTop() {
-      // console.log(this.$refs.bsIndex.$refs.myScrollbar);
       this.$refs.bsIndex.$refs.myScrollbar.forEach(val => {
         const el = val.wrap;
         const beginTime = Date.now();

@@ -346,7 +346,7 @@ export default {
               );
               this.$store.commit("globalJson/setGlobalJson", Json);
               const re = await this.$http.post("/api/GetUserRoleMenu", {});
-              if (re.data.result.code === 200 && re.data.result.item) {
+              if (re.data.result.code === 200) {
                 this.$store.commit("handlerLogin", true);
                 this.$store.commit(
                   "setRouters",
@@ -369,6 +369,7 @@ export default {
                 params: res.data.result
               });
             }
+            this.$store.commit("closeTabAll");
           } else {
             this.$common.handlerMsgState({
               msg: res.data.result.message,

@@ -287,7 +287,7 @@ export default {
         this.tableData = res.data.result.item.items;
       }
     },
-    // 取消收藏
+    // 删除
     handleDelete(row) {
       console.log(row);
     },
