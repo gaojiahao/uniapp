@@ -305,7 +305,6 @@ export default {
     },
     //选择报价商品
     handleSelect() {
-      console.log(this.item);
       const fd = {
         name: this.item.offerNumber,
         linkUrl: "/bsIndex/bsSampleOfferCommodity",

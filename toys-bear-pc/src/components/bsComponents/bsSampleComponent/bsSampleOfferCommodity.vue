@@ -3,55 +3,129 @@
     <div class="hander">
       <div class="left">
         <div
-          :class="{ tabs: true, active: isDiyu === 0 }"
-          @click="checkTabsAll(0)"
+          :class="{ tabs: true, active: typeId === 0 }"
+          @click="checkTabstypeId(0)"
         >
           我的收藏
         </div>
         <div
-          :class="{ tabs: true, active: isDiyu === 1 }"
-          @click="checkTabsEcommend(1)"
+          :class="{ tabs: true, active: typeId === 2 }"
+          @click="checkTabstypeId(2)"
+        >
+          我的找样
+        </div>
+        <div
+          :class="{ tabs: true, active: typeId === 1 }"
+          @click="checkTabstypeId(1)"
         >
           所有产品
         </div>
       </div>
       <div class="right">
         <el-button type="primary" round>
-          确定已选择
+          确定已选择({{ myOfferProductList.length }})
         </el-button>
       </div>
     </div>
-    <div class="picProductListBox">
+    <div class="productListBox">
       <!-- 产品列表 -->
-      <component :is="isGrid" :productList="offerCommodityList"></component>
+      <div class="bsGridComponent">
+        <bsSampleOfferProductList
+          @ProductList="ProductList"
+          v-for="item in productList"
+          :key="item.productNumber"
+          :item="item"
+        />
+        <div class="kong"></div>
+        <div class="kong"></div>
+        <div class="kong"></div>
+        <div class="kong"></div>
+      </div>
+
+      <!-- 分页 -->
+      <center class="myPagination">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[12, 24, 36, 48]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalCount"
+        >
+        </el-pagination>
+      </center>
     </div>
   </div>
 </template>
 <script>
-import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/bsGridComponent";
+import bsSampleOfferProductList from "@/components/bsComponents/bsSampleComponent/bsSampleOfferProductList";
 export default {
   name: "bsSampleOfferCommodity",
   components: {
-    bsGridComponent
+    bsSampleOfferProductList
+  },
+  props: {
+    item: {
+      type: Object
+    }
   },
   data() {
     return {
-      isDiyu: 0,
-      offerCommodityList: [],
-      isGrid: "bsGridComponent"
+      myOfferProductList: [],
+      num: null,
+      typeId: 0,
+      productList: [],
+      isGrid: "bsGridComponent",
+      currentPage: 1,
+      pageSize: 12,
+      totalCount: 0
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.getProductList();
+  },
   methods: {
-    async getProductList() {},
-    //切换
-    checkTabsAll(num) {
-      this.isDiyu = num;
+    ProductList(data) {
+      this.myOfferProductList = data;
     },
+    //   产品列表
+    async getProductList() {
+      const fd = {
+        PageIndex: this.currentPage,
+        PageSize: this.pageSize,
+        typeId: this.typeId
+      };
+      for (const key in fd) {
+        if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
+          delete fd[key];
+        }
+      }
+      const res = await this.$http.post("/api/SupplierProduct", fd);
+      if (res.data.result.code === 200) {
+        this.totalCount = res.data.result.item.totalCount;
+        this.productList = res.data.result.item.items;
+      }
+    },
+
     //切换
-    checkTabsEcommend(num) {
-      this.isDiyu = num;
+    checkTabstypeId(num) {
+      this.typeId = num;
+      this.myOfferProductList = [];
+      sessionStorage.removeItem("ProductList");
+      this.getProductList();
+    },
+    // 切換頁容量
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+      if (this.currentPage * pageSize > this.totalCount) return false;
+      this.getProductList();
+    },
+    // 修改当前页
+    handleCurrentChange(page) {
+      this.currentPage = page;
+      this.getProductList();
     }
   }
 };
@@ -89,6 +163,22 @@ export default {
     }
     .right {
       margin-right: 20px;
+    }
+  }
+  .productListBox {
+    width: 100%;
+    box-sizing: border-box;
+    .bsGridComponent {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      .kong {
+        width: 250px;
+        min-width: 250px;
+      }
+    }
+    .myPagination {
+      padding: 30px 0;
     }
   }
 }

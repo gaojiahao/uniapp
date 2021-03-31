@@ -200,7 +200,7 @@ export default {
         PageIndex: this.currentPage,
         PageSize: this.pageSize,
         CompanyNumber: this.item.companyNumber,
-        KeyWord: this.keywordAll
+        KeyWord: this.KeyWord
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -325,11 +325,7 @@ export default {
   .hander {
     .handerBg {
       height: 160px;
-      opacity: 1;
-      background: rgba(0, 0, 0, 0);
-      border-radius: 4px;
       background: url("~@/assets/images/clientsBg.png") no-repeat center;
-      background-size: 100% 100%;
     }
     .handerTitle {
       padding-left: 57px;
