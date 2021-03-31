@@ -50,20 +50,6 @@ export default {
     store.commit("closeTab", n);
   },
   judgeTab(arr, n) {
-    // let s = JSON.parse(sessionStorage.getItem(n));
-    // if (s) {
-    //   let flag = true;
-    //   for (const i of s) {
-    //     if (i.name == arr.name) {
-    //       flag = false;
-    //       break;
-    //     }
-    //   }
-    //   flag && s.push(arr);
-    // } else {
-    //   s = [arr];
-    // }
-    // sessionStorage.setItem(n, JSON.stringify(s));
     store.commit("myAddTab", n);
   },
   //获取当前tab id
