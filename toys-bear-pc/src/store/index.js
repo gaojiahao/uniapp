@@ -21,9 +21,6 @@ export default new Vuex.Store({
     showGlobalMsg: false,
     msgType: "primary",
     globalMsg: "",
-    confirmVisible: false,
-    confirmType: "primary",
-    confirmMsg: "确定要删除吗？",
     tabList: [
       {
         component: "bsHome",
@@ -77,12 +74,6 @@ export default new Vuex.Store({
     // 修改全局msg状态
     handlerShowGlobalMsg(state, payLoad) {
       state.showGlobalMsg = payLoad;
-    },
-    // 修改全局确认框状态
-    handlerShowConfirm(state, payLoad) {
-      state.confirmVisible = payLoad.isShow;
-      state.confirmType = payLoad.type;
-      state.confirmMsg = payLoad.msg;
     },
     // 清空路由
     clearAllTab(state, payLoad) {
