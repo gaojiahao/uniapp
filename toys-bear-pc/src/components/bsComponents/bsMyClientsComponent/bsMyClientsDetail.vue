@@ -56,18 +56,14 @@
             <el-input
               type="text"
               size="medium"
-              v-model="searchForm.keyword"
+              v-model="keywordAll"
               placeholder="请输入关键词"
               @keyup.native.enter="search"
             ></el-input>
           </div>
           <div class="item">
             <span class="label">所在展厅：</span>
-            <el-select
-              v-model="searchForm.messageExt"
-              clearable
-              placeholder="请选择"
-            >
+            <el-select v-model="messageExt" clearable placeholder="请选择">
               <el-option
                 v-for="(item, i) in typesList"
                 :key="i"
@@ -123,13 +119,13 @@
             <el-input
               type="text"
               size="medium"
-              v-model="keyword"
+              v-model="searchForm.keyword"
               placeholder="请输入关键词"
-              @keyup.native.enter="search"
+              @keyup.native.enter="searchEcommend"
             ></el-input>
           </div>
           <div class="item">
-            <el-button @click="search" type="primary" size="medium">
+            <el-button @click="searchEcommend" type="primary" size="medium">
               搜索
             </el-button>
           </div>
@@ -176,21 +172,25 @@ export default {
       isRedu: null,
       sortOrder: null,
       sortType: null,
-      keyword: null,
+      keywordAll: null,
       isGrid: "bsGridComponent",
       currentPage: 1,
       pageSize: 12,
       totalCount: 0,
       productList: [],
+      messageExt: null,
       searchForm: {
-        keyword: ""
+        keyword: "",
+        minPrice: "",
+        maxPrice: "",
+        categoryNumber: null,
+        time: []
       },
       typesList: []
     };
   },
   created() {},
   mounted() {
-    console.log(this.item);
     this.getProductListPageAll();
   },
   methods: {
@@ -199,7 +199,8 @@ export default {
       const fd = {
         PageIndex: this.currentPage,
         PageSize: this.pageSize,
-        CompanyNumber: this.item.companyNumber
+        CompanyNumber: this.item.companyNumber,
+        KeyWord: this.keywordAll
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -217,7 +218,13 @@ export default {
       const fd = {
         PageIndex: 1,
         PageSize: 12,
-        companyNumber: this.item.companyNumber
+        companyNumber: this.item.companyNumber,
+        KeyWord: this.searchForm.keyword,
+        minPrice: this.searchForm.minPrice,
+        maxPrice: this.searchForm.maxPrice,
+        startTime: this.searchForm.time.length ? this.searchForm.time[0] : null,
+        endTime: this.searchForm.time.length ? this.searchForm.time[1] : null,
+        sortOrder: this.sortOrder
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -259,10 +266,15 @@ export default {
         this.getProductListPageEcommend();
       }
     },
-    // 搜索
+    // 所有产品搜索
     search() {
       this.currentPage = 1;
       this.getProductListPageAll();
+    },
+    //推荐产品搜索
+    searchEcommend() {
+      this.currentPage = 1;
+      this.getProductListPageEcommend();
     },
     // 过滤类型
     sortTypeEvent(type) {
@@ -301,7 +313,7 @@ export default {
           this.sortOrder = null;
           break;
       }
-      //   this.getProductList();
+      this.getProductListPageEcommend();
     }
   }
 };

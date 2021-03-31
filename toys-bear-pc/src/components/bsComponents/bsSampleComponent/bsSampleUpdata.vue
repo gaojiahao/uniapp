@@ -304,7 +304,21 @@ export default {
       }
     },
     //选择报价商品
-    handleSelect() {},
+    handleSelect() {
+      console.log(this.item);
+      const fd = {
+        name: this.item.offerNumber,
+        linkUrl: "/bsIndex/bsSampleOfferCommodity",
+        component: "bsSampleOfferCommodity",
+
+        refresh: true,
+        noPush: true,
+        label: this.item.offerNumber,
+        value: this.item
+      };
+      this.$router.push("/bsIndex/bsSampleOfferCommodity");
+      this.$store.commit("myAddTab", fd);
+    },
     isInteger(obj) {
       return Math.floor(obj) === obj;
     },

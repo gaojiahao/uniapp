@@ -119,6 +119,9 @@ import bsShoppingCart from "@/views/bsPage/bsBusinessManage/bsShoppingCart/BsSho
 import bsSampleQuotation from "@/views/bsPage/bsBusinessManage/bsSampleQuotation/BsSampleQuotation.vue";
 // 找样报价-报价详情
 import bsSampleQuotationDetails from "@/components/bsComponents/bsSampleComponent/bsSampleQuotationDetails";
+// 找样报价-选择报价商品
+import bsSampleOfferCommodity from "@/components/bsComponents/bsSampleComponent/bsSampleOfferCommodity";
+
 // 找样报价-编辑详情
 import bsSampleUpdata from "@/components/bsComponents/bsSampleComponent/bsSampleUpdata";
 // 采购订单
@@ -157,6 +160,7 @@ export default {
     bsShoppingCart,
     bsSampleQuotation,
     bsSampleQuotationDetails,
+    bsSampleOfferCommodity,
     bsSampleUpdata,
     bsPurchaseOrder,
     bsTop,
@@ -221,6 +225,9 @@ export default {
               break;
             case "bsSampleQuotationDetails":
               this.$router.push("/bsIndex/bsSampleQuotation");
+              break;
+            case "bsSampleOfferCommodity":
+              this.$router.push("/bsIndex/bsSampleOfferCommodity");
               break;
             case "bsClientOrderDetails":
               this.$router.push("/bsIndex/bsCustomerOrder");
