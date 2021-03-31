@@ -12,7 +12,6 @@
         v-if="showGlobalMsg"
       ></message-component>
     </transition>
-    <button @click="handleShowConfirm">点</button>
     <router-view ref="bsIndex" />
     <!-- 漂浮物 -->
     <transition name="el-zoom-in-top">
