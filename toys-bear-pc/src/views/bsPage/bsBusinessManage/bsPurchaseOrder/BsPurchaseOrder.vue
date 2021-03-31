@@ -55,58 +55,47 @@
         ref="collecTable"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
-        <el-table-column label="来源" align="center">
+        <el-table-column label="择样单号" min-width="180">
           <template slot-scope="scope">
-            {{ scope.row.exhibitionName }}
+            <div
+              style="color:#3368A9;cursor: pointer;"
+              @click="toDetails(scope.row)"
+            >
+              {{ scope.row.orderNumber }}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作人员" align="center"></el-table-column>
+        <el-table-column label="操作时间" align="center" min-width="150">
+          <template slot-scope="scope">
+            <span>
+              {{
+                scope.row.happenDate && scope.row.happenDate.replace(/T/, " ")
+              }}
+            </span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="fa_no"
-          label="出厂货号"
-          width="100"
+          prop="the_nu"
+          label="采购数量"
           align="center"
-        ></el-table-column>
-        <el-table-column prop="ch_pa" label="包装" align="center" width="100">
+          width="100"
+        >
         </el-table-column>
-        <el-table-column label="外箱规格" align="center">
+        <el-table-column
+          prop="pushContent"
+          label="备注"
+          align="center"
+          min-width="200"
+        >
+        </el-table-column>
+        <el-table-column prop="state" label="状态" align="center" width="100">
           <template slot-scope="scope">
-            <span>
-              {{ scope.row.ou_le }}x{{ scope.row.ou_wi }}x{{
-                scope.row.ou_hi
-              }}(cm)
+            <span style="color:#f56c6c" v-if="scope.row.readStatus == 0">
+              未读
             </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="包装规格" align="center">
-          <template slot-scope="scope">
-            <span>
-              {{ scope.row.in_le }}x{{ scope.row.in_wi }}x{{
-                scope.row.in_hi
-              }}(cm)
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="装箱量" align="center" width="100">
-          <template slot-scope="scope">
-            <span> {{ scope.row.in_en }}/{{ scope.row.ou_lo }}(pcs) </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="体积/材积" align="center">
-          <template slot-scope="scope">
-            <span>
-              {{ scope.row.bulk_stere }}(cbm)/{{ scope.row.bulk_feet }}(cuft)
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="毛重/净重" align="center" width="100">
-          <template slot-scope="scope">
-            <span> {{ scope.row.gr_we }}/{{ scope.row.ne_we }}(kg) </span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="price" label="单价" align="center" width="100">
-          <template slot-scope="scope">
-            <span style="color:#f56c6c">
-              {{ scope.row.cu_de + scope.row.price.toFixed(2) }}
+            <span style="color:#f56c6c" v-else-if="scope.row.readStatus == 1">
+              已读
             </span>
           </template>
         </el-table-column>
@@ -117,14 +106,19 @@
           width="250"
         >
           <template slot-scope="scope">
-            <el-button size="mini" type="primary">推送</el-button>
-            <el-button size="mini" type="warning">导出</el-button>
+            <el-button size="mini" type="primary">
+              推送
+            </el-button>
             <el-button
               size="mini"
-              type="danger"
-              @click="handleDelete(scope.row)"
-              >删除</el-button
+              type="warning"
+              @click="exportOrder(scope.row)"
             >
+              导出
+            </el-button>
+            <el-button size="mini" type="danger">
+              删除
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -161,6 +155,14 @@ export default {
     };
   },
   methods: {
+    // 删除
+    handleDelete(row) {
+      console.log(row);
+    },
+    // 导出
+    exportOrder(row) {
+      console.log(row);
+    },
     // 获取列表
     async getTableDataList() {
       const fd = {
@@ -184,10 +186,6 @@ export default {
         this.totalCount = res.data.result.item.totalCount;
         this.tableData = res.data.result.item.items;
       }
-    },
-    // 删除
-    handleDelete(row) {
-      console.log(row);
     },
     // 切換頁容量
     handleSizeChange(pageSize) {
