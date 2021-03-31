@@ -180,7 +180,10 @@
         top="60px"
         width="80%"
       >
-        <bsExportSampleOrder :orderRow="orderRow" />
+        <bsExportSampleOrder
+          :orderRow="orderRow"
+          api="/api/GetSampleOrderExcel"
+        />
       </el-dialog>
     </transition>
   </div>

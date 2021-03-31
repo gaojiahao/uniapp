@@ -3,7 +3,10 @@
   max-width: 220px;
   box-sizing: border-box;
   height: 100%;
-  box-shadow: 0px 3px 0px 0px rgba(42,69,116,0.16);
+  @{deep} .el-menu {
+    border: none;
+  }
+  // box-shadow: 0px 3px 0px 0px rgba(42,69,116,0.16);
     .el-menu-vertical-demo:not(.el-menu--collapse) {
     box-sizing: border-box;
     width: 220px;

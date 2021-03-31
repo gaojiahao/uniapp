@@ -251,6 +251,7 @@ myAxios.install = function(Vue) {
       }
       // 屏蔽不需要验证code的请求，如下载导出等
       if (
+        res.config.url.includes("GetOfferOrderExcel") ||
         res.config.url.includes("GetProductOfferOrderExcel") ||
         res.config.url.includes("LittleBearInstallDownload") ||
         res.config.url.includes("LittleBearInstallRepeatDownload") ||

@@ -293,19 +293,15 @@ export default {
     min-width: 1350px;
     background-color: #fff;
     box-sizing: border-box;
-    // overflow: hidden;
     .leftMenu {
       height: 100%;
       box-sizing: border-box;
-      position: relative;
-      z-index: 2;
-      // box-shadow: 0px 3px 0px 0px rgba(42,69,116,0.16);
+      // box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
     }
     @{deep} .rightContent {
       flex: 1;
       height: 100%;
       width: 800px;
-      background-color: #f1f3f6;
       .views {
         height: 100%;
         position: relative;
@@ -319,6 +315,7 @@ export default {
         }
         .el-tabs {
           height: 100%;
+          background-color: #f1f3f6;
           .el-tabs__header {
             overflow: inherit;
             box-sizing: border-box;
@@ -397,12 +394,13 @@ export default {
             }
           }
           .el-tabs__content {
-            height: calc(100% - 50px);
+            height: calc(100% - 90px);
             box-sizing: border-box;
             background-color: #f1f3f6;
             overflow: hidden;
             box-sizing: border-box;
-            padding: 20px;
+            margin: 20px;
+            padding: 0;
             box-sizing: border-box;
             .el-tab-pane {
               height: 100%;
