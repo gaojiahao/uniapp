@@ -186,7 +186,36 @@ export default {
   methods: {
     // 删除
     handlerDelete(row) {
-      console.log(row);
+      this.$confirm("此操作将永久删除该文件, 是否继续?", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消"
+      })
+        .then(async () => {
+          const res = await this.$http.post("/api/DeleteERPOrder", {
+            id: row.erpOrderID
+          });
+          const { code, msg } = res.data.result;
+          if (code === 200) {
+            this.$common.handlerMsgState({
+              msg: "删除成功",
+              type: "success"
+            });
+            this.exportTemplateDialog = false;
+            this.getTableDataList();
+          } else {
+            this.$common.handlerMsgState({
+              msg: msg,
+              type: "danger"
+            });
+            this.exportTemplateDialog = false;
+          }
+        })
+        .catch(() => {
+          this.$common.handlerMsgState({
+            msg: "取消删除",
+            type: "warning"
+          });
+        });
     },
     // 导出
     exportOrder(row) {
