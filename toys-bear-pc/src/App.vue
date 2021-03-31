@@ -99,7 +99,6 @@ export default {
     },
     // 回到顶部
     toTop() {
-      // console.log(this.$refs.bsIndex.$refs.myScrollbar);
       this.$refs.bsIndex.$refs.myScrollbar.forEach(val => {
         const el = val.wrap;
         const beginTime = Date.now();

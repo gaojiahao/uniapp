@@ -1,25 +1,31 @@
 <template>
   <div>
     <el-form
-      status-icon
-      :show-message="false"
       ref="ClientForm"
       label-width="100px"
       :model="myEditClientForm"
+      size="medium"
       :rules="addRules"
       class="clientDialogForm"
     >
       <el-form-item label="公司名称" prop="companyName">
-        <el-input v-model="myEditClientForm.companyName"></el-input>
+        <el-input
+          v-model="myEditClientForm.companyName"
+          size="medium"
+        ></el-input>
       </el-form-item>
       <el-form-item label="简称" prop="companyNickName">
-        <el-input v-model="myEditClientForm.companyNickName"></el-input>
+        <el-input
+          v-model="myEditClientForm.companyNickName"
+          size="medium"
+        ></el-input>
       </el-form-item>
       <div class="threeBox">
         <el-form-item label="公司logo" prop="companyLogo">
           <el-upload
             action="/api/File/InsertPic"
             list-type="picture-card"
+            size="medium"
             ref="upload"
             :auto-upload="false"
             :on-change="changeUpload1"
@@ -34,6 +40,7 @@
         </el-form-item>
         <el-form-item label="公司背景" prop="bgImg">
           <el-upload
+            size="medium"
             action="/api/File/InsertPic"
             list-type="picture-card"
             ref="upload2"
@@ -51,6 +58,7 @@
         <el-form-item label="营业执照" prop="bgImg">
           <el-upload
             action="/api/File/InsertPic"
+            size="medium"
             list-type="picture-card"
             ref="upload2"
             :auto-upload="false"
@@ -78,6 +86,7 @@
       <el-form-item label="联系地址" class="attrsForItem" prop="address">
         <el-input
           id="suggestId"
+          size="medium"
           name="address_detail"
           @click.native="isShowAttrsList = false"
           @keyup.native="selectMapAttrs($event, false)"
@@ -100,47 +109,63 @@
       </el-form-item>
       <div class="threeBox">
         <el-form-item label="手机" prop="phoneNumber">
-          <el-input v-model.trim="myEditClientForm.phoneNumber"></el-input>
+          <el-input
+            v-model.trim="myEditClientForm.phoneNumber"
+            size="medium"
+          ></el-input>
         </el-form-item>
         <el-form-item label="联系人" prop="contactsMan">
-          <el-input v-model="myEditClientForm.contactsMan"></el-input>
+          <el-input
+            v-model="myEditClientForm.contactsMan"
+            size="medium"
+          ></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="e_mail">
-          <el-input v-model="myEditClientForm.e_mail"></el-input>
+          <el-input v-model="myEditClientForm.e_mail" size="medium"></el-input>
         </el-form-item>
       </div>
       <div class="threeBox">
         <el-form-item label="联系电话" prop="telephoneNumber">
-          <el-input v-model="myEditClientForm.telephoneNumber"></el-input>
+          <el-input
+            v-model="myEditClientForm.telephoneNumber"
+            size="medium"
+          ></el-input>
         </el-form-item>
 
         <el-form-item label="传真号码" prop="fax">
-          <el-input v-model="myEditClientForm.fax"></el-input>
+          <el-input v-model="myEditClientForm.fax" size="medium"></el-input>
         </el-form-item>
         <el-form-item label="qq" prop="qq">
-          <el-input v-model="myEditClientForm.qq"></el-input>
+          <el-input v-model="myEditClientForm.qq" size="medium"></el-input>
         </el-form-item>
       </div>
       <div class="threeBox">
         <el-form-item label="msn" prop="msn">
-          <el-input v-model="myEditClientForm.msn"></el-input>
+          <el-input v-model="myEditClientForm.msn" size="medium"></el-input>
         </el-form-item>
         <el-form-item label="skype" prop="skype">
-          <el-input v-model="myEditClientForm.skype"></el-input>
+          <el-input v-model="myEditClientForm.skype" size="medium"></el-input>
         </el-form-item>
         <el-form-item label="公司KeyCode" prop="companyKeyCode">
           <el-input
             type="text"
+            size="medium"
             v-model="myEditClientForm.companyKeyCode"
           ></el-input>
         </el-form-item>
       </div>
       <el-form-item label="公司API" prop="api">
-        <el-input type="text" v-model="myEditClientForm.companyAPI"></el-input>
+        <el-input
+          type="text"
+          v-model="myEditClientForm.companyAPI"
+          size="medium"
+        ></el-input>
       </el-form-item>
       <el-form-item label="公司介绍" prop="homepage">
         <el-input
           type="textarea"
+          size="medium"
+          rows="1"
           v-model="myEditClientForm.homepage"
           :maxlength="
             $store.state.globalJson.Json.CompanyRestrictions[1].itemCode
@@ -150,6 +175,8 @@
       <el-form-item label="备注" prop="remark">
         <el-input
           type="textarea"
+          size="medium"
+          rows="1"
           v-model="myEditClientForm.remark"
           :maxlength="$store.state.globalJson.Json.UserRestrictions[0].itemCode"
         ></el-input>
@@ -170,8 +197,8 @@
         </p>
       </el-form-item>
       <center>
-        <el-button type="primary" @click="submit">确认</el-button>
-        <el-button @click="close">取消</el-button>
+        <el-button size="medium" type="primary" @click="submit">确认</el-button>
+        <el-button size="medium" @click="close">取消</el-button>
       </center>
     </el-form>
   </div>
@@ -207,7 +234,6 @@ export default {
               if (value) {
                 cb();
               } else {
-                this.$message.error("请选择公司logo");
                 cb(new Error("请选择公司logo"));
               }
             }
@@ -445,15 +471,30 @@ export default {
 };
 </script>
 <style scoped lang="less">
+@deep: ~">>>";
 .myMap {
   height: 150px;
+}
+.el-form {
+  .el-form-item {
+    margin-bottom: 10px;
+  }
+  @{deep} .el-form-item__error {
+    padding: 0;
+    z-index: 999 !important;
+    transform: scale(0.8);
+  }
 }
 .threeBox {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 15px;
   .el-upload {
     width: 100px;
     height: 100px;
+  }
+  .el-form-item {
+    margin: 0;
   }
 }
 </style>

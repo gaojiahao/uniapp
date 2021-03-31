@@ -41,7 +41,7 @@
       <div class="editOperation" v-show="myInfo.isMain">
         <span class="editItem" @click="openEditCompany">修改公司资料</span>
         <span class="line">|</span>
-        <span class="editItem">绑定公司</span>
+        <span class="editItem" @click="openBindCompany">绑定公司</span>
       </div>
     </div>
     <div class="tableTitle">
@@ -197,6 +197,19 @@
         @close="close"
       />
     </el-dialog>
+    <!-- 绑定公司dialog -->
+    <el-dialog
+      title="绑定公司"
+      :visible.sync="bindCompanyDialog"
+      v-if="bindCompanyDialog"
+      destroy-on-close
+      width="70%"
+    >
+      <bsBindCompany
+        :companyNumber="myInfo.companyNumber"
+        :companyType="myInfo.companyType"
+      />
+    </el-dialog>
   </div>
 </template>
 
@@ -204,16 +217,19 @@
 import { mapState } from "vuex";
 import bsAddStaff from "@/components/bsComponents/bsPersonalManageComponent/bsAddStaff";
 import bsBindStaff from "@/components/bsComponents/bsPersonalManageComponent/bsBindStaff";
+import bsBindCompany from "@/components/bsComponents/bsPersonalManageComponent/bsBindCompany";
 import bsEditCompanyInfo from "@/components/bsComponents/bsPersonalManageComponent/bsEditCompanyInfo";
 export default {
   name: "bsAccountManage",
   components: {
     bsAddStaff,
     bsBindStaff,
+    bsBindCompany,
     bsEditCompanyInfo
   },
   data() {
     return {
+      bindCompanyDialog: false,
       editCompanyDialog: false,
       totalCount: 0,
       myInfo: {},
@@ -227,6 +243,10 @@ export default {
     };
   },
   methods: {
+    // 打开绑定公司
+    openBindCompany() {
+      this.bindCompanyDialog = true;
+    },
     // 提交修改公司信息
     async submitEditCompany(form) {
       const res = await this.$http.post("/api/UpdateOrgCompany", form);
@@ -343,6 +363,7 @@ export default {
         this.myInfo = item;
         this.tableData = item.personnels;
         this.totalCount = item.personnels.length;
+        console.log(item);
       } else {
         this.$common.handlerMsgState({
           msg: msg,
@@ -434,15 +455,22 @@ export default {
       }
       .content {
         display: flex;
+        color: #999;
         .left {
           width: 210px;
           .leftItem {
             line-height: 35px;
+            span {
+              color: #666;
+            }
           }
         }
         .right {
           .rightItem {
             line-height: 35px;
+            span {
+              color: #666;
+            }
           }
         }
       }
