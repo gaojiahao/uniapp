@@ -1,9 +1,8 @@
 <template>
-  <div>
-    <el-button type="text" @click="dialogVisible = true"
-      >点击打开 Dialog</el-button
-    >
-    <el-button type="danger" @click="www">取 消</el-button>
+  <div
+    style="textAlign: center;margin-top: 200px;font-weight: bold;font-size: 40px;color:red;"
+  >
+    敬请期待
   </div>
 </template>
 
