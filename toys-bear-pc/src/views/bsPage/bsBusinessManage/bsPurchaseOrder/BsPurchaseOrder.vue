@@ -55,7 +55,7 @@
         ref="collecTable"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
-        <el-table-column label="择样单号" min-width="180">
+        <el-table-column label="择样单号">
           <template slot-scope="scope">
             <div
               style="color:#3368A9;cursor: pointer;"
@@ -65,7 +65,11 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="操作人员" align="center"></el-table-column>
+        <el-table-column
+          label="操作人员"
+          prop="orgPersonnelName"
+          align="center"
+        ></el-table-column>
         <el-table-column label="操作时间" align="center" min-width="150">
           <template slot-scope="scope">
             <span>
@@ -76,7 +80,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="the_nu"
+          prop="sumAmountOu_lo"
           label="采购数量"
           align="center"
           width="100"
@@ -116,7 +120,11 @@
             >
               导出
             </el-button>
-            <el-button size="mini" type="danger">
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handlerDelete(scope.row)"
+            >
               删除
             </el-button>
           </template>
@@ -135,14 +143,35 @@
         ></el-pagination>
       </center>
     </div>
+    <!-- 导出订单模板dialog -->
+    <transition name="el-zoom-in-center">
+      <el-dialog
+        title="订单模板"
+        v-if="exportTemplateDialog"
+        :visible.sync="exportTemplateDialog"
+        top="60px"
+        width="80%"
+      >
+        <bsExportSampleOrder
+          :orderRow="orderRow"
+          api="/api/GetOfferOrderExcel"
+        />
+      </el-dialog>
+    </transition>
   </div>
 </template>
 
 <script>
+import bsExportSampleOrder from "@/components/bsComponents/bsBusinessManageComponent/bsExportSampleOrder";
 export default {
   name: "bsPurchaseOrder",
+  components: {
+    bsExportSampleOrder
+  },
   data() {
     return {
+      orderRow: {},
+      exportTemplateDialog: false,
       searchForm: {
         keyword: null,
         orgPersonnelName: null,
@@ -156,12 +185,42 @@ export default {
   },
   methods: {
     // 删除
-    handleDelete(row) {
-      console.log(row);
+    handlerDelete(row) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消"
+      })
+        .then(async () => {
+          const res = await this.$http.post("/api/DeleteERPOrder", {
+            id: row.erpOrderID
+          });
+          const { code, msg } = res.data.result;
+          if (code === 200) {
+            this.$common.handlerMsgState({
+              msg: "删除成功",
+              type: "success"
+            });
+            this.exportTemplateDialog = false;
+            this.getTableDataList();
+          } else {
+            this.$common.handlerMsgState({
+              msg: msg,
+              type: "danger"
+            });
+            this.exportTemplateDialog = false;
+          }
+        })
+        .catch(() => {
+          this.$common.handlerMsgState({
+            msg: "取消删除",
+            type: "warning"
+          });
+        });
     },
     // 导出
     exportOrder(row) {
-      console.log(row);
+      this.orderRow = row;
+      this.exportTemplateDialog = true;
     },
     // 获取列表
     async getTableDataList() {

@@ -98,7 +98,7 @@
 <script>
 import { getCurrentTime } from "@/assets/js/common/common.js";
 export default {
-  props: ["orderRow"],
+  props: ["orderRow", "api"],
   data() {
     return {};
   },
@@ -127,7 +127,7 @@ export default {
         the_nu: this.orderRow.the_nu
       };
       this.$http
-        .post("/api/GetSampleOrderExcel", fd, {
+        .post(this.api, fd, {
           responseType: "blob"
         })
         .then(res => {
