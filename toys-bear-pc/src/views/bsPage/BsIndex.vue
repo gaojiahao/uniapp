@@ -240,10 +240,9 @@ export default {
     },
     // 关闭所有tab标签
     closeAll() {
-      this.$confirm("此操作将关闭所有标签页, 是否继续?", "提示", {
+      this.$confirm("此操作将关闭所有标签页, 是否继续?", {
         confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+        cancelButtonText: "取消"
       })
         .then(() => {
           this.$store.commit("closeTabAll");
@@ -357,6 +356,12 @@ export default {
                     padding: 0;
                     text-align: center;
                     position: relative;
+                    &:first-of-type {
+                      margin-left: 20px;
+                    }
+                    &:last-of-type {
+                      margin-right: 10px;
+                    }
                     &.is-active {
                       border-top: 2px solid #3368a9;
                       color: #3368a9;
