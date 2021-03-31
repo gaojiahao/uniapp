@@ -20,9 +20,10 @@ export default new Vuex.Store({
     activeTab: "/bsIndex/bsHome",
     showGlobalMsg: false,
     msgType: "primary",
-    dialogVisible: false,
-    dialogTitle: "确定要删除吗？",
     globalMsg: "",
+    confirmVisible: false,
+    confirmType: "primary",
+    confirmMsg: "确定要删除吗？",
     tabList: [
       {
         component: "bsHome",
@@ -77,14 +78,11 @@ export default new Vuex.Store({
     handlerShowGlobalMsg(state, payLoad) {
       state.showGlobalMsg = payLoad;
     },
-    // 修改全局Dialog数据
-    handlerDialogData(state, payLoad) {
-      state.dialogVisible = payLoad.dialogVisible;
-      state.dialogTitle = payLoad.dialogTitle;
-    },
-    // 修改全局Dialog状态
-    handlerDialogShow(state, payLoad) {
-      state.dialogVisible = payLoad;
+    // 修改全局确认框状态
+    handlerShowConfirm(state, payLoad) {
+      state.confirmVisible = payLoad.isShow;
+      state.confirmType = payLoad.type;
+      state.confirmMsg = payLoad.msg;
     },
     // 清空路由
     clearAllTab(state, payLoad) {

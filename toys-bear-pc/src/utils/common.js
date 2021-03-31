@@ -41,15 +41,6 @@ export default {
     }, option.time || 2000);
   },
 
-  //全局dialog组件事件
-  handlerDialogState(data) {
-    store.commit("handlerDialogShow", false);
-    Vue.prototype.$nextTick(() => {
-      store.commit("handlerDialogShow", true);
-      store.commit("handlerDialogData", data);
-    });
-  },
-
   // 新增tab页
   addTab(n) {
     store.commit("myAddTab", n);
@@ -59,20 +50,6 @@ export default {
     store.commit("closeTab", n);
   },
   judgeTab(arr, n) {
-    // let s = JSON.parse(sessionStorage.getItem(n));
-    // if (s) {
-    //   let flag = true;
-    //   for (const i of s) {
-    //     if (i.name == arr.name) {
-    //       flag = false;
-    //       break;
-    //     }
-    //   }
-    //   flag && s.push(arr);
-    // } else {
-    //   s = [arr];
-    // }
-    // sessionStorage.setItem(n, JSON.stringify(s));
     store.commit("myAddTab", n);
   },
   //获取当前tab id
