@@ -12,28 +12,7 @@
         v-if="showGlobalMsg"
       ></message-component>
     </transition>
-    <!-- dialog -->
-    <transition name="el-zoom-in-center">
-      <el-dialog
-        style="min-height:400px"
-        :visible.sync="dialogVisible"
-        width="30%"
-        :before-close="handleClose"
-      >
-        <p>{{ dialogTitle }}</p>
-
-        <center>
-          <span slot="footer" class="dialog-footer">
-            <!-- <el-button
-              :type="isType == false ? 'primary' : 'danger'"
-              @click="Save"
-              >确 定</el-button -->
-            <el-button type="primary" @click="Save">确 定</el-button>
-            <el-button @click="handleClose">取 消</el-button>
-          </span>
-        </center>
-      </el-dialog>
-    </transition>
+    <button @click="handleShowConfirm">点</button>
     <router-view ref="bsIndex" />
     <!-- 漂浮物 -->
     <transition name="el-zoom-in-top">
@@ -71,6 +50,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(["confirmType"]),
     ...mapState(["dialogVisible"]),
     ...mapState(["dialogTitle"]),
     ...mapState(["userInfo"]),
@@ -87,12 +67,25 @@ export default {
     });
   },
   methods: {
-    Save() {
-      console.log(22222);
-    },
-    // 关闭弹框
-    handleClose() {
-      this.$common.handlerDialogShow("handlerShowGlobalMsg", false);
+    sumbit() {},
+    // 使用的地方
+    handleShowConfirm() {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消"
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
     // 去购物车
     toMyShoppingCart() {

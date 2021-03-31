@@ -3,27 +3,13 @@
     <el-button type="text" @click="dialogVisible = true"
       >点击打开 Dialog</el-button
     >
-    <bsDialog
-      :isForm="dialogProp.isForm"
-      :isType="dialogProp.isType"
-      :dialogMsg="dialogProp.dialogMsg"
-      :dialogTitle="dialogProp.dialogTitle"
-      :visible.sync="dialogVisible"
-      @resetPopupData="resetPopupData"
-      @submitPopupData="submitPopupData"
-    >
-    </bsDialog>
     <el-button type="danger" @click="www">取 消</el-button>
   </div>
 </template>
 
 <script>
-import bsDialog from "@/components/bsDialog.vue";
 export default {
   name: "bsHallSample",
-  components: {
-    bsDialog
-  },
   data() {
     return {
       dialogVisible: false,
