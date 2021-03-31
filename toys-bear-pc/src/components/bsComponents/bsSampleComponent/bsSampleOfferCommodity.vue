@@ -43,17 +43,17 @@
       </div>
 
       <!-- 分页 -->
-      <center class="myPagination">
+      <center style="padding:20px 0;">
         <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[12, 24, 36, 48]"
-          :page-size="pageSize"
           layout="total, sizes, prev, pager, next, jumper"
+          :page-sizes="[10, 20, 30, 40]"
+          background
           :total="totalCount"
-        >
-        </el-pagination>
+          :page-size="pageSize"
+          :current-page.sync="currentPage"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+        ></el-pagination>
       </center>
     </div>
   </div>
@@ -77,9 +77,9 @@ export default {
       typeId: 0,
       productList: [],
       isGrid: "bsGridComponent",
-      currentPage: 1,
-      pageSize: 12,
-      totalCount: 0
+      totalCount: 0,
+      pageSize: 10,
+      currentPage: 1
     };
   },
   created() {},
@@ -93,8 +93,8 @@ export default {
     //   产品列表
     async getProductList() {
       const fd = {
-        PageIndex: this.currentPage,
-        PageSize: this.pageSize,
+        pageIndex: this.currentPage,
+        pageSize: this.pageSize,
         typeId: this.typeId
       };
       for (const key in fd) {
@@ -176,9 +176,6 @@ export default {
         width: 250px;
         min-width: 250px;
       }
-    }
-    .myPagination {
-      padding: 30px 0;
     }
   }
 }
