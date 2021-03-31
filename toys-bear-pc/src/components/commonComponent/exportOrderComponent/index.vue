@@ -132,8 +132,9 @@ export default {
         })
         .then(res => {
           const time = getCurrentTime();
-          const fileName = this.options.name + "_" + time + ".xls";
-          console.log(res);
+          const fileName = this.options.name
+            ? this.options.name + "_" + time + ".xls"
+            : time + ".xls";
           const blob = res.data;
           if (window.navigator && window.navigator.msSaveOrOpenBlob) {
             // 兼容IE
