@@ -21,7 +21,7 @@
         <div class="content">
           <div class="left">
             <p class="leftItem">
-              机号码：<span>{{ myInfo.phoneNumber }}</span>
+              手机号码：<span>{{ myInfo.phoneNumber }}</span>
             </p>
             <p class="leftItem">
               电话号码：<span>{{ myInfo.telephoneNumber }}</span>
@@ -191,7 +191,11 @@
       :visible.sync="editCompanyDialog"
       destroy-on-close
     >
-      <bsEditCompanyInfo :editClientForm="myInfo" @close="close" />
+      <bsEditCompanyInfo
+        :editClientForm="myInfo"
+        @submit="submitEditCompany"
+        @close="close"
+      />
     </el-dialog>
   </div>
 </template>
@@ -223,7 +227,24 @@ export default {
     };
   },
   methods: {
-    // 修改公司资料
+    // 提交修改公司信息
+    async submitEditCompany(form) {
+      const res = await this.$http.post("/api/UpdateOrgCompany", form);
+      if (res.data.result.code === 200) {
+        this.$common.handlerMsgState({
+          msg: "编辑成功",
+          type: "success"
+        });
+        this.getCompanyUserList();
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+      this.editCompanyDialog = false;
+    },
+    // 打开修改公司资料
     openEditCompany() {
       this.editCompanyDialog = true;
     },
@@ -284,10 +305,9 @@ export default {
         });
         return;
       }
-      this.$confirm("确定要删除该员工吗?", "提示", {
+      this.$confirm("确定要删除该员工吗?", {
         confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+        cancelButtonText: "取消"
       })
         .then(async () => {
           const res = await this.$http.post("/api/DeleteCompanyUser", {

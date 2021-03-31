@@ -4,7 +4,7 @@
 <script>
 import BMap from "BMap";
 export default {
-  props: ["address", "isMapClick"],
+  props: ["address"],
   data() {
     return {
       zoom: 11,
@@ -58,7 +58,6 @@ export default {
         );
         // 点击地图获取地址
         map.addEventListener("click", function(e) {
-          if (_that.isMapClick === "审核") return false;
           var pt = e.point;
           map.clearOverlays(); // 清除地图上所有覆盖物
           map.centerAndZoom(pt, 16);
