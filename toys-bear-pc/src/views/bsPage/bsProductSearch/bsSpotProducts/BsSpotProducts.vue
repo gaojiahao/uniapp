@@ -81,6 +81,7 @@
 import bsColumnComponent from "@/components/bsComponents/bsProductSearchComponent/bsColumnComponent";
 import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/bsGridComponent";
 import { mapGetters } from "vuex";
+// import eventBus from "@/assets/js/common/eventBus";
 export default {
   name: "bsSpotProducts",
   components: {

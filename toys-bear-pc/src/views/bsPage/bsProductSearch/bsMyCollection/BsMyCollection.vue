@@ -70,7 +70,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="来源" align="center">
+        <el-table-column label="资料来源">
           <template slot-scope="scope">
             {{ scope.row.exhibitionName }}
           </template>
@@ -160,6 +160,7 @@
 </template>
 
 <script>
+import eventBus from "@/assets/js/common/eventBus";
 export default {
   name: "bsMyCollection",
   data() {
@@ -234,6 +235,9 @@ export default {
   },
   created() {},
   mounted() {
+    eventBus.$on("resetMyCollection", () => {
+      this.getCollectList();
+    });
     this.getCollectList();
   }
 };

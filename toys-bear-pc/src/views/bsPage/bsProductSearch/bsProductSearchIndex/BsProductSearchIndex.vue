@@ -701,7 +701,15 @@ export default {
       shoppingList: "myShoppingList"
     }),
     ...mapState(["searchImgPreview"]),
-    ...mapState(["imageSearchValue"])
+    ...mapState(["imageSearchValue"]),
+    ...mapState(["myColles"])
+  },
+  watch: {
+    shoppingList(list) {
+      if (list) {
+        this.getProductList();
+      }
+    }
   },
   beforeDestroy() {
     this.clearRootEvent();

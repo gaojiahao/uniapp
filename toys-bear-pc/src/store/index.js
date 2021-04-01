@@ -17,6 +17,7 @@ function myForEach(oList, yList) {
 }
 export default new Vuex.Store({
   state: {
+    myColles: [],
     activeTab: "/bsIndex/bsHome",
     showGlobalMsg: false,
     msgType: "primary",
@@ -67,6 +68,15 @@ export default new Vuex.Store({
     currentComparnyId: null
   },
   mutations: {
+    // 添加收藏
+    addMyCollec(state, payLoad) {
+      console.log(payLoad);
+      state.myColles.push(payLoad);
+    },
+    // 删除收藏
+    removeMyCollec(state) {
+      state.myColles.pop();
+    },
     // 修改全局msg样式
     handlerMsgType(state, payLoad) {
       state.msgType = payLoad.type;

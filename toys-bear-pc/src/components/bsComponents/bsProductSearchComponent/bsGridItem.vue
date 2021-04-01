@@ -85,6 +85,7 @@
 </template>
 
 <script>
+import eventBus from "@/assets/js/common/eventBus";
 export default {
   props: {
     item: {
@@ -125,6 +126,7 @@ export default {
           });
         }
         item.isFavorite = !item.isFavorite;
+        eventBus.$emit("resetMyCollection");
       }
     },
     // 加购

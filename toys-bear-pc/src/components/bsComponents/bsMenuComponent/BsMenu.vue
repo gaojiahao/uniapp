@@ -53,6 +53,7 @@
 
 <script>
 import { mapState } from "vuex";
+import eventBus from "@/assets/js/common/eventBus";
 export default {
   props: {
     isCollapse: {
@@ -75,6 +76,7 @@ export default {
     },
     // 点击菜单事件
     addRouterEvent(route) {
+      eventBus.$emit("showCart", false);
       const list = route.linkUrl.split("/");
       const component = list[list.length - 1];
       const fd = {

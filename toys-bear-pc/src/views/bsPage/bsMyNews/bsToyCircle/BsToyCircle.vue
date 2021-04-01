@@ -1033,11 +1033,9 @@ export default {
       }
     }
     .cell-item-box {
-      // width: 100%;
       width: 540px;
       min-width: 540px;
-      // padding-left: 20px;
-      // padding-top: 20px;
+      margin-bottom: 20px;
       border-radius: 6px;
       overflow: hidden;
       box-sizing: border-box;
