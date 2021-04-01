@@ -4,40 +4,6 @@
       <i class="titleIcon"></i>
       <h2 class="title">登录系统</h2>
     </div>
-    <el-form :model="loginforms" ref="mobileRef" class="smsLogin">
-      <el-form-item prop="username">
-        <div class="mobileBox">
-          <el-input
-            placeholder="请输入手机号"
-            v-model="loginforms.username"
-            @keyup.enter.native="handleLogin"
-          ></el-input>
-          <div class="mobileIconBox">
-            <i class="mobileIcon"></i>
-          </div>
-        </div>
-      </el-form-item>
-      <el-form-item prop="verifycode">
-        <div class="countDownBox">
-          <div class="codeBox">
-            <el-input
-              placeholder="请输入登录码"
-              v-model="loginforms.verifycode"
-              class="verifycode"
-              @keyup.enter.native="handleLogin"
-            ></el-input>
-            <div class="codeIconBox">
-              <i class="codeIcon"></i>
-            </div>
-          </div>
-        </div>
-      </el-form-item>
-      <el-form-item>
-        <el-button class="submintBtn" type="primary" @click="handleLogin"
-          >登 录</el-button
-        >
-      </el-form-item>
-    </el-form>
   </div>
 </template>
 
@@ -63,7 +29,7 @@ export default {
   mounted() {}
 };
 </script>
-<style scoped lang="scss">
+<style scoped lang="less">
 .formBox {
   width: 100%;
   height: 100%;

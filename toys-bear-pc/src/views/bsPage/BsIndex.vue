@@ -204,7 +204,6 @@ export default {
     },
     // 刷新tab标签
     triggerTab() {
-      console.log(22);
       for (let i = 0; i < this.tabList.length; i++) {
         if (this.activeTab == this.tabList[i].name) {
           this.$store.commit("updataUrl", this.activeTab);
