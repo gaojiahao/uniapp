@@ -392,7 +392,11 @@ export default {
     // 切換頁容量
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
-      if (this.currentPage * pageSize > this.totalCount) return false;
+      if (
+        this.currentPage * pageSize > this.totalCount &&
+        this.currentPage != 1
+      )
+        return false;
       this.getSearchCompanyShareOrdersPage();
     },
     // 修改当前页

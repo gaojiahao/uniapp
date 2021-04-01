@@ -35,7 +35,7 @@
           size="medium"
           value-format="yyyy-MM-ddTHH:mm:ss"
           v-model="dateTime"
-          type="daterange"
+          type="datetimerange"
           range-separator="-"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
@@ -146,7 +146,11 @@ export default {
     // 切換頁容量
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
-      if (this.currentPage * pageSize > this.totalCount) return false;
+      if (
+        this.currentPage * pageSize > this.totalCount &&
+        this.currentPage != 1
+      )
+        return false;
       this.getSearchCompanyShareOrdersPage();
     },
     // 修改当前页

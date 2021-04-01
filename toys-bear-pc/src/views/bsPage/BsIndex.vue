@@ -306,7 +306,10 @@ export default {
     .leftMenu {
       height: 100%;
       box-sizing: border-box;
-      // box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
+      box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
+      .bsMenu {
+        box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
+      }
     }
     @{deep} .rightContent {
       flex: 1;

@@ -587,7 +587,11 @@ export default {
     // 切換頁容量
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
-      if (this.currentPage * pageSize > this.totalCount) return false;
+      if (
+        this.currentPage * pageSize > this.totalCount &&
+        this.currentPage != 1
+      )
+        return false;
       this.getProductList();
     },
     // 修改当前页
@@ -761,7 +765,7 @@ export default {
         border-top: 1px solid #dcdfe6;
         padding-top: 13px;
         .itemTag {
-          padding: 7px 15px;
+          padding: 5px 12px;
           border-radius: 4px;
           cursor: pointer;
           &.isActive {
@@ -802,6 +806,14 @@ export default {
           &.priceUnit,
           &.dateTime {
             cursor: default;
+            @{deep} .el-date-editor {
+              width: 210px;
+              box-sizing: border-box;
+              padding-left: 16px;
+              .el-icon-date {
+                display: none;
+              }
+            }
           }
           .screenLabel {
             margin-right: 10px;

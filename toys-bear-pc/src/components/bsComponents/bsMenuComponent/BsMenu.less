@@ -5,8 +5,12 @@
   height: 100%;
   @{deep} .el-menu {
     border: none;
+    .el-menu-item {
+      height: 50px;
+      line-height: 50px;
+    }
   }
-  // box-shadow: 0px 3px 0px 0px rgba(42,69,116,0.16);
+  box-shadow: 0px 3px 0px 0px rgba(42,69,116,0.16);
     .el-menu-vertical-demo:not(.el-menu--collapse) {
     box-sizing: border-box;
     width: 220px;
@@ -172,8 +176,8 @@
 @{deep} .el-submenu {
   .el-menu-item {
     font-size: 15px !important;
-    height: 40px;
-    line-height: 39px;
+    height: 40px !important;
+    line-height: 39px !important;
     text-indent: 15px;
     background-color: #f9fafc;
     &:hover {

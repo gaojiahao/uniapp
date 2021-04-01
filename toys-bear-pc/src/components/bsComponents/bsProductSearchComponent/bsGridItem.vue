@@ -115,7 +115,7 @@ export default {
       if (res.data.result.code === 200) {
         if (item.isFavorite) {
           this.$common.handlerMsgState({
-            msg: "取消收藏成功",
+            msg: "取消收藏",
             type: "warning"
           });
         } else {
@@ -155,8 +155,8 @@ export default {
 </script>
 <style scoped lang="less">
 .bsGridItem {
-  width: 250px;
-  min-width: 250px;
+  width: 255px;
+  min-width: 255px;
   background: #ffffff;
   border: 1px solid #dcdfe6;
   margin-top: 20px;
