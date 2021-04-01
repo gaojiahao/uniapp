@@ -322,8 +322,11 @@ export default {
     // 切换当前页条数
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
-      if (this.currentPage * pageSize > this.totalCount &&
-        this.currentPage != 1) return false;
+      if (
+        this.currentPage * pageSize > this.totalCount &&
+        this.currentPage != 1
+      )
+        return false;
       this.getSearchCompanyShareOrderDetailsPage();
     }
   }
