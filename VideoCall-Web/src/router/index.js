@@ -1,45 +1,93 @@
+/*
+ * @Descripttion:
+ * @version: 1.0.0
+ * @Author: gaojiahao
+ * @Date: 2020-10-19 15:27:12
+ * @LastEditors: sueRimn
+ * @LastEditTime: 2021-04-01 12:27:12
+ */
 import Vue from "vue";
 import VueRouter from "vue-router";
-const Home = () => import("@/views/Home.vue");
-const Login = () => import("@/views/Login.vue");
-const originalPush = VueRouter.prototype.push;
-VueRouter.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch(err => err);
-};
+import tokenService from "@service/tokenService";
 Vue.use(VueRouter);
 
 const routes = [
+  { 
+    path: '/', 
+    name: "Home",
+    component: resolve=>(require(["@views/Home"],resolve)),
+    meta: {
+      title: "宏升视频会议",
+      auth: true      //检查权限true
+    },
+    children:[
+    
+    ]
+  },
+  { 
+    path: '/createMeeting', 
+    name: "createMeeting",
+    component: resolve=>(require(["@views/meeting/createMeeting"],resolve)),
+    meta: {
+      title: "创建会议",
+    },
+  },
+  { 
+    path: '/addMeeting', 
+    name: "addMeeting",
+    component: resolve=>(require(["@views/meeting/addMeeting"],resolve)),
+    meta: {
+      title: "进入会议",
+    },
+  },
   {
     path: "/login",
-    name: "login",
-    component: Login
+    name: "Login",
+    component: resolve=>(require(["@views/Login"],resolve)),
+    meta: {
+      title: "登录"
+    }
   },
   {
-    path: "/home",
-    name: "home",
-    component: Home
+    path: "*",
+    name: "/errorHandler",
+    component: resolve=>(require(['@components/public/errorHandler'],resolve)),
+    meta: {
+      title: "页面出错"
+    }
   },
-  {
-    path: "/",
-    redirect: "/login"
-  }
 ];
 
 const router = new VueRouter({
-  mode: "hash",
-  routes
+  routes,
+  mode: "history",
+  base: "videoMeeting"
 });
 
-// 路由拦截
+/**
+ * @name: gaojiahao
+ * @test: 路由全局前置守卫
+ * @msg:
+ * @param {*}
+ * @return {*}
+ */
 router.beforeEach((to, from, next) => {
-  if (to.name !== "login") {
-    const isLogin = sessionStorage.getItem("isLogin");
-    if (!isLogin) {
-      next({ path: "/login" });
+  if (to.matched.some(m => m.meta.auth)) {
+    // 对路由进行验证
+    if (tokenService.getToken() != "" && to.name !== "Login") {
+      // 已经登陆
+      next(); // 正常跳转到你设置好的页面
+    } else {
+      //next({ path: "/login" });
+      next();
     }
+  } else {
     next();
   }
-  next();
 });
 
+const originalPush = VueRouter.prototype.push
+   VueRouter.prototype.push = function push(location) {
+   return originalPush.call(this, location).catch(err => err)
+}
 export default router;

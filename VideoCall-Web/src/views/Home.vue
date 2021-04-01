@@ -1,50 +1,121 @@
+<!--
+ * @Description: 
+ * @Author: gaojiahao
+ * @Date: 2021-03-31 17:09:19
+ * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\Home.vue
+ * @LastEditTime: 2021-04-01 19:38:12
+ * @LastEditors: sueRimn
+ * @Descripttion: 
+ * @version: 1.0.0
+-->
 <template>
   <div class="home" id="homeBox">
-    <li class="item myItem"></li>
+    <Layout>
+        <Header>
+          <Heads></Heads>
+        </Header>
+        <Layout>
+            <Sider hide-trigger breakpoint="md" class="container-sider" v-model="isCollapsed" :collapsible=false :collapsed-width="0" ref="side1" hide-trigger :width="220">
+              <UserList @collapsed-sider="collapsedSider"></UserList>
+              <div class="nextPage" v-if="isCollapsed" @click="collapsedSider">
+                <Icon type="ios-arrow-forward" />
+              </div>
+            </Sider>
+            <Content>
+              <Video></Video>
+            </Content>
+            <Sider ref="side2" hide-trigger :width="311">
+              <Order></Order>
+            </Sider>
+        </Layout>
+        <Footer>
+          <Footers></Footers>
+        </Footer>
+    </Layout>
   </div>
 </template>
 
 <script>
-import RMT from "@/assets/js/signalROptions/signalROptions";
+import Heads from "@components/head/index";
+import UserList from "@views/user/userList";
+import Video from "@views/video/index";
+import Order from "@views/order/index";
+import Footers from "@components/footer/index";
+
 export default {
   name: "Home",
+  components:{
+    Heads,
+    UserList,
+    Video,
+    Order,
+    Footers
+  },
   data() {
     return {
-      rtc: null
+      isCollapsed: false,
     };
   },
   methods: {
-    async initRMT() {
-      this.rtc = new RMT({ groupNumber: "111" });
-      this.rtc
-        .startCall()
-        .then(res => console.log(res))
-        .catch(err => {
-          switch (err.code) {
-            case "DEVICE_NOT_FOUND":
-              this.$message.error("找不到设备");
-              break;
-          }
-        });
-    }
+    collapsedSider() {
+      this.$refs.side1.toggleCollapse();
+    },
   },
   created() {
-    this.initRMT();
+
   }
 };
 </script>
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .home {
   width: 100%;
   height: 100%;
-  background: url("~@/assets/images/ag-index-background.png") center no-repeat;
+  background: #fff;
   background-size: 100% 100%;
   display: flex;
   flex-wrap: wrap;
+  .ivu-layout /deep/ {
+    /deep/ .ivu-layout-header{
+      background: #fff;
+      // border-bottom: 1px solid #e9e9e9;
+      box-shadow: 0 1px 6px rgb(0 0 0 / 20%);
+      border-color: #eee;
+      z-index: 1;
+      line-height: unset;
+    }
+    .ivu-layout-sider{
+      background: #fff;  
+    }
+    /deep/ .ivu-layout-content{
+      background: #515a6e;  
+    }
+    /deep/ .ivu-layout-footer{
+      border-top:1px solid #e0e0e0;
+      background: #fff;
+      padding: unset;
+    }
+  }
   .item {
     width: 300px;
     height: 300px;
     margin: 10px;
+  }
+  .nextPage {
+    position: fixed;
+    top: 50%;
+    left:10px;
+    width: 40px;
+    height: 60px;
+    padding: 10px 0;
+    margin-top: -30px;
+    line-height: 40px;
+    color: #717171;
+    text-align: center;
+    pointer-events: auto;
+    background: #fff;
+    // background-color: rgba(90,90,90,.85);
+    z-index: 1;
+    transition: all 0.2s ease-in-out;
   }
 }
 </style>
