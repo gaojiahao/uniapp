@@ -2,49 +2,57 @@
   <div class="bsPurchaseOrder">
     <div class="title">采购订单 ({{ totalCount }})</div>
     <div class="searchBox">
-      <div class="item">
-        <span class="label">采购单号：</span>
-        <el-input
-          type="text"
-          size="medium"
-          v-model="searchForm.keyword"
-          placeholder="请输入"
-          clearable
-          @keyup.native.enter="search"
-        ></el-input>
+      <div class="left">
+        <div class="item">
+          <span class="label">采购单号：</span>
+          <el-input
+            type="text"
+            size="medium"
+            v-model="searchForm.keyword"
+            placeholder="请输入"
+            clearable
+            @keyup.native.enter="search"
+          ></el-input>
+        </div>
+        <div class="item">
+          <span class="label">人员：</span>
+          <el-input
+            type="text"
+            size="medium"
+            v-model="searchForm.orgPersonnelName"
+            clearable
+            placeholder="请输入"
+            @keyup.native.enter="search"
+          ></el-input>
+        </div>
+        <div class="item">
+          <span class="label">时间段：</span>
+          <el-date-picker
+            size="medium"
+            value-format="yyyy-MM-ddTHH:mm:ss"
+            v-model="searchForm.dateTime"
+            type="daterange"
+            range-separator="-"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          >
+          </el-date-picker>
+        </div>
+        <div class="item">
+          <el-button
+            @click="search"
+            type="primary"
+            icon="el-icon-search"
+            size="medium"
+          >
+            搜索
+          </el-button>
+        </div>
       </div>
-      <div class="item">
-        <span class="label">人员：</span>
-        <el-input
-          type="text"
-          size="medium"
-          v-model="searchForm.orgPersonnelName"
-          clearable
-          placeholder="请输入"
-          @keyup.native.enter="search"
-        ></el-input>
-      </div>
-      <div class="item">
-        <span class="label">时间段：</span>
-        <el-date-picker
-          size="medium"
-          value-format="yyyy-MM-ddTHH:mm:ss"
-          v-model="searchForm.dateTime"
-          type="daterange"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        >
-        </el-date-picker>
-      </div>
-      <div class="item">
-        <el-button
-          @click="search"
-          type="primary"
-          icon="el-icon-search"
-          size="medium"
-        >
-          搜索
+      <div class="right">
+        <el-button type="success" size="medium" @click="importOrder">
+          <i class="iconfont icon-daochujinruchukou"></i>
+          导入列表
         </el-button>
       </div>
     </div>
@@ -184,6 +192,30 @@ export default {
     };
   },
   methods: {
+    // 查看详情
+    toDetails(row) {
+      const fd = {
+        name: row.orderNumber,
+        linkUrl: "/bsIndex/bsPurchaseOrderDetails",
+        component: "bsPurchaseOrderDetails",
+        refresh: true,
+        noPush: true,
+        label: row.orderNumber,
+        value: row
+      };
+      this.$store.commit("myAddTab", fd);
+      console.log(row);
+      // sessionStorage.setItem("orderDetails", JSON.stringify(row));
+      // this.$store.commit("handlerBsMenuLabels", {
+      //   linkUrl: "/bsIndex/bsClientOrderDetails",
+      //   name: row.orderNumber
+      // });
+      this.$router.push("/bsIndex/bsPurchaseOrderDetails");
+    },
+    // 导入菜单
+    importOrder() {
+      alert("敬请期待");
+    },
     // 删除
     handlerDelete(row) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", {
@@ -299,15 +331,23 @@ export default {
     height: 76px;
     display: flex;
     align-items: center;
-    .item {
+    .left {
+      flex: 1;
       display: flex;
-      align-items: center;
-      max-width: 258px;
-      margin-right: 20px;
-      .label {
-        width: 70px;
-        min-width: 70px;
+      .item {
+        display: flex;
+        align-items: center;
+        max-width: 258px;
+        margin-right: 20px;
+        .label {
+          width: 70px;
+          min-width: 70px;
+        }
       }
+    }
+    .right {
+      width: 150px;
+      min-width: 150px;
     }
   }
   @{deep} .tableBox {

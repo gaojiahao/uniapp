@@ -126,6 +126,8 @@ import bsSampleOfferCommodity from "@/components/bsComponents/bsSampleComponent/
 import bsSampleUpdata from "@/components/bsComponents/bsSampleComponent/bsSampleUpdata";
 // 采购订单
 import bsPurchaseOrder from "@/views/bsPage/bsBusinessManage/bsPurchaseOrder/BsPurchaseOrder.vue";
+// 采购订单详情
+import bsPurchaseOrderDetails from "@/views/bsPage/bsBusinessManage/bsPurchaseOrder/bsPurchaseOrderDetails/BsPurchaseOrderDetails.vue";
 
 import bsTop from "@/components/bsComponents/bsTopComponent/BsTop";
 import bsMenu from "@/components/bsComponents/bsMenuComponent/BsMenu";
@@ -165,7 +167,8 @@ export default {
     bsPurchaseOrder,
     bsTop,
     bsMenu,
-    bsProductSearch
+    bsProductSearch,
+    bsPurchaseOrderDetails
   },
   data() {
     return {

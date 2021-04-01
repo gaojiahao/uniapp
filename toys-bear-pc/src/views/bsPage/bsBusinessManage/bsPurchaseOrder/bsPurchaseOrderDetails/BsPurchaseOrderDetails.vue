@@ -2,18 +2,14 @@
   <div class="clientOrderDetails">
     <div class="title">客户订单详情</div>
     <ul class="customerInfoBox">
-      <li class="itemBox">
-        <span>订单编号：</span>
-        <span class="orderNumber">{{ item.orderNumber }}</span>
-      </li>
       <div class="clientContentBox">
         <div class="left">
           <li class="clientItem">
-            <span>客户：</span>
-            <span class="content">{{ item.customerName }}</span>
+            <span class="itemTitle">采购单号：</span>
+            <span class="content orderNumber">{{ item.orderNumber }}</span>
           </li>
           <li class="clientItem">
-            <span>择样时间：</span>
+            <span class="itemTitle">采购时间：</span>
             <span class="content">
               {{ item.createdOn && item.createdOn.replace(/T/, " ") }}
             </span>
@@ -21,22 +17,29 @@
         </div>
         <div class="middle">
           <li class="clientItem">
-            <span>联系人：</span>
-            <span class="content">{{ item.contactName }}</span>
+            <span class="itemTitle">操 作 员：</span>
+            <span class="content orgPersonnelName">
+              {{ item.orgPersonnelName }}
+            </span>
           </li>
           <li class="clientItem">
-            <span>公司名称：</span>
-            <span class="content">{{ item.companyName }}</span>
+            <span class="itemTitle">客户名称：</span>
+            <span class="content">{{ item.fromCompanyName }}</span>
           </li>
         </div>
         <div class="right">
           <li class="clientItem">
-            <span>邮箱：</span>
-            <span class="content">{{ item.email }}</span>
+            <span class="itemTitle">状态：</span>
+            <span class="content state" v-if="item.readStatus">
+              已读
+            </span>
+            <span class="content state" v-else>
+              未读
+            </span>
           </li>
           <li class="clientItem">
-            <span>备注：</span>
-            <span class="content">{{ item.remark }}</span>
+            <span class="itemTitle">报价备注：</span>
+            <span class="content">{{ item.pushContent }}</span>
           </li>
         </div>
       </div>
@@ -70,8 +73,8 @@
               <el-image
                 fit="contain"
                 style="width:80px;height:60px;"
-                :src="scope.row.productImage"
-                :preview-src-list="[scope.row.productImage]"
+                :src="scope.row.imgUrl[0]"
+                :preview-src-list="scope.row.imgUrl"
               >
                 <div slot="placeholder" class="errorImg">
                   <img src="~@/assets/images/imgError.png" alt />
@@ -82,7 +85,7 @@
               </el-image>
               <div class="productName">
                 <div class="name">
-                  {{ scope.row.productName }}
+                  {{ scope.row.pr_na }}
                 </div>
                 <div class="factory">
                   <div class="fcatoryName">
@@ -164,17 +167,19 @@
             <span> {{ scope.row.in_en }}/{{ scope.row.ou_lo }}(pcs) </span>
           </template>
         </ex-table-column>
-        <ex-table-column :autoFit="true" prop="costPrice" label="参考价">
+        <ex-table-column :autoFit="true" prop="fa_pr" label="参考价">
           <template slot-scope="scope">
             <span style="color:#3368A9">
-              {{ options.currencyType + scope.row.costPrice }}
+              <span>{{ scope.row.cu_de }}</span>
+              {{ scope.row.fa_pr }}
             </span>
           </template>
         </ex-table-column>
-        <ex-table-column :autoFit="true" prop="productPrice" label="报出价">
+        <ex-table-column :autoFit="true" prop="fa_pr_pr" label="报出价">
           <template slot-scope="scope">
             <span style="color:#f56c6c">
-              {{ options.currencyType + scope.row.productPrice }}
+              <span>{{ scope.row.cu_de }}</span>
+              {{ scope.row.fa_pr_pr }}
             </span>
           </template>
         </ex-table-column>
@@ -182,36 +187,24 @@
       <div class="totalBox">
         <p class="item">
           <span class="itemTitle">总款数：</span>
-          <span>{{ options.totalKuanshu }}</span>
+          <span>{{ totalCount }}</span>
         </p>
         <p class="item">
           <span class="itemTitle">总箱数：</span>
-          <span>{{ options.totalCount }}</span>
+          <span>{{ options.sumtAmount }}</span>
         </p>
         <p class="item">
           <span class="itemTitle">总体积/总材积：</span>
-          <span>{{ options.totalStere }}</span
-          >/<span>{{ options.totalFeet }}</span>
+          <span>{{ options.sumBulk_stere }}</span
+          >/<span>{{ options.sumBulk_feet }}</span>
         </p>
         <p class="item">
           <span class="itemTitle">总毛重/总净重：</span>
-          <span
-            >{{ options.totalGrossWeight }}/{{
-              options.totalNetWeight
-            }}(kg)</span
-          >
+          <span>{{ options.sumGr_we }}/{{ options.sumNe_we }}(kg)</span>
         </p>
         <p class="item">
-          <span class="itemTitle">总出厂价/总金额：</span>
-          <span style="color: #3368A9;">
-            {{ options.currencyType }}
-          </span>
-          <span style="color: #3368A9;">{{ options.totalCostPrice }}</span>
-          <span style="margin:5px;"></span>
-          <span class="price">
-            {{ options.currencyType }}
-          </span>
-          <span class="price">{{ options.totalAmount }}</span>
+          <span class="itemTitle">总金额：</span>
+          <span class="price">￥{{ options.sumFa_pr_pr }}</span>
         </p>
       </div>
     </div>
@@ -238,9 +231,12 @@
         width="80%"
       >
         <bsExportOrder
-          :orderNumber="orderOption.orderNumber"
-          :customerName="options.customerName"
-          api="/api/ExportCustomerOrderDetailToExcel"
+          :options="{
+            orderNumber: item.orderNumber,
+            the_nu: item.the_nu,
+            name: item.fromCompanyName,
+            api: '/api/GetOfferOrderExcel'
+          }"
         />
       </el-dialog>
     </transition>
@@ -248,7 +244,7 @@
 </template>
 
 <script>
-import bsExportOrder from "@/components/bsComponents/bsSiteSharingComponent/bsExportOrder";
+import bsExportOrder from "@/components/commonComponent/exportOrderComponent";
 export default {
   components: { bsExportOrder },
   props: {
@@ -258,10 +254,10 @@ export default {
   },
   data() {
     return {
+      options: {},
       exportTemplateDialog: false,
       isOrderDetailDialog: false,
       tableData: [],
-      options: {},
       currentPage: 1,
       pageSize: 10,
       totalCount: 0,
@@ -273,8 +269,23 @@ export default {
   },
   mounted() {
     this.getSearchCompanyShareOrderDetailsPage();
+    this.getERPOrderTotal();
   },
   methods: {
+    // 获取订单详情总数
+    async getERPOrderTotal() {
+      const res = await this.$http.post("/api/GetERPOrderTotal", {
+        id: this.item.erpOrderID
+      });
+      if (res.data.result.code === 200) {
+        this.options = res.data.result.item;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
     // 打开选择导出模板
     openSelectTemplate() {
       this.exportTemplateDialog = true;
@@ -288,19 +299,14 @@ export default {
     },
     // 获取分享客户订单
     async getSearchCompanyShareOrderDetailsPage() {
-      const res = await this.$http.post(
-        "/api/SearchCompanyShareOrderDetailsPage",
-        {
-          skipCount: this.currentPage,
-          maxResultCount: this.pageSize,
-          shareOrderNumber: this.item.orderNumber
-        }
-      );
+      const res = await this.$http.post("/api/GetERPOrderDetailPage", {
+        skipCount: this.currentPage,
+        maxResultCount: this.pageSize,
+        id: this.item.erpOrderID
+      });
       if (res.data.result.code === 200) {
-        this.options = res.data.result.item;
-        this.tableData = res.data.result.item.shareOrderDetails.items;
-        console.log(this.options);
-        this.totalCount = res.data.result.item.shareOrderDetails.totalCount;
+        this.tableData = res.data.result.item.items;
+        this.totalCount = res.data.result.item.totalCount;
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -361,10 +367,22 @@ export default {
       .left,
       .middle,
       .right {
-        min-width: 250px;
+        min-width: 400px;
         .clientItem {
           line-height: 34px;
           margin-right: 20px;
+          .itemTitle {
+            color: #999;
+          }
+          .orderNumber {
+            font-weight: 700;
+          }
+          .orgPersonnelName {
+            color: #3368a9;
+          }
+          .state {
+            color: #e55555;
+          }
         }
       }
     }

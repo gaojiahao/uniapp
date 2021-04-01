@@ -40,6 +40,12 @@ const BsMyClientsDetail = () =>
     "@/components/bsComponents/bsMyClientsComponent/bsMyClientsDetail.vue"
   );
 
+/** 客户订单详情 */
+const BsPurchaseOrderDetails = () =>
+  import(
+    "@/views/bsPage/bsBusinessManage/bsPurchaseOrder/bsPurchaseOrderDetails/BsPurchaseOrderDetails.vue"
+  );
+
 export default [
   {
     path: "/bsIndex/bsHome",
@@ -84,5 +90,10 @@ export default [
     path: "/bsIndex/bsMyClientsDetail",
     name: "bsMyClientsDetail",
     component: BsMyClientsDetail
+  },
+  {
+    path: "/bsIndex/bsPurchaseOrderDetails",
+    name: "bsPurchaseOrderDetails",
+    component: BsPurchaseOrderDetails
   }
 ];

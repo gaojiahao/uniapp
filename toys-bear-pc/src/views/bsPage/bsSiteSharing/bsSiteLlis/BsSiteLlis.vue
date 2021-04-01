@@ -529,6 +529,19 @@ export default {
     };
   },
   methods: {
+    // 获取系统配置项
+    async getSelectCompanyOffer() {
+      const res = await this.$http.post("/api/GetSelectCompanyOffer", {
+        basisParameters: "CompanyProductOffer"
+      });
+      if (res.data.result.code === 200) this.options = res.data.result.item;
+      else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
     // 获取列表
     async getDataList() {
       const fd = {
@@ -761,7 +774,9 @@ export default {
     this.getClientList();
     this.getSelectProductOfferFormulaList();
   },
-  mounted() {},
+  mounted() {
+    this.getSelectCompanyOffer();
+  },
   watch: {
     defaultFormula: {
       deep: true,
