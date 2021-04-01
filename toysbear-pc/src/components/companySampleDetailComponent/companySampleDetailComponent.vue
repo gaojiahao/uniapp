@@ -389,6 +389,7 @@ export default {
   methods: {
     // 导出
     exportOrder(type) {
+      console.log(this.item);
       this.$http
         .post(
           "/api/ExportCompanySampleListToExcel",
@@ -405,8 +406,8 @@ export default {
           const fileName = this.item.companyName
             ? this.item.companyName + "_" + currentTime + ".xlsx"
             : currentTime + ".xlsx";
-          const zipName = this.sampleNumber.companyName
-            ? this.sampleNumber.companyName + "_" + getCurrentTime() + ".zip"
+          const zipName = this.item.companyName
+            ? this.item.companyName + "_" + getCurrentTime() + ".zip"
             : getCurrentTime() + ".zip";
           const myName = this.imageExportWay > 0 ? zipName : fileName;
           const blob = res.data;
