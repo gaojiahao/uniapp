@@ -212,10 +212,25 @@
           >
             <span class="headerTitle">报出价(带工厂信息)</span>
             <div>
+              <div class="isFac">
+                <span class="facTitle">是否按厂商导出</span>
+                <el-select
+                  v-model="imageExportWay"
+                  clearable
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in imageExportWayList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </div>
               <el-radio-group class="myExportWay" v-model="exportWay">
-                <el-radio :label="1">不带图片导出</el-radio>
-                <el-radio :label="2">带图片导出</el-radio>
-                <el-radio :label="3">按厂商带图片导出</el-radio>
+                <el-radio :label="1">带图片导出</el-radio>
+                <el-radio :label="2">不带图片导出</el-radio>
               </el-radio-group>
               <el-button
                 type="primary"
@@ -240,10 +255,25 @@
           >
             <span class="headerTitle">报出价(不带工厂信息)</span>
             <div>
+              <div class="isFac">
+                <span class="facTitle">是否按厂商导出</span>
+                <el-select
+                  v-model="imageExportWay"
+                  clearable
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in imageExportWayList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </div>
               <el-radio-group class="myExportWay" v-model="exportWay">
-                <el-radio :label="1">不带图片导出</el-radio>
-                <el-radio :label="2">带图片导出</el-radio>
-                <el-radio :label="3">按厂商带图片导出</el-radio>
+                <el-radio :label="1">带图片导出</el-radio>
+                <el-radio :label="2">不带图片导出</el-radio>
               </el-radio-group>
               <el-button
                 type="primary"
@@ -268,10 +298,25 @@
           >
             <span class="headerTitle">出厂价(带工厂信息)</span>
             <div>
+              <div class="isFac">
+                <span class="facTitle">是否按厂商导出</span>
+                <el-select
+                  v-model="imageExportWay"
+                  clearable
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in imageExportWayList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </div>
               <el-radio-group class="myExportWay" v-model="exportWay">
-                <el-radio :label="1">不带图片导出</el-radio>
-                <el-radio :label="2">带图片导出</el-radio>
-                <el-radio :label="3">按厂商带图片导出</el-radio>
+                <el-radio :label="1">带图片导出</el-radio>
+                <el-radio :label="2">不带图片导出</el-radio>
               </el-radio-group>
               <el-button
                 type="primary"
@@ -296,10 +341,25 @@
           >
             <span class="headerTitle">出厂价+报出价+工厂信息</span>
             <div>
+              <div class="isFac">
+                <span class="facTitle">是否按厂商导出</span>
+                <el-select
+                  v-model="imageExportWay"
+                  clearable
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in imageExportWayList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </div>
               <el-radio-group class="myExportWay" v-model="exportWay">
-                <el-radio :label="1">不带图片导出</el-radio>
-                <el-radio :label="2">带图片导出</el-radio>
-                <el-radio :label="3">按厂商带图片导出</el-radio>
+                <el-radio :label="1">带图片导出</el-radio>
+                <el-radio :label="2">不带图片导出</el-radio>
               </el-radio-group>
               <el-button
                 type="primary"
@@ -339,6 +399,12 @@ export default {
   props: ["shareOrderNumber"],
   data() {
     return {
+      imageExportWayList: [
+        { value: 0, label: "请选择" },
+        { value: 2, label: "按厂商单独导图片" },
+        { value: 1, label: "不按厂商单独导图片" }
+      ],
+      imageExportWay: 0,
       exportWay: 1,
       showViewer: false,
       exportTemplateDialog: false,
@@ -353,7 +419,8 @@ export default {
     // 导出模板
     exportOrder(type) {
       const fd = {
-        exportWay: this.exportWay,
+        excelExportWay: this.exportWay,
+        imageExportWay: this.imageExportWay ? this.imageExportWay : 0,
         templateType: type,
         shareOrderNumber: this.shareOrderNumber
       };
@@ -373,7 +440,7 @@ export default {
               getCurrentTime() +
               ".zip"
             : getCurrentTime() + ".zip";
-          const myName = this.exportWay == 1 ? fileName : zipName;
+          const myName = this.imageExportWay > 0 ? zipName : fileName;
           const blob = res.data;
           if (window.navigator && window.navigator.msSaveOrOpenBlob) {
             // 兼容IE
@@ -530,6 +597,13 @@ export default {
     .headerTitle {
       font-size: 16px;
       font-weight: bold;
+    }
+    .isFac {
+      display: inline;
+      margin: 20px;
+      .facTitle {
+        margin-right: 10px;
+      }
     }
   }
 }
