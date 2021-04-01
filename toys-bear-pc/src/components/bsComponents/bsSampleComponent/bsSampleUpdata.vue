@@ -6,17 +6,16 @@
     <bsSampleSearch :searchFormData="searchFormData"></bsSampleSearch>
     <div class="bsSampleTable">
       <div class="top">
-        <div class="left">报价商品列表({{ tableData.length }})</div>
+        <div class="left">报价商品列表({{ this.offerProductList.length }})</div>
         <div class="right">
           <el-button @click="handleSelect" class="el-icon-plus" type="primary">
             选择报价商品</el-button
           >
         </div>
       </div>
-
       <div class="tableBox">
         <el-table
-          :data="tableData"
+          :data="this.offerProductList"
           style="width: 100%"
           ref="collecTable"
           :header-cell-style="{ backgroundColor: '#f9fafc' }"
@@ -198,17 +197,17 @@
         <div class="right">
           <p class="item">
             <span class="itemTitle">总款数：</span>
-            <span>{{ tableData.length }}</span>
+            <span>{{ this.offerProductList.length }}</span>
           </p>
           <p class="item">
             <span class="itemTitle">总箱数：</span>
-            <span>{{ myTotalQuantity(tableData) }}</span>
+            <span>{{ myTotalQuantity(this.offerProductList) }}</span>
           </p>
           <p class="item">
             <span class="itemTitle">总体积/总材积：</span>
             <span
-              >{{ myTotalVolume(tableData).outerBoxStere }}/{{
-                myTotalVolume(tableData).outerBoxFeet
+              >{{ myTotalVolume(this.offerProductList).outerBoxStere }}/{{
+                myTotalVolume(this.offerProductList).outerBoxFeet
               }}</span
             >
           </p>
@@ -218,7 +217,9 @@
           </p>
           <p class="item">
             <span class="itemTitle">总金额：</span>
-            <span class="price">￥{{ myTotalPrice(tableData) }}</span>
+            <span class="price"
+              >￥{{ myTotalPrice(this.offerProductList) }}</span
+            >
           </p>
           <el-button
             type="primary"
@@ -257,12 +258,10 @@ export default {
   },
   created() {
     this.searchFormData = this.item;
+    this.getProductOfferDetailPage();
   },
 
-  mounted() {
-    this.getProductOfferDetailPage();
-    console.log(this.offerProductList);
-  },
+  mounted() {},
   methods: {
     // 获取列表
     async getProductOfferDetailPage() {
@@ -271,7 +270,10 @@ export default {
         this.item
       );
       if (res.data.result.code === 200) {
-        this.offerProductList = res.data.result.item.items;
+        this.$store.commit(
+          "updataOfferProductList",
+          res.data.result.item.items
+        );
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -280,9 +282,7 @@ export default {
       }
     },
     //确定提交
-    openSub() {
-      this.$emit("submit", 0);
-    },
+    openSub() {},
     //确定删除
     async handleDelete(row) {
       console.log(row.id);
@@ -436,10 +436,13 @@ export default {
     // 计算总净重
     totalJingzhong() {
       let number = 0;
-      for (let i = 0; i < this.tableData.length; i++) {
+      for (let i = 0; i < this.offerProductList.length; i++) {
         number = this.add(
           number,
-          this.multiply(this.tableData[i].boxNumber, this.tableData[i].ne_we)
+          this.multiply(
+            this.offerProductList[i].boxNumber,
+            this.offerProductList[i].ne_we
+          )
         );
       }
       return number;
@@ -447,10 +450,13 @@ export default {
     // 计算总毛重
     totalMaozhong() {
       let number = 0;
-      for (let i = 0; i < this.tableData.length; i++) {
+      for (let i = 0; i < this.offerProductList.length; i++) {
         number = this.add(
           number,
-          this.multiply(this.tableData[i].boxNumber, this.tableData[i].gr_we)
+          this.multiply(
+            this.offerProductList[i].boxNumber,
+            this.offerProductList[i].gr_we
+          )
         );
       }
       return number;
@@ -459,8 +465,8 @@ export default {
     // 计算总箱数量
     myTotalQuantity() {
       let number = 0;
-      for (let i = 0; i < this.tableData.length; i++) {
-        number = this.add(number, this.tableData[i].boxNumber || 0);
+      for (let i = 0; i < this.offerProductList.length; i++) {
+        number = this.add(number, this.offerProductList[i].boxNumber || 0);
       }
       return number;
     },
@@ -496,7 +502,10 @@ export default {
         e.target.value = e.target.value.slice(1, 5);
       }
       val.shoppingCount = Number(e.target.value);
-      this.$store.commit("replaceShoppingCartValueCount", this.tableData);
+      this.$store.commit(
+        "replaceShoppingCartValueCount",
+        this.offerProductList
+      );
     },
     // 点击上下键盘
     nextInput(e) {

@@ -18,6 +18,7 @@ function myForEach(oList, yList) {
 export default new Vuex.Store({
   state: {
     activeTab: "/bsIndex/bsHome",
+    lastUrl: "",//上一次点击的url
     showGlobalMsg: false,
     msgType: "primary",
     globalMsg: "",
@@ -67,6 +68,10 @@ export default new Vuex.Store({
     currentComparnyId: null
   },
   mutations: {
+    //修改上一次Url地址
+    updataUrl(state, payLoad) {
+      state.lastUrl = payLoad
+    },
     // 修改全局msg样式
     handlerMsgType(state, payLoad) {
       state.msgType = payLoad.type;
@@ -99,14 +104,19 @@ export default new Vuex.Store({
       const key = state.userInfo.uid;
       Vue.prototype.$set(state, key, payLoad);
     },
+    //修改报价商品
+    updataOfferProductList(state, payLoad) {
+      state.offerProductList = payLoad;
+    },
     //添加报价商品
     pushOfferProductList(state, payLoad) {
+      console.log(payLoad);
       state.offerProductList.push(payLoad);
     },
     // 删除报价商品
     popOfferProductList(state, payLoad) {
       for (let i = 0; i < state.offerProductList.length; i++) {
-        if (state.offerProductList[i].id == payLoad.id) {
+        if (state.offerProductList[i].productNumber == payLoad.productNumber) {
           state.offerProductList.splice(i, 1);
         }
       }
@@ -287,7 +297,9 @@ export default new Vuex.Store({
       let flag = true;
       tab.find(v => v.name == n.name) || (tab.push(n), (flag = false));
       state.activeTab = n.name;
+      state.lodUrl = n.name;
       flag && v.$common.refreshTab(n.name);
+
     },
     updateActiveTab(state, n) {
       state.activeTab = n;
