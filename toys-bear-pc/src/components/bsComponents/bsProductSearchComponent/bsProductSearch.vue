@@ -66,6 +66,7 @@ export default {
     },
     // 去购物车
     toShoppingCart() {
+      this.$router.push("/bsIndex/bsShoppingCart");
       const fd = {
         name: "/bsIndex/bsShoppingCart",
         linkUrl: "/bsIndex/bsShoppingCart",
