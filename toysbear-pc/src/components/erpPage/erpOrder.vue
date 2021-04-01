@@ -188,7 +188,7 @@
                 <el-checkbox v-model="scope.row.checked"></el-checkbox>
               </template>
             </el-table-column>
-            <el-table-column prop="hall_na" label="择样来源" align="center">
+            <el-table-column prop="hall_na" label="订单来源" align="center">
               <template slot-scope="scope">
                 {{ scope.row.hall_na || "—" }}
               </template>
