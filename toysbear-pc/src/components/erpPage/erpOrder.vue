@@ -172,7 +172,6 @@
             id="myTable"
             ref="singleTable"
             size="medium"
-            height="600"
             tooltip-effect="dark"
             highlight-current-row
             @current-change="handleSelectionChange"
@@ -193,6 +192,11 @@
               align="center"
             ></el-table-column>
             <el-table-column
+              prop="toCompanyName"
+              label="客户"
+              align="center"
+            ></el-table-column>
+            <el-table-column
               prop="number"
               label="择样编号"
               align="center"
@@ -210,6 +214,11 @@
                 }}
               </template>
             </el-table-column>
+            <el-table-column
+              prop="number"
+              label="择样编号"
+              align="center"
+            ></el-table-column>
             <el-table-column label="择样明细" align="center">
               <template slot-scope="scope">
                 <span class="openDetail" @click.stop="openDetail(scope.row)"

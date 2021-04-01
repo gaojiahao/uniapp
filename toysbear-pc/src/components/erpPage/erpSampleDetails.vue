@@ -35,6 +35,12 @@
             <div class="title">厂商数量：</div>
             {{ tableData | filterTableData }}
           </div>
+          <div class="item">
+            <div class="title">是否导入：</div>
+            <el-checkbox style="marginLeft: 20px;" v-model="checked">
+              是
+            </el-checkbox>
+          </div>
         </div>
       </div>
     </div>
@@ -159,6 +165,7 @@ export default {
   props: ["option"],
   data() {
     return {
+      checked: false,
       sortOrder: null,
       sortType: null,
       totalCount: 0,
@@ -237,6 +244,14 @@ export default {
   mounted() {
     console.log(this.option);
     this.getOrderDetail();
+  },
+  currentValue() {
+    const currentSelectItem = {
+      number: this.option.orderNumber,
+      orderType: this.option.orderType
+    };
+    console.log(currentSelectItem);
+    return JSON.stringify(currentSelectItem);
   }
 };
 </script>
