@@ -30,7 +30,7 @@ export default new Vuex.Store({
         refresh: true
       }
     ],
-    offerProductList: [],//报价数据
+    offerProductList: [], //报价数据
     historyNames: [],
     httpTime: 0, // 请求时长
     httpContent: "", // 请求内容
@@ -101,13 +101,13 @@ export default new Vuex.Store({
     },
     //添加报价商品
     pushOfferProductList(state, payLoad) {
-      state.offerProductList.push(payLoad)
+      state.offerProductList.push(payLoad);
     },
     // 删除报价商品
     popOfferProductList(state, payLoad) {
       for (let i = 0; i < state.offerProductList.length; i++) {
         if (state.offerProductList[i].id == payLoad.id) {
-          state.offerProductList.splice(i, 1)
+          state.offerProductList.splice(i, 1);
         }
       }
     },
