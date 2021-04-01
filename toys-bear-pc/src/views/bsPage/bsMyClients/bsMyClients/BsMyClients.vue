@@ -58,12 +58,7 @@
         style="width: 100%"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
-        <el-table-column
-          align="center"
-          prop="name"
-          label="客户姓名"
-          width="180"
-        >
+        <el-table-column prop="name" label="客户姓名" width="180">
         </el-table-column>
         <el-table-column
           align="center"

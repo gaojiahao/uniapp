@@ -976,6 +976,15 @@ export default {
             }
             this.$store.commit("resetShoppingCart", selectProducts);
             this.subDialogVisible = false;
+            const fd = {
+              name: "/bsIndex/bsSampleQuotation",
+              linkUrl: "/bsIndex/bsSampleQuotation",
+              component: "bsSampleQuotation",
+              refresh: true,
+              label: "找样报价"
+            };
+            this.$store.commit("myAddTab", fd);
+            this.$router.push("/bsIndex/bsSampleQuotation");
           } else {
             this.$common.handlerMsgState({
               msg: msg,

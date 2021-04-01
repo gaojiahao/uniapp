@@ -54,8 +54,7 @@
         ref="collecTable"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
-        <el-table-column label="模板名称" align="center" prop="name">
-        </el-table-column>
+        <el-table-column label="模板名称" prop="name"> </el-table-column>
         <el-table-column label="报价方式" prop="offerMethod" align="center">
         </el-table-column>
         <el-table-column

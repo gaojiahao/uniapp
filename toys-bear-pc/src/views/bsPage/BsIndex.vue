@@ -126,6 +126,8 @@ import bsSampleOfferCommodity from "@/components/bsComponents/bsSampleComponent/
 import bsSampleUpdata from "@/components/bsComponents/bsSampleComponent/bsSampleUpdata";
 // 采购订单
 import bsPurchaseOrder from "@/views/bsPage/bsBusinessManage/bsPurchaseOrder/BsPurchaseOrder.vue";
+// 采购订单详情
+import bsPurchaseOrderDetails from "@/views/bsPage/bsBusinessManage/bsPurchaseOrder/bsPurchaseOrderDetails/BsPurchaseOrderDetails.vue";
 
 import bsTop from "@/components/bsComponents/bsTopComponent/BsTop";
 import bsMenu from "@/components/bsComponents/bsMenuComponent/BsMenu";
@@ -165,7 +167,8 @@ export default {
     bsPurchaseOrder,
     bsTop,
     bsMenu,
-    bsProductSearch
+    bsProductSearch,
+    bsPurchaseOrderDetails
   },
   data() {
     return {
@@ -332,13 +335,15 @@ export default {
             box-sizing: border-box;
             box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
             .el-tabs__nav-wrap {
+              &.is-scrollable {
+                padding: 0 30px;
+              }
               .el-tabs__nav-prev,
               .el-tabs__nav-next {
                 text-align: center;
-                margin-top: 11px;
-                width: 20px;
-                height: 39px;
-                line-height: 39px;
+                width: 30px;
+                height: 50px;
+                line-height: 50px;
                 border: 1px solid #dcdfe6;
                 background-color: #fff;
                 border-bottom: none;

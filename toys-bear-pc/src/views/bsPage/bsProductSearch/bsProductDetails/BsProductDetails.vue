@@ -142,7 +142,7 @@
           </p>
           <p class="item">
             展厅编号：
-            <span>{{ item.exhibitionNumber }}</span>
+            <span>{{ item.number }}</span>
           </p>
           <p class="item">
             摊位号：

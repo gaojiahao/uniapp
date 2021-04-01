@@ -98,7 +98,7 @@
 <script>
 import { getCurrentTime } from "@/assets/js/common/common.js";
 export default {
-  props: ["orderNumber", "customerName"],
+  props: ["orderNumber", "customerName", "api"],
   data() {
     return {};
   },
@@ -126,7 +126,7 @@ export default {
         shareOrderNumber: this.orderNumber
       };
       this.$http
-        .post("/api/ExportCustomerOrderDetailToExcel", fd, {
+        .post(this.api, fd, {
           responseType: "blob"
         })
         .then(res => {

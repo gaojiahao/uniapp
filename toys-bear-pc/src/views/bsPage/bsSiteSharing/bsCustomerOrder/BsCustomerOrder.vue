@@ -254,6 +254,7 @@
         <bsExportOrder
           :orderNumber="currentOrder.orderNumber"
           :customerName="currentOrder.customerName"
+          api="/api/ExportCustomerOrderDetailToExcel"
         />
       </el-dialog>
     </transition>
@@ -386,7 +387,7 @@ export default {
       //   linkUrl: "/bsIndex/bsClientOrderDetails",
       //   name: row.orderNumber
       // });
-      // this.$router.push("/bsIndex/bsClientOrderDetails");
+      this.$router.push("/bsIndex/bsClientOrderDetails");
     },
     // 切換頁容量
     handleSizeChange(pageSize) {
