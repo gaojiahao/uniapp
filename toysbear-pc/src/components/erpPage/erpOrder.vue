@@ -193,9 +193,27 @@
               label="择样来源"
               align="center"
             ></el-table-column>
+            <el-table-column prop="orderType" label="订单类型" align="center">
+              <template slot-scope="scope">
+                {{
+                  scope.row.orderType == "Sample"
+                    ? "择样"
+                    : scope.row.orderType == "CompanySample"
+                    ? "找样"
+                    : scope.row.orderType == "ShareOrder"
+                    ? "客户订单"
+                    : ""
+                }}
+              </template>
+            </el-table-column>
             <el-table-column
               prop="the_nu"
               label="本次代号"
+              align="center"
+            ></el-table-column>
+            <el-table-column
+              prop="orderCount"
+              label="订单数量"
               align="center"
             ></el-table-column>
             <el-table-column

@@ -37,7 +37,7 @@
           </div>
           <div class="item">
             <div class="title">是否导入：</div>
-            <el-checkbox style="marginLeft: 20px;" v-model="currentValue">
+            <el-checkbox style="marginLeft: 10px;" v-model="currentValue">
               是
             </el-checkbox>
           </div>
@@ -350,6 +350,8 @@ export default {
           display: flex;
           margin-right: 40px;
           &.fanhui {
+            display: inline;
+            float: right;
             &:hover {
               color: #2d60b3;
             }
