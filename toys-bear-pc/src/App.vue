@@ -137,6 +137,7 @@ export default {
   z-index: 9999;
 }
 @{deep} .el-loading-spinner {
+  z-index: 9999;
   position: fixed;
   left: 0;
   top: 0;

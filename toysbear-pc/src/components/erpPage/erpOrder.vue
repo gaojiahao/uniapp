@@ -188,11 +188,11 @@
                 <el-checkbox v-model="scope.row.checked"></el-checkbox>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="hall_na"
-              label="择样来源"
-              align="center"
-            ></el-table-column>
+            <el-table-column prop="hall_na" label="择样来源" align="center">
+              <template slot-scope="scope">
+                {{ scope.row.hall_na || "—" }}
+              </template>
+            </el-table-column>
             <el-table-column prop="orderType" label="订单类型" align="center">
               <template slot-scope="scope">
                 {{
@@ -202,30 +202,30 @@
                     ? "找样"
                     : scope.row.orderType == "ShareOrder"
                     ? "客户订单"
-                    : ""
+                    : "—"
                 }}
               </template>
             </el-table-column>
-            <el-table-column
-              prop="the_nu"
-              label="本次代号"
-              align="center"
-            ></el-table-column>
-            <el-table-column
-              prop="orderCount"
-              label="订单数量"
-              align="center"
-            ></el-table-column>
-            <el-table-column
-              prop="toCompanyName"
-              label="客户"
-              align="center"
-            ></el-table-column>
-            <el-table-column
-              prop="number"
-              label="择样编号"
-              align="center"
-            ></el-table-column>
+            <el-table-column prop="the_nu" label="本次代号" align="center">
+              <template slot-scope="scope">
+                {{ scope.row.the_nu || "—" }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="orderCount" label="订单数量" align="center">
+              <template slot-scope="scope">
+                {{ scope.row.orderCount || "—" }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="toCompanyName" label="客户" align="center">
+              <template slot-scope="scope">
+                {{ scope.row.toCompanyName || "—" }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="number" label="择样编号" align="center">
+              <template slot-scope="scope">
+                {{ scope.row.number || "—" }}
+              </template>
+            </el-table-column>
             <el-table-column
               prop="happenDate"
               label="择样时间"
@@ -235,15 +235,15 @@
               <template slot-scope="scope">
                 {{
                   scope.row.happenDate &&
-                    scope.row.happenDate.replace(/t[\s\S]+/gi, "")
+                    scope.row.happenDate.replace(/t[\s\S]+/gi, "—")
                 }}
               </template>
             </el-table-column>
-            <el-table-column
-              prop="remark"
-              label="备注"
-              align="center"
-            ></el-table-column>
+            <el-table-column prop="remark" label="备注" align="center">
+              <template slot-scope="scope">
+                {{ scope.row.remark || "—" }}
+              </template>
+            </el-table-column>
             <el-table-column label="择样明细" align="center">
               <template slot-scope="scope">
                 <span class="openDetail" @click.stop="openDetail(scope.row)"
