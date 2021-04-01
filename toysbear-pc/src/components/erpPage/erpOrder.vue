@@ -74,13 +74,16 @@
             <div class="itemBox">
               <el-form-item label="来源：">
                 <el-select
-                  clearable
                   v-model="searchFD.orderFrom"
                   placeholder="请选择"
                   style="width: 100%"
                 >
                   <el-option
                     v-for="(item, index) in [
+                      {
+                        label: '全部',
+                        value: '全部'
+                      },
                       {
                         label: '展厅',
                         value: 'Hall'
@@ -100,13 +103,16 @@
             <div class="itemBox">
               <el-form-item label="订单类型：">
                 <el-select
-                  clearable
                   v-model="searchFD.orderType"
                   placeholder="请选择"
                   style="width: 100%"
                 >
                   <el-option
                     v-for="(item, index) in [
+                      {
+                        label: '全部',
+                        value: '全部'
+                      },
                       {
                         label: '择样',
                         value: 'Sample'
@@ -166,6 +172,7 @@
       <div class="tableBox">
         <div class="tableWrap">
           <el-table
+            :max-height="600"
             @sort-change="sort_change"
             :header-cell-style="{ backgroundColor: '#2D60B3', color: '#fff' }"
             :data="tableList"
@@ -186,9 +193,27 @@
               label="择样来源"
               align="center"
             ></el-table-column>
+            <el-table-column prop="orderType" label="订单类型" align="center">
+              <template slot-scope="scope">
+                {{
+                  scope.row.orderType == "Sample"
+                    ? "择样"
+                    : scope.row.orderType == "CompanySample"
+                    ? "找样"
+                    : scope.row.orderType == "ShareOrder"
+                    ? "客户订单"
+                    : ""
+                }}
+              </template>
+            </el-table-column>
             <el-table-column
               prop="the_nu"
               label="本次代号"
+              align="center"
+            ></el-table-column>
+            <el-table-column
+              prop="orderCount"
+              label="订单数量"
               align="center"
             ></el-table-column>
             <el-table-column
@@ -215,8 +240,8 @@
               </template>
             </el-table-column>
             <el-table-column
-              prop="number"
-              label="择样编号"
+              prop="remark"
+              label="备注"
               align="center"
             ></el-table-column>
             <el-table-column label="择样明细" align="center">
@@ -247,7 +272,11 @@
     </template>
     <!-- 详情 -->
     <div v-else>
-      <erpSampleDetails :option="currentSample" />
+      <erpSampleDetails
+        @resetCurrentValue="resetCurrentValue"
+        @fanhui="fanhui"
+        :option="currentSample"
+      />
     </div>
     <!-- 隐藏的输入框 -->
     <el-input
@@ -368,8 +397,8 @@ export default {
       dateTile: null,
       searchFD: {
         keyword: null,
-        orderFrom: null,
-        orderType: null,
+        orderFrom: "全部",
+        orderType: "全部",
         startTime: null,
         endTime: null,
         orderNumber: null
@@ -430,6 +459,21 @@ export default {
     }
   },
   methods: {
+    // 返回事件
+    fanhui() {
+      this.isOrderDetial = false;
+      this.myOrderSample = "订单列表";
+      this.currentSelectItem = {
+        number: null,
+        orderType: null,
+        token:
+          this.$store.state.userInfo && this.$store.state.userInfo.accessToken
+      };
+    },
+    // 详情选择可导出
+    resetCurrentValue(val) {
+      this.currentSelectItem = val;
+    },
     // 时间排序
     sort_change(column) {
       this.sortOrder = 2;
