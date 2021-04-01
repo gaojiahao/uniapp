@@ -43,12 +43,12 @@
         ref="collecTable"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
-        <el-table-column prop="img" label="产品" align="center" width="300">
+        <el-table-column prop="img" label="产品" width="300">
           <template slot-scope="scope">
             <div class="imgBox">
               <el-image
                 fit="contain"
-                style="width:80px;height:60px;"
+                style="width:80px;min-width: 80px;height:60px;"
                 :src="scope.row.img"
                 :preview-src-list="scope.row.imgUrlList"
               >
@@ -283,13 +283,13 @@ export default {
         display: flex;
         font-size: 14px;
         .productName {
-          width: 190px;
+          // width: 160px;
           height: 60px;
           margin-left: 15px;
           .name,
           .factory {
-            width: 190px;
-            max-width: 190px;
+            width: 160px;
+            max-width: 160px;
             overflow: hidden; /*超出部分隐藏*/
             white-space: nowrap; /*不换行*/
             text-overflow: ellipsis; /*超出部分文字以...显示*/

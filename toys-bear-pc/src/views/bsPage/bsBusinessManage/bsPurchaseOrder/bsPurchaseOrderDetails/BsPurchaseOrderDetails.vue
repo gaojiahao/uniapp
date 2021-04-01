@@ -437,13 +437,13 @@ export default {
         display: flex;
         font-size: 14px;
         .productName {
-          width: 190px;
+          width: 170px;
           height: 60px;
           margin-left: 15px;
           .name,
           .factory {
-            width: 190px;
-            max-width: 190px;
+            width: 170px;
+            max-width: 170px;
             overflow: hidden; /*超出部分隐藏*/
             white-space: nowrap; /*不换行*/
             text-overflow: ellipsis; /*超出部分文字以...显示*/

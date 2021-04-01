@@ -63,7 +63,7 @@
         ref="collecTable"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
-        <el-table-column label="择样单号">
+        <el-table-column label="采购单号">
           <template slot-scope="scope">
             <div
               style="color:#3368A9;cursor: pointer;"

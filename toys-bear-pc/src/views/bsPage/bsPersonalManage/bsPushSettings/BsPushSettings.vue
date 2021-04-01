@@ -21,12 +21,7 @@
         ref="collecTable"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
-        <el-table-column
-          align="center"
-          prop="sort"
-          label="排序"
-          width="100"
-        ></el-table-column>
+        <el-table-column prop="sort" label="排序" width="100"></el-table-column>
         <el-table-column prop="title" label="主题"></el-table-column>
         <el-table-column prop="content" label="内容"></el-table-column>
         <el-table-column

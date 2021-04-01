@@ -40,12 +40,7 @@
         ref="collecTable"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
-        <el-table-column
-          label="站点"
-          align="center"
-          width="150"
-          prop="siteRegion"
-        >
+        <el-table-column label="站点" width="150" prop="siteRegion">
           <template slot-scope="scope">
             <div>
               <i
