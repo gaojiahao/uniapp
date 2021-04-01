@@ -202,9 +202,12 @@ export default {
         };
       });
     },
+    // 刷新tab标签
     triggerTab() {
+      console.log(22);
       for (let i = 0; i < this.tabList.length; i++) {
         if (this.activeTab == this.tabList[i].name) {
+          this.$store.commit("updataUrl", this.activeTab);
           this.$router.push(this.tabList[i].linkUrl);
           if (this.tabList[i].linkUrl == "/bsIndex/bsProductDetails") {
             eventBus.$emit("showCart", true);
@@ -246,6 +249,7 @@ export default {
       len > 1 && this.$store.commit("closeTab", e);
     },
     refresh() {
+      console.log("点击");
       this.$common.refreshTab();
     },
     // 关闭所有tab标签

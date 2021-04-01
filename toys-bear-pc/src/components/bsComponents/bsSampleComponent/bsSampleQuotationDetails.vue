@@ -32,7 +32,7 @@
           <p>
             报价时间：<span>{{ item.createdOn }} </span>
           </p>
-          <p>报价备注：<span>{{}}没有字段 </span></p>
+          <p>报价备注：<span>{{}} </span></p>
         </div>
       </div>
       <div class="handerTab">

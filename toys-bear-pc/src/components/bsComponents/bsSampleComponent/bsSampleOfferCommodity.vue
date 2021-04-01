@@ -126,8 +126,11 @@ export default {
         });
       }
     },
+    //返回编辑页面
     handleAffirm() {
-      console.log(this.offerProductList);
+      console.log(this.item.offerNumber);
+      this.$store.commit("closeTab", this.item.offerNumber);
+      // this.$forceUpdate();
     },
 
     //切换
