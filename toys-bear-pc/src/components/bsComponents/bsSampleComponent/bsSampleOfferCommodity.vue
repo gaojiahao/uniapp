@@ -22,8 +22,8 @@
         </div>
       </div>
       <div class="right">
-        <el-button type="primary" round>
-          确定已选择({{ myOfferProductList.length }})
+        <el-button @click="handleAffirm" type="primary" round>
+          确定已选择({{ offerProductList.length }})
         </el-button>
       </div>
     </div>
@@ -31,7 +31,6 @@
       <!-- 产品列表 -->
       <div class="bsGridComponent">
         <bsSampleOfferProductList
-          @ProductList="ProductList"
           v-for="item in productList"
           :key="item.productNumber"
           :item="item"
@@ -59,6 +58,7 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 import bsSampleOfferProductList from "@/components/bsComponents/bsSampleComponent/bsSampleOfferProductList";
 export default {
   name: "bsSampleOfferCommodity",
@@ -72,7 +72,6 @@ export default {
   },
   data() {
     return {
-      myOfferProductList: [],
       num: null,
       typeId: 0,
       productList: [],
@@ -82,14 +81,14 @@ export default {
       currentPage: 1
     };
   },
+  computed: {
+    ...mapState(["offerProductList"])
+  },
   created() {},
   mounted() {
     this.getProductList();
   },
   methods: {
-    ProductList(data) {
-      this.myOfferProductList = data;
-    },
     //   产品列表
     async getProductList() {
       const fd = {
@@ -103,17 +102,38 @@ export default {
         }
       }
       const res = await this.$http.post("/api/SupplierProduct", fd);
-      if (res.data.result.code === 200) {
-        this.totalCount = res.data.result.item.totalCount;
-        this.productList = res.data.result.item.items;
+      const { code, item, msg } = res.data.result;
+      if (code === 200) {
+        if (this.offerProductList) {
+          for (let i = 0; i < item.items.length; i++) {
+            for (let j = 0; j < this.offerProductList.length; j++) {
+              if (
+                item.items[i].productNumber ===
+                this.offerProductList[j].productNumber
+              ) {
+                item.items[i].isShopping = true;
+              }
+            }
+          }
+        }
+        this.productList = item.items;
+        this.totalCount = item.totalCount;
+      } else {
+        this.totalCount = 0;
+        this.$common.handlerMsgState({
+          msg: msg,
+          type: "danger"
+        });
       }
+    },
+    handleAffirm() {
+      console.log(this.offerProductList);
     },
 
     //切换
     checkTabstypeId(num) {
       this.typeId = num;
       this.myOfferProductList = [];
-      sessionStorage.removeItem("ProductList");
       this.getProductList();
     },
     // 切換頁容量
@@ -132,6 +152,8 @@ export default {
 </script>
 <style lang="less" scoped>
 .bsSampleOfferCommodity {
+  background: #fff;
+
   .hander {
     height: 70px;
     font-size: 15px;
@@ -168,6 +190,7 @@ export default {
   .productListBox {
     width: 100%;
     box-sizing: border-box;
+    padding: 0 20px;
     .bsGridComponent {
       display: flex;
       justify-content: space-between;

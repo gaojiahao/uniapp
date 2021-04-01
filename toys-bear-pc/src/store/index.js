@@ -30,6 +30,7 @@ export default new Vuex.Store({
         refresh: true
       }
     ],
+    offerProductList: [],//报价数据
     historyNames: [],
     httpTime: 0, // 请求时长
     httpContent: "", // 请求内容
@@ -98,6 +99,18 @@ export default new Vuex.Store({
       const key = state.userInfo.uid;
       Vue.prototype.$set(state, key, payLoad);
     },
+    //添加报价商品
+    pushOfferProductList(state, payLoad) {
+      state.offerProductList.push(payLoad)
+    },
+    // 删除报价商品
+    popOfferProductList(state, payLoad) {
+      for (let i = 0; i < state.offerProductList.length; i++) {
+        if (state.offerProductList[i].id == payLoad.id) {
+          state.offerProductList.splice(i, 1)
+        }
+      }
+    },
     // 修改数量方法
     replaceShoppingCartValueCount(state, payLoad) {
       const key = state.userInfo.uid;
@@ -126,6 +139,7 @@ export default new Vuex.Store({
       }
       localStorage.setItem(key, JSON.stringify(state[key]));
     },
+
     // 删除购物车某指定一个商品
     popShopping(state, payLoad) {
       const key = state.userInfo.uid;

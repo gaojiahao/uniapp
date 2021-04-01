@@ -152,44 +152,21 @@ export default {
     // 添加报价
     handlerShopping(item) {
       item.isShopping = !item.isShopping;
+      console.log(item.isShopping);
       if (item.isShopping) {
         item.shoppingCount = 1;
-        let arr = JSON.parse(sessionStorage.getItem("ProductList"));
-
-        if (arr == null) {
-          let list = [];
-          list.push(item);
-          sessionStorage.setItem("ProductList", JSON.stringify(list));
-          this.$common.handlerMsgState({
-            msg: "添加报价商品成功",
-            type: "success"
-          });
-        } else {
-          for (let i = 0; i < arr.length; i++) {
-            if ((arr[i].id = !item.id)) {
-              arr.push(item);
-              sessionStorage.setItem("ProductList", JSON.stringify(arr));
-            }
-          }
-        }
+        this.$store.commit("pushOfferProductList", item);
+        this.$common.handlerMsgState({
+          msg: "添加报价商品成功",
+          type: "success"
+        });
       } else {
-        item.shoppingCount = 0;
-        let listFor = JSON.parse(sessionStorage.getItem("ProductList"));
-        for (let i = 0; i < listFor.length; i++) {
-          if (listFor[i].id === item.id) {
-            listFor.splice(i, 1);
-            this.$common.handlerMsgState({
-              msg: "删除报价商品成功",
-              type: "warning"
-            });
-            sessionStorage.setItem("ProductList", JSON.stringify(listFor));
-          }
-        }
+        this.$store.commit("popOfferProductList", item);
+        this.$common.handlerMsgState({
+          msg: "删除报价商品成功",
+          type: "warning"
+        });
       }
-      this.$emit(
-        "ProductList",
-        JSON.parse(sessionStorage.getItem("ProductList"))
-      );
       this.$forceUpdate();
     }
   },

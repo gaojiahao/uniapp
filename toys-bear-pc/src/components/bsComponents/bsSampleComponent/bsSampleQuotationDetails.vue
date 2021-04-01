@@ -68,7 +68,7 @@
       <div class="top">
         <div class="left">报价商品列表({{ tableData.length }})</div>
         <div class="right">
-          <el-button @click="handleSelect" type="warning"> 导出列表</el-button>
+          <el-button @click="exportOrder()" type="warning"> 导出列表</el-button>
         </div>
       </div>
       <div class="tableBox">
@@ -283,13 +283,28 @@
         </div>
       </div>
     </div>
+    <!-- 导出订单模板dialog -->
+    <transition name="el-zoom-in-center">
+      <el-dialog
+        title="订单模板"
+        v-if="exportTemplateDialog"
+        :visible.sync="exportTemplateDialog"
+        top="60px"
+        width="80%"
+      >
+        <bsExportOrder :options="orderRow" />
+      </el-dialog>
+    </transition>
   </div>
 </template>
 
 <script>
+import bsExportOrder from "@/components/commonComponent/exportOrderComponent";
 export default {
   name: "bsSampleQuotationDetails",
-  components: {},
+  components: {
+    bsExportOrder
+  },
   props: {
     item: {
       type: Object
@@ -297,6 +312,8 @@ export default {
   },
   data() {
     return {
+      orderRow: {},
+      exportTemplateDialog: false,
       handerTabData: [],
       tableData: [],
       currentPage: 1,
@@ -322,6 +339,15 @@ export default {
         this.$message.error(res.data.result.msg);
       }
     },
+    // 导出找样
+    exportOrder() {
+      this.orderRow = {
+        orderNumber: this.item.offerNumber,
+        name: this.item.customerName,
+        api: "/api/GetProductOfferOrderExcel"
+      };
+      this.exportTemplateDialog = true;
+    },
     // 切换当前页
     currentChange(page) {
       this.currentPage = page;
@@ -333,8 +359,7 @@ export default {
       if (this.currentPage * pageSize > this.totalCount) return false;
       this.getSearchCompanyShareOrderDetailsPage();
     },
-    //选择报价商品
-    handleSelect() {},
+
     isInteger(obj) {
       return Math.floor(obj) === obj;
     },

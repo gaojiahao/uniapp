@@ -233,7 +233,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 import bsSampleSearch from "@/components/bsComponents/bsSampleComponent/bsSampleSearch";
 export default {
   name: "bsSampleUpdata",
@@ -245,12 +245,10 @@ export default {
       type: Object
     }
   },
-  computed: {
-    ...mapGetters({
-      shoppingList: "myShoppingList"
-    })
-  },
   watch: {},
+  computed: {
+    ...mapState(["offerProductList"])
+  },
   data() {
     return {
       searchFormData: {},
@@ -263,6 +261,7 @@ export default {
 
   mounted() {
     this.getProductOfferDetailPage();
+    console.log(this.offerProductList);
   },
   methods: {
     // 获取列表
@@ -272,7 +271,7 @@ export default {
         this.item
       );
       if (res.data.result.code === 200) {
-        this.tableData = res.data.result.item.items;
+        this.offerProductList = res.data.result.item.items;
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,

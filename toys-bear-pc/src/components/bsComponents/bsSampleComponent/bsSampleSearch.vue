@@ -24,7 +24,11 @@
             </el-select>
           </el-form-item>
           <el-form-item style=" margin: 0 24px  0 24px;">
-            <el-button class="el-icon-plus" type="primary" @click="onSubmit">
+            <el-button
+              class="el-icon-plus"
+              type="primary"
+              @click.stop="openAddMyClient"
+            >
               新增客户</el-button
             >
           </el-form-item>
@@ -338,7 +342,11 @@ export default {
       }
     };
   },
-  created() {},
+  created() {
+    this.getSelectCompanyOffer();
+    this.getClientList();
+    this.getSelectProductOfferFormulaList();
+  },
   mounted() {
     this.getProductOfferByNumber();
   },
@@ -357,8 +365,36 @@ export default {
         });
       }
     },
+    // 获取客户报价模板
+    async getSelectProductOfferFormulaList() {
+      const res = await this.$http.post(
+        "/api/SelectProductOfferFormulaList",
+        {}
+      );
+      if (res.data.result.code === 200) {
+        this.customerTemplate = res.data.result.item;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
+    // 获取系统配置项
+    async getSelectCompanyOffer() {
+      const res = await this.$http.post("/api/GetSelectCompanyOffer", {
+        basisParameters: "CompanyProductOffer"
+      });
+      if (res.data.result.code === 200) this.options = res.data.result.item;
+      else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
     // 新增客户
-    onSubmit() {
+    openAddMyClient() {
       this.addClientFormData = {
         name: null,
         phoneNumber: null,
@@ -367,22 +403,45 @@ export default {
       this.addMyClientDialog = true;
     },
     // 提交新增客户
-    subMyClient() {
+    async subMyClient() {
       this.$refs.addMyClientRef.validate(async valid => {
         if (valid) {
-          // const res = await this.$http.post(
-          //   "/api/CreateCustomerInfo",
-          //   this.addClientFormData
-          // );
-          // if (res.data.result.code === 200) {
-          //   this.getClientList();
-          //   this.addMyClientDialog = false;
-          //   this.$message.success("新增操作成功");
-          // } else {
-          //   this.$message.error(res.data.result.msg);
-          // }
+          const res = await this.$http.post(
+            "/api/CreateCustomerInfo",
+            this.addClientFormData
+          );
+          if (res.data.result.code === 200) {
+            this.addMyClientDialog = false;
+            this.getClientList();
+            this.$common.handlerMsgState({
+              msg: "新增操作成功",
+              type: "success"
+            });
+          } else {
+            this.$common.handlerMsgState({
+              msg: res.data.result.msg,
+              type: "warning"
+            });
+          }
         }
       });
+    },
+    // 获取客户列表
+    async getClientList() {
+      const fd = {
+        keyword: this.clientKeyword,
+        skipCount: this.clientCurrentPage,
+        maxResultCount: this.clientPageSize
+      };
+      for (const key in fd) {
+        if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
+          delete fd[key];
+        }
+      }
+      const res = await this.$http.post("/api/SearchCustomerInfosPage", fd);
+      if (res.data.result.code === 200) {
+        this.clientList = res.data.result.item.items;
+      }
     }
   }
 };

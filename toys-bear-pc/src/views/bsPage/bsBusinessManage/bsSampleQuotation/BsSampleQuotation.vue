@@ -310,14 +310,14 @@ export default {
     },
     // 报价详情跳转
     async goDetails(row) {
-      console.log(row.offerNumber);
+      console.log(row);
       const fd = {
-        name: row.offerNumber,
+        name: "详情" + row.offerNumber,
         linkUrl: "/bsIndex/bsSampleQuotationDetails",
         component: "bsSampleQuotationDetails",
         refresh: true,
         noPush: true,
-        label: row.offerNumber,
+        label: "详情" + row.offerNumber,
         value: row
       };
       this.$router.push("/bsIndex/bsSampleQuotationDetails");
