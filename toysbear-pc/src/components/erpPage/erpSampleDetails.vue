@@ -37,9 +37,17 @@
           </div>
           <div class="item">
             <div class="title">是否导入：</div>
-            <el-checkbox style="marginLeft: 20px;" v-model="checked">
+            <el-checkbox style="marginLeft: 20px;" v-model="currentValue">
               是
             </el-checkbox>
+          </div>
+          <div
+            class="item fanhui"
+            style="cursor: pointer;"
+            @click="$emit('fanhui')"
+          >
+            <i class="iconfont icon-fanhui" style="margin-right: 5px;"></i>
+            返回
           </div>
         </div>
       </div>
@@ -89,7 +97,16 @@
           </el-table-column>
           <el-table-column prop="ch_pa" align="center" label="包装">
           </el-table-column>
-          <el-table-column prop="ou_lo" align="center" label="装箱量">
+          <el-table-column
+            prop="ou_lo"
+            align="center"
+            width="100"
+            label="内核/装箱数"
+          >
+            <template slot-scope="scope">
+              <span>{{ scope.row.in_en }}</span
+              >/<span>{{ scope.row.ou_lo }}</span>
+            </template>
           </el-table-column>
           <el-table-column prop="fa_pr" align="center" label="出厂价">
           </el-table-column>
@@ -100,7 +117,15 @@
             label="价格"
           >
           </el-table-column>
-          <el-table-column label="包装" align="center">
+          <el-table-column label="产品规格" align="center">
+            <el-table-column prop="pr_le" label="长" align="center">
+            </el-table-column>
+            <el-table-column prop="pr_wi" label="宽" align="center">
+            </el-table-column>
+            <el-table-column prop="pr_hi" label="高" align="center">
+            </el-table-column>
+          </el-table-column>
+          <el-table-column label="包装规格" align="center">
             <el-table-column prop="in_le" label="长" align="center">
             </el-table-column>
             <el-table-column prop="in_wi" label="宽" align="center">
@@ -108,7 +133,7 @@
             <el-table-column prop="in_hi" label="高" align="center">
             </el-table-column>
           </el-table-column>
-          <el-table-column label="外箱" align="center">
+          <el-table-column label="外箱规格" align="center">
             <el-table-column prop="ou_le" label="长" align="center">
             </el-table-column>
             <el-table-column prop="ou_wi" label="宽" align="center">
@@ -126,12 +151,25 @@
           </el-table-column>
           <el-table-column prop="remark" align="center" label="备注">
           </el-table-column>
-          <!-- <el-table-column
-          prop="name"
-          align="center"
-          label="摊位号">
-        </el-table-column> -->
           <el-table-column prop="ma_na" align="center" label="厂家名称">
+          </el-table-column>
+          <el-table-column
+            prop="handset"
+            align="center"
+            width="100"
+            label="厂商联系方式"
+          >
+            <template slot-scope="scope">
+              <span>
+                {{
+                  scope.row.handset
+                    ? scope.row.handset
+                    : scope.row.handset1
+                    ? scope.row.handset1
+                    : scope.row.handset2
+                }}
+              </span>
+            </template>
           </el-table-column>
           <el-table-column prop="ma_nu" align="center" label="厂家编号">
           </el-table-column>
@@ -165,7 +203,7 @@ export default {
   props: ["option"],
   data() {
     return {
-      checked: false,
+      currentValue: false,
       sortOrder: null,
       sortType: null,
       totalCount: 0,
@@ -242,16 +280,28 @@ export default {
   },
   created() {},
   mounted() {
-    console.log(this.option);
     this.getOrderDetail();
   },
-  currentValue() {
-    const currentSelectItem = {
-      number: this.option.orderNumber,
-      orderType: this.option.orderType
-    };
-    console.log(currentSelectItem);
-    return JSON.stringify(currentSelectItem);
+  watch: {
+    currentValue(val) {
+      console.log(val);
+      if (val) {
+        const currentSelectItem = {
+          number: this.option.orderNumber,
+          orderType: this.option.orderType,
+          token:
+            this.$store.state.userInfo && this.$store.state.userInfo.accessToken
+        };
+        this.$emit("resetCurrentValue", currentSelectItem);
+      } else {
+        this.$emit("resetCurrentValue", {
+          number: null,
+          orderType: null,
+          token:
+            this.$store.state.userInfo && this.$store.state.userInfo.accessToken
+        });
+      }
+    }
   }
 };
 </script>
@@ -299,6 +349,11 @@ export default {
         .item {
           display: flex;
           margin-right: 40px;
+          &.fanhui {
+            &:hover {
+              color: #2d60b3;
+            }
+          }
           &:last-of-type {
             margin: 0;
           }
