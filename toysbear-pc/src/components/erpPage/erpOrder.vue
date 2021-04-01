@@ -206,6 +206,11 @@
                 }}
               </template>
             </el-table-column>
+            <el-table-column prop="toCompanyName" label="客户" align="center">
+              <template slot-scope="scope">
+                {{ scope.row.toCompanyName || "—" }}
+              </template>
+            </el-table-column>
             <el-table-column prop="the_nu" label="本次代号" align="center">
               <template slot-scope="scope">
                 {{ scope.row.the_nu || "—" }}
@@ -216,19 +221,19 @@
                 {{ scope.row.orderCount || "—" }}
               </template>
             </el-table-column>
-            <el-table-column prop="toCompanyName" label="客户" align="center">
-              <template slot-scope="scope">
-                {{ scope.row.toCompanyName || "—" }}
-              </template>
-            </el-table-column>
-            <el-table-column prop="number" label="择样编号" align="center">
+            <el-table-column prop="number" label="订单编号" align="center">
               <template slot-scope="scope">
                 {{ scope.row.number || "—" }}
               </template>
             </el-table-column>
+            <el-table-column prop="remark" label="订单备注" align="center">
+              <template slot-scope="scope">
+                {{ scope.row.remark || "—" }}
+              </template>
+            </el-table-column>
             <el-table-column
               prop="happenDate"
-              label="择样时间"
+              label="订单时间"
               sortable="custom"
               align="center"
             >
@@ -239,12 +244,7 @@
                 }}
               </template>
             </el-table-column>
-            <el-table-column prop="remark" label="备注" align="center">
-              <template slot-scope="scope">
-                {{ scope.row.remark || "—" }}
-              </template>
-            </el-table-column>
-            <el-table-column label="择样明细" align="center">
+            <el-table-column label="订单明细" align="center">
               <template slot-scope="scope">
                 <span class="openDetail" @click.stop="openDetail(scope.row)"
                   >点击查看</span
