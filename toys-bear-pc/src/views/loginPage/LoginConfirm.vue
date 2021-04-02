@@ -138,7 +138,15 @@ export default {
             });
             this.$store.commit("removeLoginItems");
           }
-          this.$router.push("/bsIndex");
+          switch (item.companyType) {
+            case "Sales":
+              this.$router.push("/bsIndex");
+              break;
+            default:
+              location.href = "http://139.9.71.135:8080/#/me";
+              break;
+          }
+          // this.$router.push("/bsIndex");
           // let token = JSON.stringify(res.data.result);
           // location =
           //   "http://127.0.0.1:8081/#/meInfo/infoList?id=" +token
