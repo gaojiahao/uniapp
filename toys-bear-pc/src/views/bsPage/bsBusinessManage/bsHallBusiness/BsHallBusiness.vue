@@ -16,6 +16,7 @@
         <span class="label">择样类型：</span>
         <el-select
           v-model="searchForm.messageExt"
+          size="medium"
           clearable
           placeholder="请选择"
         >
@@ -40,7 +41,11 @@
       </div>
       <div class="item">
         <span class="label">状态：</span>
-        <el-select v-model="searchForm.readStatus" placeholder="请选择">
+        <el-select
+          size="medium"
+          v-model="searchForm.readStatus"
+          placeholder="请选择"
+        >
           <el-option
             v-for="(item, i) in readStatusList"
             :key="i"

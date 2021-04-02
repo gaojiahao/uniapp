@@ -20,7 +20,7 @@ export default new Vuex.Store({
     myColles: [],
     activeTab: "/bsIndex/bsHome",
     lastUrl: "", //上一次点击的url
-    showGlobalMsg: false,
+    showGlobalMsg: true,
     msgType: "primary",
     globalMsg: "",
     tabList: [],

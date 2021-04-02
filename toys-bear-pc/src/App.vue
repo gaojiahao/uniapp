@@ -7,11 +7,13 @@
   >
     <transition name="el-zoom-in-center">
       <message-component
+        id="myGlobalMsg"
         :type="msgType"
         :msg="globalMsg"
         v-if="showGlobalMsg"
       ></message-component>
     </transition>
+    <button @click="showiNFO">点</button>
     <router-view ref="bsIndex" />
     <!-- 漂浮物 -->
     <transition name="el-zoom-in-top">
@@ -66,7 +68,12 @@ export default {
     });
   },
   methods: {
-    sumbit() {},
+    showiNFO() {
+      this.$common.handlerMsgState({
+        msg: "加购成功",
+        type: "success"
+      });
+    },
     // 使用的地方
     handleShowConfirm() {
       this.$confirm("此操作将永久删除该文件, 是否继续?", {

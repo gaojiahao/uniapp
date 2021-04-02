@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "MessageComponent",
   // 传入子组件的参数写到props
@@ -27,6 +28,9 @@ export default {
       type: String,
       default: "primary"
     }
+  },
+  computed: {
+    ...mapState(["showGlobalMsg"])
   }
 };
 </script>
@@ -35,10 +39,12 @@ export default {
 .MessageComponent {
   position: fixed;
   width: 100%;
-  left: 50%;
-  top: 50%;
+  left: 0;
+  top: 200px;
   font-size: 14px;
   z-index: 999;
+  text-align: center;
+  transition: all 0.5s;
   .messageBox {
     height: 50px;
     line-height: 50px;
