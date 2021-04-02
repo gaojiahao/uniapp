@@ -30,6 +30,7 @@
           </el-radio-group>
           <el-button
             type="primary"
+            class="previewBtn"
             @click="openViewer(require('@/assets/images/mode1.png'))"
             >预览</el-button
           >
@@ -74,6 +75,7 @@
           </el-radio-group>
           <el-button
             type="primary"
+            class="previewBtn"
             @click="openViewer(require('@/assets/images/mode2.png'))"
             >预览</el-button
           >
@@ -118,6 +120,7 @@
           </el-radio-group>
           <el-button
             type="primary"
+            class="previewBtn"
             @click="openViewer(require('@/assets/images/mode3.png'))"
             >预览</el-button
           >
@@ -139,8 +142,30 @@
       >
         <span class="headerTitle">出厂价+报出价+工厂信息</span>
         <div>
+          <div class="isFac">
+            <span class="facTitle">是否按厂商导出</span>
+            <el-select
+              size="medium"
+              v-model="imageExportWay"
+              clearable
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in imageExportWayList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </div>
+          <el-radio-group class="myExportWay" v-model="exportWay">
+            <el-radio :label="1">带图片导出</el-radio>
+            <el-radio :label="2">不带图片导出</el-radio>
+          </el-radio-group>
           <el-button
             type="primary"
+            class="previewBtn"
             @click="openViewer(require('@/assets/images/mode4.png'))"
             >预览</el-button
           >
@@ -242,5 +267,8 @@ export default {
   .facTitle {
     margin-right: 10px;
   }
+}
+.previewBtn {
+  margin-left: 20px;
 }
 </style>
