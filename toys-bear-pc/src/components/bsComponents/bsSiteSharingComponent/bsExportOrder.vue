@@ -220,7 +220,6 @@ export default {
           const zipName = this.customerName + "_" + time + ".zip";
           const fileName = this.imageExportWay > 0 ? zipName : exeName;
 
-
           const blob = res.data;
           if (window.navigator && window.navigator.msSaveOrOpenBlob) {
             // 兼容IE

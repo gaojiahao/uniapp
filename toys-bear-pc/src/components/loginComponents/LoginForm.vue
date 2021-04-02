@@ -309,7 +309,6 @@ export default {
             VerificationCode: this.loginforms.verifycode
           });
           if (res.data.result.isLogin) {
-            this.$store.commit("setToken", res.data.result);
             if (res.data.result.commparnyList.length === 1) {
               // 一个角色
               this.$store.commit("setToken", res.data.result);
@@ -325,7 +324,6 @@ export default {
               } else {
                 this.$store.commit("initShoppingCart", []);
               }
-              await this.waitTime(1);
               // 获取系统参数
               const Json = {};
               Json.MessageRestriction = await this.getClientTypeList(
@@ -379,8 +377,7 @@ export default {
               // 多个角色
               this.$store.commit("setToken", res.data.result);
               this.$router.push({
-                name: "LoginConfirm",
-                params: res.data.result
+                name: "LoginConfirm"
               });
             }
             this.$store.commit("closeTabAll");

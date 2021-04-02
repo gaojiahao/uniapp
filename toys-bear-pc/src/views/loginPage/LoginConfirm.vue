@@ -10,7 +10,7 @@
           <li
             class="userItem"
             @click.prevent="toMeInfo(item)"
-            v-for="(item, i) in this.commparnyList"
+            v-for="(item, i) in this.userInfo.commparnyList"
             :key="i"
           >
             <el-image
@@ -52,6 +52,7 @@
 import { getMenuFuc } from "@/router/index";
 import loginTop from "@/components/loginComponents/LoginTop.vue";
 import loginFooter from "@/components/loginComponents/LoginFooter.vue";
+import { mapState } from "vuex";
 export default {
   components: {
     loginTop,
@@ -59,8 +60,7 @@ export default {
   },
   data() {
     return {
-      radioValue: null,
-      commparnyList: []
+      radioValue: null
     };
   },
   methods: {
@@ -140,6 +140,7 @@ export default {
           }
           switch (item.companyType) {
             case "Sales":
+              this.$store.commit("closeTabAll");
               this.$router.push("/bsIndex");
               break;
             default:
@@ -157,13 +158,10 @@ export default {
       }
     }
   },
-  async mounted() {
-    if (!this.$route.params.commparnyList) {
-      this.$router.push("/login");
-    } else {
-      this.commparnyList = this.$route.params.commparnyList;
-    }
-  }
+  computed: {
+    ...mapState(["userInfo"])
+  },
+  mounted() {}
 };
 </script>
 

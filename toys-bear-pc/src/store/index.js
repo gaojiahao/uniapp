@@ -23,15 +23,7 @@ export default new Vuex.Store({
     showGlobalMsg: false,
     msgType: "primary",
     globalMsg: "",
-    tabList: [
-      {
-        component: "bsHome",
-        label: "后台首页",
-        linkUrl: "/bsIndex/bsHome",
-        name: "/bsIndex/bsHome",
-        refresh: true
-      }
-    ],
+    tabList: [],
     offerProductList: [], //报价数据
     historyNames: [],
     httpTime: 0, // 请求时长
@@ -259,14 +251,14 @@ export default new Vuex.Store({
     closeTabAll(state) {
       v.$set(state, "tabList", []);
       const fd = {
-        component: "bsHome",
-        label: "后台首页",
-        linkUrl: "/bsIndex/bsHome",
-        name: "/bsIndex/bsHome",
+        component: "bsProductSearchIndex",
+        label: "产品查询",
+        linkUrl: "/bsIndex/bsProductSearchIndex",
+        name: "/bsIndex/bsProductSearchIndex",
         refresh: true
       };
       state.tabList.push(fd);
-      state.activeTab = "/bsIndex/bsHome";
+      state.activeTab = "/bsIndex/bsProductSearchIndex";
     },
 
     //关闭tab页
