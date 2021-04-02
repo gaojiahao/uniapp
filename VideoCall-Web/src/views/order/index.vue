@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 17:59:28
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\order\index.vue
- * @LastEditTime: 2021-04-01 19:14:38
+ * @LastEditTime: 2021-04-02 15:13:33
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -12,7 +12,7 @@
     <div class="order">
         <div class="head">
             <div class="title">
-                <Icon type="ios-list-box" />
+                <i class="iconfont icondanju"></i>
                 择样单号
             </div>
         </div>   

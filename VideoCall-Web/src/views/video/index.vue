@@ -3,48 +3,37 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 16:54:22
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\video\index.vue
- * @LastEditTime: 2021-04-01 17:54:42
+ * @LastEditTime: 2021-04-02 15:25:27
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
 -->
 <template>
     <div class="video">
-        <div class="error">
+        <div class="error" v-if="!error">
             <img :src="cameraPic">
             <p class="text">您的设备未检测到摄像头</p> 
+        </div>
+        <div v-else>
+
         </div>
     </div> 
 </template>
 <script>
-import RMT from "@/assets/js/signalROptions/signalROptions";
+import videoJs from "@mixins/video.js";
 export default {
     name:'Video',
+    mixins:[videoJs],
     data() {
         return {
             cameraPic: require("@assets/images/camera-lg.png"),
-            rtc: null,
-            error:false
         };
     },
     methods: {
-        async initRMT() {
-            this.rtc = new RMT({ groupNumber: "111" });
-            this.rtc
-                .startCall()
-                .then(res => console.log(res))
-                .catch(err => {
-                    this.error = true;
-                    switch (err.code) {
-                        case "DEVICE_NOT_FOUND":
-                            this.$Message.error("找不到设备");
-                            break;
-                    }
-                });
-        },
+
     },
     created() {
-        this.initRMT();
+
     }
 }
 </script>

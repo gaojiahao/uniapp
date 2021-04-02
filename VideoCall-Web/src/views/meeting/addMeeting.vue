@@ -7,44 +7,54 @@ d<!--
  * @LastEditTime: 2020-11-02 12:00:31
 -->
 <template>
-  <div class="metting">
+  <div class="createMeeting" ref="createMeeting">
     <div class="wrapper">
-        <div class="login_wrapper">
-          <div class="head">
-            <div class="logo">
-              <img :src="logUrl" />
-            </div>
-            <div class="title">
-              <div class="title_cn">
-                宏升视频会议
-              </div>
-              <div>
-                HS VIDEO CONFERENCE
-              </div>
-            </div>
-          </div>
-          <div class="login_box">
-            <div class="type" v-model="type">
-              <span class="active">进入会议</span>
-            </div>
-            <template>
-              <Input class="account" prefix="ios-contact" v-model="userCode" placeholder="账户" />
-              <form>
-                <Input class="password" prefix="ios-key" v-model="passWord" type="password" password placeholder="密码6-10位" />
-              </form>
-              <div style="width: 100%;display: flex; margin-top: 20px;">
-                <Input v-model="code" placeholder="验证码" style="width: 80px;margin-left: 100px;float: left;"/>
-              </div>
-              <div class="login_button">
-                <Button type="primary" @click="metting">{{$t("metting.button")}}</Button>
-              </div>
-            </template>
+      <div class="login_wrapper">
+        <div class="head">
+          <div class="title">
+            <img :src="titleUrl">
           </div>
         </div>
+        <div class="login_box">
+          <div class="type">
+            <Row :gutter="16">
+              <Col span="8">
+              </Col>
+              <Col span="8">
+                <div class="item active">进入会议</div>
+              </Col>
+              <Col span="8">
+              </Col>
+            </Row>
+          </div>
+          <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-colon>
+            <!-- <FormItem label="会议ID" prop="id">
+              <Input v-model="formValidate['id']" :style="{width:'300px',marginLeft: '-50px'}" :maxlength="11" disabled></Input>
+            </FormItem> -->
+            <FormItem label="公司名称" prop="company">
+              <Input v-model="formValidate['company']" :style="{width:'300px',marginLeft: '-47px'}" placeholder="请输入公司名称"></Input>
+            </FormItem>
+            <FormItem label="昵称" prop="name">
+              <Input v-model="formValidate['name']" :style="{width:'300px',marginLeft: '-47px'}" placeholder="请输入您的昵称"></Input>
+            </FormItem>
+            <FormItem prop="settings">
+              <CheckboxGroup v-model="formValidate.settings" :style="{marginLeft: '-150px'}">
+                <Checkbox label="isM">打开麦克风</Checkbox>
+                <Checkbox label="isC">打开摄像头</Checkbox>
+              </CheckboxGroup>    
+            </FormItem>
+            <FormItem>
+              <Button type="primary" @click="save" :style="{width:'300px',marginLeft: '-50px'}" >{{$t("createMeeting.button")}}</Button>
+            </FormItem>
+          </Form>
+        </div>
+      </div>
     </div>
     <div class="footer">
-      <div>技术支持：0754-89671122</div>
-      <div>Copyright © 2021深圳宏升软件技术开发有限公司  粤ICP备13031421号-4</div>
+      <div class="footer_wrap">
+        <div><span style="margin-right:10px">技术支持：0754-89671122</span> <span><i class="iconfont iconqq"></i>客服001</span> <span><i class="iconfont iconqq"></i>客服002</span></div>
+        <div>Copyright © 2021深圳宏升软件技术开发有限公司  粤ICP备13031421号-4</div>
+      </div>
     </div>
   </div>
 </template>
@@ -57,31 +67,39 @@ export default {
   },
   data() {
     return {
-      logUrl: require("@assets/default/logo.png"),  
+      logUrl: require("@assets/default/logo.png"),
+      titleUrl: require("@assets/images/title.webp"),
+      formValidate:{
+        id:'111111111111111',
+        company:'',
+        name:'',
+        settings:['isM','isC']
+      },
+      ruleValidate:{
+
+      }
     };
   },
   methods: {
-
+    save(){
+      this.$router.push('/');
+    }  
   },
 };
 </script>
 
 <style lang="less" scoped>
-.metting{
+.createMeeting{
   .wrapper {
     width: 100%;
     color: #464c5b;
     background: #fff;
-    background-image: url("~@assets/bg/bg.png");
-    background-repeat:no-repeat;
-    background-size: cover;
-    background-position: center 0;
     height: 900px;
     .wrapper_dropdown{
       float: right;
       margin: 10px;
       a{
-        color: #fff;
+        color: #17233d;
       }
     }
     .header{
@@ -109,14 +127,21 @@ export default {
     }
     .login_wrapper{
       position: absolute;
-      top: 20%;
-      left: calc((100% - 400px ) / 2);
+      top: 15%;
+      left: calc((100% - 1277px) / 2);
+      width: 1277px;
+      height: 726px;
+      background-image: url("~@assets/bg/bg.png");
+      background-repeat:no-repeat;
+      background-size: cover;
+      background-position: center 0;
       .head{
         color:#2684D1;
         display: flex;
         width: 300px;
         margin-left: 50px;
         margin-bottom: 30px;
+        margin-left: 488.5px;
         .logo{
           img{
             width: 70px;
@@ -132,11 +157,13 @@ export default {
         }
       }
       .login_box {
-          border-radius: 10px;
-          width: 400px;
+          // border-radius: 10px;
+          width: 450px;
+          height: 369px;
           background: rgba(255,255,255,0.6);
-          box-shadow: 2px 2px 5px rgb(104,104,104);
+          box-shadow:  0 1px 6px rgb(0 0 0 / 20%);
           text-align: center;
+          margin-left: 438.5px;
           .text {
               padding-top: 20px;
               color: #464c5b;
@@ -168,17 +195,22 @@ export default {
           }
 
           .type {
-              margin-top: 20px;
-              height: 32px;
-              display: inline-block;
-              width: 100%;
-              position: relative;
-              vertical-align: middle;
-              line-height: normal;
-              font-size: 16px;
-              .active {
-                  color: #57a3f3
-              }
+            margin-top: 51px;
+            height: 32px;
+            display: inline-block;
+            width: 100%;
+            position: relative;
+            vertical-align: middle;
+            line-height: normal;
+            font-size: 18px;
+            color: #666666;
+            margin-bottom: 38px;
+            .active {
+              color: #57a3f3;
+            }
+            .item{
+              font-weight: 600;
+            }
           }
       }
     }
@@ -195,6 +227,9 @@ export default {
     background: #2684D1;
     border-top: solid 1px #ddd;
     overflow: hidden;
+    .footer_wrap{
+      padding-top:18px
+    }
   }
 }
 </style>

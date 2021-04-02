@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 15:37:14
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-01 11:29:14
+ * @LastEditTime: 2021-04-02 15:52:51
  */
 const os = require('os');
 const path = require("path");
@@ -84,21 +84,20 @@ module.exports = {
   pwa: {}, // PWA 插件相关配置 see https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa
   // webpack-dev-server 相关配置
   devServer: {
-    // hot:true,
-    // open : true,
-    // port : 8080,
-    // host : "0.0.0.0",
-    proxy: {
-      //配置跨域
-      "/api": {
-        target: "http://cbapi.com", //这里后台的地址模拟的;应该填写你们真实的后台接口
-        //ws: true,
-        changOrigin: true, //允许跨域
-        pathRewrite: {
-          "^/api": "/api" //请求的时候使用这个api就可以
-        }
-      }
-    }
+    open: true, // 开启自动打开浏览器
+    host: "0.0.0.0", // 地址
+    port: "8080", // 端口
+    // proxy: {
+    //   //配置跨域
+    //   "/api": {
+    //     target: "http://cbapi.com", //这里后台的地址模拟的;应该填写你们真实的后台接口
+    //     //ws: true,
+    //     changOrigin: true, //允许跨域
+    //     pathRewrite: {
+    //       "^/api": "/api" //请求的时候使用这个api就可以
+    //     }
+    //   }
+    // }
   },
   // 第三方插件配置
   pluginOptions: {

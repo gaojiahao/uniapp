@@ -23,42 +23,49 @@ d<!--
       </div>
       <div class="login_wrapper">
         <div class="head">
-          <div class="logo">
-            <img :src="logUrl" />
-          </div>
           <div class="title">
-            <div class="title_cn">
-              宏升视频会议
-            </div>
-            <div>
-              HS VIDEO CONFERENCE
-            </div>
+            <img :src="titleUrl">
           </div>
         </div>
         <div class="login_box">
           <div class="type" v-model="type">
-            <span class="active">短信登录</span>
-            <span>二维码登录</span>
+            <Row :gutter="16">
+              <Col span="6">
+              </Col>
+              <Col span="6">
+                <div class="item" :class="[type=='login' ? 'active':'']" @click="changeType('login')">短信登录</div>
+              </Col>
+              <Col span="6">
+                  <div class="item" :class="[type=='qrCode' ? 'active':'']" @click="changeType('qrCode')">二维码登录</div>
+              </Col>
+              <Col span="6">
+              </Col>
+            </Row>
           </div>
-          <template>
-            <Input class="account" prefix="ios-contact" v-model="userCode" placeholder="账户" />
-            <form>
-              <Input class="password" prefix="ios-key" v-model="passWord" type="password" password placeholder="密码6-10位" />
-            </form>
-            <div style="width: 100%;display: flex; margin-top: 20px;">
-              <Input v-model="code" placeholder="验证码" style="width: 80px;margin-left: 100px;float: left;"/>
-              <s-identify :identifyCode="identifyCode" @click.native="refreshCode" @set-identifyCode="setIdentifyCode"></s-identify>
-            </div>
-            <div class="login_button">
-              <Button type="primary" @click="login">{{$t("login.button")}}</Button>
-            </div>
+          <template v-if="type=='qrCode'">
+            <img :src="qrCodeUrl" width="150px;height:150px"/>
+          </template>
+          <template v-else>
+            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-colon>
+              <FormItem label="账号" :prop="userCode">
+                <Input v-model="formValidate['userCode']" :style="{width:'300px',marginLeft: '-50px'}" placeholder="请输入手机号" :maxlength="11"></Input>
+              </FormItem>
+              <FormItem label="验证码" :prop="passWord">
+                <Input v-model="formValidate['passWord']" :style="{width:'180px',marginLeft: '-170px'}" placeholder="请输入验证码" :maxlength="4"></Input><div style="position:absolute;right: 50px;top: 0;"><Button>获取验证码</Button></div>
+              </FormItem>
+              <FormItem>
+                <Button type="primary" @click="login" :style="{width:'300px',marginLeft: '-50px'}" >{{$t("login.button")}}</Button>  
+              </FormItem>
+            </Form>
           </template>
         </div>
       </div>
     </div>
     <div class="footer">
-      <div><span style="margin-right:10px">技术支持：0754-89671122</span> <span><i class="iconfont iconqq"></i>客服001</span> <span><i class="iconfont iconqq"></i>客服002</span></div>
-      <div>Copyright © 2021深圳宏升软件技术开发有限公司  粤ICP备13031421号-4</div>
+      <div class="footer_wrap">
+        <div><span style="margin-right:10px">技术支持：0754-89671122</span> <span><i class="iconfont iconqq"></i>客服001</span> <span><i class="iconfont iconqq"></i>客服002</span></div>
+        <div>Copyright © 2021深圳宏升软件技术开发有限公司  粤ICP备13031421号-4</div>
+      </div>
     </div>
   </div>
 </template>
@@ -80,6 +87,8 @@ export default {
       var userCode = localStorage.getItem("userCode");
       return {
         logUrl: require("@assets/default/logo.png"),
+        titleUrl: require("@assets/images/title.webp"),
+        qrCodeUrl: require("@assets/images/qrCode.jpg"),
         mail: "",
         userCode: userCode || "",
         passWord: "",
@@ -117,7 +126,14 @@ export default {
             value: "tc",
             label: "繁體中文"
           }
-        ]
+        ],
+        formValidate:{
+          userCode:'',
+          passWord:''  
+        },
+        ruleValidate:{
+
+        }
       };
   },
   methods: {
@@ -190,7 +206,7 @@ export default {
         //         });
         //         this.refreshCode();
         //     });
-      this.$router.push('/');
+      this.$router.push('/createMeeting');
     },
     /**
      * @name: gaojiahao
@@ -380,10 +396,6 @@ export default {
     width: 100%;
     color: #464c5b;
     background: #fff;
-    background-image: url("~@assets/bg/bg.png");
-    background-repeat:no-repeat;
-    background-size: cover;
-    background-position: center 0;
     height: 900px;
     .wrapper_dropdown{
       float: right;
@@ -418,13 +430,20 @@ export default {
     .login_wrapper{
       position: absolute;
       top: 20%;
-      left: calc((100% - 400px ) / 2);
+      left: calc((100% - 1277px) / 2);
+      width: 1277px;
+      height: 726px;
+      background-image: url("~@assets/bg/bg.png");
+      background-repeat:no-repeat;
+      background-size: cover;
+      background-position: center 0;
       .head{
         color:#2684D1;
         display: flex;
         width: 300px;
         margin-left: 50px;
         margin-bottom: 30px;
+        margin-left: 488.5px;
         .logo{
           img{
             width: 70px;
@@ -440,11 +459,13 @@ export default {
         }
       }
       .login_box {
-          border-radius: 10px;
-          width: 400px;
+          // border-radius: 10px;
+          width: 450px;
+          height: 337px;
           background: rgba(255,255,255,0.6);
           box-shadow:  0 1px 6px rgb(0 0 0 / 20%);
           text-align: center;
+          margin-left: 438.5px;
           .text {
               padding-top: 20px;
               color: #464c5b;
@@ -476,17 +497,22 @@ export default {
           }
 
           .type {
-              margin-top: 20px;
-              height: 32px;
-              display: inline-block;
-              width: 100%;
-              position: relative;
-              vertical-align: middle;
-              line-height: normal;
-              font-size: 16px;
-              .active {
-                  color: #57a3f3
-              }
+            margin-top: 51px;
+            height: 32px;
+            display: inline-block;
+            width: 100%;
+            position: relative;
+            vertical-align: middle;
+            line-height: normal;
+            font-size: 18px;
+            color: #666666;
+            margin-bottom: 38px;
+            .active {
+              color: #57a3f3;
+            }
+            .item{
+              font-weight: 600;
+            }
           }
       }
     }
@@ -503,6 +529,9 @@ export default {
     background: #2684D1;
     border-top: solid 1px #ddd;
     overflow: hidden;
+    .footer_wrap{
+      padding-top:18px
+    }
   }
 }
 </style>

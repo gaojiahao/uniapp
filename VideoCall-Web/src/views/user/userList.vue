@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 15:46:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\user\userList.vue
- * @LastEditTime: 2021-04-01 17:04:36
+ * @LastEditTime: 2021-04-02 15:12:50
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -13,7 +13,7 @@
         <List footer="" :border="false" :loading="loading">
             <ListItem style="background: #2684D1;">
                 <div class="act avatar">
-                    <Icon type="ios-people" class="act_text" />
+                    <i class="iconfont iconrenqun1 act_text"></i>
                 </div>
                 <div class="act_name">
                     与会人
@@ -22,49 +22,17 @@
                    <Icon type="ios-arrow-back" @click="collapsedSider" />
                 </div>  
             </ListItem>
-            <ListItem>
+            <ListItem v-for="(item,index) in userlist" :key="index">
                 <div class="avatar">
-                    <Icon type="md-person" class="person text" />
+                    <i class="iconfont iconren1 person text"></i>
                 </div>
                 <div class="name">
-                    高家豪
+                    {{item.name}}
                 </div>
                 <div class="action">
-                    <Icon type="ios-mic-outline" class="outline text" />
-                    <!-- <Icon type="ios-mic-off-outline" /> -->
-                    <Icon type="ios-eye" class="eye text" />
-                    <!-- <Icon type="ios-eye-off" /> -->
-                    <Icon type="md-more text" />
-                </div>
-            </ListItem>
-            <ListItem>
-                <div class="avatar">
-                    <Icon type="md-person" class="person text" />
-                </div>
-                <div class="name">
-                    高家豪
-                </div>
-                <div class="action">
-                    <Icon type="ios-mic-outline" class="outline text" />
-                    <!-- <Icon type="ios-mic-off-outline" /> -->
-                    <Icon type="ios-eye" class="eye text" />
-                    <!-- <Icon type="ios-eye-off" /> -->
-                    <Icon type="md-more text" />
-                </div>
-            </ListItem>
-            <ListItem>
-                <div class="avatar">
-                    <Icon type="md-person" class="person text" />
-                </div>
-                <div class="name">
-                    高家豪
-                </div>
-                <div class="action">
-                    <Icon type="ios-mic-outline" class="outline text" />
-                    <!-- <Icon type="ios-mic-off-outline" /> -->
-                    <Icon type="ios-eye" class="eye text" />
-                    <!-- <Icon type="ios-eye-off" /> -->
-                    <Icon type="md-more text" />
+                    <i class="iconfont icon21maikefeng outline text"></i>
+                    <i class="iconfont iconshexiangtou eye text"></i>
+                    <i class="iconfont iconzu1306 text"></i>
                 </div>
             </ListItem>
         </List>
@@ -75,7 +43,17 @@ export default {
     name:"userList",
     data() {
         return {
-            loading: false
+            loading: false,
+            userlist:[
+                {id:1,name:'张三'},
+                {id:2,name:'张1'},
+                {id:3,name:'张2'},
+                {id:4,name:'张3'},
+                {id:5,name:'张4'},
+                {id:6,name:'张5'},
+                {id:7,name:'张6'},
+                {id:8,name:'张7'}
+            ]
         };
     },
     methods: {
@@ -102,9 +80,10 @@ export default {
         }
         .act_name{
             color: #fff;
+            margin-left: 10px;
         }
         .act_action{
-            margin-left: 130px;
+            margin-left: 120px;
             color:#fff;   
         }
         .avatar{
@@ -115,10 +94,10 @@ export default {
             }
         }
         .name{
-
+            margin-left: 10px;    
         }
         .action{
-            margin-left: 90px;
+            margin-left: auto;
             .outline{
                 color:#40C949;
             }

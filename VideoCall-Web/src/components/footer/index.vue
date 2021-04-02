@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 19:15:58
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\index.vue
- * @LastEditTime: 2021-04-01 20:05:02
+ * @LastEditTime: 2021-04-02 15:08:09
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -32,21 +32,21 @@
                     <Divider type="vertical" />
                     <div class="timer item">
                         <div class="time-car">
-                            <Icon type="ios-mic-outline" class="outline icon" />
+                            <i class="iconfont icon21maikefeng outline icon"></i>
                             <span class="time-card-count">音频</span>
                         </div>
                     </div>
                     <Divider type="vertical" />
                     <div class="timer item">
                         <div class="time-car">
-                            <Icon type="ios-eye" class="eye icon" />
+                            <i class="iconfont iconshexiangtou eye icon"></i>
                             <span class="time-card-count">视频</span>
                         </div>
                     </div>
                     <Divider type="vertical" />
                     <div class="timer item">
                         <div class="time-car">
-                            <Icon type="md-power" class="close icon" />
+                            <i class="iconfont iconzu170 close icon"></i>
                         </div>
                     </div>
                 </div>
@@ -54,13 +54,13 @@
             <Col span="8">
                 <div class="settings">
                     <div class="timer item">
-                        <Icon type="md-settings" />
+                        <i class="iconfont iconshezhi icon"></i>
                     </div>
                     <div class="timer item">
-                        <Icon type="ios-paper" />
+                        <i class="iconfont icontianxiexiangqing icon"></i>
                     </div>
                     <div class="timer item">
-                        <Icon type="ios-wifi" />
+                        <i class="iconfont iconzu1310 icon"></i>
                     </div>
                 </div>
             </Col>
@@ -183,6 +183,10 @@ export default {
         .item{
             height:69px;
             width: 35px;
+        }
+        .icon{
+            font-size: 16px;
+            color: #666666;
         }
     }
 }

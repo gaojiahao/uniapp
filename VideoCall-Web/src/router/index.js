@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 15:27:12
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-01 12:27:12
+ * @LastEditTime: 2021-04-02 12:30:19
  */
 import Vue from "vue";
 import VueRouter from "vue-router";
@@ -30,6 +30,7 @@ const routes = [
     component: resolve=>(require(["@views/meeting/createMeeting"],resolve)),
     meta: {
       title: "创建会议",
+      auth: true
     },
   },
   { 
@@ -38,6 +39,7 @@ const routes = [
     component: resolve=>(require(["@views/meeting/addMeeting"],resolve)),
     meta: {
       title: "进入会议",
+      auth: true
     },
   },
   {

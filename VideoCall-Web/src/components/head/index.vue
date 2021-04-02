@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 14:55:25
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\head\index.vue
- * @LastEditTime: 2021-04-01 18:17:58
+ * @LastEditTime: 2021-04-02 14:50:59
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -13,16 +13,8 @@
         <Row>
             <Col span="8">
                 <div class="left_title">
-                    <div class="logo">
-                        <img :src="logUrl" />
-                    </div>
                     <div class="title">
-                        <div class="title_cn">
-                            宏升视频会议
-                        </div>
-                        <div class="text">
-                            HS VIDEO CONFERENCE
-                        </div>
+                        <img :src="titleUrl">
                     </div>
                 </div>
             </Col>
@@ -31,7 +23,7 @@
                     <div class="title">
                         <div class="title_cn">
                             小竹熊云科技公司
-                            <Icon type="ios-paper-plane" />
+                            <i class="iconfont iconzhifeiji"></i>
                         </div>
                         <div class="text">
                             ID:111111111
@@ -42,6 +34,12 @@
             <Col span="8">
                 <div class="right_title">
                     <div class="title">
+                        <div class="text">
+                            <i class="iconfont iconqq"></i>客服002</span>
+                        </div>
+                        <div class="text">
+                            <i class="iconfont iconqq"></i>客服001</span>
+                        </div>
                         <div class="text">
                             <Icon type="ios-call" />技术支持：0754-89671122
                         </div>
@@ -59,7 +57,8 @@ export default {
   },
   data() {
     return {
-      logUrl: require("@assets/default/logo.png"),  
+      logUrl: require("@assets/default/logo.png"),
+      titleUrl: require("@assets/images/title.webp"),
     };
   },
   methods: {
@@ -80,17 +79,11 @@ export default {
             }
         }
         .title{
-            color: #666666;
-            margin-top: 8px;
-            .title_cn{
-                color: #2684D1;
-                font-size: 22px;
-                text-align: center;
-                font-weight: 600;
-            }
-            .text{
-                text-align: center;
-                color: #2684D1;  
+            img{
+                height: 42px;
+                width: 194px;
+                margin-top: 11px;
+                margin-left: -35px;
             }
         }
     }
@@ -115,6 +108,9 @@ export default {
         line-height: 64px;
         .title{
             color: #666666;
+            display: flex;
+            flex-direction: row-reverse;
+            margin-right: -30px;
             .title_cn{
                 color: #2684D1;
                 font-size: 22px;
@@ -122,7 +118,8 @@ export default {
                 font-weight: 600;
             }
             .text{
-                text-align: right;;    
+                text-align: right;
+                margin-left: 10px;
             }
         }
     }
