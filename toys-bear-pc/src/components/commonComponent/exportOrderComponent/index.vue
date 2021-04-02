@@ -7,6 +7,27 @@
       >
         <span class="headerTitle">报出价(带工厂信息)</span>
         <div>
+          <div class="isFac">
+            <span class="facTitle">是否按厂商导出</span>
+            <el-select
+              size="medium"
+              v-model="imageExportWay"
+              clearable
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in imageExportWayList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </div>
+          <el-radio-group class="myExportWay" v-model="exportWay">
+            <el-radio :label="1">带图片导出</el-radio>
+            <el-radio :label="2">不带图片导出</el-radio>
+          </el-radio-group>
           <el-button
             type="primary"
             @click="openViewer(require('@/assets/images/mode1.png'))"
@@ -30,6 +51,27 @@
       >
         <span class="headerTitle">报出价(不带工厂信息)</span>
         <div>
+          <div class="isFac">
+            <span class="facTitle">是否按厂商导出</span>
+            <el-select
+              size="medium"
+              v-model="imageExportWay"
+              clearable
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in imageExportWayList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </div>
+          <el-radio-group class="myExportWay" v-model="exportWay">
+            <el-radio :label="1">带图片导出</el-radio>
+            <el-radio :label="2">不带图片导出</el-radio>
+          </el-radio-group>
           <el-button
             type="primary"
             @click="openViewer(require('@/assets/images/mode2.png'))"
@@ -53,6 +95,27 @@
       >
         <span class="headerTitle">出厂价(带工厂信息)</span>
         <div>
+          <div class="isFac">
+            <span class="facTitle">是否按厂商导出</span>
+            <el-select
+              size="medium"
+              v-model="imageExportWay"
+              clearable
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in imageExportWayList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </div>
+          <el-radio-group class="myExportWay" v-model="exportWay">
+            <el-radio :label="1">带图片导出</el-radio>
+            <el-radio :label="2">不带图片导出</el-radio>
+          </el-radio-group>
           <el-button
             type="primary"
             @click="openViewer(require('@/assets/images/mode3.png'))"
@@ -104,7 +167,15 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      imageExportWayList: [
+        { value: 0, label: "请选择" },
+        { value: 1, label: "不按厂商单独导图片" },
+        { value: 2, label: "按厂商单独导图片" }
+      ],
+      imageExportWay: 0,
+      exportWay: 1
+    };
   },
   methods: {
     // 打开预览模板
@@ -125,16 +196,23 @@ export default {
     },
     // 导出模板
     exportOrder(type) {
-      this.options.templateType = type;
+      // this.options.templateType = type;
+      const fd = {
+        excelExportWay: this.exportWay,
+        imageExportWay: this.imageExportWay ? this.imageExportWay : 0,
+        templateType: type,
+        ...this.options
+      };
       this.$http
-        .post(this.options.api, this.options, {
-          responseType: "blob"
+        .post(this.options.api, fd, {
+          responseType: "blob",
+          timeout: 1000000000
         })
         .then(res => {
           const time = getCurrentTime();
-          const fileName = this.options.name
-            ? this.options.name + "_" + time + ".xls"
-            : time + ".xls";
+          const exeName = this.options.name + "_" + time + ".xlsx";
+          const zipName = this.options.name + "_" + time + ".zip";
+          const fileName = this.imageExportWay > 0 ? zipName : exeName;
           const blob = res.data;
           if (window.navigator && window.navigator.msSaveOrOpenBlob) {
             // 兼容IE
@@ -157,4 +235,12 @@ export default {
   mounted() {}
 };
 </script>
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.isFac {
+  display: inline;
+  margin: 20px;
+  .facTitle {
+    margin-right: 10px;
+  }
+}
+</style>

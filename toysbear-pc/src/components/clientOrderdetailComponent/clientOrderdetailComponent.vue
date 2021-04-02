@@ -431,16 +431,12 @@ export default {
         })
         .then(res => {
           const time = getCurrentTime();
-          console.log(this.shareOrderNumber);
           const fileName = this.tableData.customerName
             ? this.tableData.customerName + "_" + time + ".xlsx"
             : time + ".xlsx";
           const zipName = this.shareOrderNumber.companyName
-            ? this.shareOrderNumber.companyName +
-              "_" +
-              getCurrentTime() +
-              ".zip"
-            : getCurrentTime() + ".zip";
+            ? this.shareOrderNumber.companyName + "_" + time + ".zip"
+            : time + ".zip";
           const myName = this.imageExportWay > 0 ? zipName : fileName;
           const blob = res.data;
           if (window.navigator && window.navigator.msSaveOrOpenBlob) {

@@ -24,16 +24,16 @@
           <div class="iconBox telephoneIcon"></div>
           <span class="content">热线电话：0754-89671122</span>
         </div>
-        <div class="infoItem">
+        <div class="infoItem qq" @click="toQQ('3300802838')">
           <div class="iconBox QQIcon"></div>
           <span class="content">客服QQ1</span>
         </div>
-        <div class="infoItem">
+        <div class="infoItem qq" @click="toQQ('597892949')">
           <div class="iconBox QQIcon"></div>
           <span class="content">客服QQ2</span>
         </div>
         <div class="line"></div>
-        <div class="infoItem">
+        <div class="infoItem info">
           <div class="iconBox lingdangIcon"></div>
           <span class="content">我的消息</span>
         </div>
@@ -92,6 +92,17 @@ export default {
     };
   },
   methods: {
+    // QQ客服
+    toQQ(qq) {
+      const link = document.createElement("a");
+      link.target = "_blank";
+      link.href = "http://wpa.qq.com/msgrd?v=3&uin=" + qq + "&site=qq&menu=yes";
+      link.style.display = "none";
+      document.body.appendChild(link);
+      link.click();
+      URL.revokeObjectURL(link.href); // 释放URL 对象
+      document.body.removeChild(link);
+    },
     // 切换角色
     checktedUser() {
       this.$router.push("/loginConfirm?id=checkted");

@@ -252,7 +252,7 @@ export default {
       this.orderRow = {
         orderNumber: row.offerNumber,
         name: row.customerName,
-        api: "/api/GetProductOfferOrderExcel"
+        api: "/api/ExportSampleOfferToExcel"
       };
       console.log(this.orderRow);
       this.exportTemplateDialog = true;
