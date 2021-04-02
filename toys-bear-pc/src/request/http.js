@@ -90,15 +90,15 @@ const createLogRecord = async function(obj) {
 };
 const myAxios = {};
 myAxios.install = function(Vue) {
-  // 基础实例
-  const instance = axios.create({
+  const instanceOptions = {
     baseURL: target,
-    timeout: 20000, // 超时时间
     retry: 1, // 请求次数
     retryDelay: 500, // 请求间隙
     startDate: 0, // 请求开始时间
     endDate: 0 // 请求结束时间
-  });
+  };
+  // 基础实例
+  const instance = axios.create(instanceOptions);
   // 推送实例
   const push_instance = axios.create({
     baseURL: push_target,
@@ -169,6 +169,18 @@ myAxios.install = function(Vue) {
         $Store.state.userInfo && $Store.state.userInfo.accessToken;
       config.headers["content-type"] = "application/json";
       $Store.commit("updateAppLoading", true);
+      // 屏蔽不需要验证code的请求，如下载导出等
+      // if (
+      //   config.url.includes("GetOfferOrderExcel") ||
+      //   config.url.includes("GetProductOfferOrderExcel") ||
+      //   config.url.includes("LittleBearInstallDownload") ||
+      //   config.url.includes("LittleBearInstallRepeatDownload") ||
+      //   config.url.includes("ExportCompanySampleListToExcel") ||
+      //   config.url.includes("GetERPOrderExcel") ||
+      //   config.url.includes("ExportCustomerOrderDetailToExcel")
+      // ) {
+      //   config.timeout = 99999999;
+      // }
       return config;
     },
     error => {

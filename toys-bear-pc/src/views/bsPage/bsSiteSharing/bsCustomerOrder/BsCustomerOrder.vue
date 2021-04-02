@@ -291,7 +291,8 @@ export default {
       };
       this.$http
         .post("/api/ExportCustomerOrderDetailToExcel", fd, {
-          responseType: "blob"
+          responseType: "blob",
+          timeout: 100000000
         })
         .then(res => {
           const time = getCurrentTime();

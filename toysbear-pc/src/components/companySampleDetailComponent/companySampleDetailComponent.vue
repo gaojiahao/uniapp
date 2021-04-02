@@ -399,7 +399,7 @@ export default {
             templateType: type,
             sampleNumber: this.item.sampleNumber
           },
-          { responseType: "blob" }
+          { responseType: "blob", timeout: 1000000000 }
         )
         .then(res => {
           const currentTime = getCurrentTime();

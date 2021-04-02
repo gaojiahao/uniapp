@@ -95,6 +95,7 @@ export default {
         refresh: true,
         label: "购物车"
       };
+      this.$router.push("/bsIndex/bsShoppingCart");
       this.$store.commit("myAddTab", fd);
     },
     // 回到顶部
