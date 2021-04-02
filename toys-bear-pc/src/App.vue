@@ -62,6 +62,7 @@ export default {
     })
   },
   mounted() {
+    this.$store.commit("handlerShowGlobalMsg", false);
     eventBus.$on("showCart", flag => {
       this.isShowCartBox = flag;
     });
