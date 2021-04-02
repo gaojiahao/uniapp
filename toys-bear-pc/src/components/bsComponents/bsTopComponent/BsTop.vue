@@ -50,8 +50,28 @@
           </div>
           <span class="content userName">{{ userInfo.userInfo.linkman }}</span>
         </div>
-        <div class="moreBox">
+        <div class="moreBox" @click="checkUsers">
           <i class="moreIcon"></i>
+          <el-collapse-transition>
+            <div class="isCheckUserInfo" v-show="isCheckUser">
+              <div class="userInfo">
+                <div class="checkItem">{{ userInfo.userInfo.linkman }}</div>
+                <p class="phone">{{ userInfo.userInfo.phoneNumber }}</p>
+              </div>
+              <div class="item checkUser" @click="checktedUser">
+                <i class="checkUser"></i>
+                <span>切换角色</span>
+              </div>
+              <div class="item accountSettings" @click="toSetUser">
+                <i class="setUser"></i>
+                <span>账号设置</span>
+              </div>
+              <div class="item signOut" @click="signOutEvent">
+                <i class="signUser"></i>
+                <span>退出</span>
+              </div>
+            </div>
+          </el-collapse-transition>
         </div>
       </div>
     </div>
@@ -67,9 +87,36 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      isCheckUser: false
+    };
   },
-  methods: {},
+  methods: {
+    // 切换角色
+    checktedUser() {
+      this.$router.push("/loginConfirm?id=checkted");
+    },
+    // 退出
+    signOutEvent() {
+      this.$router.push("/login?id=signOut");
+    },
+    // 账号设置
+    toSetUser() {
+      const fd = {
+        name: "/bsIndex/bsAccountManage",
+        linkUrl: "/bsIndex/bsAccountManage",
+        component: "bsAccountManage",
+        refresh: true,
+        label: "账号管理"
+      };
+      this.$store.commit("myAddTab", fd);
+      this.$router.push("/bsIndex/bsAccountManage");
+    },
+    // 打开切换角色
+    checkUsers() {
+      this.isCheckUser = !this.isCheckUser;
+    }
+  },
   created() {},
   mounted() {},
   computed: {

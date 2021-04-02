@@ -10,7 +10,7 @@
           <li
             class="userItem"
             @click.prevent="toMeInfo(item)"
-            v-for="(item, i) in this.userInfo.commparnyList"
+            v-for="(item, i) in userList"
             :key="i"
           >
             <el-image
@@ -60,10 +60,26 @@ export default {
   },
   data() {
     return {
-      radioValue: null
+      radioValue: null,
+      userList: []
     };
   },
   methods: {
+    // 二次登录
+    async loginTow() {
+      const res = await this.$http.post("/api/GetUserCompanyList", {
+        phoneNumber: this.userInfo.userInfo.phoneNumber
+      });
+      console.log(res);
+      if (res.data.result.code === 200) {
+        this.userList = res.data.result.item;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
     // 获取系统参数
     async getClientTypeList(type) {
       const res = await this.$http.post("/api/ServiceConfigurationList", {
@@ -84,7 +100,7 @@ export default {
     },
     async toMeInfo(item) {
       const res = await this.$http.post("/api/UserAffiliateCompany", {
-        UserId: this.$route.params.userInfo.id,
+        UserId: this.userInfo.userInfo.id,
         CompanyNumber: item.companyNumber
       });
       if (res.data.result.isLogin) {
@@ -161,7 +177,12 @@ export default {
   computed: {
     ...mapState(["userInfo"])
   },
-  mounted() {}
+  mounted() {
+    this.userList = this.userInfo.commparnyList;
+    if (this.$route.query.id === "checkted") {
+      this.loginTow();
+    }
+  }
 };
 </script>
 

@@ -105,12 +105,89 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        position: relative;
         .moreIcon {
           width: 3px;
           height: 100%;
           vertical-align: top;
           background: url('~@/assets/images/moreIcon.png') no-repeat center;
           background-size: cover;
+        }
+        .isCheckUserInfo {
+          position: absolute;
+          right: -8px;
+          top: 40px;
+          width: 200px;
+          background-color: #fff;
+          color: #333333;
+          font-size: 15px;
+          border-radius: 4px;
+          z-index: 200;
+          box-shadow: 0px 4px 15px 0px rgba(42, 69, 116, 0.25);
+          &::after {
+            position: absolute;
+            content: "";
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-bottom-color: white;
+            right: 8px;
+            top: -20px;
+          }
+          .item {
+            height: 50px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #e5e5e5;
+            padding: 0 20px;
+            box-sizing: border-box;
+            &:hover {
+              background-color: #eff6ff;
+            }
+            &:last-of-type {
+              border: none;
+            }
+            .checkUser,
+            .setUser,
+            .signUser {
+              display: inline-block;
+              vertical-align: top;
+              width: 18px;
+              height: 18px;
+              margin-right: 13px;
+            }
+            .checkUser {
+              background: url("~@/assets/images/checkUserIcon.png") no-repeat center;
+              background-size: contain;
+            }
+            .setUser {
+              background: url("~@/assets/images/setUserIcon.png") no-repeat center;
+              background-size: contain;
+            }
+            .signUser {
+              background: url("~@/assets/images/signUserIcon.png") no-repeat center;
+              background-size: contain;
+            }
+          }
+          .userInfo {
+            height: 77px;
+            padding: 0 20px;
+            box-sizing: border-box;
+            overflow: hidden; /*超出部分隐藏*/
+            white-space: nowrap; /*不换行*/
+            text-overflow: ellipsis; /*超出部分文字以...显示*/
+            &:hover {
+              background-color: #eff6ff;
+            }
+            .checkItem {
+              line-height: 50px;
+              height: 50px;
+            }
+            .phone {
+              color: #999999;
+              font-size: 12px;
+            }
+          }
         }
       }
     }
