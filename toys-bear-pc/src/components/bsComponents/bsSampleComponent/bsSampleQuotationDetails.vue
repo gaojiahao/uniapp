@@ -342,7 +342,7 @@ export default {
     // 导出找样
     exportOrder() {
       this.orderRow = {
-        orderNumber: this.item.offerNumber,
+        sampleNumber: this.item.offerNumber,
         name: this.item.customerName,
         api: "/api/ExportSampleOfferToExcel"
       };

@@ -250,7 +250,7 @@ export default {
     exportOrder(row) {
       console.log(row);
       this.orderRow = {
-        orderNumber: row.offerNumber,
+        sampleNumber: row.offerNumber,
         name: row.customerName,
         api: "/api/ExportSampleOfferToExcel"
       };

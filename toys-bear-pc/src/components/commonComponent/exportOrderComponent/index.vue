@@ -195,8 +195,8 @@ export default {
     return {
       imageExportWayList: [
         { value: 0, label: "请选择" },
-        { value: 1, label: "不按厂商单独导图片" },
-        { value: 2, label: "按厂商单独导图片" }
+        { value: 2, label: "按厂商单独导图片" },
+        { value: 1, label: "不按厂商单独导图片" }
       ],
       imageExportWay: 0,
       exportWay: 1
