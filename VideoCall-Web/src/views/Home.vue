@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\Home.vue
- * @LastEditTime: 2021-04-02 15:22:34
+ * @LastEditTime: 2021-04-05 11:33:29
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -82,6 +82,9 @@ export default {
       border-color: #eee;
       z-index: 1;
       line-height: unset;
+    }
+    /deep/ .ivu-layout.ivu-layout-has-sider {
+      height: 803px;
     }
     .ivu-layout-sider{
       background: #fff;  

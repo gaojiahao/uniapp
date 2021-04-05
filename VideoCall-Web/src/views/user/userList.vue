@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 15:46:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\user\userList.vue
- * @LastEditTime: 2021-04-02 15:12:50
+ * @LastEditTime: 2021-04-05 17:16:20
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -19,7 +19,8 @@
                     与会人
                 </div>
                 <div class="act_action">
-                   <Icon type="ios-arrow-back" @click="collapsedSider" />
+                    <!-- <i class="iconfont iconcebianlanshousuo" @click="collapsedSider"></i> -->
+                    <Icon type="ios-arrow-back" @click="collapsedSider" />
                 </div>  
             </ListItem>
             <ListItem v-for="(item,index) in userlist" :key="index">
