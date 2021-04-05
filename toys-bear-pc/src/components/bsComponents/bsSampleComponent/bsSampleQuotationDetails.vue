@@ -231,27 +231,6 @@
               </span>
             </template>
           </el-table-column>
-          <!-- <el-table-column
-            label="操作"
-            header-align="center"
-            align="center"
-            width="100"
-          >
-            <template slot-scope="scope">
-              <el-popconfirm
-                title="确定要删除吗？"
-                @confirm="handleDelete(scope.row)"
-              >
-                <el-button
-                  size="mini"
-                  type="warning"
-                  @click.stop
-                  slot="reference"
-                  >删除</el-button
-                >
-              </el-popconfirm>
-            </template>
-          </el-table-column> -->
         </el-table>
       </div>
       <div class="tableBto">
@@ -342,9 +321,9 @@ export default {
     // 导出找样
     exportOrder() {
       this.orderRow = {
-        orderNumber: this.item.offerNumber,
+        sampleNumber: this.item.offerNumber,
         name: this.item.customerName,
-        api: "/api/GetProductOfferOrderExcel"
+        api: "/api/ExportSampleOfferToExcel"
       };
       this.exportTemplateDialog = true;
     },

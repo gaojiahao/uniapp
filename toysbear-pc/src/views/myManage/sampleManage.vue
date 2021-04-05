@@ -401,7 +401,7 @@ export default {
             templateType: type,
             sampleNumber: this.sampleNumber.sampleNumber
           },
-          { responseType: "blob" }
+          { responseType: "blob", timeout: 1000000000 }
         )
         .then(res => {
           console.log(res);

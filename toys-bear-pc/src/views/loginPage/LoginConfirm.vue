@@ -10,7 +10,7 @@
           <li
             class="userItem"
             @click.prevent="toMeInfo(item)"
-            v-for="(item, i) in this.commparnyList"
+            v-for="(item, i) in userList"
             :key="i"
           >
             <el-image
@@ -52,6 +52,7 @@
 import { getMenuFuc } from "@/router/index";
 import loginTop from "@/components/loginComponents/LoginTop.vue";
 import loginFooter from "@/components/loginComponents/LoginFooter.vue";
+import { mapState } from "vuex";
 export default {
   components: {
     loginTop,
@@ -60,10 +61,25 @@ export default {
   data() {
     return {
       radioValue: null,
-      commparnyList: []
+      userList: []
     };
   },
   methods: {
+    // 二次登录
+    async loginTow() {
+      const res = await this.$http.post("/api/GetUserCompanyList", {
+        phoneNumber: this.userInfo.userInfo.phoneNumber
+      });
+      console.log(res);
+      if (res.data.result.code === 200) {
+        this.userList = res.data.result.item;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
     // 获取系统参数
     async getClientTypeList(type) {
       const res = await this.$http.post("/api/ServiceConfigurationList", {
@@ -84,7 +100,7 @@ export default {
     },
     async toMeInfo(item) {
       const res = await this.$http.post("/api/UserAffiliateCompany", {
-        UserId: this.$route.params.userInfo.id,
+        UserId: this.userInfo.userInfo.id,
         CompanyNumber: item.companyNumber
       });
       if (res.data.result.isLogin) {
@@ -138,7 +154,16 @@ export default {
             });
             this.$store.commit("removeLoginItems");
           }
-          this.$router.push("/bsIndex");
+          switch (item.companyType) {
+            case "Sales":
+              this.$store.commit("closeTabAll");
+              this.$router.push("/bsIndex");
+              break;
+            default:
+              location.href = "http://139.9.71.135:8080/#/me";
+              break;
+          }
+          // this.$router.push("/bsIndex");
           // let token = JSON.stringify(res.data.result);
           // location =
           //   "http://127.0.0.1:8081/#/meInfo/infoList?id=" +token
@@ -149,11 +174,13 @@ export default {
       }
     }
   },
-  async mounted() {
-    if (!this.$route.params.commparnyList) {
-      this.$router.push("/login");
-    } else {
-      this.commparnyList = this.$route.params.commparnyList;
+  computed: {
+    ...mapState(["userInfo"])
+  },
+  mounted() {
+    this.userList = this.userInfo.commparnyList;
+    if (this.$route.query.id === "checkted") {
+      this.loginTow();
     }
   }
 };

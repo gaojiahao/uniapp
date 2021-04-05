@@ -543,11 +543,10 @@ export default {
     isSelectPush() {
       this.$refs.refGonggao.validate(valid => {
         if (valid) {
-          this.$confirm("是否需要推送公告?", "提示", {
+          this.$confirm("是否需要推送公告?", {
             distinguishCancelAndClose: true,
             cancelButtonText: "需要推送",
-            confirmButtonText: "不了，谢谢",
-            type: "warning"
+            confirmButtonText: "不了，谢谢"
           })
             .then(() => {
               this.sendGonggao();

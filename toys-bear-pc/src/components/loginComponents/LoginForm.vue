@@ -230,7 +230,7 @@ export default {
             );
             Json.PlatForm = await this.getClientTypeList("PlatForm");
             this.$store.commit("globalJson/setGlobalJson", Json);
-            this.$router.push("/bsIndex");
+            // this.$router.push("/bsIndex");
           } else {
             this.$common.handlerMsgState({
               msg: re.data.result.msg,
@@ -309,7 +309,6 @@ export default {
             VerificationCode: this.loginforms.verifycode
           });
           if (res.data.result.isLogin) {
-            this.$store.commit("setToken", res.data.result);
             if (res.data.result.commparnyList.length === 1) {
               // 一个角色
               this.$store.commit("setToken", res.data.result);
@@ -325,7 +324,6 @@ export default {
               } else {
                 this.$store.commit("initShoppingCart", []);
               }
-              await this.waitTime(1);
               // 获取系统参数
               const Json = {};
               Json.MessageRestriction = await this.getClientTypeList(
@@ -360,13 +358,26 @@ export default {
                 });
                 this.$store.commit("removeLoginItems");
               }
-              this.$router.push("/bsIndex/bsHome");
+              console.log(res.data.result.commparnyList);
+              switch (res.data.result.commparnyList[0].companyType) {
+                // case "Admin":
+                //   break;
+                // case "Supplier":
+                //   break;
+                // case "Exhibition":
+                //   break;
+                case "Sales":
+                  this.$router.push("/bsIndex");
+                  break;
+                default:
+                  location.href = "http://139.9.71.135:8080/#/me";
+                  break;
+              }
             } else if (res.data.result.commparnyList.length > 1) {
               // 多个角色
               this.$store.commit("setToken", res.data.result);
               this.$router.push({
-                name: "LoginConfirm",
-                params: res.data.result
+                name: "LoginConfirm"
               });
             }
             this.$store.commit("closeTabAll");

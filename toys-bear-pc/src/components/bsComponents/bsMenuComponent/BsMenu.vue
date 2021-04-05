@@ -9,10 +9,10 @@
         router
         :collapse="isCollapse"
       >
-        <el-menu-item @click="addRouterEvent(homeLink)" index="/bsIndex/bsHome">
+        <!-- <el-menu-item @click="addRouterEvent(homeLink)" index="/bsIndex/bsHome">
           <i class="icon homeIcon"></i>
           <span slot="title">后台首页</span>
-        </el-menu-item>
+        </el-menu-item> -->
         <el-submenu
           v-for="item in routers"
           :key="item.parent.id"

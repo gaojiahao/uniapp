@@ -7,6 +7,7 @@
   >
     <transition name="el-zoom-in-center">
       <message-component
+        id="myGlobalMsg"
         :type="msgType"
         :msg="globalMsg"
         v-if="showGlobalMsg"
@@ -61,12 +62,12 @@ export default {
     })
   },
   mounted() {
+    this.$store.commit("handlerShowGlobalMsg", false);
     eventBus.$on("showCart", flag => {
       this.isShowCartBox = flag;
     });
   },
   methods: {
-    sumbit() {},
     // 使用的地方
     handleShowConfirm() {
       this.$confirm("此操作将永久删除该文件, 是否继续?", {
@@ -95,6 +96,7 @@ export default {
         refresh: true,
         label: "购物车"
       };
+      this.$router.push("/bsIndex/bsShoppingCart");
       this.$store.commit("myAddTab", fd);
     },
     // 回到顶部
@@ -137,6 +139,7 @@ export default {
   z-index: 9999;
 }
 @{deep} .el-loading-spinner {
+  z-index: 9999;
   position: fixed;
   left: 0;
   top: 0;

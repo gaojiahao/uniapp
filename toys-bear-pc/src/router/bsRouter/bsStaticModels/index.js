@@ -68,10 +68,6 @@ export default [
     component: BsHallBusinessOrderDetails
   },
   {
-    path: "/bsIndex",
-    redirect: "/bsIndex/bsHome"
-  },
-  {
     path: "/bsIndex/bsSampleQuotationDetails",
     name: "bsSampleQuotationDetails",
     component: BsSampleQuotationDetails
@@ -95,5 +91,13 @@ export default [
     path: "/bsIndex/bsPurchaseOrderDetails",
     name: "bsPurchaseOrderDetails",
     component: BsPurchaseOrderDetails
+  },
+  // {
+  //   path: "/bsIndex",
+  //   redirect: "/bsIndex/bsHome"
+  // }
+  {
+    path: "/bsIndex",
+    redirect: "/bsIndex/bsProductSearchIndex"
   }
 ];
