@@ -72,7 +72,6 @@ export default new Vuex.Store({
     // 删除收藏
     removeMyCollec(state) {
       state.myColles.pop();
-      //修改上一次Url地址
     },
     updataUrl(state, payLoad) {
       state.lastUrl = payLoad;
@@ -267,14 +266,15 @@ export default new Vuex.Store({
     //关闭tab页
     closeTab(state, n) {
       let tab = state.tabList;
-      tab.forEach((v, i) => {
-        if (v.name == n) {
+      tab.forEach((val, i) => {
+        if (val.name == n) {
           tab.splice(i, 1);
-          console.log(tab.find(v => v.name == state.oldTabName));
-          if (tab.find(v => v.name == state.oldTabName)) {
+          const currentOption = tab.find(va => va.name == state.oldTabName);
+          if (currentOption) {
             state.activeTab = state.oldTabName;
           } else {
             state.activeTab = tab[tab.length - 1].name;
+            router.push(tab[tab.length - 1].linkUrl);
           }
         }
       });

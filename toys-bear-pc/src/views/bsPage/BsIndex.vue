@@ -265,7 +265,6 @@ export default {
   },
   watch: {
     activeTab(newN, oldN) {
-      console.log(newN, oldN);
       this.$store.commit("handlerOldTabName", oldN);
     }
   },

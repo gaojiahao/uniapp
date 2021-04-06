@@ -33,7 +33,7 @@
           <span class="content">客服QQ2</span>
         </div>
         <div class="line"></div>
-        <div class="infoItem info">
+        <div class="infoItem info" @click="toMyInfo">
           <div class="iconBox lingdangIcon"></div>
           <span class="content">我的消息</span>
         </div>
@@ -92,6 +92,10 @@ export default {
     };
   },
   methods: {
+    // 去查看我的消息
+    toMyInfo() {
+      this.$router.push("/bsIndex/bsNews");
+    },
     // QQ客服
     toQQ(qq) {
       const link = document.createElement("a");
@@ -113,14 +117,14 @@ export default {
     },
     // 账号设置
     toSetUser() {
-      const fd = {
-        name: "/bsIndex/bsAccountManage",
-        linkUrl: "/bsIndex/bsAccountManage",
-        component: "bsAccountManage",
-        refresh: true,
-        label: "账号管理"
-      };
-      this.$store.commit("myAddTab", fd);
+      // const fd = {
+      //   name: "/bsIndex/bsAccountManage",
+      //   linkUrl: "/bsIndex/bsAccountManage",
+      //   component: "bsAccountManage",
+      //   refresh: true,
+      //   label: "账号管理"
+      // };
+      // this.$store.commit("myAddTab", fd);
       this.$router.push("/bsIndex/bsAccountManage");
     },
     // 打开切换角色
