@@ -19,7 +19,7 @@ export default new Vuex.Store({
   state: {
     myColles: [],
     activeTab: "/bsIndex/bsHome",
-    lastUrl: "", //上一次点击的url
+    oldTabName: "/bsIndex/bsHome", //上一次点击的url
     showGlobalMsg: false,
     msgType: "primary",
     globalMsg: "",
@@ -61,6 +61,9 @@ export default new Vuex.Store({
     currentComparnyId: null
   },
   mutations: {
+    handlerOldTabName(state, payLoad) {
+      state.oldTabName = payLoad;
+    },
     // 添加收藏
     addMyCollec(state, payLoad) {
       console.log(payLoad);
@@ -251,14 +254,14 @@ export default new Vuex.Store({
     closeTabAll(state) {
       v.$set(state, "tabList", []);
       const fd = {
-        component: "bsProductSearchIndex",
-        label: "产品查询",
-        linkUrl: "/bsIndex/bsProductSearchIndex",
-        name: "/bsIndex/bsProductSearchIndex",
+        component: "bsHome",
+        label: "后台首页",
+        linkUrl: "/bsIndex/bsHome",
+        name: "/bsIndex/bsHome",
         refresh: true
       };
       state.tabList.push(fd);
-      state.activeTab = "/bsIndex/bsProductSearchIndex";
+      state.activeTab = "/bsIndex/bsHome";
     },
 
     //关闭tab页
@@ -267,27 +270,11 @@ export default new Vuex.Store({
       tab.forEach((v, i) => {
         if (v.name == n) {
           tab.splice(i, 1);
-          switch (v.component) {
-            case "bsProductDetails":
-              state.activeTab = "/bsIndex/bsProductSearchIndex";
-              break;
-            case "bsSampleUpdata":
-              state.activeTab = "/bsIndex/bsSampleQuotation";
-              break;
-            case "bsSampleQuotationDetails":
-              state.activeTab = "/bsIndex/bsSampleQuotation";
-              break;
-            case "bsSampleOfferCommodity":
-              state.activeTab = "/bsIndex/bsSampleOfferCommodity";
-              break;
-            case "bsClientOrderDetails":
-              state.activeTab = "/bsIndex/bsCustomerOrder";
-              break;
-            case "bsMyClientsDetail":
-              state.activeTab = "/bsIndex/bsVendorQuery";
-              break;
-            default:
-              state.activeTab = tab[tab.length - 1].name;
+          console.log(tab.find(v => v.name == state.oldTabName));
+          if (tab.find(v => v.name == state.oldTabName)) {
+            state.activeTab = state.oldTabName;
+          } else {
+            state.activeTab = tab[tab.length - 1].name;
           }
         }
       });
@@ -297,9 +284,9 @@ export default new Vuex.Store({
       let tab = state.tabList;
       n["refresh"] || (n["refresh"] = true);
       let flag = true;
-      tab.find(v => v.name == n.name) || (tab.push(n), (flag = false));
+      const currentOptions = tab.find(v => v.name == n.name);
+      currentOptions || tab.push(n), (flag = false);
       state.activeTab = n.name;
-      state.lodUrl = n.name;
       flag && v.$common.refreshTab(n.name);
     },
     updateActiveTab(state, n) {

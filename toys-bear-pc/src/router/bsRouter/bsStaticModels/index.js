@@ -92,12 +92,8 @@ export default [
     name: "bsPurchaseOrderDetails",
     component: BsPurchaseOrderDetails
   },
-  // {
-  //   path: "/bsIndex",
-  //   redirect: "/bsIndex/bsHome"
-  // }
   {
     path: "/bsIndex",
-    redirect: "/bsIndex/bsProductSearchIndex"
+    redirect: "/bsIndex/bsHome"
   }
 ];
