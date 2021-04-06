@@ -81,7 +81,7 @@
 import bsColumnComponent from "@/components/bsComponents/bsProductSearchComponent/bsColumnComponent";
 import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/bsGridComponent";
 import { mapGetters } from "vuex";
-// import eventBus from "@/assets/js/common/eventBus";
+import eventBus from "@/assets/js/common/eventBus";
 export default {
   name: "bsSpotProducts",
   components: {
@@ -170,7 +170,46 @@ export default {
   created() {
     this.getProductsList();
   },
-  mounted() {},
+  mounted() {
+    // 取消收藏
+    eventBus.$on("resetProducts", list => {
+      if (list.length) {
+        for (let i = 0; i < this.tableData.length; i++) {
+          for (let j = 0; j < list.length; j++) {
+            if (this.tableData[i].productNumber == list[j].productNumber) {
+              this.tableData[i].isFavorite = true;
+              break;
+            } else {
+              this.tableData[i].isFavorite = false;
+            }
+          }
+        }
+      } else {
+        this.tableData.forEach(val => {
+          val.isFavorite = false;
+        });
+      }
+    });
+    // 删除购物车
+    eventBus.$on("resetMyCart", list => {
+      if (list.length) {
+        for (let i = 0; i < this.productList.length; i++) {
+          for (let j = 0; j < list.length; j++) {
+            if (this.productList[i].productNumber == list[j].productNumber) {
+              this.productList[i].isShopping = true;
+              break;
+            } else {
+              this.productList[i].isShopping = false;
+            }
+          }
+        }
+      } else {
+        this.productList.forEach(val => {
+          val.isShopping = false;
+        });
+      }
+    });
+  },
   computed: {
     ...mapGetters({
       shoppingList: "myShoppingList"

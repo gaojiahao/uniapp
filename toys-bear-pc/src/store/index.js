@@ -15,11 +15,11 @@ function myForEach(oList, yList) {
     }
   }
 }
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
     myColles: [],
     activeTab: "/bsIndex/bsHome",
-    lastUrl: "", //上一次点击的url
+    oldTabName: "/bsIndex/bsHome", //上一次点击的url
     showGlobalMsg: false,
     msgType: "primary",
     globalMsg: "",
@@ -61,6 +61,9 @@ export default new Vuex.Store({
     currentComparnyId: null
   },
   mutations: {
+    handlerOldTabName(state, payLoad) {
+      state.oldTabName = payLoad;
+    },
     // 添加收藏
     addMyCollec(state, payLoad) {
       console.log(payLoad);
@@ -69,7 +72,6 @@ export default new Vuex.Store({
     // 删除收藏
     removeMyCollec(state) {
       state.myColles.pop();
-      //修改上一次Url地址
     },
     updataUrl(state, payLoad) {
       state.lastUrl = payLoad;
@@ -144,7 +146,7 @@ export default new Vuex.Store({
       const key = state.userInfo.uid;
       if (state[key]) {
         payLoad.index = state[key].length + 1;
-        state[key].push(payLoad);
+        state[key].unshift(payLoad);
       } else {
         payLoad.index = 1;
         Vue.prototype.$set(state, key, [payLoad]);
@@ -251,43 +253,30 @@ export default new Vuex.Store({
     closeTabAll(state) {
       v.$set(state, "tabList", []);
       const fd = {
-        component: "bsProductSearchIndex",
-        label: "产品查询",
-        linkUrl: "/bsIndex/bsProductSearchIndex",
-        name: "/bsIndex/bsProductSearchIndex",
+        component: "bsHome",
+        label: "后台首页",
+        linkUrl: "/bsIndex/bsHome",
+        name: "/bsIndex/bsHome",
         refresh: true
       };
       state.tabList.push(fd);
-      state.activeTab = "/bsIndex/bsProductSearchIndex";
+      state.activeTab = "/bsIndex/bsHome";
     },
 
     //关闭tab页
     closeTab(state, n) {
       let tab = state.tabList;
-      tab.forEach((v, i) => {
-        if (v.name == n) {
+      tab.forEach((val, i) => {
+        if (val.name == n) {
           tab.splice(i, 1);
-          switch (v.component) {
-            case "bsProductDetails":
-              state.activeTab = "/bsIndex/bsProductSearchIndex";
-              break;
-            case "bsSampleUpdata":
-              state.activeTab = "/bsIndex/bsSampleQuotation";
-              break;
-            case "bsSampleQuotationDetails":
-              state.activeTab = "/bsIndex/bsSampleQuotation";
-              break;
-            case "bsSampleOfferCommodity":
-              state.activeTab = "/bsIndex/bsSampleOfferCommodity";
-              break;
-            case "bsClientOrderDetails":
-              state.activeTab = "/bsIndex/bsCustomerOrder";
-              break;
-            case "bsMyClientsDetail":
-              state.activeTab = "/bsIndex/bsVendorQuery";
-              break;
-            default:
-              state.activeTab = tab[tab.length - 1].name;
+          const currentOption = tab.find(va => va.name == state.oldTabName);
+          if (currentOption) {
+            state.activeTab = state.oldTabName;
+            console.log(currentOption);
+            router.push(currentOption.linkUrl);
+          } else {
+            state.activeTab = tab[tab.length - 1].name;
+            router.push(tab[tab.length - 1].linkUrl);
           }
         }
       });
@@ -297,22 +286,21 @@ export default new Vuex.Store({
       let tab = state.tabList;
       n["refresh"] || (n["refresh"] = true);
       let flag = true;
-      tab.find(v => v.name == n.name) || (tab.push(n), (flag = false));
-      state.activeTab = n.name;
-      state.lodUrl = n.name;
+      tab.find(val => val.name == val.name) || (tab.push(n), (flag = false));
       flag && v.$common.refreshTab(n.name);
+      this.commit("updateActiveTab", n);
     },
     updateActiveTab(state, n) {
-      state.activeTab = n;
+      state.activeTab = n.name;
       let flag = false;
       for (let i = 0; i < state.tabList.length; i++) {
-        if (state.tabList[i].linkUrl == n) {
+        if (state.tabList[i].name == n.name) {
           flag = true;
           break;
         }
       }
-      if (flag) {
-        router.push(n);
+      if (!flag) {
+        state.tabList.push(n);
       }
     }
   },
@@ -362,3 +350,5 @@ export default new Vuex.Store({
     })
   ]
 });
+
+export default store;

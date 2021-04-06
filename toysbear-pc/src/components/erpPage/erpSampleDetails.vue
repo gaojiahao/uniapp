@@ -33,7 +33,7 @@
           </div>
           <div class="item">
             <div class="title">厂商数量：</div>
-            {{ tableData | filterTableData }}
+            {{ option.supplierCount }}
           </div>
           <div class="item">
             <div class="title">是否导入：</div>

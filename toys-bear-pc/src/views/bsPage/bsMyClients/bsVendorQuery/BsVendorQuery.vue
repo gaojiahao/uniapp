@@ -186,6 +186,9 @@ export default {
 @deep: ~">>>";
 @{deep} .el-table {
   color: #666;
+  tr {
+    cursor: pointer;
+  }
   .nameBox {
     width: 300px;
     display: flex;

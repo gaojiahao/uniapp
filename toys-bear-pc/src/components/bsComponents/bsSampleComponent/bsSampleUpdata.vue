@@ -3,7 +3,10 @@
     <div class="title">
       <div class="left">报价详情</div>
     </div>
-    <bsSampleSearch :searchFormData="searchFormData"></bsSampleSearch>
+    <bsSampleSearch
+      ref="refSearchData"
+      :searchFormData="searchFormData"
+    ></bsSampleSearch>
     <div class="bsSampleTable">
       <div class="top">
         <div class="left">报价商品列表({{ this.offerProductList.length }})</div>
@@ -276,17 +279,32 @@ export default {
         });
       }
     },
-    //确定提交
-    openSub() {
-      console.log(this.offerProductList);
-      const fd = {
-        productNumbersList: null,
-        certificateNumber: null,
-        certificateName: null,
-        certificateAddres: null,
-        effectiveTime: null,
-        ertificateType: null
-      };
+    //确定提交数据
+    async openSub() {
+      let quotationProductList = [];
+      this.offerProductList.forEach(item => {
+        quotationProductList.push({
+          productNumber: item.productNumber,
+          boxNumber: item.boxNumber,
+          offerAmount: item.offerAmount
+        });
+      });
+      const fd = Object.assign({}, this.$refs.refSearchData.clienFormData);
+      fd.quotationProductList = quotationProductList;
+      console.log(fd.defaultFormula);
+      const res = await this.$http.post("/api/UpdateProductOffer", fd);
+      if (res.data.result.code === 200) {
+        this.$store.commit("updataOfferProductList", []);
+        this.$common.handlerMsgState({
+          msg: "提交成功",
+          type: "success"
+        });
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          error: "danger"
+        });
+      }
     },
     //确定删除
     async handleDelete(row) {
@@ -297,7 +315,7 @@ export default {
       if (res.data.result.code === 200) {
         this.$common.handlerMsgState({
           msg: "删除成功",
-          type: "danger"
+          type: "success"
         });
         this.getProductOfferDetailPage();
       } else {

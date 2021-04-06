@@ -424,7 +424,6 @@ export default {
     },
     // 图搜
     uploadPic(file) {
-      console.log(file);
       const isLt5M = file.size / 1024 / 1024 < 3;
       if (!isLt5M) {
         this.$common.handlerMsgState({
@@ -473,7 +472,6 @@ export default {
           if (res.data.result.code === 200) {
             this.$store.commit("searchValues", res.data.result.object);
             this.productList = res.data.result.object;
-            console.log(this.productList);
             this.totalCount = res.data.result.object.length;
             this.cropperCancel();
           } else {
@@ -665,7 +663,7 @@ export default {
     // 二级分类点击事件
     twoTagEvent(id) {
       this.currentTwoTag = id;
-      this.searchForm.categoryNumber = id;
+      this.searchForm.categoryNumber = id || this.oneCurrentTag.id;
     },
     // 展开一级分类
     handlerOneCateLabel() {
@@ -695,6 +693,44 @@ export default {
     eventBus.$on("openUpload", file => {
       this.uploadPic(file);
     });
+    // 取消收藏
+    eventBus.$on("resetProducts", list => {
+      if (list.length) {
+        for (let i = 0; i < this.productList.length; i++) {
+          for (let j = 0; j < list.length; j++) {
+            if (this.productList[i].productNumber == list[j].productNumber) {
+              this.productList[i].isFavorite = true;
+              break;
+            } else {
+              this.productList[i].isFavorite = false;
+            }
+          }
+        }
+      } else {
+        this.productList.forEach(val => {
+          val.isFavorite = false;
+        });
+      }
+    });
+    // 删除购物车
+    eventBus.$on("resetMyCart", list => {
+      if (list.length) {
+        for (let i = 0; i < this.productList.length; i++) {
+          for (let j = 0; j < list.length; j++) {
+            if (this.productList[i].productNumber == list[j].productNumber) {
+              this.productList[i].isShopping = true;
+              break;
+            } else {
+              this.productList[i].isShopping = false;
+            }
+          }
+        }
+      } else {
+        this.productList.forEach(val => {
+          val.isShopping = false;
+        });
+      }
+    });
   },
   computed: {
     ...mapGetters({
@@ -708,6 +744,11 @@ export default {
     shoppingList(list) {
       if (list) {
         this.getProductList();
+      }
+    },
+    "searchForm.time"(newVal) {
+      if (newVal == null) {
+        this.searchForm.time = [];
       }
     }
   },
