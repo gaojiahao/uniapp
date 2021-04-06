@@ -31,7 +31,13 @@
       </div>
     </div>
     <div class="noticeContent">
-      <waterfall :col="col" :data="findList" height="100%" @loadmore="loadmore">
+      <waterfall
+        :col="col"
+        ref="findListRef"
+        :data="findList"
+        height="100%"
+        @loadmore="loadmore"
+      >
         <template>
           <div
             class="cell-item-box"
@@ -368,6 +374,10 @@ export default {
     };
   },
   methods: {
+    scrollEvent(val) {
+      console.log(val);
+      val.scrollTop = 0;
+    },
     // 查看我的公告
     searchMyNotice() {
       this.noticeType = null;
@@ -414,6 +424,7 @@ export default {
     },
     // 根据类型搜索公告
     searchNotice(type) {
+      this.$refs.findListRef.$el.scrollTop = 0;
       this.currentPage = 1;
       this.noticeType = type;
       this.publisher = null;
