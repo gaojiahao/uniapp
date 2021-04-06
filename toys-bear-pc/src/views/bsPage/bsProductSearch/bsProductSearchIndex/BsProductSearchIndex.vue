@@ -707,6 +707,11 @@ export default {
       if (list) {
         this.getProductList();
       }
+    },
+    "searchForm.time"(newVal) {
+      if (newVal == null) {
+        this.searchForm.time = [];
+      }
     }
   },
   beforeDestroy() {
