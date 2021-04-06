@@ -94,6 +94,14 @@ export default {
   methods: {
     // 去查看我的消息
     toMyInfo() {
+      const fd = {
+        name: "/bsIndex/bsNews",
+        linkUrl: "/bsIndex/bsNews",
+        component: "bsNews",
+        refresh: true,
+        label: "消息"
+      };
+      this.$store.commit("myAddTab", fd);
       this.$router.push("/bsIndex/bsNews");
     },
     // QQ客服
@@ -117,14 +125,14 @@ export default {
     },
     // 账号设置
     toSetUser() {
-      // const fd = {
-      //   name: "/bsIndex/bsAccountManage",
-      //   linkUrl: "/bsIndex/bsAccountManage",
-      //   component: "bsAccountManage",
-      //   refresh: true,
-      //   label: "账号管理"
-      // };
-      // this.$store.commit("myAddTab", fd);
+      const fd = {
+        name: "/bsIndex/bsAccountManage",
+        linkUrl: "/bsIndex/bsAccountManage",
+        component: "bsAccountManage",
+        refresh: true,
+        label: "账号管理"
+      };
+      this.$store.commit("myAddTab", fd);
       this.$router.push("/bsIndex/bsAccountManage");
     },
     // 打开切换角色

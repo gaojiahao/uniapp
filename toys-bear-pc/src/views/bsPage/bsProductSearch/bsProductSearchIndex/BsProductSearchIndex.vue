@@ -665,7 +665,7 @@ export default {
     // 二级分类点击事件
     twoTagEvent(id) {
       this.currentTwoTag = id;
-      this.searchForm.categoryNumber = id;
+      this.searchForm.categoryNumber = id || this.oneCurrentTag.id;
     },
     // 展开一级分类
     handlerOneCateLabel() {
