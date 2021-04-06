@@ -11,13 +11,13 @@
         :cell-style="{ padding: 0, margin: 0 }"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
-        <ex-table-column
+        <el-table-column
           :autoFit="true"
           width="30"
           lable="选择"
           type="selection"
-        ></ex-table-column>
-        <ex-table-column :autoFit="true" label="产品" width="300">
+        ></el-table-column>
+        <el-table-column :autoFit="true" label="产品" width="300">
           <template slot-scope="scope">
             <div class="imgBox">
               <el-image
@@ -26,19 +26,30 @@
                 :src="scope.row.img"
                 :preview-src-list="scope.row.imgUrlList"
               >
-                <div slot="placeholder" class="errorImg">
+                <div
+                  slot="placeholder"
+                  class="errorImg"
+                  @click="goDetails(scope.row)"
+                >
                   <img src="~@/assets/images/imgError.png" alt />
                 </div>
-                <div slot="error" class="errorImg">
+                <div
+                  slot="error"
+                  class="errorImg"
+                  @click="goDetails(scope.row)"
+                >
                   <img src="~@/assets/images/imgError.png" alt />
                 </div>
               </el-image>
               <div class="productName">
-                <div class="name">
+                <div class="name" @click="goDetails(scope.row)">
                   {{ scope.row.name }}
                 </div>
                 <div class="factory">
-                  <div class="fcatoryName">
+                  <div
+                    class="fcatoryName"
+                    @click="goManufacturerDetails(scope.row)"
+                  >
                     {{ scope.row.supplierName }}
                   </div>
                   <div class="icons">
@@ -56,21 +67,21 @@
               </div>
             </div>
           </template>
-        </ex-table-column>
-        <ex-table-column :autoFit="true" label="资料来源">
+        </el-table-column>
+        <el-table-column :autoFit="true" label="资料来源">
           <template slot-scope="scope">
             {{ scope.row.exhibitionName }}
           </template>
-        </ex-table-column>
-        <ex-table-column
+        </el-table-column>
+        <el-table-column
           min-width="100"
           :autoFit="true"
           prop="fa_no"
           label="出厂货号"
-        ></ex-table-column>
-        <ex-table-column :autoFit="true" prop="ch_pa" label="包装">
-        </ex-table-column>
-        <ex-table-column :autoFit="true" label="产品规格" min-width="100">
+        ></el-table-column>
+        <el-table-column :autoFit="true" prop="ch_pa" label="包装">
+        </el-table-column>
+        <el-table-column :autoFit="true" label="产品规格" min-width="100">
           <template slot-scope="scope">
             <span>
               {{ scope.row.pr_le }}x{{ scope.row.pr_wi }}x{{
@@ -78,8 +89,8 @@
               }}(cm)
             </span>
           </template>
-        </ex-table-column>
-        <ex-table-column :autoFit="true" label="包装规格" min-width="100">
+        </el-table-column>
+        <el-table-column :autoFit="true" label="包装规格" min-width="100">
           <template slot-scope="scope">
             <span>
               {{ scope.row.in_le }}x{{ scope.row.in_wi }}x{{
@@ -87,8 +98,8 @@
               }}(cm)
             </span>
           </template>
-        </ex-table-column>
-        <ex-table-column :autoFit="true" label="外箱规格" min-width="100">
+        </el-table-column>
+        <el-table-column :autoFit="true" label="外箱规格" min-width="100">
           <template slot-scope="scope">
             <span>
               {{ scope.row.ou_le }}x{{ scope.row.ou_wi }}x{{
@@ -96,25 +107,25 @@
               }}(cm)
             </span>
           </template>
-        </ex-table-column>
-        <ex-table-column :autoFit="true" label="体积/材积" min-width="150">
+        </el-table-column>
+        <el-table-column :autoFit="true" label="体积/材积" min-width="150">
           <template slot-scope="scope">
             <span>
               {{ scope.row.bulk_stere }}(cbm)/{{ scope.row.bulk_feet }}(cuft)
             </span>
           </template>
-        </ex-table-column>
-        <ex-table-column :autoFit="true" label="毛重/净重">
+        </el-table-column>
+        <el-table-column :autoFit="true" label="毛重/净重">
           <template slot-scope="scope">
             <span> {{ scope.row.gr_we }}/{{ scope.row.ne_we }}(kg) </span>
           </template>
-        </ex-table-column>
-        <ex-table-column :autoFit="true" label="装箱量">
+        </el-table-column>
+        <el-table-column :autoFit="true" label="装箱量">
           <template slot-scope="scope">
             <span> {{ scope.row.in_en }}/{{ scope.row.ou_lo }}(pcs) </span>
           </template>
-        </ex-table-column>
-        <ex-table-column :autoFit="true" label="箱量">
+        </el-table-column>
+        <el-table-column :autoFit="true" label="箱量">
           <template slot-scope="scope">
             <input
               class="inputNumber"
@@ -125,15 +136,15 @@
               v-model="scope.row.shoppingCount"
             />
           </template>
-        </ex-table-column>
-        <ex-table-column :autoFit="true" prop="price" label="单价">
+        </el-table-column>
+        <el-table-column :autoFit="true" prop="price" label="单价">
           <template slot-scope="scope">
             <span style="color:#f56c6c">
               {{ scope.row.cu_de + scope.row.price }}
             </span>
           </template>
-        </ex-table-column>
-        <ex-table-column :autoFit="true" width="100" label="总价">
+        </el-table-column>
+        <el-table-column :autoFit="true" width="100" label="总价">
           <template slot-scope="scope">
             <p class="item price">
               <span>{{ scope.row.cu_de }}</span>
@@ -148,7 +159,7 @@
               </span>
             </p>
           </template>
-        </ex-table-column>
+        </el-table-column>
       </el-table>
       <div class="totalBox">
         <div class="left">
@@ -768,7 +779,6 @@ export default {
     // 搜索客户
     filterMethod(val) {
       this.clientKeyword = val;
-      console.log(this.clientKeyword);
       if (this.timer) {
         // 如果存在延时器就清除
         clearTimeout(this.timer);
@@ -785,6 +795,36 @@ export default {
         }
       }
     },
+    // 点击产品名字跳转
+    goDetails(row) {
+      const fd = {
+        name: row.productNumber,
+        linkUrl: "/bsIndex/bsProductDetails",
+        component: "bsProductDetails",
+        refresh: true,
+        label: row.fa_no || "产品详情",
+        value: row
+      };
+      this.$router.push("/bsIndex/bsProductDetails");
+      this.$store.commit("myAddTab", fd);
+    },
+    //厂商跳转
+    goManufacturerDetails(row) {
+      //跳转的数据不对
+      console.log(row, "跳转");
+      // const fd = {
+      //   name: row.supplierName,
+      //   linkUrl: "/bsIndex/bsMyClientsDetail",
+      //   component: "bsMyClientsDetail",
+      //   refresh: true,
+      //   noPush: true,
+      //   label: row.supplierName,
+      //   value: row
+      // };
+      // this.$router.push("/bsIndex/bsMyClientsDetail");
+      // this.$store.commit("myAddTab", fd);
+    },
+
     // 提交新增客户
     subMyClient() {
       this.$refs.addMyClientRef.validate(async valid => {
@@ -856,7 +896,6 @@ export default {
     },
     // 修改购物车数量
     changeInputNumber(e, val) {
-      console.log(e, val);
       const re = /^[0-9]+.?[0-9]*/;
       if (!re.test(e.target.value)) {
         e.target.value = 0;
@@ -882,7 +921,6 @@ export default {
     },
     // table勾选发生变化事件
     selectionChange(selection) {
-      console.log(selection);
       if (selection.length) {
         if (selection.length === this.shoppingList.length) {
           this.isIndeterminate = false;
@@ -958,7 +996,6 @@ export default {
             "/api/CreateProductOffer",
             this.clienFormData
           );
-          console.log(res);
           const { code, msg } = res.data.result;
           if (code === 200) {
             this.$common.handlerMsgState({
@@ -1042,6 +1079,7 @@ export default {
       }
     }
   },
+
   created() {
     this.getSelectProductOfferFormulaList();
     this.getSelectCompanyOffer();
@@ -1205,6 +1243,7 @@ export default {
           }
           .name {
             margin-top: 8px;
+            cursor: pointer;
           }
         }
       }
@@ -1240,6 +1279,7 @@ export default {
       img {
         width: 80px;
         height: 60px;
+        cursor: pointer;
       }
     }
   }
