@@ -343,7 +343,7 @@ export default {
         if (valid) {
           const res = await this.$http.post("/api/Authenticate", {
             userAccountOrUserMobile: this.loginForm.PhoneNumber,
-            platForm: "HSERP",
+            platForm: "PC",
             loginType: "VerificationCode",
             VerificationCode: this.loginForm.identifyCode
           });
