@@ -152,9 +152,9 @@ export default {
     // 添加报价
     handlerShopping(item) {
       item.isShopping = !item.isShopping;
-      console.log(item.isShopping);
       if (item.isShopping) {
         item.shoppingCount = 1;
+        item.boxNumber = 1; //默认传一箱过去，不然总金额计算错误
         this.$store.commit("pushOfferProductList", item);
         this.$common.handlerMsgState({
           msg: "添加报价商品成功",

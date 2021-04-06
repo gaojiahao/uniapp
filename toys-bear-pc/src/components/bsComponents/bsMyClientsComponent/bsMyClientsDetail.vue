@@ -56,12 +56,12 @@
             <el-input
               type="text"
               size="medium"
-              v-model="keywordAll"
+              v-model="KeyWord"
               placeholder="请输入关键词"
               @keyup.native.enter="search"
             ></el-input>
           </div>
-          <div class="item">
+          <!-- <div class="item">
             <span class="label">所在展厅：</span>
             <el-select v-model="messageExt" clearable placeholder="请选择">
               <el-option
@@ -72,7 +72,7 @@
               >
               </el-option>
             </el-select>
-          </div>
+          </div> -->
           <div class="item">
             <el-button
               @click="search"
@@ -172,6 +172,7 @@ export default {
       isRedu: null,
       sortOrder: null,
       sortType: null,
+      KeyWord: null,
       keywordAll: null,
       isGrid: "bsGridComponent",
       currentPage: 1,
@@ -199,7 +200,6 @@ export default {
       const fd = {
         PageIndex: this.currentPage,
         PageSize: this.pageSize,
-        CompanyNumber: this.item.companyNumber,
         KeyWord: this.KeyWord
       };
       for (const key in fd) {
