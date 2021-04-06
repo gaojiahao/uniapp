@@ -349,21 +349,16 @@ export default {
           });
           if (res.data.result.isLogin) {
             this.$store.commit("setToken", res.data.result);
-            this.$store.commit("handlerLogin", true);
-            await this.waitTime(1);
-            this.$router.push("/erpOrder");
-            // if (res.data.result.commparnyList.length === 1) {
-            //   // 一个角色
-            //   this.$router.push("/erpOrder");
-            // } else if (res.data.result.commparnyList.length > 1) {
-            //   // 多个角色
-            //   this.$router.push({
-            //     path: "/erpRoleSelect",
-            //     query: {
-            //       id: res.data.result.userInfo.id
-            //     }
-            //   });
-            // }
+            if (res.data.result.commparnyList.length === 1) {
+              this.$store.commit("handlerLogin", true);
+              // 一个角色
+              this.$router.push("/erpOrder");
+            } else if (res.data.result.commparnyList.length > 1) {
+              // 多个角色
+              this.$router.push({
+                path: "/erpLoginConfirm"
+              });
+            }
           } else {
             this.$message.error(res.data.result.message);
           }
