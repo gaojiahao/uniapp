@@ -219,31 +219,6 @@ export default {
     },
     // 关闭标签
     closeTab(e) {
-      for (let i = 0; i < this.tabList.length; i++) {
-        if (this.tabList[i].name == e) {
-          switch (this.tabList[i].component) {
-            case "bsProductDetails":
-              this.$router.push("/bsIndex/bsProductSearchIndex");
-              break;
-            case "bsSampleUpdata":
-              this.$router.push("/bsIndex/bsSampleQuotation");
-              break;
-            case "bsSampleQuotationDetails":
-              this.$router.push("/bsIndex/bsSampleQuotation");
-              break;
-            case "bsSampleOfferCommodity":
-              this.$router.push("/bsIndex/bsSampleOfferCommodity");
-              break;
-            case "bsClientOrderDetails":
-              this.$router.push("/bsIndex/bsCustomerOrder");
-              break;
-            case "bsMyClientsDetail":
-              this.$router.push("/bsIndex/bsVendorQuery");
-              break;
-          }
-          break;
-        }
-      }
       let len = this.tabList.length;
       len > 1 && this.$store.commit("closeTab", e);
     },
@@ -287,6 +262,11 @@ export default {
       }
     },
     ...mapState(["tabList"])
+  },
+  watch: {
+    activeTab(newN, oldN) {
+      this.$store.commit("handlerOldTabName", oldN);
+    }
   },
   created() {},
   mounted() {
