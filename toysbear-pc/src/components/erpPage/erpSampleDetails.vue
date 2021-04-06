@@ -331,7 +331,8 @@ export default {
     },
     handleSizeChange(pages) {
       this.pageSize = pages;
-      if (this.currentPage * pages > this.totalCount) return;
+      if (this.currentPage * pages > this.totalCount && this.currentPage != 1)
+        return;
       this.getOrderDetail();
     }
   },
