@@ -5,7 +5,8 @@
       <el-input
         size="medium"
         @keyup.native.enter="searchProducts"
-        style="width: 340px; margin: 0 15px;"
+        style=" width: 340px;
+      margin: 0 15px;"
         placeholder="请输入关键词"
         v-model="searchForm.keyword"
         clearable
@@ -20,10 +21,11 @@
             :show-file-list="false"
             :on-change="openUpload"
           >
-            <i
+            <i class="iconXj"></i>
+            <!-- <i
               style="font-size: 20px;"
               class="el-input__icon el-icon-camera-solid"
-            ></i>
+            ></i> -->
           </el-upload>
         </template>
       </el-input>
@@ -97,6 +99,17 @@ export default {
     flex: 1;
     display: flex;
     align-items: center;
+  }
+  .upload-demo {
+    margin-top: 7px;
+  }
+  .iconXj {
+    display: inline-block;
+    vertical-align: bottom;
+    width: 20px;
+    height: 20px;
+    background: url("~@/assets/images/xiangji.png") no-repeat center;
+    background-size: contain;
   }
   .whiteCart {
     display: inline-block;

@@ -176,7 +176,14 @@
               <span> {{ scope.row.in_en }}/{{ scope.row.ou_lo }}(pcs) </span>
             </template>
           </el-table-column>
-          <el-table-column label="箱数" align="center" width="100">
+          <el-table-column
+            prop="boxNumber"
+            label="箱数"
+            align="center"
+            width="100"
+          >
+          </el-table-column>
+          <!-- <el-table-column label="箱数" align="center" width="100">
             <template slot-scope="scope">
               <input
                 class="inputNumber"
@@ -187,7 +194,7 @@
                 v-model="scope.row.boxNumber"
               />
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             prop="ch_pa"
             label="总数量"
