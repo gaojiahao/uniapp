@@ -490,6 +490,7 @@ export default {
   height: 100%;
 }
 .left_contaner .middle_img {
+  overflow: hidden;
   border: 1px solid #dcdfe6;
   box-sizing: border-box;
   border-radius: 4px;
@@ -514,8 +515,8 @@ export default {
   cursor: move;
 }
 .left_contaner .middle_img img {
-  /* width: 100%;
-  height: 100%; */
+  width: 524px;
+  height: 393px;
   object-fit: contain;
   image-rendering: -moz-crisp-edges;
   image-rendering: -o-crisp-edges;

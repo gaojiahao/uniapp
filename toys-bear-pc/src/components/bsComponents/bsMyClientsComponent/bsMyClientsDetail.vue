@@ -51,52 +51,10 @@
     <div class="tableBox">
       <div class="screenBox">
         <div class="left" v-if="isDiyu === 0">
-          <div class="item">
-            <span class="label">关键字：</span>
-            <el-input
-              type="text"
-              size="medium"
-              v-model="KeyWord"
-              placeholder="请输入关键词"
-              @keyup.native.enter="search"
-            ></el-input>
-          </div>
-          <!-- <div class="item">
-            <span class="label">所在展厅：</span>
-            <el-select v-model="messageExt" clearable placeholder="请选择">
-              <el-option
-                v-for="(item, i) in typesList"
-                :key="i"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </div> -->
-          <div class="item">
-            <el-button
-              @click="search"
-              type="primary"
-              icon="el-icon-search"
-              size="medium"
-            >
-              搜索
-            </el-button>
-          </div>
-        </div>
-        <div class="left" v-if="isDiyu === 1">
           <div class="screenItem" @click="sortTypeEvent(null)">
             <span :class="{ screenLabel: true, active: sortOrder === null }"
               >综合</span
             >
-          </div>
-          <div class="screenItem" @click="sortTypeEvent(3)">
-            <span :class="{ screenLabel: true, active: sortOrder === 3 }"
-              >推荐</span
-            >
-            <i v-show="isRedu === null" class="jiantou xiajiantouIcon"></i>
-            <i v-show="isRedu === 1" class="jiantou xiaActiveIcon"></i>
-            <i v-show="isRedu === 2" class="jiantou shangActiveIcon"></i>
           </div>
           <div class="screenItem" @click="sortTypeEvent(1)">
             <span :class="{ screenLabel: true, active: sortOrder === 1 }"
@@ -114,7 +72,51 @@
             <i v-show="isTime === 1" class="jiantou xiaActiveIcon"></i>
             <i v-show="isTime === 2" class="jiantou shangActiveIcon"></i>
           </div>
-          <div class="item" style="margin-left:30px">
+          <div class="item">
+            <span class="label">关键词搜索:</span>
+            <el-input
+              type="text"
+              size="medium"
+              v-model="KeyWord"
+              placeholder="请输入关键词"
+              @keyup.native.enter="search"
+            ></el-input>
+          </div>
+
+          <div class="item">
+            <el-button
+              @click="search"
+              type="primary"
+              icon="el-icon-search"
+              size="medium"
+            >
+              搜索
+            </el-button>
+          </div>
+        </div>
+        <div class="left" v-if="isDiyu === 1">
+          <div class="screenItem" @click="sortTypeEvent(null)">
+            <span :class="{ screenLabel: true, active: sortOrder === null }"
+              >综合</span
+            >
+          </div>
+          <div class="screenItem" @click="sortTypeEvent(1)">
+            <span :class="{ screenLabel: true, active: sortOrder === 1 }"
+              >单价</span
+            >
+            <i v-show="isPrice === null" class="jiantou xiajiantouIcon"></i>
+            <i v-show="isPrice === 1" class="jiantou xiaActiveIcon"></i>
+            <i v-show="isPrice === 2" class="jiantou shangActiveIcon"></i>
+          </div>
+          <div class="screenItem" @click="sortTypeEvent(2)">
+            <span :class="{ screenLabel: true, active: sortOrder === 2 }">
+              时间
+            </span>
+            <i v-show="isTime === null" class="jiantou xiajiantouIcon"></i>
+            <i v-show="isTime === 1" class="jiantou xiaActiveIcon"></i>
+            <i v-show="isTime === 2" class="jiantou shangActiveIcon"></i>
+          </div>
+          <div class="item">
             <span class="label">关键词搜索:</span>
             <el-input
               type="text"
@@ -125,7 +127,12 @@
             ></el-input>
           </div>
           <div class="item">
-            <el-button @click="searchEcommend" type="primary" size="medium">
+            <el-button
+              @click="searchEcommend"
+              type="primary"
+              size="medium"
+              icon="el-icon-search"
+            >
               搜索
             </el-button>
           </div>

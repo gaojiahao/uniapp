@@ -1,6 +1,6 @@
 <template>
-  <div class="bsGridItem" @click="toProductDetails">
-    <div class="itemImg">
+  <div class="bsGridItem">
+    <div class="itemImg" @click="toProductDetails">
       <el-image
         style="width:222px;height:166px;"
         fit="contain"

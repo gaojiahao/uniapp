@@ -186,8 +186,10 @@ export default {
 @deep: ~">>>";
 @{deep} .el-table {
   color: #666;
-  .nameBox {
+  tr {
     cursor: pointer;
+  }
+  .nameBox {
     width: 300px;
     display: flex;
     align-items: center;
