@@ -15,7 +15,7 @@ function myForEach(oList, yList) {
     }
   }
 }
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
     myColles: [],
     activeTab: "/bsIndex/bsHome",
@@ -272,6 +272,8 @@ export default new Vuex.Store({
           const currentOption = tab.find(va => va.name == state.oldTabName);
           if (currentOption) {
             state.activeTab = state.oldTabName;
+            console.log(currentOption);
+            router.push(currentOption.linkUrl);
           } else {
             state.activeTab = tab[tab.length - 1].name;
             router.push(tab[tab.length - 1].linkUrl);
@@ -284,22 +286,21 @@ export default new Vuex.Store({
       let tab = state.tabList;
       n["refresh"] || (n["refresh"] = true);
       let flag = true;
-      const currentOptions = tab.find(v => v.name == n.name);
-      currentOptions || tab.push(n), (flag = false);
-      state.activeTab = n.name;
+      tab.find(val => val.name == val.name) || (tab.push(n), (flag = false));
       flag && v.$common.refreshTab(n.name);
+      this.commit("updateActiveTab", n);
     },
     updateActiveTab(state, n) {
-      state.activeTab = n;
+      state.activeTab = n.name;
       let flag = false;
       for (let i = 0; i < state.tabList.length; i++) {
-        if (state.tabList[i].linkUrl == n) {
+        if (state.tabList[i].name == n.name) {
           flag = true;
           break;
         }
       }
-      if (flag) {
-        router.push(n);
+      if (!flag) {
+        state.tabList.push(n);
       }
     }
   },
@@ -349,3 +350,5 @@ export default new Vuex.Store({
     })
   ]
 });
+
+export default store;
