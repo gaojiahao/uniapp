@@ -149,6 +149,7 @@ export default {
         });
       }
       this.$forceUpdate();
+      eventBus.$emit("resetMyShoppingCart");
     }
   },
   created() {},

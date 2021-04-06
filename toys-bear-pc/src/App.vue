@@ -5,7 +5,7 @@
     element-loading-spinner
     element-loading-background="rgba(200, 200, 200, 0.5)"
   >
-    <transition name="el-zoom-in-center">
+    <transition name="el-zoom-in-top">
       <message-component
         id="myGlobalMsg"
         :type="msgType"

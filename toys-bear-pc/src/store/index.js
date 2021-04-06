@@ -146,7 +146,7 @@ export default new Vuex.Store({
       const key = state.userInfo.uid;
       if (state[key]) {
         payLoad.index = state[key].length + 1;
-        state[key].push(payLoad);
+        state[key].unshift(payLoad);
       } else {
         payLoad.index = 1;
         Vue.prototype.$set(state, key, [payLoad]);

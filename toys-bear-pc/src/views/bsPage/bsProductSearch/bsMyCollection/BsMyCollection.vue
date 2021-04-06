@@ -205,7 +205,8 @@ export default {
           msg: "取消收藏成功",
           type: "success"
         });
-        this.getCollectList();
+        await this.getCollectList();
+        eventBus.$emit("resetProducts", this.tableData);
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,

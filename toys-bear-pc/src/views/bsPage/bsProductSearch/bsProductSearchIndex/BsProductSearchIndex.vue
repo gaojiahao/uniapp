@@ -693,6 +693,44 @@ export default {
     eventBus.$on("openUpload", file => {
       this.uploadPic(file);
     });
+    // 取消收藏
+    eventBus.$on("resetProducts", list => {
+      if (list.length) {
+        for (let i = 0; i < this.productList.length; i++) {
+          for (let j = 0; j < list.length; j++) {
+            if (this.productList[i].productNumber == list[j].productNumber) {
+              this.productList[i].isFavorite = true;
+              break;
+            } else {
+              this.productList[i].isFavorite = false;
+            }
+          }
+        }
+      } else {
+        this.productList.forEach(val => {
+          val.isFavorite = false;
+        });
+      }
+    });
+    // 删除购物车
+    eventBus.$on("resetMyCart", list => {
+      if (list.length) {
+        for (let i = 0; i < this.productList.length; i++) {
+          for (let j = 0; j < list.length; j++) {
+            if (this.productList[i].productNumber == list[j].productNumber) {
+              this.productList[i].isShopping = true;
+              break;
+            } else {
+              this.productList[i].isShopping = false;
+            }
+          }
+        }
+      } else {
+        this.productList.forEach(val => {
+          val.isShopping = false;
+        });
+      }
+    });
   },
   computed: {
     ...mapGetters({

@@ -475,6 +475,7 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
+import eventBus from "@/assets/js/common/eventBus";
 export default {
   name: "bsShoppingCart",
   data() {
@@ -892,6 +893,8 @@ export default {
         msg: "删除成功",
         type: "success"
       });
+      console.log(this.tableData);
+      eventBus.$emit("resetMyCart", this.tableData);
       this.$store.commit("resetShoppingCart", selectProducts);
     },
     // 修改购物车数量
@@ -1091,6 +1094,11 @@ export default {
       : [];
     this.$nextTick(() => {
       this.$refs.myTableRef.toggleAllSelection();
+    });
+    eventBus.$on("resetMyShoppingCart", () => {
+      this.tableData = this.shoppingList
+        ? JSON.parse(JSON.stringify(this.shoppingList))
+        : [];
     });
   },
   computed: {
