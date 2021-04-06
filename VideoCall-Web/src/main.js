@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\main.js
- * @LastEditTime: 2021-04-06 09:35:30
+ * @LastEditTime: 2021-04-06 17:14:59
  * @LastEditors: sueRimn
  * @Descripttion:
  * @version: 1.0.0

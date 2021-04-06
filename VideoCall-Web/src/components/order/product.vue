@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:37:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\product.vue
- * @LastEditTime: 2021-04-06 12:05:37
+ * @LastEditTime: 2021-04-06 17:17:18
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -30,7 +30,7 @@
         </div>
         <!-- 择样单号 -->
         <div class="select_order" v-if="flag=='order'">
-            <Table :columns="columns1" :data="data1" height="280"></Table>
+            <Table :columns="columns1" :data="data1" height="330"></Table>
             <div class="select_order_info">
                 <Row>
                     <Col span="8">
@@ -122,11 +122,18 @@
                 </Col>
             </Row>
         </div>
+        <!-- 产品详情页 -->
+        <ModalProductDetail @show-modal-detail="showModalDetail" :showModal="showModal"></ModalProductDetail>
     </div>
 </template>
 <script>
+import ModalProductDetail from "@components/order/modalProductDetail";
+
 export default {
     name:'Product',
+    components:{
+        ModalProductDetail
+    },
     props:{
         tab_select:{
             type: String,
@@ -153,6 +160,11 @@ export default {
                             },
                             domProps: {
                                 title: params.row.name
+                            },
+                            on:{
+                                click:()=>{// 这里给了他一个打印事件，下面有展示图
+                                    this.showModalDetail(true,params.row.name)    
+                                }
                             }
                         }, params.row.name)
                         ])
@@ -254,6 +266,7 @@ export default {
             test: require("@assets/bg/test.jpg"),
             isProductList:false,
             flag:'order',
+            showModal:false,
         }
     },
     watch:{
@@ -276,7 +289,15 @@ export default {
         },
         changeProductList(){
             this.$emit('change-product-list');
-        }
+        },
+        getDetail(id){
+
+        },
+        showModalDetail(value,id){
+            this.showModal = value;
+            if(value)
+                this.getDetail(id);   
+        },
     }
 }
 </script>
