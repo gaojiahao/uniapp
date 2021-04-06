@@ -41,6 +41,7 @@
         :data="tableData"
         style="width: 100%"
         ref="collecTable"
+        @row-click="handleDetail"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
         <el-table-column prop="img" label="产品" width="300">
@@ -211,6 +212,19 @@ export default {
           type: "danger"
         });
       }
+    },
+    //点击跳转详情
+    async handleDetail(e) {
+      const fd = {
+        name: e.productNumber,
+        linkUrl: "/bsIndex/bsProductDetails",
+        component: "bsProductDetails",
+        refresh: true,
+        label: e.fa_no || "产品详情",
+        value: e
+      };
+      this.$router.push("/bsIndex/bsProductDetails");
+      this.$store.commit("myAddTab", fd);
     },
     // 切換頁容量
     handleSizeChange(pageSize) {

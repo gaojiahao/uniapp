@@ -279,14 +279,14 @@ export default {
     //确定提交
     openSub() {
       console.log(this.offerProductList);
-      const fd = {
-        productNumbersList: null,
-        certificateNumber: null,
-        certificateName: null,
-        certificateAddres: null,
-        effectiveTime: null,
-        ertificateType: null
-      };
+      // const fd = {
+      //   productNumbersList: null,
+      //   certificateNumber: null,
+      //   certificateName: null,
+      //   certificateAddres: null,
+      //   effectiveTime: null,
+      //   ertificateType: null
+      // };
     },
     //确定删除
     async handleDelete(row) {

@@ -187,6 +187,7 @@ export default {
 @{deep} .el-table {
   color: #666;
   .nameBox {
+    cursor: pointer;
     width: 300px;
     display: flex;
     align-items: center;

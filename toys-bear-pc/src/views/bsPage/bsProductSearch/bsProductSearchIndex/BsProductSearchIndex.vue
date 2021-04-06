@@ -424,7 +424,6 @@ export default {
     },
     // 图搜
     uploadPic(file) {
-      console.log(file);
       const isLt5M = file.size / 1024 / 1024 < 3;
       if (!isLt5M) {
         this.$common.handlerMsgState({
@@ -473,7 +472,6 @@ export default {
           if (res.data.result.code === 200) {
             this.$store.commit("searchValues", res.data.result.object);
             this.productList = res.data.result.object;
-            console.log(this.productList);
             this.totalCount = res.data.result.object.length;
             this.cropperCancel();
           } else {
