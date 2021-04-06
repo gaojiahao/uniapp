@@ -142,15 +142,10 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="unitPrice"
-            label="单价"
-            align="center"
-            width="100"
-          >
+          <el-table-column prop="price" label="单价" align="center" width="100">
             <template slot-scope="scope">
               <span style="color:#f56c6c">
-                {{ scope.row.cu_de + scope.row.unitPrice }}
+                {{ scope.row.cu_de + scope.row.price }}
               </span>
             </template>
           </el-table-column>
@@ -161,7 +156,7 @@
                 <span>
                   {{
                     priceCount(
-                      scope.row.unitPrice,
+                      scope.row.price,
                       scope.row.ou_lo,
                       scope.row.boxNumber
                     )
@@ -282,7 +277,17 @@ export default {
       }
     },
     //确定提交
-    openSub() {},
+    openSub() {
+      console.log(this.offerProductList);
+      const fd = {
+        productNumbersList: null,
+        certificateNumber: null,
+        certificateName: null,
+        certificateAddres: null,
+        effectiveTime: null,
+        ertificateType: null
+      };
+    },
     //确定删除
     async handleDelete(row) {
       console.log(row.id);
@@ -411,8 +416,8 @@ export default {
       return this.multiply(boxNumber, ou_lo);
     },
     // 单个产品总价
-    priceCount(unitPrice, ou_lo, boxNumber) {
-      return this.multiply(this.multiply(unitPrice, ou_lo), boxNumber);
+    priceCount(price, ou_lo, boxNumber) {
+      return this.multiply(this.multiply(price, ou_lo), boxNumber);
     },
     // 计算总体积材积
     myTotalVolume(list) {
@@ -477,7 +482,7 @@ export default {
         price = this.add(
           price,
           this.multiply(
-            this.multiply(list[i].unitPrice, list[i].boxNumber),
+            this.multiply(list[i].price, list[i].boxNumber),
             list[i].ou_lo
           )
         );

@@ -26,7 +26,7 @@
           <div class="shouyeBox" @click="resetSample">
             <i class="mySampleIcon"></i>
             <span class="sampleText">
-              {{ myOrderSample }}
+              我的订单
             </span>
           </div>
           <!-- <div class="loginBtn" @click="toLogins">登录系统</div> -->
@@ -56,6 +56,7 @@
           :inline="true"
           label-position="right"
           label-width="100px"
+          size="small"
           :model="searchFD"
           class="demo-form-inline"
         >
@@ -151,7 +152,6 @@
                 <!-- type="daterange" -->
                 <el-date-picker
                   v-model="dateTile"
-                  style="max-width: 217px;"
                   value-format="yyyy-MM-ddTHH:mm:ss"
                   :picker-options="pickerOptions"
                   type="daterange"
@@ -163,7 +163,13 @@
               </el-form-item>
             </div>
             <div class="itemBox">
-              <el-button type="primary" @click="search">搜索</el-button>
+              <el-button
+                type="primary"
+                class="searchBtn"
+                size="small"
+                @click="search"
+                >搜索</el-button
+              >
             </div>
           </div>
         </el-form>
@@ -190,7 +196,7 @@
             </el-table-column>
             <el-table-column prop="hall_na" label="订单来源" align="center">
               <template slot-scope="scope">
-                {{ scope.row.hall_na || "—" }}
+                {{ scope.row.hall_na || "--" }}
               </template>
             </el-table-column>
             <el-table-column prop="orderType" label="订单类型" align="center">
@@ -202,33 +208,37 @@
                     ? "找样"
                     : scope.row.orderType == "ShareOrder"
                     ? "客户订单"
-                    : "—"
+                    : "--"
                 }}
               </template>
             </el-table-column>
             <el-table-column prop="toCompanyName" label="客户" align="center">
               <template slot-scope="scope">
-                {{ scope.row.toCompanyName || "—" }}
+                {{ scope.row.toCompanyName || "--" }}
               </template>
             </el-table-column>
             <el-table-column prop="the_nu" label="本次代号" align="center">
               <template slot-scope="scope">
-                {{ scope.row.the_nu || "—" }}
+                {{ scope.row.the_nu || "--" }}
               </template>
             </el-table-column>
             <el-table-column prop="orderCount" label="订单数量" align="center">
               <template slot-scope="scope">
-                {{ scope.row.orderCount || "—" }}
+                {{ scope.row.orderCount || "--" }}
               </template>
             </el-table-column>
             <el-table-column prop="number" label="订单编号" align="center">
               <template slot-scope="scope">
-                {{ scope.row.number || "—" }}
+                {{ scope.row.number || "--" }}
               </template>
             </el-table-column>
             <el-table-column prop="remark" label="订单备注" align="center">
               <template slot-scope="scope">
-                {{ scope.row.remark || "—" }}
+                {{
+                  scope.row.remark && scope.row.ordertype != "Sample"
+                    ? scope.row.remark
+                    : "--"
+                }}
               </template>
             </el-table-column>
             <el-table-column
@@ -240,7 +250,7 @@
               <template slot-scope="scope">
                 {{
                   scope.row.happenDate &&
-                    scope.row.happenDate.replace(/t[\s\S]+/gi, "—")
+                    scope.row.happenDate.replace(/t[\s\S]+/gi, " ")
                 }}
               </template>
             </el-table-column>
@@ -404,7 +414,6 @@ export default {
         orderNumber: null
       },
       currentSample: null,
-      myOrderSample: "我的订单",
       isOrderDetial: false,
       jiaerweima: require("@/assets/images/erweimaicon@2x.png"),
       isActive: false,
@@ -462,7 +471,6 @@ export default {
     // 返回事件
     fanhui() {
       this.isOrderDetial = false;
-      this.myOrderSample = "订单列表";
       this.currentSelectItem = {
         number: null,
         orderType: null,
@@ -494,7 +502,6 @@ export default {
     },
     resetSample() {
       this.isOrderDetial = false;
-      this.myOrderSample = "我的订单";
     },
     // 退出登录
     signOut() {
@@ -504,7 +511,6 @@ export default {
     openDetail(item) {
       this.currentSample = item;
       this.isOrderDetial = true;
-      this.myOrderSample = "返回订单列表";
     },
     // 去主页
     toHome() {
@@ -543,7 +549,8 @@ export default {
     },
     handleSizeChange(pages) {
       this.pageSize = pages;
-      if (this.currentPage * pages > this.totalCount) return;
+      if (this.currentPage * pages > this.totalCount && this.currentPage != 1)
+        return;
       this.getOrderList();
     },
     // 搜索
