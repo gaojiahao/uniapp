@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\main.js
- * @LastEditTime: 2021-04-01 20:31:37
+ * @LastEditTime: 2021-04-06 09:35:30
  * @LastEditors: sueRimn
  * @Descripttion:
  * @version: 1.0.0
@@ -19,6 +19,7 @@ import zhLocale from "view-design/dist/locale/zh-CN";
 import enLocale from "view-design/dist/locale/en-US";
 import cn from "@lang/zh";
 import us from "@lang/en";
+import '@less/common';
 import '@css/iconfont/iconfont.css';
 
 Vue.use(ViewUI);
