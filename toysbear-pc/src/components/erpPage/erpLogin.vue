@@ -110,7 +110,7 @@
                     @click="getCode"
                     >获取验证码</span
                   >
-                  <span v-show="!show" class="count active"
+                  <span v-show="!show" @click="getCode" class="myCount"
                     >{{ count }}s重新获取</span
                   >
                 </div>
@@ -322,19 +322,20 @@ export default {
       });
       console.log(res);
       const TIME_COUNT = 60;
-      if (!this.timer) {
-        this.count = TIME_COUNT;
-        this.show = false;
-        this.timer = setInterval(() => {
-          if (this.count > 0 && this.count <= TIME_COUNT) {
-            this.count--;
-          } else {
-            this.show = true;
-            clearInterval(this.timer);
-            this.timer = null;
-          }
-        }, 1000);
+      if (this.timer) {
+        clearInterval(this.timer);
       }
+      this.count = TIME_COUNT;
+      this.show = false;
+      this.timer = setInterval(() => {
+        if (this.count > 0 && this.count <= TIME_COUNT) {
+          this.count--;
+        } else {
+          this.show = true;
+          clearInterval(this.timer);
+          this.timer = null;
+        }
+      }, 1000);
     },
     // 登录
     async toErpOrder() {

@@ -113,7 +113,7 @@
             prop="ou_lo"
             align="center"
             width="100"
-            label="内核/装箱数"
+            label="内盒/装箱数"
           >
             <template slot-scope="scope">
               <span>{{ scope.row.in_en || "—" }}</span
@@ -221,15 +221,7 @@
           >
             <template slot-scope="scope">
               <span>
-                {{
-                  scope.row.handset
-                    ? scope.row.handset
-                    : scope.row.handset1
-                    ? scope.row.handset1
-                    : scope.row.handset2
-                    ? scope.row.handset2
-                    : "—"
-                }}
+                {{ scope.row.supplierPhone || "—" }}
               </span>
             </template>
           </el-table-column>
