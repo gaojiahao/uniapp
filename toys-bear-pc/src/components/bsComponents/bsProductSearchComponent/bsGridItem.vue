@@ -100,13 +100,12 @@ export default {
     async toProductDetails() {
       const fd = {
         name: this.item.productNumber,
-        linkUrl: "/bsIndex/bsProductDetails",
+        linkUrl: "/bsIndex/bsProductSearchIndex",
         component: "bsProductDetails",
         refresh: true,
         label: this.item.fa_no || "产品详情",
         value: this.item
       };
-      this.$router.push("/bsIndex/bsProductDetails");
       this.$store.commit("myAddTab", fd);
     },
     // 去厂商详情页

@@ -477,7 +477,7 @@ export default {
     async toOrderDetails(row) {
       const fd = {
         name: row.orderNumber,
-        linkUrl: "/bsIndex/bsClientOrderDetails",
+        linkUrl: "/bsIndex/bsCustomerOrder",
         component: "bsClientOrderDetails",
         refresh: true,
         noPush: true,
@@ -485,7 +485,6 @@ export default {
         value: row
       };
       this.$store.commit("myAddTab", fd);
-      this.$router.push("/bsIndex/bsClientOrderDetails");
     },
     // 切換頁容量
     handleSizeChange(pageSize) {
