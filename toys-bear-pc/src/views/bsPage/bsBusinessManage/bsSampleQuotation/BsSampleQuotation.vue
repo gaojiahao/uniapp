@@ -336,14 +336,13 @@ export default {
     async handleEdit(index, row) {
       const fd = {
         name: "编辑" + row.offerNumber,
-        linkUrl: "/bsIndex/bsSampleUpdata",
+        linkUrl: "/bsIndex/bsSampleQuotation",
         component: "bsSampleUpdata",
         refresh: true,
         noPush: true,
         label: "编辑" + row.offerNumber,
         value: row
       };
-      this.$router.push("/bsIndex/bsSampleUpdata");
       this.$store.commit("myAddTab", fd);
     },
     // 搜索
