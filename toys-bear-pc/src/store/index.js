@@ -25,9 +25,10 @@ const store = new Vuex.Store({
     globalMsg: "",
     tabList: [
       {
-        linkUrl: "/bsIndex/bsHome",
-        name: "后台首页",
         component: "bsHome",
+        label: "后台首页",
+        linkUrl: "/bsIndex/bsHome",
+        name: "/bsIndex/bsHome",
         refresh: true
       }
     ],
