@@ -36,7 +36,7 @@
             @keyup.native.enter="search"
           ></el-input>
         </div>
-        <div class="item">
+        <div class="item" style=" max-width:300px">
           <span class="label">时间段：</span>
           <el-date-picker
             size="medium"
@@ -392,7 +392,7 @@ export default {
     .item {
       display: flex;
       align-items: center;
-      max-width: 250px;
+      max-width: 290px;
       margin-right: 20px;
       .label {
         width: 70px;

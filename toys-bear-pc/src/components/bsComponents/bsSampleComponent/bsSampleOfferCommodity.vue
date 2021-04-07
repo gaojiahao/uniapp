@@ -24,6 +24,7 @@
       <div class="right">
         <el-button @click="handleAffirm" type="primary" round>
           确定已选择({{ offerProductList.length }})
+          <i style="font-size:15px" class="el-icon-right el-icon--right"></i>
         </el-button>
       </div>
     </div>

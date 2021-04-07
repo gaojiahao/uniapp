@@ -79,7 +79,6 @@
           prop="shareUrl"
           width="350"
           label="网址"
-          align="center"
         ></el-table-column>
         <el-table-column
           prop="customerName"
@@ -88,7 +87,7 @@
         ></el-table-column>
         <el-table-column
           prop="totalKuanshu"
-          label="订单款数"
+          label="商品总款数"
           align="center"
         ></el-table-column>
         <el-table-column
@@ -120,7 +119,7 @@
             <el-button
               style="margin-right:10px;"
               size="mini"
-              type="primary"
+              type="warning"
               @click="openSelectTemplate(scope.row)"
               >导出</el-button
             >
@@ -554,7 +553,7 @@ export default {
     .item {
       display: flex;
       align-items: center;
-      max-width: 258px;
+      max-width: 290px;
       margin-right: 20px;
       .label {
         width: 58px;

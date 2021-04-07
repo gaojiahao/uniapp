@@ -219,7 +219,7 @@ export default {
     .item {
       display: flex;
       align-items: center;
-      max-width: 258px;
+      max-width: 290px;
       margin-right: 20px;
       .label {
         width: 58px;
