@@ -200,7 +200,7 @@
         </p>
         <p class="item">
           <span class="itemTitle">总毛重/总净重：</span>
-          <span>{{ options.sumGr_we }}/{{ options.sumNe_we }}(kg)</span>
+          <span>{{ options.sumGr_we }}/{{ options.sumNe_we }}(KG)</span>
         </p>
         <p class="item">
           <span class="itemTitle">总金额：</span>

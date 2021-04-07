@@ -10,6 +10,7 @@
         >
           {{ item.name }}
           <span v-if="isDiyu === i">({{ totalCount }})</span>
+          <span v-else>(0)</span>
         </div>
       </div>
       <div class="right">
@@ -161,6 +162,7 @@ export default {
     },
     // 切换专区
     checkTabs(num, item) {
+      this.totalCount = 0;
       this.isDiyu = num;
       this.currentTabs = item;
       this.currentChildren = null;

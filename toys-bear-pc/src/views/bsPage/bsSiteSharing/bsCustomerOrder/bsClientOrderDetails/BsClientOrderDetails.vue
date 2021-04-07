@@ -199,7 +199,7 @@
           <span
             >{{ options.totalGrossWeight }}/{{
               options.totalNetWeight
-            }}(kg)</span
+            }}(KG)</span
           >
         </p>
         <p class="item">

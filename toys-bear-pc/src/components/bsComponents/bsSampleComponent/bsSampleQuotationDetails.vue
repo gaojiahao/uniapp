@@ -290,7 +290,7 @@
           </p>
           <p class="item">
             <span class="itemTitle">总毛重/总净重：</span>
-            <span>{{ totalMaozhong() }}/{{ totalJingzhong() }}(kg)</span>
+            <span>{{ totalMaozhong() }}/{{ totalJingzhong() }}(KG)</span>
           </p>
           <p class="item">
             <span class="itemTitle">总金额：</span>
