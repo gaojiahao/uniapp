@@ -167,7 +167,7 @@
             <span> {{ scope.row.in_en }}/{{ scope.row.ou_lo }}(pcs) </span>
           </template>
         </ex-table-column>
-        <ex-table-column :autoFit="true" prop="fa_pr" label="参考价">
+        <ex-table-column :autoFit="true" prop="fa_pr" label="参考单价">
           <template slot-scope="scope">
             <span style="color:#3368A9">
               <span>{{ scope.row.cu_de }}</span>

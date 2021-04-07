@@ -25,12 +25,12 @@
             @keyup.native.enter="search"
           ></el-input>
         </div>
-        <div class="item">
+        <div class="item" style=" max-width:300px">
           <span class="label">时间段：</span>
           <el-date-picker
             size="medium"
             value-format="yyyy-MM-ddTHH:mm:ss"
-            v-model="dateTime"
+            v-model="searchForm.dateTime"
             type="datetimerange"
             range-separator="至"
             start-placeholder="开始日期"
@@ -341,7 +341,7 @@ export default {
       .item {
         display: flex;
         align-items: center;
-        max-width: 280px;
+        max-width: 290px;
         margin-right: 20px;
         .label {
           width: 70px;
