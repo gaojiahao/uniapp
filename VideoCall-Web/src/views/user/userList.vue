@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 15:46:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\user\userList.vue
- * @LastEditTime: 2021-04-05 17:16:20
+ * @LastEditTime: 2021-04-07 19:19:40
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -19,8 +19,7 @@
                     与会人
                 </div>
                 <div class="act_action">
-                    <!-- <i class="iconfont iconcebianlanshousuo" @click="collapsedSider"></i> -->
-                    <Icon type="ios-arrow-back" @click="collapsedSider" />
+                    <i class="iconfont iconcebianlanshousuo" @click="collapsedSider"></i>
                 </div>  
             </ListItem>
             <ListItem v-for="(item,index) in userlist" :key="index">
@@ -31,9 +30,18 @@
                     {{item.name}}
                 </div>
                 <div class="action">
-                    <i class="iconfont icon21maikefeng outline text"></i>
-                    <i class="iconfont iconshexiangtou eye text"></i>
-                    <i class="iconfont iconzu1306 text"></i>
+                    <i class="iconfont icon21maikefeng text" :class="[item.isMic ? 'outline':'eye']" @click="setMic(index)"></i>
+                    <i class="iconfont iconshexiangtou text" :class="[item.isCar ? 'outline':'eye']" @click="setCar(index)"></i>
+                    <Dropdown>
+                        <a href="javascript:void(0)">
+                            <i class="iconfont iconzu1306 text"></i>
+                        </a>
+                        <DropdownMenu slot="list">
+                            <DropdownItem @click.native="del(index)">禁止麦克风</DropdownItem>
+                            <DropdownItem @click.native="del(index)">禁止摄像头</DropdownItem>
+                            <DropdownItem @click.native="del(index)">删除</DropdownItem>
+                        </DropdownMenu>
+                    </Dropdown>
                 </div>
             </ListItem>
         </List>
@@ -46,14 +54,14 @@ export default {
         return {
             loading: false,
             userlist:[
-                {id:1,name:'张三'},
-                {id:2,name:'张1'},
-                {id:3,name:'张2'},
-                {id:4,name:'张3'},
-                {id:5,name:'张4'},
-                {id:6,name:'张5'},
-                {id:7,name:'张6'},
-                {id:8,name:'张7'}
+                {id:1,name:'张三',isMic:true,isCar:true},
+                {id:2,name:'张1',isMic:true,isCar:true},
+                {id:3,name:'张2',isMic:true,isCar:true},
+                {id:4,name:'张3',isMic:true,isCar:true},
+                {id:5,name:'张4',isMic:true,isCar:true},
+                {id:6,name:'张5',isMic:true,isCar:true},
+                {id:7,name:'张6',isMic:true,isCar:true},
+                {id:8,name:'张7',isMic:true,isCar:true}
             ]
         };
     },
@@ -61,6 +69,15 @@ export default {
         collapsedSider() {
             this.$emit("collapsed-sider");
         },
+        setMic(index){
+            this.$set(this.userlist[index],'isMic',this.userlist[index]['isMic'] ? false : true);
+        },
+        setCar(index){
+            this.$set(this.userlist[index],'isCar',this.userlist[index]['isCar'] ? false : true);
+        },
+        del(index){
+            this.userlist.splice(index,1);
+        }
     },
 }
 </script>
@@ -71,6 +88,7 @@ export default {
         }
         .text{
             font-size: 16px;
+            color: #999999;
         }
         .act{
             flex: 0 0 20px;
@@ -84,7 +102,8 @@ export default {
             margin-left: 10px;
         }
         .act_action{
-            margin-left: 120px;
+            margin-left: 100px;
+            margin-right: 10px;
             color:#fff;   
         }
         .avatar{
@@ -99,6 +118,7 @@ export default {
         }
         .action{
             margin-left: auto;
+            margin-right: 5px;
             .outline{
                 color:#40C949;
             }

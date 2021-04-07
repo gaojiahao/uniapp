@@ -63,7 +63,13 @@ d<!--
     </div>
     <div class="footer">
       <div class="footer_wrap">
-        <div><span style="margin-right:10px">技术支持：0754-89671122</span> <span><i class="iconfont iconqq"></i>客服001</span> <span><i class="iconfont iconqq"></i>客服002</span></div>
+        <div class="footer_wrap_first">
+          <div style="margin-right:10px">技术支持：0754-89671122</div> 
+          <div class="qq"></div>
+          <div style="margin-left:10px">客服001</div>
+          <div class="qq" style="margin-left:10px"></div>
+          <div style="margin-left:10px">客服002</div>
+        </div>
         <div>Copyright © 2021深圳宏升软件技术开发有限公司  粤ICP备13031421号-4</div>
       </div>
     </div>
@@ -530,7 +536,18 @@ export default {
     border-top: solid 1px #ddd;
     overflow: hidden;
     .footer_wrap{
-      padding-top:18px
+      padding-top:18px;
+      .footer_wrap_first{
+        display: flex;
+        justify-content:center;
+        .qq {
+          background: url('~@assets/images/qq2.webp');
+          background-repeat: no-repeat;
+              margin-top: 4px;
+          width: 13px;
+          height: 16px;
+        }
+      }
     }
   }
 }

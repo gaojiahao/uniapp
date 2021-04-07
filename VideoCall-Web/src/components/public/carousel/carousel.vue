@@ -34,21 +34,24 @@
             </div>
         </div>
         <div class="carouse_action">
-            <button type="button" :class="arrowClasses" class="left" @click="arrowEvent(-1)">
+            <!-- <button type="button" class="left" @click="arrowEvent(-1)">
                 <Icon type="ios-arrow-back"></Icon>
-            </button>
+            </button> -->
+            <Button icon="ios-arrow-back" @click="arrowEvent(-1)" :style="{height:'55px'}"></Button>
             <ul :class="dotsClasses">
-                <template v-for="n in slides.length">
-                    <li :class="[n - 1 === currentIndex ? prefixCls + '-active' : '']"
-                        @click="dotsEvent('click', n - 1)"
-                        @mouseover="dotsEvent('hover', n - 1)">
-                        <button type="button" :class="[radiusDot ? 'radius' : '']"></button>
+                <template v-for="(n,index) in slides">
+                    <li :class="[index  === currentIndex ? prefixCls + '-active' : '']"
+                        @click="dotsEvent('click', index )"
+                        @mouseover="dotsEvent('hover', index )">
+                        <!-- <button type="button" :class="[radiusDot ? 'radius' : '']"></button> -->
+                        <img :src="n.url" style="width:78px;height:55px" />
                     </li>
                 </template>
             </ul>
-            <button type="button" :class="arrowClasses" class="right" @click="arrowEvent(1)">
+            <Button icon="ios-arrow-forward" @click="arrowEvent(1)" :style="{height:'55px'}"></Button>
+            <!-- <button type="button" class="right" @click="arrowEvent(1)">
                 <Icon type="ios-arrow-forward"></Icon>
-            </button>
+            </button> -->
         </div>
     </div>
 </template>
@@ -114,7 +117,7 @@
                 validator (value) {
                     return value === 'auto' || Object.prototype.toString.call(value) === '[object Number]';
                 }
-            }
+            },
         },
         data () {
             return {
@@ -132,6 +135,7 @@
                 trackIndex: this.value,
                 copyTrackIndex: this.value,
                 hideTrackPos: -1, // 默认左滑
+                test: require("@assets/bg/test.jpg"),
             };
         },
         computed: {
@@ -209,7 +213,8 @@
 
                 this.findChild((child) => {
                     slides.push({
-                        $el: child.$el
+                        $el: child.$el,
+                        url: child.$el.firstChild.firstChild.firstChild.src
                     });
                     child.index = index++;
 
@@ -365,9 +370,24 @@
 <style lang="less" scoped>
 .x_carousel{
     .carouse_action{
+        margin-top: 20px;
         height: 55px;
         width: 541px;
         display: flex;
+        .ivu-carousel-dots-inside {
+            display: block;
+            position: unset;
+            bottom: unset;
+        }
+        .ivu-carousel-dots li {
+            position: relative;
+            display: inline-block;
+            vertical-align: top;
+            text-align: center;
+            margin: 0 8px;
+            padding: 0;
+            cursor: pointer;
+        }
     }
 }
 </style>

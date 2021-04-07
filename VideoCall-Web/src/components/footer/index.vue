@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 19:15:58
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\index.vue
- * @LastEditTime: 2021-04-02 15:08:09
+ * @LastEditTime: 2021-04-07 19:34:19
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -31,52 +31,55 @@
                     </div>
                     <Divider type="vertical" />
                     <div class="timer item">
-                        <div class="time-car">
-                            <i class="iconfont icon21maikefeng outline icon"></i>
-                            <span class="time-card-count">音频</span>
-                        </div>
+                        <i class="iconfont icon21maikefeng icon" :class="[isMic ? 'outline':'eye']" @click="setMic()"></i>
+                        <span class="time-card-count text">音频</span>
                     </div>
                     <Divider type="vertical" />
                     <div class="timer item">
-                        <div class="time-car">
-                            <i class="iconfont iconshexiangtou eye icon"></i>
-                            <span class="time-card-count">视频</span>
-                        </div>
+                        <i class="iconfont iconshexiangtou icon" :class="[isCar ? 'outline':'eye']" @click="setCar()"></i>
+                        <span class="time-card-count text">视频</span>
                     </div>
                     <Divider type="vertical" />
                     <div class="timer item">
-                        <div class="time-car">
-                            <i class="iconfont iconzu170 close icon"></i>
-                        </div>
+                        <div class="closeOff"></div>
                     </div>
                 </div>
             </Col>
             <Col span="8">
                 <div class="settings">
                     <div class="timer item">
-                        <i class="iconfont iconshezhi icon"></i>
+                        <i class="iconfont iconshezhi icon" @click="showModalDetail(true)"></i>
                     </div>
                     <div class="timer item">
                         <i class="iconfont icontianxiexiangqing icon"></i>
                     </div>
                     <div class="timer item">
-                        <i class="iconfont iconzu1310 icon"></i>
+                        <div class="netWork"></div>
                     </div>
                 </div>
             </Col>
-        </Row> 
+        </Row>
+        <Setting @show-modal-detail="showModalDetail" :showModal="showModal"></Setting>
     </div>
 </template>
 <script>
+import Setting from "@components/footer/setting";
+
 export default {
     name:'Footer',
+    components:{
+        Setting
+    },
     data() {
         return {
             currentTime:0,
             timeObj: null, // 时间对象,下方会用到
             myHours: '00', // 我定义来接收计算出来的 小时 的
             myMinutes: '00', // 我定义来接收计算出来的 分钟 的
-            mySeconds: '00'// 我定义来接收计算出来的 秒钟 的
+            mySeconds: '00',// 我定义来接收计算出来的 秒钟 的
+            showModal:false,
+            isMic:true,
+            isCar:true,
         }
     },
     methods: {
@@ -99,7 +102,16 @@ export default {
             this.myMinutes = this.timeObj.minutes<10?'0'+this.timeObj.minutes:this.timeObj.minutes;
             this.mySeconds = this.timeObj.seconds<10?'0'+this.timeObj.seconds:this.timeObj.seconds;
             this.currentTime++;
-        }
+        },
+        showModalDetail(value){
+            this.showModal = value;
+        },
+        setMic(){
+            this.isMic = this.isMic ? false : true;
+        },
+        setCar(index){
+            this.isCar = this.isCar ? false : true;
+        },
     },
     created() {
         this.testTimer();
@@ -135,6 +147,12 @@ export default {
           right: 0;
           margin-top: -3.5px;
         }
+        .closeOff {
+            background: url('~@assets/images/close.webp');
+            background-repeat: no-repeat;
+            width: 33px;
+            height: 33px;
+        }
     }
     .time-card {
         margin: 0 1em;
@@ -147,6 +165,9 @@ export default {
         // height: 77px;
         // line-height: 77px;
         overflow: hidden;
+    }
+    .text{
+        margin-left: 10px;
     }
     .time-card-label {
         font-size: 0.625em;
@@ -183,6 +204,12 @@ export default {
         .item{
             height:69px;
             width: 35px;
+            .netWork {
+                background: url('~@assets/images/netWork4.webp');
+                background-repeat: no-repeat;
+                width: 18px;
+                height: 19px;
+            }
         }
         .icon{
             font-size: 16px;

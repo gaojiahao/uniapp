@@ -4,13 +4,20 @@
  * @Author: gaojiahao
  * @Date: 2020-11-03 16:35:57
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-06 18:24:39
+ * @LastEditTime: 2021-04-07 11:35:59
 -->
 <template>
     <Modal v-model="show" title="  " @on-ok="ok" @on-cancel="cancel" width="1048" class="modalDetail">
         <div class="product_info_panel">
-            <div class="product_info_wrap" v-if="show">
-                <XCarousel v-model="value1" loop v-if="show">
+            <div class="product_info_wrap item" v-if="show">
+                <XCarousel v-model="value1" loop v-if="show" :imgList="imgList">
+                    <CarouselItem v-if="show">
+                        <div class="product_info_img">
+                            <div class="product_info_img_border">
+                                <img :src="test"/>
+                            </div>
+                        </div>
+                    </CarouselItem>
                     <CarouselItem v-if="show">
                         <div class="product_info_img">
                             <div class="product_info_img_border">
@@ -41,8 +48,72 @@
                     </CarouselItem>
                 </XCarousel>
             </div>
-            <div class="product_info_list">
-                Guess who I am?        
+            <div class="product_info_list item">
+                <Row class="product_info_list_item">
+                    <Col span="24">
+                        <div class="active">Guess who I am?</div>
+                    </Col>
+                    <Col span="12">
+                        <div class="product_info_list_items">price：</div>
+                    </Col>
+                    <Col span="12">
+                        <div class="product_info_list_items red"><span>$</span><span class="font_size_20">17.00</span></div>
+                    </Col>
+                    <Col span="12">
+                        <div class="product_info_list_items">price：</div>
+                    </Col>
+                    <Col span="12">
+                        <div class="product_info_list_items"><span>$</span>17.00</div>
+                    </Col>
+                    <Col span="12">
+                        <div class="product_info_list_items">price：</div>
+                    </Col>
+                    <Col span="12">
+                        <div class="product_info_list_items"><span>$</span>17.00</div>
+                    </Col>
+                    <Col span="12">
+                        <div class="product_info_list_items">price：</div>
+                    </Col>
+                    <Col span="12">
+                        <div class="product_info_list_items"><span>$</span>17.00</div>
+                    </Col>
+                    <Col span="12">
+                        <div class="product_info_list_items">price：</div>
+                    </Col>
+                    <Col span="12">
+                        <div class="product_info_list_items"><span>$</span>17.00</div>
+                    </Col>
+                    <Col span="12">
+                        <div class="product_info_list_items">price：</div>
+                    </Col>
+                    <Col span="12">
+                        <div class="product_info_list_items"><span>$</span>17.00</div>
+                    </Col>
+                    <Col span="12">
+                        <div class="product_info_list_items">price：</div>
+                    </Col>
+                    <Col span="12">
+                        <div class="product_info_list_items"><span>$</span>17.00</div>
+                    </Col>
+                    <Col span="12">
+                        <div class="product_info_list_items">price：</div>
+                    </Col>
+                    <Col span="12">
+                        <div class="product_info_list_items"><span>$</span>17.00</div>
+                    </Col>
+                    <Col span="12">
+                        <div class="product_info_list_items">price：</div>
+                    </Col>
+                    <Col span="12">
+                        <div class="product_info_list_items"><span>$</span>17.00</div>
+                    </Col>
+                    <Col span="12">
+                        <div class="product_info_list_items">price：</div>
+                    </Col>
+                    <Col span="12">
+                        <div class="product_info_list_items"><span>$</span>17.00</div>
+                    </Col>
+                </Row>
             </div>
         </div>
         <div slot="footer">
@@ -70,6 +141,13 @@ export default {
             show: false,
             test: require("@assets/bg/test.jpg"),
             value1: 0,
+            imgList:[
+                {id:1,url:require("@assets/bg/test.jpg")},
+                {id:2,url:require("@assets/bg/test.jpg")},
+                {id:3,url:require("@assets/bg/test.jpg")},
+                {id:4,url:require("@assets/bg/test.jpg")},
+                {id:5,url:require("@assets/bg/test.jpg")},
+            ]
         }
     },
     watch:{
@@ -119,10 +197,13 @@ export default {
 }
 .modalDetail .product_info_panel{
     display: flex;
+    .item{
+        margin: 0 10px;
+    }
 }
 .modalDetail .product_info_wrap {
-    width: 541px;
-    height: 552px;
+    width: 542px;
+    height: 470px;
     .product_info_img {
         width: 541px;
         .product_info_img_border {
@@ -137,6 +218,20 @@ export default {
         }
     }
 }
+.modalDetail .product_info_list {
+    width: 434px;
+    height: 470px;
+    .active {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 16px;
+    }
+    .product_info_list_item{
+        .product_info_list_items {
+            margin-bottom: 14px;
+        }
+    }
+}
 .modalDetail{
     .c_item{
         .demo-carousel {
@@ -148,6 +243,12 @@ export default {
             background: #506b9e;
         }
     }
+}
+.red{
+    color: #FF760E;
+}
+.font_size_20 {
+    font-size: 16px;
 }
 </style>
 

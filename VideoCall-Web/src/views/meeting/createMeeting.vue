@@ -27,9 +27,12 @@ d<!--
               </Col>
             </Row>
           </div>
-          <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-colon>
+          <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-colon class="form">
             <FormItem label="会议ID" prop="id">
               <Input v-model="formValidate['id']" :style="{width:'300px',marginLeft: '-50px'}" :maxlength="11" disabled></Input>
+            </FormItem>
+            <FormItem label="昵称" prop="nickName">
+              <Input v-model="formValidate['nickName']" :style="{width:'300px',marginLeft: '-50px'}" placeholder="请输入您的昵称"></Input>
             </FormItem>
             <FormItem label="开始时间" prop="startTime">
               <DatePicker v-model="formValidate['startTime']" @on-change="formValidate['startTime']=$event" format="yyyy-MM-dd HH:mm" type="date" placeholder="选择开始时间" style="width: 300px;margin-left:-50px"></DatePicker> 
@@ -55,7 +58,13 @@ d<!--
     </div>
     <div class="footer">
       <div class="footer_wrap">
-        <div><span style="margin-right:10px">技术支持：0754-89671122</span> <span><i class="iconfont iconqq"></i>客服001</span> <span><i class="iconfont iconqq"></i>客服002</span></div>
+        <div class="footer_wrap_first">
+          <div style="margin-right:10px">技术支持：0754-89671122</div> 
+          <div class="qq"></div>
+          <div style="margin-left:10px">客服001</div>
+          <div class="qq" style="margin-left:10px"></div>
+          <div style="margin-left:10px">客服002</div>
+        </div>
         <div>Copyright © 2021深圳宏升软件技术开发有限公司  粤ICP备13031421号-4</div>
       </div>
     </div>
@@ -74,6 +83,7 @@ export default {
       titleUrl: require("@assets/images/title.webp"),
       formValidate:{
         id:'111111111111111',
+        nickName:'',
         startTime:'',
         endTime:'',
         mettingNumber:'',
@@ -199,7 +209,7 @@ export default {
           }
 
           .type {
-            margin-top: 51px;
+            margin-top: 40px;
             height: 32px;
             display: inline-block;
             width: 100%;
@@ -208,12 +218,19 @@ export default {
             line-height: normal;
             font-size: 18px;
             color: #666666;
-            margin-bottom: 38px;
+            margin-bottom: 40px;
             .active {
               color: #57a3f3;
             }
             .item{
               font-weight: 600;
+            }
+          }
+          .form{
+            .ivu-form-item {
+              margin-bottom: 18px;
+              vertical-align: top;
+              zoom: 1;
             }
           }
       }
@@ -232,7 +249,18 @@ export default {
     border-top: solid 1px #ddd;
     overflow: hidden;
     .footer_wrap{
-      padding-top:18px
+      padding-top:18px;
+      .footer_wrap_first{
+        display: flex;
+        justify-content:center;
+        .qq {
+          background: url('~@assets/images/qq2.webp');
+          background-repeat: no-repeat;
+              margin-top: 4px;
+          width: 13px;
+          height: 16px;
+        }
+      }
     }
   }
 }

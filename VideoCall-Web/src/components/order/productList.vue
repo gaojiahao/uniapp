@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:15:36
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\productList.vue
- * @LastEditTime: 2021-04-06 11:23:45
+ * @LastEditTime: 2021-04-07 11:50:17
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -138,8 +138,9 @@ export default {
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
-                                    color:'#2684D1',
-                                    marginTop: '4px'
+                                    color:'#000000',
+                                    marginTop: '4px',
+                                    fontWeight:400,
                                 },
                                 domProps: {
                                     title: params.row.OR_CODE
@@ -152,8 +153,9 @@ export default {
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
-                                    color:'#2684D1',
-                                    marginTop: '4px'
+                                    color:'#000000',
+                                    marginTop: '4px',
+                                    fontWeight:400,
                                 },
                                 domProps: {
                                     title: params.row.MSG
@@ -161,12 +163,28 @@ export default {
                             }, params.row.MSG),
                             h('div', { 
                                 style: {
-                                    marginTop: '4px'
+                                    marginTop: '4px',
+                                    color:'#FF3E3E',
                                 },  
                             }, params.row.number),
-                            h('div', {  
+                            h('div',[
+                                h('span', {
+                                    style: {
+
+                                        color:'#FF3E3E',
+                                    }, 
+                                },'USD'),
+                                h('span', {
+                                    style: {
+                                        color:'#FF3E3E',
+                                        fontWeight:600,
+                                        marginLeft: '4px',
+                                    }, 
+                                },params.row.price),
+                            ], {  
                                 style: {
-                                    marginTop: '4px'
+                                    marginTop: '4px',
+                                    color:'#FF3E3E',
                                 }, 
                             }, params.row.price),
                         ])
@@ -300,7 +318,7 @@ export default {
                     OR_CODE: 'OR_CODE:54004,ERROR_ MSG:PLEASE RECHAR...',
                     MSG:'FDASFDSFADSFDASFA',
                     number: 'S658-29',
-                    price: 'USD 199.00',
+                    price: '199.00',
                     info2: 'No：8899561514',
                     packing: 'dfadsfasdf',
                     productSize: '0x0x0(cm)',
@@ -319,7 +337,7 @@ export default {
                     OR_CODE: 'OR_CODE:54004,ERROR_ MSG:PLEASE RECHAR...',
                     MSG:'FDASFDSFADSFDASFA',
                     number: 'S658-29',
-                    price: 'USD 199.00',
+                    price: '199.00',
                     info2: 'No：8899561514',
                     packing: 'dfadsfasdf',
                     productSize: '0x0x0(cm)',
@@ -338,7 +356,7 @@ export default {
                     OR_CODE: 'OR_CODE:54004,ERROR_ MSG:PLEASE RECHAR...',
                     MSG:'FDASFDSFADSFDASFA',
                     number: 'S658-29',
-                    price: 'USD 199.00',
+                    price: '199.00',
                     info2: 'No：8899561514',
                     packing: 'dfadsfasdf',
                     productSize: '0x0x0(cm)',

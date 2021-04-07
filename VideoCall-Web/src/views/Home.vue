@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\Home.vue
- * @LastEditTime: 2021-04-05 11:33:29
+ * @LastEditTime: 2021-04-07 19:37:36
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -22,7 +22,7 @@
               </div>
             </Sider>
             <Content>
-              <Video></Video>
+              <Video :isCollapsed="isCollapsed"></Video>
             </Content>
             <Sider ref="side2" hide-trigger :width="311">
               <Order></Order>
@@ -90,7 +90,8 @@ export default {
       background: #fff;  
     }
     /deep/ .ivu-layout-content{
-      background: #515a6e;  
+      background: radial-gradient(#69747d, #4a545d);
+      opacity: 1;
     }
     /deep/ .ivu-layout-footer{
       border-top:1px solid #e0e0e0;

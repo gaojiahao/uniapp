@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 14:55:25
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\head\index.vue
- * @LastEditTime: 2021-04-02 14:50:59
+ * @LastEditTime: 2021-04-07 12:14:59
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -35,13 +35,13 @@
                 <div class="right_title">
                     <div class="title">
                         <div class="text">
-                            <i class="iconfont iconqq"></i>客服002</span>
+                            <div class="qq"></div><div class="qq_text">客服002</div>
                         </div>
                         <div class="text">
-                            <i class="iconfont iconqq"></i>客服001</span>
+                            <div class="qq"></div><div class="qq_text">客服001</div>
                         </div>
                         <div class="text">
-                            <Icon type="ios-call" />技术支持：0754-89671122
+                            <div><Icon type="ios-call" /></div><div class="qq_text">技术支持：0754-89671122</div>
                         </div>
                     </div>    
                 </div>
@@ -120,6 +120,17 @@ export default {
             .text{
                 text-align: right;
                 margin-left: 10px;
+                display: flex;
+                .qq {
+                    background: url('~@assets/images/qq2.webp');
+                    background-repeat: no-repeat;
+                    margin-top: 24.5px;
+                    width: 13px;
+                    height: 16px;
+                }
+                .qq_text{
+                    margin-left: 5px;
+                }
             }
         }
     }
