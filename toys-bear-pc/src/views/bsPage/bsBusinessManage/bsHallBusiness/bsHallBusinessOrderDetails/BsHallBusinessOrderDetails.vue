@@ -6,24 +6,24 @@
         <div class="itemBox">
           <span>择样类型：</span>
           <span class="type"
-            ><span>{{ orderOption.hall_na }}：</span
-            >{{ orderOption.messageExt | switchMessageExt }}</span
+            ><span>{{ item.hall_na }}：</span
+            >{{ item.messageExt | switchMessageExt }}</span
           >
         </div>
         <div class="itemBox">
           <span>展厅名称：</span>
-          <span class="name">{{ orderOption.hall_na }}</span>
+          <span class="name">{{ item.hall_na }}</span>
         </div>
         <div class="itemBox">
           <span>本次代号：</span>
-          <span class="orderNumber">{{ orderOption.the_nu }}</span>
+          <span class="orderNumber">{{ item.the_nu }}</span>
         </div>
         <div class="itemBox">
           <span>状态：</span>
-          <span class="orderNumber" v-if="orderOption.readStatus == 0"
+          <span class="orderNumber" v-if="item.readStatus == 0"
             >未读</span
           >
-          <span class="orderNumber" v-if="orderOption.readStatus == 1"
+          <span class="orderNumber" v-if="item.readStatus == 1"
             >已读</span
           >
         </div>
@@ -33,17 +33,17 @@
           <span>择样时间：</span>
           <span class="orderNumber">
             {{
-              orderOption.happenDate && orderOption.happenDate.replace(/T/, " ")
+              item.happenDate && item.happenDate.replace(/T/, " ")
             }}
           </span>
         </div>
         <div class="itemBox">
           <span>择样单号：</span>
-          <span class="orderNumber">{{ orderOption.orderNumber }}</span>
+          <span class="orderNumber">{{ item.orderNumber }}</span>
         </div>
         <div class="itemBox remark">
           <span>备注：</span>
-          <span class="orderNumber">{{ orderOption.pushContent }}</span>
+          <span class="orderNumber">{{ item.pushContent }}</span>
         </div>
       </div>
     </ul>
@@ -223,7 +223,7 @@
         width="80%"
       >
         <bsExportOrder
-          :orderNumber="orderOption.orderNumber"
+          :orderNumber="item.orderNumber"
           :customerName="options.customerName"
         />
       </el-dialog>
@@ -235,6 +235,11 @@
 import bsExportOrder from "@/components/bsComponents/bsSiteSharingComponent/bsExportOrder";
 export default {
   components: { bsExportOrder },
+  props: {
+    item: {
+      type: Object
+    }
+  },
   data() {
     return {
       exportTemplateDialog: false,
@@ -252,8 +257,7 @@ export default {
       },
       currentPage: 1,
       pageSize: 10,
-      totalCount: 0,
-      orderOption: {}
+      totalCount: 0
     };
   },
   methods: {
@@ -271,7 +275,7 @@ export default {
     // 获取订单详情总数
     async getERPOrderTotal() {
       const res = await this.$http.post("/api/GetERPOrderTotal", {
-        id: this.orderOption.erpOrderID
+        id: this.item.erpOrderID
       });
       if (res.data.result.code === 200) {
         this.options = res.data.result.item;
@@ -287,7 +291,7 @@ export default {
       const res = await this.$http.post("/api/GetERPOrderDetailPage", {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
-        id: this.orderOption.erpOrderID
+        id: this.item.erpOrderID
       });
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items;
@@ -340,7 +344,6 @@ export default {
     }
   },
   mounted() {
-    this.orderOption = JSON.parse(sessionStorage.getItem("orderDetails"));
     this.getSearchCompanyShareOrderDetailsPage();
     this.getERPOrderTotal();
   }

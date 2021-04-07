@@ -63,7 +63,7 @@
         ref="collecTable"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
-        <el-table-column label="采购单号">
+        <el-table-column label="采购单号" width="200">
           <template slot-scope="scope">
             <div
               style="color:#3368A9;cursor: pointer;"
@@ -96,9 +96,7 @@
         </el-table-column>
         <el-table-column label="总金额" align="center" width="100">
           <template slot-scope="scope">
-            <div style="color: #EB1515;">
-              {{ scope.row.sumFa_pr_pr }}
-            </div>
+            <div style="color: #EB1515;">￥{{ scope.row.sumFa_pr_pr }}</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -203,21 +201,13 @@ export default {
     toDetails(row) {
       const fd = {
         name: row.orderNumber,
-        linkUrl: "/bsIndex/bsPurchaseOrderDetails",
+        linkUrl: "/bsIndex/bsCustomerOrder",
         component: "bsPurchaseOrderDetails",
         refresh: true,
-        noPush: true,
         label: row.orderNumber,
         value: row
       };
       this.$store.commit("myAddTab", fd);
-      console.log(row);
-      // sessionStorage.setItem("orderDetails", JSON.stringify(row));
-      // this.$store.commit("handlerBsMenuLabels", {
-      //   linkUrl: "/bsIndex/bsClientOrderDetails",
-      //   name: row.orderNumber
-      // });
-      this.$router.push("/bsIndex/bsPurchaseOrderDetails");
     },
     // 导入菜单
     importOrder() {

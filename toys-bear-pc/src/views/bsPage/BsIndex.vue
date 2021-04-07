@@ -60,7 +60,7 @@ import bsProductDetails from "@/views/bsPage/bsProductSearch/bsProductDetails/Bs
 import bsClientOrderDetails from "@/views/bsPage/bsSiteSharing/bsCustomerOrder/bsClientOrderDetails/BsClientOrderDetails.vue";
 
 /** 展厅业务订单详情 */
-import bsHallBusinessOrderDetails from "@/components/bsComponents/bsBusinessManageComponent/bsHallBusinessOrderDetails.vue";
+import bsHallBusinessOrderDetails from "@/views/bsPage/bsBusinessManage/bsHallBusiness/bsHallBusinessOrderDetails/BsHallBusinessOrderDetails.vue";
 
 // 站点列表
 import bsSiteLlis from "@/views/bsPage/bsSiteSharing/bsSiteLlis/BsSiteLlis.vue";
@@ -234,6 +234,7 @@ export default {
       })
         .then(() => {
           this.$store.commit("closeTabAll");
+          this.$router.push("/bsIndex/bsHome");
           this.$common.handlerMsgState({
             msg: "关闭成功!",
             type: "success"
@@ -360,6 +361,7 @@ export default {
                     &.is-active {
                       border-top: 2px solid #3368a9;
                       color: #3368a9;
+                      font-weight: 700;
                     }
                     .el-icon-refresh {
                       display: none;

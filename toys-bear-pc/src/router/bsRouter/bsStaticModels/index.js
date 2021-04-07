@@ -16,7 +16,7 @@ const BsClientOrderDetails = () =>
 /** 展厅业务订单详情 */
 const BsHallBusinessOrderDetails = () =>
   import(
-    "@/components/bsComponents/bsBusinessManageComponent/bsHallBusinessOrderDetails.vue"
+    "@/views/bsPage/bsBusinessManage/bsHallBusiness/bsHallBusinessOrderDetails/BsHallBusinessOrderDetails.vue"
   );
 
 // 找样报价-报价详情
