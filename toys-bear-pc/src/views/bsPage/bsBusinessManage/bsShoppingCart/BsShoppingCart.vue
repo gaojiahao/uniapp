@@ -125,7 +125,7 @@
             <span> {{ scope.row.in_en }}/{{ scope.row.ou_lo }}(pcs) </span>
           </template>
         </el-table-column>
-        <el-table-column :autoFit="true" label="箱量">
+        <el-table-column :autoFit="true" label="箱数">
           <template slot-scope="scope">
             <input
               class="inputNumber"

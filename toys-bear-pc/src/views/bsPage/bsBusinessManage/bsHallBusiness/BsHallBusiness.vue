@@ -72,7 +72,7 @@
           value-format="yyyy-MM-ddTHH:mm:ss"
           v-model="searchForm.dateTime"
           type="datetimerange"
-          range-separator="-"
+          range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
         >

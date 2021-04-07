@@ -30,9 +30,9 @@
           <el-date-picker
             size="medium"
             value-format="yyyy-MM-ddTHH:mm:ss"
-            v-model="searchForm.dateTime"
+            v-model="dateTime"
             type="datetimerange"
-            range-separator="-"
+            range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
           >
@@ -341,7 +341,7 @@ export default {
       .item {
         display: flex;
         align-items: center;
-        max-width: 258px;
+        max-width: 280px;
         margin-right: 20px;
         .label {
           width: 70px;

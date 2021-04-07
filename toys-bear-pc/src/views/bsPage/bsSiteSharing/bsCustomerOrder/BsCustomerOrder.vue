@@ -59,7 +59,7 @@
         style="width:100%;"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
-        <el-table-column prop="orderNumber" label="订单编号" width="200">
+        <el-table-column prop="orderNumber" label="订单编号" width="220">
           <template slot-scope="scope">
             <div class="orderNumberBox" @click="toOrderDetails(scope.row)">
               <i class="el-icon-tickets"></i>
@@ -79,6 +79,7 @@
           prop="shareUrl"
           width="350"
           label="网址"
+          align="center"
         ></el-table-column>
         <el-table-column
           prop="customerName"
@@ -344,7 +345,6 @@
     </transition>
   </div>
 </template>
-
 <script>
 import bsExportOrder from "@/components/bsComponents/bsSiteSharingComponent/bsExportOrder";
 import { getCurrentTime } from "@/assets/js/common/common.js";
@@ -486,12 +486,6 @@ export default {
         value: row
       };
       this.$store.commit("myAddTab", fd);
-
-      // sessionStorage.setItem("orderDetails", JSON.stringify(row));
-      // this.$store.commit("handlerBsMenuLabels", {
-      //   linkUrl: "/bsIndex/bsClientOrderDetails",
-      //   name: row.orderNumber
-      // });
       this.$router.push("/bsIndex/bsClientOrderDetails");
     },
     // 切換頁容量

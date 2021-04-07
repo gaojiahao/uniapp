@@ -139,6 +139,8 @@ export default {
       const res = await this.$http.post("/api/ContactsCompanyListByID", fd);
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items;
+        this.totalCount = res.data.result.item.totalCount;
+        this.ProductCount = res.data.result.item.totalCount;
       }
     },
     //点击详情

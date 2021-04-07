@@ -273,12 +273,12 @@ export default {
         this.currentPage != 1
       )
         return false;
-      // this.getCollectList();
+      this.getOfferFormula();
     },
     // 修改当前页
     handleCurrentChange(page) {
       this.currentPage = page;
-      // this.getCollectList();
+      this.getOfferFormula();
     }
   },
   created() {},
