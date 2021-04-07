@@ -323,14 +323,13 @@ export default {
       console.log(row);
       const fd = {
         name: "详情" + row.offerNumber,
-        linkUrl: "/bsIndex/bsSampleQuotationDetails",
+        linkUrl: "/bsIndex/bsSampleQuotation",
         component: "bsSampleQuotationDetails",
         refresh: true,
         noPush: true,
         label: "详情" + row.offerNumber,
         value: row
       };
-      this.$router.push("/bsIndex/bsSampleQuotationDetails");
       this.$store.commit("myAddTab", fd);
     },
     //编辑报价跳转
