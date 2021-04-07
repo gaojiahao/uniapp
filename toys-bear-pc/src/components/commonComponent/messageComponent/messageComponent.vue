@@ -46,6 +46,9 @@ export default {
   text-align: center;
   transition: all 0.5s;
   .messageBox {
+    position: absolute;
+    left: 50%;
+    top: 50%;
     height: 50px;
     line-height: 50px;
     display: inline-block;
