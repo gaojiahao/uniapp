@@ -20,21 +20,15 @@
         </div>
         <div class="itemBox">
           <span>状态：</span>
-          <span class="orderNumber" v-if="item.readStatus == 0"
-            >未读</span
-          >
-          <span class="orderNumber" v-if="item.readStatus == 1"
-            >已读</span
-          >
+          <span class="orderNumber" v-if="item.readStatus == 0">未读</span>
+          <span class="orderNumber" v-if="item.readStatus == 1">已读</span>
         </div>
       </div>
       <div class="infoBottom">
         <div class="itemBox">
           <span>择样时间：</span>
           <span class="orderNumber">
-            {{
-              item.happenDate && item.happenDate.replace(/T/, " ")
-            }}
+            {{ item.happenDate && item.happenDate.replace(/T/, " ") }}
           </span>
         </div>
         <div class="itemBox">
