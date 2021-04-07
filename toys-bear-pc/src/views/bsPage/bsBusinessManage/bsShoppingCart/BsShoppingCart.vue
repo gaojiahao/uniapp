@@ -61,7 +61,7 @@
                     >
                       <div class="cartPhoneIcon"></div>
                     </el-tooltip>
-                    <div class="cartInfoIcon"></div>
+                    <div class="cartInfoIcon" @click="toNews(scope.row)"></div>
                   </div>
                 </div>
               </div>
@@ -195,27 +195,23 @@
         <div class="right">
           <p class="item">
             <span class="itemTitle">总款数：</span>
-            <span>{{ tableData.length }}</span>
+            <span>{{ selectTableData.length }}</span>
           </p>
           <p class="item">
             <span class="itemTitle">总箱数：</span>
-            <span>{{ myTotalQuantity(tableData) }}</span>
+            <span>{{ myTotalQuantity }}</span>
           </p>
           <p class="item">
             <span class="itemTitle">总体积/总材积：</span>
-            <span
-              >{{ myTotalVolume(tableData).outerBoxStere }}/{{
-                myTotalVolume(tableData).outerBoxFeet
-              }}</span
-            >
+            <span>{{ myTotalOuterBoxStere }}/{{ myTotalOuterBoxFeet }}</span>
           </p>
           <p class="item">
             <span class="itemTitle">总毛重/总净重：</span>
-            <span>{{ totalMaozhong() }}/{{ totalJingzhong() }}(kg)</span>
+            <span>{{ myTotalMaozhong }}/{{ myTotalJingzhong }}(kg)</span>
           </p>
           <p class="item">
             <span class="itemTitle">总金额：</span>
-            <span class="price">￥{{ myTotalPrice(tableData) }}</span>
+            <span class="price">￥{{ myTotalPrice }}</span>
           </p>
           <el-button
             type="warning"
@@ -484,6 +480,13 @@ export default {
   name: "bsShoppingCart",
   data() {
     return {
+      myTotalPrice: 0,
+      myTotalOuterBoxStere: 0,
+      myTotalOuterBoxFeet: 0,
+      myTotalJingzhong: 0,
+      myTotalQuantity: 0,
+      myTotalMaozhong: 0,
+      selectTableData: [],
       addMyClientDialog: false,
       addClientFormData: {
         name: null,
@@ -698,58 +701,38 @@ export default {
     priceCount(price, ou_lo, shoppingCount) {
       return this.multiply(this.multiply(price, ou_lo), shoppingCount);
     },
-    // 计算总个数量
-    myTotalGe() {
+    // 计算总箱数
+    calculationTotalBox(list) {
       let number = 0;
-      for (let i = 0; i < this.tableData.length; i++) {
-        number = this.add(
-          number,
-          this.multiply(
-            this.tableData[i].shoppingCount,
-            this.tableData[i].ou_lo
-          )
-        );
+      for (let i = 0; i < list.length; i++) {
+        number = this.add(number, list[i].shoppingCount || 0);
       }
-      return number;
+      this.myTotalQuantity = number;
     },
     // 计算总毛重
-    totalMaozhong() {
+    calculationTotalMaozhong(list) {
       let number = 0;
-      for (let i = 0; i < this.tableData.length; i++) {
+      for (let i = 0; i < list.length; i++) {
         number = this.add(
           number,
-          this.multiply(
-            this.tableData[i].shoppingCount,
-            this.tableData[i].gr_we
-          )
+          this.multiply(list[i].shoppingCount, list[i].gr_we)
         );
       }
-      return number;
+      this.myTotalMaozhong = number;
     },
     // 计算总净重
-    totalJingzhong() {
+    calculationTotalJingzhong(list) {
       let number = 0;
-      for (let i = 0; i < this.tableData.length; i++) {
+      for (let i = 0; i < list.length; i++) {
         number = this.add(
           number,
-          this.multiply(
-            this.tableData[i].shoppingCount,
-            this.tableData[i].ne_we
-          )
+          this.multiply(list[i].shoppingCount, list[i].ne_we)
         );
       }
-      return number;
-    },
-    // 计算总箱数量
-    myTotalQuantity() {
-      let number = 0;
-      for (let i = 0; i < this.tableData.length; i++) {
-        number = this.add(number, this.tableData[i].shoppingCount || 0);
-      }
-      return number;
+      this.myTotalJingzhong = number;
     },
     // 计算总价
-    myTotalPrice(list) {
+    calculationTotalPrice(list) {
       let price = 0;
       for (let i = 0; i < list.length; i++) {
         price = this.add(
@@ -760,10 +743,10 @@ export default {
           )
         );
       }
-      return price;
+      this.myTotalPrice = price;
     },
     // 计算总体积材积
-    myTotalVolume(list) {
+    calculationTotalVolume(list) {
       let outerBoxStere = 0,
         outerBoxFeet = 0;
       for (let i = 0; i < list.length; i++) {
@@ -776,10 +759,20 @@ export default {
           this.multiply(list[i].bulk_feet, list[i].shoppingCount)
         );
       }
-      return {
-        outerBoxStere,
-        outerBoxFeet
+      this.myTotalOuterBoxStere = outerBoxStere;
+      this.myTotalOuterBoxFeet = outerBoxFeet;
+    },
+    // 去聊天
+    toNews(item) {
+      const fd = {
+        name: item.supplierName,
+        linkUrl: "/bsIndex/bsNews",
+        component: "bsNews",
+        refresh: true,
+        label: item.supplierName,
+        value: {}
       };
+      this.$store.commit("myAddTab", fd);
     },
     // 搜索客户
     filterMethod(val) {
@@ -928,6 +921,7 @@ export default {
     },
     // table勾选发生变化事件
     selectionChange(selection) {
+      this.selectTableData = selection;
       if (selection.length) {
         if (selection.length === this.shoppingList.length) {
           this.isIndeterminate = false;
@@ -1112,6 +1106,21 @@ export default {
     ...mapState(["userInfo"])
   },
   watch: {
+    selectTableData: {
+      deep: true,
+      handler(list) {
+        // 计算总箱数
+        this.calculationTotalBox(list);
+        // 计算总毛重
+        this.calculationTotalMaozhong(list);
+        // 计算总净重
+        this.calculationTotalJingzhong(list);
+        // 计算总体积材积
+        this.calculationTotalVolume(list);
+        // 计算总金额
+        this.calculationTotalPrice(list);
+      }
+    },
     "clienFormData.defaultFormula": {
       deep: true,
       handler(newVal) {

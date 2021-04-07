@@ -30,7 +30,7 @@
           <el-date-picker
             size="medium"
             value-format="yyyy-MM-ddTHH:mm:ss"
-            v-model="dateTime"
+            v-model="searchForm.dateTime"
             type="datetimerange"
             range-separator="至"
             start-placeholder="开始日期"
@@ -89,10 +89,17 @@
         </el-table-column>
         <el-table-column
           prop="sumAmountOu_lo"
-          label="采购数量"
+          label="采购总数"
           align="center"
           width="100"
         >
+        </el-table-column>
+        <el-table-column label="总金额" align="center" width="100">
+          <template slot-scope="scope">
+            <div style="color: #EB1515;">
+              {{ scope.row.sumFa_pr_pr }}
+            </div>
+          </template>
         </el-table-column>
         <el-table-column
           prop="pushContent"

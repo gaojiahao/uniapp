@@ -94,7 +94,7 @@
           <p>
             <span class="newTime">
               上架时间：
-              <span>{{ item.newTime.replace(/T.*/, "") }}</span>
+              <span>{{ item.newTime && item.newTime.replace(/T.*/, "") }}</span>
             </span>
             <span class="stock">
               库存：
@@ -114,7 +114,7 @@
             <i class="factoryIcon"></i>
             <span>{{ item.supplierName }}</span>
           </p>
-          <p class="item myHover">
+          <p class="item myHover" @click="toNews(item)">
             <i class="infoIcon"></i>
             <span>在线咨询</span>
           </p>
@@ -179,6 +179,18 @@ export default {
     return {};
   },
   methods: {
+    // 去聊天
+    toNews(item) {
+      const fd = {
+        name: item.supplierName,
+        linkUrl: "/bsIndex/bsNews",
+        component: "bsNews",
+        refresh: true,
+        label: item.supplierName,
+        value: {}
+      };
+      this.$store.commit("myAddTab", fd);
+    },
     // 去厂商
     toFactory(item) {
       console.log(item);

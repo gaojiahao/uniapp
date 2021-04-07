@@ -144,7 +144,7 @@ export default {
       }
       const fd = {
         name: this.item.productNumber,
-        linkUrl: "/bsIndex/bsProductDetails",
+        linkUrl: "/bsIndex/bsProductSearchIndex",
         component: "bsProductDetails",
         refresh: true,
         label: this.item.fa_no || "产品详情",

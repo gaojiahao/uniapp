@@ -147,14 +147,13 @@ export default {
     async handleDetail(e) {
       const fd = {
         name: e.companyName,
-        linkUrl: "/bsIndex/bsMyClientsDetail",
+        linkUrl: "/bsIndex/bsVendorQuery",
         component: "bsMyClientsDetail",
         refresh: true,
         noPush: true,
         label: e.companyName,
         value: e
       };
-      this.$router.push("/bsIndex/bsMyClientsDetail");
       this.$store.commit("myAddTab", fd);
     },
     // 搜索
