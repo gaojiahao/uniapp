@@ -41,7 +41,6 @@
         :data="tableData"
         style="width: 100%"
         ref="collecTable"
-        @row-click="handleDetail"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
         <el-table-column prop="img" label="产品" width="300">
@@ -53,15 +52,23 @@
                 :src="scope.row.img"
                 :preview-src-list="scope.row.imgUrlList"
               >
-                <div slot="placeholder" class="errorImg">
+                <div
+                  @click="handleDetail(scope.row)"
+                  slot="placeholder"
+                  class="errorImg"
+                >
                   <img src="~@/assets/images/imgError.png" alt />
                 </div>
-                <div slot="error" class="errorImg">
+                <div
+                  @click="handleDetail(scope.row)"
+                  slot="error"
+                  class="errorImg"
+                >
                   <img src="~@/assets/images/imgError.png" alt />
                 </div>
               </el-image>
               <div class="productName">
-                <div class="name">
+                <div class="name" @click="handleDetail(scope.row)">
                   {{ scope.row.name }}
                 </div>
                 <div class="factory">
@@ -322,11 +329,13 @@ export default {
           }
           .name {
             margin-top: 8px;
+            cursor: pointer;
           }
         }
       }
     }
     .errorImg {
+      cursor: pointer;
       img {
         width: 80px;
         height: 60px;

@@ -275,9 +275,9 @@ export default {
       const res = await this.$http.post(url, fd);
       if (res.data.result.code === 200) {
         this.yuangongTitle = "新增员工";
+        const msg = this.isEdit ? "编辑成功" : "新增成功";
         this.isEdit = false;
         this.addEmployDialog = false;
-        const msg = this.isEdit ? "编辑成功" : "新增成功";
         this.$common.handlerMsgState({
           msg: msg,
           type: "success"

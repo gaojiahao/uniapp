@@ -9,6 +9,7 @@
           :key="i"
         >
           {{ item.name }}
+          <span v-if="isDiyu === i">({{ totalCount }})</span>
         </div>
       </div>
       <div class="right">
@@ -296,7 +297,7 @@ export default {
       flex: 1;
       align-items: center;
       .tabs {
-        width: 100px;
+        width: 120px;
         height: 55px;
         box-sizing: border-box;
         border-bottom: 2px solid transparent;
