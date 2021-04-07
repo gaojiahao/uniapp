@@ -69,7 +69,8 @@
             <div class="imgBox">
               <el-image
                 fit="contain"
-                style="width:80px;height:60px;"
+                @click.native="goDetails(scope.row)"
+                style="width:80px;height:60px;cursor: pointer;"
                 :src="scope.row.productImage"
                 :preview-src-list="[scope.row.productImage]"
               >
@@ -81,7 +82,7 @@
                 </div>
               </el-image>
               <div class="productName">
-                <div class="name">
+                <div class="name" @click="goDetails(scope.row)">
                   {{ scope.row.productName }}
                 </div>
                 <div class="factory">
@@ -164,7 +165,7 @@
             <span> {{ scope.row.in_en }}/{{ scope.row.ou_lo }}(pcs) </span>
           </template>
         </ex-table-column>
-        <ex-table-column :autoFit="true" prop="costPrice" label="参考价">
+        <ex-table-column :autoFit="true" prop="costPrice" label="参考单价">
           <template slot-scope="scope">
             <span style="color:#3368A9">
               {{ options.currencyType + scope.row.costPrice }}
@@ -198,7 +199,7 @@
           <span
             >{{ options.totalGrossWeight }}/{{
               options.totalNetWeight
-            }}(kg)</span
+            }}(KG)</span
           >
         </p>
         <p class="item">
@@ -307,6 +308,21 @@ export default {
           type: "danger"
         });
       }
+    },
+    // 点击产品名字跳转
+    goDetails(row) {
+      console.log(row, 123);
+      row.img = row.productImage;
+      row.imgUrlList = [row.productImage];
+      const fd = {
+        name: row.productName + row.fa_no,
+        linkUrl: "/bsIndex/bsProductDetails",
+        component: "bsProductDetails",
+        refresh: true,
+        label: row.fa_no || "产品详情",
+        value: row
+      };
+      this.$store.commit("myAddTab", fd);
     },
     // 切换当前页
     currentChange(page) {
@@ -422,6 +438,9 @@ export default {
         text-align: left;
         display: flex;
         font-size: 14px;
+        .el-image {
+          cursor: pointer;
+        }
         .productName {
           width: 190px;
           height: 60px;
@@ -429,6 +448,7 @@ export default {
           .name,
           .factory {
             width: 190px;
+            cursor: pointer;
             max-width: 190px;
             overflow: hidden; /*超出部分隐藏*/
             white-space: nowrap; /*不换行*/

@@ -21,7 +21,7 @@
             value-format="yyyy-MM-ddTHH:mm:ss"
             v-model="dateTime"
             type="datetimerange"
-            range-separator="-"
+            range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
           >
@@ -273,12 +273,12 @@ export default {
         this.currentPage != 1
       )
         return false;
-      // this.getCollectList();
+      this.getOfferFormula();
     },
     // 修改当前页
     handleCurrentChange(page) {
       this.currentPage = page;
-      // this.getCollectList();
+      this.getOfferFormula();
     }
   },
   created() {},
@@ -324,7 +324,7 @@ export default {
       .item {
         display: flex;
         align-items: center;
-        max-width: 258px;
+        max-width: 290px;
         margin-right: 20px;
         .label {
           width: 58px;

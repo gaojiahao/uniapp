@@ -22,7 +22,7 @@
             value-format="yyyy-MM-ddTHH:mm:ss"
             v-model="dateTime"
             type="datetimerange"
-            range-separator="-"
+            range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
           >
@@ -206,6 +206,7 @@ export default {
       }
       const res = await this.$http.post("/api/SearchCustomerInfosPage", fd);
       if (res.data.result.code === 200) {
+        this.totalCount = res.data.result.item.totalCount;
         this.tableData = res.data.result.item.items;
       }
     },
@@ -235,24 +236,24 @@ export default {
         phoneNumber: null,
         remark: null
       };
+      this.dialogTitle = "新增客户";
       this.dialogVisible = true;
     },
     //创建客户
     async handleAdd() {
       this.$refs.formDataRef.validate(async valid => {
         if (valid) {
-          console.log(valid);
           const res = await this.$http.post(
             "/api/CreateCustomerInfo",
             this.formData
           );
           if (res.data.result.code === 200) {
-            this.getClientsListPage();
             this.closeDialog();
             this.$common.handlerMsgState({
               msg: "新增操作成功",
               type: "success"
             });
+            this.getClientsListPage();
           } else {
             this.$common.handlerMsgState({
               msg: res.data.result.msg,
@@ -272,7 +273,6 @@ export default {
     async handleUpdate() {
       this.$refs.formDataRef.validate(async valid => {
         if (valid) {
-          console.log(this.formData);
           const res = await this.$http.post(
             "/api/UpdateCustomerInfo",
             this.formData
@@ -296,7 +296,6 @@ export default {
     //删除客户
     async handleDelete(index, row) {
       const res = await this.$http.post("/api/DeleteCustomerInfo?id=" + row.id);
-      console.log(res.data, "回调");
       if (res.data.result.code === 200) {
         this.$common.handlerMsgState({
           msg: "删除成功",
@@ -389,7 +388,7 @@ export default {
       .item {
         display: flex;
         align-items: center;
-        max-width: 258px;
+        max-width: 290px;
         margin-right: 20px;
         .label {
           width: 58px;

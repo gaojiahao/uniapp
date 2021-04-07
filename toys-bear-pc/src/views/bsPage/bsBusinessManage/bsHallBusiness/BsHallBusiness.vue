@@ -72,7 +72,7 @@
           value-format="yyyy-MM-ddTHH:mm:ss"
           v-model="searchForm.dateTime"
           type="datetimerange"
-          range-separator="-"
+          range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
         >
@@ -263,12 +263,16 @@ export default {
     },
     // 去订单详情
     toDetails(row) {
-      sessionStorage.setItem("orderDetails", JSON.stringify(row));
-      this.$store.commit("handlerBsMenuLabels", {
-        linkUrl: "/bsIndex/bsHallBusinessOrderDetails",
-        name: row.orderNumber
-      });
-      this.$router.push("/bsIndex/bsHallBusinessOrderDetails");
+      console.log(row);
+      const fd = {
+        name: row.orderNumber,
+        linkUrl: "/bsIndex/bsHallBusiness",
+        component: "bsHallBusinessOrderDetails",
+        refresh: true,
+        label: row.orderNumber,
+        value: row
+      };
+      this.$store.commit("myAddTab", fd);
     },
     // 获取列表
     async getTableDataList() {

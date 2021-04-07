@@ -23,7 +23,15 @@ const store = new Vuex.Store({
     showGlobalMsg: false,
     msgType: "primary",
     globalMsg: "",
-    tabList: [],
+    tabList: [
+      {
+        component: "bsHome",
+        label: "后台首页",
+        linkUrl: "/bsIndex/bsHome",
+        name: "/bsIndex/bsHome",
+        refresh: true
+      }
+    ],
     offerProductList: [], //报价数据
     historyNames: [],
     httpTime: 0, // 请求时长

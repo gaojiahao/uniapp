@@ -36,14 +36,14 @@
             @keyup.native.enter="search"
           ></el-input>
         </div>
-        <div class="item">
+        <div class="item" style=" max-width:300px">
           <span class="label">时间段：</span>
           <el-date-picker
             size="medium"
             value-format="yyyy-MM-ddTHH:mm:ss"
             v-model="searchForm.dateTime"
             type="datetimerange"
-            range-separator="-"
+            range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
           >
@@ -323,28 +323,26 @@ export default {
       console.log(row);
       const fd = {
         name: "详情" + row.offerNumber,
-        linkUrl: "/bsIndex/bsSampleQuotationDetails",
+        linkUrl: "/bsIndex/bsSampleQuotation",
         component: "bsSampleQuotationDetails",
         refresh: true,
         noPush: true,
         label: "详情" + row.offerNumber,
         value: row
       };
-      this.$router.push("/bsIndex/bsSampleQuotationDetails");
       this.$store.commit("myAddTab", fd);
     },
     //编辑报价跳转
     async handleEdit(index, row) {
       const fd = {
         name: "编辑" + row.offerNumber,
-        linkUrl: "/bsIndex/bsSampleUpdata",
+        linkUrl: "/bsIndex/bsSampleQuotation",
         component: "bsSampleUpdata",
         refresh: true,
         noPush: true,
         label: "编辑" + row.offerNumber,
         value: row
       };
-      this.$router.push("/bsIndex/bsSampleUpdata");
       this.$store.commit("myAddTab", fd);
     },
     // 搜索
@@ -392,7 +390,7 @@ export default {
     .item {
       display: flex;
       align-items: center;
-      max-width: 250px;
+      max-width: 290px;
       margin-right: 20px;
       .label {
         width: 70px;

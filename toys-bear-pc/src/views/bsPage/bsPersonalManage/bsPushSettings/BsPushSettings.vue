@@ -117,6 +117,7 @@ export default {
       const res = await this.$http.post("/api/PushSettings/ListByPage", { fd });
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items;
+        this.totalCount = res.data.result.item.totalCount;
       }
     },
     // 搜索
@@ -126,14 +127,14 @@ export default {
     },
     // 提交新增或编辑
     async submit(form) {
-      console.log(form);
       const res = await this.$http.post("/api/PushSettings/Create", form);
       if (res.data.result.code === 200) {
+        this.close();
         this.$common.handlerMsgState({
           msg: "新增成功",
           type: "success"
         });
-        this.close();
+
         this.getPushSettingsPage();
       } else {
         this.$common.handlerMsgState({
@@ -161,11 +162,9 @@ export default {
     },
     // 删除推送
     async handleDelete(row) {
-      console.log(row);
       const res = await this.$http.post("/api/PushSettings/Delete", {
         id: row.id
       });
-      console.log(res.data, "回调");
       if (res.data.result.code === 200) {
         this.$common.handlerMsgState({
           msg: "删除成功",

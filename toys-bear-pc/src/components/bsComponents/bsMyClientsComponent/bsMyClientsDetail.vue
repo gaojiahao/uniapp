@@ -142,17 +142,17 @@
         <!-- 产品列表 -->
         <component :is="isGrid" :productList="productList"></component>
         <!-- 分页 -->
-        <center class="myPagination">
+        <center style="padding:20px 0;">
           <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[12, 24, 36, 48]"
-            :page-size="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
+            :page-sizes="[12, 24, 36, 48]"
+            background
             :total="totalCount"
-          >
-          </el-pagination>
+            :page-size="pageSize"
+            :current-page.sync="currentPage"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+          ></el-pagination>
         </center>
       </div>
     </div>
@@ -223,8 +223,10 @@ export default {
     //推荐产品接口
     async getProductListPageEcommend() {
       const fd = {
-        PageIndex: 1,
-        PageSize: 12,
+        // PageIndex: 1,
+        // PageSize: 12,
+        maxResultCoun: this.PageSize,
+        skipCount: this.pageIndex,
         companyNumber: this.item.companyNumber,
         KeyWord: this.searchForm.keyword,
         minPrice: this.searchForm.minPrice,
@@ -324,7 +326,11 @@ export default {
           this.sortOrder = null;
           break;
       }
-      this.getProductListPageEcommend();
+      if (this.isDiyu === 0) {
+        this.getProductListPageAll();
+      } else {
+        this.getProductListPageEcommend();
+      }
     }
   }
 };
@@ -501,9 +507,6 @@ export default {
   .productListBox {
     width: 100%;
     box-sizing: border-box;
-    .myPagination {
-      padding: 30px 0;
-    }
   }
 }
 </style>

@@ -693,12 +693,12 @@ export default {
             this.addClientFormData
           );
           if (res.data.result.code === 200) {
-            this.getClientList();
             this.addMyClientDialog = false;
             this.$common.handlerMsgState({
               msg: "新增操作成功",
               type: "success"
             });
+            this.getClientList();
           } else {
             this.$common.handlerMsgState({
               msg: res.data.result.msg,
@@ -727,6 +727,7 @@ export default {
           let url = "/api/CreateWebsiteShareInfo";
           if (this.dialogTitle === "编辑分享")
             url = "/api/UpdateWebsiteShareInfo";
+          console.log(this.clienFormData);
           const res = await this.$http.post(url, this.clienFormData);
           if (res.data.result.code === 200) {
             this.addClienDialog = false;

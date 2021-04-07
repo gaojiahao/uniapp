@@ -80,7 +80,7 @@
           </el-form-item>
         </div>
         <div class="right">
-          <el-form-item label="利润：" prop="profit">
+          <el-form-item label="利润率：" prop="profit">
             <el-input
               v-model.number="addDefaultForm.profit"
               clearable

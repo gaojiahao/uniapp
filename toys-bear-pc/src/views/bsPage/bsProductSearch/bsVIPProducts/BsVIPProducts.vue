@@ -9,6 +9,8 @@
           :key="i"
         >
           {{ item.name }}
+          <span v-if="isDiyu === i">({{ totalCount }})</span>
+          <span v-else>(0)</span>
         </div>
       </div>
       <div class="right">
@@ -56,7 +58,7 @@
             value-format="yyyy-MM-ddTHH:mm:ss"
             v-model="dateTime"
             type="datetimerange"
-            range-separator="-"
+            range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
           >
@@ -160,6 +162,7 @@ export default {
     },
     // 切换专区
     checkTabs(num, item) {
+      this.totalCount = 0;
       this.isDiyu = num;
       this.currentTabs = item;
       this.currentChildren = null;
@@ -296,7 +299,7 @@ export default {
       flex: 1;
       align-items: center;
       .tabs {
-        width: 100px;
+        width: 120px;
         height: 55px;
         box-sizing: border-box;
         border-bottom: 2px solid transparent;

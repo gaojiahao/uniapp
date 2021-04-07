@@ -59,9 +59,9 @@ export default {
         neirong: null
       },
       defaultFormRules: {
-        zhuti: [{ required: true, message: "请输入主题", trigger: "blur" }],
-        paixu: [{ required: true, message: "请输入排序", trigger: "blur" }],
-        neirong: [{ required: true, message: "请输入内容", trigger: "blur" }]
+        title: [{ required: true, message: "请输入主题", trigger: "blur" }],
+        sort: [{ required: true, message: "请输入排序", trigger: "blur" }],
+        content: [{ required: true, message: "请输入内容", trigger: "blur" }]
       }
     };
   },

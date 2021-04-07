@@ -36,7 +36,7 @@
           value-format="yyyy-MM-ddTHH:mm:ss"
           v-model="dateTime"
           type="daterange"
-          range-separator="-"
+          range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
         >
@@ -59,7 +59,7 @@
         style="width:100%;"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
-        <el-table-column prop="orderNumber" label="订单编号" width="200">
+        <el-table-column prop="orderNumber" label="订单编号" width="220">
           <template slot-scope="scope">
             <div class="orderNumberBox" @click="toOrderDetails(scope.row)">
               <i class="el-icon-tickets"></i>
@@ -87,7 +87,7 @@
         ></el-table-column>
         <el-table-column
           prop="totalKuanshu"
-          label="订单款数"
+          label="商品总款数"
           align="center"
         ></el-table-column>
         <el-table-column
@@ -119,7 +119,7 @@
             <el-button
               style="margin-right:10px;"
               size="mini"
-              type="primary"
+              type="warning"
               @click="openSelectTemplate(scope.row)"
               >导出</el-button
             >
@@ -344,7 +344,6 @@
     </transition>
   </div>
 </template>
-
 <script>
 import bsExportOrder from "@/components/bsComponents/bsSiteSharingComponent/bsExportOrder";
 import { getCurrentTime } from "@/assets/js/common/common.js";
@@ -478,7 +477,7 @@ export default {
     async toOrderDetails(row) {
       const fd = {
         name: row.orderNumber,
-        linkUrl: "/bsIndex/bsClientOrderDetails",
+        linkUrl: "/bsIndex/bsCustomerOrder",
         component: "bsClientOrderDetails",
         refresh: true,
         noPush: true,
@@ -486,13 +485,6 @@ export default {
         value: row
       };
       this.$store.commit("myAddTab", fd);
-
-      // sessionStorage.setItem("orderDetails", JSON.stringify(row));
-      // this.$store.commit("handlerBsMenuLabels", {
-      //   linkUrl: "/bsIndex/bsClientOrderDetails",
-      //   name: row.orderNumber
-      // });
-      this.$router.push("/bsIndex/bsClientOrderDetails");
     },
     // 切換頁容量
     handleSizeChange(pageSize) {
@@ -560,7 +552,7 @@ export default {
     .item {
       display: flex;
       align-items: center;
-      max-width: 258px;
+      max-width: 290px;
       margin-right: 20px;
       .label {
         width: 58px;

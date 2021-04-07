@@ -67,7 +67,7 @@
           <i v-else class="shoppingCart"></i>
         </div>
       </div>
-      <div class="sourceBox">
+      <div class="sourceBox" @click="gobsMyClientsDetail()">
         <i class="sourceIcon"></i>
         <template v-if="item.isIntegral">
           <span class="text">
@@ -96,17 +96,32 @@ export default {
     return {};
   },
   methods: {
+    // 去产品详情页
     async toProductDetails() {
       const fd = {
         name: this.item.productNumber,
-        linkUrl: "/bsIndex/bsProductDetails",
+        linkUrl: "/bsIndex/bsProductSearchIndex",
         component: "bsProductDetails",
         refresh: true,
         label: this.item.fa_no || "产品详情",
         value: this.item
       };
-      this.$router.push("/bsIndex/bsProductDetails");
       this.$store.commit("myAddTab", fd);
+    },
+    // 去厂商详情页
+    async gobsMyClientsDetail() {
+      console.log(this.item);
+      // const fd = {
+      //   name: e.companyName,
+      //   linkUrl: "/bsIndex/bsMyClientsDetail",
+      //   component: "bsMyClientsDetail",
+      //   refresh: true,
+      //   noPush: true,
+      //   label: e.companyName,
+      //   value: e
+      // };
+      // this.$router.push("/bsIndex/bsMyClientsDetail");
+      // this.$store.commit("myAddTab", fd);
     },
     // 收藏
     async addCollect(item) {
