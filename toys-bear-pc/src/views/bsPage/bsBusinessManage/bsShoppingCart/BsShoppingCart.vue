@@ -68,9 +68,13 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column :autoFit="true" label="资料来源">
+        <el-table-column :autoFit="true" label="资料来源" min-width="120">
           <template slot-scope="scope">
-            {{ scope.row.exhibitionName }}
+            <div
+              style="overflow:hidden;width:100%;white-space: nowrap;text-overflow: ellipsis;"
+            >
+              {{ scope.row.exhibitionName }}
+            </div>
           </template>
         </el-table-column>
         <el-table-column
