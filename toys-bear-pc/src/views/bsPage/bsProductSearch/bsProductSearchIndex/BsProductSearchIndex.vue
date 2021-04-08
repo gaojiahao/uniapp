@@ -748,7 +748,22 @@ export default {
   watch: {
     shoppingList(list) {
       if (list) {
-        this.getProductList();
+        if (list.length) {
+          for (let i = 0; i < this.productList.length; i++) {
+            for (let j = 0; j < list.length; j++) {
+              if (this.productList[i].productNumber == list[j].productNumber) {
+                this.productList[i].isShopping = true;
+                break;
+              } else {
+                this.productList[i].isShopping = false;
+              }
+            }
+          }
+        } else {
+          this.productList.forEach(val => {
+            val.isShopping = false;
+          });
+        }
       }
     },
     "searchForm.time"(newVal) {

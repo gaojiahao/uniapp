@@ -11,6 +11,7 @@
             type="text"
             size="medium"
             v-model="keyword"
+            clearable
             placeholder="请输入关键词"
             @keyup.native.enter="search"
           ></el-input>
