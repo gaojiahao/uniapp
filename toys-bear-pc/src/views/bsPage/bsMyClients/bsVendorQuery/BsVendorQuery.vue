@@ -30,7 +30,7 @@
     <div class="clientList">
       <div class="titleLeft">
         <p>客户列表</p>
-        <p>( {{ ProductCount }} )</p>
+        <p>( {{ totalCount }} )</p>
       </div>
     </div>
     <div class="tableBox">
@@ -114,7 +114,6 @@ export default {
   name: "bsVendorQuery",
   data() {
     return {
-      ProductCount: "0",
       totalCount: 0,
       pageSize: 12,
       currentPage: 1,
@@ -140,7 +139,6 @@ export default {
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items;
         this.totalCount = res.data.result.item.totalCount;
-        this.ProductCount = res.data.result.item.totalCount;
       }
     },
     //点击详情

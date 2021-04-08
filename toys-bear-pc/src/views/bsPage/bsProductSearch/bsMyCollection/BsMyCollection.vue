@@ -71,7 +71,7 @@
                 <div class="name" @click="handleDetail(scope.row)">
                   {{ scope.row.name }}
                 </div>
-                <div class="factory">
+                <div class="factory" @click="toFactory(scope.row)">
                   {{ scope.row.supplierName }}
                 </div>
               </div>
@@ -234,6 +234,28 @@ export default {
       this.$router.push("/bsIndex/bsProductDetails");
       this.$store.commit("myAddTab", fd);
     },
+    // 去厂商详情页
+    async toFactory(item) {
+      console.log(item);
+      const fd = {
+        name: item.supplierName,
+        linkUrl: "/bsIndex/bsVendorQuery",
+        component: "bsMyClientsDetail",
+        refresh: true,
+        noPush: true,
+        label: item.supplierName,
+        value: {
+          companyNumber: item.supplierNumber,
+          companyLogo: item.supplierPersonnelLogo,
+          companyName: item.supplierName,
+          contactsMan: item.supplierPersonnelName,
+          phoneNumber: item.supplierPhone,
+          address: item.supplierAddres || item.supplierAddress
+        }
+      };
+      this.$router.push("/bsIndex/bsVendorQuery");
+      this.$store.commit("myAddTab", fd);
+    },
     // 切換頁容量
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
@@ -314,6 +336,7 @@ export default {
         font-size: 14px;
         .productName {
           // width: 160px;
+          cursor: pointer;
           height: 60px;
           margin-left: 15px;
           .name,
@@ -329,7 +352,6 @@ export default {
           }
           .name {
             margin-top: 8px;
-            cursor: pointer;
           }
         }
       }

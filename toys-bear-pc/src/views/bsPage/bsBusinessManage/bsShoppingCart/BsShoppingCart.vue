@@ -46,10 +46,7 @@
                   {{ scope.row.name }}
                 </div>
                 <div class="factory">
-                  <div
-                    class="fcatoryName"
-                    @click="goManufacturerDetails(scope.row)"
-                  >
+                  <div class="fcatoryName" @click="toFactory(scope.row)">
                     {{ scope.row.supplierName }}
                   </div>
                   <div class="icons">
@@ -806,21 +803,27 @@ export default {
       this.$router.push("/bsIndex/bsProductDetails");
       this.$store.commit("myAddTab", fd);
     },
-    //厂商跳转
-    goManufacturerDetails(row) {
-      //跳转的数据不对
-      console.log(row, "跳转");
-      // const fd = {
-      //   name: row.supplierName,
-      //   linkUrl: "/bsIndex/bsMyClientsDetail",
-      //   component: "bsMyClientsDetail",
-      //   refresh: true,
-      //   noPush: true,
-      //   label: row.supplierName,
-      //   value: row
-      // };
-      // this.$router.push("/bsIndex/bsMyClientsDetail");
-      // this.$store.commit("myAddTab", fd);
+    // 去厂商详情页
+    async toFactory(item) {
+      console.log(item);
+      const fd = {
+        name: item.supplierName,
+        linkUrl: "/bsIndex/bsVendorQuery",
+        component: "bsMyClientsDetail",
+        refresh: true,
+        noPush: true,
+        label: item.supplierName,
+        value: {
+          companyNumber: item.supplierNumber,
+          companyLogo: item.supplierPersonnelLogo,
+          companyName: item.supplierName,
+          contactsMan: item.supplierPersonnelName,
+          phoneNumber: item.supplierPhone,
+          address: item.supplierAddres || item.supplierAddress
+        }
+      };
+      this.$router.push("/bsIndex/bsVendorQuery");
+      this.$store.commit("myAddTab", fd);
     },
 
     // 提交新增客户
@@ -1218,6 +1221,7 @@ export default {
         text-align: left;
         display: flex;
         font-size: 14px;
+        cursor: pointer;
         .productName {
           width: 190px;
           height: 60px;
@@ -1264,7 +1268,6 @@ export default {
           }
           .name {
             margin-top: 8px;
-            cursor: pointer;
           }
         }
       }

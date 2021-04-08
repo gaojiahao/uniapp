@@ -70,7 +70,7 @@
               <el-image
                 fit="contain"
                 style="width:80px;height:60px;"
-                :src="scope.row.imgUrl[0]"
+                :src="scope.row.imgUrl && scope.row.imgUrl[0]"
                 :preview-src-list="scope.row.imgUrl"
               >
                 <div slot="placeholder" class="errorImg">
@@ -104,6 +104,7 @@
             </div>
           </template>
         </ex-table-column>
+
         <ex-table-column :autoFit="true" label="资料来源">
           <template slot-scope="scope">
             {{ scope.row.exhibitionName }}
@@ -290,6 +291,7 @@ export default {
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items;
         this.totalCount = res.data.result.item.totalCount;
+        console.log(this.tableData);
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
