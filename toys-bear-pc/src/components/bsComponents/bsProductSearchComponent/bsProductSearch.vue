@@ -59,12 +59,27 @@ export default {
   methods: {
     // 选择图片-图搜
     openUpload(file) {
-      // this.$emit("openUpload", file);
+      // const fd = {
+      //   name: "/bsIndex/bsProductSearchIndex",
+      //   linkUrl: "/bsIndex/bsProductSearchIndex",
+      //   component: "bsProductSearchIndex",
+      //   refresh: true,
+      //   label: "产品查询"
+      // };
+      // this.$store.commit("myAddTab", fd);
       eventBus.$emit("openUpload", file);
     },
     // 文本搜索产品
     searchProducts() {
       eventBus.$emit("searchProducts", this.searchForm);
+      // const fd = {
+      //   name: "/bsIndex/bsProductSearchIndex",
+      //   linkUrl: "/bsIndex/bsProductSearchIndex",
+      //   component: "bsProductSearchIndex",
+      //   refresh: true,
+      //   label: "产品查询"
+      // };
+      // this.$store.commit("myAddTab", fd);
     },
     // 去购物车
     toShoppingCart() {

@@ -256,12 +256,12 @@ export default {
     // 收藏
     async addCollect(item) {
       const res = await this.$http.post("/api/CreateProductCollection", {
-        productNumber: item.productNumber
+        productNumber: item.bearProduct.productNumber
       });
       if (res.data.result.code === 200) {
         if (item.isFavorite) {
           this.$common.handlerMsgState({
-            msg: "取消收藏成功",
+            msg: "取消收藏",
             type: "warning"
           });
         } else {
@@ -271,6 +271,7 @@ export default {
           });
         }
         item.isFavorite = !item.isFavorite;
+        eventBus.$emit("resetProductCollection", item);
       }
     },
     // 获取产品详情
@@ -293,6 +294,9 @@ export default {
   mounted() {
     eventBus.$emit("showCart", true);
     this.getProductDetails();
+    eventBus.$on("resetMyCollection", () => {
+      this.getProductDetails();
+    });
   },
   computed: {
     ...mapGetters({

@@ -183,15 +183,25 @@ export default {
       myScrollbarList.forEach(val => {
         let scrollbarEl = val.wrap;
         scrollbarEl.onscroll = () => {
+          console.log(scrollbarEl.scrollTop);
           if (scrollbarEl.scrollTop >= 200) {
-            if (this.$route.path === "/bsIndex/bsProductSearchIndex") {
+            if (
+              this.activeTab == "/bsIndex/bsProductSearchIndex" &&
+              this.$route.path == "/bsIndex/bsProductSearchIndex"
+            ) {
               this.showSearch = true;
               eventBus.$emit("showCart", true);
-            } else if (this.$route.path === "/bsIndex/bsProductDetails") {
+            } else if (
+              this.$route.path == "/bsIndex/bsProductSearchIndex" &&
+              this.activeTab != "/bsIndex/bsProductSearchIndex"
+            ) {
               eventBus.$emit("showCart", true);
             }
           } else {
-            if (this.$route.path === "/bsIndex/bsProductDetails") {
+            if (
+              this.$route.path == "/bsIndex/bsProductSearchIndex" &&
+              this.activeTab != "/bsIndex/bsProductSearchIndex"
+            ) {
               eventBus.$emit("showCart", true);
               this.showSearch = false;
             } else {
@@ -260,6 +270,16 @@ export default {
       set(val) {
         this.showSearch = false;
         this.$store.commit("setActiveTab", val);
+        if (
+          this.$route.path == "/bsIndex/bsProductSearchIndex" &&
+          this.activeTab != "/bsIndex/bsProductSearchIndex"
+        ) {
+          eventBus.$emit("showCart", true);
+          this.showSearch = false;
+        } else {
+          this.showSearch = false;
+          eventBus.$emit("showCart", false);
+        }
       }
     },
     ...mapState(["tabList"])

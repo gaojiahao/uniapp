@@ -712,6 +712,15 @@ export default {
         });
       }
     });
+    eventBus.$on("resetProductCollection", item => {
+      for (let i = 0; i < this.productList.length; i++) {
+        if (
+          this.productList[i].productNumber == item.bearProduct.productNumber
+        ) {
+          this.productList[i].isFavorite = item.isFavorite;
+        }
+      }
+    });
     // 删除购物车
     eventBus.$on("resetMyCart", list => {
       if (list.length) {
