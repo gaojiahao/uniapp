@@ -217,8 +217,8 @@ export default {
     // 去厂商
     toFactory(item) {
       const fd = {
-        name: item.supplierName,
-        linkUrl: "/bsIndex/bsVendorQuery",
+        name: item.supplierNumber,
+        linkUrl: this.$route.path,
         component: "bsMyClientsDetail",
         refresh: true,
         noPush: true,
@@ -232,7 +232,6 @@ export default {
           address: item.supplierAddres || item.supplierAddress
         }
       };
-      this.$router.push("/bsIndex/bsVendorQuery");
       this.$store.commit("myAddTab", fd);
     },
     // 加购

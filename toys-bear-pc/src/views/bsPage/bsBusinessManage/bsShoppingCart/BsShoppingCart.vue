@@ -813,15 +813,13 @@ export default {
       };
       this.$store.commit("myAddTab", fd);
     },
-    // 去厂商详情页
-    async toFactory(item) {
-      console.log(item);
+    //厂商跳转
+    toFactory(item) {
       const fd = {
-        name: item.supplierName,
-        linkUrl: "/bsIndex/bsVendorQuery",
+        name: item.supplierNumber,
+        linkUrl: "/bsIndex/bsShoppingCart",
         component: "bsMyClientsDetail",
         refresh: true,
-        noPush: true,
         label: item.supplierName,
         value: {
           companyNumber: item.supplierNumber,
@@ -832,7 +830,6 @@ export default {
           address: item.supplierAddres || item.supplierAddress
         }
       };
-      this.$router.push("/bsIndex/bsVendorQuery");
       this.$store.commit("myAddTab", fd);
     },
 
