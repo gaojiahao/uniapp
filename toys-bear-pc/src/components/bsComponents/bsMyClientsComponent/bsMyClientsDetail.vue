@@ -207,7 +207,8 @@ export default {
       const fd = {
         PageIndex: this.currentPage,
         PageSize: this.pageSize,
-        KeyWord: this.KeyWord
+        KeyWord: this.KeyWord,
+        companyNumber: this.item.companyNumber
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {

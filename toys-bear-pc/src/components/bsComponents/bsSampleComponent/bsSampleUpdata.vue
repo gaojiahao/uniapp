@@ -192,6 +192,7 @@
           </el-table-column>
         </el-table>
       </div>
+
       <div class="tableBto">
         <div class="right">
           <p class="item">
@@ -229,6 +230,19 @@
           >
         </div>
       </div>
+      <!-- 分页 -->
+      <!-- <center style="padding:20px 0;">
+        <el-pagination
+          layout="total, sizes, prev, pager, next, jumper"
+          :page-sizes="[12, 24, 36, 48]"
+          background
+          :total="totalCount"
+          :page-size="pageSize"
+          :current-page.sync="currentPage"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+        ></el-pagination>
+      </center> -->
     </div>
   </div>
 </template>
@@ -252,7 +266,10 @@ export default {
   data() {
     return {
       searchFormData: {},
-      tableData: []
+      tableData: [],
+      totalCount: 0,
+      pageSize: 12,
+      currentPage: 1
     };
   },
   created() {
@@ -297,10 +314,12 @@ export default {
     },
     // 获取列表
     async getProductOfferDetailPage() {
-      const res = await this.$http.post(
-        "/api/ProductOfferDetailPage",
+      const fd = Object.assign(
+        { skipCount: 1, maxResultCount: 9999 },
         this.item
       );
+
+      const res = await this.$http.post("/api/ProductOfferDetailPage", fd);
       if (res.data.result.code === 200) {
         this.$store.commit(
           "updataOfferProductList",
@@ -387,6 +406,21 @@ export default {
     },
     isInteger(obj) {
       return Math.floor(obj) === obj;
+    },
+    // 切換頁容量
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+      if (
+        this.currentPage * pageSize > this.totalCount &&
+        this.currentPage != 1
+      )
+        return false;
+      this.getVendorListPage();
+    },
+    // 修改当前页
+    handleCurrentChange(page) {
+      this.currentPage = page;
+      this.getVendorListPage();
     },
     /*
      * 将一个浮点数转成整数，返回整数和倍数。如 3.14 >> 314，倍数是 100
