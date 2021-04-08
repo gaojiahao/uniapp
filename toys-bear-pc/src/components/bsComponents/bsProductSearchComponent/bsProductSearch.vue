@@ -80,11 +80,18 @@ export default {
     }
   },
   created() {},
-  mounted() {},
+  mounted() {
+    eventBus.$on("imgSearch", () => {
+      this.$refs.uploadRef.$children[0].$refs.input.click();
+    });
+  },
   computed: {
     ...mapGetters({
       shoppingList: "myShoppingList"
     })
+  },
+  beforeDestroy() {
+    eventBus.$off("imgSearch");
   }
 };
 </script>

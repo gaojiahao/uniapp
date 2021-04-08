@@ -71,7 +71,7 @@
                 <div class="name" @click="handleDetail(scope.row)">
                   {{ scope.row.name }}
                 </div>
-                <div class="factory">
+                <div class="factory" @click="toFactory(scope.row)">
                   {{ scope.row.supplierName }}
                 </div>
               </div>
@@ -140,14 +140,12 @@
           width="100"
         >
           <template slot-scope="scope">
-            <el-popconfirm
-              title="确定要取消收藏吗？"
-              @confirm="handleDelete(scope.row)"
+            <el-button
+              size="mini"
+              type="warning"
+              @click="handleDelete(scope.row)"
+              >取消收藏</el-button
             >
-              <el-button size="mini" type="warning" @click.stop slot="reference"
-                >取消收藏</el-button
-              >
-            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -182,6 +180,26 @@ export default {
     };
   },
   methods: {
+    // 去厂商
+    toFactory(item) {
+      const fd = {
+        name: item.supplierNumber,
+        linkUrl: "/bsIndex/bsMyCollection",
+        component: "bsMyClientsDetail",
+        refresh: true,
+        noPush: true,
+        label: item.supplierName,
+        value: {
+          companyNumber: item.supplierNumber,
+          companyLogo: item.supplierPersonnelLogo,
+          companyName: item.supplierName,
+          contactsMan: item.supplierPersonnelName,
+          phoneNumber: item.supplierPhone,
+          address: item.supplierAddres || item.supplierAddress
+        }
+      };
+      this.$store.commit("myAddTab", fd);
+    },
     // 获取列表
     async getCollectList() {
       const fd = {
@@ -204,34 +222,45 @@ export default {
     },
     // 取消收藏
     async handleDelete(row) {
-      const res = await this.$http.post("/api/CreateProductCollection", {
-        productNumber: row.productNumber
-      });
-      if (res.data.result.code === 200) {
-        this.$common.handlerMsgState({
-          msg: "取消收藏成功",
-          type: "success"
+      this.$confirm("确定要取消该收藏吗？", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消"
+      })
+        .then(async () => {
+          const res = await this.$http.post("/api/CreateProductCollection", {
+            productNumber: row.productNumber
+          });
+          if (res.data.result.code === 200) {
+            this.$common.handlerMsgState({
+              msg: "取消收藏",
+              type: "success"
+            });
+            await this.getCollectList();
+            eventBus.$emit("resetProducts", this.tableData);
+          } else {
+            this.$common.handlerMsgState({
+              msg: res.data.result.msg,
+              type: "danger"
+            });
+          }
+        })
+        .catch(() => {
+          this.$common.handlerMsgState({
+            msg: "取消成功",
+            type: "warning"
+          });
         });
-        await this.getCollectList();
-        eventBus.$emit("resetProducts", this.tableData);
-      } else {
-        this.$common.handlerMsgState({
-          msg: res.data.result.msg,
-          type: "danger"
-        });
-      }
     },
     //点击跳转详情
-    async handleDetail(e) {
+    async handleDetail(row) {
       const fd = {
-        name: e.productNumber,
-        linkUrl: "/bsIndex/bsProductDetails",
+        name: row.productNumber,
+        linkUrl: "/bsIndex/bsMyCollection",
         component: "bsProductDetails",
         refresh: true,
-        label: e.fa_no || "产品详情",
-        value: e
+        label: row.fa_no || "产品详情",
+        value: row
       };
-      this.$router.push("/bsIndex/bsProductDetails");
       this.$store.commit("myAddTab", fd);
     },
     // 切換頁容量
@@ -314,12 +343,14 @@ export default {
         font-size: 14px;
         .productName {
           // width: 160px;
+          cursor: pointer;
           height: 60px;
           margin-left: 15px;
           .name,
           .factory {
             width: 160px;
             max-width: 160px;
+            cursor: pointer;
             overflow: hidden; /*超出部分隐藏*/
             white-space: nowrap; /*不换行*/
             text-overflow: ellipsis; /*超出部分文字以...显示*/
@@ -329,7 +360,6 @@ export default {
           }
           .name {
             margin-top: 8px;
-            cursor: pointer;
           }
         }
       }

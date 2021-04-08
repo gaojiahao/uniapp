@@ -149,11 +149,15 @@ export default {
     },
     // 去购物车
     toShoppingCart() {
-      this.$store.commit("handlerBsMenuLabels", {
-        linkUrl: "/bsIndex/bsShoppingCart",
-        name: "购物车"
-      });
       this.$router.push("/bsIndex/bsShoppingCart");
+      const fd = {
+        name: "/bsIndex/bsShoppingCart",
+        linkUrl: "/bsIndex/bsShoppingCart",
+        component: "bsShoppingCart",
+        refresh: true,
+        label: "购物车"
+      };
+      this.$store.commit("myAddTab", fd);
     },
     // 选择子级
     selectChildren(child) {
@@ -253,18 +257,18 @@ export default {
     // 删除购物车
     eventBus.$on("resetMyCart", list => {
       if (list.length) {
-        for (let i = 0; i < this.productList.length; i++) {
+        for (let i = 0; i < this.tableData.length; i++) {
           for (let j = 0; j < list.length; j++) {
-            if (this.productList[i].productNumber == list[j].productNumber) {
-              this.productList[i].isShopping = true;
+            if (this.tableData[i].productNumber == list[j].productNumber) {
+              this.tableData[i].isShopping = true;
               break;
             } else {
-              this.productList[i].isShopping = false;
+              this.tableData[i].isShopping = false;
             }
           }
         }
       } else {
-        this.productList.forEach(val => {
+        this.tableData.forEach(val => {
           val.isShopping = false;
         });
       }

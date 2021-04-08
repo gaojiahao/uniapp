@@ -41,7 +41,7 @@
           </div>
           <div
             :class="{ tabs: true, active: isDiyu === 1 }"
-            @click="checkTabsEcommend(1)"
+            @click="checkTabsAll(1)"
           >
             推荐产品
           </div>
@@ -223,10 +223,8 @@ export default {
     //推荐产品接口
     async getProductListPageEcommend() {
       const fd = {
-        // PageIndex: 1,
-        // PageSize: 12,
-        maxResultCoun: this.PageSize,
-        skipCount: this.pageIndex,
+        maxResultCoun: this.pageSize,
+        skipCount: this.currentPage,
         companyNumber: this.item.companyNumber,
         KeyWord: this.searchForm.keyword,
         minPrice: this.searchForm.minPrice,
@@ -245,20 +243,18 @@ export default {
         fd
       );
       if (res.data.result.code === 200) {
-        this.totalCount = res.data.result.item.totalCount;
         this.productList = res.data.result.item.items;
+        this.totalCount = res.data.result.item.totalCount;
       }
     },
-    //切换所有产品
+    //切换产品类型
     checkTabsAll(num) {
       this.isDiyu = num;
-      this.getProductListPageAll();
-    },
-    //切换推荐产品
-    checkTabsEcommend(num) {
-      this.isDiyu = num;
-
-      this.getProductListPageEcommend();
+      if (this.isDiyu === 0) {
+        this.getProductListPageAll();
+      } else {
+        this.getProductListPageEcommend();
+      }
     },
     // 切換頁容量
     handleSizeChange(pageSize) {
@@ -268,7 +264,12 @@ export default {
         this.currentPage != 1
       )
         return false;
-      this.getProductList();
+      console.log(this.isDiyu);
+      if (this.isDiyu === 0) {
+        this.getProductListPageAll();
+      } else {
+        this.getProductListPageEcommend();
+      }
     },
     // 修改当前页
     handleCurrentChange(page) {

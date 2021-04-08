@@ -454,8 +454,8 @@ export default {
         fd
       );
       if (res.data.result.code === 200) {
-        this.totalCount = res.data.result.item.totalCount;
         this.tableData = res.data.result.item.items;
+        this.totalCount = res.data.result.item.totalCount;
       }
     },
     // 获取站点列表
@@ -514,9 +514,10 @@ export default {
   },
   created() {
     this.getDefaultSites();
-    this.getSearchCompanyShareOrdersPage();
   },
-  mounted() {}
+  mounted() {
+    this.getSearchCompanyShareOrdersPage();
+  }
 };
 </script>
 <style scoped lang="less">

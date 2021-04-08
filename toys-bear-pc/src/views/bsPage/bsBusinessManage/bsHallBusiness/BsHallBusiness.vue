@@ -185,9 +185,13 @@
         top="60px"
         width="80%"
       >
-        <bsExportSampleOrder
-          :orderRow="orderRow"
-          api="/api/GetSampleOrderExcel"
+        <bsExportOrder
+          :options="{
+            orderNumber: orderRow.orderNumber,
+            the_nu: orderRow.the_nu,
+            name: orderRow.fromCompanyName,
+            api: '/api/GetOfferOrderExcel'
+          }"
         />
       </el-dialog>
     </transition>
@@ -195,11 +199,11 @@
 </template>
 
 <script>
-import bsExportSampleOrder from "@/components/bsComponents/bsBusinessManageComponent/bsExportSampleOrder";
+import bsExportOrder from "@/components/commonComponent/exportOrderComponent";
 export default {
   name: "bsHallBusiness",
   components: {
-    bsExportSampleOrder
+    bsExportOrder
   },
   data() {
     return {
@@ -276,12 +280,13 @@ export default {
     },
     // 获取列表
     async getTableDataList() {
+      console.log(this.searchForm.fromCompanyName);
       const fd = {
         readStatus: this.searchForm.readStatus,
         sampleFrom: "hall",
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
-        keyword: this.searchForm.keyword,
+        keyWord: this.searchForm.keyword,
         orgPersonnelName: this.searchForm.orgPersonnelName,
         fromCompanyName: this.searchForm.fromCompanyName,
         messageExt: this.searchForm.messageExt,

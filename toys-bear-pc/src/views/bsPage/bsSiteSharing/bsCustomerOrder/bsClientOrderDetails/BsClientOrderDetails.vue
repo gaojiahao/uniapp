@@ -86,7 +86,7 @@
                   {{ scope.row.productName }}
                 </div>
                 <div class="factory">
-                  <div class="fcatoryName">
+                  <div class="fcatoryName" @click="toFactory(scope.row)">
                     {{ scope.row.supplierName }}
                   </div>
                   <div class="icons">
@@ -98,7 +98,7 @@
                     >
                       <div class="cartPhoneIcon"></div>
                     </el-tooltip>
-                    <div class="cartInfoIcon"></div>
+                    <div class="cartInfoIcon" @click="toNews(scope.row)"></div>
                   </div>
                 </div>
               </div>
@@ -276,6 +276,39 @@ export default {
     this.getSearchCompanyShareOrderDetailsPage();
   },
   methods: {
+    // 去消息聊天
+    toNews(item) {
+      console.log(item);
+      const fd = {
+        name: "/bsIndex/bsNews",
+        linkUrl: "/bsIndex/bsNews",
+        component: "bsNews",
+        refresh: true,
+        label: "消息"
+      };
+      this.$store.commit("myAddTab", fd);
+      this.$router.push("/bsIndex/bsNews");
+    },
+    // 去厂商
+    toFactory(item) {
+      const fd = {
+        name: item.supplierNumber,
+        linkUrl: this.$route.path,
+        component: "bsMyClientsDetail",
+        refresh: true,
+        noPush: true,
+        label: item.supplierName,
+        value: {
+          companyNumber: item.supplierNumber,
+          companyLogo: item.supplierPersonnelLogo,
+          companyName: item.supplierName,
+          contactsMan: item.supplierPersonnelName,
+          phoneNumber: item.supplierPhone,
+          address: item.supplierAddres || item.supplierAddress
+        }
+      };
+      this.$store.commit("myAddTab", fd);
+    },
     // 打开选择导出模板
     openSelectTemplate() {
       this.exportTemplateDialog = true;
@@ -311,17 +344,15 @@ export default {
     },
     // 点击产品名字跳转
     goDetails(row) {
-      console.log(row, 123);
-      row.img = row.productImage;
-      row.imgUrlList = [row.productImage];
       const fd = {
         name: row.productName + row.fa_no,
-        linkUrl: "/bsIndex/bsProductDetails",
+        linkUrl: "/bsIndex/bsCustomerOrder",
         component: "bsProductDetails",
         refresh: true,
         label: row.fa_no || "产品详情",
         value: row
       };
+      console.log(row);
       this.$store.commit("myAddTab", fd);
     },
     // 切换当前页

@@ -1,6 +1,6 @@
 <template>
   <div class="bsGridItem">
-    <div class="itemImg">
+    <div class="itemImg" @click="toProductDetails">
       <el-image
         style="width:222px;height:166px;"
         fit="contain"
@@ -99,7 +99,7 @@
         <span class="title">毛重/净重：</span>
         <span class="conText">{{ item.gr_we }}/{{ item.ne_we }}(kg)</span>
       </p>
-      <div class="sourceBox">
+      <div class="sourceBox" @click="toFactory(item)">
         <i class="sourceIcon"></i>
         <template v-if="item.isIntegral">
           <span class="text">
@@ -129,6 +129,40 @@ export default {
     };
   },
   methods: {
+    // 去产品详情页
+    async toProductDetails() {
+      const fd = {
+        name: this.item.productNumber,
+        linkUrl: "/bsIndex/bsProductSearchIndex",
+        component: "bsProductDetails",
+        refresh: true,
+        label: this.item.fa_no || "产品详情",
+        value: this.item
+      };
+      this.$store.commit("myAddTab", fd);
+    },
+    // 去厂商详情页
+    async toFactory(item) {
+      console.log(item);
+      const fd = {
+        name: item.supplierNumber,
+        linkUrl: "/bsIndex/bsVendorQuery",
+        component: "bsMyClientsDetail",
+        refresh: true,
+        noPush: true,
+        label: item.supplierName,
+        value: {
+          companyNumber: item.supplierNumber,
+          companyLogo: item.supplierPersonnelLogo,
+          companyName: item.supplierName,
+          contactsMan: item.supplierPersonnelName,
+          phoneNumber: item.supplierPhone,
+          address: item.supplierAddres || item.supplierAddress
+        }
+      };
+      this.$router.push("/bsIndex/bsVendorQuery");
+      this.$store.commit("myAddTab", fd);
+    },
     // 收藏
     async addCollect(item) {
       const res = await this.$http.post("/api/CreateProductCollection", {

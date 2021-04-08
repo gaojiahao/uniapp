@@ -112,6 +112,7 @@
             <template slot-scope="scope">
               <div class="imgBox">
                 <el-image
+                  @click.native="goDetails(scope.row)"
                   fit="contain"
                   style="width:80px;height:60px;"
                   :src="scope.row.img"
@@ -125,11 +126,11 @@
                   </div>
                 </el-image>
                 <div class="productName">
-                  <div class="name">
+                  <div class="name" @click="goDetails(scope.row)">
                     {{ scope.row.name }}
                   </div>
                   <div class="factory">
-                    <div class="fcatoryName">
+                    <div class="factoryName" @click="toFactory(scope.row)">
                       {{ scope.row.supplierName }}
                     </div>
                     <div class="icons">
@@ -345,6 +346,26 @@ export default {
     this.getProductOfferNumber();
   },
   methods: {
+    //厂商跳转
+    toFactory(item) {
+      console.log(item);
+      const fd = {
+        name: item.supplierNumber,
+        linkUrl: this.$route.path,
+        component: "bsMyClientsDetail",
+        refresh: true,
+        label: item.supplierName,
+        value: {
+          companyNumber: item.supplierNumber,
+          companyLogo: item.supplierPersonnelLogo,
+          companyName: item.supplierName,
+          contactsMan: item.supplierPersonnelName,
+          phoneNumber: item.supplierPhone,
+          address: item.supplierAddres || item.supplierAddress
+        }
+      };
+      this.$store.commit("myAddTab", fd);
+    },
     // 获取该订单报价公式详情
     async getProductOfferNumber() {
       const fd = {
@@ -357,6 +378,19 @@ export default {
       } else {
         this.$message.error(res.data.result.msg);
       }
+    },
+    // 点击产品名字跳转
+    goDetails(row) {
+      const fd = {
+        name: row.productName + row.fa_no,
+        linkUrl: "/bsIndex/bsSampleQuotation",
+        component: "bsProductDetails",
+        refresh: true,
+        label: row.fa_no || "产品详情",
+        value: row
+      };
+      console.log(row);
+      this.$store.commit("myAddTab", fd);
     },
     // 获取列表
     async getProductOfferDetailPage() {
@@ -732,10 +766,14 @@ export default {
         text-align: left;
         display: flex;
         font-size: 14px;
+        .el-image {
+          cursor: pointer;
+        }
         .productName {
           width: 190px;
           height: 60px;
           margin-left: 15px;
+          cursor: pointer;
           .name,
           .factory {
             width: 190px;
@@ -743,6 +781,9 @@ export default {
             overflow: hidden; /*超出部分隐藏*/
             white-space: nowrap; /*不换行*/
             text-overflow: ellipsis; /*超出部分文字以...显示*/
+            .factoryName {
+              cursor: pointer;
+            }
           }
           .factory {
             color: #3368a9;
