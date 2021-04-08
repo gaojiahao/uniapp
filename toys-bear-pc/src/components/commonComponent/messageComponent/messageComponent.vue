@@ -42,7 +42,7 @@ export default {
   left: 0;
   top: 200px;
   font-size: 14px;
-  z-index: 999;
+  z-index: 9999;
   text-align: center;
   transition: all 0.5s;
   .messageBox {

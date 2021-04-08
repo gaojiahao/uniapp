@@ -119,6 +119,7 @@
                         height="100%"
                         class="video-js vjs-default-skin vjs-big-play-centered"
                         controls
+                        :lazy-src="item.video"
                         style="object-fit:contain"
                       >
                         <source :src="item.video" type="video/mp4" />
@@ -129,12 +130,12 @@
                     <div class="imgComtent">
                       <el-image
                         fit="cover"
-                        v-for="(val, i) in item.imgList.split(',')"
+                        v-for="val in item.imgList.split(',')"
                         :class="{
                           img: item.imgList.split(',').length > 1,
                           multiT: item.imgList.split(',').length == 1
                         }"
-                        :key="i"
+                        :key="val"
                         :src="val"
                         alt
                         :preview-src-list="item.imgList.split(',')"
@@ -342,6 +343,9 @@
 import { dateDiff } from "@/assets/js/common/common";
 import { mapState } from "vuex";
 import bsSendNotice from "@/components/bsComponents/bsNewsComponent/bsSendNotice/bsSendNotice";
+const cubic = value => Math.pow(value, 3);
+const easeInOutCubic = value =>
+  value < 0.5 ? cubic(value * 2) / 2 : 1 - cubic((1 - value) * 2) / 2;
 export default {
   name: "bsToyCircle",
   components: { bsSendNotice },
@@ -385,6 +389,7 @@ export default {
       this.issuedCompanyID = this.currentComparnyId;
       this.currentPage = 1;
       this.getDataList();
+      this.upImage();
     },
     // 删除我的公告
     async deleteMyNotice(val) {
@@ -410,11 +415,34 @@ export default {
         });
       }
     },
+    // 解决图片不加载问题
+    upImage() {
+      this.$nextTick(() => {
+        const beginTime = Date.now();
+        const beginValue = this.$refs.findListRef.$el.scrollTop;
+        if (beginValue == 1) this.$refs.findListRef.$el.scrollTop = 0;
+        const rAF =
+          window.requestAnimationFrame || (func => setTimeout(func, 16));
+        const frameFunc = () => {
+          const progress = (Date.now() - beginTime) / 500;
+          if (progress < 1) {
+            this.$refs.findListRef.$el.scrollTop =
+              beginValue * (1 - easeInOutCubic(progress));
+            rAF(frameFunc);
+          } else {
+            this.$refs.findListRef.$el.scrollTop = 1;
+          }
+        };
+        rAF(frameFunc);
+        this.$waterfall.forceUpdate();
+      });
+    },
     // 关闭发布公告
     closeSendNotice(flag) {
       if (flag) {
         this.currentPage = 1;
         this.getDataList();
+        this.upImage();
       }
       this.sendNoticeDialog = false;
     },
@@ -424,12 +452,12 @@ export default {
     },
     // 根据类型搜索公告
     searchNotice(type) {
-      this.$refs.findListRef.$el.scrollTop = 0;
       this.currentPage = 1;
       this.noticeType = type;
       this.publisher = null;
       this.issuedCompanyID = null;
       this.getDataList();
+      this.upImage();
     },
     // 举报
     async jubaoEvent() {

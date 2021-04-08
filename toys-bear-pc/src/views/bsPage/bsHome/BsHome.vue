@@ -7,7 +7,12 @@
           <span>我的工作台</span>
         </div>
         <div class="content">
-          <li class="item" v-for="(item, i) in gongzuoList" :key="i">
+          <li
+            class="item"
+            @click="openMyGongzuo(item.title)"
+            v-for="(item, i) in gongzuoList"
+            :key="i"
+          >
             <el-image
               style="width: 30px; height: 32px;"
               :src="item.icon"
@@ -36,7 +41,12 @@
       </div>
     </div>
     <div class="labels">
-      <div class="item" v-for="(item, i) in labelList" :key="i">
+      <div
+        class="item"
+        @click="openLabel(item.title)"
+        v-for="(item, i) in labelList"
+        :key="i"
+      >
         <div class="imgBox">
           <el-image
             style="width: 54px; height: 54px;"
@@ -311,6 +321,139 @@ export default {
     };
   },
   methods: {
+    // 点击label
+    openLabel(title) {
+      let fd = {};
+      switch (title) {
+        case "找玩具":
+          fd = {
+            name: "/bsIndex/bsProductSearchIndex",
+            linkUrl: "/bsIndex/bsProductSearchIndex",
+            component: "bsProductSearchIndex",
+            refresh: true,
+            label: "产品查询"
+          };
+          break;
+        case "按图找样":
+          fd = {
+            name: "/bsIndex/bsProductSearchIndex",
+            linkUrl: "/bsIndex/bsProductSearchIndex?id=imgSearch",
+            component: "bsProductSearchIndex",
+            refresh: true,
+            label: "产品查询"
+          };
+          break;
+        case "新品区":
+          fd = {
+            name: "/bsIndex/bsLatestProducts",
+            linkUrl: "/bsIndex/bsLatestProducts",
+            component: "bsLatestProducts",
+            refresh: true,
+            label: "最新产品"
+          };
+          break;
+        case "现货区":
+          fd = {
+            name: "/bsIndex/bsSpotProducts",
+            linkUrl: "/bsIndex/bsSpotProducts",
+            component: "bsSpotProducts",
+            refresh: true,
+            label: "现货产品"
+          };
+          break;
+        case "VIP区":
+          fd = {
+            name: "/bsIndex/bsVIPProducts",
+            linkUrl: "/bsIndex/bsVIPProducts",
+            component: "bsVIPProducts",
+            refresh: true,
+            label: "VIP产品"
+          };
+          break;
+        case "玩具圈":
+          fd = {
+            name: "/bsIndex/bsToyCircle",
+            linkUrl: "/bsIndex/bsToyCircle",
+            component: "bsToyCircle",
+            refresh: true,
+            label: title
+          };
+          break;
+      }
+      this.$store.commit("myAddTab", fd);
+      this.$router.push(fd.linkUrl);
+    },
+    // 点击工作台
+    openMyGongzuo(title) {
+      let fd = {};
+      switch (title) {
+        case "展厅业务":
+          fd = {
+            name: "/bsIndex/bsNews",
+            linkUrl: "/bsIndex/bsNews",
+            component: "bsNews",
+            refresh: true,
+            label: title
+          };
+          break;
+        case "找样报价":
+          fd = {
+            name: "/bsIndex/bsSampleQuotation",
+            linkUrl: "/bsIndex/bsSampleQuotation",
+            component: "bsSampleQuotation",
+            refresh: true,
+            label: title
+          };
+          break;
+        case "采购订单":
+          fd = {
+            name: "/bsIndex/bsPurchaseOrder",
+            linkUrl: "/bsIndex/bsPurchaseOrder",
+            component: "bsPurchaseOrder",
+            refresh: true,
+            label: title
+          };
+          break;
+        case "浏览足迹":
+          fd = {
+            name: "/bsIndex/bsBrowsingHistory",
+            linkUrl: "/bsIndex/bsBrowsingHistory",
+            component: "bsBrowsingHistory",
+            refresh: true,
+            label: "浏览记录"
+          };
+          break;
+        case "站点分享":
+          fd = {
+            name: "/bsIndex/bsSiteLlis",
+            linkUrl: "/bsIndex/bsSiteLlis",
+            component: "bsSiteLlis",
+            refresh: true,
+            label: "站点列表"
+          };
+          break;
+        case "客户订单":
+          fd = {
+            name: "/bsIndex/bsCustomerOrder",
+            linkUrl: "/bsIndex/bsCustomerOrder",
+            component: "bsCustomerOrder",
+            refresh: true,
+            label: title
+          };
+          break;
+        case "我的消息":
+          fd = {
+            name: "/bsIndex/bsNews",
+            linkUrl: "/bsIndex/bsNews",
+            component: "bsNews",
+            refresh: true,
+            label: "消息"
+          };
+          break;
+      }
+      this.$store.commit("myAddTab", fd);
+      this.$router.push(fd.linkUrl);
+    },
     // 获取大小展厅
     async getOrgCompany() {
       const res = await this.$http.post("/api/GetExhibitionList", {

@@ -731,6 +731,11 @@ export default {
         });
       }
     });
+    this.$nextTick(() => {
+      if (this.$route.query.id === "imgSearch") {
+        eventBus.$emit("imgSearch");
+      }
+    });
   },
   computed: {
     ...mapGetters({
