@@ -1,6 +1,6 @@
 <template>
   <div class="clientOrderDetails">
-    <div class="title">客户订单详情</div>
+    <div class="title">采购订单详情</div>
     <ul class="customerInfoBox">
       <div class="clientContentBox">
         <div class="left">
@@ -47,7 +47,7 @@
     <div class="tableBox">
       <div class="tableTitle">
         <div class="titleText">
-          <span class="title">商品列表</span>
+          <span class="title">采购商品</span>
           ({{ totalCount }})
         </div>
         <el-button size="medium" @click="openSelectTemplate" type="warning">
@@ -264,9 +264,7 @@ export default {
       orderOption: {}
     };
   },
-  created() {
-    console.log(this.item, "客户详情");
-  },
+  created() {},
   mounted() {
     this.getSearchCompanyShareOrderDetailsPage();
     this.getERPOrderTotal();

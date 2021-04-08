@@ -59,6 +59,7 @@
         style="width:100%;"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
+        <el-table-column type="index" width="50"> </el-table-column>
         <el-table-column prop="orderNumber" label="订单编号" width="220">
           <template slot-scope="scope">
             <div class="orderNumberBox" @click="toOrderDetails(scope.row)">

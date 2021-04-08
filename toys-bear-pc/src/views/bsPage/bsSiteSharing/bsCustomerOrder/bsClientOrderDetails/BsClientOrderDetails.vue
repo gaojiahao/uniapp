@@ -86,7 +86,7 @@
                   {{ scope.row.productName }}
                 </div>
                 <div class="factory">
-                  <div class="fcatoryName">
+                  <div class="fcatoryName" @click="toFactory(scope.row)">
                     {{ scope.row.supplierName }}
                   </div>
                   <div class="icons">
@@ -311,7 +311,6 @@ export default {
     },
     // 点击产品名字跳转
     goDetails(row) {
-      console.log(row, 123);
       row.img = row.productImage;
       row.imgUrlList = [row.productImage];
       const fd = {
@@ -322,6 +321,27 @@ export default {
         label: row.fa_no || "产品详情",
         value: row
       };
+      this.$store.commit("myAddTab", fd);
+    },
+    // 去厂商详情页
+    async toFactory(item) {
+      const fd = {
+        name: item.supplierName,
+        linkUrl: "/bsIndex/bsVendorQuery",
+        component: "bsMyClientsDetail",
+        refresh: true,
+        noPush: true,
+        label: item.supplierName,
+        value: {
+          companyNumber: item.supplierNumber,
+          companyLogo: item.supplierPersonnelLogo,
+          companyName: item.supplierName,
+          contactsMan: item.supplierPersonnelName,
+          phoneNumber: item.supplierPhone,
+          address: item.supplierAddres || item.supplierAddress
+        }
+      };
+      this.$router.push("/bsIndex/bsVendorQuery");
       this.$store.commit("myAddTab", fd);
     },
     // 切换当前页
