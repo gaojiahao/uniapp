@@ -389,9 +389,9 @@ export default {
       switch (title) {
         case "展厅业务":
           fd = {
-            name: "/bsIndex/bsNews",
-            linkUrl: "/bsIndex/bsNews",
-            component: "bsNews",
+            name: "/bsIndex/bsHallBusiness",
+            linkUrl: "/bsIndex/bsHallBusiness",
+            component: "bsHallBusiness",
             refresh: true,
             label: title
           };
