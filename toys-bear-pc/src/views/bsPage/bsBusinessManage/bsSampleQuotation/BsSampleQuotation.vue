@@ -67,7 +67,6 @@
           ref="collecTable"
           :header-cell-style="{ backgroundColor: '#f9fafc' }"
         >
-          <el-table-column type="index" width="50"> </el-table-column>
           <el-table-column label="报价单号" min-width="150">
             <template slot-scope="scope">
               <span
