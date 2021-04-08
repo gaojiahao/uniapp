@@ -110,7 +110,6 @@ export default {
     },
     // 去厂商详情页
     async toFactory(item) {
-      console.log(item);
       const fd = {
         name: item.supplierName,
         linkUrl: "/bsIndex/bsVendorQuery",
