@@ -165,9 +165,13 @@
         top="60px"
         width="80%"
       >
-        <bsExportSampleOrder
-          :orderRow="orderRow"
-          api="/api/GetOfferOrderExcel"
+        <bsExportOrder
+          :options="{
+            orderNumber: orderRow.orderNumber,
+            the_nu: orderRow.the_nu,
+            name: orderRow.fromCompanyName,
+            api: '/api/GetOfferOrderExcel'
+          }"
         />
       </el-dialog>
     </transition>
@@ -175,11 +179,11 @@
 </template>
 
 <script>
-import bsExportSampleOrder from "@/components/bsComponents/bsBusinessManageComponent/bsExportSampleOrder";
+import bsExportOrder from "@/components/commonComponent/exportOrderComponent";
 export default {
   name: "bsPurchaseOrder",
   components: {
-    bsExportSampleOrder
+    bsExportOrder
   },
   data() {
     return {
@@ -201,7 +205,7 @@ export default {
     toDetails(row) {
       const fd = {
         name: row.orderNumber,
-        linkUrl: "/bsIndex/bsCustomerOrder",
+        linkUrl: this.$route.path,
         component: "bsPurchaseOrderDetails",
         refresh: true,
         label: row.orderNumber,

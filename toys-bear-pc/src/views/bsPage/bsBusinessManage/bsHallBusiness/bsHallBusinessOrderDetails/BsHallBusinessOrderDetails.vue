@@ -69,6 +69,7 @@
             <div class="imgBox">
               <el-image
                 fit="contain"
+                @click.native="goDetails(scope.row)"
                 style="width:80px;height:60px;"
                 :src="scope.row.imgUrl && scope.row.imgUrl[0]"
                 :preview-src-list="scope.row.imgUrl"
@@ -81,11 +82,11 @@
                 </div>
               </el-image>
               <div class="productName">
-                <div class="name">
+                <div class="name" @click="goDetails(scope.row)">
                   {{ scope.row.pr_na }}
                 </div>
                 <div class="factory">
-                  <div class="fcatoryName">
+                  <div class="fcatoryName" @click="toFactory(scope.row)">
                     {{ scope.row.supplierName }}
                   </div>
                   <div class="icons">
@@ -218,8 +219,12 @@
         width="80%"
       >
         <bsExportOrder
-          :orderNumber="item.orderNumber"
-          :customerName="options.customerName"
+          :options="{
+            orderNumber: item.orderNumber,
+            the_nu: item.the_nu,
+            name: item.fromCompanyName,
+            api: '/api/GetOfferOrderExcel'
+          }"
         />
       </el-dialog>
     </transition>
@@ -227,7 +232,7 @@
 </template>
 
 <script>
-import bsExportOrder from "@/components/bsComponents/bsSiteSharingComponent/bsExportOrder";
+import bsExportOrder from "@/components/commonComponent/exportOrderComponent";
 export default {
   components: { bsExportOrder },
   props: {
@@ -256,6 +261,45 @@ export default {
     };
   },
   methods: {
+    // 去厂商
+    toFactory(item) {
+      const fd = {
+        name: item.supplierName,
+        linkUrl: this.$route.path,
+        component: "bsMyClientsDetail",
+        refresh: true,
+        noPush: true,
+        label: item.supplierName,
+        value: {
+          companyNumber: item.supplierNumber,
+          companyLogo: item.supplierPersonnelLogo,
+          companyName: item.supplierName,
+          contactsMan: item.supplierPersonnelName,
+          phoneNumber: item.supplierPhone,
+          address: item.supplierAddres || item.supplierAddress
+        }
+      };
+      this.$store.commit("myAddTab", fd);
+    },
+    // 产品详情
+    goDetails(row) {
+      if (!row.productNumber) {
+        this.$common.handlerMsgState({
+          msg: "该产品没有产品编号productNumber, 请联系管理员",
+          type: "danger"
+        });
+        return false;
+      }
+      const fd = {
+        name: row.productNumber + row.fa_no,
+        linkUrl: this.$route.path,
+        component: "bsProductDetails",
+        refresh: true,
+        label: row.fa_no || "产品详情",
+        value: row
+      };
+      this.$store.commit("myAddTab", fd);
+    },
     // 打开选择导出模板
     openSelectTemplate() {
       this.exportTemplateDialog = true;
@@ -442,6 +486,7 @@ export default {
       }
       .imgBox {
         text-align: left;
+        cursor: pointer;
         display: flex;
         font-size: 14px;
         .productName {

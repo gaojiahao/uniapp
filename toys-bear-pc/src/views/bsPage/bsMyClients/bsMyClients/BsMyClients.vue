@@ -81,15 +81,12 @@
               @click="handleEdit(scope.$index, scope.row)"
               >编辑</el-button
             >
-            <el-popconfirm
-              style="margin-left:10px"
-              title="确定删除吗？"
-              @confirm="handleDelete(scope.$index, scope.row)"
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDelete(scope.row)"
+              >删除</el-button
             >
-              <el-button size="mini" type="danger" slot="reference"
-                >删除</el-button
-              >
-            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -294,20 +291,34 @@ export default {
       });
     },
     //删除客户
-    async handleDelete(index, row) {
-      const res = await this.$http.post("/api/DeleteCustomerInfo?id=" + row.id);
-      if (res.data.result.code === 200) {
-        this.$common.handlerMsgState({
-          msg: "删除成功",
-          type: "danger"
+    async handleDelete(row) {
+      this.$confirm("此操作将永久删除该客户, 是否继续?", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消"
+      })
+        .then(async () => {
+          const res = await this.$http.post(
+            "/api/DeleteCustomerInfo?id=" + row.id
+          );
+          if (res.data.result.code === 200) {
+            this.$common.handlerMsgState({
+              msg: "删除成功",
+              type: "success"
+            });
+            this.getClientsListPage();
+          } else {
+            this.$common.handlerMsgState({
+              msg: res.data.result.msg,
+              type: "danger"
+            });
+          }
+        })
+        .catch(() => {
+          this.$common.handlerMsgState({
+            msg: "取消删除",
+            type: "warning"
+          });
         });
-        this.getClientsListPage();
-      } else {
-        this.$common.handlerMsgState({
-          msg: res.data.result.msg,
-          type: "danger"
-        });
-      }
     },
     // 切換頁容量
     handleSizeChange(pageSize) {

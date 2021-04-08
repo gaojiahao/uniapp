@@ -4,72 +4,82 @@
       <div class="left">
         <magnifierComponent
           ref="magnifierRef"
-          v-if="item.img"
+          v-if="productDetail.imgUrlList"
           :middleImgWidth="524"
           :middleImgHeight="393"
           :thumbnailHeight="55"
           :thumbnailWidth="78"
           :thumbnailCount="5"
-          :imageUrls="item.imgUrlList"
-          :videoAddress="item.videoAddress"
+          :imageUrls="productDetail.imgUrlList"
+          :videoAddress="productDetail.videoAddress"
         />
       </div>
-      <div class="right">
+      <div class="right" v-if="productDetail.bearProduct">
         <div class="context">
           <div class="productName">
             <span
-              >{{ item.name }}<i class="newIcon">新品</i>
-              <i class="nowIcon">现货</i>
-              <i class="vipIcon">VIP</i></span
+              >{{ productDetail.bearProduct.name
+              }}<i class="newIcon" v-if="productDetail.isNew">新品</i>
+              <i class="nowIcon" v-if="productDetail.isSpotGoods">现货</i>
+              <i class="vipIcon" v-if="productDetail.isVip">VIP</i></span
             >
           </div>
           <div class="priceWrap">
             参考单价：
             <span class="priceBox"
-              >{{ item.cu_de }}<span class="price">{{ item.price }}</span></span
+              >{{ productDetail.bearProduct.cu_de
+              }}<span class="price">{{
+                productDetail.bearProduct.price
+              }}</span></span
             >
           </div>
           <div class="textWrap">
             <div class="left">
               <div class="itemText">
-                出厂货号：<span>{{ item.fa_no }}</span>
+                出厂货号：<span>{{ productDetail.bearProduct.fa_no }}</span>
               </div>
               <div class="itemText">
                 产品规格：
                 <span
-                  >{{ item.pr_le }} x {{ item.pr_wi }} x
-                  {{ item.pr_hi }} (cm)</span
+                  >{{ productDetail.bearProduct.pr_le }} x
+                  {{ productDetail.bearProduct.pr_wi }} x
+                  {{ productDetail.bearProduct.pr_hi }} (cm)</span
                 >
               </div>
               <div class="itemText">
                 包装规格：
                 <span
-                  >{{ item.in_le }} x {{ item.in_wi }} x
-                  {{ item.in_hi }} (cm)</span
+                  >{{ productDetail.bearProduct.in_le }} x
+                  {{ productDetail.bearProduct.in_wi }} x
+                  {{ productDetail.bearProduct.in_hi }} (cm)</span
                 >
               </div>
               <div class="itemText">
                 体积/材积：
                 <span
-                  >{{ item.bulk_stere }} (cbm) /
-                  {{ item.bulk_feet }} (cuft)</span
+                  >{{ productDetail.bearProduct.bulk_stere }} (cbm) /
+                  {{ productDetail.bearProduct.bulk_feet }} (cuft)</span
                 >
               </div>
             </div>
             <div class="right">
               <div class="itemText">
-                包装：<span>{{ item.ch_pa }}</span>
+                包装：<span>{{ productDetail.bearProduct.ch_pa }}</span>
               </div>
               <div class="itemText">
                 外箱规格：
                 <span
-                  >{{ item.ou_le }} x {{ item.ou_wi }} x
-                  {{ item.ou_hi }} (cm)</span
+                  >{{ productDetail.bearProduct.ou_le }} x
+                  {{ productDetail.bearProduct.ou_wi }} x
+                  {{ productDetail.bearProduct.ou_hi }} (cm)</span
                 >
               </div>
               <div class="itemText">
                 毛重/净重：
-                <span>{{ item.gr_we }} / {{ item.ne_we }} (kg)</span>
+                <span
+                  >{{ productDetail.bearProduct.gr_we }} /
+                  {{ productDetail.bearProduct.ne_we }} (kg)</span
+                >
               </div>
             </div>
             <!-- <div class="itemText">
@@ -79,12 +89,12 @@
           </div>
         </div>
         <div class="myCartBox">
-          <div class="myCart" @click="handlerShopping(item)">
+          <div class="myCart" @click="handlerShopping(productDetail)">
             <i class="myCartIcon"></i>
             <span>加入购物车</span>
           </div>
-          <div class="myShoucang" @click="addCollect(item)">
-            <i class="shoucangActiveIcon" v-if="item.isFavorite"></i>
+          <div class="myShoucang" @click="addCollect(productDetail)">
+            <i class="shoucangActiveIcon" v-if="productDetail.isFavorite"></i>
             <i class="shoucangIcon" v-else></i>
             <span>产品收藏</span>
           </div>
@@ -94,7 +104,9 @@
           <p>
             <span class="newTime">
               上架时间：
-              <span>{{ item.newTime && item.newTime.replace(/T.*/, "") }}</span>
+              <span>{{
+                productDetail.bearProduct.newTime.replace(/T.*/, "")
+              }}</span>
             </span>
             <span class="stock">
               库存：
@@ -103,25 +115,30 @@
           </p>
           <p>
             产品认证：
-            <i v-if="item.certificateNo" class="proveActiveIcon"></i>
+            <i
+              v-if="productDetail.bearProduct.certificateNo"
+              class="proveActiveIcon"
+            ></i>
             <i v-else class="proveIcon"></i>
-            <span>{{ item.certificateNo }}</span>
+            <span>{{ productDetail.bearProduct.certificateNo }}</span>
           </p>
         </div>
         <!-- 联系方式 -->
         <div class="contactMode">
           <p class="item">
             <i class="factoryIcon"></i>
-            <span>{{ item.supplierName }}</span>
+            <span>{{ productDetail.supplierName }}</span>
           </p>
-          <p class="item myHover" @click="toNews(item)">
+          <p class="item myHover" @click="toNews(productDetail)">
             <i class="infoIcon"></i>
             <span>在线咨询</span>
           </p>
           <el-tooltip
             class="item"
             effect="dark"
-            :content="item.supplierPhone || item.exhibitionPhone"
+            :content="
+              productDetail.supplierPhone || productDetail.exhibitionPhone
+            "
             placement="top"
           >
             <p class="item myHover">
@@ -129,7 +146,7 @@
               <span>联系电话</span>
             </p>
           </el-tooltip>
-          <p class="item myHover" @click="toFactory(item)">
+          <p class="item myHover" @click="toFactory(productDetail)">
             <i class="shopIcon"></i>
             <span>厂商店铺</span>
           </p>
@@ -138,15 +155,15 @@
         <div class="sourceBox">
           <p class="item">
             资源来源：
-            <span>{{ item.exhibitionName }}</span>
+            <span>{{ productDetail.exhibitionName }}</span>
           </p>
           <p class="item">
             展厅编号：
-            <span>{{ item.number }}</span>
+            <span>{{ productDetail.bearProduct.number }}</span>
           </p>
           <p class="item">
             摊位号：
-            <span>{{ item.fa_no }}</span>
+            <span>{{ productDetail.bearProduct.fa_no }}</span>
           </p>
         </div>
       </div>
@@ -154,7 +171,11 @@
     <div class="productDetails">
       <div class="title">产品资料</div>
       <div class="content">
-        <div class="imgItem" v-for="imgItem in item.imgUrlList" :key="imgItem">
+        <div
+          class="imgItem"
+          v-for="imgItem in productDetail.imgUrlList"
+          :key="imgItem"
+        >
           <img style="margin: 0 auto;" :src="imgItem" alt="" />
         </div>
       </div>
@@ -176,7 +197,9 @@ export default {
     magnifierComponent
   },
   data() {
-    return {};
+    return {
+      productDetail: {}
+    };
   },
   methods: {
     // 去聊天
@@ -193,7 +216,6 @@ export default {
     },
     // 去厂商
     toFactory(item) {
-      console.log(item);
       const fd = {
         name: item.supplierName,
         linkUrl: "/bsIndex/bsVendorQuery",
@@ -251,11 +273,27 @@ export default {
         }
         item.isFavorite = !item.isFavorite;
       }
+    },
+    // 获取产品详情
+    async getProductDetails() {
+      const res = await this.$http.post("/api/BearProductByNumber", {
+        productNumber: this.item.productNumber
+      });
+      if (res.data.result.code === 200) {
+        this.productDetail = res.data.result.item;
+        console.log(this.productDetail);
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
     }
   },
   created() {},
   mounted() {
     eventBus.$emit("showCart", true);
+    this.getProductDetails();
   },
   computed: {
     ...mapGetters({

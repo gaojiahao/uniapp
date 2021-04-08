@@ -72,6 +72,7 @@
             <div class="imgBox">
               <el-image
                 fit="contain"
+                @click.native="toProductDetails(scope.row)"
                 style="width:80px;height:60px;"
                 :src="scope.row.imgUrl && scope.row.imgUrl[0]"
                 :preview-src-list="scope.row.imgUrl"
@@ -84,11 +85,11 @@
                 </div>
               </el-image>
               <div class="productName">
-                <div class="name">
+                <div class="name" @click="toProductDetails(scope.row)">
                   {{ scope.row.pr_na }}
                 </div>
                 <div class="factory">
-                  <div class="fcatoryName">
+                  <div class="fcatoryName" @click="toFactory(scope.row)">
                     {{ scope.row.supplierName }}
                   </div>
                   <div class="icons">
@@ -100,7 +101,7 @@
                     >
                       <div class="cartPhoneIcon"></div>
                     </el-tooltip>
-                    <div class="cartInfoIcon"></div>
+                    <div class="cartInfoIcon" @click="toNews(scope.row)"></div>
                   </div>
                 </div>
               </div>
@@ -272,6 +273,55 @@ export default {
     this.getERPOrderTotal();
   },
   methods: {
+    // 去聊天
+    toNews(item) {
+      const fd = {
+        name: item.supplierName,
+        linkUrl: "/bsIndex/bsNews",
+        component: "bsNews",
+        refresh: true,
+        label: item.supplierName,
+        value: {}
+      };
+      this.$router.push("/bsIndex/bsNews");
+      this.$store.commit("myAddTab", fd);
+    },
+    // 去厂商
+    toFactory(item) {
+      const fd = {
+        name: item.supplierNumber,
+        linkUrl: "/bsIndex/bsMyCollection",
+        component: "bsMyClientsDetail",
+        refresh: true,
+        noPush: true,
+        label: item.supplierName,
+        value: {
+          companyNumber: item.supplierNumber,
+          companyLogo: item.supplierPersonnelLogo,
+          companyName: item.supplierName,
+          contactsMan: item.supplierPersonnelName,
+          phoneNumber: item.supplierPhone,
+          address: item.supplierAddres || item.supplierAddress
+        }
+      };
+      this.$store.commit("myAddTab", fd);
+    },
+    // 查看产品详情
+    toProductDetails(row) {
+      if (!row.productNumber) {
+        this.$message.error("该产品没有产品编号productNumber, 请联系管理员");
+        return false;
+      }
+      const fd = {
+        name: row.productNumber,
+        linkUrl: this.$route.path,
+        component: "bsProductDetails",
+        refresh: true,
+        label: row.fa_no || "产品详情",
+        value: row
+      };
+      this.$store.commit("myAddTab", fd);
+    },
     // 获取订单详情总数
     async getERPOrderTotal() {
       const res = await this.$http.post("/api/GetERPOrderTotal", {
@@ -306,6 +356,7 @@ export default {
       });
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items;
+        console.log(this.tableData);
         this.totalCount = res.data.result.item.totalCount;
       } else {
         this.$common.handlerMsgState({
@@ -440,6 +491,7 @@ export default {
         text-align: left;
         display: flex;
         font-size: 14px;
+        cursor: pointer;
         .productName {
           width: 170px;
           height: 60px;

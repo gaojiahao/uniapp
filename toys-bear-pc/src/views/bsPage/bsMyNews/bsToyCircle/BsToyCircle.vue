@@ -119,6 +119,7 @@
                         height="100%"
                         class="video-js vjs-default-skin vjs-big-play-centered"
                         controls
+                        :lazy-src="item.video"
                         style="object-fit:contain"
                       >
                         <source :src="item.video" type="video/mp4" />
@@ -127,14 +128,23 @@
                   </div>
                   <template v-else-if="item.imgList.length > 0">
                     <div class="imgComtent">
-                      <el-image
-                        fit="cover"
-                        v-for="(val, i) in item.imgList.split(',')"
+                      <img
+                        @click="openImgView(item.imgList.split(','))"
+                        v-for="val in item.imgList.split(',')"
+                        :key="val"
                         :class="{
                           img: item.imgList.split(',').length > 1,
                           multiT: item.imgList.split(',').length == 1
                         }"
-                        :key="i"
+                        :src="val"
+                        alt="图片损坏"
+                      />
+                      <!-- <el-image
+                        fit="cover"
+                        :class="{
+                          img: item.imgList.split(',').length > 1,
+                          multiT: item.imgList.split(',').length == 1
+                        }"
                         :src="val"
                         alt
                         :preview-src-list="item.imgList.split(',')"
@@ -145,7 +155,7 @@
                         <div slot="error" class="image-slot">
                           <img :src="require('@/assets/images/imgError.png')" />
                         </div>
-                      </el-image>
+                      </el-image> -->
                     </div>
                   </template>
                 </div>
@@ -342,6 +352,9 @@
 import { dateDiff } from "@/assets/js/common/common";
 import { mapState } from "vuex";
 import bsSendNotice from "@/components/bsComponents/bsNewsComponent/bsSendNotice/bsSendNotice";
+const cubic = value => Math.pow(value, 3);
+const easeInOutCubic = value =>
+  value < 0.5 ? cubic(value * 2) / 2 : 1 - cubic((1 - value) * 2) / 2;
 export default {
   name: "bsToyCircle",
   components: { bsSendNotice },
@@ -375,8 +388,23 @@ export default {
   },
   methods: {
     scrollEvent(val) {
-      console.log(val);
       val.scrollTop = 0;
+    },
+    // 预览
+    openImgView(list) {
+      this.$PreviewPic({
+        zIndex: 9999, // 组件的zIndex值 默认为2000
+        index: 0, // 展示第几张图片 默认为0
+        list: list, // 需要展示图片list
+        onClose: i => {
+          // 关闭时的回调
+          console.log(i);
+        },
+        onSelect: i => {
+          // 点击某张图片的回调
+          console.log(i);
+        }
+      });
     },
     // 查看我的公告
     searchMyNotice() {
@@ -385,6 +413,7 @@ export default {
       this.issuedCompanyID = this.currentComparnyId;
       this.currentPage = 1;
       this.getDataList();
+      this.upImage();
     },
     // 删除我的公告
     async deleteMyNotice(val) {
@@ -410,11 +439,34 @@ export default {
         });
       }
     },
+    // 解决图片不加载问题
+    upImage() {
+      this.$nextTick(() => {
+        const beginTime = Date.now();
+        const beginValue = this.$refs.findListRef.$el.scrollTop;
+        if (beginValue == 1) this.$refs.findListRef.$el.scrollTop = 0;
+        const rAF =
+          window.requestAnimationFrame || (func => setTimeout(func, 16));
+        const frameFunc = () => {
+          const progress = (Date.now() - beginTime) / 500;
+          if (progress < 1) {
+            this.$refs.findListRef.$el.scrollTop =
+              beginValue * (1 - easeInOutCubic(progress));
+            rAF(frameFunc);
+          } else {
+            this.$refs.findListRef.$el.scrollTop = 1;
+          }
+        };
+        rAF(frameFunc);
+        this.$waterfall.forceUpdate();
+      });
+    },
     // 关闭发布公告
     closeSendNotice(flag) {
       if (flag) {
         this.currentPage = 1;
         this.getDataList();
+        this.upImage();
       }
       this.sendNoticeDialog = false;
     },
@@ -424,12 +476,12 @@ export default {
     },
     // 根据类型搜索公告
     searchNotice(type) {
-      this.$refs.findListRef.$el.scrollTop = 0;
       this.currentPage = 1;
       this.noticeType = type;
       this.publisher = null;
       this.issuedCompanyID = null;
       this.getDataList();
+      this.upImage();
     },
     // 举报
     async jubaoEvent() {
@@ -452,14 +504,14 @@ export default {
           type: "success"
         });
         this.getDataList();
-        this.dialogjubao = false;
-        this.showActive = null;
       } else {
         this.$common.handlerMsgState({
-          msg: "举报公告失败，请联系管理员",
+          msg: res.data.result.msg,
           type: "danger"
         });
       }
+      this.dialogjubao = false;
+      this.showActive = null;
     },
     // 屏蔽公告
     async pingbiEvent(item) {
@@ -852,12 +904,8 @@ export default {
             height: 154px;
             margin-bottom: 10px;
             cursor: pointer;
-            object-fit: none;
+            object-fit: contain;
             box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
-            img {
-              width: 152px;
-              object-fit: contain;
-            }
           }
           .multiT {
             width: 252px;
@@ -865,9 +913,7 @@ export default {
             max-height: 322px;
             box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
             cursor: pointer;
-            img {
-              width: 252px;
-            }
+            object-fit: cover;
           }
         }
       }

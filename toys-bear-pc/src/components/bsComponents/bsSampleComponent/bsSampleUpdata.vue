@@ -27,6 +27,7 @@
             <template slot-scope="scope">
               <div class="imgBox">
                 <el-image
+                  @click.native="goDetails(scope.row)"
                   fit="contain"
                   style="width:80px;height:60px;"
                   :src="scope.row.img"
@@ -40,14 +41,14 @@
                   </div>
                 </el-image>
                 <div class="productName">
-                  <div class="name">
+                  <div class="name" @click="goDetails(scope.row)">
                     {{ scope.row.name }}
                   </div>
                   <div class="factory">
-                    <div class="fcatoryName">
+                    <div class="fcatoryName" @click="toFactory(scope.row)">
                       {{ scope.row.supplierName }}
                     </div>
-                    <div class="icons">
+                    <!-- <div class="icons">
                       <el-tooltip
                         class="item"
                         effect="dark"
@@ -57,7 +58,7 @@
                         <div class="cartPhoneIcon"></div>
                       </el-tooltip>
                       <div class="cartInfoIcon"></div>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </div>
@@ -261,6 +262,39 @@ export default {
 
   mounted() {},
   methods: {
+    // 去厂商
+    toFactory(item) {
+      console.log(item);
+      const fd = {
+        name: item.supplierNumber,
+        linkUrl: this.$route.path,
+        component: "bsMyClientsDetail",
+        refresh: true,
+        label: item.supplierName,
+        value: {
+          companyNumber: item.supplierNumber,
+          companyLogo: item.supplierPersonnelLogo,
+          companyName: item.supplierName,
+          contactsMan: item.supplierPersonnelName,
+          phoneNumber: item.supplierPhone,
+          address: item.supplierAddres || item.supplierAddress
+        }
+      };
+      this.$store.commit("myAddTab", fd);
+    },
+    // 点击产品名字跳转
+    goDetails(row) {
+      const fd = {
+        name: row.productName + row.fa_no,
+        linkUrl: this.$route.path,
+        component: "bsProductDetails",
+        refresh: true,
+        label: row.fa_no || "产品详情",
+        value: row
+      };
+      console.log(row);
+      this.$store.commit("myAddTab", fd);
+    },
     // 获取列表
     async getProductOfferDetailPage() {
       const res = await this.$http.post(
@@ -667,6 +701,7 @@ export default {
         text-align: left;
         display: flex;
         font-size: 14px;
+        cursor: pointer;
         .productName {
           width: 190px;
           height: 60px;

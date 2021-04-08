@@ -344,12 +344,11 @@ export default {
             this.$emit("close", true);
             this.skipCount = 1;
             this.maxResultCount = 10;
-            // this.ruleForm.GonggaoText = null
             this.formData.fileList = [];
           } else {
             this.$emit("close", false);
             this.$common.handlerMsgState({
-              msg: res.data.result.msg,
+              msg: result.data.result.msg,
               type: "danger"
             });
           }
@@ -498,6 +497,7 @@ export default {
           return false;
         }
         if (file.size > this.globalJson.NoticeRestrictions[5].itemCode) {
+          console.log(this.$common.handlerMsgState);
           this.$common.handlerMsgState({
             msg:
               "上传图片大小不能超过 " +
