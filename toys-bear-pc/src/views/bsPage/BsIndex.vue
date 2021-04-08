@@ -270,28 +270,33 @@ export default {
       set(val) {
         this.showSearch = false;
         this.$store.commit("setActiveTab", val);
-        if (
-          this.$route.path == "/bsIndex/bsProductSearchIndex" &&
-          this.activeTab != "/bsIndex/bsProductSearchIndex"
-        ) {
-          eventBus.$emit("showCart", true);
-          this.showSearch = false;
-        } else {
-          this.showSearch = false;
-          eventBus.$emit("showCart", false);
-        }
       }
     },
     ...mapState(["tabList"])
   },
   watch: {
     activeTab(newN, oldN) {
+      console.log(newN);
       this.$store.commit("handlerOldTabName", oldN);
+      if (newN == "/bsIndex/bsProductSearchIndex") {
+        this.handleScroll();
+      } else if (
+        newN != "/bsIndex/bsProductSearchIndex" &&
+        this.$route.path == "/bsIndex/bsProductSearchIndex"
+      ) {
+        eventBus.$emit("showCart", true);
+        this.showSearch = false;
+      } else {
+        eventBus.$emit("showCart", false);
+        this.showSearch = false;
+      }
     }
   },
   created() {},
   mounted() {
-    this.handleScroll();
+    eventBus.$on("startScroll", () => {
+      this.handleScroll();
+    });
   }
 };
 </script>

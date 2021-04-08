@@ -721,6 +721,8 @@ export default {
         }
       }
     });
+    // 增加滚动事件
+    eventBus.$emit("startScroll");
     // 删除购物车
     eventBus.$on("resetMyCart", list => {
       if (list.length) {
