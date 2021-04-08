@@ -160,7 +160,8 @@ export default {
               this.$router.push("/bsIndex");
               break;
             default:
-              location.href = "http://139.9.71.135:8080/#/me";
+              // location.href = "http://139.9.71.135:8080/#/me";
+              location.href = "https://www.toysbear.com/#/me";
               break;
           }
           // this.$router.push("/bsIndex");

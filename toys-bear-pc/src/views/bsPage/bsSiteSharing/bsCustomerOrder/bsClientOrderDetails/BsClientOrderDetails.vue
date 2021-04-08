@@ -291,6 +291,13 @@ export default {
     },
     // 去厂商
     toFactory(item) {
+      if (!item.supplierNumber) {
+        this.$common.handlerMsgState({
+          msg: "该厂商没有厂商编号，请联系管理员",
+          type: "danger"
+        });
+        return false;
+      }
       const fd = {
         name: item.supplierNumber,
         linkUrl: this.$route.path,
@@ -300,11 +307,11 @@ export default {
         label: item.supplierName,
         value: {
           companyNumber: item.supplierNumber,
-          companyLogo: item.supplierPersonnelLogo,
-          companyName: item.supplierName,
-          contactsMan: item.supplierPersonnelName,
+          companyLogo: item.productImage,
+          companyName: item.productName,
+          contactsMan: item.supplierName,
           phoneNumber: item.supplierPhone,
-          address: item.supplierAddres || item.supplierAddress
+          address: item.supplierAddres || item.supplierAddress || ""
         }
       };
       this.$store.commit("myAddTab", fd);
