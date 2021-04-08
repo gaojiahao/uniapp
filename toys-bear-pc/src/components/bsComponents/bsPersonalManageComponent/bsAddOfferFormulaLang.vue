@@ -17,7 +17,7 @@
       <el-form-item label="排序：" prop="sort">
         <el-input
           placeholder="请输入内容"
-          v-model="formData.sort"
+          v-model.number="formData.sort"
           clearable
         ></el-input>
       </el-form-item>
