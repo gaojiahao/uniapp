@@ -14,7 +14,7 @@ module.exports = {
   proEnv: {
     NODE_ENV: "production", // 生产环境
     // hosturl: "http://139.9.71.135:8081",
-    hosturl: "https://api.toysbear.com",
+    hosturl: "https://www.toysbear.com",
     // wsBaseUrl: "ws://139.9.71.135:8090/ws?UserId="
     wsBaseUrl: "wss://impush.toysbear.com/ws?UserId="
   }
