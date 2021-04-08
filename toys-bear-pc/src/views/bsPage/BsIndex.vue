@@ -185,29 +185,11 @@ export default {
         scrollbarEl.onscroll = () => {
           console.log(scrollbarEl.scrollTop);
           if (scrollbarEl.scrollTop >= 200) {
-            if (
-              this.activeTab == "/bsIndex/bsProductSearchIndex" &&
-              this.$route.path == "/bsIndex/bsProductSearchIndex"
-            ) {
-              this.showSearch = true;
-              eventBus.$emit("showCart", true);
-            } else if (
-              this.$route.path == "/bsIndex/bsProductSearchIndex" &&
-              this.activeTab != "/bsIndex/bsProductSearchIndex"
-            ) {
-              eventBus.$emit("showCart", true);
-            }
+            this.showSearch = true;
+            eventBus.$emit("showCart", true);
           } else {
-            if (
-              this.$route.path == "/bsIndex/bsProductSearchIndex" &&
-              this.activeTab != "/bsIndex/bsProductSearchIndex"
-            ) {
-              eventBus.$emit("showCart", true);
-              this.showSearch = false;
-            } else {
-              this.showSearch = false;
-              eventBus.$emit("showCart", false);
-            }
+            this.showSearch = false;
+            eventBus.$emit("showCart", false);
           }
         };
       });
@@ -280,15 +262,24 @@ export default {
       this.$store.commit("handlerOldTabName", oldN);
       if (newN == "/bsIndex/bsProductSearchIndex") {
         this.handleScroll();
-      } else if (
-        newN != "/bsIndex/bsProductSearchIndex" &&
-        this.$route.path == "/bsIndex/bsProductSearchIndex"
-      ) {
-        eventBus.$emit("showCart", true);
-        this.showSearch = false;
       } else {
-        eventBus.$emit("showCart", false);
-        this.showSearch = false;
+        if (
+          newN == "/bsIndex/bsLatestProducts" ||
+          newN == "/bsIndex/bsSpotProducts" ||
+          newN == "/bsIndex/bsVIPProducts"
+        ) {
+          this.showSearch = false;
+          eventBus.$emit("showCart", true);
+        } else if (
+          this.tabList.find(val => val.name == newN).linkUrl ==
+          "/bsIndex/bsProductSearchIndex"
+        ) {
+          this.showSearch = false;
+          eventBus.$emit("showCart", true);
+        } else {
+          this.showSearch = false;
+          eventBus.$emit("showCart", false);
+        }
       }
     }
   },
@@ -297,6 +288,10 @@ export default {
     eventBus.$on("startScroll", () => {
       this.handleScroll();
     });
+  },
+  beforeDestroy() {
+    this.showSearch = false;
+    eventBus.$emit("showCart", false);
   }
 };
 </script>
