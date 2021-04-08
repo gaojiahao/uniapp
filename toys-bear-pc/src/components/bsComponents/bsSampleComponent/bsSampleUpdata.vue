@@ -291,14 +291,26 @@ export default {
       });
       const fd = Object.assign({}, this.$refs.refSearchData.clienFormData);
       fd.quotationProductList = quotationProductList;
-      console.log(fd.defaultFormula);
+
       const res = await this.$http.post("/api/UpdateProductOffer", fd);
       if (res.data.result.code === 200) {
-        this.$store.commit("updataOfferProductList", []);
         this.$common.handlerMsgState({
           msg: "提交成功",
           type: "success"
         });
+        this.$store.commit("updataOfferProductList", []);
+        const url = "编辑" + this.item.offerNumber;
+        this.$store.commit("closeTab", url);
+
+        const fd = {
+          name: "/bsIndex/bsSampleQuotation",
+          linkUrl: "/bsIndex/bsSampleQuotation",
+          component: "bsSampleQuotation",
+          refresh: true,
+          label: "找样报价"
+        };
+        this.$router.push("/bsIndex/bsSampleQuotation");
+        this.$store.commit("myAddTab", fd);
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -308,7 +320,6 @@ export default {
     },
     //确定删除
     async handleDelete(row) {
-      console.log(row.id);
       const res = await this.$http.post("/api/UpdateProductOfferDetail", {
         id: row.id
       });

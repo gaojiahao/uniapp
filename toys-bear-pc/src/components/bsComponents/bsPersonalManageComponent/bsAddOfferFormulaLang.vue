@@ -60,7 +60,10 @@ export default {
       },
       defaultFormRules: {
         title: [{ required: true, message: "请输入主题", trigger: "blur" }],
-        sort: [{ required: true, message: "请输入排序", trigger: "blur" }],
+        sort: [
+          { required: true, message: "请输入排序", trigger: "blur" },
+          { type: "number", message: "必须为数字值" }
+        ],
         content: [{ required: true, message: "请输入内容", trigger: "blur" }]
       }
     };

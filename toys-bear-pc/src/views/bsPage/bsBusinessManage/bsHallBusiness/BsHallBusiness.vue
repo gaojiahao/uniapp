@@ -276,12 +276,13 @@ export default {
     },
     // 获取列表
     async getTableDataList() {
+      console.log(this.searchForm.fromCompanyName);
       const fd = {
         readStatus: this.searchForm.readStatus,
         sampleFrom: "hall",
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
-        keyword: this.searchForm.keyword,
+        keyWord: this.searchForm.keyword,
         orgPersonnelName: this.searchForm.orgPersonnelName,
         fromCompanyName: this.searchForm.fromCompanyName,
         messageExt: this.searchForm.messageExt,
