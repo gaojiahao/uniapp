@@ -80,7 +80,7 @@ export default {
   data() {
     return {
       logUrl: require("@assets/default/logo.png"),
-      titleUrl: require("@assets/images/title.webp"),
+      titleUrl: require("@assets/images/title_s.webp"),
       formValidate:{
         id:'111111111111111',
         nickName:'',
@@ -177,7 +177,7 @@ export default {
           background: rgba(255,255,255,0.6);
           box-shadow:  0 1px 6px rgb(0 0 0 / 20%);
           text-align: center;
-          margin-left: 438.5px;
+          margin-left: 413.5px;
           .text {
               padding-top: 20px;
               color: #464c5b;

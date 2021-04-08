@@ -28,30 +28,51 @@ d<!--
           </div>
         </div>
         <div class="login_box">
-          <div class="type" v-model="type">
+          <div class="qrcode">
+            <img :src="[type=='qrCode'? loginPic:qrCodePic]" @click="changeTypeQrCode()">
+          </div>
+          <div class="type" v-model="type" v-if="type!='qrCode'">
             <Row :gutter="16">
               <Col span="6">
               </Col>
               <Col span="6">
-                <div class="item" :class="[type=='login' ? 'active':'']" @click="changeType('login')">短信登录</div>
+                <div class="item" :class="[type=='login' ? 'active':'']" @click="changeType('login')">账号登录</div>
               </Col>
               <Col span="6">
-                  <div class="item" :class="[type=='qrCode' ? 'active':'']" @click="changeType('qrCode')">二维码登录</div>
+                <!-- <div class="item" :class="[type=='qrCode' ? 'active':'']" @click="changeType('qrCode')">二维码登录</div> -->
+                <div class="item" :class="[type=='message' ? 'active':'']" @click="changeType('message')">短信登录</div>
               </Col>
               <Col span="6">
               </Col>
             </Row>
           </div>
+          <div class="qrcode_type" v-else>
+            二维码登录
+          </div>
           <template v-if="type=='qrCode'">
-            <img :src="qrCodeUrl" width="150px;height:150px"/>
+            <img :src="qrCodeUrl" width="160px;height:160px"/>
+            <p style="font-size:13px;color:#666666">请使用小竹熊App扫一扫登录</p>
           </template>
-          <template v-else>
+          <template v-else-if="type=='message'">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-colon>
               <FormItem label="账号" :prop="userCode">
                 <Input v-model="formValidate['userCode']" :style="{width:'300px',marginLeft: '-50px'}" placeholder="请输入手机号" :maxlength="11"></Input>
               </FormItem>
               <FormItem label="验证码" :prop="passWord">
                 <Input v-model="formValidate['passWord']" :style="{width:'180px',marginLeft: '-170px'}" placeholder="请输入验证码" :maxlength="4"></Input><div style="position:absolute;right: 50px;top: 0;"><Button>获取验证码</Button></div>
+              </FormItem>
+              <FormItem>
+                <Button type="primary" @click="login" :style="{width:'300px',marginLeft: '-50px'}" >{{$t("login.button")}}</Button>  
+              </FormItem>
+            </Form>
+          </template>
+          <template v-else-if="type=='login'">
+            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-colon>
+              <FormItem label="账号" :prop="userCode">
+                <Input v-model="formValidate['userCode']" :style="{width:'300px',marginLeft: '-50px'}" placeholder="请输入手机号" :maxlength="11"></Input>
+              </FormItem>
+              <FormItem label="密码" :prop="passWord">
+                <Input v-model="formValidate['passWord']" :style="{width:'300px',marginLeft: '-50px'}" placeholder="请输入密码" :maxlength="6"></Input>
               </FormItem>
               <FormItem>
                 <Button type="primary" @click="login" :style="{width:'300px',marginLeft: '-50px'}" >{{$t("login.button")}}</Button>  
@@ -93,8 +114,10 @@ export default {
       var userCode = localStorage.getItem("userCode");
       return {
         logUrl: require("@assets/default/logo.png"),
-        titleUrl: require("@assets/images/title.webp"),
-        qrCodeUrl: require("@assets/images/qrCode.jpg"),
+        titleUrl: require("@assets/images/title_s.webp"),
+        qrCodeUrl: require("@assets/images/default_qrcode.webp"),
+        qrCodePic: require("@assets/images/qrcodeLogin.webp"),
+        loginPic: require("@assets/images/pc_login.webp"),
         mail: "",
         userCode: userCode || "",
         passWord: "",
@@ -383,6 +406,9 @@ export default {
     },
     onClickDropdown(val){
       this.changeLangFn(val);
+    },
+    changeTypeQrCode(){
+      this.type = this.type=='qrCode' ? 'login':'qrCode';
     }
   },
   created() {
@@ -471,7 +497,13 @@ export default {
           background: rgba(255,255,255,0.6);
           box-shadow:  0 1px 6px rgb(0 0 0 / 20%);
           text-align: center;
-          margin-left: 438.5px;
+          margin-left: 413.5px;
+          position: relative;
+          .qrcode {
+            position: absolute;
+            top: 7px;
+            right: 7px;
+          }
           .text {
               padding-top: 20px;
               color: #464c5b;
@@ -519,6 +551,19 @@ export default {
             .item{
               font-weight: 600;
             }
+          }
+          .qrcode_type {
+            margin-top: 51px;
+            height: 32px;
+            display: inline-block;
+            width: 100%;
+            position: relative;
+            vertical-align: middle;
+            line-height: normal;
+            font-size: 18px;
+            color: #333333;
+            font-weight: 600;
+            margin-bottom: 13px;  
           }
       }
     }

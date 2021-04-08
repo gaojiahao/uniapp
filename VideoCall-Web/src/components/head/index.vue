@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 14:55:25
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\head\index.vue
- * @LastEditTime: 2021-04-08 11:41:42
+ * @LastEditTime: 2021-04-08 16:26:30
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
