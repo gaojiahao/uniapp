@@ -93,9 +93,9 @@ export default {
     //   产品列表
     async getProductList() {
       const fd = {
-        pageIndex: this.currentPage,
         pageSize: this.pageSize,
-        typeId: this.typeId
+        typeId: this.typeId,
+        pageIndex: this.currentPage
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
