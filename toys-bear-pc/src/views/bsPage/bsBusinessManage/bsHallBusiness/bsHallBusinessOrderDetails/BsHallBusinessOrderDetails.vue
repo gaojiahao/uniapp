@@ -342,6 +342,7 @@ export default {
           type: "danger"
         });
       }
+      this.getERPOrderTotal();
     },
     // 切换当前页
     currentChange(page) {
@@ -385,7 +386,6 @@ export default {
   },
   mounted() {
     this.getSearchCompanyShareOrderDetailsPage();
-    this.getERPOrderTotal();
   }
 };
 </script>
