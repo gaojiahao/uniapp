@@ -345,17 +345,17 @@ export default {
                 this.$message.error(re.data.result.msg);
                 this.$store.commit("removeLoginItems");
               }
-              // switch (res.data.result.commparnyList[0].companyType) {
-              //   case "Sales":
-              //     // this.$router.push("/bsIndex");
-              //     location.href = "http://139.9.71.135:8080/new/#/bsIndex";
-              //     break;
-              //   default:
-              //     this.$router.push("/me");
-              //     // location.href = "http://139.9.71.135:8080/#/me";
-              //     break;
-              // }
-              this.$router.push("/me");
+              switch (res.data.result.commparnyList[0].companyType) {
+                case "Sales":
+                  // this.$router.push("/bsIndex");
+                  location.href = "https://www.toysbear.com/new/#/bsIndex";
+                  break;
+                default:
+                  this.$router.push("/me");
+                  // location.href = "http://139.9.71.135:8080/#/me";
+                  break;
+              }
+              // this.$router.push("/me");
             } else if (res.data.result.commparnyList.length > 1) {
               // 多个角色
               this.$store.commit("setToken", res.data.result);
