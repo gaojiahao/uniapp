@@ -79,6 +79,7 @@
               size="medium"
               v-model="KeyWord"
               placeholder="请输入关键词"
+              clearable
               @keyup.native.enter="search"
             ></el-input>
           </div>
