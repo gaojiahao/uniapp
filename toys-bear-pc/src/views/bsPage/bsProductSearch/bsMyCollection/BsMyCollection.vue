@@ -183,7 +183,7 @@ export default {
     // 去厂商
     toFactory(item) {
       const fd = {
-        name: item.supplierName,
+        name: item.supplierNumber,
         linkUrl: "/bsIndex/bsMyCollection",
         component: "bsMyClientsDetail",
         refresh: true,

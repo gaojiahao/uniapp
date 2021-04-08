@@ -264,7 +264,7 @@ export default {
     // 去厂商
     toFactory(item) {
       const fd = {
-        name: item.supplierName,
+        name: item.supplierNumber,
         linkUrl: this.$route.path,
         component: "bsMyClientsDetail",
         refresh: true,
@@ -342,6 +342,7 @@ export default {
           type: "danger"
         });
       }
+      this.getERPOrderTotal();
     },
     // 切换当前页
     currentChange(page) {
@@ -385,7 +386,6 @@ export default {
   },
   mounted() {
     this.getSearchCompanyShareOrderDetailsPage();
-    this.getERPOrderTotal();
   }
 };
 </script>

@@ -773,7 +773,7 @@ export default {
     // 去聊天
     toNews(item) {
       const fd = {
-        name: item.supplierName,
+        name: item.supplierNumber + "bsNews",
         linkUrl: "/bsIndex/bsNews",
         component: "bsNews",
         refresh: true,

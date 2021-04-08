@@ -292,7 +292,7 @@ export default {
     // 去厂商
     toFactory(item) {
       const fd = {
-        name: item.supplierName,
+        name: item.supplierNumber,
         linkUrl: this.$route.path,
         component: "bsMyClientsDetail",
         refresh: true,

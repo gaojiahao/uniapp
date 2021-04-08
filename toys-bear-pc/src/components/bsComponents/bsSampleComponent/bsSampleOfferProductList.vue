@@ -145,7 +145,7 @@ export default {
     async toFactory(item) {
       console.log(item);
       const fd = {
-        name: item.supplierName,
+        name: item.supplierNumber,
         linkUrl: "/bsIndex/bsVendorQuery",
         component: "bsMyClientsDetail",
         refresh: true,

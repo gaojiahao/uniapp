@@ -268,13 +268,12 @@ export default {
   created() {},
   mounted() {
     this.getSearchCompanyShareOrderDetailsPage();
-    this.getERPOrderTotal();
   },
   methods: {
     // 去聊天
     toNews(item) {
       const fd = {
-        name: item.supplierName,
+        name: item.supplierNumber + "bsNews",
         linkUrl: "/bsIndex/bsNews",
         component: "bsNews",
         refresh: true,
@@ -362,6 +361,7 @@ export default {
           type: "danger"
         });
       }
+      this.getERPOrderTotal();
     },
     // 切换当前页
     currentChange(page) {
