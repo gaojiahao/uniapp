@@ -128,14 +128,23 @@
                   </div>
                   <template v-else-if="item.imgList.length > 0">
                     <div class="imgComtent">
-                      <el-image
-                        fit="cover"
+                      <img
+                        @click="openImgView(item.imgList.split(','))"
                         v-for="val in item.imgList.split(',')"
+                        :key="val"
                         :class="{
                           img: item.imgList.split(',').length > 1,
                           multiT: item.imgList.split(',').length == 1
                         }"
-                        :key="val"
+                        :src="val"
+                        alt="图片损坏"
+                      />
+                      <!-- <el-image
+                        fit="cover"
+                        :class="{
+                          img: item.imgList.split(',').length > 1,
+                          multiT: item.imgList.split(',').length == 1
+                        }"
                         :src="val"
                         alt
                         :preview-src-list="item.imgList.split(',')"
@@ -146,7 +155,7 @@
                         <div slot="error" class="image-slot">
                           <img :src="require('@/assets/images/imgError.png')" />
                         </div>
-                      </el-image>
+                      </el-image> -->
                     </div>
                   </template>
                 </div>
@@ -381,6 +390,22 @@ export default {
     scrollEvent(val) {
       console.log(val);
       val.scrollTop = 0;
+    },
+    // 预览
+    openImgView(list) {
+      this.$PreviewPic({
+        zIndex: 9999, // 组件的zIndex值 默认为2000
+        index: 0, // 展示第几张图片 默认为0
+        list: list, // 需要展示图片list
+        onClose: i => {
+          // 关闭时的回调
+          console.log(i);
+        },
+        onSelect: i => {
+          // 点击某张图片的回调
+          console.log(i);
+        }
+      });
     },
     // 查看我的公告
     searchMyNotice() {
@@ -880,12 +905,8 @@ export default {
             height: 154px;
             margin-bottom: 10px;
             cursor: pointer;
-            object-fit: none;
+            object-fit: contain;
             box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
-            img {
-              width: 152px;
-              object-fit: contain;
-            }
           }
           .multiT {
             width: 252px;
@@ -893,9 +914,7 @@ export default {
             max-height: 322px;
             box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
             cursor: pointer;
-            img {
-              width: 252px;
-            }
+            object-fit: cover;
           }
         }
       }
