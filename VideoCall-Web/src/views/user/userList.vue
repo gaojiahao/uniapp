@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 15:46:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\user\userList.vue
- * @LastEditTime: 2021-04-07 19:19:40
+ * @LastEditTime: 2021-04-08 10:10:26
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -125,6 +125,12 @@ export default {
             .eye{
                 color: #999999;
             }
+        }
+        .ivu-list-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            height: 40px;
         }
     }
 </style>

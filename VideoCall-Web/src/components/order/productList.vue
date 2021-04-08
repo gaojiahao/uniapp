@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:15:36
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\productList.vue
- * @LastEditTime: 2021-04-07 11:50:17
+ * @LastEditTime: 2021-04-08 11:28:25
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -21,7 +21,7 @@
             </div>
             <Table :columns="columns2" :data="data2" >
                 <template slot-scope="{ row, index }" slot="action">
-                    <Icon type="ios-trash-outline" />
+                    <Icon type="ios-trash-outline" style="font-size:24px" />
                 </template>
                 <template slot="footer">
                     <div class="footer_page">
@@ -127,7 +127,7 @@ export default {
                     resizable: true,
                 },
                 {
-                    title: 'Product information',
+                    title: ' ',
                     key: 'info1',
                     render: (h, params) => {
                         return h('div', [
@@ -189,7 +189,7 @@ export default {
                             }, params.row.price),
                         ])
                     },
-                    width: 194
+                    width: 210
                 },
                 {
                     title: 'Product information',
@@ -198,60 +198,82 @@ export default {
                         return h('div', [
                             h('div', {
                                 style: {
-                                    marginTop: '4px'
+                                    marginTop: '4px',
+                                    fontSize: '12px',
+                                    color: '#333333'
                                 },
                             },'Item NO：' + params.row.info2),
                             h('div', {
                                 style: {
-                                    marginTop: '4px'
+                                    marginTop: '4px',
+                                    fontSize: '12px',
+                                    color: '#333333'
                                 },  
                             },'packing：' + params.row.packing),
                             h('div', { 
                                 style: {
-                                    marginTop: '4px'
+                                    marginTop: '4px',
+                                    fontSize: '12px',
+                                    color: '#333333'
                                 },  
                             },'productSize：' + params.row.productSize),
                             h('div', {  
                                 style: {
-                                    marginTop: '4px'
+                                    marginTop: '4px',
+                                    fontSize: '12px',
+                                    color: '#333333'
                                 }, 
                             },'packageSize：' + params.row.packageSize),
                         ])
                     },
-                    width: 240
+                    width: 210
                 },
                 {
-                    title: 'Product information',
+                    title: ' ',
                     key: 'info3',
                     render: (h, params) => {
                         return h('div', [
                             h('div', {
                                 style: {
-                                    marginTop: '4px'
+                                    marginTop: '4px',
+                                    fontSize: '12px',
+                                    color: '#333333'
                                 },
                             },'conrtonSize：' + params.row.conrtonSize),
                             h('div', {
                                 style: {
-                                    marginTop: '4px'
+                                    marginTop: '4px',
+                                    fontSize: '12px',
+                                    color: '#333333'
                                 },  
                             },'innerBox：' + params.row.innerBox),
                             h('div', { 
                                 style: {
-                                    marginTop: '4px'
+                                    marginTop: '4px',
+                                    fontSize: '12px',
+                                    color: '#333333'
                                 },  
                             },'cbm：' + params.row.cbm),
                             h('div', {  
                                 style: {
-                                    marginTop: '4px'
+                                    marginTop: '4px',
+                                    fontSize: '12px',
+                                    color: '#333333'
                                 }, 
                             },'GW/NW：' + params.row['GW/NW']),
                         ])
                     },
-                    width: 237
+                    width: 210
                 },
                 {
-                    title: 'CTNS Total QTY',
+                    renderHeader:(h,params)=>{
+                        return h('div',[
+                            h('div','CTNS'),
+                            h('div','Total QTY'),
+                        ])
+                    },
                     key: 'ctns',
+                    align: 'center',
                     render: (h, params) => {
                         return h('div', [
                             h('div', {
@@ -259,10 +281,11 @@ export default {
                                     marginTop: '4px',
                                     color:'#FF3E3E',
                                 },
-                            },'ctns：' + params.row.ctns),
+                            }, params.row.ctns),
                             h('div', {
                                 style: {
                                     marginTop: '4px',
+                                    fontSize: '12px',
                                     color:'#FF3E3E',
                                 },  
                             },'pcs：' + params.row.pcs),
@@ -273,6 +296,7 @@ export default {
                 {
                     title: 'Total volume',
                     key: 'Total',
+                    align: 'center',
                     render: (h, params) => {
                         return h('div', [
                             h('div', {
@@ -280,20 +304,21 @@ export default {
                                     marginTop: '4px',
                                     color:'#FF3E3E',
                                 },
-                            },'total：' + params.row.total),
+                            }, params.row.total),
                             h('div', {
                                 style: {
                                     marginTop: '4px',
                                     color:'#FF3E3E',
                                 },  
-                            },'volume：' + params.row.volume),
+                            }, params.row.volume),
                         ])
                     },
-                    width: 140
+                    width: 142
                 },
                 {
                     title: 'Total amount',
                     key: 'totalAmount',
+                    align: 'center',
                     render: (h, params) => {
                         return h('div', [
                             h('div', {
@@ -304,7 +329,7 @@ export default {
                             },params.row.totalAmount),
                         ])
                     },
-                    width: 100    
+                    width: 140    
                 },
                 {
                     title: ' ',

@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\Home.vue
- * @LastEditTime: 2021-04-07 19:37:36
+ * @LastEditTime: 2021-04-08 14:40:19
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -77,7 +77,6 @@ export default {
   .ivu-layout /deep/ {
     /deep/ .ivu-layout-header{
       background: #fff;
-      // border-bottom: 1px solid #e9e9e9;
       box-shadow: 0 1px 6px rgb(0 0 0 / 20%);
       border-color: #eee;
       z-index: 1;
@@ -90,7 +89,9 @@ export default {
       background: #fff;  
     }
     /deep/ .ivu-layout-content{
-      background: radial-gradient(#69747d, #4a545d);
+      background: url('~@assets/bg/bg.jpg');
+      background-size: cover;
+      background-repeat: no-repeat; 
       opacity: 1;
     }
     /deep/ .ivu-layout-footer{
@@ -117,7 +118,6 @@ export default {
     text-align: center;
     pointer-events: auto;
     background: #fff;
-    // background-color: rgba(90,90,90,.85);
     z-index: 1;
     transition: all 0.2s ease-in-out;
   }

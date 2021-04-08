@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:37:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\product.vue
- * @LastEditTime: 2021-04-06 17:17:18
+ * @LastEditTime: 2021-04-08 14:42:49
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -58,13 +58,13 @@
         <div class="now_product" v-else>
             <Row class="ipput_wrap">
                 <Col span="6"><div class="text">公司编号</div></Col>
-                <Col span="12"><Input v-model="nowProduct" class="iipput_wrap_box" :style="{width:'130px'}" clearable /></Col>
-                <Col span="6"><Button type="primary" @click="saveNow" :style="{width:'60px'}" >确定</Button></Col>
+                <Col span="12"><Input v-model="nowProduct" class="iipput_wrap_box" :style="{width:'137px'}" clearable /></Col>
+                <Col span="6"><Button type="primary" @click="saveNow" :style="{width:'60px',marginLeft: '11px'}" >确定</Button></Col>
             </Row>
             <Row class="product_wrap">
                 <Col span="8">
                     <Poptip trigger='hover' content="content" placement="right" :transfer="true">
-                        <img :src="test" style="width:87px;height:65px;margin-left:10px"/>
+                        <img :src="test" style="width:87px;height:65px;margin-left:19px"/>
                         <img slot="content" :src="test" style="width:300px;height:300px" />
                     </Poptip>
                 </Col>
@@ -113,14 +113,10 @@
                     </div>
                 </Col>
             </Row>
-            <Row class="action" type="flex" justify="space-around">
-                <Col span="4">
-                    <Button type="primary" shape="circle">加入择样</Button>
-                </Col>
-                <Col span="4">
-                    <Button type="warning" shape="circle">删除</Button>
-                </Col>
-            </Row>
+            <div class="action">
+                <Button type="primary" shape="circle" style="width:88px;margin:0 9px 0 58.5px;">加入择样</Button>
+                <Button type="warning" shape="circle" style="width:88px;margin:0 58.5px 0 9px;">删除</Button>
+            </div>
         </div>
         <!-- 产品详情页 -->
         <ModalProductDetail @show-modal-detail="showModalDetail" :showModal="showModal"></ModalProductDetail>
@@ -162,7 +158,7 @@ export default {
                                 title: params.row.name
                             },
                             on:{
-                                click:()=>{// 这里给了他一个打印事件，下面有展示图
+                                click:()=>{
                                     this.showModalDetail(true,params.row.name)    
                                 }
                             }
@@ -183,11 +179,6 @@ export default {
                         return h('div', [
                         h('span', {
                             style: {
-                                // display: 'inline-block',
-                                // width: '100%',
-                                // overflow: 'hidden',
-                                // textOverflow: 'ellipsis',
-                                // whiteSpace: 'nowrap',
                                 color:'#EC1B1B',
                                 marginTop: '4px'
                             },
@@ -360,7 +351,7 @@ export default {
         .now_product{
             height: 422px;  
             .ipput_wrap {
-                padding: 10px 10px;
+                padding: 19px 17px;
                 .text {
                     line-height: 32px;
                 }
@@ -368,6 +359,7 @@ export default {
             .product_wrap{
                 height: 65px;
                 .product_wrap_text{
+                    margin-left: 15px;
                     span{
                         color: #272727;
                         overflow: hidden;
@@ -385,12 +377,17 @@ export default {
             }
             .now_item_box{
                 .now_item{
-                    padding: 5px 0 0 10px;
+                    padding: 5px 0 0 19px;
                     display: flex;
+                    font-size: 13px;
+                    .title {
+                        color: #999999;
+                    }
                 }    
             }
             .action{
                 margin-top: 10px;
+                display: flex;
             }
         }
         .select_order /deep/ .ivu-table td {
@@ -403,6 +400,8 @@ export default {
     }
     .red{
         color: #EC1B1B;
+        font-size: 13px;
+        margin-left: 15px;
     }
     .blue{
         color: #2684D1;

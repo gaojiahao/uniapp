@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 14:55:25
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\head\index.vue
- * @LastEditTime: 2021-04-07 12:14:59
+ * @LastEditTime: 2021-04-08 11:41:42
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -23,7 +23,7 @@
                     <div class="title">
                         <div class="title_cn">
                             小竹熊云科技公司
-                            <i class="iconfont iconzhifeiji"></i>
+                            <i class="iconfont iconzhifeiji" @click="copyUrl"></i>
                         </div>
                         <div class="text">
                             ID:111111111
@@ -41,7 +41,7 @@
                             <div class="qq"></div><div class="qq_text">客服001</div>
                         </div>
                         <div class="text">
-                            <div><Icon type="ios-call" /></div><div class="qq_text">技术支持：0754-89671122</div>
+                            <i class="iconfont icondianhua1"></i><div class="tel_text">技术支持：0754-89671122</div>
                         </div>
                     </div>    
                 </div>
@@ -62,16 +62,24 @@ export default {
     };
   },
   methods: {
-
+      copyUrl(){
+        this.$Message.success({top:250,content:'复制分享链接成功！'});    
+      }
   },
+  created(){
+      this.$Message.config({
+        top: 50,
+        duration: 3
+    });
+  }
 };
 </script>
 <style lang="less" scoped>
 .head{
-    height: 64px;
+    height: 70px;
     .left_title{
         display: flex;
-        height: 64px;
+        height: 70px;
         .logo{
             img{
                 margin-top: 10px;
@@ -82,7 +90,7 @@ export default {
             img{
                 height: 42px;
                 width: 194px;
-                margin-top: 11px;
+                margin-top: 14px;
                 margin-left: -35px;
             }
         }
@@ -91,7 +99,7 @@ export default {
         height: 64px;
         .title{
             color: #666666;
-            margin-top: 8px;
+            margin-top: 11px;
             .title_cn{
                 color: #2684D1;
                 font-size: 22px;
@@ -104,8 +112,8 @@ export default {
         }
     }
     .right_title{
-        height: 64px;
-        line-height: 64px;
+        height: 70px;
+        line-height: 70px;
         .title{
             color: #666666;
             display: flex;
@@ -124,13 +132,26 @@ export default {
                 .qq {
                     background: url('~@assets/images/qq2.webp');
                     background-repeat: no-repeat;
-                    margin-top: 24.5px;
+                    margin-top: 25.5px;
                     width: 13px;
                     height: 16px;
                 }
                 .qq_text{
-                    margin-left: 5px;
+                    margin-left: 9px;
                 }
+                .tel_text {
+                    margin-left: 13px;    
+                }
+            }
+            .text:nth-child(2) {
+                text-align: right;
+                margin-left: 27px;
+                display: flex;        
+            }
+            .text:nth-child(1) {
+                text-align: right;
+                margin-left: 27px;
+                display: flex;        
             }
         }
     }

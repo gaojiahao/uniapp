@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 19:15:58
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\index.vue
- * @LastEditTime: 2021-04-07 19:34:19
+ * @LastEditTime: 2021-04-08 15:30:48
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -21,11 +21,11 @@
                             <div class="time-card-count">{{myHours}}</div>
                         </div>
                         <span class="colon">:</span>
-                        <div class="time-card" data-type="minutes" data-max="60">
+                        <div class="time-card" data-type="minutes" data-max="59">
                             <div class="time-card-count">{{myMinutes}}</div>
                         </div>
                         <span class="colon">:</span>
-                        <div class="time-card" data-type="seconds" data-max="60">
+                        <div class="time-card" data-type="seconds" data-max="59">
                             <div class="time-card-count">{{mySeconds}}</div>
                         </div>
                     </div>
@@ -41,8 +41,9 @@
                     </div>
                     <Divider type="vertical" />
                     <div class="timer item">
-                        <div class="closeOff"></div>
+                        <div class="closeOff" @click="sureClose"></div>
                     </div>
+                    <Divider type="vertical" />
                 </div>
             </Col>
             <Col span="8">
@@ -60,15 +61,20 @@
             </Col>
         </Row>
         <Setting @show-modal-detail="showModalDetail" :showModal="showModal"></Setting>
+        <EscModal @sure-close="sureClose" @cancel-close="cancelClose" :isShowEsc="isShowEsc"></EscModal>
+        <ReconnectionModal @reconnection-close="reconnectionClose" @cancel-reconnection="cancelReconnection" :isShowReconnection="isShowReconnection"></ReconnectionModal>
     </div>
 </template>
 <script>
 import Setting from "@components/footer/setting";
-
+import EscModal from "@components/public/escModal";
+import ReconnectionModal from "@components/public/reconnectionModal";
 export default {
     name:'Footer',
     components:{
-        Setting
+        Setting,
+        EscModal,
+        ReconnectionModal
     },
     data() {
         return {
@@ -80,6 +86,8 @@ export default {
             showModal:false,
             isMic:true,
             isCar:true,
+            isShowEsc:false,
+            isShowReconnection:true,
         }
     },
     methods: {
@@ -112,6 +120,21 @@ export default {
         setCar(index){
             this.isCar = this.isCar ? false : true;
         },
+        closeOff(){
+            
+        },
+        sureClose(){
+            this.isShowEsc = true;
+        },
+        cancelClose(){
+            this.isShowEsc = false;    
+        },
+        reconnectionClose(){
+            this.isShowReconnection = true;
+        },
+        cancelReconnection(){
+            this.isShowReconnection = false;    
+        }
     },
     created() {
         this.testTimer();
@@ -120,11 +143,11 @@ export default {
 </script>
 <style lang="less" scoped>
 .footer{
-    height: 69px;
+    height: 59px;
     .action {
         display: flex;
         .item{
-            height:69px;
+            height:59px;
             width: 120px;
         }
     }
@@ -146,6 +169,7 @@ export default {
           z-index: 1000;
           right: 0;
           margin-top: -3.5px;
+          margin-right: 5px;
         }
         .closeOff {
             background: url('~@assets/images/close.webp');
@@ -155,15 +179,9 @@ export default {
         }
     }
     .time-card {
-        margin: 0 1em;
         text-align: center;
     }
     .time-card-count {
-        // font-weight: 600;
-        // font-size: 70px;
-        // width: 77px;
-        // height: 77px;
-        // line-height: 77px;
         overflow: hidden;
     }
     .text{
@@ -175,12 +193,12 @@ export default {
         opacity: 0.7;
     }
     .colon {
-        // font-size: 2em;
+
     }
     /deep/ .ivu-divider, /deep/ .ivu-divider-vertical {
         margin: 0 8px;
         display: inline-block;
-        height: 69px;
+        height: 59px;
         width: 1px;
         vertical-align: middle;
         position: relative;
@@ -202,8 +220,8 @@ export default {
         display: flex;
         flex-direction: row-reverse;
         .item{
-            height:69px;
-            width: 35px;
+            height:59px;
+            width: 51px;
             .netWork {
                 background: url('~@assets/images/netWork4.webp');
                 background-repeat: no-repeat;
