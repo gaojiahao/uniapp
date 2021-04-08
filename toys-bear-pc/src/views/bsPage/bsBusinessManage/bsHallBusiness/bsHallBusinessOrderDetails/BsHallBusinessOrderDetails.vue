@@ -217,16 +217,23 @@
         top="60px"
         width="80%"
       >
-        <bsExportSampleOrder :orderRow="item" api="/api/GetSampleOrderExcel" />
+        <bsExportOrder
+          :options="{
+            orderNumber: item.orderNumber,
+            the_nu: item.the_nu,
+            name: item.fromCompanyName,
+            api: '/api/GetOfferOrderExcel'
+          }"
+        />
       </el-dialog>
     </transition>
   </div>
 </template>
 
 <script>
-import bsExportSampleOrder from "@/components/bsComponents/bsBusinessManageComponent/bsExportSampleOrder";
+import bsExportOrder from "@/components/commonComponent/exportOrderComponent";
 export default {
-  components: { bsExportSampleOrder },
+  components: { bsExportOrder },
   props: {
     item: {
       type: Object
