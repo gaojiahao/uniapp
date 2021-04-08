@@ -1,6 +1,7 @@
 <template>
   <div class="bsHome">
-    <div class="myWorkbenchBox">
+    敬请期待
+    <!-- <div class="myWorkbenchBox">
       <div class="myWorkbench">
         <div class="title">
           <i class="icon workbenchIcon"></i>
@@ -183,7 +184,7 @@
           </el-table>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 

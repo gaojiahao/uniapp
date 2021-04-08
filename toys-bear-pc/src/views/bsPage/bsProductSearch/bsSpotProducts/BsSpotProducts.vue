@@ -17,6 +17,7 @@
           <el-input
             type="text"
             size="medium"
+            clearable
             v-model="keyword"
             placeholder="请输入关键词"
             @keyup.native.enter="search"

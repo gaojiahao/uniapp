@@ -153,6 +153,7 @@ export default {
     // 加购
     handlerShopping(item) {
       // this.$set(item, "isShopping", !item.isShopping);
+      console.log(item);
       item.isShopping = !item.isShopping;
       if (item.isShopping) {
         item.shoppingCount = 1;

@@ -8,6 +8,7 @@
           type="text"
           size="medium"
           v-model="searchForm.keyword"
+          clearable
           placeholder="请输入关键词"
           @keyup.native.enter="search"
         ></el-input>
@@ -34,6 +35,7 @@
         <el-input
           type="text"
           size="medium"
+          clearable
           v-model="searchForm.fromCompanyName"
           placeholder="请输入关键词"
           @keyup.native.enter="search"
@@ -56,10 +58,11 @@
         </el-select>
       </div>
       <div class="item">
-        <span class="label">人员：</span>
+        <span class="label">操作人员：</span>
         <el-input
           type="text"
           size="medium"
+          clearable
           v-model="searchForm.orgPersonnelName"
           placeholder="请输入关键词"
           @keyup.native.enter="search"

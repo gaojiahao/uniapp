@@ -1197,6 +1197,11 @@ export default {
           padding: 10px 0;
         }
       }
+      .el-table__body-wrapper {
+        .cell {
+          padding: 10px 0;
+        }
+      }
       font-size: 12px;
       .inputNumber {
         width: 50px;
