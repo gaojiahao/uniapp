@@ -138,6 +138,30 @@
             </el-button>
           </div>
         </div>
+        <div class="right">
+          <div
+            :class="{ grid: true, active: isGrid === 'bsGridComponent' }"
+            @click="handerIsGrid('bsGridComponent')"
+          ></div>
+          <div
+            :class="{ column: true, active: isGrid === 'bsColumnComponent' }"
+            @click="handerIsGrid('bsColumnComponent')"
+          ></div>
+          <div class="line"></div>
+          <!-- <div class="totalCount">
+            <span class="totalCountText">{{ totalCount }}</span>
+            <span>条数据</span>
+          </div> -->
+          <div class="myMinPagination">
+            <div @click="firstEvent" class="first el-icon-arrow-left"></div>
+            <div class="count">
+              <span class="pageIndex">{{ currentPage }}</span>
+              <span>/</span>
+              <span>{{ Math.ceil(totalCount / pageSize) }}</span>
+            </div>
+            <div @click="nextEvent" class="next el-icon-arrow-right"></div>
+          </div>
+        </div>
       </div>
       <div class="productListBox">
         <!-- 产品列表 -->
@@ -161,11 +185,13 @@
 </template>
 
 <script>
+import bsColumnComponent from "@/components/bsComponents/bsProductSearchComponent/bsColumnComponent";
 import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/bsGridComponent";
 export default {
   name: "bsMyClientsDetail",
   components: {
-    bsGridComponent
+    bsGridComponent,
+    bsColumnComponent
   },
   props: {
     item: {
@@ -225,7 +251,7 @@ export default {
     //推荐产品接口
     async getProductListPageEcommend() {
       const fd = {
-        maxResultCoun: this.pageSize,
+        maxResultCount: this.pageSize,
         skipCount: this.currentPage,
         companyNumber: this.item.companyNumber,
         KeyWord: this.searchForm.keyword,
@@ -266,7 +292,6 @@ export default {
         this.currentPage != 1
       )
         return false;
-      console.log(this.isDiyu);
       if (this.isDiyu === 0) {
         this.getProductListPageAll();
       } else {
@@ -291,6 +316,43 @@ export default {
     searchEcommend() {
       this.currentPage = 1;
       this.getProductListPageEcommend();
+    },
+    // 切换产品列表样式
+    handerIsGrid(type) {
+      this.isGrid = type;
+    },
+    // 上一页
+    firstEvent() {
+      if (this.currentPage === 1) {
+        this.$common.handlerMsgState({
+          msg: "已经是第一页了",
+          type: "danger"
+        });
+        return false;
+      }
+      this.currentPage--;
+      if (this.isDiyu === 0) {
+        this.getProductListPageAll();
+      } else {
+        this.getProductListPageEcommend();
+      }
+    },
+    // 下一页
+    nextEvent() {
+      const totalPage = Math.ceil(this.totalCount / this.pageSize);
+      if (totalPage <= this.currentPage) {
+        this.$common.handlerMsgState({
+          msg: "已经是第最后一页了",
+          type: "danger"
+        });
+        return false;
+      }
+      this.currentPage++;
+      if (this.isDiyu === 0) {
+        this.getProductListPageAll();
+      } else {
+        this.getProductListPageEcommend();
+      }
     },
     // 过滤类型
     sortTypeEvent(type) {
@@ -443,6 +505,8 @@ export default {
       width: 100%;
       height: 50px;
       background-color: #f9fafc;
+      display: flex;
+      align-items: center;
       .left {
         flex: 1;
         display: flex;
@@ -501,6 +565,66 @@ export default {
             align-items: center;
             .line {
               margin: 0 5px;
+            }
+          }
+        }
+      }
+      .right {
+        width: 340px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        .grid,
+        .column {
+          width: 17px;
+          height: 17px;
+          margin-right: 25px;
+          cursor: pointer;
+        }
+        .grid {
+          background: url("~@/assets/images/gridIcon.png") no-repeat center;
+          background-size: contain;
+          &.active {
+            background: url("~@/assets/images/gridActiveIcon.png") no-repeat
+              center;
+            background-size: contain;
+          }
+        }
+        .column {
+          background: url("~@/assets/images/columnIcon.png") no-repeat center;
+          background-size: contain;
+          &.active {
+            background: url("~@/assets/images/columnActiveIcon.png") no-repeat
+              center;
+            background-size: contain;
+          }
+        }
+        .line {
+          width: 1px;
+          height: 100%;
+          opacity: 1;
+          background: #e9e9e9;
+        }
+        .totalCount {
+          margin-left: 15px;
+          .totalCountText {
+            color: #eb1515;
+          }
+        }
+        .myMinPagination {
+          width: 110px;
+          display: flex;
+          align-items: center;
+          justify-content: space-evenly;
+          margin-left: 20px;
+          .first,
+          .next {
+            cursor: pointer;
+          }
+          .count {
+            .pageIndex {
+              color: #ff760e;
             }
           }
         }
