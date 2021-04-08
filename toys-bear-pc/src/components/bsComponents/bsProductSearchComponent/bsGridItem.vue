@@ -67,7 +67,7 @@
           <i v-else class="shoppingCart"></i>
         </div>
       </div>
-      <div class="sourceBox" @click="gobsMyClientsDetail()">
+      <div class="sourceBox" @click="toFactory(item)">
         <i class="sourceIcon"></i>
         <template v-if="item.isIntegral">
           <span class="text">
@@ -109,19 +109,26 @@ export default {
       this.$store.commit("myAddTab", fd);
     },
     // 去厂商详情页
-    async gobsMyClientsDetail() {
-      console.log(this.item);
-      // const fd = {
-      //   name: e.companyName,
-      //   linkUrl: "/bsIndex/bsMyClientsDetail",
-      //   component: "bsMyClientsDetail",
-      //   refresh: true,
-      //   noPush: true,
-      //   label: e.companyName,
-      //   value: e
-      // };
-      // this.$router.push("/bsIndex/bsMyClientsDetail");
-      // this.$store.commit("myAddTab", fd);
+    async toFactory(item) {
+      console.log(item);
+      const fd = {
+        name: item.supplierName,
+        linkUrl: "/bsIndex/bsVendorQuery",
+        component: "bsMyClientsDetail",
+        refresh: true,
+        noPush: true,
+        label: item.supplierName,
+        value: {
+          companyNumber: item.supplierNumber,
+          companyLogo: item.supplierPersonnelLogo,
+          companyName: item.supplierName,
+          contactsMan: item.supplierPersonnelName,
+          phoneNumber: item.supplierPhone,
+          address: item.supplierAddres || item.supplierAddress
+        }
+      };
+      this.$router.push("/bsIndex/bsVendorQuery");
+      this.$store.commit("myAddTab", fd);
     },
     // 收藏
     async addCollect(item) {
