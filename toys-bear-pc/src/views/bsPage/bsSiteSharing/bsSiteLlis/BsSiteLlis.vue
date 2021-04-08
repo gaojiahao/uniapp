@@ -324,7 +324,7 @@
         </div>
         <div class="lessThanPrice">
           <div class="left">
-            <el-form-item label="价格小于：" prop="miniPrice">
+            <el-form-item label="价格小于：">
               <el-input
                 v-model="clienFormData.miniPrice"
                 clearable
@@ -335,7 +335,7 @@
           </div>
           <div class="right">
             <!-- xiaoshuweishu -->
-            <el-form-item label="小数位数：" prop="miniPriceDecimalPlaces">
+            <el-form-item label="小数位数：">
               <el-select
                 v-model="clienFormData.miniPriceDecimalPlaces"
                 placeholder="请选择小数位数"

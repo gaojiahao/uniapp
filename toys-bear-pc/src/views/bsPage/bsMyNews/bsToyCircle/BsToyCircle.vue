@@ -388,7 +388,6 @@ export default {
   },
   methods: {
     scrollEvent(val) {
-      console.log(val);
       val.scrollTop = 0;
     },
     // 预览
@@ -505,14 +504,14 @@ export default {
           type: "success"
         });
         this.getDataList();
-        this.dialogjubao = false;
-        this.showActive = null;
       } else {
         this.$common.handlerMsgState({
-          msg: "举报公告失败，请联系管理员",
+          msg: res.data.result.msg,
           type: "danger"
         });
       }
+      this.dialogjubao = false;
+      this.showActive = null;
     },
     // 屏蔽公告
     async pingbiEvent(item) {

@@ -201,7 +201,7 @@ export default {
     toDetails(row) {
       const fd = {
         name: row.orderNumber,
-        linkUrl: "/bsIndex/bsCustomerOrder",
+        linkUrl: this.$route.path,
         component: "bsPurchaseOrderDetails",
         refresh: true,
         label: row.orderNumber,

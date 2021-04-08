@@ -131,17 +131,6 @@ export default {
   },
   methods: {
     async toProductDetails() {
-      const res = await this.$http.post("/api/UpdateIntegral", {
-        integraType: 1,
-        productNumber: this.item.productNumber
-      });
-      const { code } = res.data.result;
-      if (code === 200) {
-        this.$common.handlerMsgState({
-          msg: "积分扣除成功",
-          type: "success"
-        });
-      }
       const fd = {
         name: this.item.productNumber,
         linkUrl: "/bsIndex/bsProductSearchIndex",
