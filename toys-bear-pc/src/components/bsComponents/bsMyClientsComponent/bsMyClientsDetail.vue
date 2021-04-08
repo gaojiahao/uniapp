@@ -235,6 +235,7 @@ export default {
         PageIndex: this.currentPage,
         PageSize: this.pageSize,
         KeyWord: this.KeyWord,
+        typeId: 1,
         companyNumber: this.item.companyNumber
       };
       for (const key in fd) {
