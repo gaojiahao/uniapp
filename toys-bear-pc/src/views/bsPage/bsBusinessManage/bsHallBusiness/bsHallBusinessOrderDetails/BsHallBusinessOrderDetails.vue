@@ -265,7 +265,7 @@ export default {
     toFactory(item) {
       const fd = {
         name: item.supplierNumber,
-        linkUrl: this.$route.path,
+        linkUrl: "/bsIndex/bsVendorQuery",
         component: "bsMyClientsDetail",
         refresh: true,
         noPush: true,
@@ -280,6 +280,7 @@ export default {
         }
       };
       this.$store.commit("myAddTab", fd);
+      this.$router.push("/bsIndex/bsVendorQuery");
     },
     // 产品详情
     goDetails(row) {

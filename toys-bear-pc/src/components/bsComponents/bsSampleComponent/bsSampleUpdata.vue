@@ -284,7 +284,7 @@ export default {
       console.log(item);
       const fd = {
         name: item.supplierNumber,
-        linkUrl: this.$route.path,
+        linkUrl: "/bsIndex/bsVendorQuery",
         component: "bsMyClientsDetail",
         refresh: true,
         label: item.supplierName,
@@ -297,6 +297,7 @@ export default {
           address: item.supplierAddres || item.supplierAddress
         }
       };
+      this.$router.push("/bsIndex/bsVendorQuery");
       this.$store.commit("myAddTab", fd);
     },
     // 点击产品名字跳转
