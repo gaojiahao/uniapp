@@ -15,11 +15,11 @@ module.exports = {
   },
   proEnv: {
     NODE_ENV: "production", // 生产环境
-    // hosturl: "http://139.9.71.135:8081",
-    hosturl: "https://www.toysbear.com",
-    // loginUrl: "http://139.9.71.135:8080/#/me",
-    loginUrl: "https://www.toysbear.com/#/me",
-    // wsBaseUrl: "ws://139.9.71.135:8090/ws?UserId="
-    wsBaseUrl: "wss://impush.toysbear.com/ws?UserId="
+    hosturl: "http://139.9.71.135:8081",
+    loginUrl: "http://139.9.71.135:8080/#/me",
+    wsBaseUrl: "ws://139.9.71.135:8090/ws?UserId="
+    // hosturl: "https://www.toysbear.com",
+    // loginUrl: "https://www.toysbear.com/#/me",
+    // wsBaseUrl: "wss://impush.toysbear.com/ws?UserId="
   }
 };
