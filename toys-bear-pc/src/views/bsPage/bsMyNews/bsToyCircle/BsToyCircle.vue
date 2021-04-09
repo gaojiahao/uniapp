@@ -460,25 +460,25 @@ export default {
     },
     // 解决图片不加载问题
     upImage() {
-      setTimeout(() => {
-        const beginTime = Date.now();
-        const beginValue = this.$refs.findListRef.$el.scrollTop;
-        if (beginValue == 1) this.$refs.findListRef.$el.scrollTop = 0;
-        const rAF =
-          window.requestAnimationFrame || (func => setTimeout(func, 16));
-        const frameFunc = () => {
-          const progress = (Date.now() - beginTime) / 500;
-          if (progress < 1) {
-            this.$refs.findListRef.$el.scrollTop =
-              beginValue * (1 - easeInOutCubic(progress));
-            rAF(frameFunc);
-          } else {
-            this.$refs.findListRef.$el.scrollTop = 1;
-          }
-        };
-        rAF(frameFunc);
-        this.$waterfall.forceUpdate();
-      }, 200);
+      // setTimeout(() => {
+      const beginTime = Date.now();
+      const beginValue = this.$refs.findListRef.$el.scrollTop;
+      if (beginValue == 1) this.$refs.findListRef.$el.scrollTop = 0;
+      const rAF =
+        window.requestAnimationFrame || (func => setTimeout(func, 16));
+      const frameFunc = () => {
+        const progress = (Date.now() - beginTime) / 500;
+        if (progress < 1) {
+          this.$refs.findListRef.$el.scrollTop =
+            beginValue * (1 - easeInOutCubic(progress));
+          rAF(frameFunc);
+        } else {
+          this.$refs.findListRef.$el.scrollTop = 0;
+        }
+      };
+      rAF(frameFunc);
+      // this.$waterfall.forceUpdate();
+      // }, 200);
     },
     // 关闭发布公告
     closeSendNotice(flag) {
@@ -771,6 +771,7 @@ export default {
         } else {
           this.findList = res.data.result.item.result.items;
           this.loading = false;
+          this.$waterfall.forceUpdate();
         }
         this.totalCount = res.data.result.item.result.totalCount;
       } else {
