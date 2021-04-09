@@ -118,7 +118,13 @@ const store = new Vuex.Store({
     },
     //修改报价商品
     updataOfferProductList(state, payLoad) {
-      state.offerProductList = payLoad;
+      if (state.offerProductList.length || !payLoad) {
+        Vue.prototype.$set(state, "offerProductList", []);
+      } else {
+        for (let i = 0; i < payLoad.length; i++) {
+          state.offerProductList.push(payLoad[i]);
+        }
+      }
     },
     //添加报价商品
     pushOfferProductList(state, payLoad) {
@@ -130,6 +136,18 @@ const store = new Vuex.Store({
       for (let i = 0; i < state.offerProductList.length; i++) {
         if (state.offerProductList[i].productNumber == payLoad.productNumber) {
           state.offerProductList.splice(i, 1);
+        }
+      }
+    },
+    // 修改找样报价数量方法
+    changeOfferProductNumber(state, payLoad) {
+      for (let i = 0; i < state.offerProductList.length; i++) {
+        for (let j = 0; j < payLoad.length; j++) {
+          if (
+            state.offerProductList[i].productNumber == payLoad[j].productNumber
+          ) {
+            state.offerProductList[i].boxNumber = payLoad[j].boxNumber;
+          }
         }
       }
     },

@@ -3,19 +3,20 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 16:54:22
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\video\index.vue
- * @LastEditTime: 2021-04-08 14:50:57
+ * @LastEditTime: 2021-04-09 14:57:29
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
 -->
 <template>
     <div class="video">
-        <div class="error" v-if="error">
+        <!-- <div class="error">
             <img :src="cameraPic">
             <p class="text">您的设备未检测到摄像头</p> 
-        </div>
-        <div class="box" v-else>
-            <template v-if="isSelect&&videoList.length==2">
+        </div> -->
+        <div class="box">
+            <div id="videoBox"></div>
+            <!-- <template v-if="isSelect&&videoList.length==2">
                 <div class="video_wrap">
                     <div :class="[isCollapsed ? 'video_item_2_x':'video_item_2']" v-for="(item,index) in videoList" :key="index">
                         <img :src="item.url">
@@ -52,7 +53,7 @@
             </template>
             <div class="bg" v-else>
                 <img :src="test" style="width:100%;height:807px;">
-            </div>
+            </div> -->
             <div class="userlist">
                 <div class="user" @click="selectAll(true)"><div class="active"></div></div>
                 <div class="user" @click="selectAll(false)"></div>
