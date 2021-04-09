@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\Home.vue
- * @LastEditTime: 2021-04-08 14:40:19
+ * @LastEditTime: 2021-04-09 15:01:05
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -22,14 +22,14 @@
               </div>
             </Sider>
             <Content>
-              <Video :isCollapsed="isCollapsed"></Video>
+              <Video :isCollapsed="isCollapsed" ref='video'></Video>
             </Content>
             <Sider ref="side2" hide-trigger :width="311">
               <Order></Order>
             </Sider>
         </Layout>
         <Footer>
-          <Footers></Footers>
+          <Footers @leave="leave"></Footers>
         </Footer>
     </Layout>
   </div>
@@ -60,6 +60,13 @@ export default {
     collapsedSider() {
       this.$refs.side1.toggleCollapse();
     },
+    //退出房间
+    leave(){
+      this.$refs.video.leaveCall();
+    }
+  },
+  mounted() {
+    //this.$refs.video.initRMT();
   },
   created() {
 

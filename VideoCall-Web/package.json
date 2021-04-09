@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "agora-rtc-sdk-ng": "^4.3.0",
+    "cookies": "^0.8.0",
     "core-js": "^3.6.5",
     "flyio": "^0.6.14",
     "js-cookie": "^2.2.1",

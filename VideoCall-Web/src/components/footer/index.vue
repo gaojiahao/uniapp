@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 19:15:58
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\index.vue
- * @LastEditTime: 2021-04-08 15:30:48
+ * @LastEditTime: 2021-04-09 11:01:50
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -92,7 +92,6 @@ export default {
     },
     methods: {
         testTimer(){
-            console.log("sdf");
             this.timeFunction();
             setInterval(() => {
             this.timeFunction();
@@ -125,6 +124,7 @@ export default {
         },
         sureClose(){
             this.isShowEsc = true;
+            this.$emit('leave');
         },
         cancelClose(){
             this.isShowEsc = false;    
