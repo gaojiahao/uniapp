@@ -351,7 +351,7 @@ export default {
           msg: "提交成功",
           type: "success"
         });
-        this.$store.commit("updataOfferProductList", []);
+        this.$store.commit("updataOfferProductList");
         const url = "编辑" + this.item.offerNumber;
         this.$store.commit("closeTab", url);
 

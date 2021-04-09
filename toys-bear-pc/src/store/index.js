@@ -118,8 +118,12 @@ const store = new Vuex.Store({
     },
     //修改报价商品
     updataOfferProductList(state, payLoad) {
-      for (let i = 0; i < payLoad.length; i++) {
-        state.offerProductList.push(payLoad[i]);
+      if (state.offerProductList.length || !payLoad) {
+        Vue.prototype.$set(state, "offerProductList", []);
+      } else {
+        for (let i = 0; i < payLoad.length; i++) {
+          state.offerProductList.push(payLoad[i]);
+        }
       }
     },
     //添加报价商品
