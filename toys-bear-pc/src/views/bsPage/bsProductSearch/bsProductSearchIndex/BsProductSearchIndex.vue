@@ -594,6 +594,7 @@ export default {
     },
     // 修改当前页
     handleCurrentChange(page) {
+      eventBus.$emit("toTop");
       this.currentPage = page;
       this.getProductList();
     },

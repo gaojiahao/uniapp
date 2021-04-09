@@ -53,6 +53,7 @@ import { getMenuFuc } from "@/router/index";
 import loginTop from "@/components/loginComponents/LoginTop.vue";
 import loginFooter from "@/components/loginComponents/LoginFooter.vue";
 import { mapState } from "vuex";
+import { devEnv, proEnv } from "@/assets/js/config/config.js";
 export default {
   components: {
     loginTop,
@@ -160,8 +161,11 @@ export default {
               this.$router.push("/bsIndex");
               break;
             default:
-              // location.href = "http://139.9.71.135:8080/#/me";
-              location.href = "https://www.toysbear.com/#/me";
+              location.href =
+                process.env.NODE_ENV === "production"
+                  ? proEnv.loginUrl
+                  : devEnv.loginUrl;
+              // location.href = "https://www.toysbear.com/#/me";
               break;
           }
           // this.$router.push("/bsIndex");

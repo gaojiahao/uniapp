@@ -66,6 +66,9 @@ export default {
     eventBus.$on("showCart", flag => {
       this.isShowCartBox = flag;
     });
+    eventBus.$on("toTop", () => {
+      this.toTop();
+    });
   },
   methods: {
     // 使用的地方
@@ -102,7 +105,7 @@ export default {
     // 回到顶部
     toTop() {
       this.$refs.bsIndex.$refs.myScrollbar.forEach(val => {
-        const el = val.wrap;
+        const el = val;
         const beginTime = Date.now();
         const beginValue = el.scrollTop;
         const rAF =

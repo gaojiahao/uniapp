@@ -192,18 +192,18 @@ export default {
           console.log(val.scrollTop);
           if (val.scrollTop >= 200) {
             if (this.activeTab == "/bsIndex/bsProductSearchIndex") {
-              this.showSearch = true;
+              // this.showSearch = true;
               eventBus.$emit("showCart", true);
             } else if (
               this.activeTab == "/bsIndex/bsLatestProducts" ||
               this.activeTab == "/bsIndex/bsSpotProducts" ||
               this.activeTab == "/bsIndex/bsVIPProducts"
             ) {
-              this.showSearch = false;
+              // this.showSearch = false;
               eventBus.$emit("showCart", true);
             }
           } else {
-            this.showSearch = false;
+            // this.showSearch = false;
             eventBus.$emit("showCart", false);
           }
         };
@@ -265,7 +265,7 @@ export default {
         return this.$store.state.activeTab;
       },
       set(val) {
-        this.showSearch = false;
+        // this.showSearch = false;
         this.$store.commit("setActiveTab", val);
       }
     },
@@ -282,16 +282,16 @@ export default {
           newN == "/bsIndex/bsSpotProducts" ||
           newN == "/bsIndex/bsVIPProducts"
         ) {
-          this.showSearch = false;
+          // this.showSearch = false;
           eventBus.$emit("showCart", true);
         } else if (
           this.tabList.find(val => val.name == newN).linkUrl ==
           "/bsIndex/bsProductSearchIndex"
         ) {
-          this.showSearch = false;
+          // this.showSearch = false;
           eventBus.$emit("showCart", true);
         } else {
-          this.showSearch = false;
+          // this.showSearch = false;
           eventBus.$emit("showCart", false);
         }
       }
