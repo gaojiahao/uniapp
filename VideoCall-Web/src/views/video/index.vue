@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 16:54:22
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\video\index.vue
- * @LastEditTime: 2021-04-09 14:57:29
+ * @LastEditTime: 2021-04-09 16:34:43
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -15,7 +15,14 @@
             <p class="text">您的设备未检测到摄像头</p> 
         </div> -->
         <div class="box">
-            <div id="videoBox"></div>
+            <AgoraVideoCall 
+                :videoProfile="videoProfile"
+                :channel="channel"
+                :transcode="transcode"
+                :attendeeMode="attendeeMode"
+                :baseMode="baseMode"
+                :appId="appId"
+                :uid="uid"></AgoraVideoCall>
             <!-- <template v-if="isSelect&&videoList.length==2">
                 <div class="video_wrap">
                     <div :class="[isCollapsed ? 'video_item_2_x':'video_item_2']" v-for="(item,index) in videoList" :key="index">
@@ -66,12 +73,16 @@
     </div> 
 </template>
 <script>
+import * as Cookies from "js-cookie";
 import EndModal from "@components/public/endingMettingModal";
+import AgoraVideoCall from "@components/public/AgoraVideoCall";
+import {AGORA_APP_ID} from "@root/agora.config"
 import videoJs from "@mixins/video.js";
 export default {
     name:'Video',
     components:{
-        EndModal
+        EndModal,
+        AgoraVideoCall
     },
     mixins:[videoJs],
     props:{
@@ -93,6 +104,12 @@ export default {
                 // {id:5,url:require("@assets/bg/test.jpg")},
                 // {id:6,url:require("@assets/bg/test.jpg")},
             ],
+            videoProfile: Cookies.get("videoProfile").split(",")[0] || "480p_4",
+            channel: Cookies.get("channel") || "test",
+            transcode: Cookies.get("transcode") || "interop",
+            attendeeMode: Cookies.get("attendeeMode") || "video",
+            baseMode: Cookies.get("baseMode") || "avc",
+            uid: undefined
         };
     },
     methods: {
@@ -104,7 +121,7 @@ export default {
         },
     },
     created() {
-
+        this.appId = AGORA_APP_ID;
     }
 }
 </script>

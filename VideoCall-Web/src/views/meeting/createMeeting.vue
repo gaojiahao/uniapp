@@ -29,7 +29,7 @@ d<!--
           </div>
           <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-colon class="form">
             <FormItem label="会议ID" prop="id">
-              <Input v-model="formValidate['id']" :style="{width:'300px',marginLeft: '-50px'}" :maxlength="11" disabled></Input>
+              <Input v-model="channel" :style="{width:'300px',marginLeft: '-50px'}" :maxlength="11" disabled></Input>
             </FormItem>
             <FormItem label="昵称" prop="nickName">
               <Input v-model="formValidate['nickName']" :style="{width:'300px',marginLeft: '-50px'}" placeholder="请输入您的昵称"></Input>
@@ -72,6 +72,8 @@ d<!--
 </template>
 
 <script>
+import * as Cookies from "js-cookie";
+
 export default {
   name: "createMeeting",
   components: {
@@ -91,11 +93,21 @@ export default {
       },
       ruleValidate:{
 
-      }
+      },
+      channel: "10001",
+      baseMode: "avc",
+      transcode: "interop",
+      attendeeMode: "video",
+      videoProfile: "120_3"  //省流量测试
     };
   },
   methods: {
     save(){
+      Cookies.set("channel", this.channel);
+      Cookies.set("baseMode", this.baseMode);
+      Cookies.set("transcode", this.transcode);
+      Cookies.set("attendeeMode", this.attendeeMode);
+      Cookies.set("videoProfile", this.videoProfile);
       this.$router.push('/');
     }  
   },

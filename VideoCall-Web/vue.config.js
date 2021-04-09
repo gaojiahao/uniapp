@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 15:37:14
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-05 10:18:10
+ * @LastEditTime: 2021-04-09 16:28:39
  */
 const os = require('os');
 const path = require("path");
@@ -61,7 +61,8 @@ module.exports = {
           "@less": path.resolve(__dirname, "./src/less"),
           "@mixins": path.resolve(__dirname, "./src/mixins"),
           "@utils": path.resolve(__dirname, "./src/utils"),
-          "@lang": path.resolve(__dirname, "./src/lang")
+          "@lang": path.resolve(__dirname, "./src/lang"),
+          "@root": path.resolve(__dirname, "./"),
         } // 别名配置
       },
     });
