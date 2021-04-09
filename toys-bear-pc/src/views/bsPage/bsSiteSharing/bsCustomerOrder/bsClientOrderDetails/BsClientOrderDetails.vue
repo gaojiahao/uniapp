@@ -239,8 +239,8 @@
         width="80%"
       >
         <bsExportOrder
-          :orderNumber="orderOption.orderNumber"
-          :customerName="options.customerName"
+          :orderNumber="item.orderNumber"
+          :customerName="item.customerName"
           api="/api/ExportCustomerOrderDetailToExcel"
         />
       </el-dialog>

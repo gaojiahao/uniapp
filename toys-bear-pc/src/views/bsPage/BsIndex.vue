@@ -191,8 +191,17 @@ export default {
         val.onscroll = () => {
           console.log(val.scrollTop);
           if (val.scrollTop >= 200) {
-            this.showSearch = true;
-            eventBus.$emit("showCart", true);
+            if (this.activeTab == "/bsIndex/bsProductSearchIndex") {
+              this.showSearch = true;
+              eventBus.$emit("showCart", true);
+            } else if (
+              this.activeTab == "/bsIndex/bsLatestProducts" ||
+              this.activeTab == "/bsIndex/bsSpotProducts" ||
+              this.activeTab == "/bsIndex/bsVIPProducts"
+            ) {
+              this.showSearch = false;
+              eventBus.$emit("showCart", true);
+            }
           } else {
             this.showSearch = false;
             eventBus.$emit("showCart", false);
@@ -264,7 +273,6 @@ export default {
   },
   watch: {
     activeTab(newN, oldN) {
-      console.log(newN);
       this.$store.commit("handlerOldTabName", oldN);
       if (newN == "/bsIndex/bsProductSearchIndex") {
         this.handleScroll();
