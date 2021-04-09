@@ -188,25 +188,36 @@ export default {
       const myScrollbarList = this.$refs.myScrollbar;
       console.log(myScrollbarList);
       myScrollbarList.forEach(val => {
-        val.onscroll = () => {
-          console.log(val.scrollTop);
+        const fun = () => {
           if (val.scrollTop >= 200) {
             if (this.activeTab == "/bsIndex/bsProductSearchIndex") {
-              // this.showSearch = true;
               eventBus.$emit("showCart", true);
             } else if (
               this.activeTab == "/bsIndex/bsLatestProducts" ||
               this.activeTab == "/bsIndex/bsSpotProducts" ||
               this.activeTab == "/bsIndex/bsVIPProducts"
             ) {
-              // this.showSearch = false;
               eventBus.$emit("showCart", true);
             }
           } else {
-            // this.showSearch = false;
-            eventBus.$emit("showCart", false);
+            if (this.activeTab == "/bsIndex/bsProductSearchIndex") {
+              eventBus.$emit("showCart", false);
+            } else if (
+              this.activeTab == "/bsIndex/bsLatestProducts" ||
+              this.activeTab == "/bsIndex/bsSpotProducts" ||
+              this.activeTab == "/bsIndex/bsVIPProducts"
+            ) {
+              eventBus.$emit("showCart", true);
+            } else {
+              eventBus.$emit("showCart", false);
+            }
           }
         };
+        if (this.activeTab == "/bsIndex/bsProductSearchIndex") {
+          val.onscroll = fun;
+        } else {
+          val.removeEventListener("scroll", fun, false);
+        }
       });
     },
     // 刷新tab标签
