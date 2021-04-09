@@ -11,14 +11,14 @@
           <el-form-item label="报价客户：" prop="linkman">
             <el-select
               style="width: 190px; margin: 0 15px;"
-              v-model="clienFormData.linkman"
+              v-model="clienFormData.customerId"
               placeholder="请输入/选择客户"
             >
               <el-option
                 v-for="item in clientList"
                 :key="item.id"
                 :label="item.name"
-                :value="item.name"
+                :value="item.id"
               >
               </el-option>
             </el-select>
@@ -32,10 +32,10 @@
               新增客户</el-button
             >
           </el-form-item>
-          <el-form-item label="报价备注：" prop="remark">
+          <el-form-item label="报价备注：" prop="title">
             <el-input
               style="width: 586px; margin: 0 15px;"
-              v-model="clienFormData.remark"
+              v-model="clienFormData.title"
               placeholder=" "
             ></el-input>
           </el-form-item>
@@ -238,6 +238,16 @@ export default {
     }
   },
   watch: {
+    "clienFormData.customerId": {
+      deep: true,
+      handler(newVal) {
+        if (newVal) {
+          this.clientList.forEach(val => {
+            if (val.id === newVal) this.clienFormData.customerName = val.name;
+          });
+        }
+      }
+    },
     "clienFormData.cu_de": {
       deep: true,
       handler(newVal) {
@@ -286,9 +296,11 @@ export default {
         remark: null
       },
       clienFormData: {
+        title: null,
         companyName: "11",
         defaultFormula: null,
-        customerInfoId: null,
+        customerId: null,
+        customerName: null,
         quotationProductList: [],
         profit: 0,
         offerMethod: "出厂价",
