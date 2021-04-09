@@ -218,7 +218,7 @@ export default {
     toFactory(item) {
       const fd = {
         name: item.supplierNumber,
-        linkUrl: this.$route.path,
+        linkUrl: "/bsIndex/bsVendorQuery",
         component: "bsMyClientsDetail",
         refresh: true,
         noPush: true,
@@ -233,6 +233,7 @@ export default {
         }
       };
       this.$store.commit("myAddTab", fd);
+      this.$router.push("/bsIndex/bsVendorQuery");
     },
     // 加购
     handlerShopping(item) {
@@ -256,12 +257,12 @@ export default {
     // 收藏
     async addCollect(item) {
       const res = await this.$http.post("/api/CreateProductCollection", {
-        productNumber: item.productNumber
+        productNumber: item.bearProduct.productNumber
       });
       if (res.data.result.code === 200) {
         if (item.isFavorite) {
           this.$common.handlerMsgState({
-            msg: "取消收藏成功",
+            msg: "取消收藏",
             type: "warning"
           });
         } else {
@@ -271,6 +272,7 @@ export default {
           });
         }
         item.isFavorite = !item.isFavorite;
+        eventBus.$emit("resetProductCollection", item);
       }
     },
     // 获取产品详情
@@ -293,6 +295,9 @@ export default {
   mounted() {
     eventBus.$emit("showCart", true);
     this.getProductDetails();
+    eventBus.$on("resetMyCollection", () => {
+      this.getProductDetails();
+    });
   },
   computed: {
     ...mapGetters({

@@ -239,8 +239,8 @@
         width="80%"
       >
         <bsExportOrder
-          :orderNumber="orderOption.orderNumber"
-          :customerName="options.customerName"
+          :orderNumber="item.orderNumber"
+          :customerName="item.customerName"
           api="/api/ExportCustomerOrderDetailToExcel"
         />
       </el-dialog>
@@ -291,23 +291,31 @@ export default {
     },
     // 去厂商
     toFactory(item) {
+      if (!item.supplierNumber) {
+        this.$common.handlerMsgState({
+          msg: "该厂商没有厂商编号，请联系管理员",
+          type: "danger"
+        });
+        return false;
+      }
       const fd = {
         name: item.supplierNumber,
-        linkUrl: this.$route.path,
+        linkUrl: "/bsIndex/bsVendorQuery",
         component: "bsMyClientsDetail",
         refresh: true,
         noPush: true,
         label: item.supplierName,
         value: {
           companyNumber: item.supplierNumber,
-          companyLogo: item.supplierPersonnelLogo,
-          companyName: item.supplierName,
-          contactsMan: item.supplierPersonnelName,
+          companyLogo: item.productImage,
+          companyName: item.productName,
+          contactsMan: item.supplierName,
           phoneNumber: item.supplierPhone,
-          address: item.supplierAddres || item.supplierAddress
+          address: item.supplierAddres || item.supplierAddress || ""
         }
       };
       this.$store.commit("myAddTab", fd);
+      this.$router.push("/bsIndex/bsVendorQuery");
     },
     // 打开选择导出模板
     openSelectTemplate() {

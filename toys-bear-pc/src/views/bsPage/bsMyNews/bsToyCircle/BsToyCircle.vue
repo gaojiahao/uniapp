@@ -39,11 +39,7 @@
         @loadmore="loadmore"
       >
         <template>
-          <div
-            class="cell-item-box"
-            v-for="(item, index) in findList"
-            :key="index"
-          >
+          <div class="cell-item-box" v-for="item in findList" :key="item.id">
             <div class="cell-item">
               <div class="item-top">
                 <div class="itemTopLeft">
@@ -131,6 +127,7 @@
                       <img
                         @click="openImgView(item.imgList.split(','))"
                         v-for="val in item.imgList.split(',')"
+                        :lazy-src="val"
                         :key="val"
                         :class="{
                           img: item.imgList.split(',').length > 1,
@@ -441,7 +438,7 @@ export default {
     },
     // 解决图片不加载问题
     upImage() {
-      this.$nextTick(() => {
+      setTimeout(() => {
         const beginTime = Date.now();
         const beginValue = this.$refs.findListRef.$el.scrollTop;
         if (beginValue == 1) this.$refs.findListRef.$el.scrollTop = 0;
@@ -459,7 +456,7 @@ export default {
         };
         rAF(frameFunc);
         this.$waterfall.forceUpdate();
-      });
+      }, 200);
     },
     // 关闭发布公告
     closeSendNotice(flag) {
@@ -526,6 +523,7 @@ export default {
           type: "success"
         });
         this.getDataList();
+        this.upImage();
       } else {
         this.$common.handlerMsgState({
           msg: "屏蔽公告失败，请联系管理员",

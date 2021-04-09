@@ -30,14 +30,20 @@
                 <i class="el-icon-refresh" @click.stop="refresh()"></i>
                 {{ item.label }}
               </span>
-              <el-scrollbar style="height: 100%;" ref="myScrollbar">
+
+              <div
+                class="myScrollbar"
+                style="height: 100%;overflow-y:auto;"
+                ref="myScrollbar"
+              >
                 <component
                   :item="item.value"
                   v-if="item.refresh"
                   :is="item.component"
                   :ref="item.name"
                 ></component>
-              </el-scrollbar>
+              </div>
+              <!-- </el-scrollbar> -->
             </el-tab-pane>
           </el-tabs>
           <div class="closeAll" @click="closeAll">
@@ -180,24 +186,25 @@ export default {
     // 滚动事件
     handleScroll() {
       const myScrollbarList = this.$refs.myScrollbar;
+      console.log(myScrollbarList);
       myScrollbarList.forEach(val => {
-        let scrollbarEl = val.wrap;
-        scrollbarEl.onscroll = () => {
-          if (scrollbarEl.scrollTop >= 200) {
-            if (this.$route.path === "/bsIndex/bsProductSearchIndex") {
-              this.showSearch = true;
+        val.onscroll = () => {
+          console.log(val.scrollTop);
+          if (val.scrollTop >= 200) {
+            if (this.activeTab == "/bsIndex/bsProductSearchIndex") {
+              // this.showSearch = true;
               eventBus.$emit("showCart", true);
-            } else if (this.$route.path === "/bsIndex/bsProductDetails") {
+            } else if (
+              this.activeTab == "/bsIndex/bsLatestProducts" ||
+              this.activeTab == "/bsIndex/bsSpotProducts" ||
+              this.activeTab == "/bsIndex/bsVIPProducts"
+            ) {
+              // this.showSearch = false;
               eventBus.$emit("showCart", true);
             }
           } else {
-            if (this.$route.path === "/bsIndex/bsProductDetails") {
-              eventBus.$emit("showCart", true);
-              this.showSearch = false;
-            } else {
-              this.showSearch = false;
-              eventBus.$emit("showCart", false);
-            }
+            // this.showSearch = false;
+            eventBus.$emit("showCart", false);
           }
         };
       });
@@ -258,7 +265,7 @@ export default {
         return this.$store.state.activeTab;
       },
       set(val) {
-        this.showSearch = false;
+        // this.showSearch = false;
         this.$store.commit("setActiveTab", val);
       }
     },
@@ -267,11 +274,38 @@ export default {
   watch: {
     activeTab(newN, oldN) {
       this.$store.commit("handlerOldTabName", oldN);
+      if (newN == "/bsIndex/bsProductSearchIndex") {
+        this.handleScroll();
+      } else {
+        if (
+          newN == "/bsIndex/bsLatestProducts" ||
+          newN == "/bsIndex/bsSpotProducts" ||
+          newN == "/bsIndex/bsVIPProducts"
+        ) {
+          // this.showSearch = false;
+          eventBus.$emit("showCart", true);
+        } else if (
+          this.tabList.find(val => val.name == newN).linkUrl ==
+          "/bsIndex/bsProductSearchIndex"
+        ) {
+          // this.showSearch = false;
+          eventBus.$emit("showCart", true);
+        } else {
+          // this.showSearch = false;
+          eventBus.$emit("showCart", false);
+        }
+      }
     }
   },
   created() {},
   mounted() {
-    this.handleScroll();
+    eventBus.$on("startScroll", () => {
+      this.handleScroll();
+    });
+  },
+  beforeDestroy() {
+    this.showSearch = false;
+    eventBus.$emit("showCart", false);
   }
 };
 </script>
@@ -491,6 +525,43 @@ export default {
       }
     }
   }
+}
+.myScrollbar {
+  /*-------滚动条整体样式----*/
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  /*滚动条里面小方块样式*/
+  &::-webkit-scrollbar-thumb {
+    border-radius: 100px;
+    // -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background: #d3d5d8;
+  }
+  /*滚动条里面轨道样式*/
+  &::-webkit-scrollbar-track {
+    // -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 0;
+    background: transparent;
+  }
+  /** 兼容ie样式 */
+  // scrollbar-width: 5px;
+  // /*三角箭头的颜色*/
+  // scrollbar-arrow-color: transparent;
+  // /*滚动条滑块按钮的颜色*/
+  // scrollbar-face-color: transparent;
+  // /*滚动条整体颜色*/
+  // scrollbar-highlight-color: transparent;
+  // /*滚动条阴影*/
+  // scrollbar-shadow-color: transparent;
+  // /*滚动条轨道颜色*/
+  // scrollbar-track-color: transparent;
+  // /*滚动条3d亮色阴影边框的外观颜色——左边和上边的阴影色*/
+  // scrollbar-3dlight-color: transparent;
+  // /*滚动条3d暗色阴影边框的外观颜色——右边和下边的阴影色*/
+  // scrollbar-darkshadow-color: transparent;
+  /*滚动条基准颜色*/
+  // scrollbar-base-color: #d3d5d8;
 }
 @{deep} .el-scrollbar__wrap {
   overflow-x: hidden;

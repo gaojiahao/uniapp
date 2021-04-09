@@ -115,8 +115,8 @@
                   @click.native="goDetails(scope.row)"
                   fit="contain"
                   style="width:80px;height:60px;"
-                  :src="scope.row.img"
-                  :preview-src-list="scope.row.imgUrlList"
+                  :src="scope.row.imageUrl && scope.row.imgUrlList[0]"
+                  :preview-src-list="scope.row.imgUrlList || []"
                 >
                   <div slot="placeholder" class="errorImg">
                     <img src="~@/assets/images/imgError.png" alt />
@@ -299,6 +299,19 @@
           </p>
         </div>
       </div>
+      <!-- 分页 -->
+      <!-- <center style="padding:20px 0;">
+        <el-pagination
+          layout="total, sizes, prev, pager, next, jumper"
+          :page-sizes="[12, 24, 36, 48]"
+          background
+          :total="totalCount"
+          :page-size="pageSize"
+          :current-page.sync="currentPage"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+        ></el-pagination>
+      </center> -->
     </div>
     <!-- 导出订单模板dialog -->
     <transition name="el-zoom-in-center">
@@ -394,11 +407,14 @@ export default {
     },
     // 获取列表
     async getProductOfferDetailPage() {
-      const res = await this.$http.post(
-        "/api/ProductOfferDetailPage",
+      const fd = Object.assign(
+        { skipCount: 1, maxResultCount: 9999 },
         this.item
       );
+
+      const res = await this.$http.post("/api/ProductOfferDetailPage", fd);
       if (res.data.result.code === 200) {
+        this.totalCount = res.data.result.item.totalCount;
         this.tableData = res.data.result.item.items;
       } else {
         this.$message.error(res.data.result.msg);
@@ -413,12 +429,7 @@ export default {
       };
       this.exportTemplateDialog = true;
     },
-    // 切换当前页
-    currentChange(page) {
-      this.currentPage = page;
-      this.getSearchCompanyShareOrderDetailsPage();
-    },
-    // 切换当前页条数
+    // 切換頁容量
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
       if (
@@ -426,7 +437,12 @@ export default {
         this.currentPage != 1
       )
         return false;
-      this.getSearchCompanyShareOrderDetailsPage();
+      this.getVendorListPage();
+    },
+    // 修改当前页
+    handleCurrentChange(page) {
+      this.currentPage = page;
+      this.getVendorListPage();
     },
 
     isInteger(obj) {

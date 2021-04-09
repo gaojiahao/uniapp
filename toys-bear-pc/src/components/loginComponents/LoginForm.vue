@@ -370,7 +370,11 @@ export default {
                   this.$router.push("/bsIndex");
                   break;
                 default:
-                  location.href = "http://139.9.71.135:8080/#/me";
+                  location.href =
+                    process.env.NODE_ENV === "production"
+                      ? proEnv.loginUrl
+                      : devEnv.loginUrl;
+                  // location.href = "https://www.toysbear.com/#/me";
                   break;
               }
             } else if (res.data.result.commparnyList.length > 1) {

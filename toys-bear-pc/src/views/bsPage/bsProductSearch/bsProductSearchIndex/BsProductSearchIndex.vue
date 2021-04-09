@@ -594,6 +594,7 @@ export default {
     },
     // 修改当前页
     handleCurrentChange(page) {
+      eventBus.$emit("toTop");
       this.currentPage = page;
       this.getProductList();
     },
@@ -712,6 +713,17 @@ export default {
         });
       }
     });
+    eventBus.$on("resetProductCollection", item => {
+      for (let i = 0; i < this.productList.length; i++) {
+        if (
+          this.productList[i].productNumber == item.bearProduct.productNumber
+        ) {
+          this.productList[i].isFavorite = item.isFavorite;
+        }
+      }
+    });
+    // 增加滚动事件
+    eventBus.$emit("startScroll");
     // 删除购物车
     eventBus.$on("resetMyCart", list => {
       if (list.length) {
@@ -748,7 +760,22 @@ export default {
   watch: {
     shoppingList(list) {
       if (list) {
-        this.getProductList();
+        if (list.length) {
+          for (let i = 0; i < this.productList.length; i++) {
+            for (let j = 0; j < list.length; j++) {
+              if (this.productList[i].productNumber == list[j].productNumber) {
+                this.productList[i].isShopping = true;
+                break;
+              } else {
+                this.productList[i].isShopping = false;
+              }
+            }
+          }
+        } else {
+          this.productList.forEach(val => {
+            val.isShopping = false;
+          });
+        }
       }
     },
     "searchForm.time"(newVal) {

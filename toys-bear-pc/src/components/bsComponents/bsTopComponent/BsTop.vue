@@ -14,10 +14,10 @@
           <i class="el-icon-s-fold" v-show="!isCollapse"></i>
           <i class="el-icon-s-unfold" v-show="isCollapse"></i>
         </div>
-        <div class="isNotice">
+        <!-- <div class="isNotice">
           <i class="laba iconfont icon-laba1"></i>
           <p class="noticeContext">热烈庆祝小竹熊签约优选跨界玩具展厅</p>
-        </div>
+        </div> -->
       </div>
       <div class="right">
         <div class="infoItem">
@@ -28,7 +28,7 @@
           <div class="iconBox QQIcon"></div>
           <span class="content">客服QQ1</span>
         </div>
-        <div class="infoItem qq" @click="toQQ('597892949')">
+        <div class="infoItem qq" @click="toQQ('3300802838')">
           <div class="iconBox QQIcon"></div>
           <span class="content">客服QQ2</span>
         </div>

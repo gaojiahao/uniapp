@@ -30,8 +30,8 @@
                   @click.native="goDetails(scope.row)"
                   fit="contain"
                   style="width:80px;height:60px;"
-                  :src="scope.row.img"
-                  :preview-src-list="scope.row.imgUrlList"
+                  :src="scope.row.imageUrl && scope.row.imgUrlList[0]"
+                  :preview-src-list="scope.row.imgUrlList || []"
                 >
                   <div slot="placeholder" class="errorImg">
                     <img src="~@/assets/images/imgError.png" alt />
@@ -192,6 +192,7 @@
           </el-table-column>
         </el-table>
       </div>
+
       <div class="tableBto">
         <div class="right">
           <p class="item">
@@ -229,6 +230,19 @@
           >
         </div>
       </div>
+      <!-- 分页 -->
+      <!-- <center style="padding:20px 0;">
+        <el-pagination
+          layout="total, sizes, prev, pager, next, jumper"
+          :page-sizes="[12, 24, 36, 48]"
+          background
+          :total="totalCount"
+          :page-size="pageSize"
+          :current-page.sync="currentPage"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+        ></el-pagination>
+      </center> -->
     </div>
   </div>
 </template>
@@ -252,7 +266,10 @@ export default {
   data() {
     return {
       searchFormData: {},
-      tableData: []
+      tableData: [],
+      totalCount: 0,
+      pageSize: 12,
+      currentPage: 1
     };
   },
   created() {
@@ -267,7 +284,7 @@ export default {
       console.log(item);
       const fd = {
         name: item.supplierNumber,
-        linkUrl: this.$route.path,
+        linkUrl: "/bsIndex/bsVendorQuery",
         component: "bsMyClientsDetail",
         refresh: true,
         label: item.supplierName,
@@ -280,6 +297,7 @@ export default {
           address: item.supplierAddres || item.supplierAddress
         }
       };
+      this.$router.push("/bsIndex/bsVendorQuery");
       this.$store.commit("myAddTab", fd);
     },
     // 点击产品名字跳转
@@ -292,15 +310,16 @@ export default {
         label: row.fa_no || "产品详情",
         value: row
       };
-      console.log(row);
       this.$store.commit("myAddTab", fd);
     },
     // 获取列表
     async getProductOfferDetailPage() {
-      const res = await this.$http.post(
-        "/api/ProductOfferDetailPage",
+      const fd = Object.assign(
+        { skipCount: 1, maxResultCount: 9999 },
         this.item
       );
+
+      const res = await this.$http.post("/api/ProductOfferDetailPage", fd);
       if (res.data.result.code === 200) {
         this.$store.commit(
           "updataOfferProductList",
@@ -332,7 +351,7 @@ export default {
           msg: "提交成功",
           type: "success"
         });
-        this.$store.commit("updataOfferProductList", []);
+        this.$store.commit("updataOfferProductList");
         const url = "编辑" + this.item.offerNumber;
         this.$store.commit("closeTab", url);
 
@@ -362,6 +381,7 @@ export default {
           msg: "删除成功",
           type: "success"
         });
+        this.$store.commit("popOfferProductList", row);
         this.getProductOfferDetailPage();
       } else {
         this.$common.handlerMsgState({
@@ -387,6 +407,21 @@ export default {
     },
     isInteger(obj) {
       return Math.floor(obj) === obj;
+    },
+    // 切換頁容量
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+      if (
+        this.currentPage * pageSize > this.totalCount &&
+        this.currentPage != 1
+      )
+        return false;
+      this.getVendorListPage();
+    },
+    // 修改当前页
+    handleCurrentChange(page) {
+      this.currentPage = page;
+      this.getVendorListPage();
     },
     /*
      * 将一个浮点数转成整数，返回整数和倍数。如 3.14 >> 314，倍数是 100
@@ -569,11 +604,8 @@ export default {
       } else if (e.target.value.length > 1 && e.target.value[0] == 0) {
         e.target.value = e.target.value.slice(1, 5);
       }
-      val.shoppingCount = Number(e.target.value);
-      this.$store.commit(
-        "replaceShoppingCartValueCount",
-        this.offerProductList
-      );
+      val.boxNumber = Number(e.target.value);
+      this.$store.commit("changeOfferProductNumber", this.offerProductList);
     },
     // 点击上下键盘
     nextInput(e) {

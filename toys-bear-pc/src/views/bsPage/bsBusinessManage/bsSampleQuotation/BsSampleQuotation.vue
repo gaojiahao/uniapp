@@ -26,7 +26,7 @@
           ></el-input>
         </div>
         <div class="item">
-          <span class="label">人员：</span>
+          <span class="label">操作人员：</span>
           <el-input
             type="text"
             size="medium"
