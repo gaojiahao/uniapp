@@ -165,6 +165,16 @@
             <span> {{ scope.row.in_en }}/{{ scope.row.ou_lo }}(pcs) </span>
           </template>
         </ex-table-column>
+        <ex-table-column :autoFit="true" label="箱数">
+          <template slot-scope="scope">
+            <span> {{ scope.row.in_en }} </span>
+          </template>
+        </ex-table-column>
+        <ex-table-column :autoFit="true" label="总数量">
+          <template slot-scope="scope">
+            <span> {{ scope.row.in_en }} </span>
+          </template>
+        </ex-table-column>
         <ex-table-column :autoFit="true" prop="costPrice" label="参考单价">
           <template slot-scope="scope">
             <span style="color:#3368A9">
