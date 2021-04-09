@@ -23,7 +23,6 @@
                 fit="contain"
                 style="width:80px;height:60px;"
                 :src="scope.row.img"
-                :preview-src-list="scope.row.imgUrlList"
               >
                 <div
                   slot="placeholder"
