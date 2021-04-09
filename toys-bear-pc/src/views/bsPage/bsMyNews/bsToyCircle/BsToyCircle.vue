@@ -308,6 +308,9 @@
         </template>
       </waterfall>
     </div>
+    <div class="returnTop" v-show="flagReturnTop" @click="returnTop">
+      <i class="toTopIcon el-icon-top"></i>
+    </div>
     <!-- 举报 -->
     <el-dialog
       title="举报"
@@ -357,6 +360,7 @@ export default {
   components: { bsSendNotice },
   data() {
     return {
+      flagReturnTop: false,
       sendNoticeDialog: false,
       publisher: null,
       issuedCompanyID: null,
@@ -386,6 +390,24 @@ export default {
   methods: {
     scrollEvent(val) {
       val.scrollTop = 0;
+    },
+    // 返回顶部
+    returnTop() {
+      const beginTime = Date.now();
+      const el = this.$refs.findListRef.$el;
+      const beginValue = el.scrollTop;
+      const rAF =
+        window.requestAnimationFrame || (func => setTimeout(func, 16));
+      const frameFunc = () => {
+        const progress = (Date.now() - beginTime) / 500;
+        if (progress < 1) {
+          el.scrollTop = beginValue * (1 - easeInOutCubic(progress));
+          rAF(frameFunc);
+        } else {
+          el.scrollTop = 0;
+        }
+      };
+      rAF(frameFunc);
     },
     // 预览
     openImgView(list) {
@@ -620,7 +642,6 @@ export default {
     // 打开回复评论
     openHuiPinglun(item, child) {
       if (!this.currentIten) {
-        console.log("第一次");
         this.huifuUser = child;
         this.currentIten = item;
         this.$set(this, "currentIten", item);
@@ -630,7 +651,6 @@ export default {
           this.currentIten.bearNotice.noticeNumber ==
           item.bearNotice.noticeNumber
         ) {
-          console.log("是一条公告");
           if (this.huifuUser.id == child.id) {
             item.isHuiPinglun = !item.isHuiPinglun;
           } else {
@@ -640,7 +660,6 @@ export default {
           this.currentIten.isHuiPinglun = false;
           item.isHuiPinglun = true;
           this.currentIten = item;
-          console.log("不是一条公告");
         }
       }
 
@@ -678,7 +697,6 @@ export default {
           createdBy: this.userInfo.userInfo.id
         });
       }
-      console.log(item);
       this.pinglunValue = "";
       item.isPinglun = false;
     },
@@ -752,7 +770,6 @@ export default {
           );
         } else {
           this.findList = res.data.result.item.result.items;
-          console.log(this.findList);
           this.loading = false;
         }
         this.totalCount = res.data.result.item.result.totalCount;
@@ -767,6 +784,14 @@ export default {
   },
   created() {},
   mounted() {
+    this.$refs.findListRef.$el.addEventListener("scroll", () => {
+      console.log(" scroll " + this.$refs.findListRef.$el.scrollTop);
+      if (this.$refs.findListRef.$el.scrollTop > 300) {
+        this.flagReturnTop = true;
+      } else {
+        this.flagReturnTop = false;
+      }
+    });
     const that = this;
     window.onresize = () => {
       return (() => {
@@ -774,6 +799,7 @@ export default {
         that.fullWidth = window.fullWidth;
       })();
     };
+
     this.getDataList();
   },
   computed: {
@@ -781,6 +807,9 @@ export default {
     ...mapState(["currentComparnyId"])
   },
   watch: {
+    scrollTop(val) {
+      console.log(val);
+    },
     fullWidth(val) {
       if (val < 1920) this.col = 2;
       this.fullWidth = val;
@@ -795,7 +824,27 @@ export default {
   min-height: 100%;
   height: 100%;
   padding: 10px;
+  position: relative;
   box-sizing: border-box;
+  .returnTop {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    right: 0;
+    bottom: 50px;
+    cursor: pointer;
+    pointer-events: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .toTopIcon {
+      width: 20px;
+      height: 20px;
+      color: #fff;
+      font-size: 20px;
+    }
+  }
   .topLauot {
     padding-bottom: 20px;
     display: flex;
