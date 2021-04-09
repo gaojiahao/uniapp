@@ -310,7 +310,6 @@ export default {
         label: row.fa_no || "产品详情",
         value: row
       };
-      console.log(row);
       this.$store.commit("myAddTab", fd);
     },
     // 获取列表
@@ -382,6 +381,7 @@ export default {
           msg: "删除成功",
           type: "success"
         });
+        this.$store.commit("popOfferProductList", row);
         this.getProductOfferDetailPage();
       } else {
         this.$common.handlerMsgState({
@@ -604,11 +604,8 @@ export default {
       } else if (e.target.value.length > 1 && e.target.value[0] == 0) {
         e.target.value = e.target.value.slice(1, 5);
       }
-      val.shoppingCount = Number(e.target.value);
-      this.$store.commit(
-        "replaceShoppingCartValueCount",
-        this.offerProductList
-      );
+      val.boxNumber = Number(e.target.value);
+      this.$store.commit("changeOfferProductNumber", this.offerProductList);
     },
     // 点击上下键盘
     nextInput(e) {
