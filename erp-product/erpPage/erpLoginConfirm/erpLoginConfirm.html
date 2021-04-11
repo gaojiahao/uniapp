@@ -5,14 +5,91 @@
   <meta http-equiv="X-UA-Compatible" content="IE=7">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>小竹熊云科技</title>
-  <script src="../../static/jquery.min.js"></script>
-  <script src="../../static/js/template-web.js"></script>
+  <link rel="stylesheet" href="../../static/css/base.css">
+  <link rel="stylesheet" href="./erpLoginConfirm.css">
+  <script src="../../static/js/jquery-1.8.3.min.js"></script>
+  <script src="../../static/js/jquery-jtemplates0.8.4.js"></script>
+  <script src="../../static/js/jquery.qrcode.min.js"></script>
 </head>
 <body>
-  <div id="myTable"></div>
+  <div id="erpLoginConfirm">
+    <div class="header">
+      <div class="toplauot">
+        <div class="left">
+          <img class="leftImg" src="../../static/image/logo.png" alt="">
+          <div class="titleBox">
+            <div class="chTitle">
+              小竹熊订单同步管理
+            </div>
+            <div class="enTitle">
+              Shenzhen Little Bamboo Bear Technology co.,Ltd.
+            </div>
+          </div>
+        </div>
+        
+        <div class="right">
+          <div class="loginBtn">登录系统</div>
+          <div class="shouyeBox">
+            <i class="mySampleIcon"></i>
+            <span class="sampleText">
+              我的订单
+            </span>
+          </div>
+          <div class="toHome">
+            <i class="homeIcon"></i>
+            <span class="homeText">首页</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 选角色内容 -->
+    <div class="userInfoWrap">
+      <div class="userInfoBox">
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="userIten"></div>
+        <div class="block"></div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
 <script>
   $(function () {
+    $(".toHome").click(function () {
+      window.location.href = '../erpHome/erpHome.html';
+    })
   })
   </script>

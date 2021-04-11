@@ -5,14 +5,103 @@
   <meta http-equiv="X-UA-Compatible" content="IE=7">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>小竹熊云科技</title>
-  <script src="../../static/jquery.min.js"></script>
-  <script src="../../static/js/template-web.js"></script>
+  <link rel="stylesheet" href="../../static/css/base.css">
+  <link rel="stylesheet" href="./erpLogin.css">
+  <script src="../../static/js/jquery-1.8.3.min.js"></script>
+  <script src="../../static/js/jquery-jtemplates0.8.4.js"></script>
+  <script src="../../static/js/jquery.qrcode.min.js"></script>
 </head>
 <body>
-  <div id="myTable"></div>
+  <div id="loginFrom">
+    <div class="header">
+      <div class="toplauot">
+        <div class="left">
+          <img class="leftImg" src="../../static/image/logo.png" alt="">
+          <div class="titleBox">
+            <div class="chTitle">
+              小竹熊订单同步管理
+            </div>
+            <div class="enTitle">
+              Shenzhen Little Bamboo Bear Technology co.,Ltd.
+            </div>
+          </div>
+        </div>
+        
+        <div class="right">
+          <div class="loginBtn">登录系统</div>
+          <div class="shouyeBox">
+            <i class="mySampleIcon"></i>
+            <span class="sampleText">
+              我的订单
+            </span>
+          </div>
+          <div class="toHome">
+            <i class="homeIcon"></i>
+            <span class="homeText">首页</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 登录内容 -->
+      <div class="loginWrap">
+        <div class="loginBox">
+          <div class="left">
+            <p class="yijian">订单信息一键同步</p>
+          </div>
+          <div class="middle">
+            <div class="qrcodeBox">
+              <p class="qrTitle"><i class="icon"></i>二维码登录</p>
+              <div id="qrcode"></div>
+              <p class="qrInfo">请用小竹熊App扫一扫登录</p>
+            </div>
+          </div>
+          <div class="right">
+            <div class="loginTitle">登录系统</div>
+            <div class="loginFormBox">
+              <div class="logFormTitle"><i class="icon"></i>账号登录</div>
+              <div class="phoneBox">
+                <div class="title">手机号</div>
+                <div class="inputWrap">
+                  <i class="phoneIcon"></i>
+                  <input type="text" class="phoneInput">
+                </div>
+              </div>
+              <div class="codeBox">
+                <div class="title">验证码</div>
+                <div class="inputWrap">
+                  <i class="codeIcon"></i>
+                  <input type="text" class="codeInput">
+                </div>
+              </div>
+              <div class="submitBtn">登 录</div>
+              <div class="codeBox"></div>
+            </div>
+          </div>
+        </div>
+    </div>
+    </div>
+  </div>
 </body>
 </html>
 <script>
   $(function () {
+    // 生成二维码
+    var url = window.location.href;
+    $('#qrcode').qrcode({
+      width: 198,
+      height: 198,
+      render: "table", // 渲染方式有table方式和canvas方式
+      text: url,
+      typeNumber: -1,   //计算模式一般默认为-1
+      correctLevel: 2, //二维码纠错级别
+      background: "#ffffff",  //背景颜色
+      foreground: "#000000"  //二维码颜色
+    });
+    $(".toHome").click(function () {
+      window.location.href = '../erpHome/erpHome.html';
+    })
+    $(".submitBtn").click(function () {
+      window.location.href = '../erpLoginConfirm/erpLoginConfirm.html';
+    })
   })
   </script>
