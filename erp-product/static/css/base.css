@@ -69,6 +69,7 @@ option:hover{
     background-color:#1E90FF;
 }
 .page {
+	display: none;
 	width: 1200px;
 	height: 45px;
 	padding: 20px 0;
