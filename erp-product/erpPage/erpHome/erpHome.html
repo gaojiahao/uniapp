@@ -130,59 +130,6 @@
     </div>
     <%}%>
   </script>
-<!-- <script>
-  大展厅
-  <%for(var i = 0; i < bigHallList.length; i++) {%>
-<div class="bigExhibitionItem">
-  <div class="imgBox">
-  <%if bigHallList[i].bgImg {%>
-    <img class="leftImg" src="<%=bigHallList[i].bgImg %>" alt="">
-  <%}%>
-  <%else {%>
-  <img class="leftImg" src="/static/image/logo.png" alt="">
-  <%}%>	
-  </div>
-  <%if bigHallList[i].companyName {%>
-  <div class="hallName">
-    <%=bigHallList[i].companyName %>
-  </div>
-  <%}%>
-  <%else {%>
-  <div class="hallName">
-    <%=bigHallList[i].adTitle %>
-  </div>
-  <%}%>
-</div>
-<%}%>
-</script> -->
-  <!-- <script id="tpMinHall" type="text/html">
-    小展厅
-    <%for(var i = 0; i < minHallList.length; i++) {%>
-      <div class="minExhibitionItem">
-        <div class="imgBox">
-          <%if minHallList[i].bgImg {%>
-            <img class="leftImg" src="<%=minHallList[i].bgImg %>" alt="">
-          <%}%>
-          <%else {%>
-          <img class="leftImg" src="../../static/image/logo.png" alt="">
-          <%}%>	
-        </div>
-        <div class="hallName">
-          <%=minHallList[i].companyName || minHallList[i].adTitle%>
-        </div>
-        <%if minHallList[i].companyName {%>
-          <div class="hallName">
-            <%=minHallList[i].companyName %>
-          </div>
-        <%}%>
-        <%else {%>
-          <div class="hallName">
-            <%=minHallList[i].adTitle %>
-          </div>
-        <%}%>	
-      </div>
-    <%}%>
-  </script> -->
   
 <script>
   $(function () {

@@ -208,7 +208,6 @@
 .floorBox .exhibitionList .bigExhibitions .bigExhibitionItem {
   width: 273px;
   height: 155px;
-  /* display: inline-block; */
   float: left;
   margin-right: 20px;
   cursor: pointer;
