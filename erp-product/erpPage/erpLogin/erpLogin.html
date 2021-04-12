@@ -156,10 +156,10 @@
               clearInterval(timer);
             }
             timer = setInterval(function() {
-              if (count > 0 && count <= TIME_COUNT) {
-                count--;
+              if (COUNT > 0 && COUNT <= TIME_COUNT) {
+                COUNT--;
                 var countHTML = template(document.getElementById('tpCountItem').innerHTML, {
-                  count: count
+                  count: COUNT
                 });
                 document.getElementById("codeCountTemp").innerHTML = countHTML;
               } else {
@@ -170,6 +170,7 @@
                   count: "获取验证码"
                 });
                 document.getElementById("codeCountTemp").innerHTML = countHTML;
+                COUNT = TIME_COUNT;
               }
             }, 1000);
           },
