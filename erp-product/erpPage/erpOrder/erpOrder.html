@@ -246,7 +246,7 @@
       orderFrom: orderFrom,
       orderType: orderType
     }
-    this.getSampleOrderERPPage(data)
+    // this.getSampleOrderERPPage(data)
 
   }
   //点击跳转
@@ -259,29 +259,6 @@
       }
     }
   }
-  var data = [
-    {
-      hall_na: "订单来源",
-      orderType: "订单类型",
-      toCompanyName: "本次代号",
-      the_nu: "订单数量",
-      orderCount: "1",
-      number: "订单备注",
-      remark: "订单时间",
-      happenDate: "haijing"
-    },
-    {
-      hall_na: "订单来源",
-      orderType: "订单类型",
-      toCompanyName: "本次代号",
-      the_nu: "订单数量",
-      orderCount: "2",
-      number: "订单备注",
-      remark: "订单时间",
-      happenDate: "haijing"
-    },
-  ]
-
   // 渲染列表数据
   function getTable(data) {
     var tbodyData = document.getElementById('tbodyData');
