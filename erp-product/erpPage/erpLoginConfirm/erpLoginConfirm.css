@@ -74,7 +74,7 @@
   cursor: pointer;
 }
 .header .toplauot .right .toHome .homeText{
-  color: #2D60B3;
+  color: #999999;
 }
 .header .toplauot .right .shouyeBox .sampleText{
   color: #999999;
@@ -86,7 +86,7 @@
   width: 21px;
   height: 21px;
   margin-right: 10px;
-  background: url('../../static/image/activeHomeIcon.png') no-repeat center;
+  background: url('../../static/image/erpHomeIcon.png') no-repeat center;
 }
 .header .toplauot .right .shouyeBox .mySampleIcon{
   display: inline-block;
@@ -153,9 +153,30 @@
   float: left;
   margin-right: 22px;
   margin-bottom: 22px;
+  position: relative;
 }
-#erpLoginConfirm .userInfoWrap .block {
-  width: 0;
-  height: 0;
-
+#erpLoginConfirm .userInfoWrap .userIten .leftImg {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  left: 16px;
+  top: 16px;
+}
+#erpLoginConfirm .userInfoWrap .userIten .leftImg img {
+  width: 60px;
+  height: 60px;
+}
+#erpLoginConfirm .userInfoWrap .userIten .rightContent {
+  position: absolute;
+  left: 90px;
+  top: 13px;
+  width: 100px;
+  height: 60px;
+  
+}
+#erpLoginConfirm .userInfoWrap .userIten p {
+  margin-top: 22px;
+  overflow: hidden;
+  white-space: nowrap; /*不换行*/
+  text-overflow: ellipsis; /*超出部分文字以...显示*/
 }
