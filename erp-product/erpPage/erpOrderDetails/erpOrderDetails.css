@@ -188,6 +188,11 @@
     border-collapse:collapse;
     table-layout:fixed;
 }
+.imgUrl{
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
 .tableBox table thead th{
     border:1px solid #fff;
     width: 100px;
@@ -208,6 +213,12 @@
     font-size: 14px;
     color: #333;
     border-bottom: 1px solid #ebeef5;
+}
+#tbodyData tr{
+ height: 80px;
+}
+#tbodyData tr td{
+    padding: 6px 10px;
 }
 .tableBox table tbody tr td span{
     color: #2d60b3;
