@@ -182,6 +182,7 @@
         <ul class="pagination"></ul>
         <input type="hidden" id="currentPage" name="currentPage" value="1"></input>
         <input type="hidden" id="totalPage" value="54"></input>
+
       </div>
     </div>
   </div>
@@ -190,83 +191,63 @@
 </html>
 <script>
   var url = "http://139.9.71.135:8096"
-  var userToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJMaXR0bGVCZWFyIiwianRpIjoiNjUwY2NhNTMtYzk5YS00M2M5LWJiMWEtNTcyZGQzNDY5YTRjIiwiaWF0IjoxNjE4MjIwODU3LCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMTc2MDMwMzM0NTgiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zeXN0ZW0iOiJQQyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6ImU2Yzg5ODllLTUyMGEtNGEyOS05Y2Y1LTAwZDAyNmVmZDBhMiIsIm5iZiI6MTYxODIyMDg1NywiZXhwIjoxNjE4MzA3MjU3LCJpc3MiOiJMaXR0bGVCZWFyIiwiYXVkIjoiTGl0dGxlQmVhciJ9.PpBz-nmKoqz5ZVlRY9x2H8nA1Nm7iQy8h26CB9NfSGs"
+  var orderNumber = window.localStorage.getItem("orderNumber")
+  var userToken = window.localStorage.getItem("token")
+  var orderType = window.localStorage.getItem("orderType")
   //初始化
-  var that = this
-  $(document).ready(function () {
-    // 用户信息
+  var data = {
+    skipCount: 1,
+    maxResultCount: 10,
+    sampleNumber: orderNumber,
+    orderType: orderType
+  }
 
-    // sessionStorage.setItem("user", JSON.stringify(fd));
+
+  $(document).ready(function () {
     // //订单标号
-    if (sessionStorage.getItem("orderCount")) {
-      var orderCount = sessionStorage.getItem("orderCount");
-      console.log(orderCount);
-      that.getSampleOrderDetailPageThree({
-        skipCount: 1,
-        maxResultCount: 12,
-        orderCount: orderCount
-      })
+    if (orderNumber) {
+      getSampleOrderDetailPageThree()
+    } else {
+      alert("没有订单编号")
     }
   })
 
   // 请求列表数据
-  function getSampleOrderDetailPageThree(data) {
+  function getSampleOrderDetailPageThree() {
     $.ajax({
-      type: "POST",
+      type: "post",
       url: url + "/api/SampleOrderDetailPageThree",
       data: JSON.stringify(data),
       headers: {
         "Utoken": userToken//此处放置请求到的用户token
       },
-      contentType: "application/json",
-      success: function (data) {
-        if (res.data.result.code === 200) {
-          this.getTable(res.data.result.item.items)
+      contentType: "application/json; charset=utf-8",
+      success: function (res) {
+        if (res.result.code === 200) {
+
+          getTable(res.result.item.items)
         }
-        console.log(data, "成功的回调");
 
       }
     });
   }
-  var data = [
-    {
-      imgUrl: "图片",
-      pr_na: "产品名称",
-      client_nu: "公司编号",
-      fa_no: "货号",
-      ch_pa: "包装",
-      ou_lo: "内盒/装箱数",
-      fa_pr: "出厂价",
-      ha_in_qu: "价格",
-      pr_le: "产品规格",//长
-      ou_wi: "包装规格",//宽
-      ou_hi: "外箱规格",//高
-      bulk_stere: "体积",
-      bulk_feet: "材积",
-      gr_we: "毛重",
-      ne_we: "净重",
-      remark: "备注",
-      ma_na: "厂家名称",
-      handset: "厂商联系方式",
-      ma_nu: "厂家编号"
-    },
-  ]
+
   // 渲染列表
-  function getTable(data) {
+  function getTable(list) {
     var tbodyData = document.getElementById('tbodyData');
-    for (var i = 0; i < data.length; i++) {
+    for (var i = 0; i < list.length; i++) {
       var html = ""
-      html += " <tr>" + "<td>" + data[i].imgUrl + "</td>" +
-        " <td > " + data[i].pr_na + "</td > " +
-        "<td>" + data[i].client_nu + "</td>" + "<td>" + data[i].fa_no + "</td>" +
-        "<td>" + data[i].ch_pa + "</td>" + "<td>" + data[i].ou_lo + "</td>" +
-        "<td>" + data[i].fa_pr + "</td>" + "<td>" + data[i].ha_in_qu + "</td>" +
-        "<td>" + data[i].pr_le + "</td>" + "<td>" + data[i].ou_wi + "</td>" +
-        "<td>" + data[i].ou_hi + "</td>" +
-        "<td>" + data[i].bulk_stere + "</td>" + "<td>" + data[i].bulk_feet + "</td>" +
-        "<td>" + data[i].gr_we + "</td>" + "<td>" + data[i].ne_we + "</td>" +
-        "<td>" + data[i].remark + "</td>" + "<td>" + data[i].ma_na + "</td>" +
-        "<td>" + data[i].handset + "</td>" + "<td>" + data[i].ma_nu + "</td>" +
+      html += " <tr>" + "<td> <img class='imgUrl' src=" + list[i].imgUrl + " alt=''></td>" +
+        " <td > " + list[i].pr_na + "</td > " +
+        "<td>" + list[i].client_nu + "</td>" + "<td>" + list[i].fa_no + "</td>" +
+        "<td>" + list[i].ch_pa + "</td>" + "<td>" + list[i].ou_lo + "</td>" +
+        "<td>" + list[i].fa_pr + "</td>" + "<td>" + list[i].ha_in_qu + "</td>" +
+        "<td>" + list[i].pr_le + "</td>" + "<td>" + list[i].ou_wi + "</td>" +
+        "<td>" + list[i].ou_hi + "</td>" +
+        "<td>" + list[i].bulk_stere + "</td>" + "<td>" + list[i].bulk_feet + "</td>" +
+        "<td>" + list[i].gr_we + "</td>" + "<td>" + list[i].ne_we + "</td>" +
+        "<td>" + list[i].remark + "</td>" + "<td>" + list[i].ma_na + "</td>" +
+        "<td>" + list[i].handset + "</td>" + "<td>" + list[i].ma_nu + "</td>" +
         "</tr>"
       $("#tbodyData").append(html);
 
@@ -278,7 +259,7 @@
     window.location.href = "../erpOrder/erpOrder.html"
   }
   function toHome() {
-    console.log("我是首页");
+    window.location.href = "../erpHome/erpHome.html"
   }
 
 </script>
