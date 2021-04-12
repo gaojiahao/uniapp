@@ -54,7 +54,7 @@ d<!--
             <p style="font-size:13px;color:#666666">请使用小竹熊App扫一扫登录</p>
           </template>
           <template v-else-if="type=='message'">
-            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-colon>
+            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-colon class="input_form_wrap">
               <FormItem label="账号" :prop="userCode">
                 <Input v-model="formValidate['userCode']" :style="{width:'300px',marginLeft: '-50px'}" placeholder="请输入手机号" :maxlength="11"></Input>
               </FormItem>
@@ -67,7 +67,7 @@ d<!--
             </Form>
           </template>
           <template v-else-if="type=='login'">
-            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-colon>
+            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-colon class="input_form_wrap">
               <FormItem label="账号" :prop="userCode">
                 <Input v-model="formValidate['userCode']" :style="{width:'300px',marginLeft: '-50px'}" placeholder="请输入手机号" :maxlength="11"></Input>
               </FormItem>
@@ -75,7 +75,7 @@ d<!--
                 <Input v-model="formValidate['passWord']" :style="{width:'300px',marginLeft: '-50px'}" placeholder="请输入密码" :maxlength="6"></Input>
               </FormItem>
               <FormItem>
-                <Button type="primary" @click="login" :style="{width:'300px',marginLeft: '-50px'}" >{{$t("login.button")}}</Button>  
+                <Button type="primary" @click="login" :style="{width:'300px',marginLeft: '-50px',height:'36px'}" >{{$t("login.button")}}</Button>  
               </FormItem>
             </Form>
           </template>

@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 19:15:58
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\index.vue
- * @LastEditTime: 2021-04-09 11:01:50
+ * @LastEditTime: 2021-04-12 14:51:53
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -44,6 +44,9 @@
                         <div class="closeOff" @click="sureClose"></div>
                     </div>
                     <Divider type="vertical" />
+                    <div class="timer item">
+                        <Icon type="ios-close-circle" @click="sureEnd" />结束
+                    </div>
                 </div>
             </Col>
             <Col span="8">
@@ -134,6 +137,9 @@ export default {
         },
         cancelReconnection(){
             this.isShowReconnection = false;    
+        },
+        sureEnd(){
+            this.$emit('endMeeting');
         }
     },
     created() {

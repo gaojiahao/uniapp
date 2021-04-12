@@ -27,7 +27,7 @@ d<!--
               </Col>
             </Row>
           </div>
-          <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-colon class="form">
+          <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-colon class="create_form_wrap">
             <FormItem label="会议ID" prop="id">
               <Input v-model="channel" :style="{width:'300px',marginLeft: '-50px'}" :maxlength="11" disabled></Input>
             </FormItem>
@@ -50,7 +50,7 @@ d<!--
               </CheckboxGroup>    
             </FormItem>
             <FormItem>
-              <Button type="primary" @click="save" :style="{width:'300px',marginLeft: '-50px'}" >{{$t("createMeeting.button")}}</Button>
+              <Button type="primary" @click="save" :style="{width:'300px',marginLeft: '-50px',height:'36px'}" >{{$t("createMeeting.button")}}</Button>
             </FormItem>
           </Form>
         </div>
@@ -153,7 +153,7 @@ export default {
     }
     .login_wrapper{
       position: absolute;
-      top: 15%;
+      top: 10%;
       left: calc((100% - 1277px) / 2);
       width: 1277px;
       height: 726px;
@@ -185,7 +185,7 @@ export default {
       .login_box {
           // border-radius: 10px;
           width: 450px;
-          height: 500px;
+          height: 530px;
           background: rgba(255,255,255,0.6);
           box-shadow:  0 1px 6px rgb(0 0 0 / 20%);
           text-align: center;
@@ -236,13 +236,6 @@ export default {
             }
             .item{
               font-weight: 600;
-            }
-          }
-          .form{
-            .ivu-form-item {
-              margin-bottom: 18px;
-              vertical-align: top;
-              zoom: 1;
             }
           }
       }

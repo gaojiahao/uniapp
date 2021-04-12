@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\Home.vue
- * @LastEditTime: 2021-04-09 15:01:05
+ * @LastEditTime: 2021-04-12 14:53:19
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -29,7 +29,7 @@
             </Sider>
         </Layout>
         <Footer>
-          <Footers @leave="leave"></Footers>
+          <Footers @leave="leave" @endMeeting="endMeeting"></Footers>
         </Footer>
     </Layout>
   </div>
@@ -62,8 +62,12 @@ export default {
     },
     //退出房间
     leave(){
-      this.$refs.video.leaveCall();
-    }
+      this.$refs.video.$refs.video.leave();
+    },
+    //结束会议
+    endMeeting(){
+      this.$refs.video.$refs.video.endMeeting();    
+    },
   },
   mounted() {
     //this.$refs.video.initRMT();

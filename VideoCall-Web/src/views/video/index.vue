@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 16:54:22
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\video\index.vue
- * @LastEditTime: 2021-04-09 16:34:43
+ * @LastEditTime: 2021-04-12 16:19:20
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -22,7 +22,7 @@
                 :attendeeMode="attendeeMode"
                 :baseMode="baseMode"
                 :appId="appId"
-                :uid="uid"></AgoraVideoCall>
+                :uid="uid" ref="video"></AgoraVideoCall>
             <!-- <template v-if="isSelect&&videoList.length==2">
                 <div class="video_wrap">
                     <div :class="[isCollapsed ? 'video_item_2_x':'video_item_2']" v-for="(item,index) in videoList" :key="index">
@@ -61,7 +61,7 @@
             <div class="bg" v-else>
                 <img :src="test" style="width:100%;height:807px;">
             </div> -->
-            <div class="userlist">
+            <div id="video_list_shrinkage" class="userlist">
                 <div class="user" @click="selectAll(true)"><div class="active"></div></div>
                 <div class="user" @click="selectAll(false)"></div>
                 <div class="user" @click="selectAll(false)"></div>

@@ -5,7 +5,6 @@
 
 <script>
 import { merge } from "lodash";
-import AgoraRTC from "@assets/js/Rtc.js";
 
 export default {
   data() {
@@ -34,62 +33,153 @@ export default {
   ],
 
   methods: {
-    async initRtc(){
-      let $ = this;
-      $.client.on("user-published", async (user, mediaType) => {
-        // 开始订阅远端用户。
-        await $.client.subscribe(user, mediaType);
-        console.log("subscribe success12");
-        debugger
-        // 表示本次订阅的是视频。
-        if (mediaType === "video") {
-          // 订阅完成后，从 `user` 中获取远端视频轨道对象。
-          const remoteVideoTrack = user.videoTrack;
-          // 动态插入一个 DIV 节点作为播放远端视频轨道的容器。
-          const playerContainer = document.createElement("div");
-          // 给这个 DIV 节点指定一个 ID，这里指定的是远端用户的 UID。
-          playerContainer.id = user.uid.toString();
-          playerContainer.style.width = "640px";
-          playerContainer.style.height = "480px";
-          document.body.append(playerContainer);
-
-          // 订阅完成，播放远端音视频。
-          // 传入 DIV 节点，让 SDK 在这个节点下创建相应的播放器播放远端视频。
-          remoteVideoTrack.play(playerContainer);
-
-          // 也可以只传入该 DIV 节点的 ID。
-          // remoteVideoTrack.play(playerContainer.id);
-        }
-
-        // 表示本次订阅的是音频。
-        if (mediaType === "audio") {
-          // 订阅完成后，从 `user` 中获取远端音频轨道对象。
-          const remoteAudioTrack = user.audioTrack;
-          // 播放音频因为不会有画面，不需要提供 DOM 元素的信息。
-          remoteAudioTrack.play();
-        }
+    //初始化
+    async join() {
+      var $=this;
+      // AgoraRTC.setLogLevel(3);  //日志级别0,1,2,3,4
+      $.client.enableDualStream().then(() => {
+        console.log("Enable Dual stream success!");
+      }).catch(err => {
+        console.log(err);
       });
-      $.client.on("user-unpublished", (user, mediaType) => {
-        if (mediaType === "video") {
-          // 获取刚刚动态创建的 DIV 节点。
-          const playerContainer = document.getElementById(user.uid.toString());
-          // 销毁这个节点。
-          playerContainer.remove();
-        }
+      $.client.on("user-published", this.handleUserPublished);
+      $.client.on("user-unpublished", this.handleUserUnpublished);
+      $.client.on("connection-state-change",(cur,rev,reason)=>{
+        console.log('链接状态',cur);
       });
-      $.uid = await $.client.join($.appId, $.channel, $.token, null);
-      $.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-      // 通过摄像头采集的视频创建本地视频轨道对象。
-      $.localVideoTrack = await AgoraRTC.createCameraVideoTrack();
-      // 将这些音视频轨道对象发布到频道中。
-      await $.client.publish([$.localAudioTrack, $.localVideoTrack]);
+      $.client.on("user-joined",(user)=>{
+        console.log('用户加入了',user);
+      });
+      $.client.on("user-left",(user)=>{
+        console.log('用户离开了',user);
+      });
+      [ $.uid, $.localAudioTrack, $.localVideoTrack ] = await Promise.all([
+        $.client.join($.appId, $.channel, $.token || null),
+        AgoraRTC.createMicrophoneAudioTrack(),
+        AgoraRTC.createCameraVideoTrack(
+          {encoderConfig: "120_1",}   //只有谷歌支持最低的，别的浏览器最低480p
+        )
+      ]);
+      //主持人的大画面
+      $.localVideoTrack.play("ag-canvas");
+      await $.client.publish([this.localAudioTrack, this.localVideoTrack]);
+      console.log("publish success");
+    },
+    //离开频道
+    async leave() {
+      await this.client.leave();
+    },
+    //订阅远端用户
+    async subscribe(user, mediaType) {
+      const uid = user.uid;
+      // subscribe to a remote user
+      await this.client.subscribe(user, mediaType);
+      console.log("subscribe success");
+      if (mediaType === 'video') {
+         const remoteVideoTrack = user.videoTrack;
+        // 动态插入一个 DIV 节点作为播放远端视频轨道的容器。
+        const playerContainer = document.createElement("li");
+        // 给这个 DIV 节点指定一个 ID，这里指定的是远端用户的 UID。下面缩略图画面
+        playerContainer.id = user.uid.toString();
+        playerContainer.className = "user";
+        playerContainer.style.width = "99px";
+        playerContainer.style.height = "66px";
+        playerContainer.style.marginLeft = "5px";
+        playerContainer.style.marginRight = "5px";
+        playerContainer.style.border = "1px solid #FFFFFF";
+        document.getElementById("video_list_shrinkage").appendChild(playerContainer);
+        // document.body.append(playerContainer);
+        // 订阅完成，播放远端音视频。
+        // 传入 DIV 节点，让 SDK 在这个节点下创建相应的播放器播放远端视频。
+        remoteVideoTrack.play(playerContainer);
+      }
+      if (mediaType === 'audio') {
+        user.audioTrack.play();
+      }
+    },
+    handleUserPublished(user, mediaType) {
+      debugger
+      const id = user.uid;
+      // remoteUsers[id] = user;
+      this.subscribe(user, mediaType);
+    },
+    handleUserUnpublished(user) {
+      if (mediaType === "video") {
+        // 获取刚刚动态创建的 DIV 节点。
+        const playerContainer = document.getElementById(user.uid.toString());
+        // 销毁这个节点。
+        playerContainer.remove();
+      }
+    },
+    async endMeeting(){
+      await this.client.unpublish([this.localAudioTrack, this.localVideoTrack]);
+      this.$router.push("/createMeeting");
+    },
+    //通话前质量检测
+    async testNetWork(){
+      var $=this;
+      $.upClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+      $.downClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+      const [microphoneTrack, cameraTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
+      $.upClient.join($.appId, $.channel, $.token || null);
+      $.downClient.join($.appId, $.channel, $.token || null);
+      await $.upClient.publish([microphoneTrack, cameraTrack]);
+      await $.downClient.subscribe();
+      uplinkClient.on("network-quality", (quality) => {
+        console.log("uplink network quality", quality.uplinkNetworkQuality);
+      });
+
+      // 获取下行网络质量
+      downlinkClient.on("network-quality", (quality) => {
+        console.log("downlink network quality", quality.downlinkNetworkQuality);
+      });
+
+      // 获取上行统计数据
+      uplinkVideoStats = uplinkClient.getLocalVideoStats();
+      // 获取下行统计数据
+      downlinkVideoStats = downlinkClient.getRemoteVideoStats();
+
+      console.log("uplink video stats", uplinkVideoStats);
+      console.log("downlink video stats", downlinkVideoStats);
+    },
+    testDevices(){
+      AgoraRTC.getDevices()
+        .then(devices => {
+          const audioDevices = devices.filter(function(device){
+              return device.kind === "audioinput";
+          });
+          const videoDevices = devices.filter(function(device){
+              return device.kind === "videoinput";
+          });
+
+          var selectedMicrophoneId = audioDevices[0].deviceId;
+          var selectedCameraId = videoDevices[0].deviceId;
+          return Promise.all([
+            AgoraRTC.createCameraVideoTrack({ cameraId: selectedCameraId }),
+            AgoraRTC.createMicrophoneAudioTrack({ microphoneId: selectedMicrophoneId }),
+          ]);}).then(res=>{
+            res[0].play('ag-canvas');
+            setInterval(() => {
+              const level = res[1].getVolumeLevel();
+              console.log("local stream audio level", level);
+            }, 1000);
+        });
     }
   },
-
   created() {
     let $ = this;
     $.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-    this.initRtc();
+    //摄像头插入
+    AgoraRTC.onCameraChanged = (info) => {
+      console.log("camera changed!", info.state, info.device);
+    };
+    //音频插入
+    AgoraRTC.onMicrophoneChanged = (info) => {
+      console.log("microphone changed!", info.state, info.device);
+    };
+    AgoraRTC.enableLogUpload();
+    this.testDevices();
+    this.join();
   },
 
   mounted() {
@@ -109,12 +199,6 @@ export default {
 <style>
 #ag-canvas {
   height: 100%;
-  display: grid;
-  grid-gap: 10px;
-  align-items: center;
-  justify-items: center;
-  grid-template-rows: repeat(12, auto);
-  grid-template-columns: repeat(24, auto);
 }
 
 .ag-item :first-child {

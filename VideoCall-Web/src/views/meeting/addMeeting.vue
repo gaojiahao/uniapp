@@ -27,7 +27,7 @@ d<!--
               </Col>
             </Row>
           </div>
-          <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-colon>
+          <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-colon class="input_form_wrap">
             <!-- <FormItem label="会议ID" prop="id">
               <Input v-model="formValidate['id']" :style="{width:'300px',marginLeft: '-50px'}" :maxlength="11" disabled></Input>
             </FormItem> -->
@@ -44,7 +44,7 @@ d<!--
               </CheckboxGroup>    
             </FormItem>
             <FormItem>
-              <Button type="primary" @click="save" :style="{width:'300px',marginLeft: '-50px'}" >{{$t("createMeeting.button")}}</Button>
+              <Button type="primary" @click="save" :style="{width:'300px',marginLeft: '-50px',height:'36px'}" >{{$t("createMeeting.button")}}</Button>
             </FormItem>
           </Form>
         </div>
