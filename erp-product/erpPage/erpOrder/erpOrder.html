@@ -149,39 +149,34 @@
 
 <script>
 
-  var sortOrder = 1
-  var sortType = 2
+
   var url = "http://139.9.71.135:8096"
   // var userToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJMaXR0bGVCZWFyIiwianRpIjoiNjUwY2NhNTMtYzk5YS00M2M5LWJiMWEtNTcyZGQzNDY5YTRjIiwiaWF0IjoxNjE4MjIwODU3LCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMTc2MDMwMzM0NTgiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zeXN0ZW0iOiJQQyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6ImU2Yzg5ODllLTUyMGEtNGEyOS05Y2Y1LTAwZDAyNmVmZDBhMiIsIm5iZiI6MTYxODIyMDg1NywiZXhwIjoxNjE4MzA3MjU3LCJpc3MiOiJMaXR0bGVCZWFyIiwiYXVkIjoiTGl0dGxlQmVhciJ9.PpBz-nmKoqz5ZVlRY9x2H8nA1Nm7iQy8h26CB9NfSGs"
   var userToken;
   //初始化
-  var that = this
-
-
+  var data = {
+    orderFrom: "全部",
+    orderType: "全部",
+    skipCount: 1,
+    maxResultCount: 10,
+    sortOrder: 1,
+    sortType: 2
+  }
+  var orderList = [];
   $(document).ready(function () {
     var token = window.localStorage.getItem("token")
     if (token) {
       userToken = token
-      that.getSampleOrderERPPage(data, userToken)
+      getSampleOrderERPPage()
       console.log("存在");
     } else {
       console.log("没有");
       window.location.href = "../erpHome/erpHome.html"
     }
-
-
-    // that.getSampleOrderERPPage({
-    //   skipCount: 1,
-    //   maxResultCount: 12,
-    //   sortOrder: that.sortOrder,
-    //   sortType: that.sortType,
-
-    // })
-
   })
 
   // 请求列表
-  function getSampleOrderERPPage(data, userToken) {
+  function getSampleOrderERPPage() {
     $.ajax({
       type: "post",
       url: url + "/api/SampleOrderERPPage",
@@ -190,25 +185,40 @@
         Utoken: userToken//此处放置请求到的用户token
       },
       contentType: "application/json; charset=utf-8",
-      success: function (data) {
-        if (res.data.result.code === 200) {
-          this.getTable(res.data.result.item.items)
+      success: function (res) {
+        if (res.result.code === 200) {
+          orderList = res.result.item.items;
+          getTable(res.result.item.items)
         }
-        console.log(data, "成功的回调");
+        console.log(res, "成功的回调");
 
       }
     });
   }
+  // 渲染列表数据
+  function getTable(list) {
+    var tbodyData = document.getElementById('tbodyData');
+    for (var i = 0; i < list.length; i++) {
+      var html = ""
+      html += " <tr>" + "<td>" + "</td>" + "<td>" + list[i].hall_na + "</td>" + " <td > " + list[i].orderType + "</td > " +
+        "<td>" + list[i].toCompanyName + "</td>" + "<td>" + list[i].the_nu + "</td>" +
+        "<td>" + list[i].orderCount + "</td>" + "<td>" + list[i].number + "</td>" +
+        "<td>" + list[i].remark + "</td>" + "<td>" + list[i].happenDate + "</td>" +
+        "<td><span onclick='handeldetails(" + i + ") '>点击查看</span></td></tr>"
+      $("#tbodyData").append(html);
+    }
+  }
+
   // 时间排序
   function topDete() {
-
-    // this.currentPage = 1;
-
+    data.sortOrder = 2
+    data.skipCount = 1;
+    getSampleOrderERPPage()
   }
   function bottomDete() {
-
-
-    // that.getSampleOrderERPPage()
+    data.sortType = 1
+    data.skipCount = 1;
+    getSampleOrderERPPage()
 
   }
 
@@ -230,46 +240,27 @@
   // }
   //搜索
   function handelSearch() {
+    if ($("#keyword").val()) data.keyword = $("#keyword").val();
+    if ($("#orderNumber").val()) data.orderNumber = $("#orderNumber").val();
+    if ($("#orderFrom").val()) data.orderFrom = $("#orderFrom").val();
+    if ($("#orderType").val()) data.orderType = $("#orderType").val();
+    if ($("#startCreatetime").val()) data.startTime = $("#startCreatetime").val();
+    if ($("#endCreatetime").val()) data.endTime = $("#endCreatetime").val();
 
-    var keyword = document.getElementById("keyword").value
-    var orderNumber = document.getElementById("orderNumber").value
-    var orderFrom = document.getElementById("orderFrom").value;
-    var orderType = document.getElementById("orderType").value;
-    var startCreatetime = document.getElementById("startCreatetime").value;
-    var endCreatetime = document.getElementById("endCreatetime").value;
-
-    var data = {
-      skipCount: 1,
-      maxResultCount: 10,
-      keyword: keyword,
-      orderNumber: orderNumber,
-      orderFrom: orderFrom,
-      orderType: orderType
-    }
-    // this.getSampleOrderERPPage(data)
+    console.log(data);
+    getSampleOrderERPPage()
 
   }
   //点击跳转
   function handeldetails(index) {
-    for (var i = 0; i < data.length; i++) {
+    for (var i = 0; i < orderList.length; i++) {
       if (index === i) {
-        var orderCount = data[i].orderCount
-        window.localStorage.setItem("orderCount", JSON.stringify(orderCount));
+        var orderNumber = orderList[i].orderNumber
+        var orderType = orderList[i].orderType
+        window.localStorage.setItem("orderNumber", orderNumber);
+        window.localStorage.setItem("orderType", orderType);
         window.location.href = "../erpOrderDetails/erpOrderDetails.html"
       }
-    }
-  }
-  // 渲染列表数据
-  function getTable(data) {
-    var tbodyData = document.getElementById('tbodyData');
-    for (var i = 0; i < data.length; i++) {
-      var html = ""
-      html += " <tr>" + "<td>" + "</td>" + "<td>" + data[i].hall_na + "</td>" + " <td > " + data[i].orderType + "</td > " +
-        "<td>" + data[i].toCompanyName + "</td>" + "<td>" + data[i].the_nu + "</td>" +
-        "<td>" + data[i].orderCount + "</td>" + "<td>" + data[i].number + "</td>" +
-        "<td>" + data[i].remark + "</td>" + "<td>" + data[i].happenDate + "</td>" +
-        "<td><span onclick='handeldetails(" + i + ") '>点击查看</span></td></tr>"
-      $("#tbodyData").append(html);
     }
   }
 
@@ -308,6 +299,7 @@
       var curPage = $("#currentPage").val();
       var last = $("#totalPage").val();
       var page = Math.ceil((parseInt(num)) / 10);
+
       if (num < page * 10 && num != last) {
         //移除之前的active
         $(".pagination li a").removeClass("active");
@@ -319,6 +311,7 @@
         $(".pagination").html("");
         draw(page + 1, (parseInt(num) + 1));
       }
+      getSampleOrderERPPage()
     })
 
     //绑定上一页点击事件
@@ -338,6 +331,7 @@
         $(".pagination").html("");
         draw(page - 1, (parseInt(num) - 1));
       }
+      getSampleOrderERPPage()
     })
 
     //绘制页面分页样式
