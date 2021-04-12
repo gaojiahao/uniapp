@@ -200,7 +200,21 @@
     var tbodyData = document.getElementById('tbodyData');
     for (var i = 0; i < list.length; i++) {
       var html = ""
-      html += " <tr>" + "<td>" + "</td>" + "<td>" + list[i].hall_na + "</td>" + " <td > " + list[i].orderType + "</td > " +
+      switch (list[i].orderType) {
+        case "Sample":
+          list[i].orderTypeValue = "择样"
+          break;
+        case "CompanySample":
+          list[i].orderTypeValue = "找样"
+          break;
+        case "ShareOrder":
+          list[i].orderTypeValue = "客户订单"
+          break;
+        default:
+          list[i].orderTypeValue = "--"
+          break;
+      }
+      html += " <tr>" + "<td>" + "</td>" + "<td>" + list[i].hall_na + "</td>" + " <td > " + list[i].orderTypeValue + "</td > " +
         "<td>" + list[i].toCompanyName + "</td>" + "<td>" + list[i].the_nu + "</td>" +
         "<td>" + list[i].orderCount + "</td>" + "<td>" + list[i].number + "</td>" +
         "<td>" + list[i].remark + "</td>" + "<td>" + list[i].happenDate + "</td>" +
@@ -250,6 +264,11 @@
     console.log(data);
     getSampleOrderERPPage()
 
+  }
+  //退出
+  function signOut() {
+    window.localStorage.clear()
+    window.location.href = "../erpLogin/erpLogin.html"
   }
   //点击跳转
   function handeldetails(index) {
