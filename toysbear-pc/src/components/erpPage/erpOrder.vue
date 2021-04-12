@@ -232,7 +232,7 @@
                 {{ scope.row.number || "--" }}
               </template>
             </el-table-column>
-            <el-table-column prop="remark" label="订单备注" align="center">
+            <el-table-column prop="number" label="订单备注" align="center">
               <template slot-scope="scope">
                 {{
                   scope.row.remark && scope.row.orderType != "Sample"
