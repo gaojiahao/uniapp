@@ -75,7 +75,7 @@
   cursor: pointer;
 }
 .header .toplauot .right .toHome .homeText{
-  color: #2D60B3;
+  color: #999999;
 }
 .header .toplauot .right .shouyeBox .sampleText{
   color: #999999;
@@ -87,7 +87,7 @@
   width: 21px;
   height: 21px;
   margin-right: 10px;
-  background: url('../../static/image/activeHomeIcon.png') no-repeat center;
+  background: url('../../static/image/erpHomeIcon.png') no-repeat center;
 }
 .header .toplauot .right .shouyeBox .mySampleIcon{
   display: inline-block;
@@ -245,7 +245,8 @@
   }
   .loginWrap .loginBox .right .loginFormBox .phoneBox {
     position: absolute;
-    /* width: 100%; */
+    width: 350px;
+    box-sizing: border-box;
     margin-top: 50px;
     margin-left: 80px;
   }
@@ -284,7 +285,8 @@
   }
   .loginWrap .loginBox .right .loginFormBox .codeBox {
     position: absolute;
-    /* width: 100%; */
+    width: 350px;
+    box-sizing: border-box;
     margin-top: 140px;
     margin-left: 80px;
   }
@@ -315,11 +317,24 @@
   .loginWrap .loginBox .right .loginFormBox .codeBox .inputWrap .codeInput {
     height: 44px;
     line-height: 44px;
-    width: 290px;
+    width: 150px;
     padding-left: 40px;
     box-sizing: border-box;
     border: none;
     outline-style: none;
+  }
+  .loginWrap .loginBox .right .loginFormBox .codeBox .getCode {
+    height: 44px;
+    line-height: 44px;
+    width: 130px;
+    position: absolute;
+    border: 1px solid #84aef2;
+    background-color: #84aef2;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+    right: 0;
   }
   .loginWrap .loginBox .right .loginFormBox .submitBtn {
     position: absolute;

@@ -4,12 +4,15 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=7">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="../../static/image/favicon.ico">
   <title>小竹熊云科技</title>
   <link rel="stylesheet" href="../../static/css/base.css">
   <link rel="stylesheet" href="./erpLogin.css">
   <script src="../../static/js/jquery-1.8.3.min.js"></script>
-  <script src="../../static/js/jquery-jtemplates0.8.4.js"></script>
   <script src="../../static/js/jquery.qrcode.min.js"></script>
+  <script src="../../static/js/json2.js"></script>
+  <script src="../../static/js/template.js"></script>
+  <script src="../../static/js/myLocalStorage.js"></script>
 </head>
 <body>
   <div id="loginFrom">
@@ -72,6 +75,10 @@
                   <i class="codeIcon"></i>
                   <input type="text" class="codeInput">
                 </div>
+                <div class="getCode">
+                  <span id="codeCountTemp">
+                  </span>
+                </div>
               </div>
               <div class="submitBtn">登 录</div>
               <div class="codeBox"></div>
@@ -82,26 +89,280 @@
     </div>
   </div>
 </body>
+<script id="tpCountItem" type="text/html">
+  <span><%=count%></span>
+</script>
 </html>
 <script>
   $(function () {
-    // 生成二维码
-    var url = window.location.href;
-    $('#qrcode').qrcode({
-      width: 198,
-      height: 198,
-      render: "table", // 渲染方式有table方式和canvas方式
-      text: url,
-      typeNumber: -1,   //计算模式一般默认为-1
-      correctLevel: 2, //二维码纠错级别
-      background: "#ffffff",  //背景颜色
-      foreground: "#000000"  //二维码颜色
+    // var baseUrl = "https://www.toysbear.com";
+    // var baseWsUrl = "wss://impush.toysbear.com/ws?UserId=";
+    var baseUrl = "http://139.9.71.135:8096";
+    var baseWsUrl = "ws://139.9.71.135:8090/ws?UserId=";
+    var myWs;
+    var showQrCode = false;
+    var qrTimer = null;
+    var qrRrl = "";
+    var token = "";
+    var randomCode = "";
+    var timer = null;
+    window.localStorage.removeItem("userList");
+    var countHTML = template(document.getElementById('tpCountItem').innerHTML, {
+      count: "获取验证码"
     });
+    document.getElementById("codeCountTemp").innerHTML = countHTML;
+    // 生成二维码
+    function initQrCode(url) {
+      console.log(url);
+      $('#qrcode').qrcode({
+        width: 198,
+        height: 198,
+        render: "table", // 渲染方式有table方式和canvas方式
+        text: url,
+        typeNumber: -1,   //计算模式一般默认为-1
+        correctLevel: 2, //二维码纠错级别
+        background: "#ffffff",  //背景颜色
+        foreground: "#000000"  //二维码颜色
+      });
+    }
+    // 获取验证码 并 手机验证倒计时
+    function getCode() {
+      var PhoneNumber = $(".phoneInput").val();
+      if (
+        !/^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|8[0-9]|9[89])\d{8}$/.test(
+          PhoneNumber
+        )
+      ) {
+        alert("请输入手机号");
+        return false;
+      }
+      // 发送验证码
+        $.ajax({
+          type: "post",
+          url: baseUrl + "/api/SendSMS",
+          contentType: "application/json; charset=utf-8",
+          data: JSON.stringify({ PhoneNumber: PhoneNumber, MessageType: "SignIn" }),
+          headers: {
+            Utoken: token
+          },
+          success:function(res) {
+            console.log(res);
+            var TIME_COUNT = 60;
+            var count = TIME_COUNT;
+            var show = false;
+            if (timer) {
+              clearInterval(this.timer);
+            }
+            timer = setInterval(function() {
+              if (count > 0 && count <= TIME_COUNT) {
+                count--;
+                var countHTML = template(document.getElementById('tpCountItem').innerHTML, {
+                  count: count
+                });
+                document.getElementById("codeCountTemp").innerHTML = countHTML;
+              } else {
+                show = true;
+                clearInterval(timer);
+                timer = null;
+                var countHTML = template(document.getElementById('tpCountItem').innerHTML, {
+                  count: "获取验证码"
+                });
+                document.getElementById("codeCountTemp").innerHTML = countHTML;
+              }
+            }, 1000);
+          },
+          error:function(err){
+            alert( "系统异常,请联系管理员");
+            console.log(err)
+          }
+        })
+    };
+    // 监听结果
+    function getUserConfirm() {
+      $.ajax({
+          type: "post",
+          url: baseUrl + "/api/UserConfirm",
+          contentType: "application/json; charset=utf-8",
+          data: JSON.stringify({RandomCode: randomCode}),
+          headers: {
+            Utoken: token
+          }
+        }).then(function(res) {
+          if (res.result.isLogin) {
+          clearInterval(qrTimer);
+          window.localStorage.setItem("token", res.result.accessToken);
+          qrTimer = null;
+          window.location.href = '../erpOrder/erpOrder.html';
+        } else {
+          alert(res.result.message);
+        }
+      })
+    };
+    // 链接成功
+    function websocketonopen() {
+      console.log("WebSocket连接成功");
+    };
+    // webSocket 连接错误
+    function websocketonerror() {
+      console.log("WebSocket连接发生错误");
+    };
+    // webSocket 数据接收
+    function websocketonmessage(e) {
+      var redata = JSON.parse(e.data);
+      console.log(redata);
+      if (redata.action === "QrCodeLogin") {
+        getUserConfirm();
+        console.log("成功了");
+      }
+    };
+    // 关闭 webSocket
+    function websocketclose() {
+      console.log("退出websocket了");
+    };
+    // webSocket 数据发送
+    function websocketsend(agentData) {
+      myWs.send(agentData);
+    };
+    // 初始化 webSocket
+    function initWebSocket(data) {
+      if (typeof WebSocket === "undefined") {
+        alert("您的浏览器不支持WebSocket");
+      } else {
+        // 初始化weosocket
+        // 测试
+        // this.ws = new WebSocket(
+        //   'ws://139.9.71.135:8090/ws?UserId=' + this.randomCode
+        // )
+        // 正式
+        myWs = new WebSocket(
+          baseWsUrl + data.randomCode
+        );
+        // 监听webSocket连接
+        myWs.onopen = websocketonopen;
+        // 监听webSocket错误信息
+        myWs.onerror = websocketonerror;
+        // 监听webSocket消息
+        myWs.onmessage = websocketonmessage;
+        // 监听webSocket退出
+        myWs.onclose = websocketclose;
+      }
+    };
+      $.ajax({
+            type: "post",
+            url: baseUrl + "/api/GetToken",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                companyNum: 'LittleBearWeb',
+                platForm: 'PC'
+            })
+        }).then(function(res) {
+          console.log(res);
+          window.localStorage.setItem("token", res.result.item)
+          token = res.result.item
+          // 获取二维码链接
+          $.ajax({
+            type: "post",
+            url: baseUrl + "/api/UserRandomCode",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({}),
+            headers: {
+              Utoken: token
+            }
+          }).then(function (res) {
+            console.log(res);
+            if (res.result.code === 200) {
+                var data = res.result.item;
+                qrRrl = data.qrCode;
+                // 初始化二维码
+                initQrCode(qrRrl);
+                randomCode = data.randomCode;
+                // 初始化ws
+                initWebSocket(data);
+                // var minHtml = template(document.getElementById('tpMinHall').innerHTML, {
+                //   minHallList: data.smallHallList
+                // });
+                // document.getElementById("minTempWrap").innerHTML = minHtml;
+              }
+              var TIME_COUNT = 300;
+              var count = TIME_COUNT;
+              showQrCode = false;
+              var qrcodeTitle = "请用小竹熊App扫一扫登录";
+              clearInterval(qrTimer);
+              qrTimer = setInterval(function() {
+                if (count > 0 && count <= TIME_COUNT) {
+                  count--;
+                } else {
+                  showQrCode = true;
+                  qrcodeTitle = "二维码已失效，点击刷新";
+                  clearInterval(qrTimer);
+                  qrTimer = null;
+                }
+              }, 1000);
+          })
+        })
+    // 登录事件
+    function submitLogin() {
+      var loginForm = {
+            userAccountOrUserMobile: null,
+            platForm: "PC",
+            loginType: "VerificationCode",
+            VerificationCode: null
+          };
+      loginForm.VerificationCode = $(".codeInput").val();
+      loginForm.userAccountOrUserMobile = $(".phoneInput").val();
+      if(!loginForm.userAccountOrUserMobile) {
+        alert("手机号不能为空")
+      } else if (!loginForm.VerificationCode) {
+        alert("验证码不能为空")
+      } else {
+        $.ajax({
+            type: "post",
+            url: baseUrl + "/api/Authenticate",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(loginForm),
+            headers: {
+              Utoken: token
+            },
+            success: function (res) {
+              if (res.result.isLogin) {
+                window.localStorage.setItem("token", res.result.accessToken)
+            if (res.result.commparnyList.length === 1) {
+              // 一个角色
+              window.location.href = '../erpOrder/erpOrder.html';
+              // this.$router.push("/me");
+            } else if (res.result.commparnyList.length > 1) {
+              // 多个角色
+              window.localStorage.setItem(userId, JSON.stringify(res.result.userInfo.id));
+              window.localStorage.setItem("userList", JSON.stringify(res.result.commparnyList));
+              window.location.href = '../erpLoginConfirm/erpLoginConfirm.html';
+            }
+          } else {
+            alert(res.result.message);
+          }
+        },
+        error:function(err){
+          alert( "系统异常,请联系管理员");
+          console.log(err)
+        }
+      })
+      }
+    }
     $(".toHome").click(function () {
       window.location.href = '../erpHome/erpHome.html';
     })
-    $(".submitBtn").click(function () {
-      window.location.href = '../erpLoginConfirm/erpLoginConfirm.html';
+    $(".getCode").click(function () {
+      getCode();
     })
+    $('.phoneInput').keydown(function(e){
+      if (e.keyCode == 13) {
+        submitLogin();
+      }
+    });
+    $('.codeInput').keydown(function(e){
+      if (e.keyCode == 13) {
+        submitLogin();
+      }
+    });
+    $(".submitBtn").click(submitLogin)
   })
   </script>

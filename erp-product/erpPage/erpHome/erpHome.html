@@ -4,20 +4,20 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=7">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="/static/image/favicon.ico">
   <title>小竹熊云科技</title>
-  <link rel="stylesheet" href="../../static/css/base.css">
+  <link rel="stylesheet" href="/static/css/base.css">
   <link rel="stylesheet" href="./erpHome.css">
-  <script src="../../static/js/jquery-1.8.3.min.js"></script>
-  <script src="../../static/js/json2.js"></script>
-  <script src="../../static/js/jquery-jtemplates0.8.4.js"></script>
-  <!-- <script src="../../static/js/template-web.js"></script> -->
+  <script src="/static/js/jquery-1.8.3.min.js"></script>
+  <script src="/static/js/json2.js"></script>
+  <script src="/static/js/template.js"></script>
 </head>
 <body>
   <div id="erpHome">
     <div class="header">
       <div class="toplauot">
         <div class="left">
-          <img class="leftImg" src="../../static/image/logo.png" alt="">
+          <img class="leftImg" src="/static/image/logo.png" alt="">
           <div class="titleBox">
             <div class="chTitle">
               小竹熊订单同步管理
@@ -59,42 +59,10 @@
         ></span>
       </div>
       <div class="exhibitionList">
-        <div class="bigExhibitions">
-          <div class="bigExhibitionItem">
-            <div class="imgBox">
-              <img class="leftImg" src="../../static/image/logo.png" alt="">
-            </div>
-            <div class="hallName">
-              新悦翔展厅
-            </div>
-          </div>
-          <div class="bigExhibitionItem">
-            <div class="imgBox">
-              <img class="leftImg" src="../../static/image/logo.png" alt="">
-            </div>
-            <div class="hallName">
-              新悦翔展厅新悦翔展厅新悦翔展厅新悦翔展厅新悦翔展厅
-            </div>
-          </div>
-          <div class="bigExhibitionItem">
-            <div class="imgBox">
-              <img class="leftImg" src="../../static/image/logo.png" alt="">
-            </div>
-            <div class="hallName">
-              新悦翔展厅
-            </div>
-          </div>
+        <div class="bigExhibitions" id="bigTempWrap">
+			  
         </div>
-        <div class="minExhibitions">
-          <div class="minExhibitionItem" v-for="(item, i) in minHalls" :key="i">
-            <div class="imgBox">
-              <img class="leftImg" src="../../static/image/logo.png" alt="">
-            </div>
-            <div class="hallName">
-              新悦翔展厅
-              <!-- {{ item.companyName || item.adTitle }} -->
-            </div>
-          </div>
+        <div class="minExhibitions" id="minTempWrap">
         </div>
       </div>
     </div>
@@ -106,50 +74,123 @@
           >更多新品<i class="el-icon-arrow-right moreIcon">></i
         ></span>
       </div>
-      <div class="newArrivals">
-        <div class="itemBox">
-          <div class="imgBox">
-            <img class="leftImg" src="../../static/image/logo.png" alt="">
-          </div>
-          <div class="contentText">
-            <div class="hallName">
-              <p class="name">新悦翔展厅</p>
-              <p class="textItem">
-                出厂货号：<span>10145</span>
-              </p>
-              <p class="textItem">
-                参考单价：<span class="price"
-                  >123456</span
-                >
-              </p>
-            </div>
-          </div>
-        </div>
+      <div class="newArrivals" id="newTempWrap">
       </div>
     </div>
   </div>
-  <textarea id="template-items" style="display:none">
-    <strong>{$T.name} : {$T.list_id}</strong>
-      <th>姓
-      <table>
-      <tr>
-      <th>编号</th>
-      名</th>
-      <th>年龄</th>
-      
-      <th>邮箱</th>
-    </table> 
-      {#foreach $T.bigHallList as record}
-      <p>{$T.record.id}</p>
-      {#/for}
-  </textarea>
 </body>
-
+ <!-- 大展厅 -->
+ <script id="tpBigHall" type="text/html">
+  <%for(var i = 0; i < bigHallList.length; i++) {%>
+    <div class="minExhibitionItem">
+      <div class="imgBox">
+        <img class="leftImg" src="<%=bigHallList[i].bgImg%>" alt="">
+      </div>
+      <div class="hallName">
+        <%=bigHallList[i].adTitle %>
+      </div>
+    </div>
+  <%}%>
+</script>
+<!-- 小展厅 -->
+<script id="tpMinHall" type="text/html">
+  <%for(var i = 0; i < minHallList.length; i++) {%>
+    <div class="minExhibitionItem">
+      <div class="imgBox">
+        <img class="leftImg" src="<%=minHallList[i].bgImg%>" alt="">
+      </div>
+      <div class="hallName">
+        <%=minHallList[i].adTitle%>
+      </div>
+    </div>
+  <%}%>
+</script>
+<!-- 新品 -->
+  <script id="newItem" type="text/html">
+    <%for(var i = 0; i < list.length; i++) {%>
+    <div class="itemBox">
+      <div class="imgBox">
+        <img class="leftImg" src="<%=list[i].img%>" alt="">
+      </div>
+      <div class="contentText">
+        <div class="hallName">
+          <p class="name">
+            <%=list[i].name%>
+          </p>
+          <p class="textItem">
+            出厂货号：<span><%=list[i].fa_no%></span>
+          </p>
+          <p class="textItem">
+            参考单价：<span class="price"
+              ><span><%=list[i].cu_de%></span> <%=list[i].price%></span
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+    <%}%>
+  </script>
+<!-- <script>
+  大展厅
+  <%for(var i = 0; i < bigHallList.length; i++) {%>
+<div class="bigExhibitionItem">
+  <div class="imgBox">
+  <%if bigHallList[i].bgImg {%>
+    <img class="leftImg" src="<%=bigHallList[i].bgImg %>" alt="">
+  <%}%>
+  <%else {%>
+  <img class="leftImg" src="/static/image/logo.png" alt="">
+  <%}%>	
+  </div>
+  <%if bigHallList[i].companyName {%>
+  <div class="hallName">
+    <%=bigHallList[i].companyName %>
+  </div>
+  <%}%>
+  <%else {%>
+  <div class="hallName">
+    <%=bigHallList[i].adTitle %>
+  </div>
+  <%}%>
+</div>
+<%}%>
+</script> -->
+  <!-- <script id="tpMinHall" type="text/html">
+    小展厅
+    <%for(var i = 0; i < minHallList.length; i++) {%>
+      <div class="minExhibitionItem">
+        <div class="imgBox">
+          <%if minHallList[i].bgImg {%>
+            <img class="leftImg" src="<%=minHallList[i].bgImg %>" alt="">
+          <%}%>
+          <%else {%>
+          <img class="leftImg" src="../../static/image/logo.png" alt="">
+          <%}%>	
+        </div>
+        <div class="hallName">
+          <%=minHallList[i].companyName || minHallList[i].adTitle%>
+        </div>
+        <%if minHallList[i].companyName {%>
+          <div class="hallName">
+            <%=minHallList[i].companyName %>
+          </div>
+        <%}%>
+        <%else {%>
+          <div class="hallName">
+            <%=minHallList[i].adTitle %>
+          </div>
+        <%}%>	
+      </div>
+    <%}%>
+  </script> -->
+  
 <script>
   $(function () {
+    // var baseUrl = "https://www.toysbear.com";
+    var baseUrl = "http://139.9.71.135:8096";
     $.ajax({
             type: "post",
-            url: "https://www.toysbear.com/api/GetToken",
+            url: baseUrl + "/api/GetToken",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({
                 companyNum: 'LittleBearWeb',
@@ -161,7 +202,7 @@
           var token = res.result.item
           $.ajax({
             type: "post",
-            url: "https://www.toysbear.com/api/GetExhibitionList",
+            url: baseUrl + "/api/GetExhibitionList",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({
               companyType: "Exhibition"
@@ -170,11 +211,42 @@
               Utoken: token
             }
           }).then(function (res) {
-            if (res.data.result.code === 200) {
-                var data = res.data.result.item;
-                // var minHalls = res.data.result.item.bigHallList;
-                // var minHalls = res.data.result.item.smallHallList;
-                console.log(data);
+            if (res.result.code === 200) {
+                var data = res.result.item;
+                console.log(data.bigHallList, data.smallHallList);
+                // var minHalls = res.result.item.bigHallList;
+                // var minHalls = res.result.item.smallHallList;
+                var bigHtml = template(document.getElementById('tpBigHall').innerHTML, {
+                  bigHallList: data.bigHallList || []
+                });
+                document.getElementById("bigTempWrap").innerHTML = bigHtml;
+                // 小展厅
+                var minHtml = template(document.getElementById('tpMinHall').innerHTML, {
+                  minHallList: data.smallHallList || []
+                });
+                document.getElementById("minTempWrap").innerHTML = minHtml;
+              }
+          })
+          // 获取新品推荐
+          $.ajax({
+            type: "post",
+            url: baseUrl + "/api/GetProductsByTypePage",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+              skipCount: 1,
+              maxResultCount: 5,
+              typeId: 2
+            }),
+            headers: {
+              Utoken: token
+            }
+          }).then(function (res) {
+            if (res.result.code === 200) {
+                var data = res.result.item.items;
+                var newHtml = template(document.getElementById('newItem').innerHTML, {
+                  list: data
+                });
+                document.getElementById("newTempWrap").innerHTML = newHtml;
               }
           })
         })
