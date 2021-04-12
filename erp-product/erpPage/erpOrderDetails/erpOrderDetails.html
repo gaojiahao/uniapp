@@ -224,14 +224,11 @@
       contentType: "application/json; charset=utf-8",
       success: function (res) {
         if (res.result.code === 200) {
-
           getTable(res.result.item.items)
         }
-
       }
     });
   }
-
   // 渲染列表
   function getTable(list) {
     var tbodyData = document.getElementById('tbodyData');
@@ -242,13 +239,17 @@
         "<td>" + list[i].client_nu + "</td>" + "<td>" + list[i].fa_no + "</td>" +
         "<td>" + list[i].ch_pa + "</td>" + "<td>" + list[i].ou_lo + "</td>" +
         "<td>" + list[i].fa_pr + "</td>" + "<td>" + list[i].ha_in_qu + "</td>" +
-        "<td>" + list[i].pr_le + "</td>" + "<td>" + list[i].ou_wi + "</td>" +
+        "<td>" + list[i].pr_le + "</td>" + "<td>" + list[i].pr_wi + "</td>" +
+        "<td>" + list[i].pr_hi + "</td>" +
+        "<td>" + list[i].in_le + "</td>" + "<td>" + list[i].in_wi + "</td>" +
+        "<td>" + list[i].in_hi + "</td>" +
+        "<td>" + list[i].ou_le + "</td>" + "<td>" + list[i].ou_wi + "</td>" +
         "<td>" + list[i].ou_hi + "</td>" +
         "<td>" + list[i].bulk_stere + "</td>" + "<td>" + list[i].bulk_feet + "</td>" +
         "<td>" + list[i].gr_we + "</td>" + "<td>" + list[i].ne_we + "</td>" +
-        "<td>" + list[i].remark + "</td>" + "<td>" + list[i].ma_na + "</td>" +
+        "<td>" + list[i].remark ? list[i].remark : '' + "</td>" + "<td>" + list[i].ma_na + "</td>" +
         "<td>" + list[i].handset + "</td>" + "<td>" + list[i].ma_nu + "</td>" +
-        "</tr>"
+      "</tr>"
       $("#tbodyData").append(html);
 
     }
