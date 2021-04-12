@@ -36,9 +36,9 @@
             <div class=" userImg">
               <img class="homeIcon" src="../../static/images/erpHomeIcon.png" alt="">
             </div>
-            <span class="homeText" @click="toHome">首页</span>
+            <span class="homeText" onclick="toHome()">首页</span>
           </div>
-          <div class="shouyeBox " @click="resetSample">
+          <div class="shouyeBox ">
             <div class=" userImg">
               <img class="homeIcon" src="../../static/images/activeSampleIcon.png" alt="">
             </div>
@@ -51,7 +51,7 @@
             <div class="userImg">
               <img class="homeLogo" src="../../static/images/logo.png" alt="">
             </div>
-            <span class="signOut" @click="signOut">退出</span>
+            <span class="signOut" onclick="signOut()">退出</span>
           </div>
         </div>
       </div>
@@ -197,6 +197,7 @@
   // 渲染列表数据
   function getTable(list) {
     var tbodyData = document.getElementById('tbodyData');
+    $("#tbodyData").empty();
     for (var i = 0; i < list.length; i++) {
       var html = ""
       switch (list[i].orderType) {
@@ -213,7 +214,15 @@
           list[i].orderTypeValue = "--"
           break;
       }
-      html += " <tr>" + "<td>" + "</td>" + "<td>" + list[i].hall_na + "</td>" + " <td > " + list[i].orderTypeValue + "</td > " +
+      switch (list[i].hall_na) {
+        case " ":
+          list[i].hall_naValue = "--"
+          break;
+        default:
+          list[i].hall_naValue = list[i].hall_na
+      }
+
+      html += " <tr>" + "<td>" + "</td>" + "<td>" + list[i].hall_naValue + "</td>" + " <td > " + list[i].orderTypeValue + "</td > " +
         "<td>" + list[i].toCompanyName + "</td>" + "<td>" + list[i].the_nu + "</td>" +
         "<td>" + list[i].orderCount + "</td>" + "<td>" + list[i].number + "</td>" +
         "<td>" + list[i].remark + "</td>" + "<td>" + list[i].happenDate + "</td>" +
