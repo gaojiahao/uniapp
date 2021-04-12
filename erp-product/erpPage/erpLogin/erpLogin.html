@@ -328,7 +328,7 @@
               // this.$router.push("/me");
             } else if (res.result.commparnyList.length > 1) {
               // 多个角色
-              window.localStorage.setItem(userId, JSON.stringify(res.result.userInfo.id));
+              window.localStorage.setItem("userId", JSON.stringify(res.result.userInfo.id));
               window.localStorage.setItem("userList", JSON.stringify(res.result.commparnyList));
               window.location.href = '../erpLoginConfirm/erpLoginConfirm.html';
             }
