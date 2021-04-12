@@ -1,7 +1,6 @@
 <template>
   <div class="bsHome">
-    敬请期待
-    <!-- <div class="myWorkbenchBox">
+    <div class="myWorkbenchBox">
       <div class="myWorkbench">
         <div class="title">
           <i class="icon workbenchIcon"></i>
@@ -34,9 +33,9 @@
         </div>
         <div class="content">
           <div class="item" v-for="item in 4" :key="item">
-            <p class="total">86</p>
-            <p :class="{ today: true, active: item > 2 }">今日:0</p>
-            <p class="text">展厅业务总数</p>
+            <p class="total">敬请期待</p>
+            <p :class="{ today: true, active: item > 2 }">今日:敬请期待</p>
+            <p class="text">敬请期待</p>
           </div>
         </div>
       </div>
@@ -100,7 +99,7 @@
         </div>
       </div>
       <div class="right">
-        <div class="titleBox">
+        <!-- <div class="titleBox">
           <div class="hotBox">
             <el-radio-group v-model="hotValue">
               <el-radio-button
@@ -182,9 +181,9 @@
               </template>
             </el-table-column>
           </el-table>
-        </div>
+        </div> -->
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 

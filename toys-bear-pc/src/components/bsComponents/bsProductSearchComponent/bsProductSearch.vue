@@ -4,9 +4,9 @@
       <span class="label">产品搜索:</span>
       <el-input
         size="medium"
+        ref="focusKeyword"
         @keyup.native.enter="searchProducts"
-        style=" width: 340px;
-      margin: 0 15px;"
+        style="width: 340px;margin: 0 15px;"
         placeholder="请输入关键词"
         v-model="searchForm.keyword"
         clearable

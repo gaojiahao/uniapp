@@ -2,23 +2,60 @@
   <div class="magnify">
     <!-- 左边产品图片区域 -->
     <div class="left_contaner">
-      <!-- @mouseover="boxMouseOver"
-        @mouseleave="boxMouseLeave" -->
       <div class="middle_img" @click="openBigImg(middleImg.url)">
         <!-- 3D -->
         <i class="threeIcon" @click="open3D"></i>
-        <el-image
+        <div class="pic" v-if="middleImg.type === 'img'">
+          <pic-zoom :url="rerunImg(middleImg.url)" :scale="3"></pic-zoom>
+        </div>
+
+        <!-- <el-image
+          v-if="middleImg.type === 'img'"
+          :src="middleImg.url"
+          fit="contain"
+        >
+          <div
+            slot="placeholder"
+            class="image-slot"
+            style="width: 524px;height: 393px;"
+          >
+            <pic-zoom
+              :url="require('@/assets/images/imgError.png')"
+              :scale="3"
+            ></pic-zoom>
+          </div>
+          <div
+            slot="error"
+            class="image-slot"
+            style="width: 524px;  height: 393px;"
+          >
+            <pic-zoom
+              :url="require('@/assets/images/imgError.png')"
+              :scale="3"
+            ></pic-zoom>
+          </div>
+        </el-image> -->
+        <!-- element标签样式，不带放大镜 -->
+        <!-- <el-image
           v-if="middleImg.type === 'img'"
           fit="contain"
           :src="middleImg.url"
         >
-          <div slot="placeholder" class="image-slot">
+          <div
+            slot="placeholder"
+            class="image-slot"
+            style="width: 524px;height: 393px;"
+          >
             <img :src="require('@/assets/images/imgError.png')" />
           </div>
-          <div slot="error" class="image-slot">
+          <div
+            slot="error"
+            class="image-slot"
+            style="width: 524px;  height: 393px;"
+          >
             <img :src="require('@/assets/images/imgError.png')" />
           </div>
-        </el-image>
+        </el-image> -->
         <!-- 产品视频 -->
         <video
           v-else-if="middleImg.type === 'video'"
@@ -31,14 +68,6 @@
         >
           <source :src="videoAddress" type="video/mp4" />
         </video>
-        <!-- 阴影盒子 -->
-        <div
-          class="shade"
-          @mouseover="shadeMouseOver"
-          @mousemove="shadeMouseMove"
-          ref="shade"
-          v-show="isShade"
-        ></div>
       </div>
       <!-- 缩略图容器 -->
       <div class="carousel" v-if="imageUrls.length || videoAddress">
@@ -128,8 +157,11 @@
 <script>
 import $ from "jquery";
 import { mapState } from "vuex";
+import PicZoom from "vue-piczoom";
 export default {
-  components: {},
+  components: {
+    PicZoom
+  },
   props: {
     middleImgWidth: {
       // 产品图片宽
@@ -206,82 +238,12 @@ export default {
     }
     // 计算缩略图的宽度,默认是显示4张图片,两边箭头的宽度和为50
     this.itemWidth = (this.middleImgWidth - 50) / this.thumbnailCount;
-
-    this.$nextTick(() => {
-      // 容器的高
-      const imgWidth = this.middleImgHeight + this.thumbnailHeight + 20;
-      // 设置容器宽高
-      $(".magnify").css({
-        width: this.middleImgWidth,
-        height: imgWidth
-      });
-      // 设置产品图宽高
-      $(".middle_img").css({
-        width: this.middleImgWidth,
-        height: this.middleImgHeight
-      });
-      // 设置产品图宽高
-      $(".middle_img .el-image").css({
-        width: this.middleImgWidth - 2,
-        height: this.middleImgHeight - 2
-      });
-      $(".middle_img .el-image img").css({
-        width: this.middleImgWidth - 2,
-        height: this.middleImgHeight - 2,
-        "image-rendering": "-webkit-optimize-contrast",
-        "-ms-interpolation-mode": "nearest-neighbor"
-      });
-      // 设置移动阴影图宽高
-      $(".middle_img .shade").css({
-        width: this.middleImgWidth / this.zoom,
-        height: this.middleImgHeight / this.zoom
-      });
-      // 设置缩略图容器宽度
-      if (this.videoAddress) {
-        $(".picture_container").css({
-          width: this.itemWidth * (this.pictureList.length + 1)
-        });
-      } else {
-        $(".picture_container").css({
-          width: this.itemWidth * this.pictureList.length
-        });
-      }
-      // 设置缩略图容器高
-      $(".carousel").css({
-        height: this.thumbnailHeight
-      });
-      // 设置每个缩略图容器的宽度
-      $(".picture_item").css({
-        width: this.itemWidth
-      });
-      // 设置每个缩略图容器的高度
-      $(".imgBox").css({
-        height: this.thumbnailHeight
-      });
-      // 设置每个缩略图宽度
-      $(".imgBox video").css({
-        height: this.thumbnailHeight - 2,
-        width: this.thumbnailWidth
-      });
-      // 设置每个缩略图宽度
-      $(".imgBox>img").css({
-        height: this.thumbnailHeight - 2,
-        width: this.thumbnailWidth
-      });
-      // 设置放大后图片容器的宽高,left
-      $(".right_contanier").css({
-        left: this.middleImgWidth,
-        width: this.middleImgWidth,
-        height: this.middleImgHeight
-      });
-      // 设置放大图片的宽高(图片的放大倍数)
-      $(".right_contanier .big_img").css({
-        width: imgWidth * this.zoom,
-        height: this.middleImgHeight * this.zoom
-      });
-    });
   },
   methods: {
+    rerunImg(img) {
+      if (img) return img;
+      else return require("@/assets/images/imgError.png");
+    },
     // 打开3D效果
     open3D() {
       this.$common.handlerMsgState({
@@ -339,77 +301,6 @@ export default {
       if (document.body.clientWidth <= 1024 && this.middleImg.type === "img") {
         this.dialogVisibleImg = true;
       }
-    },
-    // 产品图片鼠标移入事件,显示阴影,显示大图
-    boxMouseOver(e) {
-      if (document.body.clientWidth <= 1024) {
-        return false;
-      }
-      if (this.middleImg.type !== "img") {
-        return false;
-      }
-      e.preventDefault();
-      e.stopPropagation();
-      this.isShade = true;
-      this.isBig = true;
-      // 计算阴影的位置
-      let x = e.offsetX - $(".shade").width() / 2;
-      let y = e.offsetY - $(".shade").height() / 2;
-      let maxLeft = $(".middle_img").width() - $(".shade").width();
-      let maxTop = $(".middle_img").height() - $(".shade").height();
-      x = x <= 0 ? 0 : x;
-      x = x >= maxLeft ? maxLeft : x;
-      y = y <= 0 ? 0 : y;
-      y = y >= maxTop ? maxTop : y;
-      $(".shade").css({
-        left: x,
-        top: y
-      });
-    },
-    // 鼠标在阴影移动
-    shadeMouseMove(e) {
-      e.preventDefault();
-      e.stopPropagation(); //用页面x - 父盒子的offsetLeft - 父盒子的左边框宽度 标红的两个方法补在下面
-      var x =
-        this.getEventPage(e).pageX -
-        $(".middle_img")[0].offsetParent.offsetLeft -
-        $(".middle_img")[0].offsetParent.clientLeft; //用页面y - 父盒子的offsetTop - 父盒子的上边框宽度
-      var y =
-        this.getEventPage(e).pageY -
-        $(".middle_img")[0].offsetParent.offsetTop -
-        $(".middle_img")[0].offsetParent.clientTop; //让阴影的坐标居中
-
-      x -= $(".shade").width() / 2;
-      y -= $(".shade").height() / 2; // 移动边界限制
-
-      let maxLeft = $(".middle_img").width() - $(".shade").width();
-      let maxTop = $(".middle_img").height() - $(".shade").height();
-      x = x <= 0 ? 0 : x;
-      x = x >= maxLeft ? maxLeft : x;
-      y = y <= 0 ? 0 : y;
-      y = y >= maxTop ? maxTop : y; // 重新赋值当前的定位值
-      $(".shade").css({
-        left: x,
-        top: y
-      });
-      // 计算出实时的大图的定位,首先计算出比例
-      // 比例为x:大图宽度/小图宽度 y: 大图高度/小图高度,将小图的定位乘以比例就是大图的定位
-      const xRate = $(".big_img").width() / $(".middle_img").width();
-      const yRate = $(".big_img").height() / $(".middle_img").height();
-      $(".big_img").css({
-        left: -x * xRate,
-        top: -y * yRate
-      });
-    },
-    // 鼠标移入阴影,去除自定义事件
-    shadeMouseOver(e) {
-      e.preventDefault();
-      e.stopPropagation();
-    },
-    // 图片移出隐藏阴影和大图
-    boxMouseLeave() {
-      this.isShade = false;
-      this.isBig = false;
     },
     // 鼠标移入缩略图切换图片
     tabPicture(item) {
@@ -495,6 +386,11 @@ export default {
   box-sizing: border-box;
   border-radius: 4px;
   position: relative;
+  .pic {
+    width: 524px;
+    height: 393px;
+    overflow: hidden;
+  }
   .threeIcon {
     position: absolute;
     right: 20px;
@@ -525,7 +421,11 @@ export default {
   -ms-interpolation-mode: nearest-neighbor;
 }
 .middle_img .el-image {
+  width: 524px;
+  height: 393px;
   img {
+    width: 524px;
+    height: 393px;
     image-rendering: -moz-crisp-edges;
     image-rendering: -o-crisp-edges;
     image-rendering: -webkit-optimize-contrast;
@@ -548,30 +448,41 @@ export default {
   flex-basis: 25px;
   cursor: pointer;
 }
-.left_contaner .carousel .left_arrow {
-  width: 25px;
+@{deep} .left_contaner .carousel .left_arrow {
+  width: 30px;
+  height: 65px;
   display: flex;
   align-items: center;
   border-radius: 6px;
   font-size: 30px;
   border: 1px solid #dcdfe6;
+  i {
+    color: #dcdfe6;
+  }
 }
 .left_contaner .carousel .right_arrow {
-  width: 25px;
+  width: 30px;
+  height: 65px;
   display: flex;
   align-items: center;
   font-size: 30px;
   border-radius: 6px;
   border: 1px solid #dcdfe6;
+  i {
+    color: #dcdfe6;
+  }
 }
 .left_contaner .carousel .picture_container {
   height: 100%;
-  position: absolute;
+
+  display: flex;
+  // position: absolute;
   overflow: hidden;
-  top: 0;
-  left: 0;
+  // top: 0;
+  // left: 0;
 }
 .left_contaner .picture_container .picture_item {
+  margin: 0 5px;
   height: 100%;
   float: left;
   box-sizing: border-box;
@@ -580,6 +491,7 @@ export default {
   border: 2px solid #f2019f;
 } */
 .left_contaner .picture_container .picture_item .imgBox {
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
   display: flex;
@@ -587,7 +499,9 @@ export default {
   justify-content: center;
 }
 .left_contaner .picture_container .picture_item .imgBox img {
-  // box-sizing: border-box;
+  width: 92px;
+  height: 65px;
+  box-sizing: border-box;
   border: 1px solid #dcdfe6;
   border-radius: 4px;
   cursor: pointer;

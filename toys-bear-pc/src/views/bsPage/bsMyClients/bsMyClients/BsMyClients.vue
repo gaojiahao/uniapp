@@ -110,7 +110,7 @@
       :title="dialogTitle"
       :visible.sync="dialogVisible"
       width="30%"
-      :before-close="handleClose"
+      :before-close="closeDialog"
     >
       <el-form
         ref="formDataRef"
@@ -212,15 +212,6 @@ export default {
     search() {
       this.currentPage = 1;
       this.getClientsListPage();
-    },
-    //点击弹框事件
-    handleClose(done) {
-      this.$confirm("确认关闭？")
-        .then(() => {
-          this.formData = {};
-          done();
-        })
-        .catch(() => {});
     },
 
     // 关闭弹框

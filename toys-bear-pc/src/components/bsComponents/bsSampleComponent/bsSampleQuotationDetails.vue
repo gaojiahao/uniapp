@@ -116,7 +116,6 @@
                   fit="contain"
                   style="width:80px;height:60px;"
                   :src="scope.row.imageUrl && scope.row.imgUrlList[0]"
-                  :preview-src-list="scope.row.imgUrlList || []"
                 >
                   <div slot="placeholder" class="errorImg">
                     <img src="~@/assets/images/imgError.png" alt />

@@ -186,27 +186,35 @@ export default {
     // 滚动事件
     handleScroll() {
       const myScrollbarList = this.$refs.myScrollbar;
-      console.log(myScrollbarList);
       myScrollbarList.forEach(val => {
-        val.onscroll = () => {
-          console.log(val.scrollTop);
-          if (val.scrollTop >= 200) {
-            if (this.activeTab == "/bsIndex/bsProductSearchIndex") {
-              // this.showSearch = true;
+        const fun = () => {
+          console.log(val.scrollTop, this.activeTab);
+          if (this.activeTab == "/bsIndex/bsProductSearchIndex") {
+            if (val.scrollTop >= 200) {
               eventBus.$emit("showCart", true);
-            } else if (
-              this.activeTab == "/bsIndex/bsLatestProducts" ||
-              this.activeTab == "/bsIndex/bsSpotProducts" ||
-              this.activeTab == "/bsIndex/bsVIPProducts"
-            ) {
-              // this.showSearch = false;
-              eventBus.$emit("showCart", true);
+            } else {
+              eventBus.$emit("showCart", false);
             }
+          } else if (
+            this.tabList.find(val => val.name == this.activeTab).linkUrl ==
+            "/bsIndex/bsProductSearchIndex"
+          ) {
+            eventBus.$emit("showCart", true);
+          } else if (
+            this.activeTab == "/bsIndex/bsLatestProducts" ||
+            this.activeTab == "/bsIndex/bsSpotProducts" ||
+            this.activeTab == "/bsIndex/bsVIPProducts"
+          ) {
+            eventBus.$emit("showCart", true);
           } else {
-            // this.showSearch = false;
             eventBus.$emit("showCart", false);
           }
         };
+        if (this.activeTab == "/bsIndex/bsProductSearchIndex") {
+          val.onscroll = fun;
+        } else {
+          val.removeEventListener("scroll", fun, false);
+        }
       });
     },
     // 刷新tab标签
@@ -215,11 +223,11 @@ export default {
         if (this.activeTab == this.tabList[i].name) {
           this.$store.commit("updataUrl", this.activeTab);
           this.$router.push(this.tabList[i].linkUrl);
-          if (this.tabList[i].linkUrl == "/bsIndex/bsProductDetails") {
-            eventBus.$emit("showCart", true);
-          } else {
-            eventBus.$emit("showCart", false);
-          }
+          // if (this.tabList[i].linkUrl == "/bsIndex/bsProductDetails") {
+          //   eventBus.$emit("showCart", true);
+          // } else {
+          //   eventBus.$emit("showCart", false);
+          // }
           break;
         }
       }
