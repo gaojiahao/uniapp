@@ -189,6 +189,7 @@ export default {
       const res = await this.$http.post("/api/UserConfirm", {
         RandomCode: this.randomCode
       });
+      console.log(res);
       if (res.data.result.isLogin) {
         this.ws && this.ws.close();
         clearInterval(this.qrTimer);
@@ -223,6 +224,7 @@ export default {
             );
             Json.PlatForm = await this.getClientTypeList("PlatForm");
             this.$store.commit("globalJson/setGlobalJson", Json);
+            console.log(res.data.result);
             switch (res.data.result.commparnyList[0].companyType) {
               case "Sales":
                 // this.$router.push("/bsIndex");

@@ -25,6 +25,7 @@
     "vue": "^2.6.11",
     "vue-clipboard2": "^0.3.1",
     "vue-cropper": "^0.5.6",
+    "vue-preview-pictures": "^0.1.7",
     "vue-qr": "^2.3.0",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.2.0",

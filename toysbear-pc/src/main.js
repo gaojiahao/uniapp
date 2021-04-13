@@ -6,8 +6,8 @@ import "@/styles/base.less";
 import myAxios from "@/request/http";
 import md5 from "js-md5";
 // import ElementUI from "element-ui";
-// import "element-ui/lib/theme-chalk/index.css";
-// import "element-ui/lib/theme-chalk/display.css";
+import "element-ui/lib/theme-chalk/index.css";
+import "element-ui/lib/theme-chalk/display.css";
 import "@/assets/css/theme/index.css";
 import RTM from "@/assets/js/signalROptions";
 import Video from "video.js";
@@ -17,6 +17,7 @@ import _ from "lodash";
 import ElTreeGrid from "element-tree-grid";
 import wsConnection from "@/store/wsStore";
 import VueClipboard from "vue-clipboard2";
+import PreviewPic from "vue-preview-pictures"; // 预览
 import VueQuillEditor from "vue-quill-editor";
 import "quill/dist/quill.core.css"; // import styles
 import "quill/dist/quill.snow.css"; // for snow theme
@@ -34,6 +35,7 @@ Vue.prototype.$_ = _;
 // Vue.use(ElementUI);
 Vue.prototype.$md5 = md5;
 Vue.prototype.$RTM = RTM;
+Vue.prototype.$PreviewPic = PreviewPic;
 
 Vue.use(myAxios);
 Vue.config.productionTip = false;
