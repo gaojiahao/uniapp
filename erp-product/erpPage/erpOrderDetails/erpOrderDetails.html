@@ -347,14 +347,17 @@
       numberPage++
       $("#numberPage").val(numberPage)
       var totalCount = $("#totalCountPage").val()
-      var num = numberPage--;
-      $("#numberPage").val(num)
-      data.skipCount = num;
+      // var num = numberPage--;
+      // $("#numberPage").val(num)
+      // data.skipCount = num;
+
       if (numberPage * data.maxResultCount > totalCount) {
+        numberPage--;
+        $("#numberPage").val(numberPage)
         return false
       }
       data.skipCount = numberPage;
-      getSampleOrderDetailPageThree()
+      getSampleOrderDetailPageThree();
     }
 
 
