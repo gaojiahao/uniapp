@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 15:27:12
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-02 12:30:19
+ * @LastEditTime: 2021-04-13 17:40:30
  */
 import Vue from "vue";
 import VueRouter from "vue-router";
@@ -80,8 +80,8 @@ router.beforeEach((to, from, next) => {
       // 已经登陆
       next(); // 正常跳转到你设置好的页面
     } else {
-      //next({ path: "/login" });
-      next();
+      next({ path: "/login" });
+      // next();
     }
   } else {
     next();

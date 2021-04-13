@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\Home.vue
- * @LastEditTime: 2021-04-12 14:53:19
+ * @LastEditTime: 2021-04-13 11:36:54
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -29,7 +29,7 @@
             </Sider>
         </Layout>
         <Footer>
-          <Footers @leave="leave" @endMeeting="endMeeting"></Footers>
+          <Footers @leave="leave" @endMeeting="endMeeting" @set-volum="setVolum"></Footers>
         </Footer>
     </Layout>
   </div>
@@ -68,6 +68,10 @@ export default {
     endMeeting(){
       this.$refs.video.$refs.video.endMeeting();    
     },
+    //调整麦克风音量
+    setVolum(value){
+      this.$refs.video.$refs.video.setVolum(value);   
+    }
   },
   mounted() {
     //this.$refs.video.initRMT();

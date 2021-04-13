@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 16:54:22
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\video\index.vue
- * @LastEditTime: 2021-04-12 16:19:20
+ * @LastEditTime: 2021-04-13 09:37:40
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -109,7 +109,7 @@ export default {
             transcode: Cookies.get("transcode") || "interop",
             attendeeMode: Cookies.get("attendeeMode") || "video",
             baseMode: Cookies.get("baseMode") || "avc",
-            uid: undefined
+            uid: Cookies.get("uid") || null,
         };
     },
     methods: {

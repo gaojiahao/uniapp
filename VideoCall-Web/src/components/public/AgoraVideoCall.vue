@@ -19,7 +19,7 @@ export default {
       localAudioTrack:null,
       localVideoTrack:null,
       token:null,
-      uid:null
+      userId:null
     };
   },
 
@@ -30,10 +30,11 @@ export default {
     "channel",
     "baseMode",
     "appId",
+    "uid"
   ],
 
   methods: {
-    //初始化
+    //发布频道与加入
     async join() {
       var $=this;
       // AgoraRTC.setLogLevel(3);  //日志级别0,1,2,3,4
@@ -42,6 +43,7 @@ export default {
       }).catch(err => {
         console.log(err);
       });
+      // this.client.setRemoteVideoStreamType();
       $.client.on("user-published", this.handleUserPublished);
       $.client.on("user-unpublished", this.handleUserUnpublished);
       $.client.on("connection-state-change",(cur,rev,reason)=>{
@@ -53,8 +55,8 @@ export default {
       $.client.on("user-left",(user)=>{
         console.log('用户离开了',user);
       });
-      [ $.uid, $.localAudioTrack, $.localVideoTrack ] = await Promise.all([
-        $.client.join($.appId, $.channel, $.token || null),
+      [ $.userId, $.localAudioTrack, $.localVideoTrack ] = await Promise.all([
+        $.client.join($.appId, $.channel, $.token || null,$.uid),
         AgoraRTC.createMicrophoneAudioTrack(),
         AgoraRTC.createCameraVideoTrack(
           {encoderConfig: "120_1",}   //只有谷歌支持最低的，别的浏览器最低480p
@@ -64,9 +66,11 @@ export default {
       $.localVideoTrack.play("ag-canvas");
       await $.client.publish([this.localAudioTrack, this.localVideoTrack]);
       console.log("publish success");
+      this.testNetWork();
     },
     //离开频道
     async leave() {
+      await this.client.unpublish([this.localAudioTrack, this.localVideoTrack]);
       await this.client.leave();
     },
     //订阅远端用户
@@ -97,13 +101,15 @@ export default {
         user.audioTrack.play();
       }
     },
+    //用户发布订阅
     handleUserPublished(user, mediaType) {
       debugger
       const id = user.uid;
       // remoteUsers[id] = user;
       this.subscribe(user, mediaType);
     },
-    handleUserUnpublished(user) {
+    //用户取消发布订阅
+    handleUserUnpublished(user,mediaType) {
       if (mediaType === "video") {
         // 获取刚刚动态创建的 DIV 节点。
         const playerContainer = document.getElementById(user.uid.toString());
@@ -111,37 +117,32 @@ export default {
         playerContainer.remove();
       }
     },
+    //结束会议
     async endMeeting(){
       await this.client.unpublish([this.localAudioTrack, this.localVideoTrack]);
       this.$router.push("/createMeeting");
     },
-    //通话前质量检测
+    //通话质量检测
     async testNetWork(){
       var $=this;
-      $.upClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-      $.downClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-      const [microphoneTrack, cameraTrack] = await AgoraRTC.createMicrophoneAndCameraTracks();
-      $.upClient.join($.appId, $.channel, $.token || null);
-      $.downClient.join($.appId, $.channel, $.token || null);
-      await $.upClient.publish([microphoneTrack, cameraTrack]);
-      await $.downClient.subscribe();
-      uplinkClient.on("network-quality", (quality) => {
-        console.log("uplink network quality", quality.uplinkNetworkQuality);
+      $.client.on("network-quality", (quality) => {
+        console.log("上行网络质量：", quality.uplinkNetworkQuality);
       });
 
       // 获取下行网络质量
-      downlinkClient.on("network-quality", (quality) => {
-        console.log("downlink network quality", quality.downlinkNetworkQuality);
+      $.client.on("network-quality", (quality) => {
+        console.log("下行网络质量：", quality.downlinkNetworkQuality);
       });
 
       // 获取上行统计数据
-      uplinkVideoStats = uplinkClient.getLocalVideoStats();
+      var uplinkVideoStats = $.client.getLocalVideoStats();
       // 获取下行统计数据
-      downlinkVideoStats = downlinkClient.getRemoteVideoStats();
+      var downlinkVideoStats =  $.client.getRemoteVideoStats();
 
       console.log("uplink video stats", uplinkVideoStats);
       console.log("downlink video stats", downlinkVideoStats);
     },
+    //通话前设备检测
     testDevices(){
       AgoraRTC.getDevices()
         .then(devices => {
@@ -161,25 +162,33 @@ export default {
             res[0].play('ag-canvas');
             setInterval(() => {
               const level = res[1].getVolumeLevel();
-              console.log("local stream audio level", level);
+              console.log("本地音频级别：", level);
             }, 1000);
         });
+    },
+    //调整麦克风音量
+    setVolum(value){
+      this.localAudioTrack.setVolume(value);
+    },
+    //初始化
+    async init(){
+       let $ = this;
+      $.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+      //摄像头插入变化
+      AgoraRTC.onCameraChanged = (info) => {
+        console.log("camera changed!", info.state, info.device);
+      };
+      //音频插入变化
+      AgoraRTC.onMicrophoneChanged = (info) => {
+        console.log("microphone changed!", info.state, info.device);
+      };
+      AgoraRTC.enableLogUpload();
+      await this.testDevices();
+      await this.join();
     }
   },
   created() {
-    let $ = this;
-    $.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-    //摄像头插入
-    AgoraRTC.onCameraChanged = (info) => {
-      console.log("camera changed!", info.state, info.device);
-    };
-    //音频插入
-    AgoraRTC.onMicrophoneChanged = (info) => {
-      console.log("microphone changed!", info.state, info.device);
-    };
-    AgoraRTC.enableLogUpload();
-    this.testDevices();
-    this.join();
+    this.init();
   },
 
   mounted() {

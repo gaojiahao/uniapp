@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 19:15:58
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\index.vue
- * @LastEditTime: 2021-04-12 14:51:53
+ * @LastEditTime: 2021-04-13 11:34:27
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -31,7 +31,12 @@
                     </div>
                     <Divider type="vertical" />
                     <div class="timer item">
-                        <i class="iconfont icon21maikefeng icon" :class="[isMic ? 'outline':'eye']" @click="setMic()"></i>
+                        <Poptip trigger="click" title="" content="content">
+                            <div class="api" slot="content">
+                                <Slider v-model="volum" style="width:100px;" @on-input="onInput"></Slider>    
+                            </div>
+                            <i class="iconfont icon21maikefeng icon" :class="[isMic ? 'outline':'eye']" @click="setMic()"></i>
+                        </Poptip>
                         <span class="time-card-count text">音频</span>
                     </div>
                     <Divider type="vertical" />
@@ -91,6 +96,7 @@ export default {
             isCar:true,
             isShowEsc:false,
             isShowReconnection:true,
+            volum:100
         }
     },
     methods: {
@@ -140,6 +146,10 @@ export default {
         },
         sureEnd(){
             this.$emit('endMeeting');
+        },
+        //调整通话音量
+        onInput(value){
+            this.$emit('set-volum',value);
         }
     },
     created() {

@@ -28,8 +28,8 @@ d<!--
             </Row>
           </div>
           <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-colon class="create_form_wrap">
-            <FormItem label="会议ID" prop="id">
-              <Input v-model="channel" :style="{width:'300px',marginLeft: '-50px'}" :maxlength="11" disabled></Input>
+            <FormItem label="会议ID" prop="channel">
+              <Input v-model="formValidate['channel']" :style="{width:'300px',marginLeft: '-50px'}" :maxlength="11" disabled></Input>
             </FormItem>
             <FormItem label="昵称" prop="nickName">
               <Input v-model="formValidate['nickName']" :style="{width:'300px',marginLeft: '-50px'}" placeholder="请输入您的昵称"></Input>
@@ -41,7 +41,7 @@ d<!--
               <DatePicker v-model="formValidate['endTime']" @on-change="formValidate['endTime']=$event" format="yyyy-MM-dd HH:mm" type="date" placeholder="选择结束时间" style="width: 300px;margin-left:-50px"></DatePicker> 
             </FormItem>
             <FormItem label="入会人数" prop="mettingNumber">
-              <Input v-model="formValidate['mettingNumber']" :style="{width:'300px',marginLeft: '-27px'}" placeholder="请输入1-8" :maxlength="4"></Input><span style="margin-left:10px;color:#666666">人</span>
+              <Input v-model="formValidate['mettingNumber']" type="number" :style="{width:'300px',marginLeft: '-27px'}" placeholder="请输入1-8" :maxlength="4"></Input><span style="margin-left:10px;color:#666666">人</span>
             </FormItem>
             <FormItem prop="settings">
               <CheckboxGroup v-model="formValidate.settings" :style="{marginLeft: '-150px'}">
@@ -56,35 +56,28 @@ d<!--
         </div>
       </div>
     </div>
-    <div class="footer">
-      <div class="footer_wrap">
-        <div class="footer_wrap_first">
-          <div style="margin-right:10px">技术支持：0754-89671122</div> 
-          <div class="qq"></div>
-          <div style="margin-left:10px">客服001</div>
-          <div class="qq" style="margin-left:10px"></div>
-          <div style="margin-left:10px">客服002</div>
-        </div>
-        <div>Copyright © 2021深圳宏升软件技术开发有限公司  粤ICP备13031421号-4</div>
-      </div>
-    </div>
+    <LoginFooter></LoginFooter>
   </div>
 </template>
 
 <script>
 import * as Cookies from "js-cookie";
+import LoginFooter from "@components/footer/loginFooter";
+import {
+  CreateMeetingRoom
+} from "@service/meetingService"
 
 export default {
   name: "createMeeting",
   components: {
-      
+    LoginFooter     
   },
   data() {
     return {
       logUrl: require("@assets/default/logo.png"),
       titleUrl: require("@assets/images/title_s.webp"),
       formValidate:{
-        id:'111111111111111',
+        channel:'111111111111111',
         nickName:'',
         startTime:'',
         endTime:'',
@@ -92,7 +85,18 @@ export default {
         settings:['isM','isC']
       },
       ruleValidate:{
-
+        nickName: [
+          { required: true, message: '请输入昵称', trigger: 'blur' }
+        ],
+        startTime: [
+          { required: true, message: '请选择开始时间', trigger: 'blur' }
+        ],
+        endTime: [
+          { required: true, message: '请选择结束时间', trigger: 'blur' }
+        ],
+        mettingNumber: [
+          { required: true, message: '请输入会人数', trigger: 'blur' }
+        ],
       },
       channel: "10001",
       baseMode: "avc",
@@ -103,14 +107,42 @@ export default {
   },
   methods: {
     save(){
-      Cookies.set("channel", this.channel);
+      var params = {
+        roomNumber:this.formValidate.channel,
+        nickName:this.formValidate.nickName,
+        startTime:this.formValidate.startTime,
+        endTime:this.formValidate.endTime,
+        count:this.formValidate.mettingNumber
+      };
+      
+      return new Promise((resolve, reject) => {
+        this.$FromLoading.show();
+        CreateMeetingRoom(params).then(res => {
+          if (res.result.code == 200) {
+              
+          } else {
+            this.$Message.error({
+              background: true,
+              content: res.result.msg
+            });
+            this.$FromLoading.hide();
+          }
+        });
+      });
+      Cookies.set("channel", this.formValidate.channel);
       Cookies.set("baseMode", this.baseMode);
       Cookies.set("transcode", this.transcode);
       Cookies.set("attendeeMode", this.attendeeMode);
       Cookies.set("videoProfile", this.videoProfile);
+      Cookies.set("uid", this.formValidate.nickName);
       this.$router.push('/');
     }  
   },
+  created(){
+    this.$loading.hide();
+    var config = JSON.parse(window.localStorage.getItem("SPHY_LOGIN_TOKEN"));
+    this.formValidate.channel = config.roomNumber;
+  }
 };
 </script>
 
@@ -221,7 +253,7 @@ export default {
           }
 
           .type {
-            margin-top: 40px;
+            margin: 24px 0;
             height: 32px;
             display: inline-block;
             width: 100%;
@@ -230,7 +262,6 @@ export default {
             line-height: normal;
             font-size: 18px;
             color: #666666;
-            margin-bottom: 40px;
             .active {
               color: #57a3f3;
             }
@@ -238,33 +269,6 @@ export default {
               font-weight: 600;
             }
           }
-      }
-    }
-  }
-  .footer {
-    position: relative;
-    width: 100%;
-    text-align: center;
-    line-height: 24px;
-    margin-top: -70px;
-    height: 107px;
-    padding: 14px 15px 0 15px;
-    color:#fff;
-    background: #2684D1;
-    border-top: solid 1px #ddd;
-    overflow: hidden;
-    .footer_wrap{
-      padding-top:18px;
-      .footer_wrap_first{
-        display: flex;
-        justify-content:center;
-        .qq {
-          background: url('~@assets/images/qq2.webp');
-          background-repeat: no-repeat;
-              margin-top: 4px;
-          width: 13px;
-          height: 16px;
-        }
       }
     }
   }

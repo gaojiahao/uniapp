@@ -1,10 +1,10 @@
-d<!--
+<!--
  * @Descripttion: 
  * @version: 1.0.0
  * @Author: gaojiahao
  * @Date: 2020-10-19 16:28:17
  * @LastEditors: sueRimn
- * @LastEditTime: 2020-11-02 12:00:31
+ * @LastEditTime: 2021-04-13 19:52:16
 -->
 <template>
   <div class="login" ref="login">
@@ -36,30 +36,29 @@ d<!--
               <Col span="6">
               </Col>
               <Col span="6">
-                <div class="item" :class="[type=='login' ? 'active':'']" @click="changeType('login')">账号登录</div>
+                <div class="item" :class="[type=='login' ? 'active':'']" @click="changeType('login')">{{$t("login.account_login_text")}}</div>
               </Col>
               <Col span="6">
-                <!-- <div class="item" :class="[type=='qrCode' ? 'active':'']" @click="changeType('qrCode')">二维码登录</div> -->
-                <div class="item" :class="[type=='message' ? 'active':'']" @click="changeType('message')">短信登录</div>
+                <div class="item" :class="[type=='message' ? 'active':'']" @click="changeType('message')">{{$t("login.message_login_text")}}</div>
               </Col>
               <Col span="6">
               </Col>
             </Row>
           </div>
           <div class="qrcode_type" v-else>
-            二维码登录
+            {{$t("login.qr_code")}}
           </div>
           <template v-if="type=='qrCode'">
             <img :src="qrCodeUrl" width="160px;height:160px"/>
-            <p style="font-size:13px;color:#666666">请使用小竹熊App扫一扫登录</p>
+            <p style="font-size:13px;color:#666666">{{$t("login.scan")}}</p>
           </template>
           <template v-else-if="type=='message'">
-            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-colon class="input_form_wrap">
-              <FormItem label="账号" :prop="userCode">
-                <Input v-model="formValidate['userCode']" :style="{width:'300px',marginLeft: '-50px'}" placeholder="请输入手机号" :maxlength="11"></Input>
+            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate2" :label-width="100" label-colon class="input_form_wrap">
+              <FormItem :label="$t('login.phone')" prop="userCode">
+                <Input v-model="formValidate['userCode']" :style="{width:'300px',marginLeft: '-50px'}" :placeholder="$t('login.account_placeholder')" :maxlength="11"></Input>
               </FormItem>
-              <FormItem label="验证码" :prop="passWord">
-                <Input v-model="formValidate['passWord']" :style="{width:'180px',marginLeft: '-170px'}" placeholder="请输入验证码" :maxlength="4"></Input><div style="position:absolute;right: 50px;top: 0;"><Button>获取验证码</Button></div>
+              <FormItem :label="$t('login.verification_code')" prop="passWord">
+                <Input v-model="formValidate['passWord']" :style="{width:'180px',marginLeft: '-170px'}" :placeholder="$t('login.verification_code_text')" :maxlength="6"></Input><div style="position:absolute;right: 50px;top: 0;"><Button :style="{height: '40px'}">{{$t("login.get_verification_code")}}</Button></div>
               </FormItem>
               <FormItem>
                 <Button type="primary" @click="login" :style="{width:'300px',marginLeft: '-50px'}" >{{$t("login.button")}}</Button>  
@@ -68,11 +67,11 @@ d<!--
           </template>
           <template v-else-if="type=='login'">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-colon class="input_form_wrap">
-              <FormItem label="账号" :prop="userCode">
-                <Input v-model="formValidate['userCode']" :style="{width:'300px',marginLeft: '-50px'}" placeholder="请输入手机号" :maxlength="11"></Input>
+              <FormItem :label="$t('login.account')" prop="userCode">
+                <Input v-model="formValidate['userCode']" :style="{width:'300px',marginLeft: '-50px'}" :placeholder="$t('login.account_placeholder')" :maxlength="11"></Input>
               </FormItem>
-              <FormItem label="密码" :prop="passWord">
-                <Input v-model="formValidate['passWord']" :style="{width:'300px',marginLeft: '-50px'}" placeholder="请输入密码" :maxlength="6"></Input>
+              <FormItem :label="$t('login.password')" prop="passWord">
+                <Input v-model="formValidate['passWord']" :style="{width:'300px',marginLeft: '-50px'}" :placeholder="$t('login.password_placeholder')" :maxlength="6"></Input>
               </FormItem>
               <FormItem>
                 <Button type="primary" @click="login" :style="{width:'300px',marginLeft: '-50px',height:'36px'}" >{{$t("login.button")}}</Button>  
@@ -82,23 +81,13 @@ d<!--
         </div>
       </div>
     </div>
-    <div class="footer">
-      <div class="footer_wrap">
-        <div class="footer_wrap_first">
-          <div style="margin-right:10px">技术支持：0754-89671122</div> 
-          <div class="qq"></div>
-          <div style="margin-left:10px">客服001</div>
-          <div class="qq" style="margin-left:10px"></div>
-          <div style="margin-left:10px">客服002</div>
-        </div>
-        <div>Copyright © 2021深圳宏升软件技术开发有限公司  粤ICP备13031421号-4</div>
-      </div>
-    </div>
+    <LoginFooter></LoginFooter>
   </div>
 </template>
 
 <script>
 import SIdentify from "@components/public/sIdentify/sIdentify";
+import LoginFooter from "@components/footer/loginFooter";
 import tokenService from "@service/tokenService";
 import {
   validateEmail,
@@ -108,7 +97,8 @@ import {
 export default {
   name: "Login",
   components: {
-      SIdentify
+      SIdentify,
+      LoginFooter
   },
   data() {
       var userCode = localStorage.getItem("userCode");
@@ -161,8 +151,22 @@ export default {
           passWord:''  
         },
         ruleValidate:{
-
-        }
+          // userCode: [
+          //   { required: true, message: '请输入账号', trigger: 'blur' }
+          // ],
+          // passWord: [
+          //   { required: true, message: '请输入密码', trigger: 'blur' }
+          // ],
+        },
+        ruleValidate2:{
+          // userCode: [
+          //   { required: true, message: '请输入手机号', trigger: 'blur' }
+          // ],
+          // passWord: [
+          //   { required: true, message: '请输入验证码', trigger: 'blur' }
+          // ],
+        },
+        mac:''
       };
   },
   methods: {
@@ -174,68 +178,41 @@ export default {
      * @return {*}
      */
     login() {
-        // let params = {};
-        // if (this.isMobileLogin) {
-        //     if (!this.mobile || !this.testCode) {
-        //         this.$Message.error("请输入有效的手机号或验证码！");
-        //         return;
-        //     }
-        //     params.phoneNumberOrEmailAddress = this.mobile;
-        //     params.password = this.testCode;
-        //     params.rememberClient = true;
-        //     params.platForm = 'backstage';
-        //     params.loginType = 'Password';
-        //     params.verificationCode ='';
-        //     params.timestamp = new Date();
-        // } else {
-        //     if (!this.userCode || !this.passWord) {
-        //         this.$Message.error("请输入用户名或密码");
-        //         return;
-        //     }
-        //     if (this.code) {
-        //         if (this.code!=1111 && this.code.toLowerCase() != this.identifyCode.toLowerCase()) {
-        //             this.$Message.error("验证码出错");
-        //             return;
-        //         }
-        //     } else {
-        //         this.$Message.error("验证码不能为空");
-        //         return;
-        //     }
-        //     params.phoneNumberOrEmailAddress = this.userCode;
-        //     params.password = this.passWord;
-        //     params.rememberClient = true;
-        //     params.platForm = 'backstage';
-        //     params.loginType = 'Password';
-        //     params.verificationCode ='';
-        //     params.timestamp = +new Date();
-        // }
-        // this.$loading.show();
-        // tokenService
-        //     .pcLogin(params)
-        //     .then(data => {
-        //         if(data['result']['isLogin']){
-        //             var token = tokenService.getToken();
-        //             if (token) {
-        //                 this.$router.push('index');
-        //             }
-        //         } else {
-        //             this.$loading.hide();
-        //             this.$Message["error"]({
-        //                 background: true,
-        //                 content: '温馨提示：' + data['result']['message']
-        //             });
-        //             this.refreshCode();    
-        //         }
-        //     })
-        //     .catch(err => {
-        //         this.$loading.hide();
-        //         this.$Message["error"]({
-        //             background: true,
-        //             content: '温馨提示：' + err.message
-        //         });
-        //         this.refreshCode();
-        //     });
-      this.$router.push('/createMeeting');
+      let params = {};
+      params.loginType = this.type=='login' ? 1 : this.type=='message' ? 2 : 3;
+      params.targetId = this.formValidate.userCode;
+      params.targetCode = this.formValidate.passWord;
+      params.code = this.mac;
+      this.$loading.show();
+      tokenService
+        .pcLogin(params)
+        .then(data => {
+          if(data.success){
+            var token = tokenService.getToken();
+            if (token) {
+              switch(data.data.status) {
+                case -1:
+                  this.$router.push('/createMeeting');
+                  break;
+                case 0:
+                  this.$router.push('/createMeeting');
+                  break;
+                case 1:
+                  this.$router.push('/');
+                  break;
+                default:
+                  ''
+              } 
+            }
+          }
+        })
+        .catch(err => {
+          this.$loading.hide();
+          this.$Message.error({
+            background: true,
+            content: '温馨提示：'+err.data.message
+          });
+        });
     },
     /**
      * @name: gaojiahao
@@ -393,7 +370,7 @@ export default {
             }
         }
     },
-    //   切换多语言
+    //切换多语言
     changeLangFn(val) {
       let chan = this.changeLang;
       for (let i in chan) {
@@ -409,10 +386,25 @@ export default {
     },
     changeTypeQrCode(){
       this.type = this.type=='qrCode' ? 'login':'qrCode';
+    },
+    //生成机器识别码guid
+    generateUUID() {
+      var d = new Date().getTime();
+      var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+      });
+      return uuid;
     }
   },
   created() {
     tokenService.clean();
+    this.mac = window.localStorage.getItem('mac') || '';
+    if(!this.mac){
+      this.mac = this.generateUUID();
+      window.localStorage.setItem('mac',this.mac);
+    }
   },
   mounted() {
     this.initKeypress();
@@ -565,33 +557,6 @@ export default {
             font-weight: 600;
             margin-bottom: 13px;  
           }
-      }
-    }
-  }
-  .footer {
-    position: relative;
-    width: 100%;
-    text-align: center;
-    line-height: 24px;
-    margin-top: -70px;
-    height: 107px;
-    padding: 14px 15px 0 15px;
-    color:#fff;
-    background: #2684D1;
-    border-top: solid 1px #ddd;
-    overflow: hidden;
-    .footer_wrap{
-      padding-top:18px;
-      .footer_wrap_first{
-        display: flex;
-        justify-content:center;
-        .qq {
-          background: url('~@assets/images/qq2.webp');
-          background-repeat: no-repeat;
-              margin-top: 4px;
-          width: 13px;
-          height: 16px;
-        }
       }
     }
   }
