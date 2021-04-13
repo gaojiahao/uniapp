@@ -62,15 +62,15 @@
           <img class="homeLogo" src="../../static/images/logo.png" alt="">
         </div>
         <div class="right">
-          <div class="addrs" id="fromCompanyNameData">
+          <div class="addrs" id="fromCompanyNameDataVal">
             <script id="fromCompanyName" type="text/html">
               <%=fromCompanyName%>
             </script>
           </div>
           <div class="sampleDetail">
             <div class="item">
-              <div class="title">本次代号：
-                <script id="fromCompanyName" type="text/html">
+              <div id="the_nuVal" class="title">本次代号：
+                <script id="the_nu" type="text/html">
                   <%=the_nu%>
                      </script>
 
@@ -78,30 +78,30 @@
 
             </div>
             <div class="item">
-              <div class="title">择样数量：
-                <script id="fromCompanyName" type="text/html">
+              <div id="totalCountVal" class="title">择样数量：
+                <script id="totalCount" type="text/html">
+                  <%=totalCount%>
+                     </script>
+              </div>
+
+            </div>
+            <div class="item">
+              <div id="numberVal" class="title">择样编号：
+                <script id="number" type="text/html">
                   <%=number%>
                      </script>
               </div>
 
             </div>
             <div class="item">
-              <div class="title">择样编号：
-                <script id="fromCompanyName" type="text/html">
-                  <%=number%>
-                     </script>
-              </div>
-
-            </div>
-            <div class="item">
-              <div class="title">择样时间：</div>
-              <script id="fromCompanyName" type="text/html">
+              <div id="happenDateVal" class="title">择样时间：</div>
+              <script id="happenDate" type="text/html">
                 <%=happenDate%>
                    </script>
             </div>
             <div class="item">
-              <div class="title">厂商数量：
-                <script id="fromCompanyName" type="text/html">
+              <div id="supplierCountVal" class="title">厂商数量：
+                <script id="supplierCount" type="text/html">
                   <%=supplierCount%>
                      </script>
               </div>
@@ -180,14 +180,15 @@
       <!-- 分页 -->
       <div class="pageBox">
         <ul>
-          <li style="border: 0;">共
+          <li style="border: 0;"> 共</li>
+          <li style="border: 0;">
             <input id="totalCountPage" type="text" value="0">
-            条
           </li>
+          <li style="border: 0;"> 条</li>
           <li onclick="previousPage()">
             上一页
           </li>
-          <li>
+          <li style="margin: 5px 10px;">
             <input id="numberPage" type="text" value="1">
           </li>
           <li onclick="nextPage()">
@@ -217,7 +218,11 @@
   var orderNumber = window.localStorage.getItem("orderNumber")
   var userToken = window.localStorage.getItem("token")
   var orderType = window.localStorage.getItem("orderType")
-  var orderList = [];
+  //页面上字段
+  var the_nu = window.localStorage.getItem("the_nu")
+  var number = window.localStorage.getItem("number")
+  var supplierCount = window.localStorage.getItem("supplierCount")
+  var happenDate = window.localStorage.getItem("happenDate")
   //初始化
   var data = {
     skipCount: 1,
@@ -226,6 +231,27 @@
     orderType: orderType
   }
 
+  var the_nutHTML = template(document.getElementById('the_nu').innerHTML, {
+    the_nu: the_nu
+  });
+  document.getElementById("the_nuVal").innerHTML = the_nutHTML;
+
+  var numberHTML = template(document.getElementById('number').innerHTML, {
+    number: number
+  });
+  document.getElementById("numberVal").innerHTML = numberHTML;
+
+
+  var supplierCountHTML = template(document.getElementById('supplierCount').innerHTML, {
+    supplierCount: supplierCount
+  });
+  document.getElementById("supplierCountVal").innerHTML = supplierCountHTML;
+
+
+  var happenDateHTML = template(document.getElementById('happenDate').innerHTML, {
+    happenDate: happenDate
+  });
+  document.getElementById("happenDateVal").innerHTML = happenDateHTML;
   // 选中数据
   var selectFormValue = {
     orderType: "",

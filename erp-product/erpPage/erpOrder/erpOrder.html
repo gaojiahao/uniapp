@@ -137,14 +137,15 @@
       <!-- 分页 -->
       <div class="pageBox">
         <ul>
-          <li style="border: 0;">共
+          <li style="border: 0;"> 共</li>
+          <li style="border: 0;">
             <input id="totalCountPage" type="text" value="0">
-            条
           </li>
+          <li style="border: 0;"> 条</li>
           <li onclick="previousPage()">
             上一页
           </li>
-          <li>
+          <li style="margin: 5px 10px;">
             <input id="numberPage" type="text" value="1">
           </li>
           <li onclick="nextPage()">
@@ -190,7 +191,7 @@
 
     } else {
 
-      window.location.href = "../erpHome/erpHome.html"
+      // window.location.href = "../erpHome/erpHome.html"
     }
   })
   //日期设置，不可选择今日之后的日期
@@ -333,6 +334,7 @@
     if ($("#orderType").val()) data.orderType = $("#orderType").val();
     if ($("#startCreatetime").val()) data.startTime = $("#startCreatetime").val();
     if ($("#endCreatetime").val()) data.endTime = $("#endCreatetime").val();
+    data.skipCount = 1;
     getSampleOrderERPPage()
 
   }
@@ -351,8 +353,17 @@
       if (index === i) {
         var orderNumber = orderList[i].orderNumber
         var orderType = orderList[i].orderType
+        var the_nu = orderList[i].the_nu
+        var number = orderList[i].number
+        var supplierCount = orderList[i].supplierCount
+        var happenDate = orderList[i].happenDate
+
         window.localStorage.setItem("orderNumber", orderNumber);
         window.localStorage.setItem("orderType", orderType);
+        window.localStorage.setItem("the_nu", the_nu);
+        window.localStorage.setItem("number", number);
+        window.localStorage.setItem("supplierCount", supplierCount);
+        window.localStorage.setItem("happenDate", happenDate);
         window.location.href = "../erpOrderDetails/erpOrderDetails.html"
       }
     }
