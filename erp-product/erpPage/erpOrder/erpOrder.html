@@ -187,9 +187,9 @@
       userToken = token
       currentSelectTableValue.token = token;
       getSampleOrderERPPage()
-      console.log("存在");
+
     } else {
-      console.log("没有");
+
       // window.location.href = "../erpHome/erpHome.html"
     }
   })
@@ -220,7 +220,6 @@
           $("#totalCountPage").val(res.result.item.totalCount)
           getTable(res.result.item.items);
         }
-        // console.log(res, "成功的回调");
 
       }
     });
@@ -241,7 +240,6 @@
     delete data.endTime;
     delete data.orderNumber;
     delete data.keyword
-    console.log(data);
   }
   // 渲染列表数据
   function getTable(list) {
@@ -330,7 +328,6 @@
 
   //搜索
   function handelSearch() {
-    console.log("进来了");
     if ($("#keyword").val()) data.keyword = $("#keyword").val();
     if ($("#orderNumber").val()) data.orderNumber = $("#orderNumber").val();
     if ($("#orderFrom").val()) data.orderFrom = $("#orderFrom").val();
@@ -373,7 +370,6 @@
       data.skipCount = numberPage;
       getSampleOrderERPPage();
     }
-    console.log(numberPage);
   }
   // 下一页
   function nextPage() {
