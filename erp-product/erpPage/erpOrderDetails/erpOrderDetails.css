@@ -314,3 +314,41 @@
     padding: 0;
     margin: 0;
 }
+.thDete{
+    text-align: left;
+	width: 120px;
+}
+.thTxt{
+    height: 55px;
+	margin: 0 10px 0 20px;
+    line-height: 55px;
+    float: left;
+}
+.triangle{
+    float: left;
+    width: 20px;
+    padding-top: 20px;
+}
+.topS{
+    margin: 3px 0;
+    width:0px; 
+    height:0px; 
+    border-left:5px solid transparent;  
+    border-right:5px solid transparent; 
+    border-bottom:5px solid #c0c4cc;;  
+    font-size:0px; 
+    cursor: pointer;
+    line-height:0px;
+    
+}
+.btoS{
+    margin: 3px 0;
+    width:0px; 
+    height:0px; 
+    border-left:5px solid transparent; 
+    border-right:5px solid transparent; 
+    border-top:5px solid #c0c4cc;; 
+    font-size:0px; 
+    line-height:0px; 
+    cursor: pointer;
+}

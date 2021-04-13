@@ -225,6 +225,13 @@
           data.orderType = "全部";
           data.startTime = "";
           data.endTime = "";
+          var obj = {};
+          for (const key in data) {
+            if (data[key] != "") {
+              obj[key] = data[key];
+            }
+          }
+          data = obj;
         }
         // console.log(res, "成功的回调");
 
@@ -346,8 +353,6 @@
     } else {
       numberPage++
       $("#numberPage").val(numberPage)
-
-      console.log($("#totalCountPage").val());
       var totalCount = $("#totalCountPage").val()
       data.skipCount = numberPage - 1;
       if (numberPage * data.maxResultCount > totalCount) {
