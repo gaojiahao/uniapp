@@ -340,10 +340,24 @@
   // 下一页
   function nextPage() {
     var numberPage = $("#numberPage").val()
-    numberPage++
-    console.log(numberPage);
-    $("#numberPage").val(numberPage)
-    data.skipCount = numberPage;
-    getSampleOrderERPPage();
+
+    if (orderList.length < data.maxResultCount) {
+      return false
+    } else {
+      numberPage++
+      $("#numberPage").val(numberPage)
+
+      console.log($("#totalCountPage").val());
+      var totalCount = $("#totalCountPage").val()
+      data.skipCount = numberPage - 1;
+      if (numberPage * data.maxResultCount > totalCount) {
+        return false
+      }
+      data.skipCount = numberPage;
+      getSampleOrderERPPage();
+    }
+
+
+
   }
 </script>
