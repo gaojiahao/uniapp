@@ -566,7 +566,7 @@ export default {
           .refreshIcon {
             width: 100px;
             height: 100px;
-            background-color: #fff;
+            background-color: #fff !important;
             border-radius: 50%;
             cursor: pointer;
             display: flex;

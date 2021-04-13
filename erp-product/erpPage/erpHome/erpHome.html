@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=7">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="/static/images/favicon.ico">
+  <link rel="icon" href="../../static/images/favicon.ico">
   <title>小竹熊云科技</title>
-  <link rel="stylesheet" href="/static/css/base.css">
+  <link rel="stylesheet" href="../../static/css/base.css">
   <link rel="stylesheet" href="./erpHome.css">
-  <script src="/static/js/jquery-1.8.3.min.js"></script>
-  <script src="/static/js/json2.js"></script>
-  <script src="/static/js/template.js"></script>
+  <script src="../../static/js/jquery-1.8.3.min.js"></script>
+  <script src="../../static/js/json2.js"></script>
+  <script src="../../static/js/template.js"></script>
 </head>
 <body>
   <div id="erpHome">
@@ -75,6 +75,20 @@
         ></span>
       </div>
       <div class="newArrivals" id="newTempWrap">
+      </div>
+    </div>
+  </div>
+  <!-- 广告层 -->
+  <div class="advertisingLayer">
+    <div class="editionCenter">
+      <div class="erweimaBox">
+        <div class="qr">
+          <div class="qrImg">
+            <img src="../../static/images/ErWeiMa.png" alt="">
+          </div>
+          <p>扫码下载</p>
+          <p>小竹熊APP</p>
+        </div>
       </div>
     </div>
   </div>
@@ -197,7 +211,6 @@
               }
           })
         })
-        // 登录
         $(".loginBtn").click(function () {
           window.location.href = '../erpLogin/erpLogin.html';
         })
