@@ -217,6 +217,7 @@
   var orderNumber = window.localStorage.getItem("orderNumber")
   var userToken = window.localStorage.getItem("token")
   var orderType = window.localStorage.getItem("orderType")
+  var orderList = [];
   //初始化
   var data = {
     skipCount: 1,
@@ -255,6 +256,8 @@
         if (res.result.code === 200) {
           $("#totalCountPage").val(res.result.item.totalCount)
           getTable(res.result.item.items)
+          orderList = res.result.item.items
+
         }
       }
     });
@@ -330,17 +333,30 @@
     } else {
       $("#numberPage").val(numberPage)
       data.skipCount = numberPage;
-      getSampleOrderERPPage();
+      getSampleOrderDetailPageThree()
     }
     console.log(numberPage);
   }
   // 下一页
   function nextPage() {
     var numberPage = $("#numberPage").val()
-    numberPage++
     console.log(numberPage);
-    $("#numberPage").val(numberPage)
-    data.skipCount = numberPage;
-    getSampleOrderERPPage();
+    if (orderList.length < data.maxResultCount) {
+      return false
+    } else {
+      numberPage++
+      $("#numberPage").val(numberPage)
+
+      console.log($("#totalCountPage").val());
+      var totalCount = $("#totalCountPage").val()
+      data.skipCount = numberPage - 1;
+      if (numberPage * data.maxResultCount > totalCount) {
+        return false
+      }
+      data.skipCount = numberPage;
+      getSampleOrderDetailPageThree()
+    }
+
+
   }
 </script>
