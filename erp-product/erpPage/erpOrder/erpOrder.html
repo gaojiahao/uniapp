@@ -135,10 +135,22 @@
       <!-- 隐藏的输入框 -->
       <input id="SampleOrder" value="" placeholder="隐藏域" type="hidden"></input>
       <!-- 分页 -->
-      <div class="page">
-        <ul class="pagination"></ul>
-        <input type="hidden" id="currentPage" name="currentPage" value="1"></input>
-        <input type="hidden" id="totalPage" value="54"></input>
+      <div class="pageBox">
+        <ul>
+          <li style="border: 0;">共
+            <input id="totalCountPage" type="text" value="0">
+            条
+          </li>
+          <li onclick="previousPage()">
+            上一页
+          </li>
+          <li>
+            <input id="numberPage" type="text" value="1">
+          </li>
+          <li onclick="nextPage()">
+            下一页
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -181,6 +193,16 @@
       // window.location.href = "../erpHome/erpHome.html"
     }
   })
+  //日期设置，不可选择今日之后的日期
+  $(function () {
+    var now = new Date();
+    var year = now.getFullYear();
+    var month = now.getMonth() + 1 < 10 ? "0" + (now.getMonth() + 1)
+      : (now.getMonth() + 1);
+    var day = now.getDate() < 10 ? "0" + now.getDate() : now.getDate();
+    $("#startCreatetime").attr("max", year + "-" + month + "-" + day);
+    $("#endCreatetime").attr("max", year + "-" + month + "-" + day);
+  })
 
   // 请求列表
   function getSampleOrderERPPage() {
@@ -196,6 +218,7 @@
         if (res.result.code === 200) {
           orderList = res.result.item.items;
           getTable(res.result.item.items);
+          $("#totalCountPage").val(res.result.item.totalCount)
           data.keyword = "";
           data.orderNumber = "";
           data.orderFrom = "全部";
@@ -203,7 +226,7 @@
           data.startTime = "";
           data.endTime = "";
         }
-        console.log(res, "成功的回调");
+        // console.log(res, "成功的回调");
 
       }
     });
@@ -284,6 +307,10 @@
     window.localStorage.clear()
     window.location.href = "../erpLogin/erpLogin.html"
   }
+  // 去首页
+  function toHome() {
+    window.location.href = "../erpHome/erpHome.html"
+  }
   //点击跳转
   function handeldetails(index) {
     for (var i = 0; i < orderList.length; i++) {
@@ -296,127 +323,27 @@
       }
     }
   }
-
-</script>
-<script type="text/javascript">
-  //日期设置，不可选择今日之后的日期
-  $(function () {
-    var now = new Date();
-    var year = now.getFullYear();
-    var month = now.getMonth() + 1 < 10 ? "0" + (now.getMonth() + 1)
-      : (now.getMonth() + 1);
-    var day = now.getDate() < 10 ? "0" + now.getDate() : now.getDate();
-    $("#startCreatetime").attr("max", year + "-" + month + "-" + day);
-    $("#endCreatetime").attr("max", year + "-" + month + "-" + day);
-  })
-  $().ready(function () {
-    var curPage = $("#currentPage").val();
-    var last = $("#totalPage").val();
-    var page = Math.ceil(curPage / 10);
-    //调用绘制分页样式函数
-    draw(page, curPage);
-
-    //绑定点击页码事件
-    $(document).on("click", ".pagination li a", function () {
-      var str = $(this).html();
-      if (!isNaN(str)) {
-        //移除之前的active
-        $(".pagination li a").removeClass("active");
-        $(this).attr("class", "active");
-        $("#currentPage").val(str);
-      }
-    });
-    //绑定下一页点击事件
-    $(document).on("click", "#nextPage", function () {
-      var num = $(".active").html();
-      var curPage = $("#currentPage").val();
-      var last = $("#totalPage").val();
-      var page = Math.ceil((parseInt(num)) / 10);
-
-      if (num < page * 10 && num != last) {
-        //移除之前的active
-        $(".pagination li a").removeClass("active");
-        $("#" + (parseInt(num) + 1) + "").attr("class", "active");
-        //$(".pagination li a[text="+(parseInt(num)+1)+"]").attr("class","active");//jQ1.6支持
-        $("#currentPage").val(parseInt(num) + 1);
-      } else if (num == page * 10 && num != last) {
-        //清空之前的数据
-        $(".pagination").html("");
-        draw(page + 1, (parseInt(num) + 1));
-      }
-      getSampleOrderERPPage()
-    })
-
-    //绑定上一页点击事件
-    $(document).on("click", "#previousPage", function () {
-      var num = $(".active").html();
-      var curPage = $("#currentPage").val();
-      var last = $("#totalPage").val();
-      var page = Math.ceil((parseInt(num)) / 10);
-      if (num <= page * 10 && num != (page - 1) * 10 + 1) {
-        //移除之前的active
-        $(".pagination li a").removeClass("active");
-        $("#" + (parseInt(num) - 1) + "").attr("class", "active");
-        //$(".pagination li a[text="+(parseInt(num)+1)+"]").attr("class","active");//jQ1.6支持
-        $("#currentPage").val(parseInt(num) - 1);
-      } else if (num == (page - 1) * 10 + 1 && num != 1) {
-        //清空之前的数据
-        $(".pagination").html("");
-        draw(page - 1, (parseInt(num) - 1));
-      }
-      getSampleOrderERPPage()
-    })
-
-    //绘制页面分页样式
-    function draw(page, curPage) {
-      //页面中的当前页
-      var page = page;
-      //后台传过来的页数
-      var curPage = curPage;
-      //后台传过来的总页数
-      var datas = $("#totalPage").val();
-      //每页显示多少条数据
-      var pageSize = 10;
-      //在网页中一共要分多少页
-      var totalPage = Math.floor((datas - 1) / pageSize + 1);
-      var liStr = "<li><a id='previousPage' href='#'>«</a></li>";
-      $("#currentPage").val(curPage);
-      if (page <= totalPage) {
-        if (datas <= 10) {
-          for (i = 1; i <= datas; i++) {
-            //为当前页增加样式
-            var active = "";
-            if (i == curPage) {
-              active = " class='active' ";
-            }
-            liStr += " <li><a id=" + i + " " + active + " href='#'>" + i + "</a></li>"
-          }
-        } else {
-          var start = pageSize * (page - 1) + 1;
-          var end = page * pageSize;
-          if (page == totalPage) {
-            for (i = start; i <= datas; i++) {
-              //为当前页增加样式
-              var active = "";
-              if (i == curPage) {
-                active = " class='active' ";
-              }
-              liStr += " <li><a id=" + i + " " + active + " href='#'>" + i + "</a></li>"
-            }
-          } else {
-            for (i = start; i <= end; i++) {
-              //为当前页增加样式
-              var active = "";
-              if (i == curPage) {
-                active = " class='active' ";
-              }
-              liStr += " <li><a id=" + i + " " + active + " href='#'>" + i + "</a></li>"
-            }
-          }
-        }
-      }
-      liStr += "<li><a id='nextPage' href='#'>»</a></li>";
-      $(".pagination").append(liStr);
+  // 上一页
+  function previousPage() {
+    var numberPage = $("#numberPage").val()
+    numberPage--
+    if (numberPage < 1) {
+      alert("已经是第一页了");
+      $("#numberPage").val(1);
+    } else {
+      $("#numberPage").val(numberPage)
+      data.skipCount = numberPage;
+      getSampleOrderERPPage();
     }
-  })
+    console.log(numberPage);
+  }
+  // 下一页
+  function nextPage() {
+    var numberPage = $("#numberPage").val()
+    numberPage++
+    console.log(numberPage);
+    $("#numberPage").val(numberPage)
+    data.skipCount = numberPage;
+    getSampleOrderERPPage();
+  }
 </script>

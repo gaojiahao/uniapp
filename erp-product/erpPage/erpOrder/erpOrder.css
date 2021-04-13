@@ -226,3 +226,59 @@
 #SampleOrder{
     display: none;
 }
+/*滚动条样式*/
+.flowTable::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+.flowTable::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: #ccc;
+}
+.flowTable::-webkit-scrollbar-track {
+    border-radius: 0;
+    background: transparent;
+}
+.pageBox{
+    width: 1200px;
+    height: 45px;
+    padding: 20px 0;
+    margin: 0 auto;
+}
+.pageBox ul{
+    width: 500px;
+    height: 45px;
+    margin: 0 auto;
+}
+.pageBox ul li{
+    margin: 5px 8px;
+    padding: 0 10px;
+    height: 30px;
+    line-height: 30px;
+    float: left;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    text-align: center;
+    cursor: pointer;
+}
+#numberPage{
+    width: 30px;
+    border: 0;
+    height: 28px;
+    line-height: 8px;
+    text-align: center;
+    background-color: #F5F5F5;
+    padding: 0;
+    margin: 0;
+}
+#totalCountPage{
+    width: 30px;
+    border: 0;
+    height: 28px;
+    line-height: 8px;
+    text-align: center;
+    background-color: #F5F5F5;
+    padding: 0;
+    margin: 0;
+}
