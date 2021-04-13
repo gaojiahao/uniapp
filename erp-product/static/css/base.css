@@ -133,15 +133,15 @@ ul.pagination li a {
 .triangle{
     float: left;
     width: 20px;
-    padding-top: 18px;
+    padding-top: 20px;
 }
 .topS{
     margin: 3px 0;
     width:0px; 
     height:0px; 
-    border-left:8px solid transparent;  
-    border-right:8px solid transparent; 
-    border-bottom:8px solid #c0c4cc;;  
+    border-left:5px solid transparent;  
+    border-right:5px solid transparent; 
+    border-bottom:5px solid #c0c4cc;;  
     font-size:0px; 
     cursor: pointer;
     line-height:0px;
@@ -151,9 +151,9 @@ ul.pagination li a {
     margin: 3px 0;
     width:0px; 
     height:0px; 
-    border-left:8px solid transparent; 
-    border-right:8px solid transparent; 
-    border-top:8px solid #c0c4cc;; 
+    border-left:5px solid transparent; 
+    border-right:5px solid transparent; 
+    border-top:5px solid #c0c4cc;; 
     font-size:0px; 
     line-height:0px; 
     cursor: pointer;
