@@ -130,6 +130,7 @@
     document.getElementById("codeCountTemp").innerHTML = countHTML;
     // 生成二维码
     function initQrCode(url) {
+      $('#qrcode').html("");
       console.log(url);
       $('#qrcode').qrcode({
         width: 198,
