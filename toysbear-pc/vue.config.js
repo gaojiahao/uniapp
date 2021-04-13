@@ -60,7 +60,11 @@ module.exports = {
       })
     ],
     externals: {
-      BMap: "BMap"
+      BMap: "BMap",
+      vue: "Vue",
+      "vue-router": "VueRouter",
+      ElementUI: "ELEMENT",
+      axios: "axios"
     }
   }
 };

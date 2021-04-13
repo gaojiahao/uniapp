@@ -5,9 +5,9 @@ import store from "@/store";
 import "@/styles/base.less";
 import myAxios from "@/request/http";
 import md5 from "js-md5";
-import ElementUI from "element-ui";
-import "element-ui/lib/theme-chalk/index.css";
-import "element-ui/lib/theme-chalk/display.css";
+// import ElementUI from "element-ui";
+// import "element-ui/lib/theme-chalk/index.css";
+// import "element-ui/lib/theme-chalk/display.css";
 import "@/assets/css/theme/index.css";
 import RTM from "@/assets/js/signalROptions";
 import Video from "video.js";
@@ -31,7 +31,7 @@ Vue.component(ElTreeGrid.name, ElTreeGrid);
 Vue.prototype.$video = Video;
 Vue.prototype.$_ = _;
 
-Vue.use(ElementUI);
+// Vue.use(ElementUI);
 Vue.prototype.$md5 = md5;
 Vue.prototype.$RTM = RTM;
 

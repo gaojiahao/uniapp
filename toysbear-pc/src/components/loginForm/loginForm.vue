@@ -198,7 +198,6 @@ export default {
           "setComparnyId",
           res.data.result.commparnyList[0].commparnyId
         );
-        await this.waitTime(1);
         // 二维码登录成功获取菜单
         try {
           const re = await this.$http.post("/api/GetUserRoleMenu", {});
@@ -224,7 +223,16 @@ export default {
             );
             Json.PlatForm = await this.getClientTypeList("PlatForm");
             this.$store.commit("globalJson/setGlobalJson", Json);
-            this.$router.push("/me");
+            switch (res.data.result.commparnyList[0].companyType) {
+              case "Sales":
+                // this.$router.push("/bsIndex");
+                location.href = "https://www.toysbear.com/new/#/bsIndex";
+                break;
+              default:
+                this.$router.push("/me");
+                // location.href = "http://139.9.71.135:8080/#/me";
+                break;
+            }
           } else {
             this.$message.error(re.data.result.msg);
             this.$store.commit("removeLoginItems");
