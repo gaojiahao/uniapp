@@ -57,7 +57,7 @@
               <p class="qrTitle"><i class="icon"></i>二维码登录</p>
               <div id="qrcode"></div>
               <p class="qrInfo">请用小竹熊App扫一扫登录</p>
-              <div class="refresh" v-show="showQrCode">
+              <div class="refresh">
                 <div class="refreshIcon" @click="getQrCodeUrl">
                   <i class="iconfont icon-refresh"></i>
                 </div>
@@ -370,6 +370,9 @@
       })
       }
     }
+    $(".refresh").click(function () {
+      initWsAndQrcode();
+    })
     $(".toHome").click(function () {
       window.location.href = '../erpHome/erpHome.html';
     })
