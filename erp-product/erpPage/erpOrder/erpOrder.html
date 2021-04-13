@@ -132,6 +132,8 @@
           <p>小竹熊APP</p>
         </div>
       </div>
+      <!-- 隐藏的输入框 -->
+      <input id="SampleOrder" value="" placeholder="隐藏域" type="hidden"></input>
       <!-- 分页 -->
       <div class="page">
         <ul class="pagination"></ul>
@@ -161,11 +163,17 @@
     sortOrder: 1,
     sortType: 2
   }
+  var currentSelectTableValue = {
+    number: "",
+    orderType: "",
+    token: userToken
+  };
   var orderList = [];
   $(document).ready(function () {
     var token = window.localStorage.getItem("token")
     if (token) {
       userToken = token
+      currentSelectTableValue.token = token;
       getSampleOrderERPPage()
       console.log("存在");
     } else {
@@ -228,7 +236,7 @@
           list[i].hall_naValue = list[i].hall_na
       }
 
-      html += " <tr>" + "<td>" + "</td>" + "<td>" + list[i].hall_naValue + "</td>" + " <td > " + list[i].orderTypeValue + "</td > " +
+      html += " <tr>" + "<td> <input  type='radio' onclick='handleSelectionChange(" + i + ")' name='radio' value=''></td>" + "<td>" + list[i].hall_naValue + "</td>" + " <td > " + list[i].orderTypeValue + "</td > " +
         "<td>" + list[i].toCompanyName + "</td>" + "<td>" + list[i].the_nu + "</td>" +
         "<td>" + list[i].orderCount + "</td>" + "<td>" + list[i].number + "</td>" +
         "<td>" + list[i].remark + "</td>" + "<td>" + list[i].happenDate + "</td>" +
@@ -249,23 +257,17 @@
     getSampleOrderERPPage()
 
   }
+  // 单选按钮
+  function handleSelectionChange(index) {
+    selectFormValue = {
+      orderType: arr[index].orderType,
+      number: arr[index].orderNumber,
+      token: userToken
+    }
+    $("#SampleOrder").val(JSON.stringify(selectFormValue))
+  }
 
-  // function sortChange(column) {
-  //   this.sortOrder = 2;
-  //   switch (column.order) {
-  //     case "descending": // 降序
-  //       this.sortType = 1;
-  //       break;
-  //     case "ascending": // 升序
-  //       this.sortType = 2;
-  //       break;
-  //     default:
-  //       this.sortOrder = null;
-  //       this.sortType = null;
-  //       break;
-  //   }
-  //   this.currentPage = 1;
-  // }
+
   //搜索
   function handelSearch() {
     if ($("#keyword").val()) data.keyword = $("#keyword").val();
@@ -274,8 +276,6 @@
     if ($("#orderType").val()) data.orderType = $("#orderType").val();
     if ($("#startCreatetime").val()) data.startTime = $("#startCreatetime").val();
     if ($("#endCreatetime").val()) data.endTime = $("#endCreatetime").val();
-
-    console.log(data);
     getSampleOrderERPPage()
 
   }
