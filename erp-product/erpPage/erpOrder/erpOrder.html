@@ -62,7 +62,7 @@
         <form action="">
           <ul>
             <li>
-              <p>关键查询：</p> <input id="keyword" type="text" placeholder="输入关键字">
+              <p>关键查询：</p> <input class="searchKey" id="keyword" type="text" placeholder="输入关键字">
             </li>
             <li>
               <p>来源：</p> <select id="orderFrom">
@@ -80,14 +80,14 @@
               </select>
             </li><br>
             <li>
-              <p>订单编号：</p> <input id="orderNumber" type="text">
+              <p>订单编号：</p> <input class="searchKey" id="orderNumber" type="text">
             </li>
             <li>
               <p>时间：</p>
-              <input type="date" id="startCreatetime" max="">-
+              <input type="date" class="searchKey" id="startCreatetime" max="">-
             </li>
             <li>
-              <input type="date" id="endCreatetime" max="">
+              <input type="date" class="searchKey" id="endCreatetime" max="">
             </li>
             <li style="width: 100px;">
               <p class="btnP" onclick="handelSearch()">搜索</p>
@@ -190,7 +190,7 @@
       console.log("存在");
     } else {
       console.log("没有");
-      window.location.href = "../erpHome/erpHome.html"
+      // window.location.href = "../erpHome/erpHome.html"
     }
   })
   //日期设置，不可选择今日之后的日期
@@ -217,26 +217,31 @@
       success: function (res) {
         if (res.result.code === 200) {
           orderList = res.result.item.items;
-          getTable(res.result.item.items);
           $("#totalCountPage").val(res.result.item.totalCount)
-          data.keyword = "";
-          data.orderNumber = "";
-          data.orderFrom = "全部";
-          data.orderType = "全部";
-          data.startTime = "";
-          data.endTime = "";
-          var obj = {};
-          for (const key in data) {
-            if (data[key] != "") {
-              obj[key] = data[key];
-            }
-          }
-          data = obj;
+          getTable(res.result.item.items);
         }
         // console.log(res, "成功的回调");
 
       }
     });
+
+    $("#keyword").val("");
+    $("#orderNumber").val("");
+    $("#orderFrom").val("全部");
+    $("#orderType").val("全部");
+    $("#startCreatetime").val("");
+    $("#endCreatetime").val("");
+    data.keyword = "";
+    data.orderNumber = "";
+    data.orderFrom = "全部";
+    data.orderType = "全部";
+    data.startTime = "";
+    data.endTime = "";
+    delete data.startTime;
+    delete data.endTime;
+    delete data.orderNumber;
+    delete data.keyword
+    console.log(data);
   }
   // 渲染列表数据
   function getTable(list) {
@@ -323,9 +328,9 @@
     $("#SampleOrder").val(JSON.stringify(selectFormValue))
   }
 
-
   //搜索
   function handelSearch() {
+    console.log("进来了");
     if ($("#keyword").val()) data.keyword = $("#keyword").val();
     if ($("#orderNumber").val()) data.orderNumber = $("#orderNumber").val();
     if ($("#orderFrom").val()) data.orderFrom = $("#orderFrom").val();
@@ -392,8 +397,11 @@
       data.skipCount = numberPage;
       getSampleOrderERPPage();
     }
-
-
-
   }
+  //回车搜索事件
+  $('.searchKey').keydown(function (e) {
+    if (e.keyCode == 13) {
+      handelSearch()
+    }
+  });
 </script>
