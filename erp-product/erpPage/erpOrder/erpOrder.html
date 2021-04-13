@@ -191,7 +191,7 @@
 
     } else {
 
-      // window.location.href = "../erpHome/erpHome.html"
+      window.location.href = "../erpHome/erpHome.html"
     }
   })
   //日期设置，不可选择今日之后的日期
@@ -319,8 +319,8 @@
   // 单选按钮
   function handleSelectionChange(index) {
     selectFormValue = {
-      orderType: arr[index].orderType,
-      number: arr[index].orderNumber,
+      orderType: orderList[index].orderType,
+      number: orderList[index].orderNumber,
       token: userToken
     }
     $("#SampleOrder").val(JSON.stringify(selectFormValue))
