@@ -265,6 +265,7 @@
   // 渲染列表
   function getTable(list) {
     var tbodyData = document.getElementById('tbodyData');
+    $("#tbodyData").empty();
     for (var i = 0; i < list.length; i++) {
       var html = ""
       html += " <tr>" + "<td> <img class='imgUrl' src=" + list[i].imgUrl + " alt=''></td>" +
@@ -340,16 +341,15 @@
   // 下一页
   function nextPage() {
     var numberPage = $("#numberPage").val()
-    console.log(numberPage);
     if (orderList.length < data.maxResultCount) {
       return false
     } else {
       numberPage++
       $("#numberPage").val(numberPage)
-
-      console.log($("#totalCountPage").val());
       var totalCount = $("#totalCountPage").val()
-      data.skipCount = numberPage - 1;
+      var num = numberPage--;
+      $("#numberPage").val(num)
+      data.skipCount = num;
       if (numberPage * data.maxResultCount > totalCount) {
         return false
       }
