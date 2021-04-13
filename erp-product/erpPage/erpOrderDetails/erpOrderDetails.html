@@ -61,6 +61,7 @@
         <div class="left">
           <img class="homeLogo" src="../../static/images/logo.png" alt="">
         </div>
+
         <div class="right">
           <div class="addrs" id="fromCompanyNameDataVal">
             <script id="fromCompanyName" type="text/html">
@@ -69,43 +70,50 @@
           </div>
           <div class="sampleDetail">
             <div class="item">
-              <div id="the_nuVal" class="title">本次代号：
-                <script id="the_nu" type="text/html">
-                  <%=the_nu%>
-                     </script>
-
+              <div class="title">本次代号：
+                <div id="the_nuVal">
+                  <script id="the_nu" type="text/html">
+                    <%=the_nu%>
+                       </script>
+                </div>
               </div>
-
             </div>
             <div class="item">
-              <div id="totalCountVal" class="title">择样数量：
-                <script id="totalCount" type="text/html">
-                  <%=totalCount%>
-                     </script>
+              <div class="title">订单编号：
+                <div id="numberVal">
+                  <script id="number" type="text/html">
+                    <%=number%>
+                       </script>
+                </div>
               </div>
-
             </div>
             <div class="item">
-              <div id="numberVal" class="title">择样编号：
-                <script id="number" type="text/html">
-                  <%=number%>
-                     </script>
+              <div class="title">产品款数：
+                <div id="totalCountVal">
+                  <script id="totalCount" type="text/html">
+                    <%=totalCount%>
+                       </script>
+                </div>
               </div>
-
+            </div>
+          </div>
+          <div class="sampleDetail">
+            <div class="item">
+              <div class="title">厂商数量：
+                <div id="supplierCountVal">
+                  <script id="supplierCount" type="text/html">
+                    <%=supplierCount%>
+                       </script>
+                </div>
+              </div>
             </div>
             <div class="item">
-              <div id="happenDateVal" class="title">择样时间：</div>
-              <script id="happenDate" type="text/html">
-                <%=happenDate%>
-                   </script>
-            </div>
-            <div class="item">
-              <div id="supplierCountVal" class="title">厂商数量：
-                <script id="supplierCount" type="text/html">
-                  <%=supplierCount%>
+              <div class="title">日期：</div>
+              <div id="happenDateVal">
+                <script id="happenDate" type="text/html">
+                  <%=happenDate%>
                      </script>
               </div>
-
             </div>
             <div class="item">
               <div class="title">是否导入：</div>
@@ -230,28 +238,66 @@
     sampleNumber: orderNumber,
     orderType: orderType
   }
+  switch (the_nu) {
+    case "":
+    case null:
+    case undefined:
+    case "null":
+    case "undefined":
+      the_nu = " "
+      break;
+    default:
+      var the_nutHTML = template(document.getElementById('the_nu').innerHTML, {
+        the_nu: the_nu
+      });
+      document.getElementById("the_nuVal").innerHTML = the_nutHTML;
+  }
 
-  var the_nutHTML = template(document.getElementById('the_nu').innerHTML, {
-    the_nu: the_nu
-  });
-  document.getElementById("the_nuVal").innerHTML = the_nutHTML;
+  switch (number) {
+    case "":
+    case null:
+    case undefined:
+    case "null":
+    case "undefined":
+      number = " "
+      break;
+    default:
+      var numberHTML = template(document.getElementById('number').innerHTML, {
+        number: number
+      });
+      document.getElementById("numberVal").innerHTML = numberHTML;
+  }
+  switch (supplierCount) {
+    case "":
+    case null:
+    case undefined:
+    case "null":
+    case "undefined":
+      supplierCount = " "
+      break;
+    default:
+      var supplierCountHTML = template(document.getElementById('supplierCount').innerHTML, {
+        supplierCount: supplierCount
+      });
+      document.getElementById("supplierCountVal").innerHTML = supplierCountHTML;
+  }
 
-  var numberHTML = template(document.getElementById('number').innerHTML, {
-    number: number
-  });
-  document.getElementById("numberVal").innerHTML = numberHTML;
+  switch (happenDate) {
+    case "":
+    case null:
+    case undefined:
+    case "null":
+    case "undefined":
+      happenDate = " "
+      break;
+    default:
+      var happenDateHTML = template(document.getElementById('happenDate').innerHTML, {
+        happenDate: happenDate
+      });
+      document.getElementById("happenDateVal").innerHTML = happenDateHTML;
+  }
 
 
-  var supplierCountHTML = template(document.getElementById('supplierCount').innerHTML, {
-    supplierCount: supplierCount
-  });
-  document.getElementById("supplierCountVal").innerHTML = supplierCountHTML;
-
-
-  var happenDateHTML = template(document.getElementById('happenDate').innerHTML, {
-    happenDate: happenDate
-  });
-  document.getElementById("happenDateVal").innerHTML = happenDateHTML;
   // 选中数据
   var selectFormValue = {
     orderType: "",
