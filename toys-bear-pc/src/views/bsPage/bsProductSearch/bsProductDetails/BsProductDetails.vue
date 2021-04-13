@@ -580,6 +580,10 @@ export default {
       .imgItem {
         width: 100%;
         text-align: center;
+        img {
+          width: 100%;
+          object-fit: contain;
+        }
       }
     }
   }
