@@ -24,7 +24,6 @@ const config = {
       BMap: "BMap",
       vue: "Vue",
       vuex: "Vuex",
-      "vue-router": "VueRouter",
       ElementUI: "ELEMENT",
       axios: "axios",
       jquery: "$"
