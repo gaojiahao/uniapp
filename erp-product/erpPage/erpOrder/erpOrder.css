@@ -246,39 +246,78 @@
     padding: 20px 0;
     margin: 0 auto;
 }
-.pageBox ul{
-    width: 500px;
-    height: 45px;
-    margin: 0 auto;
+    .pageBox ul{
+        width: 500px;
+        height: 45px;
+        margin: 0 auto;
+    }
+    .pageBox ul li{
+        margin: 5px 8px;
+        padding: 0 10px;
+        height: 30px;
+        line-height: 30px;
+        float: left;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        text-align: center;
+        cursor: pointer;
+    }
+    #numberPage{
+        width: 30px;
+        border: 0;
+        height: 28px;
+        line-height: 8px;
+        text-align: center;
+        background-color: #F5F5F5;
+        padding: 0;
+        margin: 0;
+    }
+    #totalCountPage{
+        width: 30px;
+        border: 0;
+        height: 28px;
+        line-height: 8px;
+        text-align: center;
+        background-color: #F5F5F5;
+        padding: 0;
+        margin: 0;
+    }
+    
+.thDete{
+    text-align: left;
+	width: 120px;
 }
-.pageBox ul li{
-    margin: 5px 8px;
-    padding: 0 10px;
-    height: 30px;
-    line-height: 30px;
+.thTxt{
+    height: 55px;
+	margin: 0 10px 0 20px;
+    line-height: 55px;
     float: left;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    text-align: center;
+}
+.triangle{
+    float: left;
+    width: 20px;
+    padding-top: 20px;
+}
+.topS{
+    margin: 3px 0;
+    width:0px; 
+    height:0px; 
+    border-left:5px solid transparent;  
+    border-right:5px solid transparent; 
+    border-bottom:5px solid #c0c4cc;;  
+    font-size:0px; 
     cursor: pointer;
+    line-height:0px;
+    
 }
-#numberPage{
-    width: 30px;
-    border: 0;
-    height: 28px;
-    line-height: 8px;
-    text-align: center;
-    background-color: #F5F5F5;
-    padding: 0;
-    margin: 0;
-}
-#totalCountPage{
-    width: 30px;
-    border: 0;
-    height: 28px;
-    line-height: 8px;
-    text-align: center;
-    background-color: #F5F5F5;
-    padding: 0;
-    margin: 0;
+.btoS{
+    margin: 3px 0;
+    width:0px; 
+    height:0px; 
+    border-left:5px solid transparent; 
+    border-right:5px solid transparent; 
+    border-top:5px solid #c0c4cc;; 
+    font-size:0px; 
+    line-height:0px; 
+    cursor: pointer;
 }
