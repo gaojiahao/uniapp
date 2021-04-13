@@ -2,7 +2,6 @@
   width: 100%;
   background-color: #F5F5F5;
   height: 100%;
-  /* position: relative; */
 }
 #loginFrom .header {
   height: 90px;
@@ -75,7 +74,7 @@
   cursor: pointer;
 }
 .header .toplauot .right .toHome .homeText{
-  color: #2D60B3;
+  color: #999999;
 }
 .header .toplauot .right .shouyeBox .sampleText{
   color: #999999;
@@ -87,7 +86,7 @@
   width: 21px;
   height: 21px;
   margin-right: 10px;
-  background: url('../../static/image/activeHomeIcon.png') no-repeat center;
+  background: url('../../static/images/erpHomeIcon.png') no-repeat center;
 }
 .header .toplauot .right .shouyeBox .mySampleIcon{
   display: inline-block;
@@ -95,7 +94,7 @@
   width: 21px;
   height: 21px;
   margin-right: 10px;
-  background: url('../../static/image/mySampleIcon.png') no-repeat center;
+  background: url('../../static/images/mySampleIcon.png') no-repeat center;
 }
 .header .toplauot .right .signOutBox {
   display: flex;
@@ -135,8 +134,36 @@
     margin-left: -600px;
     margin-top: -220px;
     border-radius: 5px;
-    overflow: hidden;
+    /* overflow: hidden; */
   }
+  .loginWrap .erweimaBox{
+    position: absolute;
+    right: -130px;
+    bottom: 0;
+    pointer-events: auto;
+    cursor: pointer;
+    width: 114px;
+    height: 152px;
+    background-color: #fff;
+    border: 1px solid #e9e9e9;
+    border-radius: 5px;
+  }
+  .loginWrap .erweimaBox .qr .qrImg{
+    width: 102px;
+    height: 93px;
+    margin: 10px;
+    box-sizing: border-box;
+    padding-bottom: 0;
+}
+  .loginWrap .erweimaBox .qr .qrImg img{
+    width: 92px;
+    height: 92px;
+}
+  .loginWrap .erweimaBox .qr p{
+    color: #333;
+    text-align: center;
+    line-height: 17px;
+}
   .loginWrap .loginBox {
     width: 100%;
     height: 100%;
@@ -147,7 +174,7 @@
   .loginWrap .loginBox .left {
     width: 330px;
     height: 100%;
-    background: url("../../static/image/erpLogoImg.png") no-repeat 50%;
+    background: url("/static/images/erpLogoImg.png") no-repeat 50%;
     background-size: 100% 100%;
   }
   .loginWrap .loginBox .left .yijian {
@@ -170,6 +197,38 @@
     top: 50%;
     margin-top: -135px;
     border-right: 1px solid #e9e9e9;
+  }
+  .loginWrap .loginBox .middle .qrcodeBox .refresh {
+    width: 198px;
+    height: 198px;
+    position: absolute;
+    display: none;
+    left: 50%;
+    top: 50%;
+    margin-top: -98px;
+    margin-left: -98px;
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+  .loginWrap .loginBox .middle .qrcodeBox .refresh .refreshIcon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    cursor: pointer;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background-color: #fff;
+    margin-top: -40px;
+    margin-left: -40px;
+    font-size: 50px;
+  }
+  .loginWrap .loginBox .middle .qrcodeBox .refresh .refreshIcon i {
+    font-size: 40px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -20px;
+    margin-left: -20px;
   }
   .loginWrap .loginBox .middle .qrcodeBox .qrTitle {
     color: #333;
@@ -245,7 +304,8 @@
   }
   .loginWrap .loginBox .right .loginFormBox .phoneBox {
     position: absolute;
-    /* width: 100%; */
+    width: 350px;
+    box-sizing: border-box;
     margin-top: 50px;
     margin-left: 80px;
   }
@@ -264,7 +324,7 @@
     left: 10px;
     top: 12px;
     position: absolute;
-    background: url("../../static/image/shouji.png") no-repeat center;
+    background: url("../../static/images/shouji.png") no-repeat center;
     background-size: contain;
   }
   .loginWrap .loginBox .right .loginFormBox .phoneBox .title {
@@ -284,7 +344,8 @@
   }
   .loginWrap .loginBox .right .loginFormBox .codeBox {
     position: absolute;
-    /* width: 100%; */
+    width: 350px;
+    box-sizing: border-box;
     margin-top: 140px;
     margin-left: 80px;
   }
@@ -309,17 +370,30 @@
     left: 10px;
     top: 12px;
     position: absolute;
-    background: url("../../static/image/suotou.png") no-repeat center;
+    background: url("../../static/images/suotou.png") no-repeat center;
     background-size: contain;
   }
   .loginWrap .loginBox .right .loginFormBox .codeBox .inputWrap .codeInput {
     height: 44px;
     line-height: 44px;
-    width: 290px;
+    width: 150px;
     padding-left: 40px;
     box-sizing: border-box;
     border: none;
     outline-style: none;
+  }
+  .loginWrap .loginBox .right .loginFormBox .codeBox .getCode {
+    height: 44px;
+    line-height: 44px;
+    width: 130px;
+    position: absolute;
+    border: 1px solid #84aef2;
+    background-color: #84aef2;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+    right: 0;
   }
   .loginWrap .loginBox .right .loginFormBox .submitBtn {
     position: absolute;

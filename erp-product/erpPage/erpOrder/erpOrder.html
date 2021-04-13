@@ -1,18 +1,414 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=7">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>小竹熊云科技</title>
-  <script src="../../static/jquery.min.js"></script>
-  <script src="../../static/js/template-web.js"></script>
+  <script src="../../static/js/template.js"></script>
+  <script src="../../static/js/jquery-1.8.3.min.js"></script>
+  <script src="../../static/js/json2.js"></script>
+  <link rel="stylesheet" href="../../static/css/base.css">
+  <link href="./erpOrder.css" rel="stylesheet" type="text/css" />
+
 </head>
+
 <body>
-  <div id="myTable"></div>
+  <div class="erpOrderBox">
+    <!-- 头部 -->
+    <div class="toplauotBox">
+      <div class="toplauot">
+        <div class="left">
+          <img src="../../static/images/logo.png" alt="">
+          <div class="titleBox">
+            <div class="chTitle">
+              小竹熊订单同步管理
+            </div>
+            <br>
+            <div class="enTitle">
+              Shenzhen Little Bamboo Bear Technology co.,Ltd.
+            </div>
+          </div>
+        </div>
+        <div class="right">
+          <div class="shouyeBox ">
+            <div class=" userImg">
+              <img class="homeIcon" src="../../static/images/erpHomeIcon.png" alt="">
+            </div>
+            <span class="homeText" onclick="toHome()">首页</span>
+          </div>
+          <div class="shouyeBox ">
+            <div class=" userImg">
+              <img class="homeIcon" src="../../static/images/activeSampleIcon.png" alt="">
+            </div>
+            <span class="sampleText">
+              我的订单
+            </span>
+          </div>
+          <!-- <div class="loginBtn" @click="toLogins">登录系统</div> -->
+          <div class="shouyeBox ">
+            <div class="userImg">
+              <img class="homeLogo" src="../../static/images/logo.png" alt="">
+            </div>
+            <span class="signOut" onclick="signOut()">退出</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="myTable">
+      <!-- 条件搜索区 -->
+      <div class="searchBox">
+        <form action="">
+          <ul>
+            <li>
+              <p>关键查询：</p> <input class="searchKey" id="keyword" type="text" placeholder="输入关键字">
+            </li>
+            <li>
+              <p>来源：</p> <select id="orderFrom">
+                <option value="全部">全部</option>
+                <option value="Hall">展厅</option>
+                <option value="LittleBear">小竹熊</option>
+              </select>
+            </li>
+            <li>
+              <p>订单类型：</p> <select id="orderType">
+                <option value="全部">全部</option>
+                <option value="Sample">择样</option>
+                <option value="CompanySample">找样</option>
+                <option value="ShareOrder">客户订单</option>
+              </select>
+            </li><br>
+            <li>
+              <p>订单编号：</p> <input class="searchKey" id="orderNumber" type="text">
+            </li>
+            <li>
+              <p>时间：</p>
+              <input type="date" class="searchKey" id="startCreatetime" max="">-
+            </li>
+            <li>
+              <input type="date" class="searchKey" id="endCreatetime" max="">
+            </li>
+            <li style="width: 100px;">
+              <p class="btnP" onclick="handelSearch()">搜索</p>
+
+            </li>
+          </ul>
+        </form>
+      </div>
+      <!-- table表格区 -->
+      <div class="tableBox">
+        <table id="example" class="display" style="width:100%">
+          <thead>
+            <tr>
+              <th class="text-center">选择</th>
+              <th class="text-center">订单来源</th>
+              <th class="text-center">订单类型</th>
+              <th class="text-center">客户</th>
+              <th class="text-center">本次代号</th>
+              <th class="text-center">订单数量</th>
+              <th class="text-center">订单编号</th>
+              <th class="text-center">订单备注</th>
+              <th class="text-center thDete">
+                <div class="thTxt"> 订单时间</div>
+                <div class="triangle">
+                  <p onclick="topDete()" class="topS"></p>
+                  <p onclick="bottomDete()" class="btoS"></p>
+                </div>
+
+              </th>
+              <th class="text-center">订单明细</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyData">
+          </tbody>
+        </table>
+        <!-- 二维码下载 -->
+        <div class="qr">
+          <div class="qrImg">
+            <img src="../../static/images/ErWeiMa.png" alt="">
+          </div>
+          <p>扫码下载</p>
+          <p>小竹熊APP</p>
+        </div>
+      </div>
+      <!-- 隐藏的输入框 -->
+      <input id="SampleOrder" value="" placeholder="隐藏域" type="hidden"></input>
+      <!-- 分页 -->
+      <div class="pageBox">
+        <ul>
+          <li style="border: 0;"> 共</li>
+          <li style="border: 0;">
+            <input id="totalCountPage" type="text" value="0">
+          </li>
+          <li style="border: 0;"> 条</li>
+          <li onclick="previousPage()">
+            上一页
+          </li>
+          <li style="margin: 5px 10px;">
+            <input id="numberPage" type="text" value="1">
+          </li>
+          <li onclick="nextPage()">
+            下一页
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
 </body>
+
 </html>
+
+
 <script>
-  $(function () {
+
+
+  var url = "http://139.9.71.135:8096"
+  // var userToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJMaXR0bGVCZWFyIiwianRpIjoiNjUwY2NhNTMtYzk5YS00M2M5LWJiMWEtNTcyZGQzNDY5YTRjIiwiaWF0IjoxNjE4MjIwODU3LCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMTc2MDMwMzM0NTgiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zeXN0ZW0iOiJQQyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6ImU2Yzg5ODllLTUyMGEtNGEyOS05Y2Y1LTAwZDAyNmVmZDBhMiIsIm5iZiI6MTYxODIyMDg1NywiZXhwIjoxNjE4MzA3MjU3LCJpc3MiOiJMaXR0bGVCZWFyIiwiYXVkIjoiTGl0dGxlQmVhciJ9.PpBz-nmKoqz5ZVlRY9x2H8nA1Nm7iQy8h26CB9NfSGs"
+  var userToken;
+  //初始化
+  var data = {
+    orderFrom: "全部",
+    orderType: "全部",
+    skipCount: 1,
+    maxResultCount: 10,
+    sortOrder: 1,
+    sortType: 2
+  }
+  var currentSelectTableValue = {
+    number: "",
+    orderType: "",
+    token: userToken
+  };
+  var orderList = [];
+  $(document).ready(function () {
+    var token = window.localStorage.getItem("token")
+    if (token) {
+      userToken = token
+      currentSelectTableValue.token = token;
+      getSampleOrderERPPage()
+
+    } else {
+
+      window.location.href = "../erpHome/erpHome.html"
+    }
   })
-  </script>
+  //日期设置，不可选择今日之后的日期
+  $(function () {
+    var now = new Date();
+    var year = now.getFullYear();
+    var month = now.getMonth() + 1 < 10 ? "0" + (now.getMonth() + 1)
+      : (now.getMonth() + 1);
+    var day = now.getDate() < 10 ? "0" + now.getDate() : now.getDate();
+    $("#startCreatetime").attr("max", year + "-" + month + "-" + day);
+    $("#endCreatetime").attr("max", year + "-" + month + "-" + day);
+  })
+
+  // 请求列表
+  function getSampleOrderERPPage() {
+    $.ajax({
+      type: "post",
+      url: url + "/api/SampleOrderERPPage",
+      data: JSON.stringify(data),
+      headers: {
+        Utoken: userToken//此处放置请求到的用户token
+      },
+      contentType: "application/json; charset=utf-8",
+      success: function (res) {
+        if (res.result.code === 200) {
+          orderList = res.result.item.items;
+          $("#totalCountPage").val(res.result.item.totalCount)
+          getTable(res.result.item.items);
+        }
+
+      }
+    });
+    $("#keyword").val("");
+    $("#orderNumber").val("");
+    // $("#orderFrom").val("");
+    // $("#orderType").val("");
+    $("#startCreatetime").val("");
+    $("#endCreatetime").val("");
+    data.keyword = "";
+    data.orderNumber = "";
+    data.orderFrom = "全部";
+    data.orderType = "全部";
+    data.startTime = "";
+    data.endTime = "";
+    delete data.startTime;
+    delete data.endTime;
+    delete data.orderNumber;
+    delete data.keyword
+  }
+  // 渲染列表数据
+  function getTable(list) {
+    var tbodyData = document.getElementById('tbodyData');
+    $("#tbodyData").empty();
+    for (var i = 0; i < list.length; i++) {
+      var html = ""
+      switch (list[i].orderType) {
+        case "Sample":
+          list[i].orderTypeValue = "择样"
+          break;
+        case "CompanySample":
+          list[i].orderTypeValue = "找样"
+          break;
+        case "ShareOrder":
+          list[i].orderTypeValue = "客户订单"
+          break;
+        default:
+          list[i].orderTypeValue = "--"
+          break;
+      }
+      switch (list[i].hall_na) {
+        case "":
+        case null:
+        case undefined:
+        case "null":
+        case "undefined":
+          list[i].hall_naValue = "--"
+          break;
+        default:
+          list[i].hall_naValue = list[i].hall_na
+      }
+      switch (list[i].the_nu) {
+        case "":
+        case null:
+        case undefined:
+        case "null":
+        case "undefined":
+          list[i].the_nuValue = "--"
+          break;
+        default:
+          list[i].the_nuValue = list[i].the_nu
+      }
+      switch (list[i].remark) {
+        case "":
+        case null:
+        case undefined:
+        case "null":
+        case "undefined":
+          list[i].remarkValue = "--"
+          break;
+        default:
+          list[i].remarkValue = list[i].remark
+      }
+
+      html += " <tr>" + "<td> <input  type='radio' onclick='handleSelectionChange(" + i + ")' name='radio' value=''></td>" + "<td>" + list[i].hall_naValue + "</td>" + " <td > " + list[i].orderTypeValue + "</td > " +
+        "<td>" + list[i].toCompanyName + "</td>" + "<td>" + list[i].the_nuValue + "</td>" +
+        "<td>" + list[i].orderCount + "</td>" + "<td>" + list[i].number + "</td>" +
+        "<td>" + list[i].remarkValue + "</td>" + "<td>" + list[i].happenDate + "</td>" +
+        "<td><span onclick='handeldetails(" + i + ") '>点击查看</span></td></tr>"
+      $("#tbodyData").append(html);
+    }
+  }
+
+  // 时间排序
+  function topDete() {
+    data.sortOrder = 2
+    data.skipCount = 1;
+    getSampleOrderERPPage()
+  }
+  function bottomDete() {
+    data.sortType = 1
+    data.skipCount = 1;
+    getSampleOrderERPPage()
+
+  }
+  // 单选按钮
+  function handleSelectionChange(index) {
+    selectFormValue = {
+      orderType: orderList[index].orderType,
+      number: orderList[index].orderNumber,
+      token: userToken
+    }
+    $("#SampleOrder").val(JSON.stringify(selectFormValue))
+  }
+
+  //搜索
+  function handelSearch() {
+    if ($("#keyword").val()) data.keyword = $("#keyword").val();
+    if ($("#orderNumber").val()) data.orderNumber = $("#orderNumber").val();
+    if ($("#orderFrom").val()) data.orderFrom = $("#orderFrom").val();
+    if ($("#orderType").val()) data.orderType = $("#orderType").val();
+    if ($("#startCreatetime").val()) data.startTime = $("#startCreatetime").val();
+    if ($("#endCreatetime").val()) data.endTime = $("#endCreatetime").val();
+    data.skipCount = 1;
+    $("#numberPage").val(1);
+    getSampleOrderERPPage()
+
+  }
+  //退出
+  function signOut() {
+    window.localStorage.clear()
+    window.location.href = "../erpLogin/erpLogin.html"
+  }
+  // 去首页
+  function toHome() {
+    window.location.href = "../erpHome/erpHome.html"
+  }
+  //点击跳转
+  function handeldetails(index) {
+    for (var i = 0; i < orderList.length; i++) {
+      if (index === i) {
+        var orderNumber = orderList[i].orderNumber
+        var orderType = orderList[i].orderType
+        var the_nu = orderList[i].the_nu
+        var number = orderList[i].number
+        var supplierCount = orderList[i].supplierCount
+        var happenDate = orderList[i].happenDate
+
+        window.localStorage.setItem("orderNumber", orderNumber);
+        window.localStorage.setItem("orderType", orderType);
+        window.localStorage.setItem("the_nu", the_nu);
+        window.localStorage.setItem("number", number);
+        window.localStorage.setItem("supplierCount", supplierCount);
+        window.localStorage.setItem("happenDate", happenDate);
+        window.location.href = "../erpOrderDetails/erpOrderDetails.html"
+      }
+    }
+  }
+  // 上一页
+  function previousPage() {
+    var numberPage = $("#numberPage").val()
+    numberPage--
+    if (numberPage < 1) {
+      alert("已经是第一页了");
+      $("#numberPage").val(1);
+    } else {
+      $("#numberPage").val(numberPage)
+      data.skipCount = numberPage;
+      getSampleOrderERPPage();
+    }
+  }
+  // 下一页
+  function nextPage() {
+    var numberPage = $("#numberPage").val()
+
+    if (orderList.length < data.maxResultCount) {
+      return false
+    } else {
+      numberPage++
+      $("#numberPage").val(numberPage)
+      var totalCount = $("#totalCountPage").val()
+      // var num = numberPage--;
+      // $("#numberPage").val(num)
+      // data.skipCount = num;
+
+      if (numberPage * data.maxResultCount > totalCount) {
+        numberPage--;
+        $("#numberPage").val(numberPage)
+        return false
+      }
+      data.skipCount = numberPage;
+      getSampleOrderERPPage();
+    }
+  }
+  //回车搜索事件
+  $('.searchKey').keydown(function (e) {
+    if (e.keyCode == 13) {
+      handelSearch()
+    }
+  });
+</script>

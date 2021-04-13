@@ -29,6 +29,7 @@
 .header .toplauot .left .leftImg {
   width: 76px;
   height: 76px;
+  border-radius: 50%;
   object-fit: contain;
 }
 .header .toplauot .left .titleBox {
@@ -74,7 +75,7 @@
   cursor: pointer;
 }
 .header .toplauot .right .toHome .homeText{
-  color: #2D60B3;
+  color: #999999;
 }
 .header .toplauot .right .shouyeBox .sampleText{
   color: #999999;
@@ -86,7 +87,7 @@
   width: 21px;
   height: 21px;
   margin-right: 10px;
-  background: url('../../static/image/activeHomeIcon.png') no-repeat center;
+  background: url('../../static/images/erpHomeIcon.png') no-repeat center;
 }
 .header .toplauot .right .shouyeBox .mySampleIcon{
   display: inline-block;
@@ -94,7 +95,7 @@
   width: 21px;
   height: 21px;
   margin-right: 10px;
-  background: url('../../static/image/mySampleIcon.png') no-repeat center;
+  background: url('../../static/images/mySampleIcon.png') no-repeat center;
 }
 .header .toplauot .right .signOutBox {
   display: flex;
@@ -126,7 +127,6 @@
 #erpLoginConfirm .userInfoWrap {
   width: 1200px;
   height: 532px;
-  background-color: #fff;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -153,9 +153,29 @@
   float: left;
   margin-right: 22px;
   margin-bottom: 22px;
+  position: relative;
 }
-#erpLoginConfirm .userInfoWrap .block {
-  width: 0;
-  height: 0;
-
+#erpLoginConfirm .userInfoWrap .userIten .leftImg {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  left: 16px;
+  top: 16px;
+  border-radius: 30px;
+}
+#erpLoginConfirm .userInfoWrap .userIten .leftImg img {
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+}
+#erpLoginConfirm .userInfoWrap .userIten .rightContent {
+  position: absolute;
+  left: 90px;
+  top: 13px;
+  width: 100px;
+  height: 60px;
+  
+}
+#erpLoginConfirm .userInfoWrap .userIten p {
+  margin-top: 15px;
 }
