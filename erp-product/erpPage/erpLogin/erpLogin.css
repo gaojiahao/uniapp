@@ -134,8 +134,36 @@
     margin-left: -600px;
     margin-top: -220px;
     border-radius: 5px;
-    overflow: hidden;
+    /* overflow: hidden; */
   }
+  .loginWrap .erweimaBox{
+    position: absolute;
+    right: -130px;
+    bottom: 0;
+    pointer-events: auto;
+    cursor: pointer;
+    width: 114px;
+    height: 152px;
+    background-color: #fff;
+    border: 1px solid #e9e9e9;
+    border-radius: 5px;
+  }
+  .loginWrap .erweimaBox .qr .qrImg{
+    width: 102px;
+    height: 93px;
+    margin: 10px;
+    box-sizing: border-box;
+    padding-bottom: 0;
+}
+  .loginWrap .erweimaBox .qr .qrImg img{
+    width: 92px;
+    height: 92px;
+}
+  .loginWrap .erweimaBox .qr p{
+    color: #333;
+    text-align: center;
+    line-height: 17px;
+}
   .loginWrap .loginBox {
     width: 100%;
     height: 100%;
@@ -169,6 +197,37 @@
     top: 50%;
     margin-top: -135px;
     border-right: 1px solid #e9e9e9;
+  }
+  .loginWrap .loginBox .middle .qrcodeBox .refresh {
+    width: 198px;
+    height: 198px;
+    position: absolute;
+    display: none;
+    left: 50%;
+    top: 50%;
+    margin-top: -98px;
+    margin-left: -98px;
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+  .loginWrap .loginBox .middle .qrcodeBox .refresh .refreshIcon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    cursor: pointer;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -40px;
+    margin-left: -40px;
+    font-size: 50px;
+  }
+  .loginWrap .loginBox .middle .qrcodeBox .refresh .refreshIcon i {
+    font-size: 40px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -20px;
+    margin-left: -20px;
   }
   .loginWrap .loginBox .middle .qrcodeBox .qrTitle {
     color: #333;
