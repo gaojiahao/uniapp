@@ -300,8 +300,7 @@
                 // 初始化ws
                 initWebSocket(data);
               }
-              var TIME_COUNT = 5;
-              // var TIME_COUNT = 300;
+              var TIME_COUNT = 300;
               var count = TIME_COUNT;
               showQrCode = false;
               var qrcodeTitle = "请用小竹熊App扫一扫登录";
@@ -316,7 +315,7 @@
                   clearInterval(qrTimer);
                   qrTimer = null;
                   // 二维码过期
-                  $(".qrInfo").innerHeight = qrcodeTitle;
+                  $(".qrInfo").innerHTML = qrcodeTitle;
                   $(".refresh").css("display", "block")
                 }
               }, 1000);
