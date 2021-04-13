@@ -187,7 +187,13 @@
       success: function (res) {
         if (res.result.code === 200) {
           orderList = res.result.item.items;
-          getTable(res.result.item.items)
+          getTable(res.result.item.items);
+          data.keyword = "";
+          data.orderNumber = "";
+          data.orderFrom = "全部";
+          data.orderType = "全部";
+          data.startTime = "";
+          data.endTime = "";
         }
         console.log(res, "成功的回调");
 
