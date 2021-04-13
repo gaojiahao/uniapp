@@ -268,9 +268,42 @@
     $("#tbodyData").empty();
     for (var i = 0; i < list.length; i++) {
       var html = ""
+      switch (list[i].client_nu) {
+        case "":
+        case null:
+        case undefined:
+        case "null":
+        case "undefined":
+          list[i].client_nuValue = "--"
+          break;
+        default:
+          list[i].client_nuValue = list[i].client_nu
+      }
+      switch (list[i].remark) {
+        case "":
+        case null:
+        case undefined:
+        case "null":
+        case "undefined":
+          list[i].remarkValue = "--"
+          break;
+        default:
+          list[i].remarkValue = list[i].remark
+      }
+      switch (list[i].supplierPhone) {
+        case "":
+        case null:
+        case undefined:
+        case "null":
+        case "undefined":
+          list[i].supplierPhoneValue = "--"
+          break;
+        default:
+          list[i].supplierPhoneValue = list[i].supplierPhone
+      }
       html += " <tr>" + "<td> <img class='imgUrl' src=" + list[i].imgUrl + " alt=''></td>" +
         " <td > " + list[i].pr_na + "</td > " +
-        "<td>" + list[i].client_nu + "</td>" + "<td>" + list[i].fa_no + "</td>" +
+        "<td>" + list[i].client_nuValue + "</td>" + "<td>" + list[i].fa_no + "</td>" +
         "<td>" + list[i].ch_pa + "</td>" + "<td>" + list[i].ou_lo + "</td>" +
         "<td>" + list[i].fa_pr + "</td>" + "<td>" + list[i].ha_in_qu + "</td>" +
         "<td>" + list[i].pr_le + "</td>" + "<td>" + list[i].pr_wi + "</td>" +
@@ -281,8 +314,8 @@
         "<td>" + list[i].ou_hi + "</td>" +
         "<td>" + list[i].bulk_stere + "</td>" + "<td>" + list[i].bulk_feet + "</td>" +
         "<td>" + list[i].gr_we + "</td>" + "<td>" + list[i].ne_we + "</td>" +
-        "<td>" + list[i].remark + "</td>" + "<td>" + list[i].ma_na + "</td>" +
-        "<td>" + list[i].handset + "</td>" + "<td>" + list[i].ma_nu + "</td>" +
+        "<td>" + list[i].remarkValue + "</td>" + "<td>" + list[i].ma_na + "</td>" +
+        "<td>" + list[i].supplierPhoneValue + "</td>" + "<td>" + list[i].ma_nu + "</td>" +
         "</tr>"
       $("#tbodyData").append(html);
 
