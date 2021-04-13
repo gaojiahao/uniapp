@@ -40,7 +40,7 @@
     <el-button type="warning" size="medium" @click="toShoppingCart">
       <i class="whiteCart"></i>
       <span>购物车</span>
-      <span>({{ shoppingList.length }})</span>
+      <span>({{ shoppingList && shoppingList.length }})</span>
     </el-button>
   </div>
 </template>

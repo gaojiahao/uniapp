@@ -3,10 +3,10 @@ import VueRouter from "vue-router";
 import store from "@/store";
 import axios from "axios";
 import { staticRouters, setMenuTree } from "./routers";
-const originalPush = VueRouter.prototype.push;
-VueRouter.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch(err => err);
-};
+// const originalPush = VueRouter.prototype.push;
+// VueRouter.prototype.push = function push(location) {
+//   return originalPush.call(this, location).catch(err => err);
+// };
 Vue.use(VueRouter);
 function getToken() {
   return new Promise((result, reject) => {
@@ -44,7 +44,6 @@ export const router = new VueRouter({
 export async function getMenuFuc() {
   const list = store.state.routers;
   const routers = await setMenuTree(list);
-  console.log(routers, 1233456);
   router.addRoutes(routers);
 }
 // 拦截
