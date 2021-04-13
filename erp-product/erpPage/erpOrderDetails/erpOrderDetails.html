@@ -6,12 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=7">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>小竹熊云科技</title>
-  <script src="../../static/js/jquery-1.8.3.min.js"></script>
-  <script src="../../static/js/template.js"></script>
-
-  <script src="/static/js/json2.js"></script>
+  <link rel="stylesheet" href="https://at.alicdn.com/t/font_1900734_z8ej4ls4eca.css">
   <link rel="stylesheet" href="../../static/css/base.css">
   <link href="./erpOrderDetails.css" rel="stylesheet" type="text/css" />
+  <script src="../../static/js/jquery-1.8.3.min.js"></script>
+  <script src="../../static/js/template.js"></script>
+  <script src="/static/js/json2.js"></script>
 </head>
 
 <body>
@@ -64,8 +64,8 @@
         <div class="right">
           <div class="addrs" id="fromCompanyNameData">
             <script id="fromCompanyName" type="text/html">
-       <%=fromCompanyName%>
-          </script>
+              <%=fromCompanyName%>
+            </script>
           </div>
           <div class="sampleDetail">
             <div class="item">
@@ -109,7 +109,7 @@
             </div>
             <div class="item">
               <div class="title">是否导入：</div>
-              <input class="checkbox" type="checkbox" name="vehicle" value="Bike"> 是
+              <input class="checkbox" type="checkbox" name="vehicle" value="true"> 是
             </div>
             <div class="item fanhui" style="cursor: pointer;" onclick="fanhui()">
               <i class="iconfont icon-fanhui" style="margin-right: 5px;"></i>
@@ -182,12 +182,27 @@
         <ul class="pagination"></ul>
         <input type="hidden" id="currentPage" name="currentPage" value="1"></input>
         <input type="hidden" id="totalPage" value="54"></input>
-
       </div>
     </div>
   </div>
+  <!-- 隐藏的输入框 -->
+  <div id="tpYincang">
+    <el-input
+      id="SampleOrder"
+      placeholder="隐藏域"
+      value="{}"
+      type="hidden"
+    ></el-input>
+  </div>
 </body>
-
+<script id="tpYincangItem" type="text/html">
+  <el-input
+      id="SampleOrder"
+      placeholder="隐藏域"
+      type="hidden"
+      value="<%=selectFormValue%>"
+    ></el-input>
+</script>
 </html>
 <script>
   var url = "http://139.9.71.135:8096"
@@ -202,6 +217,12 @@
     orderType: orderType
   }
 
+  // 选中数据
+  var selectFormValue = {
+    orderType: "",
+    number: "",
+    token: userToken
+  }
 
   $(document).ready(function () {
     // //订单标号
@@ -266,6 +287,30 @@
   function toHome() {
     window.location.href = "../erpHome/erpHome.html"
   }
+  // 选中是否导出事件
+  function changeCheckBox(e) {
+    console.log(e.target.value, 1234);
+  }
+  $('input:checkbox[name="vehicle"]').click(function(){
+    var checkValue = $('input:checkbox[name="vehicle"]:checked').val();
+    if (checkValue) {
+      selectFormValue = {
+        orderType: orderType,
+        number: orderNumber,
+        token: userToken
+      }
+    } else {
+      selectFormValue = {
+        orderType: "",
+        number: "",
+        token: userToken
+      }
+    }
+    var HTML = template(document.getElementById('tpYincangItem').innerHTML, {
+      selectFormValue: JSON.stringify(selectFormValue)
+    });
+    document.getElementById("tpYincang").innerHTML = HTML;
+  });
 
 </script>
 <script type="text/javascript">
