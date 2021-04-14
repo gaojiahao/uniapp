@@ -234,13 +234,20 @@
                 {{ scope.row.number }}
               </template>
             </el-table-column>
-            <el-table-column prop="number" label="订单备注" align="center">
+            <el-table-column
+              prop="number"
+              width="200"
+              label="订单备注"
+              align="center"
+            >
               <template slot-scope="scope">
-                {{
-                  scope.row.remark && scope.row.orderType != "Sample"
-                    ? scope.row.remark
-                    : ""
-                }}
+                <div class="remarkClass">
+                  {{
+                    scope.row.remark && scope.row.orderType != "Sample"
+                      ? scope.row.remark
+                      : ""
+                  }}
+                </div>
               </template>
             </el-table-column>
             <el-table-column

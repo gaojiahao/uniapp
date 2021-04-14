@@ -203,9 +203,16 @@
               {{ scope.row.ne_we }}
             </template>
           </el-table-column>
-          <el-table-column prop="remark" align="center" label="备注">
+          <el-table-column
+            prop="remark"
+            align="center"
+            width="200"
+            label="备注"
+          >
             <template slot-scope="scope">
-              {{ scope.row.remark }}
+              <div class="remarkClass">
+                {{ scope.row.remark }}
+              </div>
             </template>
           </el-table-column>
           <el-table-column prop="ma_na" align="center" label="厂家名称">
@@ -445,5 +452,11 @@ export default {
       }
     }
   }
+}
+.remarkClass {
+  max-width: 200px;
+  overflow: hidden;
+  white-space: nowrap; /*不换行*/
+  text-overflow: ellipsis; /*超出部分文字以...显示*/
 }
 </style>

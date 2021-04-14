@@ -89,8 +89,8 @@ export default {
     return {
       value: null,
       ws: null,
-      // wsBaseUrl: "wss://impush.toysbear.com/ws?UserId=",
-      wsBaseUrl: "ws://139.9.71.135:8090/ws?UserId=",
+      wsBaseUrl: "wss://impush.toysbear.com/ws?UserId=",
+      // wsBaseUrl: "ws://139.9.71.135:8090/ws?UserId=",
       lang: "zh-CN",
       qrTimer: null,
       randomCode: null,
