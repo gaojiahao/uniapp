@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:58:11
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\addSampling.vue
- * @LastEditTime: 2021-04-06 12:04:22
+ * @LastEditTime: 2021-04-14 20:47:23
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -49,7 +49,7 @@ export default {
     },
     methods:{
         save(){
-            this.$emit('save');
+            this.$emit('save',this.formValidate);
         },
     }
 }

@@ -35,10 +35,10 @@ d<!--
               <Input v-model="formValidate['nickName']" :style="{width:'300px',marginLeft: '-50px'}" placeholder="请输入您的昵称"></Input>
             </FormItem>
             <FormItem label="开始时间" prop="startTime">
-              <DatePicker v-model="formValidate['startTime']" @on-change="formValidate['startTime']=$event" format="yyyy-MM-dd HH:mm" type="date" placeholder="选择开始时间" style="width: 300px;margin-left:-50px"></DatePicker> 
+              <DatePicker type="datetime" v-model="formValidate['startTime']" @on-change="formValidate['startTime']=$event" format="yyyy-MM-dd HH:mm" placeholder="选择开始时间" style="width: 300px;margin-left:-50px"></DatePicker> 
             </FormItem>
             <FormItem label="结束时间" prop="endTime">
-              <DatePicker v-model="formValidate['endTime']" @on-change="formValidate['endTime']=$event" format="yyyy-MM-dd HH:mm" type="date" placeholder="选择结束时间" style="width: 300px;margin-left:-50px"></DatePicker> 
+              <DatePicker type="datetime" v-model="formValidate['endTime']" @on-change="formValidate['endTime']=$event" format="yyyy-MM-dd HH:mm" placeholder="选择结束时间" style="width: 300px;margin-left:-50px"></DatePicker> 
             </FormItem>
             <FormItem label="入会人数" prop="mettingNumber">
               <Input v-model="formValidate['mettingNumber']" type="number" :style="{width:'300px',marginLeft: '-27px'}" placeholder="请输入1-8" :maxlength="4"></Input><span style="margin-left:10px;color:#666666">人</span>

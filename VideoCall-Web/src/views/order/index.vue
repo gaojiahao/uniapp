@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 17:59:28
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\order\index.vue
- * @LastEditTime: 2021-04-06 12:11:12
+ * @LastEditTime: 2021-04-14 20:52:34
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -11,11 +11,11 @@
 <template>
     <div class="order">
         <!-- 新增择样 -->
-        <template v-if="!samplingStatus">
+        <template v-if="samplingStatus">
             <AddSampling @save="save"></AddSampling>
         </template>
         <template v-else>
-            <Product :tab_select="tab_select" @chang-tab-type="changTabType" @chang-type="changType" @change-product-list="changeProductList"></Product>
+            <Product :tab_select="tab_select" @chang-tab-type="changTabType" @chang-type="changType" @change-product-list="changeProductList" :sampleSelection="sampleSelection"></Product>
             <!-- 聊天 -->
             <Chart></Chart>
             <!-- 择样购物车 -->
@@ -41,11 +41,14 @@ export default {
             samplingStatus: true,  //采样状态
             tab_select: 'order',
             isProductList:false,
+            sampleSelection:{},
         }
     },
     methods: {
-        save(){
-            this.samplingStatus = true;
+        save(val){
+            debugger
+            this.sampleSelection = val;
+            this.samplingStatus = false;
         },
         changTabType(value){
             this.tab_select = value;

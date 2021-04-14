@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:37:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\product.vue
- * @LastEditTime: 2021-04-08 14:42:49
+ * @LastEditTime: 2021-04-14 20:58:56
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -58,10 +58,10 @@
         <div class="now_product" v-else>
             <Row class="ipput_wrap">
                 <Col span="6"><div class="text">公司编号</div></Col>
-                <Col span="12"><Input v-model="nowProduct" class="iipput_wrap_box" :style="{width:'137px'}" clearable /></Col>
-                <Col span="6"><Button type="primary" @click="saveNow" :style="{width:'60px',marginLeft: '11px'}" >确定</Button></Col>
+                <Col span="12"><Input v-model="companyNumber" class="iipput_wrap_box" :style="{width:'137px'}" clearable /></Col>
+                <Col span="6"><Button type="primary" :style="{width:'60px',marginLeft: '11px'}" @click="getProductInfo">确定</Button></Col>
             </Row>
-            <Row class="product_wrap">
+            <Row class="product_wrap" v-if="this.productInfo.id">
                 <Col span="8">
                     <Poptip trigger='hover' content="content" placement="right" :transfer="true">
                         <img :src="test" style="width:87px;height:65px;margin-left:19px"/>
@@ -69,52 +69,52 @@
                     </Poptip>
                 </Col>
                 <Col span="16">
-                    <div class="product_wrap_text"><span title="益智回力积木军事灰色日本 三式中型坦克（75PCS）sdfdsfdsfdsfsddfd">益智回力积木军事灰色日本 三式中型坦克（75PCS）sdfdsfdsfdsfsddfd</span></div>
-                    <div class="red">￥：299.00</div>
+                    <div class="product_wrap_text"><span :title="productInfo.productName">{{this.productInfo.productName}}</span></div>
+                    <div class="red">￥{{this.productInfo.factoryPrice}}</div>
                 </Col>
             </Row>
-            <Row class="now_item_box">
+            <Row class="now_item_box" v-if="this.productInfo.id">
                 <Col span="24">
                     <div class="now_item">
                         <div class="title">公司编号：</div>
-                        <div class="text">12342132132312321</div>
+                        <div class="text">{{this.productInfo.companyNumber}}</div>
                     </div>
                     <div class="now_item">
                         <div class="title">货号：</div>
-                        <div class="text">YD-12421</div>
+                        <div class="text">{{this.productInfo.factoryNo}}</div>
                     </div>
                     <div class="now_item">
                         <div class="title">包装：</div>
-                        <div class="text"></div>
+                        <div class="text">{{this.productInfo.chinesePack}}</div>
                     </div>
                     <div class="now_item">
-                        <div class="title">包装：</div>
-                        <div class="text"></div>
+                        <div class="title">产品规格：</div>
+                        <div class="text">{{this.productInfo.productLength}}*{{this.productInfo.productWidth}}*{{this.productInfo.productHeight}}</div>（CM）
                     </div>
                     <div class="now_item">
-                        <div class="title">包装：</div>
-                        <div class="text"></div>
+                        <div class="title">外箱规格：</div>
+                        <div class="text">{{this.productInfo.outerBoxLength}}*{{this.productInfo.outerBoxWidth}}*{{this.productInfo.outerBoxHeight}}</div>（CM）
                     </div>
                     <div class="now_item">
-                        <div class="title">包装：</div>
-                        <div class="text"></div>
+                        <div class="title">包装规格：</div>
+                        <div class="text"></div>（CM）
                     </div>
                     <div class="now_item">
-                        <div class="title">包装：</div>
-                        <div class="text"></div>
+                        <div class="title">装箱量：</div>
+                        <div class="text">{{this.productInfo.outerBoxLoadCapa}}</div>（PCS）
                     </div>
                     <div class="now_item">
-                        <div class="title">包装：</div>
-                        <div class="text"></div>
+                        <div class="title">体积/材积：</div>
+                        <div class="text"></div>（CBM）
                     </div>
                     <div class="now_item">
-                        <div class="title">包装：</div>
-                        <div class="text"></div>
+                        <div class="title">毛重/净重：</div>
+                        <div class="text"></div>（kg）
                     </div>
                 </Col>
             </Row>
-            <div class="action">
-                <Button type="primary" shape="circle" style="width:88px;margin:0 9px 0 58.5px;">加入择样</Button>
+            <div class="action" v-if="this.productInfo.id">
+                <Button type="primary" shape="circle" style="width:88px;margin:0 9px 0 58.5px;" @click="addSelection">加入择样</Button>
                 <Button type="warning" shape="circle" style="width:88px;margin:0 58.5px 0 9px;">删除</Button>
             </div>
         </div>
@@ -124,6 +124,10 @@
 </template>
 <script>
 import ModalProductDetail from "@components/order/modalProductDetail";
+import {
+  QueryProductByCompanyNumber,
+  AddSampleOrderDetail
+} from "@service/meetingService";
 
 export default {
     name:'Product',
@@ -135,6 +139,12 @@ export default {
             type: String,
             default: '',
         },
+        sampleSelection:{
+            type:Object,
+            default () {
+                return {}
+            }
+        }
     },
     data(){
         return {
@@ -258,6 +268,8 @@ export default {
             isProductList:false,
             flag:'order',
             showModal:false,
+            companyNumber:'',
+            productInfo:{}
         }
     },
     watch:{
@@ -289,6 +301,44 @@ export default {
             if(value)
                 this.getDetail(id);   
         },
+        getProductInfo(){
+            var params = {
+                CompanyNumber:this.companyNumber
+            };
+            return new Promise((resolve, reject) => {
+                QueryProductByCompanyNumber(params).then(res => {
+                    if (res.success) {
+                        this.productInfo = res.data;
+                    } else {
+                        this.$Message.error({
+                        background: true,
+                        content: res.result.msg
+                        });
+                        this.$FromLoading.hide();
+                    }
+                });
+            });
+        },
+        addSelection(){
+            var params = {
+                code:this.sampleSelection.number,
+                verifyCode:this.sampleSelection.code,
+                id:this.productInfo.id,
+            };
+            return new Promise((resolve, reject) => {
+                AddSampleOrderDetail(params).then(res => {
+                    if (res.success) {
+                        debugger
+                    } else {
+                        this.$Message.error({
+                        background: true,
+                        content: res.result.msg
+                        });
+                        this.$FromLoading.hide();
+                    }
+                });
+            });        
+        }
     }
 }
 </script>

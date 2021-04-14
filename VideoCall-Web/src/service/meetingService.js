@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-13 15:01:44
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\service\meetingService.js
- * @LastEditTime: 2021-04-14 16:43:54
+ * @LastEditTime: 2021-04-14 20:59:47
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -48,7 +48,7 @@ export let QueryMeetingRoomMembers = (data = {}) => {
 //------------------------------------------Product-----------------------------------------//
 //根据公司编号获取产品信息
 export let QueryProductByCompanyNumber = (data = {}) => {
-    return $flyio.get({
+    return $flyio.ajax({
         url: '/api/Product/QueryProductByCompanyNumber',
         data: data
     })
@@ -56,21 +56,21 @@ export let QueryProductByCompanyNumber = (data = {}) => {
 //------------------------------------------SampleOrder-----------------------------------------//
 //根据择样代号和验证码查询择样单详情列表
 export let QuerySampleOrderDetails = (data = {}) => {
-    return $flyio.get({
+    return $flyio.ajax({
         url: '/api/SampleOrder/QuerySampleOrderDetails',
         data: data
     })
 };
 //添加择样单详情
 export let AddSampleOrderDetail = (data = {}) => {
-    return $flyio.get({
+    return $flyio.ajax({
         url: '/api/SampleOrder/AddSampleOrderDetail',
         data: data
     })
 };
 //删除择样单详情
 export let DeleteSampleOrderDetail = (data = {}) => {
-    return $flyio.get({
+    return $flyio.ajax({
         url: '/api/SampleOrder/DeleteSampleOrderDetail',
         data: data
     })
