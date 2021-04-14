@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-11-03 16:35:57
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-07 15:51:12
+ * @LastEditTime: 2021-04-14 11:37:00
 -->
 <template>
     <Modal v-model="show" title="设置" @on-ok="ok" @on-cancel="cancel" width="430" draggable class="setting">
@@ -58,7 +58,36 @@
                         </div>
                     </div>
                 </TabPane>
-                <TabPane label="个人设置" name="name2"></TabPane>
+                <TabPane label="个人设置" name="name2">
+                    <div class="setting_room_wrap">
+                        <div class="item">
+                            <div class="icon">
+                                <Icon type="ios-calendar-outline" />       
+                            </div>
+                            <div class="title">
+                                摄像头
+                            </div>
+                            <div class="text">
+                                <Select v-model="videoDevice" :style="{width:'200px',float: 'left'}" clearable @on-select="onChangeVideoDevice">
+                                    <Option v-for="(item,index) in videoDevices" :value="item.deviceId" :key="index">{{ item.label }}</Option>
+                                </Select>
+                            </div>    
+                        </div>
+                        <div class="item">
+                            <div class="icon">
+                                <Icon type="ios-calendar-outline" />       
+                            </div>
+                            <div class="title">
+                                麦克风
+                            </div>
+                            <div class="text">
+                                <Select v-model="audioDevice" :style="{width:'200px',float: 'left'}" clearable  @on-select="onChangeAudioDevice">
+                                    <Option v-for="(item,index) in audioDevices" :value="item.deviceId" :key="index">{{ item.label }}</Option>
+                                </Select>
+                            </div>    
+                        </div>
+                    </div>
+                </TabPane>
             </Tabs>
         </div>
         <div slot="footer">
@@ -75,6 +104,18 @@ export default {
             type: Boolean,
             default: false,
         },
+        videoDevices: {
+            type: Array,
+            default () {
+                return []
+            }
+        },
+        audioDevices: {
+            type: Array,
+            default () {
+                return []
+            }
+        },
     },
     data() {
         return {
@@ -83,7 +124,9 @@ export default {
                 id:100007,
                 endTime:'',
                 settings:['isM','isC']
-            }
+            },
+            videoDevice:'',
+            audioDevice:''
         }
     },
     watch:{
@@ -100,6 +143,12 @@ export default {
         cancel(){
             this.$emit('show-modal-detail', false);    
         },
+        onChangeVideoDevice(val){
+            this.$emit('change-devices',val.value,'');
+        },
+        onChangeAudioDevice(val){
+            this.$emit('change-devices','',val.value);        
+        }
     },
     mounted() {
 

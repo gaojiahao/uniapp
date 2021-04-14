@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\Home.vue
- * @LastEditTime: 2021-04-13 11:36:54
+ * @LastEditTime: 2021-04-14 11:43:23
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -22,14 +22,14 @@
               </div>
             </Sider>
             <Content>
-              <Video :isCollapsed="isCollapsed" ref='video'></Video>
+              <Video :isCollapsed="isCollapsed" ref='video' @change-devices="changeDevices"></Video>
             </Content>
             <Sider ref="side2" hide-trigger :width="311">
               <Order></Order>
             </Sider>
         </Layout>
         <Footer>
-          <Footers @leave="leave" @endMeeting="endMeeting" @set-volum="setVolum"></Footers>
+          <Footers @leave="leave" @endMeeting="endMeeting" @set-volum="setVolum" @get-devices="getDevices" :videoDevices="videoDevices" :audioDevices="audioDevices" @change-devices="changeDevices"></Footers>
         </Footer>
     </Layout>
   </div>
@@ -54,6 +54,8 @@ export default {
   data() {
     return {
       isCollapsed: false,
+      videoDevices:null,
+      audioDevices:null,
     };
   },
   methods: {
@@ -71,10 +73,19 @@ export default {
     //调整麦克风音量
     setVolum(value){
       this.$refs.video.$refs.video.setVolum(value);   
+    },
+    //获取设备
+    getDevices(){
+      this.videoDevices = this.$refs.video.$refs.video.videoDevices;
+      this.audioDevices = this.$refs.video.$refs.video.audioDevices;
+    },
+    //改变设备
+    changeDevices(videoId,audioId){
+      this.$refs.video.$refs.video.changeDevices(videoId,audioId);
     }
   },
   mounted() {
-    //this.$refs.video.initRMT();
+    
   },
   created() {
 

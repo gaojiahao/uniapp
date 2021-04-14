@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 19:15:58
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\index.vue
- * @LastEditTime: 2021-04-13 11:34:27
+ * @LastEditTime: 2021-04-14 11:43:13
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -68,7 +68,7 @@
                 </div>
             </Col>
         </Row>
-        <Setting @show-modal-detail="showModalDetail" :showModal="showModal"></Setting>
+        <Setting @show-modal-detail="showModalDetail" :showModal="showModal" :videoDevices="videoDevices" :audioDevices="audioDevices" @change-devices="changeDevices"></Setting>
         <EscModal @sure-close="sureClose" @cancel-close="cancelClose" :isShowEsc="isShowEsc"></EscModal>
         <ReconnectionModal @reconnection-close="reconnectionClose" @cancel-reconnection="cancelReconnection" :isShowReconnection="isShowReconnection"></ReconnectionModal>
     </div>
@@ -83,6 +83,20 @@ export default {
         Setting,
         EscModal,
         ReconnectionModal
+    },
+    props:{
+        videoDevices: {
+            type: Array,
+            default () {
+                return []
+            }
+        },
+        audioDevices: {
+            type: Array,
+            default () {
+                return []
+            }
+        },
     },
     data() {
         return {
@@ -121,6 +135,7 @@ export default {
         },
         showModalDetail(value){
             this.showModal = value;
+            this.$emit('get-devices');
         },
         setMic(){
             this.isMic = this.isMic ? false : true;
@@ -150,6 +165,12 @@ export default {
         //调整通话音量
         onInput(value){
             this.$emit('set-volum',value);
+        },
+        getDevices(){
+            this.$emit('getDevices');
+        },
+        changeDevices(videoId,audioId){
+            this.$emit('change-devices',videoId,audioId);
         }
     },
     created() {

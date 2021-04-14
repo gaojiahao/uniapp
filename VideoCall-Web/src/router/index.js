@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 15:27:12
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-13 17:40:30
+ * @LastEditTime: 2021-04-14 09:27:20
  */
 import Vue from "vue";
 import VueRouter from "vue-router";
@@ -18,7 +18,7 @@ const routes = [
     component: resolve=>(require(["@views/Home"],resolve)),
     meta: {
       title: "宏升视频会议",
-      auth: true      //检查权限true
+      // auth: true      //检查权限true
     },
     children:[
     
@@ -39,7 +39,7 @@ const routes = [
     component: resolve=>(require(["@views/meeting/addMeeting"],resolve)),
     meta: {
       title: "进入会议",
-      auth: true
+      // auth: true
     },
   },
   {

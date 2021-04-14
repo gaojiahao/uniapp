@@ -19,7 +19,9 @@ export default {
       localAudioTrack:null,
       localVideoTrack:null,
       token:null,
-      userId:null
+      userId:null,
+      audioDevices:[],
+      videoDevices:[],
     };
   },
 
@@ -30,7 +32,8 @@ export default {
     "channel",
     "baseMode",
     "appId",
-    "uid"
+    "uid",
+    "videoId"
   ],
 
   methods: {
@@ -59,7 +62,7 @@ export default {
         $.client.join($.appId, $.channel, $.token || null,$.uid),
         AgoraRTC.createMicrophoneAudioTrack(),
         AgoraRTC.createCameraVideoTrack(
-          {encoderConfig: "120_1",}   //只有谷歌支持最低的，别的浏览器最低480p
+          {encoderConfig: "120_1",cameraId:$.videoId}   //只有谷歌支持最低的，别的浏览器最低480p
         )
       ]);
       //主持人的大画面
@@ -146,25 +149,58 @@ export default {
     testDevices(){
       AgoraRTC.getDevices()
         .then(devices => {
-          const audioDevices = devices.filter(function(device){
-              return device.kind === "audioinput";
-          });
-          const videoDevices = devices.filter(function(device){
-              return device.kind === "videoinput";
-          });
-
-          var selectedMicrophoneId = audioDevices[0].deviceId;
-          var selectedCameraId = videoDevices[0].deviceId;
-          return Promise.all([
-            AgoraRTC.createCameraVideoTrack({ cameraId: selectedCameraId }),
-            AgoraRTC.createMicrophoneAudioTrack({ microphoneId: selectedMicrophoneId }),
-          ]);}).then(res=>{
-            res[0].play('ag-canvas');
-            setInterval(() => {
-              const level = res[1].getVolumeLevel();
-              console.log("本地音频级别：", level);
-            }, 1000);
+          debugger
+          for(var i in devices){
+            if(devices[i]['kind']=='audioinput'){
+              this.audioDevices.push({
+                deviceId:devices[i]['deviceId'],
+                groupId:devices[i]['groupId'],
+                kind:devices[i]['kind'],
+                label:devices[i]['label'],
+              });
+            }
+            if(devices[i]['kind']=='videoinput'){
+              this.videoDevices.push({
+                deviceId:devices[i]['deviceId'],
+                groupId:devices[i]['groupId'],
+                kind:devices[i]['kind'],
+                label:devices[i]['label'],
+              });
+            }
+          }
+          // var selectedMicrophoneId = this.audioDevices[0].deviceId;
+          // var selectedCameraId = this.videoDevices[0].deviceId;
+          // return Promise.all([
+          //   AgoraRTC.createCameraVideoTrack({ cameraId: selectedCameraId }),
+          //   AgoraRTC.createMicrophoneAudioTrack({ microphoneId: selectedMicrophoneId }),
+          // ]);}).then(res=>{
+          //   res[0].play('ag-canvas');
+          //   setInterval(() => {
+          //     const level = res[1].getVolumeLevel();
+          //     console.log("本地音频级别：", level);
+          //   }, 1000);
         });
+    },
+    getDevices(){
+
+    },
+    //切换设备
+    changeDevices(videoId,audioId){
+      debugger
+      if(videoId){
+        this.localVideoTrack.setDevice(videoId).then(() => {
+          console.log("set device success");
+        }).catch(e => {
+          console.log("set device error", e);
+        });
+      }
+      if(audioId){
+        this.localAudioTrack.setDevice(videoId).then(() => {
+          console.log("set device success");
+        }).catch(e => {
+          console.log("set device error", e);
+        });
+      }
     },
     //调整麦克风音量
     setVolum(value){

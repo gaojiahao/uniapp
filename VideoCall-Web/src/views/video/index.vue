@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 16:54:22
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\video\index.vue
- * @LastEditTime: 2021-04-13 09:37:40
+ * @LastEditTime: 2021-04-14 14:10:49
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -22,6 +22,7 @@
                 :attendeeMode="attendeeMode"
                 :baseMode="baseMode"
                 :appId="appId"
+                :videoId="videoId"
                 :uid="uid" ref="video"></AgoraVideoCall>
             <!-- <template v-if="isSelect&&videoList.length==2">
                 <div class="video_wrap">
@@ -110,6 +111,7 @@ export default {
             attendeeMode: Cookies.get("attendeeMode") || "video",
             baseMode: Cookies.get("baseMode") || "avc",
             uid: Cookies.get("uid") || null,
+            videoId: Cookies.get("videoId") || null,
         };
     },
     methods: {

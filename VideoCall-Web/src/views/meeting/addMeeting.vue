@@ -34,8 +34,13 @@ d<!--
             <FormItem label="公司名称" prop="company">
               <Input v-model="formValidate['company']" :style="{width:'300px',marginLeft: '-47px'}" placeholder="请输入公司名称"></Input>
             </FormItem>
-            <FormItem label="昵称" prop="name">
-              <Input v-model="formValidate['name']" :style="{width:'300px',marginLeft: '-47px'}" placeholder="请输入您的昵称"></Input>
+            <FormItem label="昵称" prop="nickName">
+              <Input v-model="formValidate['nickName']" :style="{width:'300px',marginLeft: '-47px'}" placeholder="请输入您的昵称"></Input>
+            </FormItem>
+            <FormItem label="摄像头" prop="videoId">
+              <Select v-model="formValidate['videoId']" :style="{width:'300px',marginLeft: '-47px'}" clearable @on-select="onChangeVideoDevice">
+                <Option v-for="(item,index) in videoDevices" :value="item.deviceId" :key="index">{{ item.label }}</Option>
+             </Select>
             </FormItem>
             <FormItem prop="settings">
               <CheckboxGroup v-model="formValidate.settings" :style="{marginLeft: '-150px'}">
@@ -55,7 +60,10 @@ d<!--
 </template>
 
 <script>
+import RMT from "@/assets/js/signalROptions/signalROptions";
+import * as Cookies from "js-cookie";
 import LoginFooter from "@components/footer/loginFooter";
+
 
 export default {
   name: "addMeeting",
@@ -67,21 +75,52 @@ export default {
       logUrl: require("@assets/default/logo.png"),
       titleUrl: require("@assets/images/title_s.webp"),
       formValidate:{
-        id:'111111111111111',
+        channel:'10009',
         company:'',
-        name:'',
-        settings:['isM','isC']
+        nickName:'',
+        settings:['isM','isC'],
+        videoId:'',
       },
+      channel: "10001",
+      baseMode: "avc",
+      transcode: "interop",
+      attendeeMode: "video",
+      videoProfile: "120_3",  //省流量测试
       ruleValidate:{
 
-      }
+      },
+      videoDevices:[]
     };
   },
   methods: {
     save(){
+      Cookies.set("channel", this.formValidate.channel);
+      Cookies.set("baseMode", this.baseMode);
+      Cookies.set("transcode", this.transcode);
+      Cookies.set("attendeeMode", this.attendeeMode);
+      Cookies.set("videoProfile", this.videoProfile);
+      Cookies.set("uid", this.formValidate.nickName);
+      Cookies.set("videoId", this.formValidate.videoId);
       this.$router.push('/');
-    }  
+    },
+    onChangeVideoDevice(){
+
+    },
+    async initRMT() {
+      this.rtc = new RMT({ groupNumber:null, token:null, uid:null });
+      this.videoDevices = this.rtc
+        .getDevices()
+        .then(res => {
+          this.videoDevices = res.videoDevices;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   },
+  created(){
+    this.initRMT();
+  }
 };
 </script>
 
@@ -156,7 +195,7 @@ export default {
       .login_box {
           // border-radius: 10px;
           width: 450px;
-          height: 369px;
+          height: 470px;
           background: rgba(255,255,255,0.6);
           box-shadow:  0 1px 6px rgb(0 0 0 / 20%);
           text-align: center;

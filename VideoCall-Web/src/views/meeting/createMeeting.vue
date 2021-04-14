@@ -107,28 +107,28 @@ export default {
   },
   methods: {
     save(){
-      var params = {
-        roomNumber:this.formValidate.channel,
-        nickName:this.formValidate.nickName,
-        startTime:this.formValidate.startTime,
-        endTime:this.formValidate.endTime,
-        count:this.formValidate.mettingNumber
-      };
+      // var params = {
+      //   roomNumber:this.formValidate.channel,
+      //   nickName:this.formValidate.nickName,
+      //   startTime:this.formValidate.startTime,
+      //   endTime:this.formValidate.endTime,
+      //   count:this.formValidate.mettingNumber
+      // };
       
-      return new Promise((resolve, reject) => {
-        this.$FromLoading.show();
-        CreateMeetingRoom(params).then(res => {
-          if (res.result.code == 200) {
+      // return new Promise((resolve, reject) => {
+      //   this.$FromLoading.show();
+      //   CreateMeetingRoom(params).then(res => {
+      //     if (res.result.code == 200) {
               
-          } else {
-            this.$Message.error({
-              background: true,
-              content: res.result.msg
-            });
-            this.$FromLoading.hide();
-          }
-        });
-      });
+      //     } else {
+      //       this.$Message.error({
+      //         background: true,
+      //         content: res.result.msg
+      //       });
+      //       this.$FromLoading.hide();
+      //     }
+      //   });
+      // });
       Cookies.set("channel", this.formValidate.channel);
       Cookies.set("baseMode", this.baseMode);
       Cookies.set("transcode", this.transcode);
