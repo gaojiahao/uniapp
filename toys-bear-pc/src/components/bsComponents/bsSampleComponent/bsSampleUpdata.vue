@@ -3,13 +3,10 @@
     <div class="title">
       <div class="left">报价详情</div>
     </div>
-    <bsSampleSearch
-      ref="refSearchData"
-      :searchFormData="searchFormData"
-    ></bsSampleSearch>
+    <bsSampleSearch ref="refSearchData" :searchFormData="item"></bsSampleSearch>
     <div class="bsSampleTable">
       <div class="top">
-        <div class="left">报价商品列表({{ this.offerProductList.length }})</div>
+        <div class="left">报价商品列表({{ offerProductList.length }})</div>
         <div class="right">
           <el-button @click="handleSelect" class="el-icon-plus" type="primary">
             选择报价商品</el-button
@@ -18,7 +15,7 @@
       </div>
       <div class="tableBox">
         <el-table
-          :data="this.offerProductList"
+          :data="offerProductList"
           style="width: 100%"
           ref="collecTable"
           :header-cell-style="{ backgroundColor: '#f9fafc' }"
@@ -178,8 +175,7 @@
               <el-button
                 size="mini"
                 type="warning"
-                @click.stop="handleDelete(scope.row)"
-                slot="reference"
+                @click="handleDelete(scope.row)"
                 >删除</el-button
               >
             </template>
@@ -191,17 +187,17 @@
         <div class="right">
           <p class="item">
             <span class="itemTitle">总款数：</span>
-            <span>{{ this.offerProductList.length }}</span>
+            <span>{{ offerProductList.length }}</span>
           </p>
           <p class="item">
             <span class="itemTitle">总箱数：</span>
-            <span>{{ myTotalQuantity(this.offerProductList) }}</span>
+            <span>{{ myTotalQuantity(offerProductList) }}</span>
           </p>
           <p class="item">
             <span class="itemTitle">总体积/总材积：</span>
             <span
-              >{{ myTotalVolume(this.offerProductList).outerBoxStere }}/{{
-                myTotalVolume(this.offerProductList).outerBoxFeet
+              >{{ myTotalVolume(offerProductList).outerBoxStere }}/{{
+                myTotalVolume(offerProductList).outerBoxFeet
               }}</span
             >
           </p>
@@ -211,9 +207,7 @@
           </p>
           <p class="item">
             <span class="itemTitle">总金额：</span>
-            <span class="price"
-              >￥{{ myTotalPrice(this.offerProductList) }}</span
-            >
+            <span class="price">￥{{ myTotalPrice(offerProductList) }}</span>
           </p>
           <el-button
             type="primary"
@@ -259,19 +253,16 @@ export default {
   },
   data() {
     return {
-      searchFormData: {},
       tableData: [],
       totalCount: 0,
       pageSize: 12,
       currentPage: 1
     };
   },
-  created() {
-    this.searchFormData = this.item;
+  created() {},
+  mounted() {
     this.getProductOfferDetailPage();
   },
-
-  mounted() {},
   methods: {
     // 去厂商
     toFactory(item) {
@@ -345,7 +336,7 @@ export default {
           msg: "提交成功",
           type: "success"
         });
-        this.$store.commit("updataOfferProductList");
+        this.$store.commit("initOfferProductList");
         const url = "编辑" + this.item.offerNumber;
         this.$store.commit("closeTab", url);
 
@@ -380,7 +371,7 @@ export default {
               msg: "删除成功",
               type: "success"
             });
-            this.$store.commit("popOfferProductList", row);
+            // this.$store.commit("popOfferProductList", row);
             this.getProductOfferDetailPage();
           } else {
             this.$common.handlerMsgState({

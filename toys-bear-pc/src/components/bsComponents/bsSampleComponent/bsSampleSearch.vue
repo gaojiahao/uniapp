@@ -366,6 +366,7 @@ export default {
   methods: {
     //请求条件
     async getProductOfferByNumber() {
+      console.log(this.searchFormData);
       const res = await this.$http.post("/api/GetProductOfferByNumber", {
         offerNumber: this.searchFormData.offerNumber
       });
