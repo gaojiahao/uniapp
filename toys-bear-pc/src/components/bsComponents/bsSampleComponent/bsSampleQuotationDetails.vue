@@ -406,17 +406,37 @@ export default {
     },
     // 获取列表
     async getProductOfferDetailPage() {
-      const fd = Object.assign(
-        { skipCount: 1, maxResultCount: 9999 },
-        this.item
-      );
+      console.log(this.item);
+      if (this.item.offerNumber.indexOf("S") < 0) {
+        const fd = Object.assign(
+          { skipCount: 1, maxResultCount: 9999 },
+          this.item
+        );
 
-      const res = await this.$http.post("/api/ProductOfferDetailPage", fd);
-      if (res.data.result.code === 200) {
-        this.totalCount = res.data.result.item.totalCount;
-        this.tableData = res.data.result.item.items;
+        const res = await this.$http.post("/api/ProductOfferDetailPage", fd);
+        if (res.data.result.code === 200) {
+          this.totalCount = res.data.result.item.totalCount;
+          this.tableData = res.data.result.item.items;
+        } else {
+          this.$message.error(res.data.result.msg);
+        }
       } else {
-        this.$message.error(res.data.result.msg);
+        const fd_s = {
+          skipCount: 1,
+          maxResultCount: 9999,
+          sampleNumber: this.item.offerNumber
+        };
+
+        const res = await this.$http.post(
+          "/api/CompanySamplelistByNumber",
+          fd_s
+        );
+        if (res.data.result.code === 200) {
+          this.totalCount = res.data.result.item.totalCount;
+          this.tableData = res.data.result.item.items;
+        } else {
+          this.$message.error(res.data.result.msg);
+        }
       }
     },
     // 导出找样
