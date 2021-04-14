@@ -380,15 +380,17 @@ export default {
     },
     // 获取该订单报价公式详情
     async getProductOfferNumber() {
-      const fd = {
-        OfferNumber: this.item.offerNumber
-      };
-      const res = await this.$http.post("/api/GetProductOfferByNumber", fd);
-      if (res.data.result.code === 200) {
-        this.handerTabData.push(res.data.result.item);
-        this.itemList = res.data.result.item;
-      } else {
-        this.$message.error(res.data.result.msg);
+      if (this.item.offerNumber.indexOf("S") < 0) {
+        const fd = {
+          OfferNumber: this.item.offerNumber
+        };
+        const res = await this.$http.post("/api/GetProductOfferByNumber", fd);
+        if (res.data.result.code === 200) {
+          this.handerTabData.push(res.data.result.item);
+          this.itemList = res.data.result.item;
+        } else {
+          this.$message.error(res.data.result.msg);
+        }
       }
     },
     // 点击产品名字跳转
