@@ -16,11 +16,17 @@ switch (env) {
 }
 console.log(target);
 const config = {
+  productionSourceMap: false,
   publicPath: "/new/",
   lintOnSave: true, // 是否在开发环境下每次保存代码时都启用 eslint验证
   configureWebpack: {
     externals: {
-      BMap: "BMap"
+      BMap: "BMap",
+      vue: "Vue",
+      vuex: "Vuex",
+      ElementUI: "ELEMENT",
+      axios: "axios",
+      jquery: "$"
     }
   }
 };

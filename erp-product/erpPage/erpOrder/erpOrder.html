@@ -110,7 +110,7 @@
               <th class="text-center">订单编号</th>
               <th class="text-center">订单备注</th>
               <th class="text-center thDete">
-                <div class="thTxt"> 订单时间</div>
+                <div class="thTxt"> 日期</div>
                 <div class="triangle">
                   <p onclick="topDete()" class="topS"></p>
                   <p onclick="bottomDete()" class="btoS"></p>
@@ -232,8 +232,8 @@
     $("#endCreatetime").val("");
     data.keyword = "";
     data.orderNumber = "";
-    data.orderFrom = "全部";
-    data.orderType = "全部";
+    // data.orderFrom = "全部";
+    // data.orderType = "全部";
     data.startTime = "";
     data.endTime = "";
     delete data.startTime;
@@ -304,7 +304,7 @@
     }
   }
 
-  // 时间排序
+  // 排序
   function topDete() {
     data.sortOrder = 2
     data.skipCount = 1;
@@ -358,12 +358,14 @@
         var number = orderList[i].number
         var supplierCount = orderList[i].supplierCount
         var happenDate = orderList[i].happenDate
+        var orderCount = orderList[i].orderCount
 
         window.localStorage.setItem("orderNumber", orderNumber);
         window.localStorage.setItem("orderType", orderType);
         window.localStorage.setItem("the_nu", the_nu);
         window.localStorage.setItem("number", number);
         window.localStorage.setItem("supplierCount", supplierCount);
+        window.localStorage.setItem("orderCount", orderCount);
         window.localStorage.setItem("happenDate", happenDate);
         window.location.href = "../erpOrderDetails/erpOrderDetails.html"
       }
@@ -392,15 +394,15 @@
       numberPage++
       $("#numberPage").val(numberPage)
       var totalCount = $("#totalCountPage").val()
-      // var num = numberPage--;
-      // $("#numberPage").val(num)
-      // data.skipCount = num;
-
       if (numberPage * data.maxResultCount > totalCount) {
-        numberPage--;
-        $("#numberPage").val(numberPage)
-        return false
+
+        if (numberPage >= Math.ceil(totalCount / data.maxResultCount) + 1) {
+          numberPage--;
+          $("#numberPage").val(numberPage)
+          return false
+        }
       }
+
       data.skipCount = numberPage;
       getSampleOrderERPPage();
     }

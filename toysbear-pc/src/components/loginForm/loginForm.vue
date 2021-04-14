@@ -189,6 +189,7 @@ export default {
       const res = await this.$http.post("/api/UserConfirm", {
         RandomCode: this.randomCode
       });
+      console.log(res);
       if (res.data.result.isLogin) {
         this.ws && this.ws.close();
         clearInterval(this.qrTimer);
@@ -198,7 +199,6 @@ export default {
           "setComparnyId",
           res.data.result.commparnyList[0].commparnyId
         );
-        await this.waitTime(1);
         // 二维码登录成功获取菜单
         try {
           const re = await this.$http.post("/api/GetUserRoleMenu", {});
@@ -224,7 +224,17 @@ export default {
             );
             Json.PlatForm = await this.getClientTypeList("PlatForm");
             this.$store.commit("globalJson/setGlobalJson", Json);
-            this.$router.push("/me");
+            console.log(res.data.result);
+            switch (res.data.result.commparnyList[0].companyType) {
+              case "Sales":
+                // this.$router.push("/bsIndex");
+                location.href = "https://www.toysbear.com/new/#/bsIndex";
+                break;
+              default:
+                this.$router.push("/me");
+                // location.href = "http://139.9.71.135:8080/#/me";
+                break;
+            }
           } else {
             this.$message.error(re.data.result.msg);
             this.$store.commit("removeLoginItems");

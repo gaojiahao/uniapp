@@ -5,7 +5,7 @@ import store from "./store";
 import myAxios from "@/request/http";
 import "@/styles/base.less";
 import ElementUI from "element-ui";
-import "element-ui/lib/theme-chalk/index.css";
+// import "element-ui/lib/theme-chalk/index.css";
 import "@/assets/css/theme/index.css";
 import { getMenuFuc } from "@/router/index";
 import ExTableColumn from "ex-table-column";

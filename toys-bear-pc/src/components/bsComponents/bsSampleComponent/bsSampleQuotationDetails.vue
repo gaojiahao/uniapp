@@ -46,13 +46,13 @@
           border
           lazy
         >
-          <el-table-column
+          <!-- <el-table-column
             align="center"
             prop="offerMethod"
             label="报价方式"
             width="180"
           >
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column align="center" prop="profit" label="利润率">
           </el-table-column>
           <el-table-column

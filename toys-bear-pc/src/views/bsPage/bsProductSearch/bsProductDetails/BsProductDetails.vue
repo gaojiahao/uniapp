@@ -75,6 +75,13 @@
                 >
               </div>
               <div class="itemText">
+                装箱量：
+                <span
+                  >{{ productDetail.bearProduct.in_en }} /
+                  {{ productDetail.bearProduct.ou_lo }} (pcs)</span
+                >
+              </div>
+              <div class="itemText">
                 毛重/净重：
                 <span
                   >{{ productDetail.bearProduct.gr_we }} /
@@ -82,10 +89,6 @@
                 >
               </div>
             </div>
-            <!-- <div class="itemText">
-              内盒/装量：
-              <span>{{ item.in_en }} / {{ item.ou_lo }} (pcs)</span>
-            </div> -->
           </div>
         </div>
         <div class="myCartBox">
@@ -110,7 +113,7 @@
             </span>
             <span class="stock">
               库存：
-              <span>0</span>
+              <span>--</span>
             </span>
           </p>
           <p>
@@ -282,7 +285,7 @@ export default {
       });
       if (res.data.result.code === 200) {
         this.productDetail = res.data.result.item;
-        console.log(this.productDetail);
+        console.log(this.productDetail, "产品详情");
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -580,6 +583,10 @@ export default {
       .imgItem {
         width: 100%;
         text-align: center;
+        img {
+          width: 100%;
+          object-fit: contain;
+        }
       }
     }
   }
