@@ -142,8 +142,8 @@
                 <th rowspan="2" class="text-center thDete ">
                   <div class="thTxt"> 价钱</div>
                   <div class="triangle">
-                    <p onclick="topDete()" class="topS"></p>
-                    <p onclick="bottomDete()" class="btoS"></p>
+                    <p onclick="sortDete(1)" class="topS"></p>
+                    <p onclick="sortDete(2)" class="btoS"></p>
                   </div>
                 </th>
                 <th colspan="3" class="text-center thWidth">产品规格
@@ -388,7 +388,7 @@
       html += " <tr>" + "<td> <img class='imgUrl' src=" + list[i].imgUrl + " alt=''></td>" +
         " <td > " + list[i].pr_na + "</td > " +
         "<td>" + list[i].client_nuValue + "</td>" + "<td>" + list[i].fa_no + "</td>" +
-        "<td>" + list[i].ch_pa + "</td>" + "<td>" + list[i].ou_lo + "</td>" +
+        "<td>" + list[i].ch_pa + "</td>" + "<td>" + list[i].in_en + "/" + list[i].ou_lo + "</td > " +
         "<td>" + list[i].fa_pr + "</td>" + "<td>" + list[i].ha_in_qu + "</td>" +
         "<td>" + list[i].pr_le + "</td>" + "<td>" + list[i].pr_wi + "</td>" +
         "<td>" + list[i].pr_hi + "</td>" +
@@ -405,17 +405,24 @@
 
     }
   }
-  // 排序
-  function topDete() {
-    data.sortOrder = 2
+  // 排序  升序
+  function sortDete(num) {
+    data.sortOrder = 1;
+    switch (num) {
+      case num = 2: // 降序
+        data.sortType = 1;
+        break;
+      case num = 1: // 升序
+        data.sortType = 2;
+        break;
+      default:
+        data.sortOrder = null;
+        data.sortType = null;
+        break;
+    }
+    console.log(num);
     data.skipCount = 1;
     getSampleOrderDetailPageThree()
-  }
-  function bottomDete() {
-    data.sortType = 1
-    data.skipCount = 1;
-    getSampleOrderDetailPageThree()
-
   }
   //退出
   function signOut() {
