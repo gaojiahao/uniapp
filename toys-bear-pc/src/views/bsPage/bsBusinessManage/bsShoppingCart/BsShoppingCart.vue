@@ -181,23 +181,24 @@
           >
             全选
           </el-checkbox>
-          <el-popconfirm
+          <!-- <el-popconfirm
             class="deleteBtn"
             title="确定要删除选中的产品吗？"
             @confirm="removeMyShoppingCart"
+          > -->
+          <el-button
+            slot="reference"
+            type="primary"
+            :disabled="
+              $refs.myTableRef && $refs.myTableRef.selection.length < 1
+            "
+            style="margin-left: 20px;"
+            size="small"
+            @click.stop="removeMyShoppingCart"
+            plain
+            >删除</el-button
           >
-            <el-button
-              slot="reference"
-              type="primary"
-              :disabled="
-                $refs.myTableRef && $refs.myTableRef.selection.length < 1
-              "
-              style="margin-left: 20px;"
-              size="small"
-              plain
-              >删除</el-button
-            >
-          </el-popconfirm>
+          <!-- </el-popconfirm> -->
         </div>
         <div class="right">
           <p class="item">
@@ -885,23 +886,36 @@ export default {
     },
     // 删除购物车
     removeMyShoppingCart() {
-      const selectProducts = this.$refs.myTableRef.selection;
-      for (let i = 0; i < selectProducts.length; i++) {
-        for (let j = 0; j < this.tableData.length; j++) {
-          if (
-            selectProducts[i].productNumber === this.tableData[j].productNumber
-          ) {
-            this.tableData.splice(j, 1);
+      this.$confirm("确定要删除选中的产品吗？", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消"
+      })
+        .then(async () => {
+          const selectProducts = this.$refs.myTableRef.selection;
+          for (let i = 0; i < selectProducts.length; i++) {
+            for (let j = 0; j < this.tableData.length; j++) {
+              if (
+                selectProducts[i].productNumber ===
+                this.tableData[j].productNumber
+              ) {
+                this.tableData.splice(j, 1);
+              }
+            }
           }
-        }
-      }
-      this.$common.handlerMsgState({
-        msg: "删除成功",
-        type: "success"
-      });
-      console.log(this.tableData);
-      eventBus.$emit("resetMyCart", this.tableData);
-      this.$store.commit("resetShoppingCart", selectProducts);
+          this.$common.handlerMsgState({
+            msg: "删除成功",
+            type: "success"
+          });
+          console.log(this.tableData);
+          eventBus.$emit("resetMyCart", this.tableData);
+          this.$store.commit("resetShoppingCart", selectProducts);
+        })
+        .catch(() => {
+          this.$common.handlerMsgState({
+            msg: "已取消删除",
+            type: "warning"
+          });
+        });
     },
     // 修改购物车数量
     changeInputNumber(e, val) {
