@@ -137,8 +137,8 @@ export default {
           }
           switch (item.companyType) {
             case "Sales":
-              // this.$router.push("/bsIndex");
-              location.href = "https://www.toysbear.com/new/#/bsIndex";
+              // location.href = "https://www.toysbear.com/new/#/bsIndex";
+              location.href = "http://139.9.71.135:8080/new/#/bsIndex";
               break;
             default:
               this.$router.push("/me");
