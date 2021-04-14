@@ -442,11 +442,13 @@
       // var num = numberPage--;
       // $("#numberPage").val(num)
       // data.skipCount = num;
-
       if (numberPage * data.maxResultCount > totalCount) {
-        numberPage--;
-        $("#numberPage").val(numberPage)
-        return false
+        var num = Math.ceil(totalCount / data.maxResultCount) + 1
+        if (numberPage = num) {
+          numberPage--;
+          $("#numberPage").val(numberPage)
+          return false
+        }
       }
       data.skipCount = numberPage;
       getSampleOrderDetailPageThree();

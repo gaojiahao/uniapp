@@ -232,8 +232,8 @@
     $("#endCreatetime").val("");
     data.keyword = "";
     data.orderNumber = "";
-    data.orderFrom = "全部";
-    data.orderType = "全部";
+    // data.orderFrom = "全部";
+    // data.orderType = "全部";
     data.startTime = "";
     data.endTime = "";
     delete data.startTime;
@@ -392,15 +392,14 @@
       numberPage++
       $("#numberPage").val(numberPage)
       var totalCount = $("#totalCountPage").val()
-      // var num = numberPage--;
-      // $("#numberPage").val(num)
-      // data.skipCount = num;
-
       if (numberPage * data.maxResultCount > totalCount) {
-        numberPage--;
-        $("#numberPage").val(numberPage)
-        return false
+        if (numberPage >= Math.ceil(totalCount / data.maxResultCount) + 1) {
+          numberPage--;
+          $("#numberPage").val(numberPage)
+          return false
+        }
       }
+
       data.skipCount = numberPage;
       getSampleOrderERPPage();
     }
