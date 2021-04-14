@@ -298,16 +298,16 @@
         default:
           list[i].remarkValue = list[i].remark
       }
-      switch (list[i].remark) {
+      switch (list[i].happenDate) {
         case "":
         case null:
         case undefined:
         case "null":
         case "undefined":
-          list[i].remarkValue = "  "
+          list[i].happenDateValue = "  "
           break;
         default:
-          list[i].remarkValue = list[i].remark
+          list[i].happenDateValue = list[i].happenDate.replace(/[T].*/, "")
       }
       switch (list[i].toCompanyName) {
         case "":
@@ -315,11 +315,12 @@
         case undefined:
         case "null":
         case "undefined":
-          list[i].toCompanyName = "  "
+          list[i].toCompanyNameValue = "  "
           break;
         default:
           list[i].toCompanyNameValue = list[i].toCompanyName;
       }
+
       html += " <tr>" + "<td> <input  type='radio' onclick='handleSelectionChange(" + i + ")' name='radio' value=''></td>" + "<td>" + list[i].hall_naValue + "</td>" + " <td > " + list[i].orderTypeValue + "</td > " +
         "<td>" + list[i].toCompanyNameValue + "</td>" + "<td>" + list[i].the_nuValue + "</td>" +
         "<td>" + list[i].orderCount + "</td>" + "<td>" + list[i].number + "</td>" +
