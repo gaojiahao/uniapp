@@ -217,7 +217,7 @@
 
 </html>
 <script>
-  var url = "http://139.9.71.135:8096"
+  var url = "https://www.toysbear.com"
   var orderNumber = window.localStorage.getItem("orderNumber")
   var userToken = window.localStorage.getItem("token")
   var orderType = window.localStorage.getItem("orderType")
@@ -228,7 +228,7 @@
   var happenDateSting = window.localStorage.getItem("happenDate")
   var happenDate = happenDateSting.replace(/[T].*/, "");
   var orderCount = window.localStorage.getItem("orderCount")
-  //初始化
+  // 初始化
   var data = {
     skipCount: 1,
     maxResultCount: 10,
@@ -398,7 +398,7 @@
         "<td>" + list[i].ou_hi + "</td>" +
         "<td>" + list[i].bulk_stere + "</td>" + "<td>" + list[i].bulk_feet + "</td>" +
         "<td>" + list[i].gr_we + "</td>" + "<td>" + list[i].ne_we + "</td>" +
-        "<td  class='remarkCla'>" + list[i].remarkValue + "</td>" + "<td>" + list[i].ma_na + "</td>" +
+        "<td>" + list[i].remarkValue + "</td>" + "<td>" + list[i].ma_na + "</td>" +
         "<td>" + list[i].supplierPhoneValue + "</td>" + "<td>" + list[i].ma_nu + "</td>" +
         "</tr>"
       $("#tbodyData").append(html);
@@ -426,14 +426,14 @@
   //退出
   function signOut() {
     window.localStorage.clear()
-    window.location.href = "../erpLogin/erpLogin.html"
+    window.location.href = "https://www.toysbear.com/erpProduct/erpPage/erpLogin/erpLogin.html"
   }
   // 返回
   function fanhui() {
-    window.location.href = "../erpOrder/erpOrder.html"
+    window.location.href = "https://www.toysbear.com/erpProduct/erpPage/erpOrder/erpOrder.html"
   }
   function toHome() {
-    window.location.href = "../erpHome/erpHome.html"
+    window.location.href = "https://www.toysbear.com/erpProduct/erpPage/erpHome/erpHome.html"
   }
   // 选中是否导出事件
   function changeCheckBox(e) {
