@@ -89,9 +89,9 @@
             </div>
             <div class="item">
               <div class="title">产品款数：
-                <span id="totalCountVal">
-                  <script id="totalCount" type="text/html">
-                    <%=totalCount%>
+                <span id="orderCountVal">
+                  <script id="orderCount" type="text/html">
+                    <%=orderCount%>
                        </script>
                 </span>
               </div>
@@ -223,6 +223,7 @@
   var number = window.localStorage.getItem("number")
   var supplierCount = window.localStorage.getItem("supplierCount")
   var happenDate = window.localStorage.getItem("happenDate")
+  var orderCount = window.localStorage.getItem("orderCount")
   //初始化
   var data = {
     skipCount: 1,
@@ -258,6 +259,20 @@
         number: number
       });
       document.getElementById("numberVal").innerHTML = numberHTML;
+  }
+  switch (orderCount) {
+    case "":
+    case null:
+    case undefined:
+    case "null":
+    case "undefined":
+      orderCount = " "
+      break;
+    default:
+      var orderCountHTML = template(document.getElementById('orderCount').innerHTML, {
+        orderCount: orderCount
+      });
+      document.getElementById("orderCountVal").innerHTML = orderCountHTML;
   }
   switch (supplierCount) {
     case "":
@@ -385,6 +400,18 @@
 
     }
   }
+  // 排序
+  function topDete() {
+    data.sortOrder = 2
+    data.skipCount = 1;
+    getSampleOrderDetailPageThree()
+  }
+  function bottomDete() {
+    data.sortType = 1
+    data.skipCount = 1;
+    getSampleOrderDetailPageThree()
+
+  }
   //退出
   function signOut() {
     window.localStorage.clear()
@@ -443,8 +470,7 @@
       // $("#numberPage").val(num)
       // data.skipCount = num;
       if (numberPage * data.maxResultCount > totalCount) {
-        var num = Math.ceil(totalCount / data.maxResultCount) + 1
-        if (numberPage = num) {
+        if (numberPage >= Math.ceil(totalCount / data.maxResultCount) + 1) {
           numberPage--;
           $("#numberPage").val(numberPage)
           return false
