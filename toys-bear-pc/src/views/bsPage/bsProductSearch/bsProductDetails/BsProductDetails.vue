@@ -166,7 +166,7 @@
           </p>
           <p class="item">
             摊位号：
-            <span>{{ productDetail.bearProduct.fa_no }}</span>
+            <span>{{ productDetail.bearProduct.booth_nu_pro }}</span>
           </p>
         </div>
       </div>
