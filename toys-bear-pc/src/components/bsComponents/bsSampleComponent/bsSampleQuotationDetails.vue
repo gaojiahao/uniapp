@@ -406,6 +406,10 @@ export default {
     },
     // 获取列表
     async getProductOfferDetailPage() {
+      console.log(this.item);
+      if (this.item.offerNumber.indexOf("S") >= 0) {
+      } else {
+      }
       const fd = Object.assign(
         { skipCount: 1, maxResultCount: 9999 },
         this.item

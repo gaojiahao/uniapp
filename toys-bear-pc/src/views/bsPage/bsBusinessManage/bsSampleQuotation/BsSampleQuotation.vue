@@ -160,6 +160,7 @@
           >
             <template slot-scope="scope">
               <el-button
+                v-show="scope.row.offerNumber.indexOf('S') >= 0"
                 size="mini"
                 type="success"
                 @click="handleEdit(scope.$index, scope.row)"
@@ -322,11 +323,10 @@ export default {
     },
     tuisong(row) {
       console.log(row.offerNumber);
-      console.log(row.offerNumber.indexOf("s"));
+      console.log(row.offerNumber.indexOf("S") >= 0);
     },
     // 报价详情跳转
     async goDetails(row) {
-      console.log(row);
       const fd = {
         name: "详情" + row.offerNumber,
         linkUrl: "/bsIndex/bsSampleQuotation",

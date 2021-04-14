@@ -225,7 +225,8 @@
   var the_nu = window.localStorage.getItem("the_nu")
   var number = window.localStorage.getItem("number")
   var supplierCount = window.localStorage.getItem("supplierCount")
-  var happenDate = window.localStorage.getItem("happenDate")
+  var happenDateSting = window.localStorage.getItem("happenDate")
+  var happenDate = happenDateSting.replace(/[T].*/, "");
   var orderCount = window.localStorage.getItem("orderCount")
   //初始化
   var data = {
@@ -301,6 +302,7 @@
       happenDate = " "
       break;
     default:
+
       var happenDateHTML = template(document.getElementById('happenDate').innerHTML, {
         happenDate: happenDate
       });
