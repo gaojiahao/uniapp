@@ -4,40 +4,42 @@
     <ul class="customerInfoBox">
       <div class="infoTop">
         <div class="itemBox">
-          <span>择样类型：</span>
+          <span class="itemTitle">择样类型：</span>
           <span class="type"
             ><span>{{ item.hall_na }}：</span
             >{{ item.messageExt | switchMessageExt }}</span
           >
         </div>
         <div class="itemBox">
-          <span>展厅名称：</span>
+          <span class="itemTitle">展厅名称：</span>
           <span class="name">{{ item.hall_na }}</span>
         </div>
         <div class="itemBox">
-          <span>本次代号：</span>
+          <span class="itemTitle">本次代号：</span>
           <span class="orderNumber">{{ item.the_nu }}</span>
         </div>
         <div class="itemBox">
-          <span>状态：</span>
+          <span class="itemTitle">状态：</span>
           <span class="orderNumber" v-if="item.readStatus == 0">未读</span>
           <span class="orderNumber" v-if="item.readStatus == 1">已读</span>
         </div>
       </div>
       <div class="infoBottom">
         <div class="itemBox">
-          <span>择样时间：</span>
+          <span class="itemTitle">择样时间：</span>
           <span class="orderNumber">
             {{ item.happenDate && item.happenDate.replace(/T/, " ") }}
           </span>
         </div>
         <div class="itemBox">
-          <span>择样单号：</span>
+          <span class="itemTitle">择样单号：</span>
           <span class="orderNumber">{{ item.orderNumber }}</span>
         </div>
-        <div class="itemBox remark">
-          <span>备注：</span>
-          <span class="orderNumber">{{ item.pushContent }}</span>
+      </div>
+      <div class="infoBottom">
+        <div class="itemBox remarkItemBox">
+          <span class="itemTitle">备注：</span>
+          <span class="remark">{{ item.pushContent }}</span>
         </div>
       </div>
     </ul>
@@ -422,8 +424,12 @@ export default {
     .infoBottom {
       display: flex;
       .itemBox {
-        flex: 1;
+        width: 300px;
+        min-width: 300px;
         line-height: 34px;
+        .itemTitle {
+          color: #999;
+        }
         &.remark {
           flex: 2;
           overflow: hidden;
@@ -437,6 +443,9 @@ export default {
         .name {
           color: #3368a9;
         }
+      }
+      .remarkItemBox {
+        width: 100%;
       }
     }
   }

@@ -89,8 +89,8 @@ export default {
     return {
       value: null,
       ws: null,
-      wsBaseUrl: "wss://impush.toysbear.com/ws?UserId=",
-      // wsBaseUrl: "ws://139.9.71.135:8090/ws?UserId=",
+      // wsBaseUrl: "wss://impush.toysbear.com/ws?UserId=",
+      wsBaseUrl: "ws://139.9.71.135:8090/ws?UserId=",
       lang: "zh-CN",
       qrTimer: null,
       randomCode: null,
@@ -228,7 +228,8 @@ export default {
             switch (res.data.result.commparnyList[0].companyType) {
               case "Sales":
                 // this.$router.push("/bsIndex");
-                location.href = "https://www.toysbear.com/new/#/bsIndex";
+                // location.href = "https://www.toysbear.com/new/#/bsIndex";
+                location.href = "http://139.9.71.135:8080/new/#/bsIndex";
                 break;
               default:
                 this.$router.push("/me");
@@ -358,7 +359,8 @@ export default {
               switch (res.data.result.commparnyList[0].companyType) {
                 case "Sales":
                   // this.$router.push("/bsIndex");
-                  location.href = "https://www.toysbear.com/new/#/bsIndex";
+                  // location.href = "https://www.toysbear.com/new/#/bsIndex";
+                  location.href = "http://139.9.71.135:8080/new/#/bsIndex";
                   break;
                 default:
                   this.$router.push("/me");

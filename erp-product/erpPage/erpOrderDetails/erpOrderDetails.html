@@ -205,6 +205,9 @@
         </ul>
       </div>
     </div>
+    <div class="clearfix">
+
+    </div>
   </div>
   <!-- 隐藏的输入框 -->
   <div id="tpYincang">
@@ -222,7 +225,8 @@
   var the_nu = window.localStorage.getItem("the_nu")
   var number = window.localStorage.getItem("number")
   var supplierCount = window.localStorage.getItem("supplierCount")
-  var happenDate = window.localStorage.getItem("happenDate")
+  var happenDateSting = window.localStorage.getItem("happenDate")
+  var happenDate = happenDateSting.replace(/[T].*/, "");
   var orderCount = window.localStorage.getItem("orderCount")
   //初始化
   var data = {
@@ -298,6 +302,7 @@
       happenDate = " "
       break;
     default:
+
       var happenDateHTML = template(document.getElementById('happenDate').innerHTML, {
         happenDate: happenDate
       });
@@ -353,7 +358,7 @@
         case undefined:
         case "null":
         case "undefined":
-          list[i].client_nuValue = "--"
+          list[i].client_nuValue = "  "
           break;
         default:
           list[i].client_nuValue = list[i].client_nu
@@ -364,7 +369,7 @@
         case undefined:
         case "null":
         case "undefined":
-          list[i].remarkValue = "--"
+          list[i].remarkValue = "  "
           break;
         default:
           list[i].remarkValue = list[i].remark
@@ -375,7 +380,7 @@
         case undefined:
         case "null":
         case "undefined":
-          list[i].supplierPhoneValue = "--"
+          list[i].supplierPhoneValue = "  "
           break;
         default:
           list[i].supplierPhoneValue = list[i].supplierPhone

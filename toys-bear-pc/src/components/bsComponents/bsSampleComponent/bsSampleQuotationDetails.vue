@@ -380,15 +380,17 @@ export default {
     },
     // 获取该订单报价公式详情
     async getProductOfferNumber() {
-      const fd = {
-        OfferNumber: this.item.offerNumber
-      };
-      const res = await this.$http.post("/api/GetProductOfferByNumber", fd);
-      if (res.data.result.code === 200) {
-        this.handerTabData.push(res.data.result.item);
-        this.itemList = res.data.result.item;
-      } else {
-        this.$message.error(res.data.result.msg);
+      if (this.item.offerNumber.indexOf("S") < 0) {
+        const fd = {
+          OfferNumber: this.item.offerNumber
+        };
+        const res = await this.$http.post("/api/GetProductOfferByNumber", fd);
+        if (res.data.result.code === 200) {
+          this.handerTabData.push(res.data.result.item);
+          this.itemList = res.data.result.item;
+        } else {
+          this.$message.error(res.data.result.msg);
+        }
       }
     },
     // 点击产品名字跳转
@@ -406,17 +408,37 @@ export default {
     },
     // 获取列表
     async getProductOfferDetailPage() {
-      const fd = Object.assign(
-        { skipCount: 1, maxResultCount: 9999 },
-        this.item
-      );
+      console.log(this.item);
+      if (this.item.offerNumber.indexOf("S") < 0) {
+        const fd = Object.assign(
+          { skipCount: 1, maxResultCount: 9999 },
+          this.item
+        );
 
-      const res = await this.$http.post("/api/ProductOfferDetailPage", fd);
-      if (res.data.result.code === 200) {
-        this.totalCount = res.data.result.item.totalCount;
-        this.tableData = res.data.result.item.items;
+        const res = await this.$http.post("/api/ProductOfferDetailPage", fd);
+        if (res.data.result.code === 200) {
+          this.totalCount = res.data.result.item.totalCount;
+          this.tableData = res.data.result.item.items;
+        } else {
+          this.$message.error(res.data.result.msg);
+        }
       } else {
-        this.$message.error(res.data.result.msg);
+        const fd_s = {
+          skipCount: 1,
+          maxResultCount: 9999,
+          sampleNumber: this.item.offerNumber
+        };
+
+        const res = await this.$http.post(
+          "/api/CompanySamplelistByNumber",
+          fd_s
+        );
+        if (res.data.result.code === 200) {
+          this.totalCount = res.data.result.item.totalCount;
+          this.tableData = res.data.result.item.items;
+        } else {
+          this.$message.error(res.data.result.msg);
+        }
       }
     },
     // 导出找样
