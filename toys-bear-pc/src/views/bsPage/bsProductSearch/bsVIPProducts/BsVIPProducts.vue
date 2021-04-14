@@ -9,8 +9,8 @@
           :key="i"
         >
           {{ item.name }}
-          <span v-if="isDiyu === i">({{ totalCount }})</span>
-          <span v-else>(0)</span>
+          <span v-if="i === 0">({{ oneCount }})</span>
+          <span v-else-if="i === 1">({{ twoCount }})</span>
         </div>
       </div>
       <div class="right">
@@ -122,6 +122,7 @@ export default {
     return {
       currentChildren: null,
       currentTabs: {},
+      TwoTabs: {},
       floorList: [],
       isGrid: "bsGridComponent",
       keyword: null,
@@ -129,6 +130,8 @@ export default {
       isDiyu: 0,
       tableData: [],
       totalCount: 0,
+      oneCount: 0,
+      twoCount: 0,
       pageSize: 12,
       currentPage: 1
     };
@@ -140,7 +143,10 @@ export default {
       if (res.data.result.code === 200) {
         this.floorList = res.data.result.item.vipRegionItem;
         this.currentTabs = res.data.result.item.vipRegionItem[0];
+        this.TwoTabs = res.data.result.item.vipRegionItem[1];
         this.getProductsList();
+        this.getTwoProductsList();
+        this.getOneProductsList();
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -206,6 +212,31 @@ export default {
         }
         this.totalCount = res.data.result.item.totalCount;
         this.tableData = res.data.result.item.items;
+      }
+    },
+    // 获取列表
+    async getTwoProductsList() {
+      const fd = {
+        skipCount: this.currentPage,
+        maxResultCount: this.pageSize,
+        parentCode: this.TwoTabs.code,
+        typeId: 1
+      };
+      const res = await this.$http.post("/api/GetProductsByTypePage", fd);
+      if (res.data.result.code === 200) {
+        this.twoCount = res.data.result.item.totalCount;
+      }
+    },
+    async getOneProductsList() {
+      const fd = {
+        skipCount: this.currentPage,
+        maxResultCount: this.pageSize,
+        parentCode: this.currentTabs.code,
+        typeId: 1
+      };
+      const res = await this.$http.post("/api/GetProductsByTypePage", fd);
+      if (res.data.result.code === 200) {
+        this.oneCount = res.data.result.item.totalCount;
       }
     },
     // 切换产品列表样式
