@@ -406,7 +406,6 @@ export default {
     },
     // 获取列表
     async getProductOfferDetailPage() {
-      console.log(this.item);
       if (this.item.offerNumber.indexOf("S") < 0) {
         const fd = Object.assign(
           { skipCount: 1, maxResultCount: 9999 },
@@ -426,7 +425,6 @@ export default {
           maxResultCount: 9999,
           sampleNumber: this.item.offerNumber
         };
-
         const res = await this.$http.post(
           "/api/CompanySamplelistByNumber",
           fd_s
