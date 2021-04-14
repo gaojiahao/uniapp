@@ -83,7 +83,7 @@
               <p>订单编号：</p> <input class="searchKey" id="orderNumber" type="text">
             </li>
             <li>
-              <p>时间：</p>
+              <p>日期：</p>
               <input type="date" class="searchKey" id="startCreatetime" max="">-
             </li>
             <li>
@@ -153,6 +153,9 @@
           </li>
         </ul>
       </div>
+    </div>
+    <div class="clearfix">
+
     </div>
   </div>
 
@@ -252,13 +255,14 @@
           list[i].orderTypeValue = "择样"
           break;
         case "CompanySample":
+        case "CompanySample2":
           list[i].orderTypeValue = "找样"
           break;
         case "ShareOrder":
           list[i].orderTypeValue = "客户订单"
           break;
         default:
-          list[i].orderTypeValue = "--"
+          list[i].orderTypeValue = " "
           break;
       }
       switch (list[i].hall_na) {
@@ -267,7 +271,7 @@
         case undefined:
         case "null":
         case "undefined":
-          list[i].hall_naValue = "--"
+          list[i].hall_naValue = "  "
           break;
         default:
           list[i].hall_naValue = list[i].hall_na
@@ -278,7 +282,7 @@
         case undefined:
         case "null":
         case "undefined":
-          list[i].the_nuValue = "--"
+          list[i].the_nuValue = "  "
           break;
         default:
           list[i].the_nuValue = list[i].the_nu
@@ -289,16 +293,37 @@
         case undefined:
         case "null":
         case "undefined":
-          list[i].remarkValue = "--"
+          list[i].remarkValue = "  "
           break;
         default:
           list[i].remarkValue = list[i].remark
       }
-
+      switch (list[i].remark) {
+        case "":
+        case null:
+        case undefined:
+        case "null":
+        case "undefined":
+          list[i].remarkValue = "  "
+          break;
+        default:
+          list[i].remarkValue = list[i].remark
+      }
+      switch (list[i].toCompanyName) {
+        case "":
+        case null:
+        case undefined:
+        case "null":
+        case "undefined":
+          list[i].toCompanyName = "  "
+          break;
+        default:
+          list[i].toCompanyNameValue = list[i].toCompanyName;
+      }
       html += " <tr>" + "<td> <input  type='radio' onclick='handleSelectionChange(" + i + ")' name='radio' value=''></td>" + "<td>" + list[i].hall_naValue + "</td>" + " <td > " + list[i].orderTypeValue + "</td > " +
-        "<td>" + list[i].toCompanyName + "</td>" + "<td>" + list[i].the_nuValue + "</td>" +
+        "<td>" + list[i].toCompanyNameValue + "</td>" + "<td>" + list[i].the_nuValue + "</td>" +
         "<td>" + list[i].orderCount + "</td>" + "<td>" + list[i].number + "</td>" +
-        "<td>" + list[i].remarkValue + "</td>" + "<td>" + list[i].happenDate + "</td>" +
+        "<td>" + list[i].remarkValue + "</td>" + "<td>" + list[i].happenDateValue + "</td>" +
         "<td><span onclick='handeldetails(" + i + ") '>点击查看</span></td></tr>"
       $("#tbodyData").append(html);
     }
