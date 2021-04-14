@@ -79,7 +79,7 @@
                 v-for="(item, i) in options.cu_deList"
                 :key="i"
                 :label="item.itemCode"
-                :value="item.parameter"
+                :value="item.itemCode"
               >
               </el-option>
             </el-select>
@@ -248,13 +248,15 @@ export default {
         }
       }
     },
-    "clienFormData.cu_de": {
+    "clienFormData.cu_deName": {
       deep: true,
       handler(newVal) {
         if (newVal) {
+          // console.log(newVal, this.options.cu_deList);
           this.options.cu_deList.forEach(val => {
-            if (val.parameter === newVal)
-              this.clienFormData.cu_deName = val.itemCode;
+            if (val.itemCode === newVal)
+              this.clienFormData.cu_de = val.parameter;
+            console.log(this.clienFormData.cu_de, this.clienFormData.cu_deName);
           });
         }
       }
@@ -305,7 +307,7 @@ export default {
         profit: 0,
         offerMethod: "出厂价",
         cu_de: "¥",
-        cu_deName: "RMB",
+        cu_deName: "",
         totalCost: "0",
         exchange: 0,
         size: "24",

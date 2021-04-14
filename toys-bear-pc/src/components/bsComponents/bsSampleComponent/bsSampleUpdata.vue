@@ -144,15 +144,13 @@
           </el-table-column>
           <el-table-column prop="price" label="单价" align="center" width="100">
             <template slot-scope="scope">
-              <span style="color:#f56c6c">
-                {{ scope.row.cu_de + scope.row.price }}
-              </span>
+              <span style="color:#f56c6c"> ￥{{ scope.row.price }} </span>
             </template>
           </el-table-column>
           <ex-table-column :autoFit="true" width="100" label="总价">
             <template slot-scope="scope">
               <p class="item price">
-                <span>{{ scope.row.cu_de }}</span>
+                <span>￥</span>
                 <span>
                   {{
                     priceCount(
