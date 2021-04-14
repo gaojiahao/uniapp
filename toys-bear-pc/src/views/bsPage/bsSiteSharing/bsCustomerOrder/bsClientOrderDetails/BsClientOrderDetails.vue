@@ -164,17 +164,17 @@
             <span> {{ scope.row.in_en }}/{{ scope.row.ou_lo }}(pcs) </span>
           </template>
         </el-table-column>
-        <el-table-column width="50" align="center" label="箱数">
-          <!-- <template slot-scope="scope"> -->
-          <!-- 缺少字段 -->
-          <!-- {{ 缺少字段 }} -->
-          <!-- </template> -->
+        <el-table-column
+          prop="productCount"
+          width="50"
+          align="center"
+          label="箱数"
+        >
         </el-table-column>
         <el-table-column width="80" align="center" label="总数量">
-          <!-- <template slot-scope="scope">
-            缺少字段 -->
-          <!-- {{ scope.row.in_en }} -->
-          <!-- </template> -->
+          <template slot-scope="scope">
+            {{ scope.row.productCount * scope.row.ou_lo }}
+          </template>
         </el-table-column>
         <el-table-column prop="costPrice" align="center" label="参考单价">
           <template slot-scope="scope">

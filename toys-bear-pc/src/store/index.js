@@ -116,15 +116,13 @@ const store = new Vuex.Store({
       const key = state.userInfo.uid;
       Vue.prototype.$set(state, key, payLoad);
     },
-    //修改报价商品
+    // 提交报价
+    initOfferProductList(state) {
+      Vue.prototype.$set(state, "offerProductList", []);
+    },
+    // 请求修改报价商品接口赋值
     updataOfferProductList(state, payLoad) {
-      if (state.offerProductList.length || !payLoad) {
-        Vue.prototype.$set(state, "offerProductList", []);
-      } else {
-        for (let i = 0; i < payLoad.length; i++) {
-          state.offerProductList.push(payLoad[i]);
-        }
-      }
+      Vue.prototype.$set(state, "offerProductList", payLoad);
     },
     //添加报价商品
     pushOfferProductList(state, payLoad) {
