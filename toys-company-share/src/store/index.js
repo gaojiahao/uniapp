@@ -62,6 +62,7 @@ const store = new Vuex.Store({
       state.searchForm.in_le = ""; // 包装规格 长
       state.searchForm.in_wi = ""; // 包装规格 宽
       state.searchForm.in_hi = ""; // 包装规格 高
+      state.searchForm.pa_nu = ""; // 包装方式
       state.searchForm.fa_no = ""; // 出厂货号
       state.searchForm.startTime = ""; // 开始时间
       state.searchForm.endTime = ""; // 结束时间
@@ -148,10 +149,16 @@ const store = new Vuex.Store({
     myShoppingList(state) {
       if (!state.userInfo) {
         return [];
+      } else {
+        const key =
+          state.userInfo.shareId + "_" + (state.userInfo.loginEmail || "");
+        if (state[key]) {
+          return state[key];
+        } else {
+          Vue.prototype.$set(state, key, []);
+          return state[key];
+        }
       }
-      return state[
-        state.userInfo.shareId + "_" + (state.userInfo.loginEmail || "")
-      ];
     }
   },
   actions: {

@@ -331,15 +331,15 @@
 .triangle{
     float: left;
     width: 20px;
-    padding-top: 20px;
+    padding-top: 17px;
 }
 .topS{
     margin: 3px 0;
     width:0px; 
     height:0px; 
-    border-left:5px solid transparent;  
-    border-right:5px solid transparent; 
-    border-bottom:5px solid #c0c4cc;;  
+    border-left:7px solid transparent;  
+    border-right:7px solid transparent; 
+    border-bottom:7px solid #c0c4cc;;  
     font-size:0px; 
     cursor: pointer;
     line-height:0px;
@@ -349,9 +349,9 @@
     margin: 3px 0;
     width:0px; 
     height:0px; 
-    border-left:5px solid transparent; 
-    border-right:5px solid transparent; 
-    border-top:5px solid #c0c4cc;; 
+    border-left:7px solid transparent; 
+    border-right:7px solid transparent; 
+    border-top:7px solid #c0c4cc;; 
     font-size:0px; 
     line-height:0px; 
     cursor: pointer;
