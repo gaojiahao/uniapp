@@ -165,7 +165,9 @@
                 @click="handleEdit(scope.$index, scope.row)"
                 >编辑</el-button
               >
-              <el-button size="mini" type="info">推送</el-button>
+              <el-button size="mini" type="info" @click="tuisong(scope.row)"
+                >推送</el-button
+              >
               <el-button
                 size="mini"
                 @click="exportOrder(scope.row)"
@@ -317,6 +319,10 @@ export default {
     handleCurrentChange(page) {
       this.currentPage = page;
       this.getCompanySamplelistPage();
+    },
+    tuisong(row) {
+      console.log(row.offerNumber);
+      console.log(row.offerNumber.indexOf("s"));
     },
     // 报价详情跳转
     async goDetails(row) {
