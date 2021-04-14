@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="format-detection" content="telephone=yes"/>
+  <meta name="format-detection" content="telephone=yes" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <!-- 把所有http静态资源请求统一转换为https请求资源 -->
   <!-- <meta http-equiv='Content-Security-Policy' content='upgrade-insecure-requests'> -->
@@ -22,6 +22,18 @@
   <link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.4.0/theme-chalk/index.css">
   <script src="https://cdn.bootcss.com/element-ui/2.4.0/index.js"></script>
   <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+    var userAgent = navigator.userAgent;
+    // 判断是否为小于IE11的浏览器
+    var isLessIE11 =
+      userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1;
+    console.log(window.location);
+    if (isLessIE11 && window.location.href == "http://127.0.0.1:8081/#/erphome") {
+      // this._message('请升级至IE11或更换其他浏览器，才能使用发布公告功能', 'warn')
+      window.location.href =
+        "http://139.9.71.135:8096/erpPage/erpHome/erpHome.html";
+    }
+  </script>
 </head>
 
 <body>
