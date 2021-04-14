@@ -32,6 +32,7 @@
     </div>
     <div class="noticeContent">
       <waterfall
+        v-show="findList.length"
         :col="col"
         ref="findListRef"
         :data="findList"
