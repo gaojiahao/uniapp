@@ -36,7 +36,9 @@
             <el-input
               style="width: 586px; margin: 0 15px;"
               v-model="clienFormData.title"
+              maxlength="50"
               placeholder=" "
+              show-word-limit
             ></el-input>
           </el-form-item>
           <el-form-item label="默认公式：" prop="defaultFormula">
