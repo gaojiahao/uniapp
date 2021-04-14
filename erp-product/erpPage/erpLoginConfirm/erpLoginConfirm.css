@@ -87,7 +87,7 @@
   width: 21px;
   height: 21px;
   margin-right: 10px;
-  background: url('../../static/images/erpHomeIcon.png') no-repeat center;
+  background: url('/erpProduct/static/images/erpHomeIcon.png') no-repeat center;
 }
 .header .toplauot .right .shouyeBox .mySampleIcon{
   display: inline-block;
@@ -95,7 +95,7 @@
   width: 21px;
   height: 21px;
   margin-right: 10px;
-  background: url('../../static/images/mySampleIcon.png') no-repeat center;
+  background: url('/erpProduct/static/images/mySampleIcon.png') no-repeat center;
 }
 .header .toplauot .right .signOutBox {
   display: flex;
