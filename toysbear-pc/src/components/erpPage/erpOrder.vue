@@ -196,7 +196,7 @@
             </el-table-column>
             <el-table-column prop="hall_na" label="订单来源" align="center">
               <template slot-scope="scope">
-                {{ scope.row.hall_na || "--" }}
+                {{ scope.row.hall_na }}
               </template>
             </el-table-column>
             <el-table-column prop="orderType" label="订单类型" align="center">
@@ -210,28 +210,28 @@
                     ? "找样"
                     : scope.row.orderType == "ShareOrder"
                     ? "客户订单"
-                    : "--"
+                    : ""
                 }}
               </template>
             </el-table-column>
             <el-table-column prop="toCompanyName" label="客户" align="center">
               <template slot-scope="scope">
-                {{ scope.row.toCompanyName || "--" }}
+                {{ scope.row.toCompanyName }}
               </template>
             </el-table-column>
             <el-table-column prop="the_nu" label="本次代号" align="center">
               <template slot-scope="scope">
-                {{ scope.row.the_nu || "--" }}
+                {{ scope.row.the_nu }}
               </template>
             </el-table-column>
             <el-table-column prop="orderCount" label="订单数量" align="center">
               <template slot-scope="scope">
-                {{ scope.row.orderCount || "--" }}
+                {{ scope.row.orderCount }}
               </template>
             </el-table-column>
             <el-table-column prop="number" label="订单编号" align="center">
               <template slot-scope="scope">
-                {{ scope.row.number || "--" }}
+                {{ scope.row.number }}
               </template>
             </el-table-column>
             <el-table-column prop="number" label="订单备注" align="center">

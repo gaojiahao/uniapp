@@ -773,19 +773,17 @@ export default {
           delete fd[key];
         }
       }
-      const res = await this.$http.post("/api/BearNoticePage", fd);
+      const res = await this.$http.post("/api/BearNoticePagev2", fd);
       if (res.data.result.code === 200) {
         this.$emit("getNoticeUnreadTotal");
         if (flag) {
-          this.findList = this.findList.concat(
-            res.data.result.item.result.items
-          );
+          this.findList = this.findList.concat(res.data.result.item.items);
         } else {
-          this.findList = res.data.result.item.result.items;
+          this.findList = res.data.result.item.items;
           this.loading = false;
           this.$waterfall.forceUpdate();
         }
-        this.totalCount = res.data.result.item.result.totalCount;
+        this.totalCount = res.data.result.item.totalCount;
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,

@@ -64,7 +64,7 @@
           'font-weight': '400'
         }"
       >
-        <ex-table-column :autoFit="true" label="产品" width="300">
+        <el-table-column label="产品" width="300">
           <template slot-scope="scope">
             <div class="imgBox">
               <el-image
@@ -103,24 +103,24 @@
               </div>
             </div>
           </template>
-        </ex-table-column>
-        <ex-table-column :autoFit="true" label="资料来源">
+        </el-table-column>
+        <el-table-column width="100" label="资料来源">
           <template slot-scope="scope">
             <div
-              style="width:110px;overflow:hidden;max-width: 100px;white-space: nowrap;text-overflow: ellipsis;"
+              style="width:100px;overflow:hidden;max-width: 100px;white-space: nowrap;text-overflow: ellipsis;"
             >
               {{ scope.row.exhibitionName }}
             </div>
           </template>
-        </ex-table-column>
-        <ex-table-column
-          :autoFit="true"
+        </el-table-column>
+        <el-table-column
           prop="fa_no"
           label="出厂货号"
-        ></ex-table-column>
-        <ex-table-column :autoFit="true" prop="ch_pa" label="包装">
-        </ex-table-column>
-        <ex-table-column :autoFit="true" label="产品规格" min-width="100">
+          align="center"
+        ></el-table-column>
+        <el-table-column prop="ch_pa" label="包装" align="center">
+        </el-table-column>
+        <el-table-column label="产品规格" min-width="100" align="center">
           <template slot-scope="scope">
             <span>
               {{ scope.row.pr_le }}x{{ scope.row.pr_wi }}x{{
@@ -128,8 +128,8 @@
               }}(cm)
             </span>
           </template>
-        </ex-table-column>
-        <ex-table-column :autoFit="true" label="包装规格" min-width="100">
+        </el-table-column>
+        <el-table-column label="包装规格" min-width="100" align="center">
           <template slot-scope="scope">
             <span>
               {{ scope.row.in_le }}x{{ scope.row.in_wi }}x{{
@@ -137,8 +137,8 @@
               }}(cm)
             </span>
           </template>
-        </ex-table-column>
-        <ex-table-column :autoFit="true" label="外箱规格" min-width="100">
+        </el-table-column>
+        <el-table-column label="外箱规格" min-width="100" align="center">
           <template slot-scope="scope">
             <span>
               {{ scope.row.ou_le }}x{{ scope.row.ou_wi }}x{{
@@ -146,48 +146,50 @@
               }}(cm)
             </span>
           </template>
-        </ex-table-column>
-        <ex-table-column :autoFit="true" label="体积/材积" min-width="150">
+        </el-table-column>
+        <el-table-column label="体积/材积" min-width="150" align="center">
           <template slot-scope="scope">
             <span>
               {{ scope.row.bulk_stere }}(cbm)/{{ scope.row.bulk_feet }}(cuft)
             </span>
           </template>
-        </ex-table-column>
-        <ex-table-column :autoFit="true" label="毛重/净重">
+        </el-table-column>
+        <el-table-column label="毛重/净重" align="center">
           <template slot-scope="scope">
             <span> {{ scope.row.gr_we }}/{{ scope.row.ne_we }}(kg) </span>
           </template>
-        </ex-table-column>
-        <ex-table-column :autoFit="true" label="装箱量">
+        </el-table-column>
+        <el-table-column label="装箱量" align="center">
           <template slot-scope="scope">
             <span> {{ scope.row.in_en }}/{{ scope.row.ou_lo }}(pcs) </span>
           </template>
-        </ex-table-column>
-        <ex-table-column :autoFit="true" label="箱数">
-          <template slot-scope="scope">
-            <span> {{ scope.row.in_en }} </span>
-          </template>
-        </ex-table-column>
-        <ex-table-column :autoFit="true" label="总数量">
-          <template slot-scope="scope">
-            <span> {{ scope.row.in_en }} </span>
-          </template>
-        </ex-table-column>
-        <ex-table-column :autoFit="true" prop="costPrice" label="参考单价">
+        </el-table-column>
+        <el-table-column width="50" align="center" label="箱数">
+          <!-- <template slot-scope="scope"> -->
+          <!-- 缺少字段 -->
+          <!-- {{ 缺少字段 }} -->
+          <!-- </template> -->
+        </el-table-column>
+        <el-table-column width="80" align="center" label="总数量">
+          <!-- <template slot-scope="scope">
+            缺少字段 -->
+          <!-- {{ scope.row.in_en }} -->
+          <!-- </template> -->
+        </el-table-column>
+        <el-table-column prop="costPrice" align="center" label="参考单价">
           <template slot-scope="scope">
             <span style="color:#3368A9">
               {{ options.currencyType + scope.row.costPrice }}
             </span>
           </template>
-        </ex-table-column>
-        <ex-table-column :autoFit="true" prop="productPrice" label="报出价">
+        </el-table-column>
+        <el-table-column prop="productPrice" align="center" label="报出价">
           <template slot-scope="scope">
             <span style="color:#f56c6c">
               {{ options.currencyType + scope.row.productPrice }}
             </span>
           </template>
-        </ex-table-column>
+        </el-table-column>
       </el-table>
       <div class="totalBox">
         <p class="item">
@@ -456,10 +458,10 @@ export default {
       .el-table__header-wrapper .el-checkbox {
         display: none;
       }
-      .cell {
-        white-space: nowrap;
-        width: fit-content;
-      }
+      // .cell {
+      // white-space: nowrap;
+      // width: fit-content;
+      // }
       font-size: 12px;
       .inputNumber {
         width: 50px;
