@@ -436,27 +436,39 @@ export default {
     },
     // 删除我的公告
     async deleteMyNotice(val) {
-      const res = await this.$http.post("/api/DeleteBearBotice", {
-        id: val.bearNotice.id
-      });
-      if (res.data.result.code === 200) {
-        this.$common.handlerMsgState({
-          msg: "删除成功",
-          type: "success"
-        });
-        for (let i = 0; i < this.findList.length; i++) {
-          if (val.bearNotice.id == this.findList[i].bearNotice.id) {
-            this.findList.splice(i, 1);
-            this.showActive = false;
-            break;
+      this.$confirm("确定要删除吗?", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消"
+      })
+        .then(async () => {
+          const res = await this.$http.post("/api/DeleteBearBotice", {
+            id: val.bearNotice.id
+          });
+          if (res.data.result.code === 200) {
+            this.$common.handlerMsgState({
+              msg: "删除成功",
+              type: "success"
+            });
+            for (let i = 0; i < this.findList.length; i++) {
+              if (val.bearNotice.id == this.findList[i].bearNotice.id) {
+                this.findList.splice(i, 1);
+                this.showActive = false;
+                break;
+              }
+            }
+          } else {
+            this.$common.handlerMsgState({
+              msg: res.data.result.msg,
+              type: "danger"
+            });
           }
-        }
-      } else {
-        this.$common.handlerMsgState({
-          msg: res.data.result.msg,
-          type: "danger"
+        })
+        .catch(() => {
+          this.$common.handlerMsgState({
+            msg: "已取消删除",
+            type: "warning"
+          });
         });
-      }
     },
     // 解决图片不加载问题
     upImage() {

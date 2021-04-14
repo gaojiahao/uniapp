@@ -175,18 +175,13 @@
             width="100"
           >
             <template slot-scope="scope">
-              <el-popconfirm
-                title="确定要删除吗？"
-                @confirm="handleDelete(scope.row)"
+              <el-button
+                size="mini"
+                type="warning"
+                @click.stop="handleDelete(scope.row)"
+                slot="reference"
+                >删除</el-button
               >
-                <el-button
-                  size="mini"
-                  type="warning"
-                  @click.stop
-                  slot="reference"
-                  >删除</el-button
-                >
-              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
@@ -372,22 +367,34 @@ export default {
     },
     //确定删除
     async handleDelete(row) {
-      const res = await this.$http.post("/api/UpdateProductOfferDetail", {
-        id: row.id
-      });
-      if (res.data.result.code === 200) {
-        this.$common.handlerMsgState({
-          msg: "删除成功",
-          type: "success"
+      this.$confirm("确定要删除吗?", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消"
+      })
+        .then(async () => {
+          const res = await this.$http.post("/api/UpdateProductOfferDetail", {
+            id: row.id
+          });
+          if (res.data.result.code === 200) {
+            this.$common.handlerMsgState({
+              msg: "删除成功",
+              type: "success"
+            });
+            this.$store.commit("popOfferProductList", row);
+            this.getProductOfferDetailPage();
+          } else {
+            this.$common.handlerMsgState({
+              msg: res.data.result.msg,
+              error: "danger"
+            });
+          }
+        })
+        .catch(() => {
+          this.$common.handlerMsgState({
+            msg: "已取消删除",
+            type: "warning"
+          });
         });
-        this.$store.commit("popOfferProductList", row);
-        this.getProductOfferDetailPage();
-      } else {
-        this.$common.handlerMsgState({
-          msg: res.data.result.msg,
-          error: "danger"
-        });
-      }
     },
     //选择报价商品
     handleSelect() {
