@@ -1,95 +1,91 @@
 <template>
   <div class="productDetailWrap">
-    <div class="detailBox">
+    <div class="detailBox" v-if="productData">
       <div class="left">
         <magnifierComponent
           ref="magnifierRef"
-          v-if="productDetails.imageUrls"
+          v-if="productData.imageUrls"
           :middleImgWidth="541"
           :middleImgHeight="395"
           :thumbnailHeight="55"
           :thumbnailWidth="78"
           :thumbnailCount="5"
-          :imageUrls="productDetails.imageUrls"
-          :videoAddress="productDetails.videoAddress"
+          :imageUrls="productData.imageUrls"
+          :videoAddress="productData.videoAddress"
         />
       </div>
       <div class="right">
         <div class="context">
           <div class="productName">
             <span>{{
-              globalLang === "zh-CN"
-                ? productDetails.name
-                : productDetails.ename
+              globalLang === "zh-CN" ? productData.name : productData.ename
             }}</span>
           </div>
           <div class="itemText">
             {{ productLang.price }}：
             <span class="priceBox"
               >{{ userInfo.currencyType
-              }}<span class="price">{{ productDetails.price }}</span></span
+              }}<span class="price">{{ productData.price }}</span></span
             >
           </div>
           <div class="itemText">
             {{ productLang.exFactoryArticleNo }}：<span>{{
-              productDetails.outFactoryNumber
+              productData.outFactoryNumber
             }}</span>
           </div>
           <div class="itemText">
             {{ productLang.packingMethod }}：<span>{{
               globalLang === "zh-CN"
-                ? productDetails.packMethod
-                : productDetails.ePackMethod
+                ? productData.packMethod
+                : productData.ePackMethod
             }}</span>
           </div>
           <div class="itemText">
             {{ productLang.productSpecification }}：
             <span
-              >{{ productDetails.sampleLenth }} x
-              {{ productDetails.sampleWidth }} x
-              {{ productDetails.sampleHeight }} (cm)</span
+              >{{ productData.sampleLenth }} x {{ productData.sampleWidth }} x
+              {{ productData.sampleHeight }} (cm)</span
             >
           </div>
           <div class="itemText">
             {{ productLang.packageSpecification }}：
             <span
-              >{{ productDetails.innerLenth }} x
-              {{ productDetails.innerWidth }} x
-              {{ productDetails.innerHeight }} (cm)</span
+              >{{ productData.innerLenth }} x {{ productData.innerWidth }} x
+              {{ productData.innerHeight }} (cm)</span
             >
           </div>
           <div class="itemText">
             {{ productLang.outerBoxSize }}：
             <span
-              >{{ productDetails.outerBoxLenth }} x
-              {{ productDetails.outerBoxWidth }} x
-              {{ productDetails.outerBoxHeight }} (cm)</span
+              >{{ productData.outerBoxLenth }} x
+              {{ productData.outerBoxWidth }} x
+              {{ productData.outerBoxHeight }} (cm)</span
             >
           </div>
           <div class="itemText">
             {{ productLang.packingQuantity }}：
             <span
-              >{{ productDetails.innerEn }} /
-              {{ productDetails.outerBoxLo }} (pcs)</span
+              >{{ productData.innerEn }} /
+              {{ productData.outerBoxLo }} (pcs)</span
             >
           </div>
           <div class="itemText">
             {{ productLang.volumeVolume }}：
             <span
-              >{{ productDetails.outerBoxStere }} (cbm) /
-              {{ productDetails.outerBoxFeet }} (cuft)</span
+              >{{ productData.outerBoxStere }} (cbm) /
+              {{ productData.outerBoxFeet }} (cuft)</span
             >
           </div>
           <div class="itemText">
             {{ productLang.grossNetWeight }}：
             <span
-              >{{ productDetails.outerBoxWeight }} /
-              {{ productDetails.outerBoxNetWeight }} (kg)</span
+              >{{ productData.outerBoxWeight }} /
+              {{ productData.outerBoxNetWeight }} (kg)</span
             >
           </div>
         </div>
         <div class="myCartBox">
-          <div class="myCart" @click="handlerShopping(productDetails)">
+          <div class="myCart" @click="handlerShopping(productData)">
             <i class="myCartIcon"></i>
             {{ productLang.addToCart }}
           </div>
@@ -97,7 +93,7 @@
       </div>
     </div>
     <!-- 相关产品 -->
-    <relatedProducts :keyword="productDetails.name" />
+    <relatedProducts v-if="productData" :keyword="productData.name" />
   </div>
 </template>
 
@@ -106,18 +102,14 @@ import { mapState, mapGetters } from "vuex";
 import magnifierComponent from "@/components/magnifierComponent/magnifierComponent.vue";
 import relatedProducts from "@/components/relatedProducts/relatedProducts.vue";
 export default {
-  props: {
-    item: {
-      type: Object
-    }
-  },
   components: {
     magnifierComponent,
     relatedProducts
   },
   data() {
     return {
-      productDetails: null
+      productDetails: null,
+      productData: null
     };
   },
   methods: {
@@ -135,6 +127,20 @@ export default {
         this.$store.commit("popShopping", item);
         this.$message.warning(this.publicLang.cancelSuccessfully);
       }
+    },
+    // 获取产品详情接口
+    async getProductDetails() {
+      const res = await this.$http.get(
+        "/api/WebsiteShare/SearchCompanyShareProductDetailPage?productNumber=" +
+          this.productDetails.productNumber
+      );
+      const { code, data, message } = res.data.result;
+      if (code == 200) {
+        this.productData = data;
+        console.log(data);
+      } else {
+        this.$message.error(message);
+      }
     }
   },
   created() {
@@ -142,7 +148,9 @@ export default {
       window.sessionStorage.getItem("currentProductDetails")
     );
   },
-  mounted() {},
+  mounted() {
+    this.getProductDetails();
+  },
   computed: {
     productLang() {
       return this.$t("lang.product");
