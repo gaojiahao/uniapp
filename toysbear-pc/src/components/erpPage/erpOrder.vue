@@ -239,7 +239,7 @@
                 {{
                   scope.row.remark && scope.row.orderType != "Sample"
                     ? scope.row.remark
-                    : "--"
+                    : ""
                 }}
               </template>
             </el-table-column>
