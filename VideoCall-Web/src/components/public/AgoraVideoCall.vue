@@ -80,7 +80,7 @@ export default {
     },
     async leave(){
       this.$FromLoading.show();
-      await QuitMeetingRoom({roomNumber:this.config.roomNumber,meetingRoomMemberId:this.uid}).then(res => {
+      await QuitMeetingRoom({roomNumber:this.channel,meetingRoomMemberId:this.uid}).then(res => {
         if (res.success) {
           this.$Message.info({
             background: true,
@@ -147,8 +147,9 @@ export default {
     //结束会议
     async endMeeting(){
       this.$FromLoading.show();
-      await CloseMeetingRoom({roomNumber:this.config.roomNumber,code:this.code}).then(res => {
+      await CloseMeetingRoom({roomNumber:this.channel,code:this.code}).then(res => {
         if (res.success) {
+          this.$FromLoading.hide();
           this.$Message.info({
             background: true,
             content: res.message
@@ -165,7 +166,7 @@ export default {
     },
     async closeMeeting(){
       await this.client.unpublish([this.localAudioTrack, this.localVideoTrack]);
-      this.$router.push('/login');
+      // this.$router.push('/login');
     },
     //通话质量检测
     async testNetWork(){
@@ -267,6 +268,7 @@ export default {
   created() {
     this.init();
     this.config = JSON.parse(window.localStorage.getItem("SPHY_LOGIN_TOKEN"));
+
     this.code = window.localStorage.getItem("mac");
   },
 
