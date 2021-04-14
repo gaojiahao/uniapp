@@ -20,15 +20,15 @@
             {{ option.the_nu }}
           </div>
           <div class="item">
-            <div class="title">择样数量：</div>
+            <div class="title">产品款数：</div>
             {{ totalCount }}
           </div>
           <div class="item">
-            <div class="title">择样编号：</div>
+            <div class="title">订单编号：</div>
             {{ option.number }}
           </div>
           <div class="item">
-            <div class="title">择样时间：</div>
+            <div class="title">日期：</div>
             {{ option.happenDate.split("T")[0] }}
           </div>
           <div class="item">
