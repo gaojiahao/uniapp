@@ -148,7 +148,7 @@
               </el-form-item>
             </div>
             <div class="itemBox">
-              <el-form-item label="时间：">
+              <el-form-item label="日期：">
                 <!-- type="daterange" -->
                 <el-date-picker
                   v-model="dateTile"
@@ -204,6 +204,8 @@
                 {{
                   scope.row.orderType == "Sample"
                     ? "择样"
+                    : scope.row.orderType == "CompanySample2"
+                    ? "找样"
                     : scope.row.orderType == "CompanySample"
                     ? "找样"
                     : scope.row.orderType == "ShareOrder"
@@ -243,7 +245,7 @@
             </el-table-column>
             <el-table-column
               prop="happenDate"
-              label="订单时间"
+              label="日期"
               sortable="custom"
               align="center"
             >
