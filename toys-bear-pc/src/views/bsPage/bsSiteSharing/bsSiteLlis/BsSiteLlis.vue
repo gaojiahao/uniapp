@@ -124,14 +124,18 @@
               @click.stop="openEdit(scope.row)"
               >编辑</el-button
             >
-            <el-popconfirm
+            <!-- <el-popconfirm
               title="确定要删除此分享吗？"
               @confirm="handleDelete(scope.row)"
+            > -->
+            <el-button
+              size="mini"
+              type="warning"
+              @click.stop="handleDelete(scope.row)"
+              slot="reference"
+              >删除</el-button
             >
-              <el-button size="mini" type="warning" @click.stop slot="reference"
-                >删除</el-button
-              >
-            </el-popconfirm>
+            <!-- </el-popconfirm> -->
           </template>
         </el-table-column>
       </el-table>
@@ -565,22 +569,34 @@ export default {
     },
     // 删除分享
     async handleDelete(row) {
-      const res = await this.$http.post(
-        "/api/DeleteWebsiteShareInfo?id=" + row.id,
-        {}
-      );
-      if (res.data.result.code === 200) {
-        this.$common.handlerMsgState({
-          msg: "删除成功",
-          type: "success"
+      this.$confirm("确定要删除吗?", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消"
+      })
+        .then(async () => {
+          const res = await this.$http.post(
+            "/api/DeleteWebsiteShareInfo?id=" + row.id,
+            {}
+          );
+          if (res.data.result.code === 200) {
+            this.$common.handlerMsgState({
+              msg: "删除成功",
+              type: "success"
+            });
+            this.getDataList();
+          } else {
+            this.$common.handlerMsgState({
+              msg: "删除失败,请联系管理员！",
+              type: "danger"
+            });
+          }
+        })
+        .catch(() => {
+          this.$common.handlerMsgState({
+            msg: "已取消删除",
+            type: "warning"
+          });
         });
-        this.getDataList();
-      } else {
-        this.$common.handlerMsgState({
-          msg: "删除失败,请联系管理员！",
-          type: "danger"
-        });
-      }
     },
     // 切換頁容量
     handleSizeChange(pageSize) {
