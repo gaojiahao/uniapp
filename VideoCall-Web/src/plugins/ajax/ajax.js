@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 15:30:49
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-03-27 11:56:21
+ * @LastEditTime: 2021-04-14 16:45:08
  */
 import Fly from "flyio/dist/npm/fly";
 // 请求地址引入
@@ -34,7 +34,8 @@ fly.interceptors.request.use(request => {
   }
   // token 存在则赋值在header当中
   if (token) {
-    request.headers.Utoken = token;
+    //request.headers.Utoken = token;
+    request.headers.Authorization = 'Bearer '+token;
   } else {
     // token 不存在，锁住请求，优先请求token，后序请求进入队列
     fly.lock();
@@ -42,7 +43,7 @@ fly.interceptors.request.use(request => {
       .login()
       .then(token => {
         if (token) {
-          request.headers.Utoken = token;
+          request.headers.Authorization = 'Bearer '+token;
           // 请求token成功之后，即将进入第一个请求
           if (window.sessionStorage.getItem("shareUrl")) {
             return window.sessionStorage.getItem("shareUrl");
@@ -161,7 +162,7 @@ let Rxports = {
         .request(params, params.data)
         .then(res => {
           if (res) {
-            resolve(res);
+            resolve(res.data);
           } else {
             reject();
           }
@@ -186,6 +187,7 @@ let Rxports = {
         .then(res => resolve(res.data))
         .catch(err => {
           // 弹窗提醒
+          debugger
             Message.error({
               background: true,
               content: "温馨提示："+err.message,
@@ -246,7 +248,7 @@ let Rxports = {
       if (window.isApp) {
         xmlhttp.setRequestHeader("os", window.device.platform);
       }
-      xmlhttp.setRequestHeader("Utoken", token);
+      xmlhttp.setRequestHeader("Authorization", 'Bearer '+token);
       xmlhttp.setRequestHeader(
         "Content-Type",
         "application/json;charset=utf-8"
@@ -296,7 +298,7 @@ let Rxports = {
       url: "/H_roleplay-si/ds/upload",
       headers: {
         "Content-Type": "multipart/form-data",
-        Utoken: token.token
+        Authorization: 'Bearer '+token
       },
       data: param
     });

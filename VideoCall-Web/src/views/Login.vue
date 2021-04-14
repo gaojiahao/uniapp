@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 16:28:17
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-13 19:52:16
+ * @LastEditTime: 2021-04-14 15:32:28
 -->
 <template>
   <div class="login" ref="login">
@@ -410,6 +410,7 @@ export default {
     this.initKeypress();
     this.locale = this.$i18n.locale;
     this.changeLangFn(this.locale);
+    this.$FromLoading.hide();
   }
 };
 </script>

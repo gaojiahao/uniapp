@@ -107,35 +107,33 @@ export default {
   },
   methods: {
     save(){
-      // var params = {
-      //   roomNumber:this.formValidate.channel,
-      //   nickName:this.formValidate.nickName,
-      //   startTime:this.formValidate.startTime,
-      //   endTime:this.formValidate.endTime,
-      //   count:this.formValidate.mettingNumber
-      // };
-      
-      // return new Promise((resolve, reject) => {
-      //   this.$FromLoading.show();
-      //   CreateMeetingRoom(params).then(res => {
-      //     if (res.result.code == 200) {
-              
-      //     } else {
-      //       this.$Message.error({
-      //         background: true,
-      //         content: res.result.msg
-      //       });
-      //       this.$FromLoading.hide();
-      //     }
-      //   });
-      // });
-      Cookies.set("channel", this.formValidate.channel);
-      Cookies.set("baseMode", this.baseMode);
-      Cookies.set("transcode", this.transcode);
-      Cookies.set("attendeeMode", this.attendeeMode);
-      Cookies.set("videoProfile", this.videoProfile);
-      Cookies.set("uid", this.formValidate.nickName);
-      this.$router.push('/');
+      var params = {
+        roomNumber:this.formValidate.channel,
+        nickName:this.formValidate.nickName,
+        startTime:this.formValidate.startTime,
+        endTime:this.formValidate.endTime,
+        count:this.formValidate.mettingNumber
+      };
+      return new Promise((resolve, reject) => {
+        this.$FromLoading.show();
+        CreateMeetingRoom(params).then(res => {
+          if (res.success) {
+            Cookies.set("channel", this.formValidate.channel);
+            Cookies.set("baseMode", this.baseMode);
+            Cookies.set("transcode", this.transcode);
+            Cookies.set("attendeeMode", this.attendeeMode);
+            Cookies.set("videoProfile", this.videoProfile);
+            Cookies.set("uid", this.formValidate.nickName);
+            this.$router.push('/');    
+          } else {
+            this.$Message.error({
+              background: true,
+              content: res.result.msg
+            });
+            this.$FromLoading.hide();
+          }
+        });
+      });
     }  
   },
   created(){

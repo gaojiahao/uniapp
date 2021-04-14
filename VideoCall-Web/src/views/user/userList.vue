@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 15:46:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\user\userList.vue
- * @LastEditTime: 2021-04-08 10:10:26
+ * @LastEditTime: 2021-04-14 17:16:33
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -22,14 +22,15 @@
                     <i class="iconfont iconcebianlanshousuo" @click="collapsedSider"></i>
                 </div>  
             </ListItem>
-            <ListItem v-for="(item,index) in userlist" :key="index">
+            <ListItem v-for="(item,index) in userList" :key="index">
                 <div class="avatar">
                     <i class="iconfont iconren1 person text"></i>
                 </div>
                 <div class="name">
-                    {{item.name}}
+                    {{item.nickname}}
                 </div>
                 <div class="action">
+                    {{item.isMaster?'主持人':''}}
                     <i class="iconfont icon21maikefeng text" :class="[item.isMic ? 'outline':'eye']" @click="setMic(index)"></i>
                     <i class="iconfont iconshexiangtou text" :class="[item.isCar ? 'outline':'eye']" @click="setCar(index)"></i>
                     <Dropdown>
@@ -50,20 +51,30 @@
 <script>
 export default {
     name:"userList",
+    props:{
+        userlist: {
+            type: Array,
+            default () {
+                return []
+            }
+        },
+    },
     data() {
         return {
             loading: false,
-            userlist:[
-                {id:1,name:'张三',isMic:true,isCar:true},
-                {id:2,name:'张1',isMic:true,isCar:true},
-                {id:3,name:'张2',isMic:true,isCar:true},
-                {id:4,name:'张3',isMic:true,isCar:true},
-                {id:5,name:'张4',isMic:true,isCar:true},
-                {id:6,name:'张5',isMic:true,isCar:true},
-                {id:7,name:'张6',isMic:true,isCar:true},
-                {id:8,name:'张7',isMic:true,isCar:true}
-            ]
+            userList:[]
         };
+    },
+    watch:{
+        userlist:{
+            handler(val){
+                this.userList = val.map((e,index)=>{
+                    e.isMic = true;
+                    e.isCar = true;
+                    return e;
+                });
+            }
+        }    
     },
     methods: {
         collapsedSider() {

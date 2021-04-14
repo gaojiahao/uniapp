@@ -89,12 +89,13 @@ export default {
       ruleValidate:{
 
       },
-      videoDevices:[]
+      videoDevices:[],
+      roomNumber:''
     };
   },
   methods: {
     save(){
-      Cookies.set("channel", this.formValidate.channel);
+      // Cookies.set("channel", this.formValidate.channel);
       Cookies.set("baseMode", this.baseMode);
       Cookies.set("transcode", this.transcode);
       Cookies.set("attendeeMode", this.attendeeMode);
@@ -120,6 +121,8 @@ export default {
   },
   created(){
     this.initRMT();
+    this.roomNumber = this.$route.query.roomNumber;
+    Cookies.set("channel", this.roomNumber);
   }
 };
 </script>

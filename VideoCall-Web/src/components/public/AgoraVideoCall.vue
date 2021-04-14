@@ -5,10 +5,17 @@
 
 <script>
 import { merge } from "lodash";
+import {
+  CloseMeetingRoom,
+  JoinMeetingRoom,
+  QuitMeetingRoom,
+} from "@service/meetingService";
 
 export default {
   data() {
     return {
+      config:{},
+      code:'',
       client: {},
       localStream: {},
       shareClient: {},
@@ -71,9 +78,26 @@ export default {
       console.log("publish success");
       this.testNetWork();
     },
+    async leave(){
+      this.$FromLoading.show();
+      await QuitMeetingRoom({roomNumber:this.config.roomNumber,meetingRoomMemberId:this.uid}).then(res => {
+        if (res.success) {
+          this.$Message.info({
+            background: true,
+            content: res.message
+          });
+          this.leaveMeetingRoom();
+        } else {
+          this.$Message.error({
+            background: true,
+            content: res.result.msg
+          });
+          this.$FromLoading.hide();
+        }
+      }); 
+    },
     //离开频道
-    async leave() {
-      await this.client.unpublish([this.localAudioTrack, this.localVideoTrack]);
+    async leaveMeetingRoom() {
       await this.client.leave();
     },
     //订阅远端用户
@@ -122,8 +146,26 @@ export default {
     },
     //结束会议
     async endMeeting(){
+      this.$FromLoading.show();
+      await CloseMeetingRoom({roomNumber:this.config.roomNumber,code:this.code}).then(res => {
+        if (res.success) {
+          this.$Message.info({
+            background: true,
+            content: res.message
+          });
+          this.closeMeeting();
+        } else {
+          this.$Message.error({
+            background: true,
+            content: res.result.msg
+          });
+          this.$FromLoading.hide();
+        }
+      }); 
+    },
+    async closeMeeting(){
       await this.client.unpublish([this.localAudioTrack, this.localVideoTrack]);
-      this.$router.push("/createMeeting");
+      this.$router.push('/login');
     },
     //通话质量检测
     async testNetWork(){
@@ -149,7 +191,6 @@ export default {
     testDevices(){
       AgoraRTC.getDevices()
         .then(devices => {
-          debugger
           for(var i in devices){
             if(devices[i]['kind']=='audioinput'){
               this.audioDevices.push({
@@ -225,6 +266,8 @@ export default {
   },
   created() {
     this.init();
+    this.config = JSON.parse(window.localStorage.getItem("SPHY_LOGIN_TOKEN"));
+    this.code = window.localStorage.getItem("mac");
   },
 
   mounted() {

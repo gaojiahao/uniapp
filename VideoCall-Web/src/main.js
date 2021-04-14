@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\main.js
- * @LastEditTime: 2021-04-13 12:24:36
+ * @LastEditTime: 2021-04-14 14:57:42
  * @LastEditors: sueRimn
  * @Descripttion:
  * @version: 1.0.0
@@ -22,10 +22,12 @@ import us from "@lang/en";
 import '@less/common';
 import '@css/iconfont/iconfont.css';
 import Loading from "@plugins/loading/pageLoad/loading";
+import FromLoading from "@components/public/loading/loading.js";
 
 Vue.use(ViewUI);
 Vue.use(VueI18n);
 Vue.use(Loading);
+Vue.use(FromLoading);
 
 Vue.prototype.$Message = ViewUI.Message;
 
@@ -42,9 +44,10 @@ const i18n = new VueI18n({
   messages // set locale messages
 });
 
-new Vue({
+let vueMain = new Vue({
   router,
   store,
   i18n,
   render: h => h(App)
 }).$mount("#app");
+export default vueMain;
