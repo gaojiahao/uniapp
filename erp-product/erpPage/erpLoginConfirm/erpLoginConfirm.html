@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=7">
@@ -13,6 +14,7 @@
   <script src="/static/js/template.js"></script>
   <script src="/static/js/myLocalStorage.js"></script>
 </head>
+
 <body>
   <div id="erpLoginConfirm">
     <div class="header">
@@ -28,7 +30,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="right">
           <div class="loginBtn">登录系统</div>
           <div class="shouyeBox">
@@ -72,6 +74,7 @@
     </div>
   <%}%>
 </script>
+
 </html>
 <script>
   $(function () {
@@ -85,20 +88,20 @@
     });
     document.getElementById("tpUserWrap").innerHTML = html;
     $(".userIten").click(function (e) {
-      console.log("123456", e.currentTarget.getAttribute("value"));
       var currentUser = userList[e.currentTarget.getAttribute("value")];
-      console.log(currentUser);
       $.ajax({
-          type: "post",
-          url: baseUrl + "/api/UserAffiliateCompany",
-          contentType: "application/json; charset=utf-8",
-          data: JSON.stringify({UserId: userId,
-          CompanyNumber: currentUser.companyNumber}),
-          headers: {
-            Utoken: token
-          }
-        }).then(function(res) {
-          if (res.result.isLogin) {
+        type: "post",
+        url: baseUrl + "/api/UserAffiliateCompany",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({
+          UserId: userId,
+          CompanyNumber: currentUser.companyNumber
+        }),
+        headers: {
+          Utoken: token
+        }
+      }).then(function (res) {
+        if (res.result.isLogin) {
           window.localStorage.setItem("token", res.result.accessToken);
           window.location.href = '../erpOrder/erpOrder.html';
         } else {
@@ -107,7 +110,7 @@
       });
     })
     $(".toHome").click(function () {
-       window.location.href = '../erpHome/erpHome.html';
+      window.location.href = '../erpHome/erpHome.html';
     })
   })
-  </script>
+</script>
