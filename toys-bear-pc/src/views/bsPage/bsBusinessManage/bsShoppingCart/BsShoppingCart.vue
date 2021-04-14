@@ -20,15 +20,12 @@
           <template slot-scope="scope">
             <div class="imgBox">
               <el-image
+                @click.native="goDetails(scope.row)"
                 fit="contain"
                 style="width:80px;height:60px;"
                 :src="scope.row.img"
               >
-                <div
-                  slot="placeholder"
-                  class="errorImg"
-                  @click="goDetails(scope.row)"
-                >
+                <div slot="placeholder" class="errorImg">
                   <img src="~@/assets/images/imgError.png" alt />
                 </div>
                 <div

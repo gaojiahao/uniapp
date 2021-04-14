@@ -113,7 +113,7 @@
             </span>
             <span class="stock">
               库存：
-              <span>0</span>
+              <span>--</span>
             </span>
           </p>
           <p>
