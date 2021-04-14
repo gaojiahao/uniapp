@@ -83,7 +83,7 @@
               <p>订单编号：</p> <input class="searchKey" id="orderNumber" type="text">
             </li>
             <li>
-              <p>时间区间：：</p>
+              <p>日期：</p>
               <select id="startTime" onchange="getDateList()">
                 <option value=" ">全部</option>
                 <option value="today">当天</option>
@@ -180,8 +180,8 @@
     skipCount: 1,
     maxResultCount: 10,
     sortOrder: 1,
-    sortType: 2,
-  }
+    sortType: 2
+  };
   var currentSelectTableValue = {
     number: "",
     orderType: "",
