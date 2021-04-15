@@ -27,13 +27,21 @@
                   @click.native="goDetails(scope.row)"
                   fit="contain"
                   style="width:80px;height:60px;"
-                  :src="scope.row.imageUrl && scope.row.imgUrlList[0]"
+                  :src="scope.row.imgUrlList && scope.row.imgUrlList[0]"
                 >
                   <div slot="placeholder" class="errorImg">
-                    <img src="~@/assets/images/imgError.png" alt />
+                    <img
+                      style="width:60px;height:60px;"
+                      src="~@/assets/images/imgError.png"
+                      alt
+                    />
                   </div>
                   <div slot="error" class="errorImg">
-                    <img src="~@/assets/images/imgError.png" alt />
+                    <img
+                      style="width:60px;height:60px;"
+                      src="~@/assets/images/imgError.png"
+                      alt
+                    />
                   </div>
                 </el-image>
                 <div class="productName">
@@ -250,6 +258,7 @@
 <script>
 import { mapState } from "vuex";
 import bsSampleSearch from "@/components/bsComponents/bsSampleComponent/bsSampleSearch";
+import eventBus from "@/assets/js/common/eventBus.js";
 export default {
   name: "bsSampleUpdata",
   components: {
@@ -266,6 +275,7 @@ export default {
   },
   data() {
     return {
+      searchForm: {},
       tableData: [],
       totalCount: 0,
       pageSize: 12,
@@ -275,6 +285,9 @@ export default {
   created() {},
   mounted() {
     this.getProductOfferDetailPage();
+    eventBus.$on("resetOffProduct", () => {
+      this.getProductOfferDetailPage();
+    });
   },
   methods: {
     // 去厂商
@@ -405,9 +418,7 @@ export default {
         name: this.item.offerNumber,
         linkUrl: "/bsIndex/bsSampleOfferCommodity",
         component: "bsSampleOfferCommodity",
-
         refresh: true,
-        noPush: true,
         label: this.item.offerNumber,
         value: this.item
       };

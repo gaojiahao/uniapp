@@ -212,8 +212,8 @@ export default {
         loop: true, //循环滚动
         direction: "horizontal", //方向设置，垂直滚动
         infinite: 1, //无限滚动前后遍历数
-        slidesToScroll: 2, // 每次滑动项数
-        pagination: 2, // 每次滑动项数
+        slidesToScroll: 1, // 每次滑动项数
+        pagination: 1, // 每次滑动项数
         loopedSlides: 1,
         speed: 300
       },

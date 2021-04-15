@@ -61,6 +61,7 @@
 <script>
 import { mapState } from "vuex";
 import bsSampleOfferProductList from "@/components/bsComponents/bsSampleComponent/bsSampleOfferProductList";
+import eventBus from "@/assets/js/common/eventBus.js";
 export default {
   name: "bsSampleOfferCommodity",
   components: {
@@ -75,6 +76,7 @@ export default {
     return {
       num: null,
       typeId: 0,
+      formDate: {},
       productList: [],
       isGrid: "bsGridComponent",
       totalCount: 0,
@@ -127,9 +129,49 @@ export default {
         });
       }
     },
+    callback(val) {
+      this.formDate = val;
+    },
     //返回编辑页面
-    handleAffirm() {
-      console.log(this.item.offerNumber);
+    async handleAffirm() {
+      eventBus.$emit("getSearchForm", this.callback);
+      console.log(this.item.offerNumber, this.formDate);
+      let quotationProductList = [];
+      this.offerProductList.forEach(item => {
+        quotationProductList.push({
+          productNumber: item.productNumber,
+          boxNumber: item.boxNumber
+        });
+      });
+      const fd = Object.assign({}, this.formDate);
+      fd.quotationProductList = quotationProductList;
+      console.log(fd);
+      const res = await this.$http.post("/api/UpdateProductOffer", fd);
+      if (res.data.result.code === 200) {
+        this.$common.handlerMsgState({
+          msg: "提交成功",
+          type: "success"
+        });
+        eventBus.$emit("resetOffProduct");
+        // this.$store.commit("initOfferProductList");
+        // const url = "编辑" + this.item.offerNumber;
+        // this.$store.commit("closeTab", url);
+
+        // const fd = {
+        //   name: "/bsIndex/bsSampleQuotation",
+        //   linkUrl: "/bsIndex/bsSampleQuotation",
+        //   component: "bsSampleQuotation",
+        //   refresh: true,
+        //   label: "找样报价"
+        // };
+        // this.$router.push("/bsIndex/bsSampleQuotation");
+        // this.$store.commit("myAddTab", fd);
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          error: "danger"
+        });
+      }
       this.$store.commit("closeTab", this.item.offerNumber);
       // this.$forceUpdate();
     },

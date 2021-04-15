@@ -232,6 +232,7 @@
   </div>
 </template>
 <script>
+import eventBus from "@/assets/js/common/eventBus.js";
 export default {
   name: "bsSampleSearch",
   props: {
@@ -366,6 +367,9 @@ export default {
   },
   mounted() {
     this.getProductOfferByNumber();
+    eventBus.$on("getSearchForm", callback => {
+      callback(this.clienFormData);
+    });
   },
   methods: {
     //请求条件
