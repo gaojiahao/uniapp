@@ -59,13 +59,7 @@ const configureWebpack = {
     }
   },
   externals: {
-    BMap: "BMap",
-    vue: "Vue",
-    vuex: "Vuex",
-    "vue-router": "VueRouter",
-    ElementUI: "ELEMENT",
-    axios: "axios",
-    jquery: "$"
+    BMap: "BMap"
   }
 };
 if (env === "production") {

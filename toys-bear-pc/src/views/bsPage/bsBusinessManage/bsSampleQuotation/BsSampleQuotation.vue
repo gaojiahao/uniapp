@@ -110,7 +110,7 @@
           <el-table-column label="总金额" align="center" width="100">
             <template slot-scope="scope">
               <span style="color:#EB1515;">
-                {{ scope.row.cu_deName }}
+                {{ scope.row.cu_de }}
               </span>
               <span style="color:#EB1515;">
                 {{ scope.row.offerTotalAmount }}

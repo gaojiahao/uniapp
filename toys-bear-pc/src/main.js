@@ -16,6 +16,7 @@ import waterfall from "vue-waterfall2";
 import Video from "video.js";
 import "video.js/dist/video-js.css";
 import common from "@/utils/common";
+import VueCookies from "vue-cookies";
 
 /**
  * 全局组件集合
@@ -31,6 +32,7 @@ getMenuFuc();
 Vue.use(element);
 Vue.use(myAxios);
 Vue.use(waterfall);
+Vue.use(VueCookies);
 Vue.use(common);
 Vue.use(MessageComponent);
 
