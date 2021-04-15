@@ -4,8 +4,10 @@ import router from "./router";
 import store from "./store";
 import myAxios from "@/request/http";
 import "@/styles/base.less";
-import ElementUI from "element-ui";
+// import ElementUI from "element-ui";
 // import "element-ui/lib/theme-chalk/index.css";
+
+import element from "@/element/index";
 import "@/assets/css/theme/index.css";
 import { getMenuFuc } from "@/router/index";
 import ExTableColumn from "ex-table-column";
@@ -15,8 +17,6 @@ import Video from "video.js";
 import "video.js/dist/video-js.css";
 import common from "@/utils/common";
 
-// import element from "@/element-ui/index";
-// Vue.use(element);
 /**
  * 全局组件集合
  */
@@ -27,7 +27,8 @@ Vue.prototype.$PreviewPic = PreviewPic;
 Vue.prototype.$video = Video;
 Vue.config.productionTip = false;
 getMenuFuc();
-Vue.use(ElementUI);
+// Vue.use(ElementUI);
+Vue.use(element);
 Vue.use(myAxios);
 Vue.use(waterfall);
 Vue.use(common);

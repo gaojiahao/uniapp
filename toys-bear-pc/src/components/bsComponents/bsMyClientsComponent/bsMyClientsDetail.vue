@@ -25,7 +25,7 @@
             <div class="name">{{ item.companyName }}</div>
             <div class="tel">
               <p>联系人：{{ item.contactsMan }}</p>
-              <p>电话：{{ item.phoneNumber }}</p>
+              <p>电话：{{ item.telePhoneNumber }}</p>
               <p>手机：{{ item.phoneNumber }}</p>
               <p>QQ：{{ item.qq }}</p>
               <p>地址：{{ item.address }}</p>
