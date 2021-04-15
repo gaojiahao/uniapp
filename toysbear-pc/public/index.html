@@ -27,11 +27,11 @@
     // 判断是否为小于IE11的浏览器
     var isLessIE11 =
       userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1;
-    console.log(window.location);
-    if (isLessIE11 && window.location.href == "http://139.9.71.135:8080/#/erphome") {
+    console.log(window.location.href);
+    if (isLessIE11 && window.location.href == "https://www.toysbear.com/#/erphome") {
       // this._message('请升级至IE11或更换其他浏览器，才能使用发布公告功能', 'warn')
       window.location.href =
-        "http://139.9.71.135:8096/erpPage/erpHome/erpHome.html";
+        "https://www.toysbear.com/erpProduct/erpPage/erpHome/erpHome.html";
     }
   </script>
 </head>
