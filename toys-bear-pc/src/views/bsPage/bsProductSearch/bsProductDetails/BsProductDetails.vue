@@ -102,7 +102,10 @@
           <p>
             <span class="newTime">
               上架时间：
-              <span>{{ productDetail.newTime.replace(/T.*/, "") }}</span>
+              <span>{{
+                productDetail.newTime &&
+                  productDetail.newTime.replace(/T.*/, "")
+              }}</span>
             </span>
             <span class="stock">
               库存：
@@ -250,7 +253,7 @@ export default {
     // 收藏
     async addCollect(item) {
       const res = await this.$http.post("/api/CreateProductCollection", {
-        productNumber: item.bearProduct.productNumber
+        productNumber: item.productNumber
       });
       if (res.data.result.code === 200) {
         if (item.isFavorite) {
