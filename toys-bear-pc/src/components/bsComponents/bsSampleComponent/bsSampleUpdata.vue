@@ -142,11 +142,24 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="price" label="单价" align="center" width="100">
+          <el-table-column prop="price" label="厂价" align="center" width="100">
             <template slot-scope="scope">
               <span style="color:#f56c6c"> ￥{{ scope.row.price }} </span>
             </template>
           </el-table-column>
+          <el-table-column
+            prop="offerAmount"
+            label="报出价"
+            align="center"
+            width="100"
+          >
+            <template slot-scope="scope">
+              <span style="color:#f56c6c">
+                {{ scope.row.cu_de + scope.row.offerAmount }}
+              </span>
+            </template>
+          </el-table-column>
+
           <ex-table-column :autoFit="true" width="100" label="总价">
             <template slot-scope="scope">
               <p class="item price">
