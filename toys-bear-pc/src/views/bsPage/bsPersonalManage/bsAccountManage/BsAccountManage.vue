@@ -122,7 +122,11 @@
         label="添加时间"
         min-width="150"
         align="center"
-      ></el-table-column>
+      >
+        <template slot-scope="scope">
+          {{ scope.row.createdOn.replace(/[T].*/, "") }}
+        </template>
+      </el-table-column>
       <el-table-column label="操作" min-width="250" align="center">
         <template slot-scope="scope">
           <el-button

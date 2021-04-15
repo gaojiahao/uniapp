@@ -64,7 +64,7 @@
         </el-table-column>
         <el-table-column
           align="center"
-          prop="ContactsMan"
+          prop="contactsMan"
           label="联系人"
           width="180"
         >
@@ -87,7 +87,7 @@
         </el-table-column>
         <el-table-column
           align="center"
-          prop="ProductCount"
+          prop="productCount"
           label="产品数量"
           width="200"
         >
@@ -140,10 +140,12 @@ export default {
       if (res.data.result.code === 200) {
         this.tableData = res.data.result.item.items;
         this.totalCount = res.data.result.item.totalCount;
+        console.log("contactsMan", this.tableData);
       }
     },
     //点击详情
     async handleDetail(e) {
+      console.log(e);
       const fd = {
         name: e.companyName,
         linkUrl: "/bsIndex/bsVendorQuery",

@@ -32,10 +32,10 @@
               新增客户</el-button
             >
           </el-form-item>
-          <el-form-item label="报价备注：" prop="title">
+          <el-form-item label="报价备注：" prop="remark">
             <el-input
               style="width: 586px; margin: 0 15px;"
-              v-model="clienFormData.title"
+              v-model="clienFormData.remark"
               maxlength="50"
               placeholder=" "
               show-word-limit
