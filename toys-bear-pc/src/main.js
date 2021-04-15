@@ -15,6 +15,8 @@ import Video from "video.js";
 import "video.js/dist/video-js.css";
 import common from "@/utils/common";
 
+// import element from "@/element-ui/index";
+// Vue.use(element);
 /**
  * 全局组件集合
  */

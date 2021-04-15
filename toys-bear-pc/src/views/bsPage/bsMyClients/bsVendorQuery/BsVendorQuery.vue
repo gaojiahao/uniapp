@@ -78,7 +78,7 @@
         </el-table-column>
         <el-table-column
           align="center"
-          prop="phoneNumber"
+          prop="telePhoneNumber"
           label="电话"
           width="180"
         >

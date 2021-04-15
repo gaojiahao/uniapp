@@ -27,6 +27,7 @@
               <p>联系人：{{ item.contactsMan }}</p>
               <p>电话：{{ item.phoneNumber }}</p>
               <p>手机：{{ item.phoneNumber }}</p>
+              <p>QQ：{{ item.qq }}</p>
               <p>地址：{{ item.address }}</p>
               <p><img src="~@/assets/images/consult.png" alt /> 在线咨询</p>
             </div>

@@ -256,7 +256,7 @@
             width="100"
           >
             <template slot-scope="scope">
-              <span>{{ scope.row.cu_de }}</span>
+              <span style="color:#f56c6c">{{ scope.row.cu_de }}</span>
               <span style="color:#f56c6c">
                 {{
                   priceCount(
