@@ -85,21 +85,27 @@
           </div>
         </div>
         <div class="minHall">
-          <div class="item" v-for="(item, i) in minHalls" :key="i">
-            <div class="imgBox">
-              <el-image
-                style="width: 222px; height: 108px;"
-                :src="item.bgImg || item.img"
-                fit="contain"
-              >
-              </el-image>
-            </div>
-            <div class="name">{{ item.companyName || item.adTitle }}</div>
-          </div>
+          <slider :options="sliderinit" @slide="slide">
+            <slideritem v-for="(item, i) in minHalls" :key="i">
+              <div class="minHallItem">
+                <div class="imgBox">
+                  <el-image
+                    style="width: 221px; height: 108px;"
+                    :src="item.bgImg || item.img"
+                    fit="contain"
+                  >
+                  </el-image>
+                </div>
+                <div class="name">
+                  {{ item.companyName || item.adTitle || 123456 }}
+                </div>
+              </div>
+            </slideritem>
+          </slider>
         </div>
       </div>
       <div class="right">
-        <!-- <div class="titleBox">
+        <div class="titleBox">
           <div class="hotBox">
             <el-radio-group v-model="hotValue">
               <el-radio-button
@@ -181,55 +187,37 @@
               </template>
             </el-table-column>
           </el-table>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { slider, slideritem } from "vue-concise-slider"; // 引入slider组件
 export default {
   name: "bsHome",
+  components: {
+    slider: slider,
+    slideritem: slideritem
+  },
   data() {
     return {
-      tableData: [
-        {
-          id: 1,
-          img: require("@/assets/images/imgError.png"),
-          name: "99式坦克军事系列积木套装99式坦克军事系列积木套装",
-          price: "2932.00",
-          pr_no: "￥",
-          cate: "电玩玩具/坦克",
-          number: "588454"
-        },
-        {
-          id: 2,
-          img: require("@/assets/images/imgError.png"),
-          name: "99式坦克军事系列积木套装99式坦克军事系列积木套装",
-          price: "2932.00",
-          pr_no: "￥",
-          cate: "电玩玩具/坦克",
-          number: "588454"
-        },
-        {
-          id: 3,
-          img: require("@/assets/images/imgError.png"),
-          name: "99式坦克军事系列积木套装99式坦克军事系列积木套装",
-          price: "2932.00",
-          pr_no: "￥",
-          cate: "电玩玩具/坦克",
-          number: "588454"
-        },
-        {
-          id: 4,
-          img: require("@/assets/images/imgError.png"),
-          name: "99式坦克军事系列积木套装99式坦克军事系列积木套装",
-          price: "2932.00",
-          pr_no: "￥",
-          cate: "电玩玩具/坦克",
-          number: "588454"
-        }
-      ],
+      //滑动配置[obj]
+      sliderinit: {
+        currentPage: 0, //当前页码
+        thresholdDistance: 500, //滑动判定距离
+        thresholdTime: 100, //滑动判定时间
+        autoplay: 4000, //自动滚动[ms]
+        loop: true, //循环滚动
+        direction: "horizontal", //方向设置，垂直滚动
+        infinite: 1, //无限滚动前后遍历数
+        slidesToScroll: 2, // 每次滑动项数
+        pagination: 2, // 每次滑动项数
+        loopedSlides: 1,
+        speed: 300
+      },
+      tableData: [],
       bigHalls: [],
       minHalls: [],
       hotValue: "热门择样",
@@ -321,6 +309,16 @@ export default {
     };
   },
   methods: {
+    slide(data) {
+      if (data.currentPage > this.minHalls.length - 3) {
+        data.currentPage = 0;
+      }
+      // const list = [this.minHalls[0], this.minHalls[1]];
+      // const number = this.minHalls.length - 4;
+      // console.log(number, data.currentPage);
+      //   console.log(data.currentPage, data);
+      //   this.minHalls.splice(0, 2);
+    },
     // 点击label
     openLabel(title) {
       let fd = {};
@@ -461,7 +459,7 @@ export default {
       });
       if (res.data.result.code === 200) {
         this.bigHalls = res.data.result.item.bigHallList.splice(0, 3);
-        this.minHalls = res.data.result.item.smallHallList.splice(0, 4);
+        this.minHalls = res.data.result.item.smallHallList;
       }
     }
   },
@@ -643,7 +641,6 @@ export default {
       border-radius: 4px;
       box-sizing: border-box;
       padding: 0 20px;
-      margin-bottom: 20px;
       .title {
         height: 50px;
         display: flex;
@@ -688,17 +685,33 @@ export default {
           }
         }
       }
-      .minHall {
+      @{deep} .minHall {
         display: flex;
         justify-content: space-between;
-        margin-top: 10px;
-        .item {
-          width: 222px;
+        height: 208px;
+        .swiper-container-horizontal .slider-wrapper,
+        .swiper-container-vertical .slider-wrapper {
+          align-items: flex-start !important;
+        }
+        .slider-item {
+          width: 221px;
+          height: 158px;
+          margin-right: 20px;
+          cursor: pointer;
+          &:last-of-type {
+            margin-right: 0;
+          }
+        }
+        .minHallItem {
+          width: 221px;
+          height: 158px;
           .imgBox {
-            width: 222px;
+            width: 221px;
             height: 108px;
-            overflow: hidden;
+            // overflow: hidden;
             .el-image {
+              width: 221px;
+              height: 108px;
               transition: all 1s;
             }
           }
@@ -713,6 +726,8 @@ export default {
           .name {
             height: 50px;
             display: flex;
+            font-size: 14px;
+            color: #333;
             align-items: center;
             justify-content: center;
           }
@@ -726,7 +741,6 @@ export default {
       border-radius: 4px;
       padding: 0 20px;
       box-sizing: border-box;
-      margin-bottom: 20px;
       .titleBox {
         height: 50px;
         display: flex;

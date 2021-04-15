@@ -436,12 +436,12 @@ export default {
             }
           }
           .el-tabs__content {
-            height: calc(100% - 90px);
+            height: calc(100% - 50px);
             box-sizing: border-box;
             background-color: #f1f3f6;
             overflow: hidden;
             box-sizing: border-box;
-            margin: 20px;
+            margin: 0 20px;
             padding: 0;
             box-sizing: border-box;
             .el-tab-pane {
@@ -535,6 +535,8 @@ export default {
   }
 }
 .myScrollbar {
+  padding: 20px 0;
+  box-sizing: border-box;
   /*-------滚动条整体样式----*/
   &::-webkit-scrollbar {
     width: 5px;

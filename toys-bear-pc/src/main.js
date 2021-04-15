@@ -5,7 +5,7 @@ import store from "./store";
 import myAxios from "@/request/http";
 import "@/styles/base.less";
 import ElementUI from "element-ui";
-// import "element-ui/lib/theme-chalk/index.css";
+import "element-ui/lib/theme-chalk/index.css";
 import "@/assets/css/theme/index.css";
 import { getMenuFuc } from "@/router/index";
 import ExTableColumn from "ex-table-column";
@@ -14,6 +14,7 @@ import waterfall from "vue-waterfall2";
 import Video from "video.js";
 import "video.js/dist/video-js.css";
 import common from "@/utils/common";
+import VueCookies from "vue-cookies";
 
 /**
  * 全局组件集合
@@ -25,6 +26,7 @@ Vue.prototype.$PreviewPic = PreviewPic;
 Vue.prototype.$video = Video;
 Vue.config.productionTip = false;
 getMenuFuc();
+Vue.use(VueCookies);
 Vue.use(ElementUI);
 Vue.use(myAxios);
 Vue.use(waterfall);

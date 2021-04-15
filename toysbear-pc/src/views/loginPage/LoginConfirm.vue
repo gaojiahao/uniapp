@@ -59,6 +59,8 @@ export default {
   },
   data() {
     return {
+      loginUrl: "https://www.toysbear.com/new/#/bsIndex",
+      // loginUrl: "http://139.9.71.135:8080/new/#/bsIndex",
       radioValue: null,
       commparnyList: []
     };
@@ -88,6 +90,14 @@ export default {
         CompanyNumber: item.companyNumber
       });
       if (res.data.result.isLogin) {
+        const tokenValue = JSON.stringify({
+          accessToken: res.data.result.accessToken,
+          commparnyList: res.data.result.commparnyList,
+          uid: res.data.result.uid,
+          userInfo: res.data.result.userInfo
+        });
+        // 保存数据到cookit
+        this.$cookies.set("userInfo", tokenValue);
         // 设置token
         this.$store.commit("setToken", res.data.result);
         this.$store.commit(
@@ -137,7 +147,7 @@ export default {
           }
           switch (item.companyType) {
             case "Sales":
-              location.href = "https://www.toysbear.com/new/#/bsIndex";
+              location.href = this.loginUrl;
               // location.href = "http://139.9.71.135:8080/new/#/bsIndex";
               break;
             default:
