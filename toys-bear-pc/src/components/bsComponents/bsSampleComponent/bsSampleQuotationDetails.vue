@@ -30,7 +30,9 @@
         </div>
         <div class="flex_b">
           <p>
-            报价时间：<span>{{ itemList.createdOn }} </span>
+            报价时间：<span v-if="itemList.createdOn"
+              >{{ itemList.createdOn.replace(/T/, " ") }}
+            </span>
           </p>
           <p>
             报价备注：<span>{{ itemList.title }} </span>
@@ -267,7 +269,7 @@
 
           <el-table-column
             prop="OfferTotalAmount"
-            label="总价"
+            label="报出总价"
             align="center"
             width="100"
           >
@@ -277,7 +279,7 @@
                 {{
                   handleOffer(
                     priceCount(
-                      scope.row.price,
+                      scope.row.offerAmount,
                       scope.row.ou_lo,
                       scope.row.boxNumber
                     )
@@ -317,8 +319,8 @@
           <p class="item">
             <span class="itemTitle">总金额：</span>
             <span class="price"
-              >￥{{ handleOffer(myTotalPrice(tableData)) }}</span
-            >
+              >{{ item.cu_de + handleOffer(myTotalPrice(tableData)) }}
+            </span>
           </p>
         </div>
       </div>
@@ -384,7 +386,6 @@ export default {
   methods: {
     // 判断编号
     handleOffer(row) {
-      console.log(row);
       if (this.item.offerNumber.indexOf("S") < 0) {
         return row;
       } else {
@@ -393,7 +394,6 @@ export default {
     },
     //厂商跳转
     toFactory(item) {
-      console.log(item);
       const fd = {
         name: item.supplierNumber,
         linkUrl: this.$route.path,
@@ -436,7 +436,6 @@ export default {
         label: row.fa_no || "产品详情",
         value: row
       };
-      console.log(row);
       this.$store.commit("myAddTab", fd);
     },
     // 获取列表
@@ -647,11 +646,12 @@ export default {
     // 计算总价
     myTotalPrice(list) {
       let price = 0;
+
       for (let i = 0; i < list.length; i++) {
         price = this.add(
           price,
           this.multiply(
-            this.multiply(list[i].price, list[i].boxNumber),
+            this.multiply(list[i].offerAmount, list[i].boxNumber),
             list[i].ou_lo
           )
         );

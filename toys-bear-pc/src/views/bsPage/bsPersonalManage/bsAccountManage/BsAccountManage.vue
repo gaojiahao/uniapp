@@ -367,7 +367,6 @@ export default {
         this.myInfo = item;
         this.tableData = item.personnels;
         this.totalCount = item.personnels.length;
-        console.log(item);
       } else {
         this.$common.handlerMsgState({
           msg: msg,

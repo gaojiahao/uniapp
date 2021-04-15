@@ -160,14 +160,14 @@
             </template>
           </el-table-column>
 
-          <ex-table-column :autoFit="true" width="100" label="总价">
+          <ex-table-column :autoFit="true" width="100" label="报出总价">
             <template slot-scope="scope">
               <p class="item price">
-                <span>￥</span>
-                <span>
+                <span style="color:#f56c6c">{{ scope.row.cu_de }}</span>
+                <span style="color:#f56c6c">
                   {{
                     priceCount(
-                      scope.row.price,
+                      scope.row.offerAmount,
                       scope.row.ou_lo,
                       scope.row.boxNumber
                     )
@@ -218,7 +218,9 @@
           </p>
           <p class="item">
             <span class="itemTitle">总金额：</span>
-            <span class="price">￥{{ myTotalPrice(offerProductList) }}</span>
+            <span class="price"
+              >{{ item.cu_de + myTotalPrice(offerProductList) }}
+            </span>
           </p>
           <el-button
             type="primary"
@@ -277,7 +279,6 @@ export default {
   methods: {
     // 去厂商
     toFactory(item) {
-      console.log(item);
       const fd = {
         name: item.supplierNumber,
         linkUrl: "/bsIndex/bsVendorQuery",
@@ -588,7 +589,7 @@ export default {
         price = this.add(
           price,
           this.multiply(
-            this.multiply(list[i].price, list[i].boxNumber),
+            this.multiply(list[i].offerAmount, list[i].boxNumber),
             list[i].ou_lo
           )
         );

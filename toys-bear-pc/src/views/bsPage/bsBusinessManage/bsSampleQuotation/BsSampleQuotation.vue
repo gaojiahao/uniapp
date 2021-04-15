@@ -170,7 +170,6 @@
                 v-show="scope.row.offerNumber.indexOf('S') < 0"
                 size="mini"
                 type="info"
-                @click="tuisong(scope.row)"
                 >推送</el-button
               >
               <el-button
@@ -250,13 +249,11 @@ export default {
   methods: {
     // 导出找样
     exportOrder(row) {
-      console.log(row);
       this.orderRow = {
         sampleNumber: row.offerNumber,
         name: row.customerName,
         api: "/api/ExportSampleOfferToExcel"
       };
-      console.log(this.orderRow);
       this.exportTemplateDialog = true;
     },
     // 获取列表
@@ -325,10 +322,6 @@ export default {
     handleCurrentChange(page) {
       this.currentPage = page;
       this.getCompanySamplelistPage();
-    },
-    tuisong(row) {
-      console.log(row.offerNumber);
-      console.log(row.offerNumber.indexOf("S") >= 0);
     },
     // 报价详情跳转
     async goDetails(row) {
