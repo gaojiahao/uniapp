@@ -17,6 +17,7 @@ import Video from "video.js";
 import "video.js/dist/video-js.css";
 import common from "@/utils/common";
 import VueCookies from "vue-cookies";
+import CollapseTransition from "element-ui/lib/transitions/collapse-transition";
 
 /**
  * 全局组件集合
@@ -35,6 +36,7 @@ Vue.use(waterfall);
 Vue.use(VueCookies);
 Vue.use(common);
 Vue.use(MessageComponent);
+Vue.component(CollapseTransition.name, CollapseTransition);
 
 new Vue({
   router,

@@ -6,16 +6,60 @@ import {
   MessageBox,
   Message,
   Dialog,
-  Table
+  Table,
+  Image,
+  Tabs,
+  TabPane,
+  Form,
+  FormItem,
+  Input,
+  InputNumber,
+  Loading,
+  Avatar,
+  Menu,
+  Scrollbar,
+  MenuItem,
+  Submenu,
+  RadioGroup,
+  RadioButton,
+  Upload,
+  TableColumn,
+  Checkbox,
+  DatePicker,
+  Pagination,
+  Tooltip,
+  Badge
 } from "element-ui";
 const element = {
-  install: function (Vue) {
+  install: function(Vue) {
     Vue.use(Button);
     Vue.use(Switch);
     Vue.use(Select);
     Vue.use(Option);
     Vue.use(Dialog);
     Vue.use(Table);
+    Vue.use(Image);
+    Vue.use(Tabs);
+    Vue.use(TabPane);
+    Vue.use(Form);
+    Vue.use(FormItem);
+    Vue.use(Input);
+    Vue.use(InputNumber);
+    Vue.use(Loading);
+    Vue.use(Avatar);
+    Vue.use(Menu);
+    Vue.use(MenuItem);
+    Vue.use(Submenu);
+    Vue.use(Upload);
+    Vue.use(RadioGroup);
+    Vue.use(RadioButton);
+    Vue.use(TableColumn);
+    Vue.use(Checkbox);
+    Vue.use(DatePicker);
+    Vue.use(Pagination);
+    Vue.use(Tooltip);
+    Vue.use(Scrollbar);
+    Vue.use(Badge);
 
     // 往vue实例原型里添加消息提示，方便全局调用
     Vue.prototype.$msgbox = MessageBox;
