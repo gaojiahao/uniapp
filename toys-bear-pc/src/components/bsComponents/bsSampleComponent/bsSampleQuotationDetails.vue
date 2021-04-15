@@ -212,6 +212,11 @@
             align="center"
             width="100"
           >
+            <template slot-scope="scope">
+              <span>
+                {{ handleOffer(scope.row.boxNumber) }}
+              </span>
+            </template>
           </el-table-column>
           <!-- <el-table-column label="箱数" align="center" width="100">
             <template slot-scope="scope">
@@ -233,22 +238,33 @@
           >
             <template slot-scope="scope">
               <span>
-                {{ sumPriceCount(scope.row.boxNumber, scope.row.ou_lo) }}
+                {{
+                  handleOffer(
+                    sumPriceCount(scope.row.boxNumber, scope.row.ou_lo)
+                  )
+                }}
               </span>
             </template>
           </el-table-column>
+          <el-table-column prop="price" label="厂价" align="center" width="100">
+            <template slot-scope="scope">
+              <span style="color:#f56c6c"> ￥{{ scope.row.price }} </span>
+            </template>
+          </el-table-column>
+
           <el-table-column
-            prop="unitPrice"
-            label="单价"
+            prop="offerAmount"
+            label="报出价"
             align="center"
             width="100"
           >
             <template slot-scope="scope">
               <span style="color:#f56c6c">
-                {{ scope.row.cu_de + scope.row.unitPrice }}
+                {{ scope.row.cu_de + handleOffer(scope.row.offerAmount) }}
               </span>
             </template>
           </el-table-column>
+
           <el-table-column
             prop="OfferTotalAmount"
             label="总价"
@@ -259,10 +275,12 @@
               <span style="color:#f56c6c">{{ scope.row.cu_de }}</span>
               <span style="color:#f56c6c">
                 {{
-                  priceCount(
-                    scope.row.unitPrice,
-                    scope.row.ou_lo,
-                    scope.row.boxNumber
+                  handleOffer(
+                    priceCount(
+                      scope.row.price,
+                      scope.row.ou_lo,
+                      scope.row.boxNumber
+                    )
                   )
                 }}
               </span>
@@ -283,18 +301,24 @@
           <p class="item">
             <span class="itemTitle">总体积/总材积：</span>
             <span
-              >{{ myTotalVolume(tableData).outerBoxStere }}/{{
-                myTotalVolume(tableData).outerBoxFeet
+              >{{ handleOffer(myTotalVolume(tableData).outerBoxStere) }}/{{
+                handleOffer(myTotalVolume(tableData).outerBoxFeet)
               }}</span
             >
           </p>
           <p class="item">
             <span class="itemTitle">总毛重/总净重：</span>
-            <span>{{ totalMaozhong() }}/{{ totalJingzhong() }}(KG)</span>
+            <span
+              >{{ handleOffer(totalMaozhong()) }}/{{
+                handleOffer(totalJingzhong())
+              }}(KG)</span
+            >
           </p>
           <p class="item">
             <span class="itemTitle">总金额：</span>
-            <span class="price">￥{{ myTotalPrice(tableData) }}</span>
+            <span class="price"
+              >￥{{ handleOffer(myTotalPrice(tableData)) }}</span
+            >
           </p>
         </div>
       </div>
@@ -358,6 +382,15 @@ export default {
     this.getProductOfferNumber();
   },
   methods: {
+    // 判断编号
+    handleOffer(row) {
+      console.log(row);
+      if (this.item.offerNumber.indexOf("S") < 0) {
+        return row;
+      } else {
+        return 0;
+      }
+    },
     //厂商跳转
     toFactory(item) {
       console.log(item);
@@ -558,8 +591,8 @@ export default {
       return this.multiply(boxNumber, ou_lo);
     },
     // 单个产品总价
-    priceCount(unitPrice, ou_lo, boxNumber) {
-      return this.multiply(this.multiply(unitPrice, ou_lo), boxNumber);
+    priceCount(price, ou_lo, boxNumber) {
+      return this.multiply(this.multiply(price, ou_lo), boxNumber);
     },
     // 计算总净重
     totalJingzhong() {
@@ -618,7 +651,7 @@ export default {
         price = this.add(
           price,
           this.multiply(
-            this.multiply(list[i].unitPrice, list[i].boxNumber),
+            this.multiply(list[i].price, list[i].boxNumber),
             list[i].ou_lo
           )
         );
