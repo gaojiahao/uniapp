@@ -21,10 +21,12 @@ import {
   MenuItem,
   Submenu,
   RadioGroup,
+  Radio,
   RadioButton,
   Upload,
   TableColumn,
   Checkbox,
+  CheckboxGroup,
   DatePicker,
   Pagination,
   Tooltip,
@@ -52,9 +54,11 @@ const element = {
     Vue.use(Submenu);
     Vue.use(Upload);
     Vue.use(RadioGroup);
+    Vue.use(Radio);
     Vue.use(RadioButton);
     Vue.use(TableColumn);
     Vue.use(Checkbox);
+    Vue.use(CheckboxGroup);
     Vue.use(DatePicker);
     Vue.use(Pagination);
     Vue.use(Tooltip);
