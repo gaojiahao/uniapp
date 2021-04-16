@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:37:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\product.vue
- * @LastEditTime: 2021-04-14 20:58:56
+ * @LastEditTime: 2021-04-16 16:58:37
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -30,23 +30,23 @@
         </div>
         <!-- 择样单号 -->
         <div class="select_order" v-if="flag=='order'">
-            <Table :columns="columns1" :data="data1" height="330"></Table>
+            <Table :columns="orderColumns" :data="orderList" height="330" class="select_order_list"></Table>
             <div class="select_order_info">
                 <Row>
                     <Col span="8">
-                        总款数：6
+                        总款数：{{totalKuanshu}}
                     </Col>
                     <Col span="8">
-                        总箱数：120
+                        总箱数：{{totalBoxCount}}
                     </Col>
                     <Col span="8">
-                        总个数：1200
+                        总个数：{{totalCount}}
                     </Col>
                     <Col span="24">
-                        总体积/总材积：0.035/10.27
+                        总体积/总材积：{{totalBulkStere}}/{{totalBulkFeet}}
                     </Col>
                     <Col span="19">
-                        总金额：<span class="red">￥1890.00</span>
+                        总金额：<span class="red">￥{{totalAmount}}</span>
                     </Col>
                     <Col span="5">
                         <div class="order_list" @click="changeProductList"></div>    
@@ -115,18 +115,20 @@
             </Row>
             <div class="action" v-if="this.productInfo.id">
                 <Button type="primary" shape="circle" style="width:88px;margin:0 9px 0 58.5px;" @click="addSelection">加入择样</Button>
-                <Button type="warning" shape="circle" style="width:88px;margin:0 58.5px 0 9px;">删除</Button>
+                <Button type="warning" shape="circle" style="width:88px;margin:0 58.5px 0 9px;"  @click="delSelection">删除</Button>
             </div>
         </div>
         <!-- 产品详情页 -->
-        <ModalProductDetail @show-modal-detail="showModalDetail" :showModal="showModal"></ModalProductDetail>
+        <ModalProductDetail @show-modal-detail="showModalDetail" :showModal="showModal" :modalProductInfo="modalProductInfo"></ModalProductDetail>
     </div>
 </template>
 <script>
+import * as Cookies from "js-cookie";
 import ModalProductDetail from "@components/order/modalProductDetail";
 import {
   QueryProductByCompanyNumber,
-  AddSampleOrderDetail
+  AddSampleOrderDetail,
+  QuerySampleOrderDetails
 } from "@service/meetingService";
 
 export default {
@@ -148,10 +150,10 @@ export default {
     },
     data(){
         return {
-            columns1: [
+            orderColumns: [
                 {
                     title: '品名',
-                    key: 'name',
+                    key: 'productName',
                     render: (h, params) => {
                         return h('div', [
                         h('span', {
@@ -165,21 +167,22 @@ export default {
                                 marginTop: '4px'
                             },
                             domProps: {
-                                title: params.row.name
+                                title: params.row.productName
                             },
                             on:{
                                 click:()=>{
-                                    this.showModalDetail(true,params.row.name)    
+                                    this.modalProductInfo = params.row;
+                                    this.showModalDetail(true,params.row.productName);  
                                 }
                             }
-                        }, params.row.name)
+                        }, params.row.productName)
                         ])
                     },
                     width: 107
                 },
                 {
                     title: '货号',
-                    key: 'age',
+                    key: 'factoryNo',
                     width: 90
                 },
                 {
@@ -193,83 +196,29 @@ export default {
                                 marginTop: '4px'
                             },
                             domProps: {
-                                title: params.row.address
+                                title: params.row.quoteThePrice?params.row.quoteThePrice:0
                             }
-                        }, '￥'+params.row.address)
+                        }, '￥'+(params.row.quoteThePrice?params.row.quoteThePrice:0))
                         ])
                     },
                 }
             ],
-            data1: [
-                {
-                    name: 'John Brown',
-                    age: 18,
-                    address: '199.00',
-                    date: '199.00'
-                },
-                {
-                    name: 'Jim Green',
-                    age: 24,
-                    address: '199.00',
-                    date: '199.00'
-                },
-                {
-                    name: 'Joe Black',
-                    age: 30,
-                    address: '199.00',
-                    date: '199.00'
-                },
-                {
-                    name: 'Jon Snow',
-                    age: 26,
-                    address: '199.00',
-                    date: '199.00'
-                },
-                {
-                    name: 'Jon Snow',
-                    age: 26,
-                    address: '199.00',
-                    date: '199.00'
-                },
-                {
-                    name: 'Jon Snow',
-                    age: 26,
-                    address: '199.00',
-                    date: '199.00'
-                },{
-                    name: 'Jon Snow',
-                    age: 26,
-                    address: '199.00',
-                    date: '199.00'
-                },{
-                    name: 'Jon Snow',
-                    age: 26,
-                    address: '199.00',
-                    date: '199.00'
-                },{
-                    name: 'Jon Snow',
-                    age: 26,
-                    address: '199.00',
-                    date: '199.00'
-                },{
-                    name: 'Jon Snow',
-                    age: 26,
-                    address: '199.00',
-                    date: '199.00'
-                },{
-                    name: 'Jon Snow',
-                    age: 26,
-                    address: '199.00',
-                    date: '199.00'
-                }
-            ],
+            orderList: [],
             nowProduct:'1111111111',
             test: require("@assets/bg/test.jpg"),
             isProductList:false,
             flag:'order',
             showModal:false,
             companyNumber:'',
-            productInfo:{}
+            productInfo:{},
+            modalProductInfo:{},
+            totalAmount:0,
+            totalBoxCount:0,
+            totalBulkFeet: 0,
+            totalBulkStere: 0,
+            totalCount: 0,
+            totalKuanshu: 0,
+            roomNumber:null
         }
     },
     watch:{
@@ -286,9 +235,12 @@ export default {
         changTabType(value){
             this.flag = value;
             this.$emit('chang-tab-type',value);
+            if(value=='order'){
+                this.getQuerySampleOrderDetails();
+            }
         },
         changType(){
-            this.$emit('chang-type',false,'order');
+            this.$emit('chang-type',true,'order');
         },
         changeProductList(){
             this.$emit('change-product-list');
@@ -303,7 +255,9 @@ export default {
         },
         getProductInfo(){
             var params = {
-                CompanyNumber:this.companyNumber
+                companyNumber:this.companyNumber,
+                companyApiHost:window.localStorage.getItem('mac'),
+                roomNumber: this.roomNumber
             };
             return new Promise((resolve, reject) => {
                 QueryProductByCompanyNumber(params).then(res => {
@@ -319,26 +273,93 @@ export default {
                 });
             });
         },
+        //新增择样
         addSelection(){
             var params = {
                 code:this.sampleSelection.number,
                 verifyCode:this.sampleSelection.code,
                 id:this.productInfo.id,
+                roomNumber: this.roomNumber
             };
             return new Promise((resolve, reject) => {
                 AddSampleOrderDetail(params).then(res => {
                     if (res.success) {
-                        debugger
+                        this.$Message.info({
+                            background: true,
+                            content: res.message
+                        });
+                        this.$FromLoading.hide();
                     } else {
                         this.$Message.error({
-                        background: true,
-                        content: res.result.msg
+                            background: true,
+                            content: res.message
                         });
                         this.$FromLoading.hide();
                     }
                 });
             });        
+        },
+        //删除择样
+        delSelection(){
+            var params = {
+                code:this.sampleSelection.number,
+                verifyCode:this.sampleSelection.code,
+                id:this.productInfo.id,
+                roomNumber: this.roomNumber
+            };
+            return new Promise((resolve, reject) => {
+                DeleteSampleOrderDetail(params).then(res => {
+                    if (res.success) {
+                        this.$Message.info({
+                            background: true,
+                            content: res.result.msg
+                        });
+                        this.$FromLoading.hide();
+                    } else {
+                        this.$Message.error({
+                            background: true,
+                            content: res.result.msg
+                        });
+                        this.$FromLoading.hide();
+                    }
+                });
+            });        
+        },
+        //根据择样代号和验证码查询择样单详情列表
+        getQuerySampleOrderDetails(){
+            var params = {
+                pageIndex:1,
+                pageSize:99999,
+                code:this.sampleSelection.number,
+                verifyCode:this.sampleSelection.code,
+                companyApiHost:window.localStorage.getItem('mac'),
+                roomNumber: this.roomNumber
+            };
+            return new Promise((resolve, reject) => {
+                QuerySampleOrderDetails(params).then(res => {
+                    if (res.success) {
+                        this.orderList = res.data.sampleOrderDetails.items;
+                        this.totalAmount=res.data.totalAmount;
+                        this.totalBoxCount=res.data.totalBoxCount;
+                        this.totalBulkFeet=res.data.totalBulkFeet;
+                        this.totalBulkStere=res.data.totalBulkStere;
+                        this.totalCount=res.data.totalCount;
+                        this.totalKuanshu=res.data.totalKuanshu;
+                        this.$FromLoading.hide();
+                    } else {
+                        this.$Message.error({
+                            background: true,
+                            content: res.result.msg
+                        });
+                        this.$FromLoading.hide();
+                    }
+                });
+            });     
         }
+    },
+    created(){
+        this.roomNumber=Cookies.get('channel');
+        this.getQuerySampleOrderDetails();
     }
 }
 </script>
@@ -395,6 +416,13 @@ export default {
                     width: 32px;
                     margin-top: -10px;
                     margin-left: 20px;
+                }
+            }
+            .select_order_list{
+                /deep/ .ivu-table-cell {
+                    padding-left: 16px;
+                    padding-right: 16px;
+                    font-size: 13px;
                 }
             }
         }

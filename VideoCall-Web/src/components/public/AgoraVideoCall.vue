@@ -40,12 +40,14 @@ export default {
     "baseMode",
     "appId",
     "uid",
-    "videoId"
+    "videoId",
+    "userlist"
   ],
 
   methods: {
     //发布频道与加入
     async join() {
+      debugger
       var $=this;
       // AgoraRTC.setLogLevel(3);  //日志级别0,1,2,3,4
       $.client.enableDualStream().then(() => {
@@ -99,6 +101,7 @@ export default {
     //离开频道
     async leaveMeetingRoom() {
       await this.client.leave();
+      this.$router.push('/login');
     },
     //订阅远端用户
     async subscribe(user, mediaType) {
@@ -166,7 +169,7 @@ export default {
     },
     async closeMeeting(){
       await this.client.unpublish([this.localAudioTrack, this.localVideoTrack]);
-      // this.$router.push('/login');
+      this.$router.push('/login');
     },
     //通话质量检测
     async testNetWork(){
@@ -228,7 +231,6 @@ export default {
     },
     //切换设备
     changeDevices(videoId,audioId){
-      debugger
       if(videoId){
         this.localVideoTrack.setDevice(videoId).then(() => {
           console.log("set device success");
@@ -248,6 +250,14 @@ export default {
     setVolum(value){
       this.localAudioTrack.setVolume(value);
     },
+    //开启/关闭摄像头
+    async setEnabledCamera(value){
+      await this.localVideoTrack.setEnabled(value);
+    },
+    //开启/关闭麦克风
+    async setEnabledAudio(value){
+      await this.localAudioTrack.setEnabled(value);
+    },
     //初始化
     async init(){
        let $ = this;
@@ -262,7 +272,7 @@ export default {
       };
       AgoraRTC.enableLogUpload();
       await this.testDevices();
-      await this.join();
+      // await this.join();
     }
   },
   created() {

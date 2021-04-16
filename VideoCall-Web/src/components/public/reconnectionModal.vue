@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-08 14:53:35
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\public\reconnectionModal.vue
- * @LastEditTime: 2021-04-08 15:52:09
+ * @LastEditTime: 2021-04-16 12:26:13
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -19,7 +19,7 @@
                 上一次会议室：1008，进行中...    
             </div>
             <div class="action">
-                <Button type="primary" shape="circle" style="width:88px;margin:0 14px 0 78px;background:#2684D1;border-color:#2684D1" @click="close">重新链接</Button>
+                <Button type="primary" shape="circle" style="width:88px;margin:0 14px 0 78px;background:#2684D1;border-color:#2684D1" @click="reconnection">重新链接</Button>
                 <Button type="warning" shape="circle" style="width:88px;margin:0 78px 0 14px;background:#FF5151;border-color:#FF5151" @click="close">结束关闭</Button>
             </div>
         </div>
@@ -48,6 +48,9 @@ export default {
         }
     },
     methods:{
+        reconnection(){
+            this.$emit('reconnection-close');    
+        },
         close(){
             this.$emit('cancel-reconnection');
         }

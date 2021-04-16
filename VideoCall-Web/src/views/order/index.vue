@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 17:59:28
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\order\index.vue
- * @LastEditTime: 2021-04-14 20:52:34
+ * @LastEditTime: 2021-04-15 16:56:31
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -19,7 +19,7 @@
             <!-- 聊天 -->
             <Chart></Chart>
             <!-- 择样购物车 -->
-            <ProductList @change-product-list="changeProductList" :isProductList="isProductList"></ProductList>
+            <ProductList @change-product-list="changeProductList" :isProductList="isProductList" :sampleSelection="sampleSelection"></ProductList>
         </template>
     </div>
 </template>
@@ -46,7 +46,6 @@ export default {
     },
     methods: {
         save(val){
-            debugger
             this.sampleSelection = val;
             this.samplingStatus = false;
         },

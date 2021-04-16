@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 19:15:58
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\index.vue
- * @LastEditTime: 2021-04-14 11:43:13
+ * @LastEditTime: 2021-04-16 19:34:28
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -31,7 +31,7 @@
                     </div>
                     <Divider type="vertical" />
                     <div class="timer item">
-                        <Poptip trigger="click" title="" content="content">
+                        <Poptip trigger="hover" title="" content="content">
                             <div class="api" slot="content">
                                 <Slider v-model="volum" style="width:100px;" @on-input="onInput"></Slider>    
                             </div>
@@ -46,12 +46,9 @@
                     </div>
                     <Divider type="vertical" />
                     <div class="timer item">
-                        <div class="closeOff" @click="sureClose"></div>
+                        <div class="closeOff" @click="closeOff"></div>
                     </div>
                     <Divider type="vertical" />
-                    <div class="timer item">
-                        <Icon type="ios-close-circle" @click="sureEnd" />结束
-                    </div>
                 </div>
             </Col>
             <Col span="8">
@@ -74,6 +71,7 @@
     </div>
 </template>
 <script>
+import * as Cookies from "js-cookie";
 import Setting from "@components/footer/setting";
 import EscModal from "@components/public/escModal";
 import ReconnectionModal from "@components/public/reconnectionModal";
@@ -98,6 +96,18 @@ export default {
             }
         },
     },
+    watch:{
+        roomStatus:{
+            handler(val){
+                if(val==1){
+                    this.isShowReconnection = true;
+                } else {
+                    this.isShowReconnection = false;
+                    this.$parent.$parent.$parent.$refs.video.$refs.video.join();
+                }
+            },
+        }    
+    },
     data() {
         return {
             currentTime:0,
@@ -110,7 +120,9 @@ export default {
             isCar:true,
             isShowEsc:false,
             isShowReconnection:true,
-            volum:100
+            volum:100,
+            roomStatus:'',
+            flag:false
         }
     },
     methods: {
@@ -139,28 +151,33 @@ export default {
         },
         setMic(){
             this.isMic = this.isMic ? false : true;
+            this.$parent.$parent.$parent.$refs.video.$refs.video.setEnabledAudio(this.isMic);
         },
-        setCar(index){
+        setCar(){
             this.isCar = this.isCar ? false : true;
+            this.$parent.$parent.$parent.$refs.video.$refs.video.setEnabledCamera(this.isCar);
         },
         closeOff(){
-            
+            this.isShowEsc = true;        
         },
         sureClose(){
-            this.isShowEsc = true;
-            this.$emit('leave');
+            this.isShowEsc = false;
+            if(this.flag){
+                this.$emit('endMeeting');    
+            } else {
+                this.$emit('leave');    
+            }
         },
         cancelClose(){
             this.isShowEsc = false;    
         },
         reconnectionClose(){
-            this.isShowReconnection = true;
+            this.isShowReconnection = false;
+            this.$parent.$parent.$parent.$refs.video.$refs.video.join();
         },
         cancelReconnection(){
-            this.isShowReconnection = false;    
-        },
-        sureEnd(){
-            this.$emit('endMeeting');
+            this.isShowReconnection = false;
+            this.$parent.$parent.$parent.$refs.video.$refs.video.endMeeting();
         },
         //调整通话音量
         onInput(value){
@@ -174,7 +191,13 @@ export default {
         }
     },
     created() {
+        debugger
         this.testTimer();
+        this.roomStatus = this.$route.params.status||'';
+        this.flag = Cookies.get("isAdmin");
+        // if(!this.flag){
+        //     this.isShowReconnection = false;
+        // }
     },
 }
 </script>

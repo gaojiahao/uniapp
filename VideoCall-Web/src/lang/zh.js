@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 20:28:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\lang\zh.js
- * @LastEditTime: 2021-04-13 19:51:28
+ * @LastEditTime: 2021-04-15 16:45:33
  * @LastEditors: sueRimn
  * @Descripttion:
  * @version: 1.0.0
@@ -12,7 +12,7 @@ export default {
   login:{
     button: '登录',
     account_login_text: '账号登录',
-    message_login_text: '密码登录',
+    message_login_text: '短信登录',
     account:'账号',
     password:'密码',
     phone:'手机号',

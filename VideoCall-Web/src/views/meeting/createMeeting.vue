@@ -31,6 +31,11 @@ d<!--
             <FormItem label="会议ID" prop="channel">
               <Input v-model="formValidate['channel']" :style="{width:'300px',marginLeft: '-50px'}" :maxlength="11" disabled></Input>
             </FormItem>
+            <FormItem label="选择展厅" prop="companyId">
+              <Select v-model="formValidate['companyId']" :style="{width:'300px',marginLeft: '-50px'}" clearable>
+                  <Option v-for="(item,index) in companys" :value="item.companyId" :key="index">{{ item.companyName }}</Option>
+              </Select>
+            </FormItem>
             <FormItem label="昵称" prop="nickName">
               <Input v-model="formValidate['nickName']" :style="{width:'300px',marginLeft: '-50px'}" placeholder="请输入您的昵称"></Input>
             </FormItem>
@@ -73,11 +78,33 @@ export default {
     LoginFooter     
   },
   data() {
+    const startTimeVail = (rule, value, callback) => {
+      if (value == ''||value === undefined) {
+        callback(new Error('请选择开始时间'));
+      } else {
+        callback();
+      }
+    };
+    const endTimeVail = (rule, value, callback) => {
+      if (value == ''||value === undefined) {
+        callback(new Error('请选择结束时间'));
+      } else {
+        callback();
+      }
+    };
+    const companyIdVali = (rule, value, callback) => {
+      if (value == ''||value === undefined) {
+        callback(new Error('请选择展厅'));
+      } else {
+        callback();
+      }
+    };
     return {
       logUrl: require("@assets/default/logo.png"),
       titleUrl: require("@assets/images/title_s.webp"),
       formValidate:{
         channel:'111111111111111',
+        companyId:'',
         nickName:'',
         startTime:'',
         endTime:'',
@@ -85,60 +112,72 @@ export default {
         settings:['isM','isC']
       },
       ruleValidate:{
+        companyId: [
+          { required: true, message: '请选择展厅', trigger: 'change', validator: companyIdVali }
+        ],
         nickName: [
           { required: true, message: '请输入昵称', trigger: 'blur' }
         ],
         startTime: [
-          { required: true, message: '请选择开始时间', trigger: 'blur' }
+          { required: true, message: '请选择开始时间', trigger: 'blur', validator: startTimeVail }
         ],
         endTime: [
-          { required: true, message: '请选择结束时间', trigger: 'blur' }
+          { required: true, message: '请选择结束时间', trigger: 'blur', validator: endTimeVail }
         ],
         mettingNumber: [
-          { required: true, message: '请输入会人数', trigger: 'blur' }
+          { required: true, message: '请输入入会人数', trigger: 'blur' }
         ],
       },
       channel: "10001",
       baseMode: "avc",
       transcode: "interop",
       attendeeMode: "video",
-      videoProfile: "120_3"  //省流量测试
+      videoProfile: "120_3",  //省流量测试
+      companys:[]
     };
   },
   methods: {
     save(){
       var params = {
         roomNumber:this.formValidate.channel,
+        companyId:this.formValidate.companyId,
         nickName:this.formValidate.nickName,
         startTime:this.formValidate.startTime,
         endTime:this.formValidate.endTime,
-        count:this.formValidate.mettingNumber
+        count:this.formValidate.mettingNumber,
+        code:window.localStorage.getItem("mac")
       };
-      return new Promise((resolve, reject) => {
-        this.$FromLoading.show();
-        CreateMeetingRoom(params).then(res => {
-          if (res.success) {
-            Cookies.set("channel", this.formValidate.channel);
-            Cookies.set("baseMode", this.baseMode);
-            Cookies.set("transcode", this.transcode);
-            Cookies.set("attendeeMode", this.attendeeMode);
-            Cookies.set("videoProfile", this.videoProfile);
-            Cookies.set("uid", this.formValidate.nickName);
-            this.$router.push('/');    
-          } else {
-            this.$Message.error({
-              background: true,
-              content: res.result.msg
+      this.$refs['formValidate'].validate((valid) => {
+        if (valid) {
+          return new Promise((resolve, reject) => {
+            this.$FromLoading.show();
+            CreateMeetingRoom(params).then(res => {
+              if (res.success) {
+                Cookies.set("channel", this.formValidate.channel);
+                Cookies.set("baseMode", this.baseMode);
+                Cookies.set("transcode", this.transcode);
+                Cookies.set("attendeeMode", this.attendeeMode);
+                Cookies.set("videoProfile", this.videoProfile);
+                Cookies.set("uid", this.formValidate.nickName);
+                Cookies.set("companyName", res.data.companyName);   
+                this.$router.push('/'); 
+              } else {
+                this.$Message.error({
+                  background: true,
+                  content: res.result.msg
+                });
+                this.$FromLoading.hide();
+              }
             });
-            this.$FromLoading.hide();
-          }
-        });
-      });
+          });
+        }
+      })
     }  
   },
   created(){
     this.$loading.hide();
     var config = JSON.parse(window.localStorage.getItem("SPHY_LOGIN_TOKEN"));
+    this.companys = config.companyInfos;
     this.formValidate.channel = config.roomNumber;
   }
 };
@@ -183,7 +222,7 @@ export default {
     }
     .login_wrapper{
       position: absolute;
-      top: 10%;
+      top: 8%;
       left: calc((100% - 1277px) / 2);
       width: 1277px;
       height: 726px;
@@ -215,7 +254,7 @@ export default {
       .login_box {
           // border-radius: 10px;
           width: 450px;
-          height: 530px;
+          height: 600px;
           background: rgba(255,255,255,0.6);
           box-shadow:  0 1px 6px rgb(0 0 0 / 20%);
           text-align: center;

@@ -63,7 +63,9 @@ d<!--
 import RMT from "@/assets/js/signalROptions/signalROptions";
 import * as Cookies from "js-cookie";
 import LoginFooter from "@components/footer/loginFooter";
-
+import {
+  JoinMeetingRoom
+} from "@service/meetingService";
 
 export default {
   name: "addMeeting",
@@ -75,13 +77,11 @@ export default {
       logUrl: require("@assets/default/logo.png"),
       titleUrl: require("@assets/images/title_s.webp"),
       formValidate:{
-        channel:'10009',
         company:'',
         nickName:'',
         settings:['isM','isC'],
         videoId:'',
       },
-      channel: "10001",
       baseMode: "avc",
       transcode: "interop",
       attendeeMode: "video",
@@ -95,14 +95,37 @@ export default {
   },
   methods: {
     save(){
-      // Cookies.set("channel", this.formValidate.channel);
-      Cookies.set("baseMode", this.baseMode);
-      Cookies.set("transcode", this.transcode);
-      Cookies.set("attendeeMode", this.attendeeMode);
-      Cookies.set("videoProfile", this.videoProfile);
-      Cookies.set("uid", this.formValidate.nickName);
-      Cookies.set("videoId", this.formValidate.videoId);
-      this.$router.push('/');
+      var params = {
+        company:this.formValidate.company,
+        nickName:this.formValidate.nickName,
+        code:window.localStorage.getItem("mac"),
+        roomNumber:this.roomNumber
+      };
+      this.$refs['formValidate'].validate((valid) => {
+        if(valid) {
+          return new Promise((resolve, reject) => {
+            this.$FromLoading.show();
+            JoinMeetingRoom(params).then(res => {
+              if (res.success) {
+                Cookies.set("isAdmin", false);
+                Cookies.set("baseMode", this.baseMode);
+                Cookies.set("transcode", this.transcode);
+                Cookies.set("attendeeMode", this.attendeeMode);
+                Cookies.set("videoProfile", this.videoProfile);
+                Cookies.set("uid", this.formValidate.nickName);
+                Cookies.set("videoId", this.formValidate.videoId);
+                this.$router.push('/');  
+              } else {
+                this.$Message.error({
+                  background: true,
+                  content: res.result.msg
+                });
+                this.$FromLoading.hide();
+              }
+            });
+          });
+        }
+      })
     },
     onChangeVideoDevice(){
 
@@ -117,12 +140,28 @@ export default {
         .catch(err => {
           console.log(err);
         });
-    }
+    },
+    tempSetToken(){
+      var globalToken = {
+        token : this.generateUUID(),
+      };
+      window.localStorage.setItem('SPHY_LOGIN_TOKEN', JSON.stringify(globalToken));
+    },
+    generateUUID() {
+      var d = new Date().getTime();
+      var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+      });
+      return uuid;
+    },
   },
   created(){
     this.initRMT();
     this.roomNumber = this.$route.query.roomNumber;
     Cookies.set("channel", this.roomNumber);
+    this.tempSetToken();
   }
 };
 </script>

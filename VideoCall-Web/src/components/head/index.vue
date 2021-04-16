@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 14:55:25
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\head\index.vue
- * @LastEditTime: 2021-04-08 16:26:30
+ * @LastEditTime: 2021-04-16 11:00:07
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -22,11 +22,11 @@
                 <div class="center_title">
                     <div class="title">
                         <div class="title_cn">
-                            小竹熊云科技公司
+                            {{companyName}}
                             <i class="iconfont iconzhifeiji" @click="copyUrl"></i>
                         </div>
                         <div class="text">
-                            ID:111111111
+                            ID:{{channel}}
                         </div>
                     </div>    
                 </div>
@@ -50,6 +50,7 @@
     </div>
 </template>
 <script>
+import * as Cookies from "js-cookie";
 export default {
   name: "Heads",
   components: {
@@ -59,6 +60,8 @@ export default {
     return {
       logUrl: require("@assets/default/logo.png"),
       titleUrl: require("@assets/images/title.webp"),
+      companyName:"",
+      channel: "",
     };
   },
   methods: {
@@ -67,10 +70,12 @@ export default {
       }
   },
   created(){
-      this.$Message.config({
+    this.$Message.config({
         top: 50,
         duration: 3
     });
+    this.companyName = Cookies.get("companyName") || "未获取到公司信息";
+    this.channel = Cookies.get("channel") || "未获取到房间号";
   }
 };
 </script>

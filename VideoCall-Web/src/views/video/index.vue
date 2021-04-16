@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 16:54:22
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\video\index.vue
- * @LastEditTime: 2021-04-14 14:10:49
+ * @LastEditTime: 2021-04-16 11:04:50
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -23,6 +23,7 @@
                 :baseMode="baseMode"
                 :appId="appId"
                 :videoId="videoId"
+                :userlist="userlist"
                 :uid="uid" ref="video"></AgoraVideoCall>
             <!-- <template v-if="isSelect&&videoList.length==2">
                 <div class="video_wrap">
@@ -62,12 +63,12 @@
             <div class="bg" v-else>
                 <img :src="test" style="width:100%;height:807px;">
             </div> -->
-            <div id="video_list_shrinkage" class="userlist">
+            <div id="video_list_shrinkage" class="userlist" v-for="">
                 <div class="user" @click="selectAll(true)"><div class="active"></div></div>
+                <!-- <div class="user" @click="selectAll(false)"></div>
                 <div class="user" @click="selectAll(false)"></div>
                 <div class="user" @click="selectAll(false)"></div>
-                <div class="user" @click="selectAll(false)"></div>
-                <div class="user" @click="selectAll(false)"></div>
+                <div class="user" @click="selectAll(false)"></div> -->
             </div>
         </div>
         <EndModal></EndModal>
@@ -90,6 +91,12 @@ export default {
         isCollapsed: {
             type: Boolean,
             default: false
+        },
+        userlist: {
+            type: Array,
+            default () {
+                return []
+            }
         },
     },
     data() {

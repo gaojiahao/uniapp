@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-13 15:01:44
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\service\meetingService.js
- * @LastEditTime: 2021-04-14 20:59:47
+ * @LastEditTime: 2021-04-15 16:06:43
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -28,7 +28,7 @@ export let CloseMeetingRoom = (data = {}) => {
 export let JoinMeetingRoom = (data = {}) => {
     return $flyio.post({
         url: '/api/Meeting/JoinMeetingRoom',
-        data: data
+        data: data,
     })
 };
 //退出会议室
@@ -63,14 +63,14 @@ export let QuerySampleOrderDetails = (data = {}) => {
 };
 //添加择样单详情
 export let AddSampleOrderDetail = (data = {}) => {
-    return $flyio.ajax({
+    return $flyio.post({
         url: '/api/SampleOrder/AddSampleOrderDetail',
         data: data
     })
 };
 //删除择样单详情
 export let DeleteSampleOrderDetail = (data = {}) => {
-    return $flyio.ajax({
+    return $flyio.post({
         url: '/api/SampleOrder/DeleteSampleOrderDetail',
         data: data
     })

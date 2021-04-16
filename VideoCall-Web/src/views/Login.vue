@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 16:28:17
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-14 15:32:28
+ * @LastEditTime: 2021-04-16 19:39:37
 -->
 <template>
   <div class="login" ref="login">
@@ -28,28 +28,36 @@
           </div>
         </div>
         <div class="login_box">
-          <div class="qrcode">
+          <!-- <div class="qrcode">
             <img :src="[type=='qrCode'? loginPic:qrCodePic]" @click="changeTypeQrCode()">
-          </div>
-          <div class="type" v-model="type" v-if="type!='qrCode'">
+          </div> -->
+          <div class="type" v-model="type">
             <Row :gutter="16">
               <Col span="6">
-              </Col>
-              <Col span="6">
-                <div class="item" :class="[type=='login' ? 'active':'']" @click="changeType('login')">{{$t("login.account_login_text")}}</div>
               </Col>
               <Col span="6">
                 <div class="item" :class="[type=='message' ? 'active':'']" @click="changeType('message')">{{$t("login.message_login_text")}}</div>
               </Col>
               <Col span="6">
+                <div class="item" :class="[type=='qrCode' ? 'active':'']" @click="changeType('qrCode')">{{$t("login.qr_code")}}</div>
+              </Col>
+              <Col span="6">
               </Col>
             </Row>
           </div>
-          <div class="qrcode_type" v-else>
+          <!-- <div class="qrcode_type" v-else>
             {{$t("login.qr_code")}}
-          </div>
+          </div> -->
           <template v-if="type=='qrCode'">
-            <img :src="qrCodeUrl" width="160px;height:160px"/>
+            <!-- <img :src="qrCodeUrl" width="160px;height:160px"/> -->
+            <vue-qr
+              :text="options.url"
+              :logoSrc="options.icon + '?cache'"
+              colorLight="#fff"
+              colorDark="#018e37"
+              :margin="0"
+              :size="160"
+            ></vue-qr>
             <p style="font-size:13px;color:#666666">{{$t("login.scan")}}</p>
           </template>
           <template v-else-if="type=='message'">
@@ -58,14 +66,14 @@
                 <Input v-model="formValidate['userCode']" :style="{width:'300px',marginLeft: '-50px'}" :placeholder="$t('login.account_placeholder')" :maxlength="11"></Input>
               </FormItem>
               <FormItem :label="$t('login.verification_code')" prop="passWord">
-                <Input v-model="formValidate['passWord']" :style="{width:'180px',marginLeft: '-170px'}" :placeholder="$t('login.verification_code_text')" :maxlength="6"></Input><div style="position:absolute;right: 50px;top: 0;"><Button :style="{height: '40px'}">{{$t("login.get_verification_code")}}</Button></div>
+                <Input v-model="formValidate['passWord']" :style="{width:'180px',marginLeft: '-170px'}" :placeholder="$t('login.verification_code_text')" :maxlength="6"></Input><div style="position:absolute;right: 50px;top: 0;"><Button :style="{height: '40px',width:'102px'}" @click="sendSMS" :disabled='!sendBottonStatus' >{{!sendBottonStatus ? count+'s':$t("login.get_verification_code")}}</Button></div>
               </FormItem>
               <FormItem>
                 <Button type="primary" @click="login" :style="{width:'300px',marginLeft: '-50px'}" >{{$t("login.button")}}</Button>  
               </FormItem>
             </Form>
           </template>
-          <template v-else-if="type=='login'">
+          <!-- <template v-else-if="type=='login'">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" label-colon class="input_form_wrap">
               <FormItem :label="$t('login.account')" prop="userCode">
                 <Input v-model="formValidate['userCode']" :style="{width:'300px',marginLeft: '-50px'}" :placeholder="$t('login.account_placeholder')" :maxlength="11"></Input>
@@ -77,7 +85,7 @@
                 <Button type="primary" @click="login" :style="{width:'300px',marginLeft: '-50px',height:'36px'}" >{{$t("login.button")}}</Button>  
               </FormItem>
             </Form>
-          </template>
+          </template> -->
         </div>
       </div>
     </div>
@@ -86,6 +94,8 @@
 </template>
 
 <script>
+import * as Cookies from "js-cookie";
+import VueQr from "vue-qr";
 import SIdentify from "@components/public/sIdentify/sIdentify";
 import LoginFooter from "@components/footer/loginFooter";
 import tokenService from "@service/tokenService";
@@ -98,7 +108,8 @@ export default {
   name: "Login",
   components: {
       SIdentify,
-      LoginFooter
+      LoginFooter,
+      VueQr
   },
   data() {
       var userCode = localStorage.getItem("userCode");
@@ -122,7 +133,7 @@ export default {
         theme: "",
         count: 60,
         controls: "",
-        type: "login",
+        type: "message",
         code: "",
         identifyCode: "",
         phoneNumber: "",
@@ -166,8 +177,32 @@ export default {
           //   { required: true, message: '请输入验证码', trigger: 'blur' }
           // ],
         },
-        mac:''
+        mac:'',
+        baseMode: "avc",
+        transcode: "interop",
+        attendeeMode: "video",
+        videoProfile: "120_3",
+        sendBottonStatus:true,
+        timer:null,
+        count: '',
+        wsBaseUrl:process.env.VUE_APP_WX,
+        options: {
+            // 二维码配置
+            url: " ",
+            icon: require("@assets/images/logo.png")
+        },
       };
+  },
+  watch:{
+    type:{
+      handler(val){
+        if(val=='qrCode'){
+          this.getQrCodeUrl();
+        } else {
+          
+        }
+      }
+    } 
   },
   methods: {
     /**
@@ -188,6 +223,7 @@ export default {
         .pcLogin(params)
         .then(data => {
           if(data.success){
+            Cookies.set("isAdmin", true);
             var token = tokenService.getToken();
             if (token) {
               switch(data.data.status) {
@@ -198,7 +234,13 @@ export default {
                   this.$router.push('/createMeeting');
                   break;
                 case 1:
-                  this.$router.push('/');
+                  Cookies.set("channel", data.data.roomNumber);
+                  Cookies.set("baseMode", this.baseMode);
+                  Cookies.set("transcode", this.transcode);
+                  Cookies.set("attendeeMode", this.attendeeMode);
+                  Cookies.set("videoProfile", this.videoProfile);
+                  Cookies.set("uid", data.data.nickName);
+                  this.$router.push({name:'Home',params:{status:data.data.status}}); 
                   break;
                 default:
                   ''
@@ -210,7 +252,51 @@ export default {
           this.$loading.hide();
           this.$Message.error({
             background: true,
-            content: '温馨提示：'+err.data.message
+            content: '温馨提示：'+err.data.errors['TargetId'][0]+','+err.data.errors['TargetCode'][0]
+          });
+        });
+    },
+    qrLogin() {
+      let params = {};
+      params.loginType=3;
+      params.targetId = this.randomCode;
+      params.targetCode = this.options.url;
+      params.code = this.mac;
+      this.$loading.show();
+      tokenService
+        .pcLogin(params)
+        .then(data => {
+          if(data.success){
+            Cookies.set("isAdmin", true);
+            var token = tokenService.getToken();
+            if (token) {
+              switch(data.data.status) {
+                case -1:
+                  this.$router.push('/createMeeting');
+                  break;
+                case 0:
+                  this.$router.push('/createMeeting');
+                  break;
+                case 1:
+                  Cookies.set("channel", data.data.roomNumber);
+                  Cookies.set("baseMode", this.baseMode);
+                  Cookies.set("transcode", this.transcode);
+                  Cookies.set("attendeeMode", this.attendeeMode);
+                  Cookies.set("videoProfile", this.videoProfile);
+                  Cookies.set("uid", data.data.nickName);
+                  this.$router.push({name:'Home',params:{status:data.data.status}}); 
+                  break;
+                default:
+                  ''
+              } 
+            }
+          }
+        })
+        .catch(err => {
+          this.$loading.hide();
+          this.$Message.error({
+            background: true,
+            content: '温馨提示：'+err.data.errors['TargetId'][0]+','+err.data.errors['TargetCode'][0]
           });
         });
     },
@@ -328,12 +414,33 @@ export default {
     makeCode(o, l) {
         this.identifyCode = this.generatedCode();
     },
-    send() {
-        if (this.phoneNumber) {
+    sendSMS() {
+      if (this.formValidate.userCode) {
+        let params = {};
+        params.phoneNumber = this.formValidate.userCode;
+        tokenService
+        .sendTestCode(params)
+        .then(data => {
+          if(data.success){
             this.$Message.info({
-                content: '温馨提示：' + "发送成功！"
+              background: true,
+              content: '温馨提示：'+err.message
             });
-        }
+            this.countDown();
+          }
+        })
+        .catch(err => {
+          this.$Message.error({
+            background: true,
+            content: '温馨提示：'+err.message
+          });
+        });
+      } else {
+        this.$Message.error({
+          background: true,
+          content: '温馨提示：手机号不能为空！'
+        });
+      }
     },
     setIdentifyCode(value){
         this.identifyCode = value;
@@ -396,7 +503,115 @@ export default {
         return (c=='x' ? r : (r&0x3|0x8)).toString(16);
       });
       return uuid;
-    }
+    },
+    //验证码倒计时
+    countDown(){
+      this.count = 60;
+      this.timer = window.setInterval(() => {
+        if (this.count > 0 && this.count <= 60){
+          this.sendBottonStatus=false;
+          this.count--;
+        } else {
+          // 倒计时完，可点击
+          this.sendBottonStatus=true;
+          clearInterval(this.timer)
+          this.timer = 60
+        }
+      }, 1000)
+    },
+    countDownQrCode(){
+      this.count = 300;
+      this.timer = window.setInterval(() => {
+        if (this.count > 0 && this.count <= 300){
+          this.count--;
+        } else {
+          // 倒计时完，可点击
+          this.getQrCodeUrl();
+          clearInterval(this.timer)
+          this.timer = 300
+        }
+      }, 1000)
+    },
+    // 初始化 webSocket
+    initWebSocket() {
+      if (typeof WebSocket === "undefined") {
+        this.$Message.error({
+          background: true,
+          content: '温馨提示：'+您的浏览器不支持WebSocket
+        });
+      } else {
+        // 初始化weosocket
+        // 正式
+        this.ws = new WebSocket(this.wsBaseUrl + this.randomCode);
+        // 测试
+        // this.ws = new WebSocket(
+        //   'ws://139.9.71.135:8090/ws?UserId=' + this.randomCode
+        // )
+        // 监听webSocket连接
+        this.ws.onopen = this.websocketonopen;
+        // 监听webSocket错误信息
+        this.ws.onerror = this.websocketonerror;
+        // 监听webSocket消息
+        this.ws.onmessage = this.websocketonmessage;
+        // 监听webSocket退出
+        this.ws.onclose = this.websocketclose;
+      }
+    },
+    // webSocket 连接成功
+    websocketonopen() {
+      console.log("WebSocket连接成功");
+    },
+    // webSocket 连接错误
+    websocketonerror() {
+      console.log("WebSocket连接发生错误");
+    },
+    // webSocket 数据接收
+    websocketonmessage(e) {
+      const redata = JSON.parse(e.data);
+      console.log(redata);
+      if (redata.action === "QrCodeLogin") {
+        this.qrLogin();
+        console.log("成功了");
+      }
+    },
+    // webSocket 数据发送
+    websocketsend(agentData) {
+      this.ws.send(agentData);
+    },
+    // 关闭 webSocket
+    websocketclose(e) {
+      console.log(e, "退出websocket了");
+    },
+    // 获取二维码链接
+    async getQrCodeUrl() {
+      const res = await tokenService.getQrCodeUrl();
+      if (res.success) {
+        this.options.url = res.data.qrCode;
+        this.randomCode = res.data.randomCode;
+        // 开启长连接
+        this.initWebSocket();
+        this.countDownQrCode();
+      }
+      // const TIME_COUNT = 20
+      // const TIME_COUNT = 300;
+      // if (!this.timer) {
+      //   let count = TIME_COUNT;
+      //   this.showQrCode = false;
+      //   this.qrcodeTitle = "请用小竹熊 云科技App扫码登录";
+      //   clearInterval(this.qrTimer);
+      //   this.qrTimer = setInterval(() => {
+      //     if (count > 0 && count <= TIME_COUNT) {
+      //       count--;
+      //     } else {
+      //       this.ws && this.ws.close();
+      //       this.showQrCode = true;
+      //       this.qrcodeTitle = "二维码已失效，点击刷新";
+      //       clearInterval(this.qrTimer);
+      //       this.qrTimer = null;
+      //     }
+      //   }, 1000);
+      // }
+    },
   },
   created() {
     tokenService.clean();

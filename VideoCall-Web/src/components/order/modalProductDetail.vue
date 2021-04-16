@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-11-03 16:35:57
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-07 11:35:59
+ * @LastEditTime: 2021-04-15 14:16:00
 -->
 <template>
     <Modal v-model="show" title="  " @on-ok="ok" @on-cancel="cancel" width="1048" class="modalDetail">
@@ -51,67 +51,67 @@
             <div class="product_info_list item">
                 <Row class="product_info_list_item">
                     <Col span="24">
-                        <div class="active">Guess who I am?</div>
+                        <div class="active">{{modalProductInfo.productName}}</div>
                     </Col>
                     <Col span="12">
                         <div class="product_info_list_items">price：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items red"><span>$</span><span class="font_size_20">17.00</span></div>
+                        <div class="product_info_list_items red"><span>$</span><span class="font_size_20">{{modalProductInfo.quoteThePrice}}</span></div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items">price：</div>
+                        <div class="product_info_list_items">Item No：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items"><span>$</span>17.00</div>
+                        <div class="product_info_list_items"><span></span>{{modalProductInfo.number}}</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items">price：</div>
+                        <div class="product_info_list_items">FA No：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items"><span>$</span>17.00</div>
+                        <div class="product_info_list_items"><span></span>{{modalProductInfo.factoryNo}}</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items">price：</div>
+                        <div class="product_info_list_items">Packing：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items"><span>$</span>17.00</div>
+                        <div class="product_info_list_items"><span></span>{{modalProductInfo.chinesePack}}</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items">price：</div>
+                        <div class="product_info_list_items">Product Size：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items"><span>$</span>17.00</div>
+                        <div class="product_info_list_items"><span></span>{{modalProductInfo.productLength}}*{{modalProductInfo.productWidth}}*{{modalProductInfo.productHeight}}</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items">price：</div>
+                        <div class="product_info_list_items">Package Size：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items"><span>$</span>17.00</div>
+                        <div class="product_info_list_items"><span></span>{{modalProductInfo.innerBoxLength}}*{{modalProductInfo.innerBoxWidth}}*{{modalProductInfo.innerBoxHeight}}</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items">price：</div>
+                        <div class="product_info_list_items">Carton Size：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items"><span>$</span>17.00</div>
+                        <div class="product_info_list_items"><span></span>17.00</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items">price：</div>
+                        <div class="product_info_list_items">Inner Box/Outer Packing：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items"><span>$</span>17.00</div>
+                        <div class="product_info_list_items"><span></span>17.00</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items">price：</div>
+                        <div class="product_info_list_items">CBM/CUFT：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items"><span>$</span>17.00</div>
+                        <div class="product_info_list_items"><span></span>17.00</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items">price：</div>
+                        <div class="product_info_list_items">G.W/N.W：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items"><span>$</span>17.00</div>
+                        <div class="product_info_list_items"><span></span>17.00</div>
                     </Col>
                 </Row>
             </div>
@@ -135,6 +135,12 @@ export default {
             type: Boolean,
             default: false,
         },
+        modalProductInfo:{
+            type:Object,
+            default () {
+                return {}
+            }
+        }
     },
     data() {
         return {

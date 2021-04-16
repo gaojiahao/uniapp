@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 15:27:12
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-14 09:27:20
+ * @LastEditTime: 2021-04-16 14:31:05
  */
 import Vue from "vue";
 import VueRouter from "vue-router";
@@ -18,7 +18,7 @@ const routes = [
     component: resolve=>(require(["@views/Home"],resolve)),
     meta: {
       title: "宏升视频会议",
-      // auth: true      //检查权限true
+      auth: true      //检查权限true
     },
     children:[
     
@@ -75,6 +75,9 @@ const router = new VueRouter({
  */
 router.beforeEach((to, from, next) => {
   if (to.matched.some(m => m.meta.auth)) {
+    if(to.name == "Login"){
+      tokenService.clean();  
+    }
     // 对路由进行验证
     if (tokenService.getToken() != "" && to.name !== "Login") {
       // 已经登陆

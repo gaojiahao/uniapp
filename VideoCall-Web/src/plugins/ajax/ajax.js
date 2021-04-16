@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 15:30:49
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-14 16:45:08
+ * @LastEditTime: 2021-04-16 19:59:52
  */
 import Fly from "flyio/dist/npm/fly";
 // 请求地址引入
@@ -31,6 +31,19 @@ fly.interceptors.request.use(request => {
   let token = tokenService.getToken();
   if (window.isApp) {
     request.headers.os = window.device.platform;
+  }
+  //判断是否校验token
+  if(request.url){
+    var noAuth = [
+      '/api/Meeting/JoinMeetingRoom',
+      '/api/Meeting/QuitMeetingRoom',
+      '/api/Meeting/QueryMeetingRoomMembers',
+      '/api/SampleOrder/QuerySampleOrderDetails',
+    ]
+    var a = noAuth.indexOf(request.url);
+    if(a!=-1){
+      return ;
+    }
   }
   // token 存在则赋值在header当中
   if (token) {
@@ -80,26 +93,27 @@ fly.interceptors.response.use(
     console.log("error:", error);
     // 响应拦截 报错标识
     if (error.status === 401) {
-      localStorage.clear();
-      sessionStorage.clear();
-      if (userCode != null) localStorage.setItem("userCode", userCode);
-      if (window.isApp) {
-        window.DsService.close();
-        window.router.push("/tokenExpiry");
-        return;
-      }
+      let token = tokenService.getToken();
+      // localStorage.clear();
+      // sessionStorage.clear();
       this.lock();
-      return tokenService.login().then(token => {
+      return tokenService.refreshToken({token:token}).then(token => {
         console.log("token已更新");
-        this.$Message.info({
-          background: true,
-          content: "您的登录状态似乎有点问题，不用担心，页面刷新之后就好",
-          closable: true,
-          onClose() {
-            location.reload();
-          }
-        });
+        var opt = {
+          method: error.request.type ||  error.request.method || "GET",
+          baseURL: process.env.VUE_APP_API,
+          url: ensureUrl( error.request.url),
+          headers: {
+            "Content-Type":  error.request.contentType || "*/*"
+          },
+          timeout:  error.request.time || 30 * 1000,
+          responseType:  error.request.dataType || "json",
+          data:error.request.body
+        }
+        debugger
+        Rxports.ajax(opt);
       });
+      
     } else if (error.status === 1) {
       if (error.message.includes("timeout")) {
         return rejectError(
@@ -130,7 +144,7 @@ let Rxports = {
     return new Promise((resolve, reject) => {
       let params = {
         method: opts.type || opts.method || "GET",
-        baseURL: window.baseURL||process.env.VUE_APP_API,
+        baseURL: process.env.VUE_APP_API,
         url: ensureUrl(opts.url),
         headers: {
           "Content-Type": opts.contentType || "*/*"
@@ -183,11 +197,10 @@ let Rxports = {
   post(opts = {}) {
     return new Promise((resolve, reject) => {
       fly
-        .post(ensureUrl(opts.url), opts.data, { baseURL: window.baseURL || process.env.VUE_APP_API ,responseType:opts.responseType})
+        .post(ensureUrl(opts.url), opts.data, { baseURL: process.env.VUE_APP_API ,responseType:opts.responseType})
         .then(res => resolve(res.data))
         .catch(err => {
           // 弹窗提醒
-          debugger
             Message.error({
               background: true,
               content: "温馨提示："+err.message,
@@ -226,7 +239,7 @@ let Rxports = {
   request: function(url, data) {
     var xmlhttp = new XMLHttpRequest(),
       params = parseParam(data),
-      baseUrl = window.baseURL || process.env.VUE_APP_API,
+      baseUrl = process.env.VUE_APP_API,
       token = tokenService.getToken(),
       rs;
 

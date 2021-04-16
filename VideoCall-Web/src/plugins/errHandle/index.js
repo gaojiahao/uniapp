@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-20 14:22:42
  * @LastEditors: sueRimn
- * @LastEditTime: 2020-11-03 19:31:21
+ * @LastEditTime: 2021-04-15 16:17:03
  */
 import Vue from "vue";
 import { Message } from "view-design";
@@ -15,8 +15,8 @@ export default function errorHandler(err) {
     err = "抱歉，数据似乎出了点问题，请稍后重试";
   }
   // 弹窗提醒
-  Message.info({
-    background: true,
-    content: '接口出错：'+err,
-  });
+  // Message.info({
+  //   background: true,
+  //   content: '接口出错：'+err,
+  // });
 }

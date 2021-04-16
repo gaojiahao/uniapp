@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\Home.vue
- * @LastEditTime: 2021-04-14 17:43:22
+ * @LastEditTime: 2021-04-16 15:17:43
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -22,7 +22,7 @@
               </div>
             </Sider>
             <Content>
-              <Video :isCollapsed="isCollapsed" ref='video' @change-devices="changeDevices"></Video>
+              <Video :isCollapsed="isCollapsed" ref='video' @change-devices="changeDevices" :userlist="userlist"></Video>
             </Content>
             <Sider ref="side2" hide-trigger :width="311">
               <Order></Order>
@@ -91,6 +91,7 @@ export default {
       this.$refs.video.$refs.video.changeDevices(videoId,audioId);
     },
     getQueryMeetingRoomMembers(){
+      debugger
       return new Promise((resolve, reject) => {
         QueryMeetingRoomMembers({roomNumber:this.roomNumber}).then(res => {
           if (res.success) {
@@ -112,8 +113,8 @@ export default {
     this.$loading.hide();
     this.$FromLoading.hide();
     this.config = JSON.parse(window.localStorage.getItem("SPHY_LOGIN_TOKEN"));
-    this.roomNumber = Cookies.get("channel")
-    this.getQueryMeetingRoomMembers()
+    this.roomNumber = Cookies.get("channel");
+    this.getQueryMeetingRoomMembers();
   }
 };
 </script>
