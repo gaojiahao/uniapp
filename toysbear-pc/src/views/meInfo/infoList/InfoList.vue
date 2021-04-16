@@ -168,10 +168,10 @@ export default {
     return {
       allCount: 0,
       ws: null,
-      // wsBaseUrl:
-      //   "wss://impush.toysbear.com/ws?UserId=" +
-      //   this.$store.state.userInfo.userInfo.id,
-      wsBaseUrl: "ws://139.9.71.135:8090/ws?UserId=" + this.$store.state.userInfo.userInfo.id,
+      wsBaseUrl:
+        "wss://impush.toysbear.com/ws?UserId=" +
+        this.$store.state.userInfo.userInfo.id,
+      // wsBaseUrl: "ws://139.9.71.135:8090/ws?UserId=" + this.$store.state.userInfo.userInfo.id,
       lockReturn: false,
       timeout: 280000,
       // timeout: 1000,
