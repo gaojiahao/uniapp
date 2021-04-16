@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "@/store/index";
 import axios from "axios";
-import { Message } from "element-ui";
+// import { Message } from "element-ui";
 import { staticRouters, setMenuTree } from "./routers";
 // const originalPush = VueRouter.prototype.push;
 // VueRouter.prototype.push = function push(location) {
@@ -35,9 +35,7 @@ function getToken() {
         platForm: "PC"
       })
       .then(res => {
-        if (res.data.result.code === 200) {
-          result(res.data.result.item);
-        }
+        result(res);
       })
       .catch(err => {
         reject(err);
@@ -143,6 +141,14 @@ router.beforeEach(async (to, from, next) => {
           "setComparnyId",
           res.data.result.commparnyList[0].commparnyId
         );
+        const localKey = res.data.result.uid;
+        let localShoppingCart = localStorage.getItem(localKey);
+        if (localShoppingCart) {
+          localShoppingCart = JSON.parse(localShoppingCart);
+          store.commit("initShoppingCart", localShoppingCart);
+        } else {
+          store.commit("initShoppingCart", []);
+        }
         // 登录成功获取系统参数
         // const Json = {};
         // Json.MessageRestriction = await getClientTypeList("MessageRestriction");
@@ -157,7 +163,6 @@ router.beforeEach(async (to, from, next) => {
         // store.commit("globalJson/setGlobalJson", Json);
         // 登录成功获取菜单
         const menus = await getUserRoleMenu(token);
-        console.log(menus, "菜单");
         if (menus.data.result.code === 200) {
           store.commit("setRouters", menus.data.result.item.modulesList || []);
           await getMenuFuc();
@@ -169,24 +174,29 @@ router.beforeEach(async (to, from, next) => {
       }
       Vue.prototype.$cookies.remove("userInfo");
     } else {
-      console.log("没有cookit_token");
-      try {
-        const res = await getToken();
-        const obj =
-          typeof res === "string" && res.constructor === String
-            ? { accessToken: res }
-            : null;
+      console.log("没有cookit_token", store.state);
+      const res = await getToken();
+      console.log(res, "没有cookit_Token获取到的临时token");
+      if (res.data.result.code === 200) {
+        const obj = { accessToken: res.data.result.item };
         store.commit("setToken", obj);
-      } catch (error) {
-        if (error) Message.error("请求失败，请求接口为/api/GetToken");
       }
-      return next({ path: "/login" });
+      if (to.path == "/login") {
+        next();
+      } else {
+        return next({ path: "/login" });
+      }
     }
   } else {
     if (store.state.isLogin) {
       next();
     } else {
-      return next({ path: "/login" });
+      console.log(to.path);
+      if (to.path == "/login" || to.path == "/loginConfirm") {
+        next();
+      } else {
+        return next({ path: "/login" });
+      }
     }
   }
 });

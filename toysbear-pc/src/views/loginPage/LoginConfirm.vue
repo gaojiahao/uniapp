@@ -59,8 +59,8 @@ export default {
   },
   data() {
     return {
-      loginUrl: "https://www.toysbear.com/new/#/bsIndex",
-      // loginUrl: "http://139.9.71.135:8080/new/#/bsIndex",
+      // loginUrl: "https://www.toysbear.com/new/#/bsIndex",
+      loginUrl: "http://139.9.71.135:8080/new/#/bsIndex",
       radioValue: null,
       commparnyList: []
     };
@@ -108,7 +108,6 @@ export default {
         } else {
           this.$store.commit("initShoppingCart", []);
         }
-        await this.waitTime(1);
         // 登录成功获取系统参数
         const Json = {};
         Json.MessageRestriction = await this.getClientTypeList(
