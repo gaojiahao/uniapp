@@ -132,6 +132,8 @@ router.beforeEach(async (to, from, next) => {
     if (token) {
       const res = await resetPersonInfo(token);
       console.log("有cookit_token", res, token);
+      Vue.prototype.$cookies.remove("userInfo");
+      console.log("删除了 cookit_token", token);
       if (res.data.result.isLogin) {
         console.log("有登录成功标识符");
         store.commit("handlerLogin", true);
@@ -172,7 +174,6 @@ router.beforeEach(async (to, from, next) => {
         console.log("刷新token失败");
         return next({ path: "/login" });
       }
-      Vue.prototype.$cookies.remove("userInfo");
     } else {
       console.log("没有cookit_token", store.state);
       const res = await getToken();

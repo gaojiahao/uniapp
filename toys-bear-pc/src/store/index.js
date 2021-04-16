@@ -18,6 +18,7 @@ function myForEach(oList, yList) {
 const store = new Vuex.Store({
   state: {
     myColles: [],
+    isJindu: false,
     activeTab: "/bsIndex/bsHome",
     oldTabName: "/bsIndex/bsHome", //上一次点击的url
     showGlobalMsg: false,
@@ -71,6 +72,10 @@ const store = new Vuex.Store({
   mutations: {
     handlerOldTabName(state, payLoad) {
       state.oldTabName = payLoad;
+    },
+    // 修改进度条状态
+    handlerIsJindu(state, payLoad) {
+      state.isJindu = payLoad;
     },
     // 添加收藏
     addMyCollec(state, payLoad) {

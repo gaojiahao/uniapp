@@ -29,6 +29,7 @@ import {
   CheckboxGroup,
   DatePicker,
   Pagination,
+  Card,
   Col,
   Tooltip,
   Badge
@@ -64,6 +65,7 @@ const element = {
     Vue.use(Pagination);
     Vue.use(Tooltip);
     Vue.use(Col);
+    Vue.use(Card);
     Vue.use(Scrollbar);
     Vue.use(Badge);
 

@@ -172,7 +172,13 @@ myAxios.install = function(Vue) {
       loaddingOptions[config.url] = true;
       setTimeout(() => {
         if (loaddingOptions[config.url])
-          $Store.commit("updateAppLoading", true);
+          if (
+            !config.url.includes("ExportSampleOfferToExcel") &&
+            !config.url.includes("ExportCustomerOrderDetailToExcel") &&
+            !config.url.includes("GetOfferOrderExcel")
+          ) {
+            $Store.commit("updateAppLoading", true);
+          }
       }, 1000);
       // 屏蔽不需要验证code的请求，如下载导出等
       // if (
@@ -260,6 +266,7 @@ myAxios.install = function(Vue) {
         // 不需要loading的请求
         !res.config.url.includes("GetHotWord") &&
         !res.config.url.includes("CreateLogRecord") &&
+        !res.config.url.includes("ExportSampleOfferToExcel") &&
         // !res.config.url.includes('ProductCategoryList') &&
         !res.config.url.includes("UserConfirm") &&
         !res.config.url.includes("OrgCompanyList") &&
@@ -348,6 +355,7 @@ myAxios.install = function(Vue) {
               !error.response.config.url.includes("CreateLogRecord") &&
               !error.response.config.url.includes("UserConfirm") &&
               !error.response.config.url.includes("OrgCompanyList") &&
+              !error.response.config.url.includes("ExportSampleOfferToExcel") &&
               !error.response.config.url.includes("SampleOrderTotal")
             ) {
               $Store.commit("updateAppLoading", false);

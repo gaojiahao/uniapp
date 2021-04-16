@@ -376,10 +376,7 @@ export default {
   methods: {
     // 导出模板
     exportOrder(type) {
-      // const fd = {
-      //   templateType: type,
-      //   shareOrderNumber: this.currentOrder.orderNumber
-      // };
+      this.$store.commit("handlerIsJindu", true);
       const fd = {
         excelExportWay: this.exportWay,
         imageExportWay: this.imageExportWay ? this.imageExportWay : 0,
@@ -417,6 +414,10 @@ export default {
             URL.revokeObjectURL(link.href); // 释放URL 对象
             document.body.removeChild(link);
           }
+          this.$store.commit("handlerIsJindu", false);
+        })
+        .catch(() => {
+          this.$store.commit("handlerIsJindu", false);
         });
     },
     // 预览导出模板
