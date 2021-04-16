@@ -122,7 +122,7 @@ export default {
       currentPage: 1,
       keyword: null,
       dateTime: null,
-      tableData: [],
+      tableData: []
     };
   },
   methods: {
@@ -131,7 +131,7 @@ export default {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         keyword: this.keyword,
-        OppositeRole: "Supplier",
+        OppositeRole: "Supplier"
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -155,7 +155,7 @@ export default {
         refresh: true,
         noPush: true,
         label: e.companyName,
-        value: e,
+        value: e
       };
       this.$store.commit("myAddTab", fd);
     },
@@ -178,12 +178,12 @@ export default {
     handleCurrentChange(page) {
       this.currentPage = page;
       this.getVendorListPage();
-    },
+    }
   },
   created() {},
   mounted() {
     this.getVendorListPage();
-  },
+  }
 };
 </script>
 <style scoped lang="less">

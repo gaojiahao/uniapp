@@ -33,7 +33,7 @@
 
               <div
                 class="myScrollbar"
-                style="height: 100%;overflow-y:auto;"
+                style="height: 100%; overflow-y: auto"
                 ref="myScrollbar"
               >
                 <component
@@ -203,7 +203,8 @@ export default {
           } else if (
             this.activeTab == "/bsIndex/bsLatestProducts" ||
             this.activeTab == "/bsIndex/bsSpotProducts" ||
-            this.activeTab == "/bsIndex/bsVIPProducts"
+            this.activeTab == "/bsIndex/bsVIPProducts" ||
+            this.activeTab == "/bsIndex/bsMyCollection"
           ) {
             eventBus.$emit("showCart", true);
           } else {
@@ -288,7 +289,8 @@ export default {
         if (
           newN == "/bsIndex/bsLatestProducts" ||
           newN == "/bsIndex/bsSpotProducts" ||
-          newN == "/bsIndex/bsVIPProducts"
+          newN == "/bsIndex/bsVIPProducts" ||
+          newN == "/bsIndex/bsMyCollection"
         ) {
           // this.showSearch = false;
           eventBus.$emit("showCart", true);
@@ -334,7 +336,7 @@ export default {
       box-sizing: border-box;
       // box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
       z-index: 99;
-      box-shadow: 1px 0px 0px #dcdfe6; 
+      box-shadow: 1px 0px 0px #dcdfe6;
       .bsMenu {
         box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
       }
@@ -366,8 +368,8 @@ export default {
             box-sizing: border-box;
             box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
             .el-tabs__nav-wrap {
-              margin-bottom:0px  !important;
-              box-shadow: 0px 1px 0px #dcdfe6; 
+              margin-bottom: 0px !important;
+              box-shadow: 0px 1px 0px #dcdfe6;
               z-index: 99;
               &.is-scrollable {
                 padding: 0 30px;

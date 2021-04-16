@@ -16,7 +16,7 @@
           <p>
             状态：<span
               :style="{
-                color: itemList.status == 0 ? '#3368A9' : '#2D7FE4',
+                color: itemList.status == 0 ? '#3368A9' : '#2D7FE4'
               }"
               >{{
                 itemList.status == 0
@@ -360,12 +360,12 @@ import bsExportOrder from "@/components/commonComponent/exportOrderComponent";
 export default {
   name: "bsSampleQuotationDetails",
   components: {
-    bsExportOrder,
+    bsExportOrder
   },
   props: {
     item: {
-      type: Object,
-    },
+      type: Object
+    }
   },
   data() {
     return {
@@ -376,7 +376,7 @@ export default {
       currentPage: 1,
       pageSize: 10,
       totalCount: 0,
-      itemList: {},
+      itemList: {}
     };
   },
   created() {},
@@ -408,8 +408,8 @@ export default {
           companyName: item.supplierName,
           contactsMan: item.supplierPersonnelName,
           phoneNumber: item.supplierPhone,
-          address: item.supplierAddres || item.supplierAddress,
-        },
+          address: item.supplierAddres || item.supplierAddress
+        }
       };
       this.$store.commit("myAddTab", fd);
     },
@@ -417,7 +417,7 @@ export default {
     async getProductOfferNumber() {
       if (this.item.offerNumber.indexOf("S") < 0) {
         const fd = {
-          OfferNumber: this.item.offerNumber,
+          OfferNumber: this.item.offerNumber
         };
         const res = await this.$http.post("/api/GetProductOfferByNumber", fd);
         if (res.data.result.code === 200) {
@@ -436,7 +436,7 @@ export default {
         component: "bsProductDetails",
         refresh: true,
         label: row.fa_no || "产品详情",
-        value: row,
+        value: row
       };
       this.$store.commit("myAddTab", fd);
     },
@@ -459,7 +459,7 @@ export default {
         const fd_s = {
           skipCount: 1,
           maxResultCount: 9999,
-          sampleNumber: this.item.offerNumber,
+          sampleNumber: this.item.offerNumber
         };
         const res = await this.$http.post(
           "/api/CompanySamplelistByNumber",
@@ -478,7 +478,7 @@ export default {
       this.orderRow = {
         sampleNumber: this.item.offerNumber,
         name: this.item.customerName,
-        api: "/api/ExportSampleOfferToExcel",
+        api: "/api/ExportSampleOfferToExcel"
       };
       this.exportTemplateDialog = true;
     },
@@ -633,7 +633,7 @@ export default {
       }
       return {
         outerBoxStere,
-        outerBoxFeet,
+        outerBoxFeet
       };
     },
     onSubmit() {},
@@ -679,7 +679,7 @@ export default {
       }
       val.shoppingCount = Number(e.target.value);
       this.$store.commit("replaceShoppingCartValueCount", this.tableData);
-    },
+    }
   },
   // 点击上下键盘
   nextInput(e) {
@@ -714,7 +714,7 @@ export default {
       e.returnValue = false;
       e.cancelBubble = true;
     }
-  },
+  }
 };
 </script>
 <style scoped lang="less">

@@ -183,11 +183,11 @@ export default {
         name: null,
         PhoneNumber: null,
         email: null,
-        remark: null,
+        remark: null
       },
       rules: {
-        name: [{ required: true, message: "请输入客户名称", trigger: "blur" }],
-      },
+        name: [{ required: true, message: "请输入客户名称", trigger: "blur" }]
+      }
     };
   },
   methods: {
@@ -197,7 +197,7 @@ export default {
         maxResultCount: this.pageSize,
         keyword: this.keyword,
         startTime: this.dateTime && this.dateTime[0],
-        endTime: this.dateTime && this.dateTime[1],
+        endTime: this.dateTime && this.dateTime[1]
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -225,14 +225,14 @@ export default {
       this.formData = {
         name: null,
         phoneNumber: null,
-        remark: null,
+        remark: null
       };
       this.dialogTitle = "新增客户";
       this.dialogVisible = true;
     },
     //创建客户
     async handleAdd() {
-      this.$refs.formDataRef.validate(async (valid) => {
+      this.$refs.formDataRef.validate(async valid => {
         if (valid) {
           const res = await this.$http.post(
             "/api/CreateCustomerInfo",
@@ -242,13 +242,13 @@ export default {
             this.closeDialog();
             this.$common.handlerMsgState({
               msg: "新增操作成功",
-              type: "success",
+              type: "success"
             });
             this.getClientsListPage();
           } else {
             this.$common.handlerMsgState({
               msg: res.data.result.msg,
-              type: "danger",
+              type: "danger"
             });
           }
         }
@@ -262,7 +262,7 @@ export default {
     },
     //编辑客户
     async handleUpdate() {
-      this.$refs.formDataRef.validate(async (valid) => {
+      this.$refs.formDataRef.validate(async valid => {
         if (valid) {
           const res = await this.$http.post(
             "/api/UpdateCustomerInfo",
@@ -273,12 +273,12 @@ export default {
             this.getClientsListPage();
             this.$common.handlerMsgState({
               msg: "编辑操作成功",
-              type: "success",
+              type: "success"
             });
           } else {
             this.$common.handlerMsgState({
               msg: res.data.result.msg,
-              type: "danger",
+              type: "danger"
             });
           }
         }
@@ -288,7 +288,7 @@ export default {
     async handleDelete(row) {
       this.$confirm("此操作将永久删除该客户, 是否继续?", {
         confirmButtonText: "确定",
-        cancelButtonText: "取消",
+        cancelButtonText: "取消"
       })
         .then(async () => {
           const res = await this.$http.post(
@@ -297,20 +297,20 @@ export default {
           if (res.data.result.code === 200) {
             this.$common.handlerMsgState({
               msg: "删除成功",
-              type: "success",
+              type: "success"
             });
             this.getClientsListPage();
           } else {
             this.$common.handlerMsgState({
               msg: res.data.result.msg,
-              type: "danger",
+              type: "danger"
             });
           }
         })
         .catch(() => {
           this.$common.handlerMsgState({
             msg: "取消删除",
-            type: "warning",
+            type: "warning"
           });
         });
     },
@@ -328,12 +328,12 @@ export default {
     handleCurrentChange(page) {
       this.currentPage = page;
       this.getClientsListPage();
-    },
+    }
   },
   created() {},
   mounted() {
     this.getClientsListPage();
-  },
+  }
 };
 </script>
 <style scoped lang="less">

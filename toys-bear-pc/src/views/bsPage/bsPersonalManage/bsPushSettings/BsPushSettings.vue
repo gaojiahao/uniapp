@@ -91,7 +91,7 @@ import bsAddOfferFormulaLang from "@/components/bsComponents/bsPersonalManageCom
 export default {
   name: "bsPushSettings",
   components: {
-    bsAddOfferFormulaLang,
+    bsAddOfferFormulaLang
   },
   data() {
     return {
@@ -103,7 +103,7 @@ export default {
       totalCount: 0,
       pageSize: 10,
       currentPage: 10,
-      tableData: [],
+      tableData: []
     };
   },
   methods: {
@@ -113,7 +113,7 @@ export default {
         maxResultCount: this.pageSize,
         keyword: this.keyword,
         startTime: this.dateTime && this.dateTime[0],
-        endTime: this.dateTime && this.dateTime[1],
+        endTime: this.dateTime && this.dateTime[1]
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -138,14 +138,14 @@ export default {
         this.close();
         this.$common.handlerMsgState({
           msg: "新增成功",
-          type: "success",
+          type: "success"
         });
 
         this.getPushSettingsPage();
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
-          type: "danger",
+          type: "danger"
         });
       }
     },
@@ -170,29 +170,29 @@ export default {
     async handleDelete(row) {
       this.$confirm("确定要删除吗?", {
         confirmButtonText: "确定",
-        cancelButtonText: "取消",
+        cancelButtonText: "取消"
       })
         .then(async () => {
           const res = await this.$http.post("/api/PushSettings/Delete", {
-            id: row.id,
+            id: row.id
           });
           if (res.data.result.code === 200) {
             this.$common.handlerMsgState({
               msg: "删除成功",
-              type: "success",
+              type: "success"
             });
             this.getPushSettingsPage();
           } else {
             this.$common.handlerMsgState({
               msg: res.data.result.msg,
-              type: "danger",
+              type: "danger"
             });
           }
         })
         .catch(() => {
           this.$common.handlerMsgState({
             msg: "已取消删除",
-            type: "warning",
+            type: "warning"
           });
         });
     },
@@ -210,12 +210,12 @@ export default {
     handleCurrentChange(page) {
       this.currentPage = page;
       this.getCollectList();
-    },
+    }
   },
   created() {},
   mounted() {
     this.getPushSettingsPage();
-  },
+  }
 };
 </script>
 <style scoped lang="less">

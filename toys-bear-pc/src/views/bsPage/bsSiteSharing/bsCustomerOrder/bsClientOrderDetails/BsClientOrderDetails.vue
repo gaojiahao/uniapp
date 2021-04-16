@@ -61,7 +61,7 @@
           'font-size': '14px',
           color: '#666',
           backgroundColor: '#f9fafc',
-          'font-weight': '400',
+          'font-weight': '400'
         }"
       >
         <el-table-column label="序号" type="index" align="center" width="70">
@@ -273,8 +273,8 @@ export default {
   components: { bsExportOrder },
   props: {
     item: {
-      type: Object,
-    },
+      type: Object
+    }
   },
   data() {
     return {
@@ -285,7 +285,7 @@ export default {
       currentPage: 1,
       pageSize: 10,
       totalCount: 0,
-      orderOption: {},
+      orderOption: {}
     };
   },
   created() {
@@ -303,7 +303,7 @@ export default {
         linkUrl: "/bsIndex/bsNews",
         component: "bsNews",
         refresh: true,
-        label: "消息",
+        label: "消息"
       };
       this.$store.commit("myAddTab", fd);
       this.$router.push("/bsIndex/bsNews");
@@ -313,7 +313,7 @@ export default {
       if (!item.supplierNumber) {
         this.$common.handlerMsgState({
           msg: "该厂商没有厂商编号，请联系管理员",
-          type: "danger",
+          type: "danger"
         });
         return false;
       }
@@ -330,8 +330,8 @@ export default {
           companyName: item.productName,
           contactsMan: item.supplierName,
           phoneNumber: item.supplierPhone,
-          address: item.supplierAddres || item.supplierAddress || "",
-        },
+          address: item.supplierAddres || item.supplierAddress || ""
+        }
       };
       this.$store.commit("myAddTab", fd);
       this.$router.push("/bsIndex/bsVendorQuery");
@@ -354,7 +354,7 @@ export default {
         {
           skipCount: this.currentPage,
           maxResultCount: this.pageSize,
-          shareOrderNumber: this.item.orderNumber,
+          shareOrderNumber: this.item.orderNumber
         }
       );
       if (res.data.result.code === 200) {
@@ -365,7 +365,7 @@ export default {
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
-          type: "danger",
+          type: "danger"
         });
       }
     },
@@ -377,7 +377,7 @@ export default {
         component: "bsProductDetails",
         refresh: true,
         label: row.fa_no || "产品详情",
-        value: row,
+        value: row
       };
       console.log(row);
       this.$store.commit("myAddTab", fd);
@@ -396,8 +396,8 @@ export default {
       )
         return false;
       this.getSearchCompanyShareOrderDetailsPage();
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped lang="less">

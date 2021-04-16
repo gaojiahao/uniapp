@@ -504,10 +504,10 @@ export default {
       addClientFormData: {
         name: null,
         phoneNumber: null,
-        remark: null,
+        remark: null
       },
       addMyClientRules: {
-        name: [{ required: true, message: "请输入客户名称", trigger: "blur" }],
+        name: [{ required: true, message: "请输入客户名称", trigger: "blur" }]
       },
       clientList: [],
       clientCurrentPage: 1,
@@ -519,7 +519,7 @@ export default {
         decimalPlaces: [],
         offerMethod: [],
         rejectionMethod: [],
-        size: [],
+        size: []
       },
       clienFormData: {
         defaultFormula: null,
@@ -536,85 +536,85 @@ export default {
         decimalPlaces: 3,
         rejectionMethod: "四舍五入",
         miniPrice: 0,
-        miniPriceDecimalPlaces: 1,
+        miniPriceDecimalPlaces: 1
       },
       addInfoRules: {
         customerId: [
           {
             required: true,
             message: "请选择客户",
-            trigger: "change",
-          },
+            trigger: "change"
+          }
         ],
         defaultFormula: [
           {
             required: true,
             message: "请选择默认公式",
-            trigger: "change",
-          },
+            trigger: "change"
+          }
         ],
         offerMethod: [
           {
             required: true,
             message: "请输入报价方式",
-            trigger: "blur",
-          },
+            trigger: "blur"
+          }
         ],
         cu_de: [
           {
             required: true,
             message: "请选择币别",
-            trigger: "change",
-          },
+            trigger: "change"
+          }
         ],
         exchange: [
           {
             required: true,
             message: "请输入汇率",
-            trigger: "blur",
-          },
+            trigger: "blur"
+          }
         ],
         decimalPlaces: {
           required: true,
           message: "请选择小数位数",
-          trigger: "change",
+          trigger: "change"
         },
         profit: {
           required: true,
           message: "请输入利润率",
-          trigger: "blur",
+          trigger: "blur"
         },
         totalCost: {
           required: true,
           message: "请输入总费用",
-          trigger: "blur",
+          trigger: "blur"
         },
         size: {
           required: true,
           message: "请选择尺码",
-          trigger: "change",
+          trigger: "change"
         },
         rejectionMethod: {
           required: true,
           message: "请选择取舍方式",
-          trigger: "change",
+          trigger: "change"
         },
         miniPrice: {
           required: true,
           message: "请输入价格",
-          trigger: "blur",
+          trigger: "blur"
         },
         miniPriceDecimalPlaces: {
           required: true,
           message: "请选择小数位数",
-          trigger: "change",
-        },
+          trigger: "change"
+        }
       },
       customerTemplate: [],
       isIndeterminate: false,
       checkAll: false,
       tableData: [],
-      subDialogVisible: false,
+      subDialogVisible: false
     };
   },
   methods: {
@@ -783,7 +783,7 @@ export default {
         component: "bsNews",
         refresh: true,
         label: item.supplierName,
-        value: {},
+        value: {}
       };
       this.$store.commit("myAddTab", fd);
     },
@@ -814,7 +814,7 @@ export default {
         component: "bsProductDetails",
         refresh: true,
         label: row.fa_no || "产品详情",
-        value: row,
+        value: row
       };
       this.$store.commit("myAddTab", fd);
     },
@@ -832,8 +832,8 @@ export default {
           companyName: item.supplierName,
           contactsMan: item.supplierPersonnelName,
           phoneNumber: item.supplierPhone,
-          address: item.supplierAddres || item.supplierAddress,
-        },
+          address: item.supplierAddres || item.supplierAddress
+        }
       };
       this.$router.push("/bsIndex/bsVendorQuery");
       this.$store.commit("myAddTab", fd);
@@ -841,7 +841,7 @@ export default {
 
     // 提交新增客户
     subMyClient() {
-      this.$refs.addMyClientRef.validate(async (valid) => {
+      this.$refs.addMyClientRef.validate(async valid => {
         if (valid) {
           const res = await this.$http.post(
             "/api/CreateCustomerInfo",
@@ -852,12 +852,12 @@ export default {
             this.addMyClientDialog = false;
             this.$common.handlerMsgState({
               msg: "新增操作成功",
-              type: "success",
+              type: "success"
             });
           } else {
             this.$common.handlerMsgState({
               msg: res.data.result.msg,
-              type: "danger",
+              type: "danger"
             });
           }
         }
@@ -868,7 +868,7 @@ export default {
       this.addClientFormData = {
         name: null,
         phoneNumber: null,
-        remark: null,
+        remark: null
       };
       this.addMyClientDialog = true;
     },
@@ -877,7 +877,7 @@ export default {
       const fd = {
         keyword: this.clientKeyword,
         skipCount: this.clientCurrentPage,
-        maxResultCount: this.clientPageSize,
+        maxResultCount: this.clientPageSize
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -894,7 +894,7 @@ export default {
     removeMyShoppingCart() {
       this.$confirm("确定要删除选中的产品吗？", {
         confirmButtonText: "确定",
-        cancelButtonText: "取消",
+        cancelButtonText: "取消"
       })
         .then(async () => {
           const selectProducts = this.$refs.myTableRef.selection;
@@ -910,7 +910,7 @@ export default {
           }
           this.$common.handlerMsgState({
             msg: "删除成功",
-            type: "success",
+            type: "success"
           });
           console.log(this.tableData);
           eventBus.$emit("resetMyCart", this.tableData);
@@ -919,7 +919,7 @@ export default {
         .catch(() => {
           this.$common.handlerMsgState({
             msg: "已取消删除",
-            type: "warning",
+            type: "warning"
           });
         });
     },
@@ -1001,7 +1001,7 @@ export default {
       if (selectProducts.length < 1) {
         this.$common.handlerMsgState({
           msg: "请选择要提交的产品",
-          type: "danger",
+          type: "danger"
         });
         return false;
       }
@@ -1009,18 +1009,16 @@ export default {
     },
     // 提交订单
     async submitOrder() {
-      this.$refs.addSubmitOrderRef.validate(async (valid) => {
+      this.$refs.addSubmitOrderRef.validate(async valid => {
         if (valid) {
           const selectProducts = this.$refs.myTableRef.selection;
-          this.clienFormData.quotationProductList = selectProducts.map(
-            (val) => {
-              return {
-                productNumber: val.productNumber,
-                boxNumber: val.shoppingCount,
-                offerAmount: val.price,
-              };
-            }
-          );
+          this.clienFormData.quotationProductList = selectProducts.map(val => {
+            return {
+              productNumber: val.productNumber,
+              boxNumber: val.shoppingCount,
+              offerAmount: val.price
+            };
+          });
           if (this.userInfo.commparnyList[0].companyType == "Sales") {
             this.clienFormData.productOfferType = "company";
           }
@@ -1032,7 +1030,7 @@ export default {
           if (code === 200) {
             this.$common.handlerMsgState({
               msg: "提交成功",
-              type: "success",
+              type: "success"
             });
             for (let i = 0; i < this.tableData.length; i++) {
               for (let j = 0; j < selectProducts.length; j++) {
@@ -1050,14 +1048,14 @@ export default {
               linkUrl: "/bsIndex/bsSampleQuotation",
               component: "bsSampleQuotation",
               refresh: true,
-              label: "找样报价",
+              label: "找样报价"
             };
             this.$store.commit("myAddTab", fd);
             this.$router.push("/bsIndex/bsSampleQuotation");
           } else {
             this.$common.handlerMsgState({
               msg: msg,
-              type: "danger",
+              type: "danger"
             });
           }
         }
@@ -1078,7 +1076,7 @@ export default {
         decimalPlaces: 3,
         rejectionMethod: "四舍五入",
         miniPrice: 0,
-        miniPriceDecimalPlaces: 0,
+        miniPriceDecimalPlaces: 0
       };
       this.subDialogVisible = false;
     },
@@ -1093,23 +1091,23 @@ export default {
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
-          type: "danger",
+          type: "danger"
         });
       }
     },
     // 获取系统配置项
     async getSelectCompanyOffer() {
       const res = await this.$http.post("/api/GetSelectCompanyOffer", {
-        basisParameters: "CompanyProductOffer",
+        basisParameters: "CompanyProductOffer"
       });
       if (res.data.result.code === 200) this.options = res.data.result.item;
       else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
-          type: "danger",
+          type: "danger"
         });
       }
-    },
+    }
   },
 
   created() {
@@ -1132,9 +1130,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      shoppingList: "myShoppingList",
+      shoppingList: "myShoppingList"
     }),
-    ...mapState(["userInfo"]),
+    ...mapState(["userInfo"])
   },
   watch: {
     selectTableData: {
@@ -1150,7 +1148,7 @@ export default {
         this.calculationTotalVolume(list);
         // 计算总金额
         this.calculationTotalPrice(list);
-      },
+      }
     },
     "clienFormData.defaultFormula": {
       deep: true,
@@ -1166,20 +1164,20 @@ export default {
           this.clienFormData.decimalPlaces = obj.decimalPlaces;
           this.clienFormData.rejectionMethod = obj.rejectionMethod;
         }
-      },
+      }
     },
     "clienFormData.cu_de": {
       deep: true,
       handler(newVal) {
         if (newVal) {
-          this.options.cu_deList.forEach((val) => {
+          this.options.cu_deList.forEach(val => {
             if (val.parameter === newVal)
               this.clienFormData.cu_deName = val.itemCode;
           });
         }
-      },
-    },
-  },
+      }
+    }
+  }
 };
 </script>
 <style scoped lang="less">

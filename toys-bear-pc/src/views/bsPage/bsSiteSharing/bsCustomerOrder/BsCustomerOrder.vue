@@ -374,7 +374,7 @@ export default {
       imageExportWayList: [
         { value: 0, label: "请选择" },
         { value: 2, label: "按厂商单独导图片" },
-        { value: 1, label: "不按厂商单独导图片" },
+        { value: 1, label: "不按厂商单独导图片" }
       ],
       imageExportWay: 0,
       exportWay: 1,
@@ -388,7 +388,7 @@ export default {
       sitesList: [],
       totalCount: 0,
       pageSize: 10,
-      currentPage: 1,
+      currentPage: 1
     };
   },
   methods: {
@@ -402,14 +402,14 @@ export default {
         excelExportWay: this.exportWay,
         imageExportWay: this.imageExportWay ? this.imageExportWay : 0,
         templateType: type,
-        shareOrderNumber: this.currentOrder.orderNumber,
+        shareOrderNumber: this.currentOrder.orderNumber
       };
       this.$http
         .post("/api/ExportCustomerOrderDetailToExcel", fd, {
           responseType: "blob",
-          timeout: 100000000,
+          timeout: 100000000
         })
-        .then((res) => {
+        .then(res => {
           const time = getCurrentTime();
           // this.currentOrder.customerName + "_" + time + ".xlsx";
           const exeName = this.currentOrder.customerName
@@ -443,14 +443,14 @@ export default {
         zIndex: 9999, // 组件的zIndex值 默认为2000
         index: 0, // 展示第几张图片 默认为0
         list: [url], // 需要展示图片list
-        onClose: (i) => {
+        onClose: i => {
           // 关闭时的回调
           console.log(i);
         },
-        onSelect: (i) => {
+        onSelect: i => {
           // 点击某张图片的回调
           console.log(i);
-        },
+        }
       });
     },
     // 获取列表
@@ -461,7 +461,7 @@ export default {
         keyword: this.keyword,
         url: this.zhandian,
         startTime: this.dateTime && this.dateTime[0],
-        endTime: this.dateTime && this.dateTime[1],
+        endTime: this.dateTime && this.dateTime[1]
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -483,12 +483,12 @@ export default {
       if (res.data.result.code === 200) {
         this.sitesList = [
           { key: "全部", value: null },
-          ...res.data.result.item,
+          ...res.data.result.item
         ];
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
-          type: "danger",
+          type: "danger"
         });
       }
     },
@@ -501,7 +501,7 @@ export default {
         refresh: true,
         noPush: true,
         label: row.orderNumber,
-        value: row,
+        value: row
       };
       this.$store.commit("myAddTab", fd);
     },
@@ -529,14 +529,14 @@ export default {
     search() {
       this.currentPage = 1;
       this.getSearchCompanyShareOrdersPage();
-    },
+    }
   },
   created() {
     this.getDefaultSites();
   },
   mounted() {
     this.getSearchCompanyShareOrdersPage();
-  },
+  }
 };
 </script>
 <style scoped lang="less">

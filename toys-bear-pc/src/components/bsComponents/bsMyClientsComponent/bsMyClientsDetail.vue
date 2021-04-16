@@ -229,8 +229,7 @@ export default {
 
   created() {},
   mounted() {
-    
-      eventBus.$emit("showCart", true);
+    eventBus.$emit("showCart", true);
     this.getProductListPageAll();
   },
   methods: {

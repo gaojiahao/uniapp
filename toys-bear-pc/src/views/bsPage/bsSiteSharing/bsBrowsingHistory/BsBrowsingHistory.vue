@@ -116,7 +116,7 @@ export default {
       sitesList: [],
       totalCount: 0,
       pageSize: 10,
-      currentPage: 1,
+      currentPage: 1
     };
   },
   methods: {
@@ -128,7 +128,7 @@ export default {
         keyword: this.keyword,
         url: this.zhandian,
         startTime: this.dateTime && this.dateTime[0],
-        endTime: this.dateTime && this.dateTime[1],
+        endTime: this.dateTime && this.dateTime[1]
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -142,7 +142,7 @@ export default {
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
-          type: "danger",
+          type: "danger"
         });
       }
     },
@@ -167,12 +167,12 @@ export default {
       if (res.data.result.code === 200) {
         this.sitesList = [
           { key: "全部", value: null },
-          ...res.data.result.item,
+          ...res.data.result.item
         ];
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
-          type: "danger",
+          type: "danger"
         });
       }
     },
@@ -180,13 +180,13 @@ export default {
     search() {
       this.currentPage = 1;
       this.getSearchCompanyShareOrdersPage();
-    },
+    }
   },
   created() {
     this.getDefaultSites();
     this.getSearchCompanyShareOrdersPage();
   },
-  mounted() {},
+  mounted() {}
 };
 </script>
 <style scoped lang="less">
