@@ -403,7 +403,8 @@
             </div>
             <el-form-item label="报价备注：">
               <el-input
-                maxlength="255"
+                maxlength="50"
+                show-word-limit
                 v-model="clienFormData.remark"
               ></el-input>
             </el-form-item>
@@ -827,6 +828,7 @@ export default {
           address: item.supplierAddres || item.supplierAddress
         }
       };
+      this.$router.push("/bsIndex/bsVendorQuery");
       this.$store.commit("myAddTab", fd);
     },
 
