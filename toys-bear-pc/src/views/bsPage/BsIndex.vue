@@ -31,11 +31,7 @@
                 {{ item.label }}
               </span>
 
-              <div
-                class="myScrollbar"
-                style="height: 100%;overflow-y:auto;"
-                ref="myScrollbar"
-              >
+              <div class="myScrollbar" ref="myScrollbar">
                 <component
                   :item="item.value"
                   v-if="item.refresh"
@@ -334,7 +330,7 @@ export default {
       box-sizing: border-box;
       // box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
       z-index: 99;
-      box-shadow: 1px 0px 0px #dcdfe6; 
+      box-shadow: 1px 0px 0px #dcdfe6;
       .bsMenu {
         box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
       }
@@ -366,8 +362,8 @@ export default {
             box-sizing: border-box;
             box-shadow: 0px 0px 3px 0px rgba(42, 69, 116, 0.16);
             .el-tabs__nav-wrap {
-              margin-bottom:0px  !important;
-              box-shadow: 0px 1px 0px #dcdfe6; 
+              margin-bottom: 0px !important;
+              box-shadow: 0px 1px 0px #dcdfe6;
               z-index: 99;
               &.is-scrollable {
                 padding: 0 30px;
@@ -541,6 +537,8 @@ export default {
 }
 .myScrollbar {
   padding: 20px 0;
+  height: 100%;
+  overflow-y: auto;
   box-sizing: border-box;
   /*-------滚动条整体样式----*/
   &::-webkit-scrollbar {

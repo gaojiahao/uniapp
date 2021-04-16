@@ -313,6 +313,21 @@ const store = new Vuex.Store({
         }
       });
     },
+    // 不需要回到上一次历史记录的关闭标签
+    closeOfferTab(state, n) {
+      let tab = state.tabList;
+      let currentTab;
+      for (let i = 0; i < tab.length; i++) {
+        if (tab[i].name == n.toName) {
+          currentTab = tab[i];
+        }
+        if (tab[i].name == n.name) {
+          tab.splice(i, 1);
+        }
+      }
+      state.activeTab = currentTab.name;
+      router.push(currentTab.linkUrl);
+    },
     //新增tab页
     myAddTab(state, n) {
       let tab = state.tabList;

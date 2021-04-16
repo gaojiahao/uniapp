@@ -117,13 +117,14 @@ myAxios.install = function(Vue) {
     startDate: 0, // 请求开始时间
     endDate: 0 // 请求结束时间
   });
+  // 超过一秒没有返回请求数据的才出现loading
+  const loaddingOptions = {};
   // 推送请求拦截
   push_instance.interceptors.request.use(
     config => {
       config.headers.Utoken =
         $Store.state.userInfo && $Store.state.userInfo.accessToken;
       config.headers["content-type"] = "application/json";
-      $Store.commit("updateAppLoading", true);
       return config;
     },
     error => {
@@ -168,7 +169,11 @@ myAxios.install = function(Vue) {
       config.headers.Utoken =
         $Store.state.userInfo && $Store.state.userInfo.accessToken;
       config.headers["content-type"] = "application/json";
-      $Store.commit("updateAppLoading", true);
+      loaddingOptions[config.url] = true;
+      setTimeout(() => {
+        if (loaddingOptions[config.url])
+          $Store.commit("updateAppLoading", true);
+      }, 1000);
       // 屏蔽不需要验证code的请求，如下载导出等
       // if (
       //   config.url.includes("GetOfferOrderExcel") ||
@@ -221,6 +226,7 @@ myAxios.install = function(Vue) {
   // 响应拦截
   instance.interceptors.response.use(
     res => {
+      loaddingOptions[res.config.url] = false;
       $Store.commit("updateAppLoading", false);
       /** 全局设置请求时长和请求内容 */
       const myUrl = res.config.url;

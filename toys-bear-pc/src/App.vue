@@ -3,6 +3,7 @@
     id="app"
     v-loading="$store.state.AppLoading"
     element-loading-spinner
+    text="加载中..."
     element-loading-background="rgba(0, 0, 0, 0.2)"
   >
     <transition name="el-zoom-in-top">
@@ -147,14 +148,18 @@ export default {
 @{deep} .el-loading-spinner {
   z-index: 9999;
   position: fixed;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
+  width: 100px;
+  height: 100px;
+  margin-left: -50px;
+  margin-top: -50px;
+  border-radius: 10px;
+  overflow: hidden;
+  left: 50%;
+  top: 50%;
   background: url("~@/assets/images/loadding.gif") no-repeat center center;
-  // background-size: 100px 100px;
-  // width: 100%;
-  // height: 100%;
+  .circular {
+    border-radius: 50%;
+  }
 }
 #app {
   position: relative;

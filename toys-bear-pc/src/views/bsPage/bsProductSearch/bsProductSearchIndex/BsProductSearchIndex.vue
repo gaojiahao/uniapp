@@ -609,6 +609,7 @@ export default {
           type: "danger"
         });
       }
+      this.getProductList();
     },
     // 选择综合
     handleSynthesis(flag) {
@@ -681,7 +682,7 @@ export default {
   },
   created() {
     this.getProductCategoryList();
-    this.getProductList();
+    // this.getProductList();
   },
   mounted() {
     // 点击搜索-文字搜索

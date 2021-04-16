@@ -256,7 +256,7 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+// import { mapState } from "vuex";
 import bsSampleSearch from "@/components/bsComponents/bsSampleComponent/bsSampleSearch";
 import eventBus from "@/assets/js/common/eventBus.js";
 export default {
@@ -270,11 +270,9 @@ export default {
     }
   },
   watch: {},
-  computed: {
-    ...mapState(["offerProductList"])
-  },
   data() {
     return {
+      offerProductList: [],
       searchForm: {},
       tableData: [],
       totalCount: 0,
@@ -284,7 +282,6 @@ export default {
   },
   created() {},
   mounted() {
-    this.getProductOfferDetailPage();
     eventBus.$on("resetOffProduct", () => {
       this.getProductOfferDetailPage();
     });
@@ -331,10 +328,7 @@ export default {
 
       const res = await this.$http.post("/api/ProductOfferDetailPage", fd);
       if (res.data.result.code === 200) {
-        this.$store.commit(
-          "updataOfferProductList",
-          res.data.result.item.items
-        );
+        this.offerProductList = res.data.result.item.items;
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -414,13 +408,17 @@ export default {
     },
     //选择报价商品
     handleSelect() {
+      const myValue = {
+        offerNumber: this.item.offerNumber,
+        list: this.offerProductList
+      };
       const fd = {
         name: this.item.offerNumber,
         linkUrl: "/bsIndex/bsSampleOfferCommodity",
         component: "bsSampleOfferCommodity",
         refresh: true,
         label: this.item.offerNumber,
-        value: this.item
+        value: myValue
       };
       this.$router.push("/bsIndex/bsSampleOfferCommodity");
       this.$store.commit("myAddTab", fd);
