@@ -13,7 +13,7 @@
           @keyup.native.enter="search"
         ></el-input>
       </div>
-      <div class="item" style="width:200px;">
+      <div class="item" style="width: 200px">
         <span class="label">站点：</span>
         <el-select
           v-model="zhandian"
@@ -57,13 +57,15 @@
     <div class="tableBox">
       <el-table
         :data="tableData"
-        style="width:100%;"
+        style="width: 100%"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
+        <el-table-column label="序号" type="index" align="center" width="70">
+        </el-table-column>
         <el-table-column label="客户">
           <template slot-scope="scope">
             <i class="el-icon-view"></i>
-            <span style="margin-left: 15px;">{{ scope.row.customerName }}</span>
+            <span style="margin-left: 15px">{{ scope.row.customerName }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="siteRegion" label="站点"></el-table-column>
@@ -86,7 +88,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <center style="padding:20px 0;">
+      <center style="padding: 20px 0">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
           :page-sizes="[10, 20, 30, 40]"

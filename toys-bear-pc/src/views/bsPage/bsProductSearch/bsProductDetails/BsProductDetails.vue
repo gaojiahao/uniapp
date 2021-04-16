@@ -14,11 +14,11 @@
           :videoAddress="productDetail.videoAddress"
         />
       </div>
-      <div class="right" v-if="productDetail.bearProduct">
+      <div class="right">
         <div class="context">
           <div class="productName">
             <span
-              >{{ productDetail.bearProduct.name
+              >{{ productDetail.name
               }}<i class="newIcon" v-if="productDetail.isNew">新品</i>
               <i class="nowIcon" v-if="productDetail.isSpotGoods">现货</i>
               <i class="vipIcon" v-if="productDetail.isVip">VIP</i></span
@@ -27,65 +27,60 @@
           <div class="priceWrap">
             参考单价：
             <span class="priceBox"
-              >{{ productDetail.bearProduct.cu_de
-              }}<span class="price">{{
-                productDetail.bearProduct.price
-              }}</span></span
+              >{{ productDetail.cu_de
+              }}<span class="price">{{ productDetail.price }}</span></span
             >
           </div>
           <div class="textWrap">
             <div class="left">
               <div class="itemText">
-                出厂货号：<span>{{ productDetail.bearProduct.fa_no }}</span>
+                出厂货号：<span>{{ productDetail.fa_no }}</span>
               </div>
               <div class="itemText">
                 产品规格：
                 <span
-                  >{{ productDetail.bearProduct.pr_le }} x
-                  {{ productDetail.bearProduct.pr_wi }} x
-                  {{ productDetail.bearProduct.pr_hi }} (cm)</span
+                  >{{ productDetail.pr_le }} x {{ productDetail.pr_wi }} x
+                  {{ productDetail.pr_hi }} (cm)</span
                 >
               </div>
               <div class="itemText">
                 包装规格：
                 <span
-                  >{{ productDetail.bearProduct.in_le }} x
-                  {{ productDetail.bearProduct.in_wi }} x
-                  {{ productDetail.bearProduct.in_hi }} (cm)</span
+                  >{{ productDetail.in_le }} x {{ productDetail.in_wi }} x
+                  {{ productDetail.in_hi }} (cm)</span
                 >
               </div>
               <div class="itemText">
                 体积/材积：
                 <span
-                  >{{ productDetail.bearProduct.bulk_stere }} (cbm) /
-                  {{ productDetail.bearProduct.bulk_feet }} (cuft)</span
+                  >{{ productDetail.bulk_stere }} (cbm) /
+                  {{ productDetail.bulk_feet }} (cuft)</span
                 >
               </div>
             </div>
             <div class="right">
               <div class="itemText">
-                包装：<span>{{ productDetail.bearProduct.ch_pa }}</span>
+                包装：<span>{{ productDetail.ch_pa }}</span>
               </div>
               <div class="itemText">
                 外箱规格：
                 <span
-                  >{{ productDetail.bearProduct.ou_le }} x
-                  {{ productDetail.bearProduct.ou_wi }} x
-                  {{ productDetail.bearProduct.ou_hi }} (cm)</span
+                  >{{ productDetail.ou_le }} x {{ productDetail.ou_wi }} x
+                  {{ productDetail.ou_hi }} (cm)</span
                 >
               </div>
               <div class="itemText">
                 装箱量：
                 <span
-                  >{{ productDetail.bearProduct.in_en }} /
-                  {{ productDetail.bearProduct.ou_lo }} (pcs)</span
+                  >{{ productDetail.in_en }} /
+                  {{ productDetail.ou_lo }} (pcs)</span
                 >
               </div>
               <div class="itemText">
                 毛重/净重：
                 <span
-                  >{{ productDetail.bearProduct.gr_we }} /
-                  {{ productDetail.bearProduct.ne_we }} (kg)</span
+                  >{{ productDetail.gr_we }} /
+                  {{ productDetail.ne_we }} (kg)</span
                 >
               </div>
             </div>
@@ -108,7 +103,8 @@
             <span class="newTime">
               上架时间：
               <span>{{
-                productDetail.bearProduct.newTime.replace(/T.*/, "")
+                productDetail.newTime &&
+                  productDetail.newTime.replace(/T.*/, "")
               }}</span>
             </span>
             <span class="stock">
@@ -118,12 +114,9 @@
           </p>
           <p>
             产品认证：
-            <i
-              v-if="productDetail.bearProduct.certificateNo"
-              class="proveActiveIcon"
-            ></i>
+            <i v-if="productDetail.certificateNo" class="proveActiveIcon"></i>
             <i v-else class="proveIcon"></i>
-            <span>{{ productDetail.bearProduct.certificateNo }}</span>
+            <span>{{ productDetail.certificateNo }}</span>
           </p>
         </div>
         <!-- 联系方式 -->
@@ -162,11 +155,11 @@
           </p>
           <p class="item">
             展厅编号：
-            <span>{{ productDetail.bearProduct.number }}</span>
+            <span>{{ productDetail.number }}</span>
           </p>
           <p class="item">
             摊位号：
-            <span>{{ productDetail.bearProduct.booth_nu_pro }}</span>
+            <span>{{ productDetail.booth_nu_pro }}</span>
           </p>
         </div>
       </div>
@@ -240,6 +233,13 @@ export default {
     },
     // 加购
     handlerShopping(item) {
+      if (this.shoppingList.length >= 500) {
+        this.$common.handlerMsgState({
+          msg: "购物车已满500条",
+          type: "warning"
+        });
+        return;
+      }
       item.isShopping = !item.isShopping;
       if (item.isShopping) {
         item.shoppingCount = 1;
@@ -260,7 +260,7 @@ export default {
     // 收藏
     async addCollect(item) {
       const res = await this.$http.post("/api/CreateProductCollection", {
-        productNumber: item.bearProduct.productNumber
+        productNumber: item.productNumber
       });
       if (res.data.result.code === 200) {
         if (item.isFavorite) {
@@ -280,7 +280,7 @@ export default {
     },
     // 获取产品详情
     async getProductDetails() {
-      const res = await this.$http.post("/api/BearProductByNumber", {
+      const res = await this.$http.post("/api/BearProductByNumberV2", {
         productNumber: this.item.productNumber
       });
       if (res.data.result.code === 200) {

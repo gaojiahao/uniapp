@@ -89,8 +89,10 @@ export default {
     return {
       value: null,
       ws: null,
-      wsBaseUrl: "wss://impush.toysbear.com/ws?UserId=",
-      // wsBaseUrl: "ws://139.9.71.135:8090/ws?UserId=",
+      // loginUrl: "https://www.toysbear.com/new/#/bsIndex",
+      loginUrl: "http://139.9.71.135:8080/new/#/bsIndex",
+      // wsBaseUrl: "wss://impush.toysbear.com/ws?UserId=",
+      wsBaseUrl: "ws://139.9.71.135:8090/ws?UserId=",
       lang: "zh-CN",
       qrTimer: null,
       randomCode: null,
@@ -194,6 +196,9 @@ export default {
         this.ws && this.ws.close();
         clearInterval(this.qrTimer);
         this.qrTimer = null;
+        // 保存数据到cookit
+        this.$cookies.set("userInfo", res.data.result.accessToken);
+        console.log(this.$cookies.get("userInfo"));
         this.$store.commit("setToken", res.data.result);
         this.$store.commit(
           "setComparnyId",
@@ -228,8 +233,8 @@ export default {
             switch (res.data.result.commparnyList[0].companyType) {
               case "Sales":
                 // this.$router.push("/bsIndex");
-                // location.href = "https://www.toysbear.com/new/#/bsIndex";
-                location.href = "http://139.9.71.135:8080/new/#/bsIndex";
+                location.href = this.loginUrl;
+                // location.href = "http://139.9.71.135:8080/new/#/bsIndex";
                 break;
               default:
                 this.$router.push("/me");
@@ -311,6 +316,9 @@ export default {
             this.$store.commit("setToken", res.data.result);
             if (res.data.result.commparnyList.length === 1) {
               // 一个角色
+              // 保存数据到cookit
+              this.$cookies.set("userInfo", res.data.result.accessToken);
+              console.log(this.$cookies.get("userInfo"));
               this.$store.commit("setToken", res.data.result);
               this.$store.commit(
                 "setComparnyId",
@@ -324,7 +332,6 @@ export default {
               } else {
                 this.$store.commit("initShoppingCart", []);
               }
-              await this.waitTime(1);
               // 获取系统参数
               const Json = {};
               Json.MessageRestriction = await this.getClientTypeList(
@@ -359,15 +366,14 @@ export default {
               switch (res.data.result.commparnyList[0].companyType) {
                 case "Sales":
                   // this.$router.push("/bsIndex");
-                  // location.href = "https://www.toysbear.com/new/#/bsIndex";
-                  location.href = "http://139.9.71.135:8080/new/#/bsIndex";
+                  location.href = this.loginUrl;
+                  // location.href = "http://139.9.71.135:8080/new/#/bsIndex";
                   break;
                 default:
                   this.$router.push("/me");
                   // location.href = "http://139.9.71.135:8080/#/me";
                   break;
               }
-              // this.$router.push("/me");
             } else if (res.data.result.commparnyList.length > 1) {
               // 多个角色
               this.$store.commit("setToken", res.data.result);

@@ -389,7 +389,7 @@
         " <td > " + list[i].pr_na + "</td > " +
         "<td>" + list[i].client_nuValue + "</td>" + "<td>" + list[i].fa_no + "</td>" +
         "<td>" + list[i].ch_pa + "</td>" + "<td>" + list[i].in_en + "/" + list[i].ou_lo + "</td > " +
-        "<td>" + list[i].fa_pr + "</td>" + "<td>" + list[i].ha_in_qu + "</td>" +
+        "<td>" + list[i].cu_de + list[i].fa_pr + "</td>" + "<td>" + list[i].ha_in_qu + "</td>" +
         "<td>" + list[i].pr_le + "</td>" + "<td>" + list[i].pr_wi + "</td>" +
         "<td>" + list[i].pr_hi + "</td>" +
         "<td>" + list[i].in_le + "</td>" + "<td>" + list[i].in_wi + "</td>" +
@@ -398,7 +398,7 @@
         "<td>" + list[i].ou_hi + "</td>" +
         "<td>" + list[i].bulk_stere + "</td>" + "<td>" + list[i].bulk_feet + "</td>" +
         "<td>" + list[i].gr_we + "</td>" + "<td>" + list[i].ne_we + "</td>" +
-        "<td>" + list[i].remarkValue + "</td>" + "<td>" + list[i].ma_na + "</td>" +
+        "<td >" + list[i].remarkValue + "</td>" + "<td>" + list[i].ma_na + "</td>" +
         "<td>" + list[i].supplierPhoneValue + "</td>" + "<td>" + list[i].ma_nu + "</td>" +
         "</tr>"
       $("#tbodyData").append(html);
@@ -455,6 +455,35 @@
     }
     $("#SampleOrder").val(JSON.stringify(selectFormValue))
   });
+
+  // var table = document.getElementById("tbodyData");//获取第一个表格  
+  // var trList = table.getElementsByTagName("tr")
+  // // 鼠标滑入备注
+  // function onmouseoverShow(index) {
+  //   console.log(index, "滑入");
+  //   if (trList.length > 0) {
+  //     var td = trList[index].getElementsByTagName("td")
+  //     for (var i = 0; i < td.length; i++) {
+  //       if (td[i].className == "trHidden") {
+  //         td[i].classList.remove("trHidden")
+  //         td[i].classList.add("show")
+  //       }
+  //     }
+  //   }
+  // }
+  // // 鼠标滑出备注
+  // function onmouseoutHidden(index) {
+  //   console.log(index, "划出");
+  //   if (trList.length > 0) {
+  //     var td = trList[index].getElementsByTagName("td")
+  //     for (var i = 0; i < td.length; i++) {
+  //       if (td[i].className == "show") {
+  //         td[i].classList.remove("show")
+  //         td[i].classList.add("trHidden")
+  //       }
+  //     }
+  //   }
+  // }
   // 上一页
   function previousPage() {
     var numberPage = $("#numberPage").val()

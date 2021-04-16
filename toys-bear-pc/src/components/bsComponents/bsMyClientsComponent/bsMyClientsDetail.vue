@@ -25,8 +25,9 @@
             <div class="name">{{ item.companyName }}</div>
             <div class="tel">
               <p>联系人：{{ item.contactsMan }}</p>
-              <p>电话：{{ item.phoneNumber }}</p>
+              <p>电话：{{ item.telePhoneNumber }}</p>
               <p>手机：{{ item.phoneNumber }}</p>
+              <p>QQ：{{ item.qq }}</p>
               <p>地址：{{ item.address }}</p>
               <p><img src="~@/assets/images/consult.png" alt /> 在线咨询</p>
             </div>
@@ -187,6 +188,7 @@
 <script>
 import bsColumnComponent from "@/components/bsComponents/bsProductSearchComponent/bsColumnComponent";
 import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/bsGridComponent";
+import eventBus from "@/assets/js/common/eventBus.js";
 export default {
   name: "bsMyClientsDetail",
   components: {
@@ -224,8 +226,10 @@ export default {
       typesList: []
     };
   },
+
   created() {},
   mounted() {
+    eventBus.$emit("showCart", true);
     this.getProductListPageAll();
   },
   methods: {

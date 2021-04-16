@@ -37,15 +37,17 @@
     <div class="tableBox">
       <el-table
         :data="tableData"
-        style="width: 100%;"
+        style="width: 100%"
         ref="collecTable"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
+        <el-table-column label="序号" type="index" align="center" width="70">
+        </el-table-column>
         <el-table-column label="站点" width="150" prop="siteRegion">
           <template slot-scope="scope">
             <div>
               <i
-                style="color: #3368A9; margin-right: 15px;"
+                style="color: #3368a9; margin-right: 15px"
                 class="iconfont icon-hulianwang"
               ></i>
               <span>{{ scope.row.siteRegion }}</span>
@@ -92,7 +94,7 @@
               <i
                 @click="resetLoginCode(scope.row)"
                 class="el-icon-refresh"
-                style="font-size: 14px;cursor: pointer;"
+                style="font-size: 14px; cursor: pointer"
               ></i>
             </div>
           </template>
@@ -118,7 +120,7 @@
         >
           <template slot-scope="scope">
             <el-button
-              style="margin-right:10px;"
+              style="margin-right: 10px"
               size="mini"
               type="success"
               @click.stop="openEdit(scope.row)"
@@ -139,7 +141,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <center style="padding:20px 0;">
+      <center style="padding: 20px 0">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
           :page-sizes="[10, 20, 30, 40]"
@@ -167,10 +169,10 @@
         :model="clienFormData"
       >
         <el-form-item label="站点域名：" prop="url">
-          <div style="display:flex;margin-bottom:10px;">
+          <div style="display: flex; margin-bottom: 10px">
             <el-tag
               @click="clienFormData.url = item"
-              style="margin-right: 10px;cursor: pointer;"
+              style="margin-right: 10px; cursor: pointer"
               v-for="(item, key) of defaultShareDomain"
               :key="item"
               >{{ key }}</el-tag
@@ -200,7 +202,7 @@
               </el-option>
             </el-select>
             <el-button
-              style="margin-left:10px;"
+              style="margin-left: 10px"
               type="primary"
               @click.stop="openAddMyClient"
               >新增客户</el-button
@@ -425,7 +427,7 @@
     <!-- 生成二维码 -->
     <el-dialog :visible.sync="QRCodeDialog" v-if="QRCodeDialog" width="20%">
       <vue-qr
-        style="width:100%;"
+        style="width: 100%"
         :text="QRCodeUrl"
         colorLight="#fff"
         colorDark="#000"

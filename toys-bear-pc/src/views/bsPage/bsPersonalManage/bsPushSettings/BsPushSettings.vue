@@ -21,6 +21,8 @@
         ref="collecTable"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
+        <el-table-column label="序号" type="index" align="center" width="70">
+        </el-table-column>
         <el-table-column prop="sort" label="排序" width="100"></el-table-column>
         <el-table-column prop="title" label="主题"></el-table-column>
         <el-table-column prop="content" label="内容"></el-table-column>
@@ -54,7 +56,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <center style="padding:20px 0;">
+      <center style="padding: 20px 0">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
           :page-sizes="[10, 20, 30, 40]"

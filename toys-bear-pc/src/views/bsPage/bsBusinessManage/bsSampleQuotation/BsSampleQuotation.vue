@@ -36,7 +36,7 @@
             @keyup.native.enter="search"
           ></el-input>
         </div>
-        <div class="item" style=" max-width:300px">
+        <div class="item" style="max-width: 300px">
           <span class="label">时间段：</span>
           <el-date-picker
             size="medium"
@@ -67,11 +67,13 @@
           ref="collecTable"
           :header-cell-style="{ backgroundColor: '#f9fafc' }"
         >
+          <el-table-column label="序号" type="index" align="center" width="70">
+          </el-table-column>
           <el-table-column label="报价单号" min-width="150">
             <template slot-scope="scope">
               <span
                 @click="goDetails(scope.row)"
-                style="color:#3368A9;cursor: pointer;"
+                style="color: #3368a9; cursor: pointer"
               >
                 {{ scope.row.offerNumber }}
               </span>
@@ -109,10 +111,10 @@
           </el-table-column>
           <el-table-column label="总金额" align="center" width="100">
             <template slot-scope="scope">
-              <span style="color:#EB1515;">
-                {{ scope.row.cu_deName }}
+              <span style="color: #eb1515">
+                {{ scope.row.cu_de }}
               </span>
-              <span style="color:#EB1515;">
+              <span style="color: #eb1515">
                 {{ scope.row.offerTotalAmount }}
               </span>
             </template>
@@ -170,7 +172,6 @@
                 v-show="scope.row.offerNumber.indexOf('S') < 0"
                 size="mini"
                 type="info"
-                @click="tuisong(scope.row)"
                 >推送</el-button
               >
               <el-button
@@ -182,7 +183,7 @@
               </el-button>
               <el-button
                 v-show="scope.row.offerNumber.indexOf('S') < 0"
-                style="margin-left: 10px;"
+                style="margin-left: 10px"
                 size="mini"
                 type="danger"
                 @click="handleDelete(scope.row)"
@@ -191,7 +192,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <center style="padding:20px 0;">
+        <center style="padding: 20px 0">
           <el-pagination
             layout="total, sizes, prev, pager, next, jumper"
             :page-sizes="[10, 20, 30, 40]"
@@ -250,13 +251,11 @@ export default {
   methods: {
     // 导出找样
     exportOrder(row) {
-      console.log(row);
       this.orderRow = {
         sampleNumber: row.offerNumber,
         name: row.customerName,
         api: "/api/ExportSampleOfferToExcel"
       };
-      console.log(this.orderRow);
       this.exportTemplateDialog = true;
     },
     // 获取列表
@@ -325,10 +324,6 @@ export default {
     handleCurrentChange(page) {
       this.currentPage = page;
       this.getCompanySamplelistPage();
-    },
-    tuisong(row) {
-      console.log(row.offerNumber);
-      console.log(row.offerNumber.indexOf("S") >= 0);
     },
     // 报价详情跳转
     async goDetails(row) {

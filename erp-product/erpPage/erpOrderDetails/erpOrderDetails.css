@@ -219,6 +219,15 @@
 #tbodyData tr{
  height: 80px;
 }
+.trHidden {
+    overflow: hidden;
+    /*超出部分隐藏*/
+    white-space: nowrap;
+    /*不换行*/
+    text-overflow: ellipsis;
+    /*超出部分文字以...显示*/
+}
+
 #tbodyData tr td{
     padding: 6px 10px;
     border-right: 1px solid #ebeef5;

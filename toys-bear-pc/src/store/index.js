@@ -275,16 +275,24 @@ const store = new Vuex.Store({
     // 测试
     //关闭全部tab页
     closeTabAll(state) {
+      console.log(state.activeTab, state.tabList);
+      let activeTab;
+      for (let i = 0; i < state.tabList.length; i++) {
+        if (state.tabList[i].name === state.activeTab) {
+          activeTab = state.tabList[i];
+          break;
+        }
+      }
       v.$set(state, "tabList", []);
-      const fd = {
-        component: "bsHome",
-        label: "后台首页",
-        linkUrl: "/bsIndex/bsHome",
-        name: "/bsIndex/bsHome",
-        refresh: true
-      };
-      state.tabList.push(fd);
-      state.activeTab = "/bsIndex/bsHome";
+      state.tabList.push(activeTab);
+      // const fd = {
+      //   component: "bsHome",
+      //   label: "后台首页",
+      //   linkUrl: "/bsIndex/bsHome",
+      //   name: "/bsIndex/bsHome",
+      //   refresh: true
+      // };
+      // state.activeTab = "/bsIndex/bsHome";
     },
 
     //关闭tab页

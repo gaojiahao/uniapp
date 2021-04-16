@@ -59,6 +59,8 @@
         style="width: 100%"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
+        <el-table-column label="序号" type="index" align="center" width="70">
+        </el-table-column>
         <el-table-column prop="name" label="客户姓名" width="180">
         </el-table-column>
         <el-table-column
@@ -92,7 +94,7 @@
         </el-table-column>
       </el-table>
       <!-- 分页 -->
-      <center style="padding:20px 0;">
+      <center style="padding: 20px 0">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
           :page-sizes="[12, 24, 36, 48]"
@@ -148,7 +150,7 @@
           </el-input>
         </el-form-item>
       </el-form>
-      <div style="margin: 20px;"></div>
+      <div style="margin: 20px"></div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">取 消</el-button>
         <el-button

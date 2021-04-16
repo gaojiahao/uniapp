@@ -5,7 +5,7 @@ import store from "@/store";
 import "@/styles/base.less";
 import myAxios from "@/request/http";
 import md5 from "js-md5";
-// import ElementUI from "element-ui";
+import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import "element-ui/lib/theme-chalk/display.css";
 import "@/assets/css/theme/index.css";
@@ -23,6 +23,7 @@ import "quill/dist/quill.core.css"; // import styles
 import "quill/dist/quill.snow.css"; // for snow theme
 import "quill/dist/quill.bubble.css"; // for bubble theme
 import "@/assets/js/rem.js";
+import VueCookies from "vue-cookies";
 import { NoticeBar } from "vant";
 Vue.use(VueQuillEditor);
 Vue.use(VueClipboard);
@@ -32,7 +33,8 @@ Vue.component(ElTreeGrid.name, ElTreeGrid);
 Vue.prototype.$video = Video;
 Vue.prototype.$_ = _;
 
-// Vue.use(ElementUI);
+Vue.use(VueCookies);
+Vue.use(ElementUI);
 Vue.prototype.$md5 = md5;
 Vue.prototype.$RTM = RTM;
 Vue.prototype.$PreviewPic = PreviewPic;

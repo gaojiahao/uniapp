@@ -385,7 +385,7 @@ export default {
       currentPage: 1,
       pageSize: 20,
       totalCount: 0,
-      col: document.documentElement.clientWidth < 1920 ? 2 : 3
+      col: 3
     };
   },
   methods: {
@@ -821,11 +821,11 @@ export default {
   watch: {
     scrollTop(val) {
       console.log(val);
-    },
-    fullWidth(val) {
-      if (val < 1920) this.col = 2;
-      this.fullWidth = val;
     }
+    // fullWidth(val) {
+    //   if (val < 1920) this.col = 2;
+    //   this.fullWidth = val;
+    // }
   }
 };
 </script>
@@ -915,12 +915,15 @@ export default {
   }
   .noticeContent {
     height: calc(100% - 85px);
+    width: 1660px;
+    min-width: 1660;
     position: relative;
     overflow: hidden;
     padding-right: 20px;
     padding-bottom: 20px;
     border-radius: 4px;
     .vue-waterfall {
+      width: 1640px;
       &::-webkit-scrollbar {
         // 谷歌隐藏滚动条
         display: none;

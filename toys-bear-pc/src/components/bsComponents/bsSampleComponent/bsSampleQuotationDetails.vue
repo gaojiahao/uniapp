@@ -11,7 +11,7 @@
             客户名称：<span>{{ itemList.customerName }} </span>
           </p>
           <p>
-            操作员：<span style="color:#2D7FE4">{{ itemList.linkman }} </span>
+            操作员：<span style="color: #2d7fe4">{{ itemList.linkman }} </span>
           </p>
           <p>
             状态：<span
@@ -30,7 +30,9 @@
         </div>
         <div class="flex_b">
           <p>
-            报价时间：<span>{{ itemList.createdOn }} </span>
+            报价时间：<span v-if="itemList.createdOn"
+              >{{ itemList.createdOn.replace(/T/, " ") }}
+            </span>
           </p>
           <p>
             报价备注：<span>{{ itemList.title }} </span>
@@ -97,7 +99,7 @@
     <div class="bsSampleTable">
       <div class="top">
         <div class="left">报价商品列表({{ tableData.length }})</div>
-        <div class="right">
+        <div class="right" v-if="tableData.length > 0">
           <el-button @click="exportOrder()" type="warning"> 导出列表</el-button>
         </div>
       </div>
@@ -108,14 +110,16 @@
           ref="collecTable"
           :header-cell-style="{ background: '#f1f3f6' }"
         >
+          <el-table-column label="序号" type="index" align="center" width="70">
+          </el-table-column>
           <el-table-column prop="img" label="产品" align="center" width="300">
             <template slot-scope="scope">
               <div class="imgBox">
                 <el-image
                   @click.native="goDetails(scope.row)"
                   fit="contain"
-                  style="width:80px;height:60px;"
-                  :src="scope.row.imageUrl && scope.row.imgUrlList[0]"
+                  style="width: 80px; height: 60px"
+                  :src="scope.row.imgUrlList && scope.row.imgUrlList[0]"
                 >
                   <div slot="placeholder" class="errorImg">
                     <img src="~@/assets/images/imgError.png" alt />
@@ -212,6 +216,11 @@
             align="center"
             width="100"
           >
+            <template slot-scope="scope">
+              <span>
+                {{ handleOffer(scope.row.boxNumber) }}
+              </span>
+            </template>
           </el-table-column>
           <!-- <el-table-column label="箱数" align="center" width="100">
             <template slot-scope="scope">
@@ -233,36 +242,49 @@
           >
             <template slot-scope="scope">
               <span>
-                {{ sumPriceCount(scope.row.boxNumber, scope.row.ou_lo) }}
+                {{
+                  handleOffer(
+                    sumPriceCount(scope.row.boxNumber, scope.row.ou_lo)
+                  )
+                }}
               </span>
             </template>
           </el-table-column>
+          <el-table-column prop="price" label="厂价" align="center" width="100">
+            <template slot-scope="scope">
+              <span style="color: #f56c6c"> ￥{{ scope.row.price }} </span>
+            </template>
+          </el-table-column>
+
           <el-table-column
-            prop="unitPrice"
-            label="单价"
+            prop="offerAmount"
+            label="报出价"
             align="center"
             width="100"
           >
             <template slot-scope="scope">
-              <span style="color:#f56c6c">
-                {{ scope.row.cu_de + scope.row.unitPrice }}
+              <span style="color: #f56c6c">
+                {{ scope.row.cu_de + handleOffer(scope.row.offerAmount) }}
               </span>
             </template>
           </el-table-column>
+
           <el-table-column
             prop="OfferTotalAmount"
-            label="总价"
+            label="报出总价"
             align="center"
             width="100"
           >
             <template slot-scope="scope">
-              <span>{{ scope.row.cu_de }}</span>
-              <span style="color:#f56c6c">
+              <span style="color: #f56c6c">{{ scope.row.cu_de }}</span>
+              <span style="color: #f56c6c">
                 {{
-                  priceCount(
-                    scope.row.unitPrice,
-                    scope.row.ou_lo,
-                    scope.row.boxNumber
+                  handleOffer(
+                    priceCount(
+                      scope.row.offerAmount,
+                      scope.row.ou_lo,
+                      scope.row.boxNumber
+                    )
                   )
                 }}
               </span>
@@ -283,18 +305,24 @@
           <p class="item">
             <span class="itemTitle">总体积/总材积：</span>
             <span
-              >{{ myTotalVolume(tableData).outerBoxStere }}/{{
-                myTotalVolume(tableData).outerBoxFeet
+              >{{ handleOffer(myTotalVolume(tableData).outerBoxStere) }}/{{
+                handleOffer(myTotalVolume(tableData).outerBoxFeet)
               }}</span
             >
           </p>
           <p class="item">
             <span class="itemTitle">总毛重/总净重：</span>
-            <span>{{ totalMaozhong() }}/{{ totalJingzhong() }}(KG)</span>
+            <span
+              >{{ handleOffer(totalMaozhong()) }}/{{
+                handleOffer(totalJingzhong())
+              }}(KG)</span
+            >
           </p>
           <p class="item">
             <span class="itemTitle">总金额：</span>
-            <span class="price">￥{{ myTotalPrice(tableData) }}</span>
+            <span class="price"
+              >{{ item.cu_de + handleOffer(myTotalPrice(tableData)) }}
+            </span>
           </p>
         </div>
       </div>
@@ -358,9 +386,16 @@ export default {
     this.getProductOfferNumber();
   },
   methods: {
+    // 判断编号
+    handleOffer(row) {
+      if (this.item.offerNumber.indexOf("S") < 0) {
+        return row;
+      } else {
+        return 0;
+      }
+    },
     //厂商跳转
     toFactory(item) {
-      console.log(item);
       const fd = {
         name: item.supplierNumber,
         linkUrl: this.$route.path,
@@ -403,7 +438,6 @@ export default {
         label: row.fa_no || "产品详情",
         value: row
       };
-      console.log(row);
       this.$store.commit("myAddTab", fd);
     },
     // 获取列表
@@ -558,8 +592,8 @@ export default {
       return this.multiply(boxNumber, ou_lo);
     },
     // 单个产品总价
-    priceCount(unitPrice, ou_lo, boxNumber) {
-      return this.multiply(this.multiply(unitPrice, ou_lo), boxNumber);
+    priceCount(price, ou_lo, boxNumber) {
+      return this.multiply(this.multiply(price, ou_lo), boxNumber);
     },
     // 计算总净重
     totalJingzhong() {
@@ -614,11 +648,12 @@ export default {
     // 计算总价
     myTotalPrice(list) {
       let price = 0;
+
       for (let i = 0; i < list.length; i++) {
         price = this.add(
           price,
           this.multiply(
-            this.multiply(list[i].unitPrice, list[i].boxNumber),
+            this.multiply(list[i].offerAmount, list[i].boxNumber),
             list[i].ou_lo
           )
         );

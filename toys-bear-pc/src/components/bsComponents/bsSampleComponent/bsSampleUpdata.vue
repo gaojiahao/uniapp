@@ -27,13 +27,21 @@
                   @click.native="goDetails(scope.row)"
                   fit="contain"
                   style="width:80px;height:60px;"
-                  :src="scope.row.imageUrl && scope.row.imgUrlList[0]"
+                  :src="scope.row.imgUrlList && scope.row.imgUrlList[0]"
                 >
                   <div slot="placeholder" class="errorImg">
-                    <img src="~@/assets/images/imgError.png" alt />
+                    <img
+                      style="width:60px;height:60px;"
+                      src="~@/assets/images/imgError.png"
+                      alt
+                    />
                   </div>
                   <div slot="error" class="errorImg">
-                    <img src="~@/assets/images/imgError.png" alt />
+                    <img
+                      style="width:60px;height:60px;"
+                      src="~@/assets/images/imgError.png"
+                      alt
+                    />
                   </div>
                 </el-image>
                 <div class="productName">
@@ -142,19 +150,32 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="price" label="单价" align="center" width="100">
+          <el-table-column prop="price" label="厂价" align="center" width="100">
             <template slot-scope="scope">
               <span style="color:#f56c6c"> ￥{{ scope.row.price }} </span>
             </template>
           </el-table-column>
-          <ex-table-column :autoFit="true" width="100" label="总价">
+          <el-table-column
+            prop="offerAmount"
+            label="报出价"
+            align="center"
+            width="100"
+          >
+            <template slot-scope="scope">
+              <span style="color:#f56c6c">
+                {{ scope.row.cu_de + scope.row.offerAmount }}
+              </span>
+            </template>
+          </el-table-column>
+
+          <ex-table-column :autoFit="true" width="100" label="报出总价">
             <template slot-scope="scope">
               <p class="item price">
-                <span>￥</span>
-                <span>
+                <span style="color:#f56c6c">{{ scope.row.cu_de }}</span>
+                <span style="color:#f56c6c">
                   {{
                     priceCount(
-                      scope.row.price,
+                      scope.row.offerAmount,
                       scope.row.ou_lo,
                       scope.row.boxNumber
                     )
@@ -205,7 +226,9 @@
           </p>
           <p class="item">
             <span class="itemTitle">总金额：</span>
-            <span class="price">￥{{ myTotalPrice(offerProductList) }}</span>
+            <span class="price"
+              >{{ item.cu_de + myTotalPrice(offerProductList) }}
+            </span>
           </p>
           <el-button
             type="primary"
@@ -235,6 +258,7 @@
 <script>
 import { mapState } from "vuex";
 import bsSampleSearch from "@/components/bsComponents/bsSampleComponent/bsSampleSearch";
+import eventBus from "@/assets/js/common/eventBus.js";
 export default {
   name: "bsSampleUpdata",
   components: {
@@ -251,6 +275,7 @@ export default {
   },
   data() {
     return {
+      searchForm: {},
       tableData: [],
       totalCount: 0,
       pageSize: 12,
@@ -260,11 +285,13 @@ export default {
   created() {},
   mounted() {
     this.getProductOfferDetailPage();
+    eventBus.$on("resetOffProduct", () => {
+      this.getProductOfferDetailPage();
+    });
   },
   methods: {
     // 去厂商
     toFactory(item) {
-      console.log(item);
       const fd = {
         name: item.supplierNumber,
         linkUrl: "/bsIndex/bsVendorQuery",
@@ -391,9 +418,7 @@ export default {
         name: this.item.offerNumber,
         linkUrl: "/bsIndex/bsSampleOfferCommodity",
         component: "bsSampleOfferCommodity",
-
         refresh: true,
-        noPush: true,
         label: this.item.offerNumber,
         value: this.item
       };
@@ -575,7 +600,7 @@ export default {
         price = this.add(
           price,
           this.multiply(
-            this.multiply(list[i].price, list[i].boxNumber),
+            this.multiply(list[i].offerAmount, list[i].boxNumber),
             list[i].ou_lo
           )
         );

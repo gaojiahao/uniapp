@@ -66,13 +66,15 @@
           'font-weight': '400'
         }"
       >
+        <el-table-column label="序号" type="index" align="center" width="70">
+        </el-table-column>
         <ex-table-column :autoFit="true" label="产品" width="300">
           <template slot-scope="scope">
             <div class="imgBox">
               <el-image
                 fit="contain"
                 @click.native="goDetails(scope.row)"
-                style="width:80px;height:60px;"
+                style="width: 80px; height: 60px"
                 :src="scope.row.imgUrl && scope.row.imgUrl[0]"
                 :preview-src-list="scope.row.imgUrl || []"
               >
@@ -166,7 +168,7 @@
         </ex-table-column>
         <ex-table-column :autoFit="true" prop="productPrice" label="参考单价">
           <template slot-scope="scope">
-            <span style="color:#f56c6c">
+            <span style="color: #f56c6c">
               {{ scope.row.cu_de + scope.row.fa_pr }}
             </span>
           </template>
@@ -199,7 +201,7 @@
       </div>
     </div>
 
-    <center style="margin-top:20px;">
+    <center style="margin-top: 20px">
       <el-pagination
         layout="total, sizes, prev, pager, next, jumper"
         background
