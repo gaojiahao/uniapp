@@ -123,7 +123,9 @@
         <div class="contactMode">
           <p class="item">
             <i class="factoryIcon"></i>
-            <span>{{ productDetail.supplierName }}</span>
+            <span @click="toFactory(productDetail)">{{
+              productDetail.supplierName
+            }}</span>
           </p>
           <p class="item myHover" @click="toNews(productDetail)">
             <i class="infoIcon"></i>
