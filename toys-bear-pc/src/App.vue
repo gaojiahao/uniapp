@@ -3,7 +3,7 @@
     id="app"
     v-loading="$store.state.AppLoading"
     element-loading-spinner
-    element-loading-background="rgba(200, 200, 200, 0.5)"
+    element-loading-background="rgba(0, 0, 0, 0.2)"
   >
     <transition name="el-zoom-in-top">
       <message-component
@@ -152,9 +152,9 @@ export default {
   right: 0;
   bottom: 0;
   background: url("~@/assets/images/loadding.gif") no-repeat center center;
-  background-size: 100px 100px;
-  width: 100%;
-  height: 100%;
+  // background-size: 100px 100px;
+  // width: 100%;
+  // height: 100%;
 }
 #app {
   position: relative;
