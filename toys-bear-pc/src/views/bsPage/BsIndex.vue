@@ -31,10 +31,7 @@
                 {{ item.label }}
               </span>
 
-              <div
-                class="myScrollbar"
-                ref="myScrollbar"
-              >
+              <div class="myScrollbar" ref="myScrollbar">
                 <component
                   :item="item.value"
                   v-if="item.refresh"
