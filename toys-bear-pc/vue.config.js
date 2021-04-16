@@ -41,6 +41,7 @@ const pluginsProduction = [
     deleteOriginalAssets: true // 删除原文件
   })
 ];
+console.log(pluginsProduction);
 const configureWebpack = {
   // 警告 webpack 的性能提示
   performance: {
@@ -59,8 +60,8 @@ const configureWebpack = {
   }
 };
 if (env === "production") {
-  // configureWebpack.plugins = plugins;
-  configureWebpack.plugins = pluginsProduction;
+  configureWebpack.plugins = plugins;
+  // configureWebpack.plugins = pluginsProduction;
 } else {
   configureWebpack.plugins = plugins;
 }
