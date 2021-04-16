@@ -14,7 +14,7 @@
             :key="i"
           >
             <el-image
-              style="width: 30px; height: 32px;"
+              style="width: 30px; height: 32px"
               :src="item.icon"
               fit="contain"
             >
@@ -49,7 +49,7 @@
       >
         <div class="imgBox">
           <el-image
-            style="width: 54px; height: 54px;"
+            style="width: 54px; height: 54px"
             :src="item.icon"
             fit="contain"
           >
@@ -75,7 +75,7 @@
           <div class="item" v-for="(item, i) in bigHalls" :key="i">
             <div class="imgBox">
               <el-image
-                style="width: 302px; height: 133px;"
+                style="width: 302px; height: 133px"
                 :src="item.bgImg || item.img"
                 fit="contain"
               >
@@ -90,7 +90,7 @@
               <div class="minHallItem">
                 <div class="imgBox">
                   <el-image
-                    style="width: 221px; height: 108px;"
+                    style="width: 221px; height: 108px"
                     :src="item.bgImg || item.img"
                     fit="contain"
                   >
@@ -147,7 +147,7 @@
               <template slot-scope="scope">
                 <div class="productInfo">
                   <el-image
-                    style="width: 70px; height: 54px;"
+                    style="width: 70px; height: 54px"
                     :src="scope.row.img"
                     fit="contain"
                   >
@@ -169,7 +169,7 @@
               align="center"
             >
               <template slot-scope="scope">
-                <span style="font-size: 13px;">
+                <span style="font-size: 13px">
                   {{ scope.row.cate }}
                 </span>
               </template>
@@ -181,9 +181,7 @@
               align="center"
             >
               <template slot-scope="scope">
-                <span style="font-sizr: 12px;">
-                  {{ scope.row.number }} 次
-                </span>
+                <span style="font-sizr: 12px"> {{ scope.row.number }} 次 </span>
               </template>
             </el-table-column>
           </el-table>
@@ -199,7 +197,7 @@ export default {
   name: "bsHome",
   components: {
     slider: slider,
-    slideritem: slideritem
+    slideritem: slideritem,
   },
   data() {
     return {
@@ -215,7 +213,7 @@ export default {
         slidesToScroll: 1, // 每次滑动项数
         pagination: 1, // 每次滑动项数
         loopedSlides: 1,
-        speed: 300
+        speed: 300,
       },
       tableData: [],
       bigHalls: [],
@@ -223,89 +221,89 @@ export default {
       hotValue: "热门择样",
       hotList: [
         {
-          value: "热门择样"
+          value: "热门择样",
         },
         {
-          value: "热门搜索"
-        }
+          value: "热门搜索",
+        },
       ],
       dayValue: "7天",
       dayList: [
         {
-          value: "3天"
+          value: "3天",
         },
         {
-          value: "7天"
+          value: "7天",
         },
         {
-          value: "15天"
+          value: "15天",
         },
         {
-          value: "30天"
-        }
+          value: "30天",
+        },
       ],
       labelList: [
         {
           title: "找玩具",
           content: "产品100W+为您存在",
-          icon: require("@/assets/images/zhaowanju.png")
+          icon: require("@/assets/images/zhaowanju.png"),
         },
         {
           title: "按图找样",
           content: "智能对比，轻松找样",
-          icon: require("@/assets/images/antuzhaoyang.png")
+          icon: require("@/assets/images/antuzhaoyang.png"),
         },
         {
           title: "新品区",
           content: "新意产品不错过",
-          icon: require("@/assets/images/xinpinqu.png")
+          icon: require("@/assets/images/xinpinqu.png"),
         },
         {
           title: "现货区",
           content: "现货在手，说有就有",
-          icon: require("@/assets/images/xianhuoqu.png")
+          icon: require("@/assets/images/xianhuoqu.png"),
         },
         {
           title: "VIP区",
           content: "品牌厂家不容错过",
-          icon: require("@/assets/images/vipqu.png")
+          icon: require("@/assets/images/vipqu.png"),
         },
         {
           title: "玩具圈",
           content: "查看发布玩具信息",
-          icon: require("@/assets/images/wanjuquan.png")
-        }
+          icon: require("@/assets/images/wanjuquan.png"),
+        },
       ],
       gongzuoList: [
         {
           title: "展厅业务",
-          icon: require("@/assets/images/zhantingyewu.png")
+          icon: require("@/assets/images/zhantingyewu.png"),
         },
         {
           title: "找样报价",
-          icon: require("@/assets/images/zhaoyangbaojia.png")
+          icon: require("@/assets/images/zhaoyangbaojia.png"),
         },
         {
           title: "采购订单",
-          icon: require("@/assets/images/caigoudingdan.png")
+          icon: require("@/assets/images/caigoudingdan.png"),
         },
         {
           title: "浏览足迹",
-          icon: require("@/assets/images/liulanzuji.png")
+          icon: require("@/assets/images/liulanzuji.png"),
         },
         {
           title: "站点分享",
-          icon: require("@/assets/images/zhandianfenxiang.png")
+          icon: require("@/assets/images/zhandianfenxiang.png"),
         },
         {
           title: "客户订单",
-          icon: require("@/assets/images/kehudingdan.png")
+          icon: require("@/assets/images/kehudingdan.png"),
         },
         {
           title: "我的消息",
-          icon: require("@/assets/images/wodexiaoxi.png")
-        }
-      ]
+          icon: require("@/assets/images/wodexiaoxi.png"),
+        },
+      ],
     };
   },
   methods: {
@@ -329,7 +327,7 @@ export default {
             linkUrl: "/bsIndex/bsProductSearchIndex",
             component: "bsProductSearchIndex",
             refresh: true,
-            label: "产品查询"
+            label: "产品查询",
           };
           break;
         case "按图找样":
@@ -338,7 +336,7 @@ export default {
             linkUrl: "/bsIndex/bsProductSearchIndex?id=imgSearch",
             component: "bsProductSearchIndex",
             refresh: true,
-            label: "产品查询"
+            label: "产品查询",
           };
           break;
         case "新品区":
@@ -347,7 +345,7 @@ export default {
             linkUrl: "/bsIndex/bsLatestProducts",
             component: "bsLatestProducts",
             refresh: true,
-            label: "最新产品"
+            label: "最新产品",
           };
           break;
         case "现货区":
@@ -356,7 +354,7 @@ export default {
             linkUrl: "/bsIndex/bsSpotProducts",
             component: "bsSpotProducts",
             refresh: true,
-            label: "现货产品"
+            label: "现货产品",
           };
           break;
         case "VIP区":
@@ -365,7 +363,7 @@ export default {
             linkUrl: "/bsIndex/bsVIPProducts",
             component: "bsVIPProducts",
             refresh: true,
-            label: "VIP产品"
+            label: "VIP产品",
           };
           break;
         case "玩具圈":
@@ -374,7 +372,7 @@ export default {
             linkUrl: "/bsIndex/bsToyCircle",
             component: "bsToyCircle",
             refresh: true,
-            label: title
+            label: title,
           };
           break;
       }
@@ -391,7 +389,7 @@ export default {
             linkUrl: "/bsIndex/bsHallBusiness",
             component: "bsHallBusiness",
             refresh: true,
-            label: title
+            label: title,
           };
           break;
         case "找样报价":
@@ -400,7 +398,7 @@ export default {
             linkUrl: "/bsIndex/bsSampleQuotation",
             component: "bsSampleQuotation",
             refresh: true,
-            label: title
+            label: title,
           };
           break;
         case "采购订单":
@@ -409,7 +407,7 @@ export default {
             linkUrl: "/bsIndex/bsPurchaseOrder",
             component: "bsPurchaseOrder",
             refresh: true,
-            label: title
+            label: title,
           };
           break;
         case "浏览足迹":
@@ -418,7 +416,7 @@ export default {
             linkUrl: "/bsIndex/bsBrowsingHistory",
             component: "bsBrowsingHistory",
             refresh: true,
-            label: "浏览记录"
+            label: "浏览记录",
           };
           break;
         case "站点分享":
@@ -427,7 +425,7 @@ export default {
             linkUrl: "/bsIndex/bsSiteLlis",
             component: "bsSiteLlis",
             refresh: true,
-            label: "站点列表"
+            label: "站点列表",
           };
           break;
         case "客户订单":
@@ -436,7 +434,7 @@ export default {
             linkUrl: "/bsIndex/bsCustomerOrder",
             component: "bsCustomerOrder",
             refresh: true,
-            label: title
+            label: title,
           };
           break;
         case "我的消息":
@@ -445,7 +443,7 @@ export default {
             linkUrl: "/bsIndex/bsNews",
             component: "bsNews",
             refresh: true,
-            label: "消息"
+            label: "消息",
           };
           break;
       }
@@ -455,18 +453,18 @@ export default {
     // 获取大小展厅
     async getOrgCompany() {
       const res = await this.$http.post("/api/GetExhibitionList", {
-        companyType: "Exhibition"
+        companyType: "Exhibition",
       });
       if (res.data.result.code === 200) {
         this.bigHalls = res.data.result.item.bigHallList.splice(0, 3);
         this.minHalls = res.data.result.item.smallHallList;
       }
-    }
+    },
   },
   created() {},
   mounted() {
     this.getOrgCompany();
-  }
+  },
 };
 </script>
 <style scoped lang="less">

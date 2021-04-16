@@ -13,7 +13,7 @@
           @keyup.native.enter="search"
         ></el-input>
       </div>
-      <div class="item" style="width:200px;">
+      <div class="item" style="width: 200px">
         <span class="label">站点：</span>
         <el-select
           v-model="zhandian"
@@ -57,14 +57,16 @@
     <div class="tableBox">
       <el-table
         :data="tableData"
-        style="width:100%;"
+        style="width: 100%"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
+        <el-table-column label="序号" type="index" align="center" width="70">
+        </el-table-column>
         <el-table-column prop="orderNumber" label="订单编号" width="220">
           <template slot-scope="scope">
             <div class="orderNumberBox" @click="toOrderDetails(scope.row)">
               <i class="el-icon-tickets"></i>
-              <span style="margin-left: 15px;">
+              <span style="margin-left: 15px">
                 {{ scope.row.orderNumber }}
               </span>
             </div>
@@ -98,7 +100,7 @@
           align="center"
         >
           <template slot-scope="scope">
-            <span style="color:#ff0b00;">
+            <span style="color: #ff0b00">
               {{ scope.row.totalAmount }}
             </span>
           </template>
@@ -118,7 +120,7 @@
         <el-table-column label="操作" align="center" width="150">
           <template slot-scope="scope">
             <el-button
-              style="margin-right:10px;"
+              style="margin-right: 10px"
               size="mini"
               type="warning"
               @click="openSelectTemplate(scope.row)"
@@ -127,7 +129,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <center style="padding:20px 0;">
+      <center style="padding: 20px 0">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
           :page-sizes="[10, 20, 30, 40]"
@@ -152,7 +154,11 @@
         <el-card class="box-card">
           <div
             slot="header"
-            style="display:flex; align-items:center; justify-content:space-between"
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            "
           >
             <span class="headerTitle">报出价(带工厂信息)</span>
             <div>
@@ -196,7 +202,11 @@
         <el-card class="box-card">
           <div
             slot="header"
-            style="display:flex; align-items:center; justify-content:space-between"
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            "
           >
             <span class="headerTitle">报出价(不带工厂信息)</span>
             <div>
@@ -240,7 +250,11 @@
         <el-card class="box-card">
           <div
             slot="header"
-            style="display:flex; align-items:center; justify-content:space-between"
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            "
           >
             <span class="headerTitle">出厂价(带工厂信息)</span>
             <div>
@@ -284,7 +298,11 @@
         <el-card class="box-card">
           <div
             slot="header"
-            style="display:flex; align-items:center; justify-content:space-between"
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            "
           >
             <span class="headerTitle">出厂价+报出价+工厂信息</span>
             <div>
@@ -356,7 +374,7 @@ export default {
       imageExportWayList: [
         { value: 0, label: "请选择" },
         { value: 2, label: "按厂商单独导图片" },
-        { value: 1, label: "不按厂商单独导图片" }
+        { value: 1, label: "不按厂商单独导图片" },
       ],
       imageExportWay: 0,
       exportWay: 1,
@@ -370,7 +388,7 @@ export default {
       sitesList: [],
       totalCount: 0,
       pageSize: 10,
-      currentPage: 1
+      currentPage: 1,
     };
   },
   methods: {
@@ -384,14 +402,14 @@ export default {
         excelExportWay: this.exportWay,
         imageExportWay: this.imageExportWay ? this.imageExportWay : 0,
         templateType: type,
-        shareOrderNumber: this.currentOrder.orderNumber
+        shareOrderNumber: this.currentOrder.orderNumber,
       };
       this.$http
         .post("/api/ExportCustomerOrderDetailToExcel", fd, {
           responseType: "blob",
-          timeout: 100000000
+          timeout: 100000000,
         })
-        .then(res => {
+        .then((res) => {
           const time = getCurrentTime();
           // this.currentOrder.customerName + "_" + time + ".xlsx";
           const exeName = this.currentOrder.customerName
@@ -425,14 +443,14 @@ export default {
         zIndex: 9999, // 组件的zIndex值 默认为2000
         index: 0, // 展示第几张图片 默认为0
         list: [url], // 需要展示图片list
-        onClose: i => {
+        onClose: (i) => {
           // 关闭时的回调
           console.log(i);
         },
-        onSelect: i => {
+        onSelect: (i) => {
           // 点击某张图片的回调
           console.log(i);
-        }
+        },
       });
     },
     // 获取列表
@@ -443,7 +461,7 @@ export default {
         keyword: this.keyword,
         url: this.zhandian,
         startTime: this.dateTime && this.dateTime[0],
-        endTime: this.dateTime && this.dateTime[1]
+        endTime: this.dateTime && this.dateTime[1],
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -465,12 +483,12 @@ export default {
       if (res.data.result.code === 200) {
         this.sitesList = [
           { key: "全部", value: null },
-          ...res.data.result.item
+          ...res.data.result.item,
         ];
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
-          type: "danger"
+          type: "danger",
         });
       }
     },
@@ -483,7 +501,7 @@ export default {
         refresh: true,
         noPush: true,
         label: row.orderNumber,
-        value: row
+        value: row,
       };
       this.$store.commit("myAddTab", fd);
     },
@@ -511,14 +529,14 @@ export default {
     search() {
       this.currentPage = 1;
       this.getSearchCompanyShareOrdersPage();
-    }
+    },
   },
   created() {
     this.getDefaultSites();
   },
   mounted() {
     this.getSearchCompanyShareOrdersPage();
-  }
+  },
 };
 </script>
 <style scoped lang="less">
