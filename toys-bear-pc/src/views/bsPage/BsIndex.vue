@@ -33,7 +33,6 @@
 
               <div
                 class="myScrollbar"
-                style="height: 100%; overflow-y: auto"
                 ref="myScrollbar"
               >
                 <component
@@ -541,6 +540,9 @@ export default {
 }
 .myScrollbar {
   padding: 20px 0;
+  height: 100%;
+  height: 100%;
+  overflow-y: auto;
   box-sizing: border-box;
   padding-right: 20px;
   /*-------滚动条整体样式----*/

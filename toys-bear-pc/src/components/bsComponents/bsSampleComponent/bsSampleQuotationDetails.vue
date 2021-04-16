@@ -382,7 +382,6 @@ export default {
   created() {},
 
   mounted() {
-    this.getProductOfferDetailPage();
     this.getProductOfferNumber();
   },
   methods: {
@@ -427,6 +426,7 @@ export default {
           this.$message.error(res.data.result.msg);
         }
       }
+      this.getProductOfferDetailPage();
     },
     // 点击产品名字跳转
     goDetails(row) {

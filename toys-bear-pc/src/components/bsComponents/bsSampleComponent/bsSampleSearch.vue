@@ -362,14 +362,15 @@ export default {
   },
   created() {
     this.getSelectCompanyOffer();
-    this.getClientList();
-    this.getSelectProductOfferFormulaList();
   },
   mounted() {
     this.getProductOfferByNumber();
-    eventBus.$on("getSearchForm", callback => {
-      callback(this.clienFormData);
-    });
+    eventBus.$on(
+      "getSearchForm" + this.searchFormData.offerNumber,
+      callback => {
+        callback(this.clienFormData);
+      }
+    );
   },
   methods: {
     //请求条件
@@ -402,6 +403,7 @@ export default {
           type: "danger"
         });
       }
+      eventBus.$emit("resetOffProduct");
     },
     // 获取系统配置项
     async getSelectCompanyOffer() {
@@ -415,6 +417,7 @@ export default {
           type: "danger"
         });
       }
+      this.getClientList();
     },
     // 新增客户
     openAddMyClient() {
@@ -465,6 +468,7 @@ export default {
       if (res.data.result.code === 200) {
         this.clientList = res.data.result.item.items;
       }
+      this.getSelectProductOfferFormulaList();
     }
   }
 };
