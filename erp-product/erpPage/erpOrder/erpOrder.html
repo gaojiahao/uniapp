@@ -357,7 +357,7 @@
       html += " <tr>" + "<td> <input  type='radio' onclick='handleSelectionChange(" + i + ")' name='radio' value=''></td>" + "<td>" + list[i].hall_naValue + "</td>" + " <td > " + list[i].orderTypeValue + "</td > " +
         "<td>" + list[i].toCompanyNameValue + "</td>" + "<td>" + list[i].the_nuValue + "</td>" +
         "<td>" + list[i].orderCount + "</td>" + "<td>" + list[i].number + "</td>" +
-        "<td  class='trHidden'  onmouseout= 'onmouseoutHidden(" + i + ")' onmouseover='onmouseoverShow(" + i + ")'>" + list[i].remarkValue + "</td>" + list[i].remarkValue + "</td>" + "<td>" + list[i].happenDateValue + "</td>" +
+        "<td  " + list[i].remarkValue + "</td>" + list[i].remarkValue + "</td>" + "<td>" + list[i].happenDateValue + "</td>" +
         "<td><span onclick='handeldetails(" + i + ") '>点击查看</span></td></tr>"
       $("#tbodyData").append(html);
     }
@@ -435,34 +435,34 @@
       }
     }
   }
-  var table = document.getElementById("tbodyData");//获取第一个表格  
-  var trList = table.getElementsByTagName("tr")
-  // 鼠标滑入备注
-  function onmouseoverShow(index) {
-    console.log(index, "滑入");
-    if (trList.length > 0) {
-      var td = trList[index].getElementsByTagName("td")
-      for (var i = 0; i < td.length; i++) {
-        if (td[i].className == "trHidden") {
-          td[i].classList.remove("trHidden")
-          td[i].classList.add("show")
-        }
-      }
-    }
-  }
-  // 鼠标滑出备注
-  function onmouseoutHidden(index) {
-    console.log(index, "划出");
-    if (trList.length > 0) {
-      var td = trList[index].getElementsByTagName("td")
-      for (var i = 0; i < td.length; i++) {
-        if (td[i].className == "show") {
-          td[i].classList.remove("show")
-          td[i].classList.add("trHidden")
-        }
-      }
-    }
-  }
+  // var table = document.getElementById("tbodyData");//获取第一个表格  
+  // var trList = table.getElementsByTagName("tr")
+  // // 鼠标滑入备注
+  // function onmouseoverShow(index) {
+  //   console.log(index, "滑入");
+  //   if (trList.length > 0) {
+  //     var td = trList[index].getElementsByTagName("td")
+  //     for (var i = 0; i < td.length; i++) {
+  //       if (td[i].className == "trHidden") {
+  //         td[i].classList.remove("trHidden")
+  //         td[i].classList.add("show")
+  //       }
+  //     }
+  //   }
+  // }
+  // // 鼠标滑出备注
+  // function onmouseoutHidden(index) {
+  //   console.log(index, "划出");
+  //   if (trList.length > 0) {
+  //     var td = trList[index].getElementsByTagName("td")
+  //     for (var i = 0; i < td.length; i++) {
+  //       if (td[i].className == "show") {
+  //         td[i].classList.remove("show")
+  //         td[i].classList.add("trHidden")
+  //       }
+  //     }
+  //   }
+  // }
   // 上一页
   function previousPage() {
     var numberPage = $("#numberPage").val()

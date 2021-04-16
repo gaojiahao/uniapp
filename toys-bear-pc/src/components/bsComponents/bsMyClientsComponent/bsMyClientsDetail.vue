@@ -188,6 +188,7 @@
 <script>
 import bsColumnComponent from "@/components/bsComponents/bsProductSearchComponent/bsColumnComponent";
 import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/bsGridComponent";
+import eventBus from "@/assets/js/common/eventBus.js";
 export default {
   name: "bsMyClientsDetail",
   components: {
@@ -225,8 +226,11 @@ export default {
       typesList: []
     };
   },
+
   created() {},
   mounted() {
+    
+      eventBus.$emit("showCart", true);
     this.getProductListPageAll();
   },
   methods: {
