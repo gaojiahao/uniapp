@@ -43,11 +43,13 @@
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
         @row-click="handleDetail"
       >
+        <el-table-column label="序号" type="index" align="center" width="70">
+        </el-table-column>
         <el-table-column label="厂商">
           <template slot-scope="scope">
             <div class="nameBox">
               <el-avatar
-                style="background-color:#E4EFFF;"
+                style="background-color: #e4efff"
                 :size="40"
                 :src="scope.row.companyLogo"
               >
@@ -55,7 +57,7 @@
                   {{ scope.row.linkman }}
                 </p>
               </el-avatar>
-              <span style="margin-left:10px" class="name">{{
+              <span style="margin-left: 10px" class="name">{{
                 scope.row.companyName
               }}</span>
               <span class="isMain" v-if="scope.row.isMain"><i>主账号</i></span>
@@ -94,7 +96,7 @@
         </el-table-column>
       </el-table>
       <!-- 分页 -->
-      <center style="padding:20px 0;">
+      <center style="padding: 20px 0">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
           :page-sizes="[12, 24, 36, 48]"
@@ -120,7 +122,7 @@ export default {
       currentPage: 1,
       keyword: null,
       dateTime: null,
-      tableData: []
+      tableData: [],
     };
   },
   methods: {
@@ -129,7 +131,7 @@ export default {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         keyword: this.keyword,
-        OppositeRole: "Supplier"
+        OppositeRole: "Supplier",
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -153,7 +155,7 @@ export default {
         refresh: true,
         noPush: true,
         label: e.companyName,
-        value: e
+        value: e,
       };
       this.$store.commit("myAddTab", fd);
     },
@@ -176,12 +178,12 @@ export default {
     handleCurrentChange(page) {
       this.currentPage = page;
       this.getVendorListPage();
-    }
+    },
   },
   created() {},
   mounted() {
     this.getVendorListPage();
-  }
+  },
 };
 </script>
 <style scoped lang="less">

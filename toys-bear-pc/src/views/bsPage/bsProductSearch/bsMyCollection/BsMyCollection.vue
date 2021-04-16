@@ -44,12 +44,14 @@
         ref="collecTable"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
+        <el-table-column label="序号" type="index" align="center" width="70">
+        </el-table-column>
         <el-table-column prop="img" label="产品" width="300">
           <template slot-scope="scope">
             <div class="imgBox">
               <el-image
                 fit="contain"
-                style="width:80px;min-width: 80px;height:60px;"
+                style="width: 80px; min-width: 80px; height: 60px"
                 :src="scope.row.img"
                 :preview-src-list="scope.row.imgUrlList"
               >
@@ -129,7 +131,7 @@
         </el-table-column>
         <el-table-column prop="price" label="单价" align="center" width="100">
           <template slot-scope="scope">
-            <span style="color:#f56c6c">
+            <span style="color: #f56c6c">
               {{ scope.row.cu_de + scope.row.price.toFixed(2) }}
             </span>
           </template>
@@ -150,7 +152,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <center style="padding:20px 0;">
+      <center style="padding: 20px 0">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
           :page-sizes="[10, 20, 30, 40]"
@@ -177,7 +179,7 @@ export default {
       tableData: [],
       totalCount: 0,
       pageSize: 10,
-      currentPage: 1
+      currentPage: 1,
     };
   },
   methods: {
@@ -196,8 +198,8 @@ export default {
           companyName: item.supplierName,
           contactsMan: item.supplierPersonnelName,
           phoneNumber: item.supplierPhone,
-          address: item.supplierAddres || item.supplierAddress
-        }
+          address: item.supplierAddres || item.supplierAddress,
+        },
       };
       this.$store.commit("myAddTab", fd);
       this.$router.push("/bsIndex/bsVendorQuery");
@@ -209,7 +211,7 @@ export default {
         maxResultCount: this.pageSize,
         keyword: this.keyword,
         startTime: this.dateTime && this.dateTime[0],
-        endTime: this.dateTime && this.dateTime[1]
+        endTime: this.dateTime && this.dateTime[1],
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -226,30 +228,30 @@ export default {
     async handleDelete(row) {
       this.$confirm("确定要取消该收藏吗？", {
         confirmButtonText: "确定",
-        cancelButtonText: "取消"
+        cancelButtonText: "取消",
       })
         .then(async () => {
           const res = await this.$http.post("/api/CreateProductCollection", {
-            productNumber: row.productNumber
+            productNumber: row.productNumber,
           });
           if (res.data.result.code === 200) {
             this.$common.handlerMsgState({
               msg: "取消收藏",
-              type: "success"
+              type: "success",
             });
             await this.getCollectList();
             eventBus.$emit("resetProducts", this.tableData);
           } else {
             this.$common.handlerMsgState({
               msg: res.data.result.msg,
-              type: "danger"
+              type: "danger",
             });
           }
         })
         .catch(() => {
           this.$common.handlerMsgState({
             msg: "取消成功",
-            type: "warning"
+            type: "warning",
           });
         });
     },
@@ -261,7 +263,7 @@ export default {
         component: "bsProductDetails",
         refresh: true,
         label: row.fa_no || "产品详情",
-        value: row
+        value: row,
       };
       this.$store.commit("myAddTab", fd);
     },
@@ -284,7 +286,7 @@ export default {
     search() {
       this.currentPage = 1;
       this.getCollectList();
-    }
+    },
   },
   created() {},
   mounted() {
@@ -292,7 +294,7 @@ export default {
       this.getCollectList();
     });
     this.getCollectList();
-  }
+  },
 };
 </script>
 <style scoped lang="less">

@@ -4,7 +4,7 @@
     <div class="basicInfo">
       <div class="imgBox">
         <el-avatar
-          style="background-color:#E4EFFF;"
+          style="background-color: #e4efff"
           :size="110"
           :src="myInfo.companyLogo"
         >
@@ -65,11 +65,13 @@
       :header-cell-style="{ backgroundColor: '#f9fafc', color: '#666' }"
       style="width: 100%"
     >
+      <el-table-column label="序号" type="index" align="center" width="70">
+      </el-table-column>
       <el-table-column label="员工" min-width="300">
         <template slot-scope="scope">
           <div class="nameBox">
             <el-avatar
-              style="background-color:#E4EFFF;"
+              style="background-color: #e4efff"
               :size="40"
               :src="scope.row.userImage"
             >
@@ -229,7 +231,7 @@ export default {
     bsAddStaff,
     bsBindStaff,
     bsBindCompany,
-    bsEditCompanyInfo
+    bsEditCompanyInfo,
   },
   data() {
     return {
@@ -243,7 +245,7 @@ export default {
       addEmployDialog: false,
       bindEmployDialog: false,
       isEdit: false,
-      currentRow: {}
+      currentRow: {},
     };
   },
   methods: {
@@ -257,13 +259,13 @@ export default {
       if (res.data.result.code === 200) {
         this.$common.handlerMsgState({
           msg: "编辑成功",
-          type: "success"
+          type: "success",
         });
         this.getCompanyUserList();
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
-          type: "danger"
+          type: "danger",
         });
       }
       this.editCompanyDialog = false;
@@ -284,13 +286,13 @@ export default {
         this.addEmployDialog = false;
         this.$common.handlerMsgState({
           msg: msg,
-          type: "success"
+          type: "success",
         });
         this.getCompanyUserList();
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
-          type: "danger"
+          type: "danger",
         });
         this.isEdit = false;
         this.addEmployDialog = false;
@@ -325,23 +327,23 @@ export default {
       if (row.isMain) {
         this.$common.handlerMsgState({
           msg: "不能删除主账号",
-          type: "danger"
+          type: "danger",
         });
         return;
       }
       this.$confirm("确定要删除该员工吗?", {
         confirmButtonText: "确定",
-        cancelButtonText: "取消"
+        cancelButtonText: "取消",
       })
         .then(async () => {
           const res = await this.$http.post("/api/DeleteCompanyUser", {
             OrgCompanyID: this.myInfo.id,
-            OrgPersonnelID: row.id
+            OrgPersonnelID: row.id,
           });
           if (res.data.result.code === 200) {
             this.$common.handlerMsgState({
               msg: "删除成功",
-              type: "success"
+              type: "success",
             });
             this.getCompanyUserList();
           }
@@ -349,7 +351,7 @@ export default {
         .catch(() => {
           this.$common.handlerMsgState({
             msg: "已取消删除",
-            type: "warning"
+            type: "warning",
           });
         });
     },
@@ -360,7 +362,7 @@ export default {
     // 获取个人信息中的个人信息和员工列表
     async getCompanyUserList() {
       const res = await this.$http.post("/api/CompanyUserList", {
-        orgCompanyID: this.currentComparnyId
+        orgCompanyID: this.currentComparnyId,
       });
       const { code, item, msg } = res.data.result;
       if (code === 200) {
@@ -370,18 +372,18 @@ export default {
       } else {
         this.$common.handlerMsgState({
           msg: msg,
-          type: "danger"
+          type: "danger",
         });
       }
-    }
+    },
   },
   created() {},
   mounted() {
     this.getCompanyUserList();
   },
   computed: {
-    ...mapState(["currentComparnyId"])
-  }
+    ...mapState(["currentComparnyId"]),
+  },
 };
 </script>
 <style scoped lang="less">

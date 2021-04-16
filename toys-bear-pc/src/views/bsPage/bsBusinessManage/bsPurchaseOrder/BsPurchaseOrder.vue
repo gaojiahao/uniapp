@@ -25,7 +25,7 @@
             @keyup.native.enter="search"
           ></el-input>
         </div>
-        <div class="item" style=" max-width:300px">
+        <div class="item" style="max-width: 300px">
           <span class="label">时间段：</span>
           <el-date-picker
             size="medium"
@@ -63,10 +63,12 @@
         ref="collecTable"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
+        <el-table-column label="序号" type="index" align="center" width="70">
+        </el-table-column>
         <el-table-column label="采购单号" width="200">
           <template slot-scope="scope">
             <div
-              style="color:#3368A9;cursor: pointer;"
+              style="color: #3368a9; cursor: pointer"
               @click="toDetails(scope.row)"
             >
               {{ scope.row.orderNumber }}
@@ -96,7 +98,7 @@
         </el-table-column>
         <el-table-column label="总金额" align="center" width="100">
           <template slot-scope="scope">
-            <div style="color: #EB1515;">￥{{ scope.row.sumFa_pr_pr }}</div>
+            <div style="color: #eb1515">￥{{ scope.row.sumFa_pr_pr }}</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -108,10 +110,10 @@
         </el-table-column>
         <el-table-column prop="state" label="状态" align="center" width="100">
           <template slot-scope="scope">
-            <span style="color:#f56c6c" v-if="scope.row.readStatus == 0">
+            <span style="color: #f56c6c" v-if="scope.row.readStatus == 0">
               未读
             </span>
-            <span style="color:#f56c6c" v-else-if="scope.row.readStatus == 1">
+            <span style="color: #f56c6c" v-else-if="scope.row.readStatus == 1">
               已读
             </span>
           </template>
@@ -123,9 +125,7 @@
           width="250"
         >
           <template slot-scope="scope">
-            <el-button size="mini" type="primary">
-              推送
-            </el-button>
+            <el-button size="mini" type="primary"> 推送 </el-button>
             <el-button
               size="mini"
               type="warning"
@@ -143,7 +143,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <center style="padding:20px 0;">
+      <center style="padding: 20px 0">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
           :page-sizes="[10, 20, 30, 40]"
@@ -170,7 +170,7 @@
             orderNumber: orderRow.orderNumber,
             the_nu: orderRow.the_nu,
             name: orderRow.fromCompanyName,
-            api: '/api/GetOfferOrderExcel'
+            api: '/api/GetOfferOrderExcel',
           }"
         />
       </el-dialog>
@@ -183,7 +183,7 @@ import bsExportOrder from "@/components/commonComponent/exportOrderComponent";
 export default {
   name: "bsPurchaseOrder",
   components: {
-    bsExportOrder
+    bsExportOrder,
   },
   data() {
     return {
@@ -192,12 +192,12 @@ export default {
       searchForm: {
         keyword: null,
         orgPersonnelName: null,
-        dateTime: null
+        dateTime: null,
       },
       tableData: [],
       totalCount: 0,
       pageSize: 10,
-      currentPage: 1
+      currentPage: 1,
     };
   },
   methods: {
@@ -209,7 +209,7 @@ export default {
         component: "bsPurchaseOrderDetails",
         refresh: true,
         label: row.orderNumber,
-        value: row
+        value: row,
       };
       this.$store.commit("myAddTab", fd);
     },
@@ -221,24 +221,24 @@ export default {
     handlerDelete(row) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", {
         confirmButtonText: "确定",
-        cancelButtonText: "取消"
+        cancelButtonText: "取消",
       })
         .then(async () => {
           const res = await this.$http.post("/api/DeleteERPOrder", {
-            id: row.erpOrderID
+            id: row.erpOrderID,
           });
           const { code, msg } = res.data.result;
           if (code === 200) {
             this.$common.handlerMsgState({
               msg: "删除成功",
-              type: "success"
+              type: "success",
             });
             this.exportTemplateDialog = false;
             this.getTableDataList();
           } else {
             this.$common.handlerMsgState({
               msg: msg,
-              type: "danger"
+              type: "danger",
             });
             this.exportTemplateDialog = false;
           }
@@ -246,7 +246,7 @@ export default {
         .catch(() => {
           this.$common.handlerMsgState({
             msg: "取消删除",
-            type: "warning"
+            type: "warning",
           });
         });
     },
@@ -266,7 +266,7 @@ export default {
         messageExt: 7,
         messageModel: 7,
         startTime: this.searchForm.dateTime && this.searchForm.dateTime[0],
-        endTime: this.searchForm.dateTime && this.searchForm.dateTime[1]
+        endTime: this.searchForm.dateTime && this.searchForm.dateTime[1],
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -298,12 +298,12 @@ export default {
     search() {
       this.currentPage = 1;
       this.getTableDataList();
-    }
+    },
   },
   created() {},
   mounted() {
     this.getTableDataList();
-  }
+  },
 };
 </script>
 <style scoped lang="less">

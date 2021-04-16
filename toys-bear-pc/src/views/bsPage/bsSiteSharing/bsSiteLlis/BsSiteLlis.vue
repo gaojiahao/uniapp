@@ -37,15 +37,17 @@
     <div class="tableBox">
       <el-table
         :data="tableData"
-        style="width: 100%;"
+        style="width: 100%"
         ref="collecTable"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
+        <el-table-column label="序号" type="index" align="center" width="70">
+        </el-table-column>
         <el-table-column label="站点" width="150" prop="siteRegion">
           <template slot-scope="scope">
             <div>
               <i
-                style="color: #3368A9; margin-right: 15px;"
+                style="color: #3368a9; margin-right: 15px"
                 class="iconfont icon-hulianwang"
               ></i>
               <span>{{ scope.row.siteRegion }}</span>
@@ -92,7 +94,7 @@
               <i
                 @click="resetLoginCode(scope.row)"
                 class="el-icon-refresh"
-                style="font-size: 14px;cursor: pointer;"
+                style="font-size: 14px; cursor: pointer"
               ></i>
             </div>
           </template>
@@ -106,7 +108,7 @@
           <template slot-scope="scope">
             {{
               (scope.row.expireTime && scope.row.expireTime.split("T")[0]) ||
-                "永久有效"
+              "永久有效"
             }}
           </template>
         </el-table-column>
@@ -118,7 +120,7 @@
         >
           <template slot-scope="scope">
             <el-button
-              style="margin-right:10px;"
+              style="margin-right: 10px"
               size="mini"
               type="success"
               @click.stop="openEdit(scope.row)"
@@ -139,7 +141,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <center style="padding:20px 0;">
+      <center style="padding: 20px 0">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
           :page-sizes="[10, 20, 30, 40]"
@@ -167,10 +169,10 @@
         :model="clienFormData"
       >
         <el-form-item label="站点域名：" prop="url">
-          <div style="display:flex;margin-bottom:10px;">
+          <div style="display: flex; margin-bottom: 10px">
             <el-tag
               @click="clienFormData.url = item"
-              style="margin-right: 10px;cursor: pointer;"
+              style="margin-right: 10px; cursor: pointer"
               v-for="(item, key) of defaultShareDomain"
               :key="item"
               >{{ key }}</el-tag
@@ -200,7 +202,7 @@
               </el-option>
             </el-select>
             <el-button
-              style="margin-left:10px;"
+              style="margin-left: 10px"
               type="primary"
               @click.stop="openAddMyClient"
               >新增客户</el-button
@@ -212,7 +214,7 @@
             <el-option
               v-for="(item, i) in [
                 { label: '是', value: true },
-                { label: '否', value: false }
+                { label: '否', value: false },
               ]"
               :key="i"
               :label="item.label"
@@ -425,7 +427,7 @@
     <!-- 生成二维码 -->
     <el-dialog :visible.sync="QRCodeDialog" v-if="QRCodeDialog" width="20%">
       <vue-qr
-        style="width:100%;"
+        style="width: 100%"
         :text="QRCodeUrl"
         colorLight="#fff"
         colorDark="#000"
@@ -440,7 +442,7 @@ import VueQr from "vue-qr";
 export default {
   name: "bsSiteLlis",
   components: {
-    VueQr
+    VueQr,
   },
   data() {
     return {
@@ -456,13 +458,13 @@ export default {
       QRCodeDialog: false,
       QRCodeUrl: "",
       addMyClientRules: {
-        name: [{ required: true, message: "请输入客户名称", trigger: "blur" }]
+        name: [{ required: true, message: "请输入客户名称", trigger: "blur" }],
       },
       addMyClientDialog: false,
       addClientFormData: {
         name: null,
         phoneNumber: null,
-        remark: null
+        remark: null,
       },
       customerTemplate: [],
       clientListTotalCount: 0,
@@ -485,7 +487,7 @@ export default {
         exchange: 0,
         size: "24",
         decimalPlaces: 3,
-        rejectionMethod: "四舍五入"
+        rejectionMethod: "四舍五入",
       },
       options: {
         // 报价配置项
@@ -493,52 +495,52 @@ export default {
         decimalPlaces: [],
         offerMethod: [],
         rejectionMethod: [],
-        size: []
+        size: [],
       },
       addRules: {
         url: [{ required: true, message: "请输入站点域名", trigger: "blur" }],
         isExportExcel: [
-          { required: true, message: "请输入站点域名", trigger: "change" }
+          { required: true, message: "请输入站点域名", trigger: "change" },
         ],
         profit: [{ required: true, message: "请输入利润率", trigger: "blur" }],
         customerInfoId: [
-          { required: true, message: "请选择客户", trigger: "blur" }
+          { required: true, message: "请选择客户", trigger: "blur" },
         ],
         offerMethod: [
-          { required: true, message: "请选择报价方式", trigger: "change" }
+          { required: true, message: "请选择报价方式", trigger: "change" },
         ],
         currencyType: [
-          { required: true, message: "请选择币种", trigger: "change" }
+          { required: true, message: "请选择币种", trigger: "change" },
         ],
         totalCost: [
-          { required: true, message: "请输入总费用", trigger: "blur" }
+          { required: true, message: "请输入总费用", trigger: "blur" },
         ],
         exchange: [{ required: true, message: "请输入汇率", trigger: "blur" }],
         size: [{ required: true, message: "请选择尺寸", trigger: "change" }],
         decimalPlaces: [
-          { required: true, message: "请选择小数位数", trigger: "blur" }
+          { required: true, message: "请选择小数位数", trigger: "blur" },
         ],
         rejectionMethod: [
-          { required: true, message: "请选择取舍方式", trigger: "blur" }
+          { required: true, message: "请选择取舍方式", trigger: "blur" },
         ],
         miniPrice: [{ required: true, message: "请输入价格", trigger: "blur" }],
         miniPriceDecimalPlaces: [
-          { required: true, message: "请选择小数位数", trigger: "change" }
-        ]
-      }
+          { required: true, message: "请选择小数位数", trigger: "change" },
+        ],
+      },
     };
   },
   methods: {
     // 获取系统配置项
     async getSelectCompanyOffer() {
       const res = await this.$http.post("/api/GetSelectCompanyOffer", {
-        basisParameters: "CompanyProductOffer"
+        basisParameters: "CompanyProductOffer",
       });
       if (res.data.result.code === 200) this.options = res.data.result.item;
       else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
-          type: "danger"
+          type: "danger",
         });
       }
     },
@@ -547,7 +549,7 @@ export default {
       const fd = {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
-        keyword: this.keyword
+        keyword: this.keyword,
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -563,7 +565,7 @@ export default {
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
-          type: "danger"
+          type: "danger",
         });
       }
     },
@@ -571,7 +573,7 @@ export default {
     async handleDelete(row) {
       this.$confirm("确定要删除吗?", {
         confirmButtonText: "确定",
-        cancelButtonText: "取消"
+        cancelButtonText: "取消",
       })
         .then(async () => {
           const res = await this.$http.post(
@@ -581,20 +583,20 @@ export default {
           if (res.data.result.code === 200) {
             this.$common.handlerMsgState({
               msg: "删除成功",
-              type: "success"
+              type: "success",
             });
             this.getDataList();
           } else {
             this.$common.handlerMsgState({
               msg: "删除失败,请联系管理员！",
-              type: "danger"
+              type: "danger",
             });
           }
         })
         .catch(() => {
           this.$common.handlerMsgState({
             msg: "已取消删除",
-            type: "warning"
+            type: "warning",
           });
         });
     },
@@ -621,7 +623,7 @@ export default {
       else {
         this.$common.handlerMsgState({
           msg: msg,
-          type: "danger"
+          type: "danger",
         });
       }
     },
@@ -647,7 +649,7 @@ export default {
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
-          type: "danger"
+          type: "danger",
         });
       }
     },
@@ -689,7 +691,7 @@ export default {
       document.execCommand("Copy"); // 执行浏览器复制命令
       this.$common.handlerMsgState({
         msg: "已复制好，可贴粘。",
-        type: "success"
+        type: "success",
       });
     },
     // 打开新增客户
@@ -697,13 +699,13 @@ export default {
       this.addClientFormData = {
         name: null,
         phoneNumber: null,
-        remark: null
+        remark: null,
       };
       this.addMyClientDialog = true;
     },
     // 提交新增客户
     subMyClient() {
-      this.$refs.addMyClientRef.validate(async valid => {
+      this.$refs.addMyClientRef.validate(async (valid) => {
         if (valid) {
           const res = await this.$http.post(
             "/api/CreateCustomerInfo",
@@ -713,13 +715,13 @@ export default {
             this.addMyClientDialog = false;
             this.$common.handlerMsgState({
               msg: "新增操作成功",
-              type: "success"
+              type: "success",
             });
             this.getClientList();
           } else {
             this.$common.handlerMsgState({
               msg: res.data.result.msg,
-              type: "danger"
+              type: "danger",
             });
           }
         }
@@ -739,7 +741,7 @@ export default {
     },
     // 提交新增 | 编辑 分享
     async subProcessingLog() {
-      this.$refs.addClientFormRef.validate(async valid => {
+      this.$refs.addClientFormRef.validate(async (valid) => {
         if (valid) {
           let url = "/api/CreateWebsiteShareInfo";
           if (this.dialogTitle === "编辑分享")
@@ -751,12 +753,12 @@ export default {
             this.getDataList();
             this.$common.handlerMsgState({
               msg: "操作成功",
-              type: "success"
+              type: "success",
             });
           } else {
             this.$common.handlerMsgState({
               msg: res.data.result.msg,
-              type: "danger"
+              type: "danger",
             });
           }
         }
@@ -767,7 +769,7 @@ export default {
       const fd = {
         keyword: this.clientKeyword,
         skipCount: this.clientCurrentPage,
-        maxResultCount: this.clientPageSize
+        maxResultCount: this.clientPageSize,
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -784,7 +786,7 @@ export default {
     search() {
       this.currentPage = 1;
       this.getDataList();
-    }
+    },
   },
   created() {
     this.getDataList();
@@ -809,20 +811,20 @@ export default {
           this.clienFormData.decimalPlaces = obj.decimalPlaces;
           this.clienFormData.rejectionMethod = obj.rejectionMethod;
         }
-      }
+      },
     },
     "clienFormData.currencyType": {
       deep: true,
       handler(newVal) {
         if (newVal) {
-          this.options.cu_deList.forEach(val => {
+          this.options.cu_deList.forEach((val) => {
             if (val.parameter === newVal)
               this.clienFormData.currencyTypeName = val.itemCode;
           });
         }
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
 <style scoped lang="less">

@@ -13,7 +13,7 @@
           @keyup.native.enter="search"
         ></el-input>
       </div>
-      <div class="item" style="width:200px;">
+      <div class="item" style="width: 200px">
         <span class="label">站点：</span>
         <el-select
           v-model="zhandian"
@@ -57,13 +57,15 @@
     <div class="tableBox">
       <el-table
         :data="tableData"
-        style="width:100%;"
+        style="width: 100%"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
+        <el-table-column label="序号" type="index" align="center" width="70">
+        </el-table-column>
         <el-table-column label="客户">
           <template slot-scope="scope">
             <i class="el-icon-view"></i>
-            <span style="margin-left: 15px;">{{ scope.row.customerName }}</span>
+            <span style="margin-left: 15px">{{ scope.row.customerName }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="siteRegion" label="站点"></el-table-column>
@@ -86,7 +88,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <center style="padding:20px 0;">
+      <center style="padding: 20px 0">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
           :page-sizes="[10, 20, 30, 40]"
@@ -114,7 +116,7 @@ export default {
       sitesList: [],
       totalCount: 0,
       pageSize: 10,
-      currentPage: 1
+      currentPage: 1,
     };
   },
   methods: {
@@ -126,7 +128,7 @@ export default {
         keyword: this.keyword,
         url: this.zhandian,
         startTime: this.dateTime && this.dateTime[0],
-        endTime: this.dateTime && this.dateTime[1]
+        endTime: this.dateTime && this.dateTime[1],
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -140,7 +142,7 @@ export default {
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
-          type: "danger"
+          type: "danger",
         });
       }
     },
@@ -165,12 +167,12 @@ export default {
       if (res.data.result.code === 200) {
         this.sitesList = [
           { key: "全部", value: null },
-          ...res.data.result.item
+          ...res.data.result.item,
         ];
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
-          type: "danger"
+          type: "danger",
         });
       }
     },
@@ -178,13 +180,13 @@ export default {
     search() {
       this.currentPage = 1;
       this.getSearchCompanyShareOrdersPage();
-    }
+    },
   },
   created() {
     this.getDefaultSites();
     this.getSearchCompanyShareOrdersPage();
   },
-  mounted() {}
+  mounted() {},
 };
 </script>
 <style scoped lang="less">

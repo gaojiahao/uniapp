@@ -36,7 +36,7 @@
             @keyup.native.enter="search"
           ></el-input>
         </div>
-        <div class="item" style=" max-width:300px">
+        <div class="item" style="max-width: 300px">
           <span class="label">时间段：</span>
           <el-date-picker
             size="medium"
@@ -67,11 +67,13 @@
           ref="collecTable"
           :header-cell-style="{ backgroundColor: '#f9fafc' }"
         >
+          <el-table-column label="序号" type="index" align="center" width="70">
+          </el-table-column>
           <el-table-column label="报价单号" min-width="150">
             <template slot-scope="scope">
               <span
                 @click="goDetails(scope.row)"
-                style="color:#3368A9;cursor: pointer;"
+                style="color: #3368a9; cursor: pointer"
               >
                 {{ scope.row.offerNumber }}
               </span>
@@ -109,10 +111,10 @@
           </el-table-column>
           <el-table-column label="总金额" align="center" width="100">
             <template slot-scope="scope">
-              <span style="color:#EB1515;">
+              <span style="color: #eb1515">
                 {{ scope.row.cu_de }}
               </span>
-              <span style="color:#EB1515;">
+              <span style="color: #eb1515">
                 {{ scope.row.offerTotalAmount }}
               </span>
             </template>
@@ -181,7 +183,7 @@
               </el-button>
               <el-button
                 v-show="scope.row.offerNumber.indexOf('S') < 0"
-                style="margin-left: 10px;"
+                style="margin-left: 10px"
                 size="mini"
                 type="danger"
                 @click="handleDelete(scope.row)"
@@ -190,7 +192,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <center style="padding:20px 0;">
+        <center style="padding: 20px 0">
           <el-pagination
             layout="total, sizes, prev, pager, next, jumper"
             :page-sizes="[10, 20, 30, 40]"
@@ -224,7 +226,7 @@ import bsExportOrder from "@/components/commonComponent/exportOrderComponent";
 export default {
   name: "bsSampleQuotation",
   components: {
-    bsExportOrder
+    bsExportOrder,
   },
   data() {
     return {
@@ -238,12 +240,12 @@ export default {
         Linkman: null,
         clientName: null,
         contacts: null,
-        dateTime: null
+        dateTime: null,
       },
       tableData: [],
       totalCount: 0,
       pageSize: 10,
-      currentPage: 1
+      currentPage: 1,
     };
   },
   methods: {
@@ -252,7 +254,7 @@ export default {
       this.orderRow = {
         sampleNumber: row.offerNumber,
         name: row.customerName,
-        api: "/api/ExportSampleOfferToExcel"
+        api: "/api/ExportSampleOfferToExcel",
       };
       this.exportTemplateDialog = true;
     },
@@ -265,7 +267,7 @@ export default {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         startTime: this.searchForm.dateTime && this.searchForm.dateTime[0],
-        endTime: this.searchForm.dateTime && this.searchForm.dateTime[1]
+        endTime: this.searchForm.dateTime && this.searchForm.dateTime[1],
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -282,29 +284,29 @@ export default {
     async handleDelete(row) {
       this.$confirm("此操作将永久删除该订单, 是否继续?", {
         confirmButtonText: "确定",
-        cancelButtonText: "取消"
+        cancelButtonText: "取消",
       })
         .then(async () => {
           const res = await this.$http.post("/api/DeleteProductOffer", {
-            id: row.id
+            id: row.id,
           });
           if (res.data.result.code === 200) {
             this.$common.handlerMsgState({
               msg: "删除成功",
-              type: "success"
+              type: "success",
             });
             this.getCompanySamplelistPage();
           } else {
             this.$common.handlerMsgState({
               msg: res.data.result.msg,
-              type: "danger"
+              type: "danger",
             });
           }
         })
         .catch(() => {
           this.$common.handlerMsgState({
             msg: "取消删除",
-            type: "warning"
+            type: "warning",
           });
         });
     },
@@ -332,7 +334,7 @@ export default {
         refresh: true,
         noPush: true,
         label: "详情" + row.offerNumber,
-        value: row
+        value: row,
       };
       this.$store.commit("myAddTab", fd);
     },
@@ -345,7 +347,7 @@ export default {
         refresh: true,
         noPush: true,
         label: "编辑" + row.offerNumber,
-        value: row
+        value: row,
       };
       this.$store.commit("myAddTab", fd);
     },
@@ -353,12 +355,12 @@ export default {
     search() {
       this.currentPage = 1;
       this.getCompanySamplelistPage();
-    }
+    },
   },
   created() {},
   mounted() {
     this.getCompanySamplelistPage();
-  }
+  },
 };
 </script>
 <style scoped lang="less">

@@ -99,10 +99,12 @@
         ref="collecTable"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
+        <el-table-column label="序号" type="index" align="center" width="70">
+        </el-table-column>
         <el-table-column label="择样单号" min-width="180">
           <template slot-scope="scope">
             <div
-              style="color:#3368A9;cursor: pointer;"
+              style="color: #3368a9; cursor: pointer"
               @click="toDetails(scope.row)"
             >
               {{ scope.row.orderNumber }}
@@ -141,10 +143,10 @@
         </el-table-column>
         <el-table-column prop="state" label="状态" align="center" width="100">
           <template slot-scope="scope">
-            <span style="color:#f56c6c" v-if="scope.row.readStatus == 0">
+            <span style="color: #f56c6c" v-if="scope.row.readStatus == 0">
               未读
             </span>
-            <span style="color:#f56c6c" v-else-if="scope.row.readStatus == 1">
+            <span style="color: #f56c6c" v-else-if="scope.row.readStatus == 1">
               已读
             </span>
           </template>
@@ -166,7 +168,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <center style="padding:20px 0;">
+      <center style="padding: 20px 0">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
           :page-sizes="[10, 20, 30, 40]"
@@ -193,7 +195,7 @@
             orderNumber: orderRow.orderNumber,
             the_nu: orderRow.the_nu,
             name: orderRow.fromCompanyName,
-            api: '/api/GetOfferOrderExcel'
+            api: '/api/GetOfferOrderExcel',
           }"
         />
       </el-dialog>
@@ -206,7 +208,7 @@ import bsExportOrder from "@/components/commonComponent/exportOrderComponent";
 export default {
   name: "bsHallBusiness",
   components: {
-    bsExportOrder
+    bsExportOrder,
   },
   data() {
     return {
@@ -215,38 +217,38 @@ export default {
       typesList: [
         {
           label: "系统通知",
-          value: 0
+          value: 0,
         },
         {
           label: "补样",
-          value: 3
+          value: 3,
         },
         {
           label: "借样",
-          value: 5
+          value: 5,
         },
         {
           label: "补样借样",
-          value: 11
+          value: 11,
         },
         {
           label: "洽谈",
-          value: 12
-        }
+          value: 12,
+        },
       ],
       readStatusList: [
         {
           label: "全部",
-          value: "-1"
+          value: "-1",
         },
         {
           label: "未读",
-          value: 0
+          value: 0,
         },
         {
           label: "已读",
-          value: 1
-        }
+          value: 1,
+        },
       ],
       searchForm: {
         keyword: null,
@@ -254,12 +256,12 @@ export default {
         orgPersonnelName: null,
         messageExt: null,
         readStatus: "-1",
-        dateTime: null
+        dateTime: null,
       },
       tableData: [],
       totalCount: 0,
       pageSize: 10,
-      currentPage: 1
+      currentPage: 1,
     };
   },
   methods: {
@@ -277,7 +279,7 @@ export default {
         component: "bsHallBusinessOrderDetails",
         refresh: true,
         label: row.orderNumber,
-        value: row
+        value: row,
       };
       this.$store.commit("myAddTab", fd);
     },
@@ -294,7 +296,7 @@ export default {
         fromCompanyName: this.searchForm.fromCompanyName,
         messageExt: this.searchForm.messageExt,
         startTime: this.searchForm.dateTime && this.searchForm.dateTime[0],
-        endTime: this.searchForm.dateTime && this.searchForm.dateTime[1]
+        endTime: this.searchForm.dateTime && this.searchForm.dateTime[1],
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -330,7 +332,7 @@ export default {
     search() {
       this.currentPage = 1;
       this.getTableDataList();
-    }
+    },
   },
   created() {
     this.getTableDataList();
@@ -356,9 +358,9 @@ export default {
           break;
       }
       return msg;
-    }
+    },
   },
-  mounted() {}
+  mounted() {},
 };
 </script>
 <style scoped lang="less">

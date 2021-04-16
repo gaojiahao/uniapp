@@ -61,16 +61,18 @@
           'font-size': '14px',
           color: '#666',
           backgroundColor: '#f9fafc',
-          'font-weight': '400'
+          'font-weight': '400',
         }"
       >
+        <el-table-column label="序号" type="index" align="center" width="70">
+        </el-table-column>
         <el-table-column label="产品" width="300">
           <template slot-scope="scope">
             <div class="imgBox">
               <el-image
                 fit="contain"
                 @click.native="goDetails(scope.row)"
-                style="width:80px;height:60px;cursor: pointer;"
+                style="width: 80px; height: 60px; cursor: pointer"
                 :src="scope.row.productImage"
               >
                 <div slot="placeholder" class="errorImg">
@@ -107,7 +109,13 @@
         <el-table-column width="100" label="资料来源">
           <template slot-scope="scope">
             <div
-              style="width:100px;overflow:hidden;max-width: 100px;white-space: nowrap;text-overflow: ellipsis;"
+              style="
+                width: 100px;
+                overflow: hidden;
+                max-width: 100px;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+              "
             >
               {{ scope.row.exhibitionName }}
             </div>
@@ -178,14 +186,14 @@
         </el-table-column>
         <el-table-column prop="costPrice" align="center" label="参考单价">
           <template slot-scope="scope">
-            <span style="color:#3368A9">
+            <span style="color: #3368a9">
               {{ options.currencyType + scope.row.costPrice }}
             </span>
           </template>
         </el-table-column>
         <el-table-column prop="productPrice" align="center" label="报出价">
           <template slot-scope="scope">
-            <span style="color:#f56c6c">
+            <span style="color: #f56c6c">
               {{ options.currencyType + scope.row.productPrice }}
             </span>
           </template>
@@ -215,11 +223,11 @@
         </p>
         <p class="item">
           <span class="itemTitle">总出厂价/总金额：</span>
-          <span style="color: #3368A9;">
+          <span style="color: #3368a9">
             {{ options.currencyType }}
           </span>
-          <span style="color: #3368A9;">{{ options.totalCostPrice }}</span>
-          <span style="margin:5px;"></span>
+          <span style="color: #3368a9">{{ options.totalCostPrice }}</span>
+          <span style="margin: 5px"></span>
           <span class="price">
             {{ options.currencyType }}
           </span>
@@ -228,7 +236,7 @@
       </div>
     </div>
 
-    <center style="margin-top:20px;">
+    <center style="margin-top: 20px">
       <el-pagination
         layout="total, sizes, prev, pager, next, jumper"
         background
@@ -265,8 +273,8 @@ export default {
   components: { bsExportOrder },
   props: {
     item: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   data() {
     return {
@@ -277,7 +285,7 @@ export default {
       currentPage: 1,
       pageSize: 10,
       totalCount: 0,
-      orderOption: {}
+      orderOption: {},
     };
   },
   created() {
@@ -295,7 +303,7 @@ export default {
         linkUrl: "/bsIndex/bsNews",
         component: "bsNews",
         refresh: true,
-        label: "消息"
+        label: "消息",
       };
       this.$store.commit("myAddTab", fd);
       this.$router.push("/bsIndex/bsNews");
@@ -305,7 +313,7 @@ export default {
       if (!item.supplierNumber) {
         this.$common.handlerMsgState({
           msg: "该厂商没有厂商编号，请联系管理员",
-          type: "danger"
+          type: "danger",
         });
         return false;
       }
@@ -322,8 +330,8 @@ export default {
           companyName: item.productName,
           contactsMan: item.supplierName,
           phoneNumber: item.supplierPhone,
-          address: item.supplierAddres || item.supplierAddress || ""
-        }
+          address: item.supplierAddres || item.supplierAddress || "",
+        },
       };
       this.$store.commit("myAddTab", fd);
       this.$router.push("/bsIndex/bsVendorQuery");
@@ -346,7 +354,7 @@ export default {
         {
           skipCount: this.currentPage,
           maxResultCount: this.pageSize,
-          shareOrderNumber: this.item.orderNumber
+          shareOrderNumber: this.item.orderNumber,
         }
       );
       if (res.data.result.code === 200) {
@@ -357,7 +365,7 @@ export default {
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
-          type: "danger"
+          type: "danger",
         });
       }
     },
@@ -369,7 +377,7 @@ export default {
         component: "bsProductDetails",
         refresh: true,
         label: row.fa_no || "产品详情",
-        value: row
+        value: row,
       };
       console.log(row);
       this.$store.commit("myAddTab", fd);
@@ -388,8 +396,8 @@ export default {
       )
         return false;
       this.getSearchCompanyShareOrderDetailsPage();
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped lang="less">

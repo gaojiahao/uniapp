@@ -11,12 +11,12 @@
             客户名称：<span>{{ itemList.customerName }} </span>
           </p>
           <p>
-            操作员：<span style="color:#2D7FE4">{{ itemList.linkman }} </span>
+            操作员：<span style="color: #2d7fe4">{{ itemList.linkman }} </span>
           </p>
           <p>
             状态：<span
               :style="{
-                color: itemList.status == 0 ? '#3368A9' : '#2D7FE4'
+                color: itemList.status == 0 ? '#3368A9' : '#2D7FE4',
               }"
               >{{
                 itemList.status == 0
@@ -110,13 +110,15 @@
           ref="collecTable"
           :header-cell-style="{ background: '#f1f3f6' }"
         >
+          <el-table-column label="序号" type="index" align="center" width="70">
+          </el-table-column>
           <el-table-column prop="img" label="产品" align="center" width="300">
             <template slot-scope="scope">
               <div class="imgBox">
                 <el-image
                   @click.native="goDetails(scope.row)"
                   fit="contain"
-                  style="width:80px;height:60px;"
+                  style="width: 80px; height: 60px"
                   :src="scope.row.imgUrlList && scope.row.imgUrlList[0]"
                 >
                   <div slot="placeholder" class="errorImg">
@@ -250,7 +252,7 @@
           </el-table-column>
           <el-table-column prop="price" label="厂价" align="center" width="100">
             <template slot-scope="scope">
-              <span style="color:#f56c6c"> ￥{{ scope.row.price }} </span>
+              <span style="color: #f56c6c"> ￥{{ scope.row.price }} </span>
             </template>
           </el-table-column>
 
@@ -261,7 +263,7 @@
             width="100"
           >
             <template slot-scope="scope">
-              <span style="color:#f56c6c">
+              <span style="color: #f56c6c">
                 {{ scope.row.cu_de + handleOffer(scope.row.offerAmount) }}
               </span>
             </template>
@@ -274,8 +276,8 @@
             width="100"
           >
             <template slot-scope="scope">
-              <span style="color:#f56c6c">{{ scope.row.cu_de }}</span>
-              <span style="color:#f56c6c">
+              <span style="color: #f56c6c">{{ scope.row.cu_de }}</span>
+              <span style="color: #f56c6c">
                 {{
                   handleOffer(
                     priceCount(
@@ -358,12 +360,12 @@ import bsExportOrder from "@/components/commonComponent/exportOrderComponent";
 export default {
   name: "bsSampleQuotationDetails",
   components: {
-    bsExportOrder
+    bsExportOrder,
   },
   props: {
     item: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   data() {
     return {
@@ -374,7 +376,7 @@ export default {
       currentPage: 1,
       pageSize: 10,
       totalCount: 0,
-      itemList: {}
+      itemList: {},
     };
   },
   created() {},
@@ -406,8 +408,8 @@ export default {
           companyName: item.supplierName,
           contactsMan: item.supplierPersonnelName,
           phoneNumber: item.supplierPhone,
-          address: item.supplierAddres || item.supplierAddress
-        }
+          address: item.supplierAddres || item.supplierAddress,
+        },
       };
       this.$store.commit("myAddTab", fd);
     },
@@ -415,7 +417,7 @@ export default {
     async getProductOfferNumber() {
       if (this.item.offerNumber.indexOf("S") < 0) {
         const fd = {
-          OfferNumber: this.item.offerNumber
+          OfferNumber: this.item.offerNumber,
         };
         const res = await this.$http.post("/api/GetProductOfferByNumber", fd);
         if (res.data.result.code === 200) {
@@ -434,7 +436,7 @@ export default {
         component: "bsProductDetails",
         refresh: true,
         label: row.fa_no || "产品详情",
-        value: row
+        value: row,
       };
       this.$store.commit("myAddTab", fd);
     },
@@ -457,7 +459,7 @@ export default {
         const fd_s = {
           skipCount: 1,
           maxResultCount: 9999,
-          sampleNumber: this.item.offerNumber
+          sampleNumber: this.item.offerNumber,
         };
         const res = await this.$http.post(
           "/api/CompanySamplelistByNumber",
@@ -476,7 +478,7 @@ export default {
       this.orderRow = {
         sampleNumber: this.item.offerNumber,
         name: this.item.customerName,
-        api: "/api/ExportSampleOfferToExcel"
+        api: "/api/ExportSampleOfferToExcel",
       };
       this.exportTemplateDialog = true;
     },
@@ -631,7 +633,7 @@ export default {
       }
       return {
         outerBoxStere,
-        outerBoxFeet
+        outerBoxFeet,
       };
     },
     onSubmit() {},
@@ -677,7 +679,7 @@ export default {
       }
       val.shoppingCount = Number(e.target.value);
       this.$store.commit("replaceShoppingCartValueCount", this.tableData);
-    }
+    },
   },
   // 点击上下键盘
   nextInput(e) {
@@ -712,7 +714,7 @@ export default {
       e.returnValue = false;
       e.cancelBubble = true;
     }
-  }
+  },
 };
 </script>
 <style scoped lang="less">
