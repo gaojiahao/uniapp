@@ -310,14 +310,7 @@ export default {
   },
   methods: {
     slide(data) {
-      if (data.currentPage > this.minHalls.length - 3) {
-        data.currentPage = 0;
-      }
-      // const list = [this.minHalls[0], this.minHalls[1]];
-      // const number = this.minHalls.length - 4;
-      // console.log(number, data.currentPage);
-      //   console.log(data.currentPage, data);
-      //   this.minHalls.splice(0, 2);
+      console.log(data);
     },
     // 点击label
     openLabel(title) {

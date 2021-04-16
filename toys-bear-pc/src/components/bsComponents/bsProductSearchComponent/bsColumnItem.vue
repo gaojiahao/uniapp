@@ -118,6 +118,7 @@
 
 <script>
 import eventBus from "@/assets/js/common/eventBus";
+import { mapGetters } from "vuex";
 export default {
   props: {
     item: {
@@ -165,6 +166,13 @@ export default {
     // 加购
     handlerShopping(item) {
       // this.$set(item, "isShopping", !item.isShopping);
+      if (this.shoppingList.length >= 500) {
+        this.$common.handlerMsgState({
+          msg: "购物车已满500条",
+          type: "warning"
+        });
+        return;
+      }
       item.isShopping = !item.isShopping;
       if (item.isShopping) {
         item.shoppingCount = 1;
@@ -183,6 +191,11 @@ export default {
       }
       this.$forceUpdate();
     }
+  },
+  computed: {
+    ...mapGetters({
+      shoppingList: "myShoppingList"
+    })
   },
   created() {},
   mounted() {}
