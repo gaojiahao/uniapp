@@ -44,6 +44,79 @@ function getToken() {
       });
   });
 }
+// 刷新个人登录信息
+function resetPersonInfo(token) {
+  return new Promise((result, reject) => {
+    axios
+      .post(
+        "/api/RefreshToken",
+        {
+          token: token
+        },
+        {
+          headers: {
+            "content-type": "application/json"
+          }
+        }
+      )
+      .then(res => {
+        result(res);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}
+// 获取菜单
+function getUserRoleMenu(token) {
+  return new Promise((result, reject) => {
+    axios
+      .post(
+        "/api/GetUserRoleMenu",
+        {
+          Uoken: token
+        },
+        {
+          headers: {
+            "content-type": "application/json",
+            Utoken: token
+          }
+        }
+      )
+      .then(res => {
+        result(res);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}
+// 获取系统参数
+// function getClientTypeList(type) {
+//   return new Promise((result, reject) => {
+//     axios
+//       .post(
+//         "/api/ServiceConfigurationList",
+//         {
+//           basisParameters: type
+//         },
+//         {
+//           headers: {
+//             "content-type": "application/json",
+//             Utoken: store.state.userInfo.accessToken
+//           }
+//         }
+//       )
+//       .then(res => {
+//         if (res.data.result.code === 200) {
+//           result(res.data.result.item);
+//         }
+//       })
+//       .catch(err => {
+//         reject(err);
+//       });
+//   });
+// }
 const routes = [...staticRouters];
 
 const router = new VueRouter({
@@ -56,15 +129,47 @@ export async function getMenuFuc() {
 // 拦截
 router.beforeEach(async (to, from, next) => {
   // 如果没有登录token
-  if (!store.state.userInfo || !store.state.userInfo.accessToken) {
-    const userInfo = Vue.prototype.$cookies.get("userInfo");
-    console.log("没有token", 1324, userInfo);
-    if (userInfo) {
-      console.log("有cookit_token");
-      store.commit("handlerLogin", true);
-      store.commit("setToken", userInfo);
-      next();
+  if (!store.state.userInfo) {
+    const token = Vue.prototype.$cookies.get("userInfo");
+    if (token) {
+      const res = await resetPersonInfo(token);
+      console.log("有cookit_token", res, token);
+      if (res.data.result.isLogin) {
+        console.log("有登录成功标识符");
+        store.commit("handlerLogin", true);
+        // 设置token
+        store.commit("setToken", res.data.result);
+        store.commit(
+          "setComparnyId",
+          res.data.result.commparnyList[0].commparnyId
+        );
+        // 登录成功获取系统参数
+        // const Json = {};
+        // Json.MessageRestriction = await getClientTypeList("MessageRestriction");
+        // Json.UserRestrictions = await getClientTypeList("UserRestrictions");
+        // Json.NoticeRestrictions = await getClientTypeList("NoticeRestrictions");
+        // Json.CompanyRestrictions = await getClientTypeList(
+        //   "CompanyRestrictions"
+        // );
+        // Json.PlatForm = await getClientTypeList("PlatForm");
+        // Json.packageManage = await getClientTypeList("packageManage");
+        // console.log(Json);
+        // store.commit("globalJson/setGlobalJson", Json);
+        // 登录成功获取菜单
+        const menus = await getUserRoleMenu(token);
+        console.log(menus, "菜单");
+        if (menus.data.result.code === 200) {
+          store.commit("setRouters", menus.data.result.item.modulesList || []);
+          await getMenuFuc();
+        }
+        next();
+      } else {
+        console.log("刷新token失败");
+        return next({ path: "/login" });
+      }
+      Vue.prototype.$cookies.remove("userInfo");
     } else {
+      console.log("没有cookit_token");
       try {
         const res = await getToken();
         const obj =
@@ -72,53 +177,16 @@ router.beforeEach(async (to, from, next) => {
             ? { accessToken: res }
             : null;
         store.commit("setToken", obj);
-        return next({ path: "/login" });
       } catch (error) {
         if (error) Message.error("请求失败，请求接口为/api/GetToken");
-        return next({ path: "/login" });
       }
-      // 如果有token但是没有经过正规登录
+      return next({ path: "/login" });
     }
-    // if (
-    //   to.path.includes("/beforeIndex") ||
-    //   to.path.includes("/erp") ||
-    //   to.path.includes("/login") ||
-    //   to.path.includes("/offer") ||
-    //   to.path.includes("/publicChat") ||
-    //   to.path.includes("/dontLoad")
-    // ) {
-    //   next();
-    // } else {
-    //   return next({ path: "/login" });
-    // }
   } else {
-    // 有token
-    if (
-      to.path.includes("/beforeIndex") ||
-      to.path.includes("/login") ||
-      to.path.includes("/erp") ||
-      to.path.includes("/offer") ||
-      to.path.includes("/publicChat") ||
-      to.path.includes("/dontLoad")
-    ) {
+    if (store.state.isLogin) {
       next();
     } else {
-      if (store.state.isLogin) {
-        next();
-      } else {
-        const userInfo = Vue.prototype.$cookies.get("userInfo");
-        console.log(userInfo);
-        if (userInfo) {
-          console.log("有token");
-          store.commit("handlerLogin", true);
-          store.commit("setToken", userInfo);
-          next();
-        } else {
-          console.log("没有登录");
-          // 如果有token但是没有经过正规登录
-          return next({ path: "/login" });
-        }
-      }
+      return next({ path: "/login" });
     }
   }
 });
