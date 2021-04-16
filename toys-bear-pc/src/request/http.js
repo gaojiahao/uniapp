@@ -179,7 +179,7 @@ myAxios.install = function(Vue) {
           ) {
             $Store.commit("updateAppLoading", true);
           }
-      }, 1000);
+      }, 500);
       // 屏蔽不需要验证code的请求，如下载导出等
       // if (
       //   config.url.includes("GetOfferOrderExcel") ||
