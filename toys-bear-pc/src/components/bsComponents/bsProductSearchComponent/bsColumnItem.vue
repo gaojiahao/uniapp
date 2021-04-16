@@ -166,7 +166,7 @@ export default {
     // 加购
     handlerShopping(item) {
       // this.$set(item, "isShopping", !item.isShopping);
-      if (this.shoppingList.length >= 2) {
+      if (this.shoppingList.length >= 500) {
         this.$common.handlerMsgState({
           msg: "购物车已满500条",
           type: "warning"

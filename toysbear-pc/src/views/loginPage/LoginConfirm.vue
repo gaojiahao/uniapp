@@ -92,6 +92,7 @@ export default {
       if (res.data.result.isLogin) {
         // 保存数据到cookit
         this.$cookies.set("userInfo", res.data.result.accessToken);
+        console.log(this.$cookies.get("userInfo"));
         // 设置token
         this.$store.commit("setToken", res.data.result);
         this.$store.commit(

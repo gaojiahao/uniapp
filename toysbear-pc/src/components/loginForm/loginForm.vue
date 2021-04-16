@@ -196,14 +196,9 @@ export default {
         this.ws && this.ws.close();
         clearInterval(this.qrTimer);
         this.qrTimer = null;
-        const tokenValue = JSON.stringify({
-          accessToken: res.data.result.accessToken,
-          commparnyList: res.data.result.commparnyList,
-          uid: res.data.result.uid,
-          userInfo: res.data.result.userInfo
-        });
         // 保存数据到cookit
-        this.$cookies.set("userInfo", tokenValue);
+        this.$cookies.set("userInfo", res.data.result.accessToken);
+        console.log(this.$cookies.get("userInfo"));
         this.$store.commit("setToken", res.data.result);
         this.$store.commit(
           "setComparnyId",
@@ -321,14 +316,9 @@ export default {
             this.$store.commit("setToken", res.data.result);
             if (res.data.result.commparnyList.length === 1) {
               // 一个角色
-              const tokenValue = JSON.stringify({
-                accessToken: res.data.result.accessToken,
-                commparnyList: res.data.result.commparnyList,
-                uid: res.data.result.uid,
-                userInfo: res.data.result.userInfo
-              });
               // 保存数据到cookit
-              this.$cookies.set("userInfo", tokenValue);
+              this.$cookies.set("userInfo", res.data.result.accessToken);
+              console.log(this.$cookies.get("userInfo"));
               this.$store.commit("setToken", res.data.result);
               this.$store.commit(
                 "setComparnyId",
@@ -385,7 +375,7 @@ export default {
                   // location.href = "http://139.9.71.135:8080/#/me";
                   break;
               }
-              // this.$router.push("/me");
+              this.$router.push("/me");
             } else if (res.data.result.commparnyList.length > 1) {
               // 多个角色
               this.$store.commit("setToken", res.data.result);
