@@ -90,14 +90,8 @@ export default {
         CompanyNumber: item.companyNumber
       });
       if (res.data.result.isLogin) {
-        const tokenValue = JSON.stringify({
-          accessToken: res.data.result.accessToken,
-          commparnyList: res.data.result.commparnyList,
-          uid: res.data.result.uid,
-          userInfo: res.data.result.userInfo
-        });
         // 保存数据到cookit
-        this.$cookies.set("userInfo", tokenValue);
+        this.$cookies.set("userInfo", res.data.result.accessToken);
         // 设置token
         this.$store.commit("setToken", res.data.result);
         this.$store.commit(

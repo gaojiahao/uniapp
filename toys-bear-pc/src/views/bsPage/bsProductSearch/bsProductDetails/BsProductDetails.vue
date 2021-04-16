@@ -233,6 +233,13 @@ export default {
     },
     // 加购
     handlerShopping(item) {
+      if (this.shoppingList.length >= 2) {
+        this.$common.handlerMsgState({
+          msg: "购物车已满500条",
+          type: "warning"
+        });
+        return;
+      }
       item.isShopping = !item.isShopping;
       if (item.isShopping) {
         item.shoppingCount = 1;
