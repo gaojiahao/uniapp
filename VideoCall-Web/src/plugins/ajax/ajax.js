@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 15:30:49
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-16 19:59:52
+ * @LastEditTime: 2021-04-17 10:08:10
  */
 import Fly from "flyio/dist/npm/fly";
 // 请求地址引入
@@ -89,40 +89,21 @@ fly.interceptors.response.use(
     }
   },
   function(error) {
-    var userCode = localStorage.getItem("userCode");
-    console.log("error:", error);
     // 响应拦截 报错标识
     if (error.status === 401) {
       let token = tokenService.getToken();
-      // localStorage.clear();
-      // sessionStorage.clear();
-      this.lock();
+      fly.lock();
       return tokenService.refreshToken({token:token}).then(token => {
         console.log("token已更新");
-        var opt = {
-          method: error.request.type ||  error.request.method || "GET",
-          baseURL: process.env.VUE_APP_API,
-          url: ensureUrl( error.request.url),
-          headers: {
-            "Content-Type":  error.request.contentType || "*/*"
-          },
-          timeout:  error.request.time || 30 * 1000,
-          responseType:  error.request.dataType || "json",
-          data:error.request.body
-        }
-        debugger
-        Rxports.ajax(opt);
-      });
-      
-    } else if (error.status === 1) {
-      if (error.message.includes("timeout")) {
-        return rejectError(
-          "reject",
-          "不好意思，网络似乎出了点问题，请稍后再试"
-        );
-      }
+      }).finally(() => fly.unlock()) //解锁后，会继续发起请求队列中的任务 
+        .then(() => {
+          console.log(`重新请求：path:${error.request.url}，baseURL:${error.request.baseURL}`)
+          return fly.request(error.request);
+      }); 
+    } else if (error.status === 400) {
+      return Promise.resolve("网络请求：ERROR！")
     }
-    rejectError("reject", error.response && error.response.data.message);
+    //rejectError("reject", error.response && error.response.data.message);
   }
 );
 // 请求选项列表
