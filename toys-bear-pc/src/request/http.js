@@ -173,6 +173,7 @@ myAxios.install = function(Vue) {
       // setTimeout(() => {
       //   if (loaddingOptions[config.url])
       if (
+        !config.url.includes("SelectProductOfferFormulaList") &&
         !config.url.includes("CreateProductCollection") &&
         !config.url.includes("ExportSampleOfferToExcel") &&
         !config.url.includes("ExportCustomerOrderDetailToExcel") &&

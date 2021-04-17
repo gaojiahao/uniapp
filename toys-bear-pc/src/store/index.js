@@ -336,6 +336,16 @@ const store = new Vuex.Store({
       state.activeTab = currentTab.name;
       router.push(currentTab.linkUrl);
     },
+    // 不需要回到上一次历史记录的关闭标签
+    closeOfferTabNoPush(state, n) {
+      let tab = state.tabList;
+      for (let i = 0; i < tab.length; i++) {
+        if (tab[i].name != n.toName) {
+          console.log(tab[i].name, n.toName);
+          tab.splice(i, 1);
+        }
+      }
+    },
     //新增tab页
     myAddTab(state, n) {
       let tab = state.tabList;
