@@ -1,18 +1,18 @@
 <template>
   <div class="bsMyCollection">
-      <div class="title">
-        <div class="titleLeft">
-          <span>我的收藏 ({{ totalCount }})</span>
-        </div>
-        <div class="right">
-          <el-button type="warning" size="medium" @click="toShoppingCart">
-            <i class="whiteCart"></i>
-            <span>购物车</span>
-            <span>({{ shoppingList.length }})</span>
-          </el-button>
-        </div>
+    <div class="title">
+      <div class="titleLeft">
+        <span>我的收藏 ({{ totalCount }})</span>
+      </div>
+      <div class="right">
+        <el-button type="warning" size="medium" @click="toShoppingCart">
+          <i class="whiteCart"></i>
+          <span>购物车</span>
+          <span>({{ shoppingList.length }})</span>
+        </el-button>
+      </div>
     </div>
-        <div class="searchBox">
+    <div class="searchBox">
       <div class="left">
         <div class="item">
           <span class="label">关键字：</span>
@@ -89,7 +89,7 @@ import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/
 import { mapGetters } from "vuex";
 export default {
   name: "bsMyCollection",
- components: {
+  components: {
     bsColumnComponent,
     bsGridComponent
   },
@@ -104,7 +104,7 @@ export default {
       productList: []
     };
   },
-   computed: {
+  computed: {
     ...mapGetters({
       shoppingList: "myShoppingList"
     })
@@ -130,7 +130,7 @@ export default {
         this.productList = res.data.result.item.items;
       }
     },
-        // 去购物车
+    // 去购物车
     toShoppingCart() {
       this.$router.push("/bsIndex/bsShoppingCart");
       const fd = {
@@ -162,10 +162,10 @@ export default {
       this.currentPage = 1;
       this.getCollectList();
     },
-       // 切换产品列表样式
+    // 切换产品列表样式
     handerIsGrid(type) {
       this.isGrid = type;
-    },
+    }
   },
   created() {},
   mounted() {
@@ -182,7 +182,7 @@ export default {
   min-height: 100%;
   background-color: #fff;
   padding: 0 20px;
- .title {
+  .title {
     height: 55px;
     font-size: 15px;
     font-weight: 700;
@@ -218,7 +218,7 @@ export default {
       }
     }
   }
-   .searchBox {
+  .searchBox {
     height: 76px;
     display: flex;
     align-items: center;
