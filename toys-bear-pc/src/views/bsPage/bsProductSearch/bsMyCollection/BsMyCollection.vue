@@ -1,41 +1,64 @@
 <template>
   <div class="bsMyCollection">
-    <div class="title">我的收藏 ({{ totalCount }})</div>
-    <div class="searchBox">
-      <div class="item">
-        <span class="label">关键字：</span>
-        <el-input
-          v-focus
-          type="text"
-          size="medium"
-          v-model="keyword"
-          placeholder="请输入关键词"
-          clearable
-          @keyup.native.enter="search"
-        ></el-input>
+      <div class="title">
+        <div class="titleLeft">
+          <span>我的收藏 ({{ totalCount }})</span>
+        </div>
+        <div class="right">
+          <el-button type="warning" size="medium" @click="toShoppingCart">
+            <i class="whiteCart"></i>
+            <span>购物车</span>
+            <span>({{ shoppingList.length }})</span>
+          </el-button>
+        </div>
+    </div>
+        <div class="searchBox">
+      <div class="left">
+        <div class="item">
+          <span class="label">关键字：</span>
+          <el-input
+            v-focus
+            type="text"
+            size="medium"
+            v-model="keyword"
+            clearable
+            placeholder="请输入关键词"
+            @keyup.native.enter="search"
+          ></el-input>
+        </div>
+        <div class="item">
+          <span class="label">时间段：</span>
+          <el-date-picker
+            size="medium"
+            value-format="yyyy-MM-ddTHH:mm:ss"
+            v-model="dateTime"
+            type="datetimerange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          >
+          </el-date-picker>
+        </div>
+        <div class="item">
+          <el-button
+            @click="search"
+            type="primary"
+            icon="el-icon-search"
+            size="medium"
+          >
+            搜索
+          </el-button>
+        </div>
       </div>
-      <div class="item">
-        <span class="label">时间段：</span>
-        <el-date-picker
-          size="medium"
-          value-format="yyyy-MM-ddTHH:mm:ss"
-          v-model="dateTime"
-          type="datetimerange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        >
-        </el-date-picker>
-      </div>
-      <div class="item">
-        <el-button
-          @click="search"
-          type="primary"
-          icon="el-icon-search"
-          size="medium"
-        >
-          搜索
-        </el-button>
+      <div class="right">
+        <div
+          :class="{ grid: true, active: isGrid === 'bsGridComponent' }"
+          @click="handerIsGrid('bsGridComponent')"
+        ></div>
+        <div
+          :class="{ column: true, active: isGrid === 'bsColumnComponent' }"
+          @click="handerIsGrid('bsColumnComponent')"
+        ></div>
       </div>
     </div>
     <div class="productListBox">
@@ -61,11 +84,13 @@
 
 <script>
 import eventBus from "@/assets/js/common/eventBus";
+import bsColumnComponent from "@/components/bsComponents/bsProductSearchComponent/bsColumnComponent";
 import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/bsGridComponent";
-
+import { mapGetters } from "vuex";
 export default {
   name: "bsMyCollection",
-  components: {
+ components: {
+    bsColumnComponent,
     bsGridComponent
   },
   data() {
@@ -78,6 +103,11 @@ export default {
       currentPage: 1,
       productList: []
     };
+  },
+   computed: {
+    ...mapGetters({
+      shoppingList: "myShoppingList"
+    })
   },
   methods: {
     // 获取列表
@@ -100,6 +130,18 @@ export default {
         this.productList = res.data.result.item.items;
       }
     },
+        // 去购物车
+    toShoppingCart() {
+      this.$router.push("/bsIndex/bsShoppingCart");
+      const fd = {
+        name: "/bsIndex/bsShoppingCart",
+        linkUrl: "/bsIndex/bsShoppingCart",
+        component: "bsShoppingCart",
+        refresh: true,
+        label: "购物车"
+      };
+      this.$store.commit("myAddTab", fd);
+    },
     // 切換頁容量
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
@@ -119,7 +161,11 @@ export default {
     search() {
       this.currentPage = 1;
       this.getCollectList();
-    }
+    },
+       // 切换产品列表样式
+    handerIsGrid(type) {
+      this.isGrid = type;
+    },
   },
   created() {},
   mounted() {
@@ -136,15 +182,20 @@ export default {
   min-height: 100%;
   background-color: #fff;
   padding: 0 20px;
-  .title {
+ .title {
     height: 55px;
-    line-height: 55px;
     font-size: 15px;
     font-weight: 700;
     padding-left: 15px;
     box-sizing: border-box;
     position: relative;
     border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .titleLeft {
+      flex: 1;
+    }
     &::before {
       width: 4px;
       height: 14px;
@@ -155,19 +206,65 @@ export default {
       content: "";
       transform: translate(0, -50%);
     }
+    .right {
+      .whiteCart {
+        display: inline-block;
+        vertical-align: bottom;
+        width: 14px;
+        height: 14px;
+        background: url("~@/assets/images/whiteCart.png") no-repeat center;
+        background-size: contain;
+        margin-right: 10px;
+      }
+    }
   }
-  .searchBox {
+   .searchBox {
     height: 76px;
     display: flex;
     align-items: center;
-    .item {
+    .left {
+      flex: 1;
       display: flex;
       align-items: center;
-      max-width: 290px;
-      margin-right: 20px;
-      .label {
-        width: 58px;
-        min-width: 58px;
+      .item {
+        display: flex;
+        align-items: center;
+        max-width: 290px;
+        margin-right: 20px;
+        .label {
+          width: 58px;
+          min-width: 58px;
+        }
+      }
+    }
+    .right {
+      display: flex;
+      width: 60px;
+      min-width: 60px;
+      .grid,
+      .column {
+        width: 17px;
+        height: 17px;
+        cursor: pointer;
+      }
+      .grid {
+        margin-right: 25px;
+        background: url("~@/assets/images/gridIcon.png") no-repeat center;
+        background-size: contain;
+        &.active {
+          background: url("~@/assets/images/gridActiveIcon.png") no-repeat
+            center;
+          background-size: contain;
+        }
+      }
+      .column {
+        background: url("~@/assets/images/columnIcon.png") no-repeat center;
+        background-size: contain;
+        &.active {
+          background: url("~@/assets/images/columnActiveIcon.png") no-repeat
+            center;
+          background-size: contain;
+        }
       }
     }
   }
