@@ -37,7 +37,13 @@ Vue.use(VueCookies);
 Vue.use(common);
 Vue.use(MessageComponent);
 Vue.component(CollapseTransition.name, CollapseTransition);
-
+// Input默认选中焦点
+Vue.directive("focus", {
+  inserted(el) {
+    // 聚焦元素
+    el.querySelector("input").focus();
+  }
+});
 new Vue({
   router,
   store,

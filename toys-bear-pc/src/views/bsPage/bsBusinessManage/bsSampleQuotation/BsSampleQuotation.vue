@@ -6,6 +6,7 @@
         <div class="item">
           <span class="label">报价单号：</span>
           <el-input
+            v-focus
             type="text"
             size="medium"
             clearable

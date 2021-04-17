@@ -31,11 +31,7 @@
                 {{ item.label }}
               </span>
 
-              <div
-                class="myScrollbar"
-                style="height: 100%; overflow-y: auto"
-                ref="myScrollbar"
-              >
+              <div class="myScrollbar" ref="myScrollbar">
                 <component
                   :item="item.value"
                   v-if="item.refresh"
@@ -188,7 +184,6 @@ export default {
       const myScrollbarList = this.$refs.myScrollbar;
       myScrollbarList.forEach(val => {
         const fun = () => {
-          console.log(val.scrollTop, this.activeTab);
           if (this.activeTab == "/bsIndex/bsProductSearchIndex") {
             if (val.scrollTop >= 200) {
               eventBus.$emit("showCart", true);
@@ -239,7 +234,6 @@ export default {
       len > 1 && this.$store.commit("closeTab", e);
     },
     refresh() {
-      console.log("点击");
       this.$common.refreshTab();
     },
     // 关闭所有tab标签
@@ -448,7 +442,7 @@ export default {
             background-color: #f1f3f6;
             overflow: hidden;
             box-sizing: border-box;
-            margin: 0 20px;
+            margin: 0 0 0 20px;
             padding: 0;
             box-sizing: border-box;
             .el-tab-pane {
@@ -543,11 +537,15 @@ export default {
 }
 .myScrollbar {
   padding: 20px 0;
+  height: 100%;
+  height: 100%;
+  overflow-y: auto;
   box-sizing: border-box;
+  padding-right: 20px;
   /*-------滚动条整体样式----*/
   &::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 8px;
+    height: 8px;
   }
   /*滚动条里面小方块样式*/
   &::-webkit-scrollbar-thumb {

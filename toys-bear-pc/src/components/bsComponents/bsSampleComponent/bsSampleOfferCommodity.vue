@@ -32,6 +32,8 @@
       <!-- 产品列表 -->
       <div class="bsGridComponent">
         <bsSampleOfferProductList
+          @pushOfferProductList="pushOfferProductList"
+          @popOfferProductList="popOfferProductList"
           v-for="item in productList"
           :key="item.productNumber"
           :item="item"
@@ -59,7 +61,7 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+// import { mapState } from "vuex";
 import bsSampleOfferProductList from "@/components/bsComponents/bsSampleComponent/bsSampleOfferProductList";
 import eventBus from "@/assets/js/common/eventBus.js";
 export default {
@@ -76,6 +78,7 @@ export default {
     return {
       num: null,
       typeId: 0,
+      offerProductList: [],
       formDate: {},
       productList: [],
       isGrid: "bsGridComponent",
@@ -84,14 +87,24 @@ export default {
       currentPage: 1
     };
   },
-  computed: {
-    ...mapState(["offerProductList"])
-  },
-  created() {},
   mounted() {
+    this.$set(this, "offerProductList", this.item.list);
     this.getProductList();
   },
   methods: {
+    // 删除商品
+    popOfferProductList(item) {
+      for (let i = 0; i < this.offerProductList.length; i++) {
+        if (this.offerProductList[i].productNumber == item.productNumber) {
+          this.offerProductList.splice(i, 1);
+        }
+      }
+    },
+    // 添加商品
+    pushOfferProductList(item) {
+      console.log(item);
+      this.offerProductList.push(item);
+    },
     //   产品列表
     async getProductList() {
       const fd = {
@@ -134,46 +147,33 @@ export default {
     },
     //返回编辑页面
     async handleAffirm() {
-      eventBus.$emit("getSearchForm", this.callback);
-      console.log(this.item.offerNumber, this.formDate);
-      let quotationProductList = [];
-      this.offerProductList.forEach(item => {
-        quotationProductList.push({
-          productNumber: item.productNumber,
-          boxNumber: item.boxNumber
-        });
-      });
-      const fd = Object.assign({}, this.formDate);
-      fd.quotationProductList = quotationProductList;
-      console.log(fd);
-      const res = await this.$http.post("/api/UpdateProductOffer", fd);
+      eventBus.$emit("getSearchForm" + this.item.offerNumber, this.callback);
+      const quotationProductList = this.offerProductList.map(item => ({
+        productNumber: item.productNumber,
+        boxNumber: item.boxNumber
+      }));
+      this.formDate.quotationProductList = quotationProductList;
+      const res = await this.$http.post(
+        "/api/UpdateProductOffer",
+        this.formDate
+      );
       if (res.data.result.code === 200) {
         this.$common.handlerMsgState({
           msg: "提交成功",
           type: "success"
         });
         eventBus.$emit("resetOffProduct");
-        // this.$store.commit("initOfferProductList");
-        // const url = "编辑" + this.item.offerNumber;
-        // this.$store.commit("closeTab", url);
-
-        // const fd = {
-        //   name: "/bsIndex/bsSampleQuotation",
-        //   linkUrl: "/bsIndex/bsSampleQuotation",
-        //   component: "bsSampleQuotation",
-        //   refresh: true,
-        //   label: "找样报价"
-        // };
-        // this.$router.push("/bsIndex/bsSampleQuotation");
-        // this.$store.commit("myAddTab", fd);
+        const option = {
+          name: this.item.offerNumber,
+          toName: "编辑" + this.item.offerNumber
+        };
+        this.$store.commit("closeOfferTab", option);
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
           error: "danger"
         });
       }
-      this.$store.commit("closeTab", this.item.offerNumber);
-      // this.$forceUpdate();
     },
 
     //切换

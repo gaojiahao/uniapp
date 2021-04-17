@@ -3,6 +3,7 @@
     <div class="searchInput">
       <span class="label">产品搜索:</span>
       <el-input
+        v-focus
         size="medium"
         ref="focusKeyword"
         @keyup.native.enter="searchProducts"

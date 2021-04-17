@@ -18,6 +18,7 @@ function myForEach(oList, yList) {
 const store = new Vuex.Store({
   state: {
     myColles: [],
+    isJindu: false,
     activeTab: "/bsIndex/bsHome",
     oldTabName: "/bsIndex/bsHome", //上一次点击的url
     showGlobalMsg: false,
@@ -71,6 +72,10 @@ const store = new Vuex.Store({
   mutations: {
     handlerOldTabName(state, payLoad) {
       state.oldTabName = payLoad;
+    },
+    // 修改进度条状态
+    handlerIsJindu(state, payLoad) {
+      state.isJindu = payLoad;
     },
     // 添加收藏
     addMyCollec(state, payLoad) {
@@ -312,6 +317,21 @@ const store = new Vuex.Store({
           }
         }
       });
+    },
+    // 不需要回到上一次历史记录的关闭标签
+    closeOfferTab(state, n) {
+      let tab = state.tabList;
+      let currentTab;
+      for (let i = 0; i < tab.length; i++) {
+        if (tab[i].name == n.toName) {
+          currentTab = tab[i];
+        }
+        if (tab[i].name == n.name) {
+          tab.splice(i, 1);
+        }
+      }
+      state.activeTab = currentTab.name;
+      router.push(currentTab.linkUrl);
     },
     //新增tab页
     myAddTab(state, n) {

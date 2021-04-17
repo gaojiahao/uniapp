@@ -15,6 +15,7 @@
         <div class="item">
           <span class="label">关键字：</span>
           <el-input
+            v-focus
             type="text"
             size="medium"
             clearable
