@@ -201,7 +201,7 @@
           </el-table-column>
         </el-table>
       </div>
-
+      <!-- 统计 -->
       <div class="tableBto">
         <div class="right">
           <p class="item">
@@ -240,7 +240,7 @@
         </div>
       </div>
       <!-- 分页 -->
-      <!-- <center style="padding:20px 0;">
+      <center style="padding:20px 0;">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
           :page-sizes="[12, 24, 36, 48]"
@@ -251,7 +251,7 @@
           @current-change="handleCurrentChange"
           @size-change="handleSizeChange"
         ></el-pagination>
-      </center> -->
+      </center>
     </div>
   </div>
 </template>
@@ -282,6 +282,7 @@ export default {
   },
   created() {},
   mounted() {
+    this.getProductOfferDetailPage();
     eventBus.$on("resetOffProduct", () => {
       this.getProductOfferDetailPage();
     });
@@ -321,14 +322,15 @@ export default {
     },
     // 获取列表
     async getProductOfferDetailPage() {
-      const fd = Object.assign(
-        { skipCount: 1, maxResultCount: 9999 },
-        this.item
-      );
-
+      const fd = {
+        skipCount: this.currentPage,
+        maxResultCount: this.pageSize,
+        ...this.item
+      };
       const res = await this.$http.post("/api/ProductOfferDetailPage", fd);
       if (res.data.result.code === 200) {
         this.offerProductList = res.data.result.item.items;
+        this.totalCount = res.data.result.item.totalCount;
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -346,7 +348,7 @@ export default {
           offerAmount: item.offerAmount
         });
       });
-      const fd = Object.assign({}, this.$refs.refSearchData.clienFormData);
+      const fd = this.$refs.refSearchData.clienFormData;
       fd.quotationProductList = quotationProductList;
 
       const res = await this.$http.post("/api/UpdateProductOffer", fd);
@@ -356,8 +358,6 @@ export default {
           type: "success"
         });
         this.$store.commit("initOfferProductList");
-        const url = "编辑" + this.item.offerNumber;
-        this.$store.commit("closeTab", url);
 
         const fd = {
           name: "/bsIndex/bsSampleQuotation",
@@ -366,6 +366,11 @@ export default {
           refresh: true,
           label: "找样报价"
         };
+        if (this.$store.state.tabList.length < 2) {
+          return false;
+        }
+        const url = "编辑" + this.item.offerNumber;
+        this.$store.commit("closeTab", url);
         this.$router.push("/bsIndex/bsSampleQuotation");
         this.$store.commit("myAddTab", fd);
       } else {
@@ -408,19 +413,18 @@ export default {
     },
     //选择报价商品
     handleSelect() {
-      const myValue = {
-        offerNumber: this.item.offerNumber,
-        list: this.offerProductList
-      };
+      // const myValue = {
+      //   offerNumber: .offerNumber,
+      //   list: this.offerProductList
+      // };
       const fd = {
         name: this.item.offerNumber,
-        linkUrl: "/bsIndex/bsSampleOfferCommodity",
+        linkUrl: "/bsIndex/bsSampleQuotation",
         component: "bsSampleOfferCommodity",
         refresh: true,
         label: this.item.offerNumber,
-        value: myValue
+        value: this.item
       };
-      this.$router.push("/bsIndex/bsSampleOfferCommodity");
       this.$store.commit("myAddTab", fd);
     },
     isInteger(obj) {
@@ -434,12 +438,12 @@ export default {
         this.currentPage != 1
       )
         return false;
-      this.getVendorListPage();
+      this.getProductOfferDetailPage();
     },
     // 修改当前页
     handleCurrentChange(page) {
       this.currentPage = page;
-      this.getVendorListPage();
+      this.getProductOfferDetailPage();
     },
     /*
      * 将一个浮点数转成整数，返回整数和倍数。如 3.14 >> 314，倍数是 100

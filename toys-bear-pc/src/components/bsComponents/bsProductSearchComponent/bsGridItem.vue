@@ -32,12 +32,12 @@
       ></div>
       <i
         v-show="item.isFavorite"
-        class="iconClient iconfont icon-wujiaoxing-"
+        class="iconClient activeClientIcon"
         @click.stop="addCollect(item)"
       ></i>
       <i
         v-show="!item.isFavorite"
-        class="iconClient iconfont icon-wujiaoxingkong"
+        class="iconClient clientIcon"
         @click.stop="addCollect(item)"
       ></i>
     </div>
@@ -132,30 +132,33 @@ export default {
     },
     // 收藏
     async addCollect(item) {
+      if (item.isFavorite) {
+        this.$common.handlerMsgState({
+          msg: "取消收藏",
+          type: "warning"
+        });
+      } else {
+        this.$common.handlerMsgState({
+          msg: "收藏成功",
+          type: "success"
+        });
+      }
+      item.isFavorite = !item.isFavorite;
       const res = await this.$http.post("/api/CreateProductCollection", {
         productNumber: item.productNumber
       });
       if (res.data.result.code === 200) {
-        if (item.isFavorite) {
-          this.$common.handlerMsgState({
-            msg: "取消收藏",
-            type: "warning"
-          });
-        } else {
-          this.$common.handlerMsgState({
-            msg: "收藏成功",
-            type: "success"
-          });
-        }
-        item.isFavorite = !item.isFavorite;
         eventBus.$emit("resetMyCollection");
+      } else {
+        this.$common.handlerMsgState({
+          msg: "收藏失败",
+          type: "danger"
+        });
       }
     },
     // 加购
     handlerShopping(item) {
-      // this.$set(item, "isShopping", !item.isShopping);
-      console.log(item);
-      if (this.shoppingList.length >= 500) {
+      if (this.shoppingList.length >= 500 && !item.isShopping) {
         this.$common.handlerMsgState({
           msg: "购物车已满500条",
           type: "warning"
@@ -213,9 +216,22 @@ export default {
     .iconClient {
       position: absolute;
       right: 25px;
+      width: 20px;
+      height: 20px;
       top: 25px;
-      color: #fb6055;
       cursor: pointer;
+      &.activeClientIcon {
+        background: url("~@/assets/images/activeClientIcon.png") no-repeat
+          center;
+      }
+      &.clientIcon {
+        background: url("~@/assets/images/clientIcon.png") no-repeat center;
+      }
+      &.clientIcon,
+      &.activeClientIcon {
+        background-size: contain;
+      }
+      background-size: contain;
     }
     .el-image {
       img {

@@ -403,7 +403,7 @@ export default {
           type: "danger"
         });
       }
-      eventBus.$emit("resetOffProduct");
+      // eventBus.$emit("resetOffProduct");
     },
     // 获取系统配置项
     async getSelectCompanyOffer() {

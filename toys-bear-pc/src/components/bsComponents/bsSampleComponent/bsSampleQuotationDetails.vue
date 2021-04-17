@@ -110,9 +110,9 @@
           ref="collecTable"
           :header-cell-style="{ background: '#f1f3f6' }"
         >
-          <el-table-column label="序号" type="index" align="center" width="70">
+          <el-table-column label="序号" type="index" align="center" width="60">
           </el-table-column>
-          <el-table-column prop="img" label="产品" align="center" width="300">
+          <el-table-column prop="img" label="产品" width="280">
             <template slot-scope="scope">
               <div class="imgBox">
                 <el-image
@@ -214,7 +214,7 @@
             prop="boxNumber"
             label="箱数"
             align="center"
-            width="100"
+            width="80"
           >
             <template slot-scope="scope">
               <span>
@@ -291,54 +291,57 @@
             </template>
           </el-table-column>
         </el-table>
-      </div>
-      <div class="tableBto">
-        <div class="right">
-          <p class="item">
-            <span class="itemTitle">总款数：</span>
-            <span>{{ tableData.length }}</span>
-          </p>
-          <p class="item">
-            <span class="itemTitle">总箱数：</span>
-            <span>{{ myTotalQuantity(tableData) }}</span>
-          </p>
-          <p class="item">
-            <span class="itemTitle">总体积/总材积：</span>
-            <span
-              >{{ handleOffer(myTotalVolume(tableData).outerBoxStere) }}/{{
-                handleOffer(myTotalVolume(tableData).outerBoxFeet)
-              }}</span
-            >
-          </p>
-          <p class="item">
-            <span class="itemTitle">总毛重/总净重：</span>
-            <span
-              >{{ handleOffer(totalMaozhong()) }}/{{
-                handleOffer(totalJingzhong())
-              }}(KG)</span
-            >
-          </p>
-          <p class="item">
-            <span class="itemTitle">总金额：</span>
-            <span class="price"
-              >{{ item.cu_de + handleOffer(myTotalPrice(tableData)) }}
-            </span>
-          </p>
+        <!-- 统计 -->
+        <div class="tableBtoBox">
+          <div class="tableBto">
+            <div class="right">
+              <p class="item">
+                <span class="itemTitle">总款数：</span>
+                <span>{{ tableData.length }}</span>
+              </p>
+              <p class="item">
+                <span class="itemTitle">总箱数：</span>
+                <span>{{ myTotalQuantity(tableData) }}</span>
+              </p>
+              <p class="item">
+                <span class="itemTitle">总体积/总材积：</span>
+                <span
+                  >{{ handleOffer(myTotalVolume(tableData).outerBoxStere) }}/{{
+                    handleOffer(myTotalVolume(tableData).outerBoxFeet)
+                  }}</span
+                >
+              </p>
+              <p class="item">
+                <span class="itemTitle">总毛重/总净重：</span>
+                <span
+                  >{{ handleOffer(totalMaozhong()) }}/{{
+                    handleOffer(totalJingzhong())
+                  }}(KG)</span
+                >
+              </p>
+              <p class="item">
+                <span class="itemTitle">总金额：</span>
+                <span class="price"
+                  >{{ item.cu_de + handleOffer(myTotalPrice(tableData)) }}
+                </span>
+              </p>
+            </div>
+          </div>
         </div>
+        <!-- 分页 -->
+        <center style="padding:20px 0;">
+          <el-pagination
+            layout="total, sizes, prev, pager, next, jumper"
+            :page-sizes="[12, 24, 36, 48]"
+            background
+            :total="totalCount"
+            :page-size="pageSize"
+            :current-page.sync="currentPage"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+          ></el-pagination>
+        </center>
       </div>
-      <!-- 分页 -->
-      <!-- <center style="padding:20px 0;">
-        <el-pagination
-          layout="total, sizes, prev, pager, next, jumper"
-          :page-sizes="[12, 24, 36, 48]"
-          background
-          :total="totalCount"
-          :page-size="pageSize"
-          :current-page.sync="currentPage"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange"
-        ></el-pagination>
-      </center> -->
     </div>
     <!-- 导出订单模板dialog -->
     <transition name="el-zoom-in-center">
@@ -444,7 +447,7 @@ export default {
     async getProductOfferDetailPage() {
       if (this.item.offerNumber.indexOf("S") < 0) {
         const fd = Object.assign(
-          { skipCount: 1, maxResultCount: 9999 },
+          { skipCount: this.currentPage, maxResultCount: this.pageSize },
           this.item
         );
 
@@ -457,8 +460,8 @@ export default {
         }
       } else {
         const fd_s = {
-          skipCount: 1,
-          maxResultCount: 9999,
+          skipCount: this.currentPage,
+          maxResultCount: this.pageSize,
           sampleNumber: this.item.offerNumber
         };
         const res = await this.$http.post(
@@ -490,12 +493,12 @@ export default {
         this.currentPage != 1
       )
         return false;
-      this.getVendorListPage();
+      this.getProductOfferDetailPage();
     },
     // 修改当前页
     handleCurrentChange(page) {
       this.currentPage = page;
-      this.getVendorListPage();
+      this.getProductOfferDetailPage();
     },
 
     isInteger(obj) {
@@ -790,31 +793,6 @@ export default {
       align-items: center;
       justify-content: space-between;
     }
-    .tableBto {
-      display: flex;
-      align-items: center;
-      height: 80px;
-      padding-left: 10px;
-      box-sizing: border-box;
-      .right {
-        flex: 1;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        .item {
-          margin-right: 15px;
-          display: flex;
-          align-items: center;
-          // .itemTitle {
-          // }
-          .price {
-            color: #eb1515;
-            font-weight: 700;
-            font-size: 18px;
-          }
-        }
-      }
-    }
   }
   @{deep} .tableBox {
     .el-table {
@@ -863,6 +841,65 @@ export default {
           }
         }
       }
+    }
+    .tableBtoBox {
+      width: 100%;
+      .tableBto {
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        height: 80px;
+        padding-left: 10px;
+        box-sizing: border-box;
+        .right {
+          flex: 1;
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          .item {
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            // .itemTitle {
+            // }
+            .price {
+              color: #eb1515;
+              font-weight: 700;
+              font-size: 18px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+// 表格样式
+.el-table {
+  /*
+	 *改变浏览器默认的滚动条样式
+	 */
+  .el-table__body-wrapper::-webkit-scrollbar-track {
+    background-color: #f8f8f8;
+  }
+  .el-table__body-wrapper::-webkit-scrollbar-track-piece {
+    background-color: #f8f8f8;
+  }
+  .el-table__body-wrapper::-webkit-scrollbar {
+    width: 16px;
+    height: 16px;
+  }
+  .el-table__body-wrapper::-webkit-scrollbar-thumb {
+    background-color: #dddddd;
+    border-radius: 3px;
+  }
+  .el-table__body-wrapper::-webkit-scrollbar-thumb:hover {
+    background-color: #bbb;
+  }
+  .el-table__header {
+    .cell {
+      font-weight: 400;
+      font-size: 14px;
+      color: #666;
     }
   }
 }
