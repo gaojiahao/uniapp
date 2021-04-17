@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 19:15:58
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\index.vue
- * @LastEditTime: 2021-04-16 19:34:28
+ * @LastEditTime: 2021-04-17 12:25:18
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -162,7 +162,7 @@ export default {
         },
         sureClose(){
             this.isShowEsc = false;
-            if(this.flag){
+            if(this.flag=='true'){
                 this.$emit('endMeeting');    
             } else {
                 this.$emit('leave');    
@@ -191,7 +191,6 @@ export default {
         }
     },
     created() {
-        debugger
         this.testTimer();
         this.roomStatus = this.$route.params.status||'';
         this.flag = Cookies.get("isAdmin");

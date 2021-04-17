@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 16:28:17
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-16 19:39:37
+ * @LastEditTime: 2021-04-17 11:57:27
 -->
 <template>
   <div class="login" ref="login">
@@ -239,7 +239,7 @@ export default {
                   Cookies.set("transcode", this.transcode);
                   Cookies.set("attendeeMode", this.attendeeMode);
                   Cookies.set("videoProfile", this.videoProfile);
-                  Cookies.set("uid", data.data.nickName);
+                  Cookies.set("uid", data.data.meetingRoomMemberId);
                   this.$router.push({name:'Home',params:{status:data.data.status}}); 
                   break;
                 default:
@@ -283,7 +283,7 @@ export default {
                   Cookies.set("transcode", this.transcode);
                   Cookies.set("attendeeMode", this.attendeeMode);
                   Cookies.set("videoProfile", this.videoProfile);
-                  Cookies.set("uid", data.data.nickName);
+                  Cookies.set("uid", data.data.meetingRoomMemberId);
                   this.$router.push({name:'Home',params:{status:data.data.status}}); 
                   break;
                 default:

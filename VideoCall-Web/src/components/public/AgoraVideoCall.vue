@@ -47,7 +47,7 @@ export default {
   methods: {
     //发布频道与加入
     async join() {
-      debugger
+      // debugger
       var $=this;
       // AgoraRTC.setLogLevel(3);  //日志级别0,1,2,3,4
       $.client.enableDualStream().then(() => {
@@ -63,9 +63,11 @@ export default {
       });
       $.client.on("user-joined",(user)=>{
         console.log('用户加入了',user);
+        this.$parent.$parent.$parent.$parent.$parent.getQueryMeetingRoomMembers();
       });
       $.client.on("user-left",(user)=>{
         console.log('用户离开了',user);
+        this.$parent.$parent.$parent.$parent.$parent.getQueryMeetingRoomMembers();
       });
       [ $.userId, $.localAudioTrack, $.localVideoTrack ] = await Promise.all([
         $.client.join($.appId, $.channel, $.token || null,$.uid),
@@ -133,10 +135,11 @@ export default {
     },
     //用户发布订阅
     handleUserPublished(user, mediaType) {
-      debugger
+      // debugger
       const id = user.uid;
       // remoteUsers[id] = user;
       this.subscribe(user, mediaType);
+      // this.$parent.$parent.$parent.$parent.$parent.getQueryMeetingRoomMembers();
     },
     //用户取消发布订阅
     handleUserUnpublished(user,mediaType) {
@@ -145,6 +148,7 @@ export default {
         const playerContainer = document.getElementById(user.uid.toString());
         // 销毁这个节点。
         playerContainer.remove();
+        // this.$parent.$parent.$parent.$parent.$parent.getQueryMeetingRoomMembers();
       }
     },
     //结束会议
@@ -175,12 +179,12 @@ export default {
     async testNetWork(){
       var $=this;
       $.client.on("network-quality", (quality) => {
-        console.log("上行网络质量：", quality.uplinkNetworkQuality);
+        //console.log("上行网络质量：", quality.uplinkNetworkQuality);
       });
 
       // 获取下行网络质量
       $.client.on("network-quality", (quality) => {
-        console.log("下行网络质量：", quality.downlinkNetworkQuality);
+        //console.log("下行网络质量：", quality.downlinkNetworkQuality);
       });
 
       // 获取上行统计数据

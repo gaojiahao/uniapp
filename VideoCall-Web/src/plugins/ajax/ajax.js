@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 15:30:49
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-17 10:08:10
+ * @LastEditTime: 2021-04-17 10:18:59
  */
 import Fly from "flyio/dist/npm/fly";
 // 请求地址引入
@@ -97,7 +97,7 @@ fly.interceptors.response.use(
         console.log("token已更新");
       }).finally(() => fly.unlock()) //解锁后，会继续发起请求队列中的任务 
         .then(() => {
-          console.log(`重新请求：path:${error.request.url}，baseURL:${error.request.baseURL}`)
+          // console.log(`重新请求：path:${error.request.url}，baseURL:${error.request.baseURL}`)
           return fly.request(error.request);
       }); 
     } else if (error.status === 400) {

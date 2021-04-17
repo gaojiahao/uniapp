@@ -91,7 +91,6 @@ export default {
       this.$refs.video.$refs.video.changeDevices(videoId,audioId);
     },
     getQueryMeetingRoomMembers(){
-      debugger
       return new Promise((resolve, reject) => {
         QueryMeetingRoomMembers({roomNumber:this.roomNumber}).then(res => {
           if (res.success) {

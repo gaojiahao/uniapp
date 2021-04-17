@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:26:36
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\public\chart.vue
- * @LastEditTime: 2021-04-06 12:09:38
+ * @LastEditTime: 2021-04-17 12:25:26
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -59,41 +59,45 @@
             </List>
         </div>
         <div class="input_wrap">
-            <Input v-model="chartValue" placeholder="说点什么"  :border="false" class="input_box" clearable />
+            <Input v-model="chartValue" placeholder="说点什么"  :border="false" class="input_box" clearable @on-enter="send" />
             <span class="blue" @click="send">发送</span>
         </div>
     </div>
 </template>
 <script>
+import * as Cookies from "js-cookie";
+import AgoraRTM from 'agora-rtm-sdk';
+import {AGORA_APP_ID} from "@root/agora.config";
+import util from "@utils/util.js";
+
 export default {
     name:'Chart',  
     data(){
         return {
             loading:false,
-            chartHistory:[
-                 {id:1,name:'Jack',content:'helloe111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111!',date:'19:25',isMy:false},
-                {id:1,name:'Jack',content:'helloe!',date:'19:26',isMy:false},
-                {id:1,name:'Jack',content:'helloe!',date:'19:27',isMy:false},
-                {id:1,name:'Tom',content:'fdsad!',date:'19:28',isMy:false},
-                {id:1,name:'Bob',content:'hedsfdsflloe!',date:'19:29',isMy:false},
-                {id:1,name:'Jim',content:'hel12313loe!',date:'19:30',isMy:false},
-                {id:2,name:'我',content:'HI！',date:'19:31',isMy:true},
-            ],
-            id:2,
+            chartHistory:[],
             chartValue:'',
+            appId:null,
+            client:null,
+            channel:null
         }
     },
     methods: {
         send(){
-            this.chartHistory.push({
-                id:2,
-                name:'我',
-                content: this.chartValue,
-                date: new Date(),
-                isMy: true
-            });
-            this.chartValue = "";
-            this.scrollToBottom();
+            this.channel.sendMessage({ text: this.chartValue }).then(() => {
+            /* 频道消息发送成功的处理逻辑 */
+                this.chartHistory.push({
+                    id:this.uid,
+                    name:'我',
+                    content: this.chartValue,
+                    date: util.getNowTime(),
+                    isMy: true
+                });
+                this.chartValue = "";
+                this.scrollToBottom();
+            }).catch(error => {
+            /* 频道消息发送失败的处理逻辑 */
+            })
         },
         scrollToBottom () {
             var me = this;
@@ -108,6 +112,53 @@ export default {
                 }, 500)
             })
         },
+        //登入
+        async login(){
+            await this.client.login({ token:  this.appId, uid: this.uid }).then(() => {
+                console.log('聊天登录成功');
+            }).catch(err => {
+                console.log('聊天登录失败', err);
+            });
+            var roomNumber = Cookies.get("channel");
+            this.channel = await this.client.createChannel(roomNumber); // 此处传入频道 ID
+            await this.channel.join().then(() => {
+                console.log('加入聊天频道成功！');
+            /* 加入频道成功的处理逻辑 */
+            }).catch(error => {
+                console.log('加入聊天频道失败！');
+            /* 加入频道失败的处理逻辑 */
+            });
+            this.channel.on('ChannelMessage', ({ text }, senderId) => { // text 为收到的频道消息文本，senderId 为发送方的 User ID
+                this.chartHistory.push({
+                    id:senderId,
+                    name:senderId,
+                    content: text,
+                    date: util.getNowTime(),
+                    isMy: false
+                });
+                this.scrollToBottom();
+                /* 收到频道消息的处理逻辑 */
+            });
+        },
+        //登出
+        loginOut(){
+            this.channel.leave();
+            this.client.logout();
+        },
+        //初始化群聊
+        async init(){
+            this.appId = AGORA_APP_ID;
+            this.uid = Cookies.get("uid") || null;
+            this.client = AgoraRTM.createInstance(this.appId);
+            this.client.on('ConnectionStateChanged', (newState, reason) => {
+                console.log('on connection state changed to ' + newState + ' reason: ' + reason);
+            });
+            await this.login();
+        }
+    },
+    created(){
+        this.init();    
+        
     }
 }
 </script>

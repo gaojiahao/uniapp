@@ -112,7 +112,7 @@ export default {
                 Cookies.set("transcode", this.transcode);
                 Cookies.set("attendeeMode", this.attendeeMode);
                 Cookies.set("videoProfile", this.videoProfile);
-                Cookies.set("uid", this.formValidate.nickName);
+                Cookies.set("uid", res.data.meetingRoomMemberId);
                 Cookies.set("videoId", this.formValidate.videoId);
                 this.$router.push('/');  
               } else {

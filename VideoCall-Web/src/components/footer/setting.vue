@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-11-03 16:35:57
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-14 11:37:00
+ * @LastEditTime: 2021-04-17 12:28:04
 -->
 <template>
     <Modal v-model="show" title="设置" @on-ok="ok" @on-cancel="cancel" width="430" draggable class="setting">
@@ -97,6 +97,8 @@
 </template>
 
 <script>
+import * as Cookies from "js-cookie";
+
 export default {
     name: 'Setting',
     props: {
@@ -154,7 +156,7 @@ export default {
 
     },
     created(){
-       
+        this.formValidate.id = Cookies.get("channel");
     }
 }
 </script>

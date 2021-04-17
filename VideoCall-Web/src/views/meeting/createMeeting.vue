@@ -158,7 +158,7 @@ export default {
                 Cookies.set("transcode", this.transcode);
                 Cookies.set("attendeeMode", this.attendeeMode);
                 Cookies.set("videoProfile", this.videoProfile);
-                Cookies.set("uid", this.formValidate.nickName);
+                Cookies.set("uid", res.data.meetingRoomMemberId);
                 Cookies.set("companyName", res.data.companyName);   
                 this.$router.push('/'); 
               } else {
