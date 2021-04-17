@@ -5,6 +5,7 @@
       <div class="item">
         <span class="label">关键字：</span>
         <el-input
+          v-focus
           type="text"
           size="medium"
           v-model="keyword"
@@ -173,49 +174,9 @@ export default {
   .productListBox {
     background-color: #fff;
     width: 100%;
-    padding: 0 20px;
     box-sizing: border-box;
     .myPagination {
       padding: 30px 0;
-    }
-  }
-
-  @{deep} .tableBox {
-    .el-table {
-      font-size: 13px;
-      .imgBox {
-        text-align: left;
-        display: flex;
-        font-size: 14px;
-        .productName {
-          // width: 160px;
-          cursor: pointer;
-          height: 60px;
-          margin-left: 15px;
-          .name,
-          .factory {
-            width: 160px;
-            max-width: 160px;
-            cursor: pointer;
-            overflow: hidden; /*超出部分隐藏*/
-            white-space: nowrap; /*不换行*/
-            text-overflow: ellipsis; /*超出部分文字以...显示*/
-          }
-          .factory {
-            color: #3368a9;
-          }
-          .name {
-            margin-top: 8px;
-          }
-        }
-      }
-    }
-    .errorImg {
-      cursor: pointer;
-      img {
-        width: 80px;
-        height: 60px;
-      }
     }
   }
 }
