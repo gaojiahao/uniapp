@@ -219,7 +219,6 @@ export default {
       width: 20px;
       height: 20px;
       top: 25px;
-      color: #fb6055;
       cursor: pointer;
       &.activeClientIcon {
         background: url("~@/assets/images/activeClientIcon.png") no-repeat
@@ -227,6 +226,10 @@ export default {
       }
       &.clientIcon {
         background: url("~@/assets/images/clientIcon.png") no-repeat center;
+      }
+      &.clientIcon,
+      &.activeClientIcon {
+        background-size: contain;
       }
       background-size: contain;
     }

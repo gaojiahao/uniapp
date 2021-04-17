@@ -155,7 +155,7 @@
               </div>
             </div>
             <el-button
-              @click="getProductList"
+              @click="getProductList(false)"
               type="primary"
               style="margin-left: 10px;"
               size="mini"
@@ -446,7 +446,7 @@ export default {
     // 文字搜
     textSearchProducts() {
       this.currentPage = 1;
-      this.getProductList();
+      this.getProductList(false);
     },
     // 确定裁剪图片
     onCubeImg() {
@@ -531,10 +531,10 @@ export default {
           this.sortOrder = null;
           break;
       }
-      this.getProductList();
+      this.getProductList(false);
     },
     // 获取产品列表请求
-    async getProductList() {
+    async getProductList(flag) {
       this.$store.commit("searchValues", null);
       const fd = {
         name: this.searchForm.keyword,
@@ -581,7 +581,7 @@ export default {
           type: "danger"
         });
       }
-      this.getProductCategoryList();
+      if (flag) this.getProductCategoryList();
     },
     // 切換頁容量
     handleSizeChange(pageSize) {
@@ -591,13 +591,13 @@ export default {
         this.currentPage != 1
       )
         return false;
-      this.getProductList();
+      this.getProductList(false);
     },
     // 修改当前页
     handleCurrentChange(page) {
       eventBus.$emit("toTop");
       this.currentPage = page;
-      this.getProductList();
+      this.getProductList(false);
     },
     // 获取产品类目列表
     async getProductCategoryList() {
@@ -640,7 +640,7 @@ export default {
         return false;
       }
       this.currentPage--;
-      this.getProductList();
+      this.getProductList(false);
     },
     // 下一页
     nextEvent() {
@@ -653,7 +653,7 @@ export default {
         return false;
       }
       this.currentPage++;
-      this.getProductList();
+      this.getProductList(false);
     },
     // 一级分类点击事件
     oneTagEvent(item) {
@@ -681,14 +681,14 @@ export default {
     }
   },
   created() {
-    this.getProductList();
+    this.getProductList(true);
   },
   mounted() {
     // 点击搜索-文字搜索
     eventBus.$on("searchProducts", form => {
       this.searchForm.keyword = form.keyword;
       this.currentPage = 1;
-      this.getProductList();
+      this.getProductList(false);
     });
     // 图搜
     eventBus.$on("openUpload", file => {
