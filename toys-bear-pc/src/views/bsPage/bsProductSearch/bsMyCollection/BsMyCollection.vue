@@ -126,6 +126,9 @@ export default {
       this.getCollectList();
     });
     this.getCollectList();
+  },
+  beforeDestroy() {
+    eventBus.$off("resetMyCollection");
   }
 };
 </script>

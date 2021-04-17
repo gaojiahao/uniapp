@@ -581,6 +581,7 @@ export default {
           type: "danger"
         });
       }
+      this.getProductCategoryList();
     },
     // 切換頁容量
     handleSizeChange(pageSize) {
@@ -609,7 +610,6 @@ export default {
           type: "danger"
         });
       }
-      this.getProductList();
     },
     // 选择综合
     handleSynthesis(flag) {
@@ -681,8 +681,7 @@ export default {
     }
   },
   created() {
-    this.getProductCategoryList();
-    // this.getProductList();
+    this.getProductList();
   },
   mounted() {
     // 点击搜索-文字搜索
@@ -846,6 +845,7 @@ export default {
         padding-top: 13px;
         .itemTag {
           padding: 5px 12px;
+          margin-bottom: 2px;
           border-radius: 4px;
           cursor: pointer;
           &.isActive {
@@ -854,11 +854,11 @@ export default {
           }
         }
         &.showOneCate {
-          max-height: 66px;
+          max-height: 61px;
           overflow: hidden;
         }
         &.showTwoCate {
-          max-height: 33px;
+          max-height: 30px;
           overflow: hidden;
         }
       }

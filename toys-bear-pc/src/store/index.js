@@ -279,17 +279,20 @@ const store = new Vuex.Store({
     },
     // 测试
     //关闭全部tab页
-    closeTabAll(state) {
+    closeTabAll(state, router) {
       console.log(state.activeTab, state.tabList);
-      let activeTab;
-      for (let i = 0; i < state.tabList.length; i++) {
-        if (state.tabList[i].name === state.activeTab) {
-          activeTab = state.tabList[i];
-          break;
-        }
-      }
+      // let activeTab;
+      // for (let i = 0; i < state.tabList.length; i++) {
+      //   if (state.tabList[i].name === state.activeTab) {
+      //     activeTab = state.tabList[i];
+      //     break;
+      //   }
+      // }
+      const activeTab = state.tabList.find(val => val.name === state.activeTab);
+      console.log(activeTab, router);
       v.$set(state, "tabList", []);
       state.tabList.push(activeTab);
+      router.push(activeTab.linkUrl);
       // const fd = {
       //   component: "bsHome",
       //   label: "后台首页",

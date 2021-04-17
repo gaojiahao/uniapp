@@ -404,14 +404,14 @@ export default {
           };
           break;
         case "浏览足迹":
-          fd = {
-            name: "/bsIndex/bsBrowsingHistory",
-            linkUrl: "/bsIndex/bsBrowsingHistory",
-            component: "bsBrowsingHistory",
-            refresh: true,
-            label: "浏览记录"
-          };
-          break;
+          return false;
+        // fd = {
+        //   name: "/bsIndex/bsBrowsingHistory",
+        //   linkUrl: "/bsIndex/bsBrowsingHistory",
+        //   component: "bsBrowsingHistory",
+        //   refresh: true,
+        //   label: "浏览记录"
+        // };
         case "站点分享":
           fd = {
             name: "/bsIndex/bsSiteLlis",

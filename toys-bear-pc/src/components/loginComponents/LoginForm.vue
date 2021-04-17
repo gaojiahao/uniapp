@@ -368,6 +368,13 @@ export default {
                 this.$store.commit("removeLoginItems");
               }
               console.log(res.data.result.commparnyList);
+              const fd = {
+                component: "bsHome",
+                label: "后台首页",
+                linkUrl: "/bsIndex/bsHome",
+                name: "/bsIndex/bsHome",
+                refresh: true
+              };
               switch (res.data.result.commparnyList[0].companyType) {
                 // case "Admin":
                 //   break;
@@ -376,7 +383,8 @@ export default {
                 // case "Exhibition":
                 //   break;
                 case "Sales":
-                  this.$router.push("/bsIndex");
+                  this.$store.commit("updateActiveTab", fd);
+                  this.$store.commit("closeTabAll", this.$router);
                   break;
                 default:
                   location.href =
@@ -393,7 +401,6 @@ export default {
                 name: "LoginConfirm"
               });
             }
-            this.$store.commit("closeTabAll");
           } else {
             this.$common.handlerMsgState({
               msg: res.data.result.message,
