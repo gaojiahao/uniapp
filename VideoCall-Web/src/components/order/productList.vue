@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:15:36
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\productList.vue
- * @LastEditTime: 2021-04-16 17:27:35
+ * @LastEditTime: 2021-04-19 12:27:23
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -108,7 +108,7 @@ export default {
                             },[
                                 h('img', {
                                     attrs: {
-                                        src: (params.row.imgOne ?this.$base_url+params.row.imgOne:'') || require("@assets/default/logo.png")
+                                        src: (params.row.productImages.length&&params.row.productImages[0]) || require("@assets/default/logo.png")
                                     },
                                     style: {
                                         width: '30px',
@@ -118,7 +118,7 @@ export default {
                                         click:()=>{
                                             this.srcData = {
                                                 imgName: '图片预览',
-                                                src: (params.row.imgOne ?this.$base_url+params.row.imgOne:'') || require("@assets/default/logo.png")
+                                                src: (params.row.productImages.length&&params.row.productImages[0]) || require("@assets/default/logo.png")
                                             }
                                             this.showImageModel(true);
                                         }
@@ -127,7 +127,7 @@ export default {
                                 h('img',{
                                     slot:"content",
                                     attrs: {
-                                        src: (params.row.imgOne ?this.$base_url+params.row.imgOne:'') || require("@assets/default/logo.png")
+                                        src: (params.row.productImages.length&&params.row.productImages[0]) || require("@assets/default/logo.png")
                                     },
                                     style: {
                                         width: '300px',

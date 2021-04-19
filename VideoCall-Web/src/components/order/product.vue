@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:37:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\product.vue
- * @LastEditTime: 2021-04-16 16:58:37
+ * @LastEditTime: 2021-04-19 12:16:36
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -64,8 +64,8 @@
             <Row class="product_wrap" v-if="this.productInfo.id">
                 <Col span="8">
                     <Poptip trigger='hover' content="content" placement="right" :transfer="true">
-                        <img :src="test" style="width:87px;height:65px;margin-left:19px"/>
-                        <img slot="content" :src="test" style="width:300px;height:300px" />
+                        <img :src="productInfo.productImages.length&&productInfo.productImages[0]||test" style="width:87px;height:65px;margin-left:19px"/>
+                        <img slot="content" :src="productInfo.productImages.length&&productInfo.productImages[0]||test" style="width:300px;height:300px" />
                     </Poptip>
                 </Col>
                 <Col span="16">

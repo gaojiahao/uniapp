@@ -4,45 +4,45 @@
  * @Author: gaojiahao
  * @Date: 2020-11-03 16:35:57
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-15 14:16:00
+ * @LastEditTime: 2021-04-19 12:25:21
 -->
 <template>
     <Modal v-model="show" title="  " @on-ok="ok" @on-cancel="cancel" width="1048" class="modalDetail">
         <div class="product_info_panel">
             <div class="product_info_wrap item" v-if="show">
-                <XCarousel v-model="value1" loop v-if="show" :imgList="imgList">
+                <XCarousel v-model="value1" loop v-if="show" :imgList="modalProductInfo.productImages">
                     <CarouselItem v-if="show">
                         <div class="product_info_img">
                             <div class="product_info_img_border">
-                                <img :src="test"/>
+                                <img :src="modalProductInfo.productImages.length&&modalProductInfo.productImages[0]||test"/>
                             </div>
                         </div>
                     </CarouselItem>
                     <CarouselItem v-if="show">
                         <div class="product_info_img">
                             <div class="product_info_img_border">
-                                <img :src="test"/>
+                                <img :src="modalProductInfo.productImages.length&&modalProductInfo.productImages[0]||test"/>
                             </div>
                         </div>
                     </CarouselItem>
                     <CarouselItem v-if="show">
                         <div class="product_info_img">
                             <div class="product_info_img_border">
-                                <img :src="test"/>
+                                <img :src="modalProductInfo.productImages.length&&modalProductInfo.productImages[0]||test"/>
                             </div>
                         </div>
                     </CarouselItem>
                     <CarouselItem v-if="show">
                         <div class="product_info_img">
                             <div class="product_info_img_border">
-                                <img :src="test"/>
+                                <img :src="modalProductInfo.productImages.length&&modalProductInfo.productImages[0]||test"/>
                             </div>
                         </div>
                     </CarouselItem>
                     <CarouselItem v-if="show">
                         <div class="product_info_img">
                             <div class="product_info_img_border">
-                                <img :src="test"/>
+                                <img :src="modalProductInfo.productImages.length&&modalProductInfo.productImages[0]||test"/>
                             </div>
                         </div>
                     </CarouselItem>
