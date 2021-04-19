@@ -278,7 +278,6 @@ export default {
           this.options.cu_deList.forEach(val => {
             if (val.itemCode === newVal)
               this.clienFormData.cu_de = val.parameter;
-            console.log(this.clienFormData.cu_de, this.clienFormData.cu_deName);
           });
         }
       }
@@ -287,7 +286,6 @@ export default {
       deep: true,
       handler(newVal) {
         if (newVal) {
-          console.log(newVal);
           const obj = JSON.parse(newVal);
           this.clienFormData.profit = obj.profit;
           this.clienFormData.offerMethod = obj.offerMethod;
@@ -397,13 +395,11 @@ export default {
   methods: {
     //请求条件
     async getProductOfferByNumber() {
-      console.log(this.searchFormData);
       const res = await this.$http.post("/api/GetProductOfferByNumber", {
         offerNumber: this.searchFormData.offerNumber
       });
       if (res.data.result.code === 200) {
         this.clienFormData = res.data.result.item;
-        console.log(this.clienFormData);
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,

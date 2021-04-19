@@ -2,7 +2,7 @@
   <div class="productSearch">
     <template v-if="!imageSearchValue">
       <div class="advancedSearchBox">
-        <bsProductSearch @screeningShow="screeningShow" />
+        <bsProductSearch @screeningShow="screeningShow" :isCart="isCart" />
         <!-- 高级筛选 -->
         <div class="advancedScreening " v-show="screeningFlag == true">
           <div class="title">高级筛选:</div>
@@ -66,11 +66,16 @@
                   <el-select
                     size="medium"
                     style="width: 200px; heigth:35px"
-                    v-model="advancedFormdata.region"
+                    v-model="advancedFormdata.ch_pa"
                     placeholder="请选择"
                   >
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
+                    <el-option
+                      v-for="item in chpaList"
+                      :key="item.pa_nu"
+                      :label="item.ch_pa"
+                      :value="item.ch_pa"
+                    >
+                    </el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item style="margin:0" label="是否图片：">
@@ -526,6 +531,11 @@ export default {
     bsGridComponent,
     VueCropper
   },
+  props: {
+    isCart: {
+      type: Boolean
+    }
+  },
   data() {
     return {
       loading: false,
@@ -535,6 +545,7 @@ export default {
       advancedFormdata: {}, //高级搜索条件
       screeningFlag: false,
       isAccurate: "",
+      chpaList: [],
       // 裁剪组件的基础配置option
       option: {
         img: "", // 裁剪图片的地址
@@ -706,10 +717,6 @@ export default {
     async getProductList(flag) {
       this.$store.commit("searchValues", null);
 
-      if (this.isAccurate == "精准") {
-        console.log(this.isAccurate);
-        console.log(this.searchForm.fa_no);
-      }
       const fd = {
         name: this.searchForm.keyword,
         skipCount: this.currentPage,
@@ -719,16 +726,18 @@ export default {
         maxPrice: this.searchForm.maxPrice,
         startTime: this.searchForm.time.length ? this.searchForm.time[0] : null,
         endTime: this.searchForm.time.length ? this.searchForm.time[1] : null,
-        precisionSearch: JSON.stringify({
-          fa_no: this.searchForm.fa_no ? 1 : 0,
-          number: this.searchForm.number ? 1 : 0,
-          name: this.searchForm.name ? 1 : 0,
-          packName: this.searchForm.packName ? 1 : 0
-        }),
+        // precisionSearch: JSON.stringify({
+        //   fa_no: this.searchForm.fa_no ? 1 : 0,
+        //   number: this.searchForm.number ? 1 : 0,
+        //   name: this.searchForm.name ? 1 : 0,
+        //   packName: this.searchForm.packName ? 1 : 0
+        // }),
         sortOrder: this.sortOrder,
         sortType: this.sortType,
         // 高级搜索条件
+        fa_no: this.advancedFormdata.fa_no,
         isUpInsetImg: this.advancedFormdata.isUpInsetImg,
+        ch_pa: this.advancedFormdata.ch_pa,
         pr_le: this.advancedFormdata.pr_le,
         pr_wi: this.advancedFormdata.pr_wi,
         pr_hi: this.advancedFormdata.pr_hi,
@@ -739,12 +748,28 @@ export default {
         in_wi: this.advancedFormdata.in_wi,
         in_hi: this.advancedFormdata.in_hi
       };
-
+      switch (this.isAccurate) {
+        case "精准":
+          fd.precisionSearch = JSON.stringify({
+            fa_no: this.searchForm.fa_no ? 2 : 0,
+            name: this.searchForm.name ? 2 : 0,
+            number: this.searchForm.number ? 2 : 0,
+            packName: this.searchForm.packName ? 2 : 0
+          });
+          break;
+        default:
+          fd.precisionSearch = JSON.stringify({
+            fa_no: this.searchForm.fa_no ? 1 : 0,
+            name: this.searchForm.name ? 1 : 0,
+            number: this.searchForm.number ? 1 : 0,
+            packName: this.searchForm.packName ? 1 : 0
+          });
+          break;
+      }
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "")
           delete fd[key];
       }
-      console.log(fd);
       const res = await this.$http.post("/api/SearchBearProductPage", fd);
       const { code, item, msg } = res.data.result;
       if (code === 200) {
@@ -769,6 +794,7 @@ export default {
         });
       }
       if (flag) this.getProductCategoryList();
+      this.GetProductChpaList();
     },
     // 切換頁容量
     handleSizeChange(pageSize) {
@@ -798,9 +824,23 @@ export default {
         });
       }
     },
+    //   获取包装方式
+    async GetProductChpaList() {
+      const res = await this.$http.post("/api/GetProductChpaList", {});
+      if (res.data.result.code === 200) {
+        this.chpaList = res.data.result.item;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
+
     // 选择综合
     handleSynthesis(flag) {
       if (flag) {
+        this.isAccurate = "";
         this.searchForm.fa_no = 0;
         this.searchForm.number = 0;
         this.searchForm.name = 0;
@@ -814,7 +854,7 @@ export default {
       }
     },
     //高级搜索
-    screeningShow() {
+    async screeningShow() {
       this.screeningFlag = !this.screeningFlag;
     },
     // 确认高级搜索
