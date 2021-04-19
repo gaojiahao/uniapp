@@ -198,25 +198,25 @@
             </span>
           </template>
         </el-table-column>
-         <el-table-column
-            prop="OfferTotalAmount"
-            label="报出总价"
-            align="center"
-            width="100"
-          >
-            <template slot-scope="scope">
-              <span style="color: #f56c6c">{{ scope.row.cu_de }}</span>
-              <span style="color: #f56c6c">
-                {{
-                     priceCount(
-                      scope.row.productCount,
-                      scope.row.ou_lo,
-                      scope.row.productPrice
-                    )
-                }}
-              </span>
-            </template>
-          </el-table-column>
+        <el-table-column
+          prop="OfferTotalAmount"
+          label="报出总价"
+          align="center"
+          width="100"
+        >
+          <template slot-scope="scope">
+            <span style="color: #f56c6c">{{ scope.row.cu_de }}</span>
+            <span style="color: #f56c6c">
+              {{
+                priceCount(
+                  scope.row.productCount,
+                  scope.row.ou_lo,
+                  scope.row.productPrice
+                )
+              }}
+            </span>
+          </template>
+        </el-table-column>
       </el-table>
       <div class="totalBox">
         <p class="item">
@@ -416,10 +416,10 @@ export default {
         return false;
       this.getSearchCompanyShareOrderDetailsPage();
     },
-        isInteger(obj) {
+    isInteger(obj) {
       return Math.floor(obj) === obj;
     },
-     /*
+    /*
      * 将一个浮点数转成整数，返回整数和倍数。如 3.14 >> 314，倍数是 100
      * @param floatNum {number} 小数
      * @return {object}
@@ -512,8 +512,8 @@ export default {
     // 单个产品总价
     priceCount(price, ou_lo, boxNumber) {
       return this.multiply(this.multiply(price, ou_lo), boxNumber);
-    },
     }
+  }
 };
 </script>
 <style scoped lang="less">
