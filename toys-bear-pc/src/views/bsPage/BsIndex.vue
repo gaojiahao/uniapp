@@ -255,7 +255,6 @@ export default {
       })
         .then(() => {
           this.$store.commit("closeTabAll", this.$router);
-          // this.$router.push("/bsIndex/bsHome");
           this.$common.handlerMsgState({
             msg: "关闭成功!",
             type: "success"

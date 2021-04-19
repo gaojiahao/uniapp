@@ -11,13 +11,13 @@
         :cell-style="{ padding: 0, margin: 0 }"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
-        <el-table-column label="序号" type="index" align="center" width="70">
-        </el-table-column>
         <el-table-column
           width="30"
           lable="选择"
           type="selection"
         ></el-table-column>
+        <el-table-column label="序号" type="index" align="center" width="60">
+        </el-table-column>
         <el-table-column :autoFit="true" label="产品" width="300">
           <template slot-scope="scope">
             <div class="imgBox">
