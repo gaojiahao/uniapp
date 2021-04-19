@@ -258,6 +258,7 @@ export default {
           type: "warning"
         });
       }
+      // eventBus.$emit("resetMyCart", );
     },
     // 收藏
     async addCollect(item) {
@@ -287,6 +288,7 @@ export default {
       });
       if (res.data.result.code === 200) {
         this.productDetail = res.data.result.item;
+        this.productDetail.isShopping = this.item.isShopping;
         console.log(this.productDetail, "产品详情");
       } else {
         this.$common.handlerMsgState({

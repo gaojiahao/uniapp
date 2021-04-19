@@ -62,7 +62,7 @@
             <span>{{ item.fa_no }}</span>
           </p>
         </div>
-        <div class="right" @click.stop="handlerShopping(item)">
+        <div class="right" @click.stop="handlerShopping">
           <i v-if="item.isShopping" class="shoppingCartActive"></i>
           <i v-else class="shoppingCart"></i>
         </div>
@@ -157,25 +157,26 @@ export default {
       }
     },
     // 加购
-    handlerShopping(item) {
-      if (this.shoppingList.length >= 500 && !item.isShopping) {
+    handlerShopping() {
+      if (this.shoppingList.length >= 500 && !this.item.isShopping) {
         this.$common.handlerMsgState({
           msg: "购物车已满500条",
           type: "warning"
         });
         return;
       }
-      item.isShopping = !item.isShopping;
-      if (item.isShopping) {
-        item.shoppingCount = 1;
-        this.$store.commit("pushShopping", item);
+      console.log(this.item.isShopping);
+      this.item.isShopping = !this.item.isShopping;
+      if (this.item.isShopping) {
+        this.item.shoppingCount = 1;
+        this.$store.commit("pushShopping", this.item);
         this.$common.handlerMsgState({
           msg: "加购成功",
           type: "success"
         });
       } else {
-        item.shoppingCount = 0;
-        this.$store.commit("popShopping", item);
+        this.item.shoppingCount = 0;
+        this.$store.commit("popShopping", this.item);
         this.$common.handlerMsgState({
           msg: "取消加购成功",
           type: "warning"

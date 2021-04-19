@@ -322,13 +322,12 @@ export default {
         linkUrl: "/bsIndex/bsVendorQuery",
         component: "bsMyClientsDetail",
         refresh: true,
-        noPush: true,
         label: item.supplierName,
         value: {
           companyNumber: item.supplierNumber,
           companyLogo: item.productImage,
-          companyName: item.productName,
-          contactsMan: item.supplierName,
+          companyName: item.supplierName,
+          contactsMan: item.productName,
           phoneNumber: item.supplierPhone,
           address: item.supplierAddres || item.supplierAddress || ""
         }
