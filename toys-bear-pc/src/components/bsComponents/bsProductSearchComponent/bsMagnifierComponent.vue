@@ -62,7 +62,7 @@
           id="example_video"
           :width="middleImgWidth"
           :height="middleImgHeight"
-          class="video-js vjs-default-skin"
+          class="video-js vjs-default-skin bigVideo"
           controls
           poster=""
         >
@@ -89,7 +89,7 @@
                   id="example_video"
                   :width="thumbnailWidth"
                   :height="thumbnailHeight"
-                  class="video-js vjs-default-skin"
+                  class="video-js vjs-default-skin minVideo"
                   poster=""
                 >
                   <source
@@ -492,11 +492,20 @@ export default {
 } */
 .left_contaner .picture_container .picture_item .imgBox {
   box-sizing: border-box;
-  width: 100%;
-  height: 100%;
+  width: 92px;
+  height: 65px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.left_contaner .picture_container .picture_item .imgBox .minVideo {
+  box-sizing: border-box;
+  width: 92px;
+  height: 65px;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  cursor: pointer;
+  object-fit: contain;
 }
 .left_contaner .picture_container .picture_item .imgBox img {
   width: 92px;
@@ -536,7 +545,7 @@ export default {
   height: 100px;
 }
 //视频窗口大小
-.video-js {
+.bigVideo {
   width: 524px;
   height: 393px;
 }
