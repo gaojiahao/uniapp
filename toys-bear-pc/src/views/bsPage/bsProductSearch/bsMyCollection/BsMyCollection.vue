@@ -125,9 +125,27 @@ export default {
         }
       }
       const res = await this.$http.post("/api/ProductCollectionPage", fd);
-      if (res.data.result.code === 200) {
+      const { code, item, msg } = res.data.result;
+      if (code === 200) {
+        if (this.shoppingList) {
+          for (let i = 0; i < item.items.length; i++) {
+            for (let j = 0; j < this.shoppingList.length; j++) {
+              if (
+                item.items[i].productNumber ===
+                this.shoppingList[j].productNumber
+              )
+                item.items[i].isShopping = true;
+            }
+          }
+        }
         this.totalCount = res.data.result.item.totalCount;
         this.productList = res.data.result.item.items;
+      } else {
+        this.totalCount = 0;
+        this.$common.handlerMsgState({
+          msg: msg,
+          type: "danger"
+        });
       }
     },
     // 去购物车
@@ -169,13 +187,34 @@ export default {
   },
   created() {},
   mounted() {
-    eventBus.$on("resetMyCollection", () => {
+    // 收藏
+    eventBus.$on("resetProducts", () => {
       this.getCollectList();
+    });
+    // 删除购物车
+    eventBus.$on("resetMyCart", list => {
+      if (list.length) {
+        for (let i = 0; i < this.productList.length; i++) {
+          for (let j = 0; j < list.length; j++) {
+            if (this.productList[i].productNumber == list[j].productNumber) {
+              this.productList[i].isShopping = true;
+              break;
+            } else {
+              this.productList[i].isShopping = false;
+            }
+          }
+        }
+      } else {
+        this.productList.forEach(val => {
+          val.isShopping = false;
+        });
+      }
     });
     this.getCollectList();
   },
   beforeDestroy() {
-    eventBus.$off("resetMyCollection");
+    eventBus.$off("resetProducts");
+    eventBus.$off("resetMyCart");
   }
 };
 </script>

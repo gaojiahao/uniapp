@@ -2,8 +2,21 @@
   <div class="bsSampleUpdata">
     <div class="title">
       <div class="left">报价详情</div>
+      <div class="right">
+        <el-button
+          :type="isEditOffMethod ? 'primary' : 'success'"
+          :icon="isEditOffMethod ? 'el-icon-edit' : 'el-icon-check'"
+          @click="handlerMethod"
+        >
+          {{ isEditMsg }}
+        </el-button>
+      </div>
     </div>
-    <bsSampleSearch ref="refSearchData" :searchFormData="item"></bsSampleSearch>
+    <bsSampleSearch
+      ref="refSearchData"
+      :isEdit="isEditOffMethod"
+      :searchFormData="item"
+    ></bsSampleSearch>
     <div class="bsSampleTable">
       <div class="top">
         <div class="left">报价商品列表({{ offerProductList.length }})</div>
@@ -20,6 +33,8 @@
           ref="collecTable"
           :header-cell-style="{ backgroundColor: '#f9fafc' }"
         >
+          <el-table-column label="序号" type="index" align="center" width="70">
+          </el-table-column>
           <el-table-column prop="img" label="产品" align="center" width="300">
             <template slot-scope="scope">
               <div class="imgBox">
@@ -52,7 +67,7 @@
                     <div class="fcatoryName" @click="toFactory(scope.row)">
                       {{ scope.row.supplierName }}
                     </div>
-                    <!-- <div class="icons">
+                    <div class="icons">
                       <el-tooltip
                         class="item"
                         effect="dark"
@@ -62,7 +77,7 @@
                         <div class="cartPhoneIcon"></div>
                       </el-tooltip>
                       <div class="cartInfoIcon"></div>
-                    </div> -->
+                    </div>
                   </div>
                 </div>
               </div>
@@ -240,7 +255,7 @@
         </div>
       </div>
       <!-- 分页 -->
-      <center style="padding:20px 0;">
+      <!-- <center style="padding:20px 0;">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
           :page-sizes="[12, 24, 36, 48]"
@@ -251,7 +266,7 @@
           @current-change="handleCurrentChange"
           @size-change="handleSizeChange"
         ></el-pagination>
-      </center>
+      </center> -->
     </div>
   </div>
 </template>
@@ -272,22 +287,68 @@ export default {
   watch: {},
   data() {
     return {
+      isEditMsg: "编辑公式",
+      isEditOffMethod: true,
       offerProductList: [],
       searchForm: {},
       tableData: [],
       totalCount: 0,
-      pageSize: 12,
+      pageSize: 500,
       currentPage: 1
     };
   },
   created() {},
   mounted() {
-    this.getProductOfferDetailPage();
+    // this.getProductOfferDetailPage();
     eventBus.$on("resetOffProduct", () => {
       this.getProductOfferDetailPage();
     });
   },
+  beforeDestroy() {
+    eventBus.$off("resetOffProduct");
+  },
   methods: {
+    // 编辑报价公式
+    async handlerMethod() {
+      if (this.isEditOffMethod) {
+        this.isEditOffMethod = false;
+        this.isEditMsg = "保存公式";
+      } else {
+        let quotationProductList = [];
+        // this.offerProductList.forEach(item => {
+        //   quotationProductList.push({
+        //     productNumber: item.productNumber,
+        //     boxNumber: item.boxNumber,
+        //     offerAmount: item.offerAmount
+        //   });
+        // });
+        for (let i = 0; i < this.offerProductList.length; i++) {
+          quotationProductList.push({
+            productNumber: this.offerProductList[i].productNumber,
+            boxNumber: this.offerProductList[i].boxNumber,
+            offerAmount: this.offerProductList[i].offerAmount
+          });
+        }
+        const fd = this.$refs.refSearchData.clienFormData;
+        fd.quotationProductList = quotationProductList;
+
+        const res = await this.$http.post("/api/UpdateProductOffer", fd);
+        if (res.data.result.code === 200) {
+          this.$common.handlerMsgState({
+            msg: "编辑成功",
+            type: "success"
+          });
+          this.$store.commit("initOfferProductList");
+          this.isEditOffMethod = true;
+          this.isEditMsg = "编辑公式";
+        } else {
+          this.$common.handlerMsgState({
+            msg: res.data.result.msg,
+            type: "danger"
+          });
+        }
+      }
+    },
     // 去厂商
     toFactory(item) {
       const fd = {
@@ -770,6 +831,31 @@ export default {
           }
           .factory {
             color: #3368a9;
+            display: flex;
+            align-items: center;
+            .factoryName {
+              cursor: pointer;
+            }
+            .icons {
+              display: flex;
+              .cartPhoneIcon,
+              .cartInfoIcon {
+                width: 20px;
+                height: 20px;
+                margin-left: 15px;
+                cursor: pointer;
+              }
+              .cartPhoneIcon {
+                background: url("~@/assets/images/cartPhoneIcon.png") no-repeat
+                  center;
+                background-size: contain;
+              }
+              .cartInfoIcon {
+                background: url("~@/assets/images/cartInfoIcon.png") no-repeat
+                  center;
+                background-size: contain;
+              }
+            }
           }
           .name {
             margin-top: 8px;

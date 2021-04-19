@@ -306,13 +306,13 @@ const store = new Vuex.Store({
     //关闭tab页
     closeTab(state, n) {
       let tab = state.tabList;
+      console.log(n, state.oldTabName);
       tab.forEach((val, i) => {
         if (val.name == n) {
           tab.splice(i, 1);
           const currentOption = tab.find(va => va.name == state.oldTabName);
           if (currentOption) {
             state.activeTab = state.oldTabName;
-            console.log(currentOption);
             router.push(currentOption.linkUrl);
           } else {
             state.activeTab = tab[tab.length - 1].name;
@@ -335,16 +335,6 @@ const store = new Vuex.Store({
       }
       state.activeTab = currentTab.name;
       router.push(currentTab.linkUrl);
-    },
-    // 不需要回到上一次历史记录的关闭标签
-    closeOfferTabNoPush(state, n) {
-      let tab = state.tabList;
-      for (let i = 0; i < tab.length; i++) {
-        if (tab[i].name != n.toName) {
-          console.log(tab[i].name, n.toName);
-          tab.splice(i, 1);
-        }
-      }
     },
     //新增tab页
     myAddTab(state, n) {

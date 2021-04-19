@@ -22,8 +22,16 @@
               :label="item.label"
             >
               <span slot="label">
-                <i class="el-icon-refresh" @click.stop="refresh()"></i>
-                {{ item.label }}
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  :content="item.label"
+                  placement="top"
+                >
+                  <span style="width:90px;padding:0;">
+                    {{ item.label }}
+                  </span>
+                </el-tooltip>
               </span>
 
               <div class="myScrollbar" ref="myScrollbar">
@@ -278,8 +286,8 @@ export default {
     ...mapState(["tabList"])
   },
   watch: {
-    activeTab(newN) {
-      // this.$store.commit("handlerOldTabName", oldN);
+    activeTab(newN, oldN) {
+      this.$store.commit("handlerOldTabName", oldN);
       // if (newN == "/bsIndex/bsProductSearchIndex") {
       //   // this.handleScroll();
       // } else {
@@ -290,22 +298,9 @@ export default {
         newN == "/bsIndex/bsVIPProducts" ||
         newN == "/bsIndex/bsMyCollection"
       ) {
-        console.log(newN);
-        // this.showSearch = false;
         eventBus.$emit("showCart", true);
       }
-      //  else if (
-      //   this.tabList.find(val => val.name == newN).linkUrl ==
-      //   "/bsIndex/bsProductSearchIndex"
-      // ) {
-      //   // this.showSearch = false;
-      //   eventBus.$emit("showCart", true);
-      // } else {
-      //   // this.showSearch = false;
-      //   eventBus.$emit("showCart", false);
-      // }
     }
-    // }
   },
   created() {},
   mounted() {
