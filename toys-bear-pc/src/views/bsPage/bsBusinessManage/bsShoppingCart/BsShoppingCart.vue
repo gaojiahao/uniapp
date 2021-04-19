@@ -412,7 +412,7 @@
               <el-input
                 maxlength="50"
                 show-word-limit
-                v-model="clienFormData.remark"
+                v-model="clienFormData.title"
               ></el-input>
             </el-form-item>
           </el-form>
@@ -912,7 +912,6 @@ export default {
             msg: "删除成功",
             type: "success"
           });
-          console.log(this.tableData);
           eventBus.$emit("resetMyCart", this.tableData);
           this.$store.commit("resetShoppingCart", selectProducts);
         })
