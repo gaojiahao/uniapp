@@ -694,23 +694,15 @@ export default {
     eventBus.$on("openUpload", file => {
       this.uploadPic(file);
     });
+    eventBus.$on("resetMyCollection", () => {
+      this.getCollectList();
+    });
     // 取消收藏
-    eventBus.$on("resetProducts", list => {
-      if (list.length) {
-        for (let i = 0; i < this.productList.length; i++) {
-          for (let j = 0; j < list.length; j++) {
-            if (this.productList[i].productNumber == list[j].productNumber) {
-              this.productList[i].isFavorite = true;
-              break;
-            } else {
-              this.productList[i].isFavorite = false;
-            }
-          }
+    eventBus.$on("resetProducts", item => {
+      for (let i = 0; i < this.productList.length; i++) {
+        if (this.productList[i].productNumber == item.productNumber) {
+          this.productList[i].isFavorite = item.isFavorite;
         }
-      } else {
-        this.productList.forEach(val => {
-          val.isFavorite = false;
-        });
       }
     });
     eventBus.$on("resetProductCollection", item => {
@@ -784,6 +776,7 @@ export default {
   },
   beforeDestroy() {
     this.clearRootEvent();
+    eventBus.$off("resetProducts");
   }
 };
 </script>

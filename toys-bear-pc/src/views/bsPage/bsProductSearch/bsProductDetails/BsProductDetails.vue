@@ -258,7 +258,7 @@ export default {
           type: "warning"
         });
       }
-      // eventBus.$emit("resetMyCart", );
+      eventBus.$emit("resetMyCart", this.shoppingList);
     },
     // 收藏
     async addCollect(item) {
@@ -278,7 +278,7 @@ export default {
           });
         }
         item.isFavorite = !item.isFavorite;
-        eventBus.$emit("resetProductCollection", item);
+        eventBus.$emit("resetProducts", item);
       }
     },
     // 获取产品详情

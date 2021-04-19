@@ -298,22 +298,9 @@ export default {
         newN == "/bsIndex/bsVIPProducts" ||
         newN == "/bsIndex/bsMyCollection"
       ) {
-        console.log(newN);
-        // this.showSearch = false;
         eventBus.$emit("showCart", true);
       }
-      //  else if (
-      //   this.tabList.find(val => val.name == newN).linkUrl ==
-      //   "/bsIndex/bsProductSearchIndex"
-      // ) {
-      //   // this.showSearch = false;
-      //   eventBus.$emit("showCart", true);
-      // } else {
-      //   // this.showSearch = false;
-      //   eventBus.$emit("showCart", false);
-      // }
     }
-    // }
   },
   created() {},
   mounted() {

@@ -180,22 +180,11 @@ export default {
   },
   mounted() {
     // 取消收藏
-    eventBus.$on("resetProducts", list => {
-      if (list.length) {
-        for (let i = 0; i < this.tableData.length; i++) {
-          for (let j = 0; j < list.length; j++) {
-            if (this.tableData[i].productNumber == list[j].productNumber) {
-              this.tableData[i].isFavorite = true;
-              break;
-            } else {
-              this.tableData[i].isFavorite = false;
-            }
-          }
+    eventBus.$on("resetProducts", item => {
+      for (let i = 0; i < this.tableData.length; i++) {
+        if (this.tableData[i].productNumber == item.productNumber) {
+          this.tableData[i].isFavorite = item.isFavorite;
         }
-      } else {
-        this.tableData.forEach(val => {
-          val.isFavorite = false;
-        });
       }
     });
     // 删除购物车
@@ -217,6 +206,9 @@ export default {
         });
       }
     });
+  },
+  beforeDestroy() {
+    eventBus.$off("resetProducts");
   },
   computed: {
     ...mapGetters({
