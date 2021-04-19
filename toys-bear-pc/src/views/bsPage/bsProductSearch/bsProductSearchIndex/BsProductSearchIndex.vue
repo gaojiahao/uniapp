@@ -2,8 +2,174 @@
   <div class="productSearch">
     <template v-if="!imageSearchValue">
       <div class="advancedSearchBox">
-        <bsProductSearch />
-        <div class="standardScreening">
+        <bsProductSearch @screeningShow="screeningShow" />
+        <!-- 高级筛选 -->
+        <div class="advancedScreening " v-show="screeningFlag == true">
+          <div class="title">高级筛选:</div>
+          <div class="queryCondition">
+            <div>
+              <span class="text">综合：</span>
+              <el-checkbox
+                v-model="synthesis"
+                @change="handleSynthesis"
+                style="margin-right: 30px;"
+              >
+                综合查询
+              </el-checkbox>
+            </div>
+            <div>
+              <span class="text">搜索类型：</span>
+              <el-checkbox
+                @change="handleCheckedScreensChange"
+                v-model="searchForm.fa_no"
+              >
+                货号
+              </el-checkbox>
+              <el-checkbox
+                @change="handleCheckedScreensChange"
+                v-model="searchForm.name"
+              >
+                名称
+              </el-checkbox>
+              <el-checkbox
+                @change="handleCheckedScreensChange"
+                v-model="searchForm.number"
+              >
+                编号
+              </el-checkbox>
+              <el-checkbox
+                @change="handleCheckedScreensChange"
+                v-model="searchForm.packName"
+              >
+                包装
+              </el-checkbox>
+            </div>
+            <div>
+              <span class="text">是否精准：</span>
+              <el-radio-group v-model="isAccurate">
+                <el-radio label="模糊"></el-radio>
+                <el-radio label="精准"></el-radio>
+              </el-radio-group>
+            </div>
+          </div>
+          <div class="parameter">
+            <el-form :model="advancedFormdata">
+              <div class="left">
+                <el-form-item label="出厂货号：" placeholder="请输入内容">
+                  <el-input
+                    size="medium"
+                    style="width: 200px; "
+                    v-model="advancedFormdata.fa_no"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item label="包装方式：">
+                  <el-select
+                    size="medium"
+                    style="width: 200px; heigth:35px"
+                    v-model="advancedFormdata.region"
+                    placeholder="请选择"
+                  >
+                    <el-option label="区域一" value="shanghai"></el-option>
+                    <el-option label="区域二" value="beijing"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item style="margin:0" label="是否图片：">
+                  <el-radio-group v-model="advancedFormdata.isUpInsetImg">
+                    <el-radio label="是"></el-radio>
+                    <el-radio label="否"></el-radio>
+                  </el-radio-group>
+                </el-form-item>
+              </div>
+              <div class="right">
+                <el-form-item label="产品规格：">
+                  <el-input
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    size="medium"
+                    placeholder="长"
+                    style="width: 55px; "
+                    v-model="advancedFormdata.pr_le"
+                  ></el-input
+                  ><span>-</span>
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="宽"
+                    style="width: 55px; "
+                    v-model="advancedFormdata.pr_wi"
+                  ></el-input
+                  ><span>-</span>
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="高"
+                    style="width: 55px; "
+                    v-model="advancedFormdata.pr_hi"
+                  ></el-input>
+                  &nbsp;<span>CM</span>
+                </el-form-item>
+                <el-form-item label="外箱规格：">
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="长"
+                    style="width: 55px; "
+                    v-model="advancedFormdata.ou_le"
+                  ></el-input
+                  ><span>-</span>
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="宽"
+                    style="width: 55px; "
+                    v-model="advancedFormdata.ou_wi"
+                  ></el-input
+                  ><span>-</span>
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="高"
+                    style="width: 55px; "
+                    v-model="advancedFormdata.ou_hi"
+                  ></el-input>
+                  &nbsp;<span>CM</span>
+                </el-form-item>
+                <el-form-item label="包装规格：">
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="长"
+                    style="width: 55px; "
+                    v-model="advancedFormdata.in_le"
+                  ></el-input
+                  ><span>-</span>
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="宽"
+                    style="width: 55px; "
+                    v-model="advancedFormdata.in_wi"
+                  ></el-input
+                  ><span>-</span>
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="高"
+                    style="width: 55px; "
+                    v-model="advancedFormdata.in_hi"
+                  ></el-input>
+                  &nbsp;<span>CM</span>
+                </el-form-item>
+              </div>
+            </el-form>
+          </div>
+          <div class="confirm">
+            <el-button type="primary" @click="confirmAdvanced">
+              确 定
+            </el-button>
+          </div>
+        </div>
+        <!-- 标准筛选 -->
+        <div class="standardScreening" v-show="screeningFlag == false">
           <span class="myLabel">标准筛选:</span>
           <el-checkbox
             v-model="synthesis"
@@ -366,6 +532,9 @@ export default {
       baseImg: null,
       fileinfo: null,
       isShowCropper: false,
+      advancedFormdata: {}, //高级搜索条件
+      screeningFlag: false,
+      isAccurate: "",
       // 裁剪组件的基础配置option
       option: {
         img: "", // 裁剪图片的地址
@@ -536,6 +705,11 @@ export default {
     // 获取产品列表请求
     async getProductList(flag) {
       this.$store.commit("searchValues", null);
+
+      if (this.isAccurate == "精准") {
+        console.log(this.isAccurate);
+        console.log(this.searchForm.fa_no);
+      }
       const fd = {
         name: this.searchForm.keyword,
         skipCount: this.currentPage,
@@ -552,12 +726,25 @@ export default {
           packName: this.searchForm.packName ? 1 : 0
         }),
         sortOrder: this.sortOrder,
-        sortType: this.sortType
+        sortType: this.sortType,
+        // 高级搜索条件
+        isUpInsetImg: this.advancedFormdata.isUpInsetImg,
+        pr_le: this.advancedFormdata.pr_le,
+        pr_wi: this.advancedFormdata.pr_wi,
+        pr_hi: this.advancedFormdata.pr_hi,
+        ou_le: this.advancedFormdata.ou_le,
+        ou_wi: this.advancedFormdata.ou_wi,
+        ou_hi: this.advancedFormdata.ou_hi,
+        in_le: this.advancedFormdata.in_le,
+        in_wi: this.advancedFormdata.in_wi,
+        in_hi: this.advancedFormdata.in_hi
       };
+
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "")
           delete fd[key];
       }
+      console.log(fd);
       const res = await this.$http.post("/api/SearchBearProductPage", fd);
       const { code, item, msg } = res.data.result;
       if (code === 200) {
@@ -625,6 +812,14 @@ export default {
       if (flag) {
         this.synthesis = null;
       }
+    },
+    //高级搜索
+    screeningShow() {
+      this.screeningFlag = !this.screeningFlag;
+    },
+    // 确认高级搜索
+    confirmAdvanced() {
+      this.getProductList(false);
     },
     // 切换产品列表样式
     handerIsGrid(type) {
@@ -786,6 +981,7 @@ export default {
   .advancedSearchBox {
     background-color: #fff;
     width: 100%;
+    .advancedScreening,
     .standardScreening,
     .productClass,
     .twoLevelClass {
@@ -804,6 +1000,71 @@ export default {
             border-radius: 50%;
           }
         }
+      }
+    }
+    @{deep} .advancedScreening {
+      display: flex;
+      height: 147px;
+      .el-checkbox {
+        .el-checkbox__input {
+          border-radius: 50%;
+          .el-checkbox__inner {
+            border-radius: 50%;
+          }
+        }
+      }
+      .title {
+        display: flex;
+        align-items: center;
+      }
+      .queryCondition {
+        width: 468px;
+        height: 147px;
+        opacity: 1;
+        border: 1px solid #dcdfe6;
+        border-radius: 5px;
+        padding: 20px 0;
+        margin: 0 20px;
+        box-sizing: border-box;
+        div {
+          display: flex;
+          align-items: center;
+          padding: 10px 10px;
+          .text {
+            width: 80px;
+            text-align: right;
+          }
+        }
+      }
+      .parameter {
+        width: 626px;
+        form {
+          display: flex;
+          .el-form-item {
+            height: 36px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            .el-form-item__content {
+              line-height: 36px;
+            }
+          }
+          span {
+            color: #999999;
+            text-align: center;
+          }
+          .left {
+            flex: 1;
+          }
+          .right {
+            flex: 1;
+          }
+        }
+      }
+      .confirm {
+        display: flex;
+        align-self: flex-end;
+        margin-left: 20px;
       }
     }
     .productClass,

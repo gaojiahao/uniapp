@@ -37,6 +37,12 @@
         icon="el-icon-search"
         >搜 索</el-button
       >
+      <el-button
+        size="medium"
+        :icon="advanced == true ? 'el-icon-arrow-down' : ' el-icon-arrow-up'"
+        @click="advancedSearchProducts(1)"
+        >高级搜索 <i></i
+      ></el-button>
     </div>
     <el-button type="warning" size="medium" @click="toShoppingCart">
       <i class="whiteCart"></i>
@@ -52,6 +58,7 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
+      advanced: true,
       searchForm: {
         keyword: ""
       }
@@ -93,10 +100,17 @@ export default {
         label: "购物车"
       };
       this.$store.commit("myAddTab", fd);
+    },
+    // 切换高级搜索
+    advancedSearchProducts() {
+      this.advanced = !this.advanced;
+
+      this.$emit("screeningShow");
     }
   },
   created() {},
   mounted() {
+    //   console.log(this.advanced);
     eventBus.$on("imgSearch", () => {
       this.$refs.uploadRef.$children[0].$refs.input.click();
     });
