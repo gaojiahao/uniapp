@@ -37,14 +37,19 @@
         icon="el-icon-search"
         >搜 索</el-button
       >
-      <el-button
-        size="medium"
-        :icon="advanced == true ? 'el-icon-arrow-down' : ' el-icon-arrow-up'"
-        @click="advancedSearchProducts(1)"
-        >高级搜索 <i></i
-      ></el-button>
+      <div class="advancedBox" @click="advancedSearchProducts">
+        高级搜索
+        <i
+          :class="advanced == true ? 'el-icon-arrow-down' : ' el-icon-arrow-up'"
+        ></i>
+      </div>
     </div>
-    <el-button type="warning" size="medium" @click="toShoppingCart">
+    <el-button
+      type="warning"
+      size="medium"
+      @click="toShoppingCart"
+      v-show="isCart === true"
+    >
       <i class="whiteCart"></i>
       <span>购物车</span>
       <span>({{ shoppingList && shoppingList.length }})</span>
@@ -56,6 +61,11 @@
 import eventBus from "@/assets/js/common/eventBus";
 import { mapGetters } from "vuex";
 export default {
+  props: {
+    isCart: {
+      type: Boolean
+    }
+  },
   data() {
     return {
       advanced: true,
@@ -110,7 +120,6 @@ export default {
   },
   created() {},
   mounted() {
-    //   console.log(this.advanced);
     eventBus.$on("imgSearch", () => {
       this.$refs.uploadRef.$children[0].$refs.input.click();
     });
@@ -136,6 +145,22 @@ export default {
     flex: 1;
     display: flex;
     align-items: center;
+    .advancedBox {
+      width: 90px;
+      height: 36px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      line-height: 36px;
+      cursor: pointer;
+      i {
+        margin-left: 5px;
+        width: 10px;
+        height: 10px;
+        color: #666666;
+        display: inline-block;
+      }
+    }
   }
   .upload-demo {
     margin-top: 7px;
