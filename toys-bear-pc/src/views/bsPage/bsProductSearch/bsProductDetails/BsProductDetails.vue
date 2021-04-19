@@ -308,6 +308,9 @@ export default {
     ...mapGetters({
       shoppingList: "myShoppingList"
     })
+  },
+  beforeDestroy() {
+    eventBus.$off("resetMyCollection");
   }
 };
 </script>

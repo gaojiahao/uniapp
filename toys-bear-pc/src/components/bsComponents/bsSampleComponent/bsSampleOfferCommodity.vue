@@ -88,10 +88,29 @@ export default {
     };
   },
   mounted() {
-    this.$set(this, "offerProductList", this.item.list);
-    this.getProductList();
+    // this.$set(this, "offerProductList", this.item.list);
+    // this.getProductList();
+    this.getProductOfferDetailPage();
   },
   methods: {
+    // 获取全部列表
+    async getProductOfferDetailPage() {
+      const fd = {
+        skipCount: 1,
+        maxResultCount: 9999,
+        ...this.item
+      };
+      const res = await this.$http.post("/api/ProductOfferDetailPage", fd);
+      if (res.data.result.code === 200) {
+        this.offerProductList = res.data.result.item.items;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+      this.getProductList();
+    },
     // 删除商品
     popOfferProductList(item) {
       for (let i = 0; i < this.offerProductList.length; i++) {
@@ -167,7 +186,20 @@ export default {
           name: this.item.offerNumber,
           toName: "编辑" + this.item.offerNumber
         };
+        // const tabList = this.$store.state.tabList;
+        // const flag = tabList.find(
+        //   val => val.name === "编辑" + this.item.offerNumber
+        // );
         this.$store.commit("closeOfferTab", option);
+        // if (tabList.length < 2) {
+        //   return false;
+        // } else {
+        //   if (!flag) {
+        //     this.$store.commit("closeOfferTabNoPush", option);
+        //   } else {
+        //     this.$store.commit("closeOfferTab", option);
+        //   }
+        // }
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,

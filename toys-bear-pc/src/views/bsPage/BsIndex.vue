@@ -7,11 +7,6 @@
       </div>
       <div class="rightContent">
         <div class="views">
-          <el-collapse-transition>
-            <div class="positionSearchBox" v-show="showSearch">
-              <bsProductSearch />
-            </div>
-          </el-collapse-transition>
           <el-tabs
             v-model="activeTab"
             @tab-remove="closeTab"
@@ -133,7 +128,6 @@ import bsPurchaseOrderDetails from "@/views/bsPage/bsBusinessManage/bsPurchaseOr
 
 import bsTop from "@/components/bsComponents/bsTopComponent/BsTop";
 import bsMenu from "@/components/bsComponents/bsMenuComponent/BsMenu";
-import bsProductSearch from "@/components/bsComponents/bsProductSearchComponent/bsProductSearch";
 import eventBus from "@/assets/js/common/eventBus.js";
 import { mapState } from "vuex";
 export default {
@@ -169,49 +163,58 @@ export default {
     bsPurchaseOrder,
     bsTop,
     bsMenu,
-    bsProductSearch,
     bsPurchaseOrderDetails
   },
   data() {
     return {
-      isCollapse: false,
-      showSearch: false
+      isCollapse: false
     };
   },
   methods: {
     // 滚动事件
     handleScroll() {
-      const myScrollbarList = this.$refs.myScrollbar;
-      myScrollbarList.forEach(val => {
-        const fun = () => {
-          if (this.activeTab == "/bsIndex/bsProductSearchIndex") {
-            if (val.scrollTop >= 200) {
-              eventBus.$emit("showCart", true);
-            } else {
-              eventBus.$emit("showCart", false);
-            }
-          } else if (
-            this.tabList.find(val => val.name == this.activeTab).linkUrl ==
-            "/bsIndex/bsProductSearchIndex"
-          ) {
-            eventBus.$emit("showCart", true);
-          } else if (
-            this.activeTab == "/bsIndex/bsLatestProducts" ||
-            this.activeTab == "/bsIndex/bsSpotProducts" ||
-            this.activeTab == "/bsIndex/bsVIPProducts" ||
-            this.activeTab == "/bsIndex/bsMyCollection"
-          ) {
-            eventBus.$emit("showCart", true);
-          } else {
-            eventBus.$emit("showCart", false);
-          }
-        };
-        if (this.activeTab == "/bsIndex/bsProductSearchIndex") {
-          val.onscroll = fun;
-        } else {
-          val.removeEventListener("scroll", fun, false);
-        }
-      });
+      eventBus.$emit("showCart", false);
+      const newN = this.$route.path;
+      if (
+        newN == "/bsIndex/bsProductSearchIndex" ||
+        newN == "/bsIndex/bsLatestProducts" ||
+        newN == "/bsIndex/bsSpotProducts" ||
+        newN == "/bsIndex/bsVIPProducts" ||
+        newN == "/bsIndex/bsMyCollection"
+      ) {
+        eventBus.$emit("showCart", true);
+      }
+      // const myScrollbarList = this.$refs.myScrollbar;
+      // myScrollbarList.forEach(val => {
+      //   const fun = () => {
+      //     if (this.activeTab == "/bsIndex/bsProductSearchIndex") {
+      //       if (val.scrollTop >= 200) {
+      //         eventBus.$emit("showCart", true);
+      //       } else {
+      //         eventBus.$emit("showCart", false);
+      //       }
+      //     } else if (
+      //       this.tabList.find(val => val.name == this.activeTab).linkUrl ==
+      //       "/bsIndex/bsProductSearchIndex"
+      //     ) {
+      //       eventBus.$emit("showCart", true);
+      //     } else if (
+      //       this.activeTab == "/bsIndex/bsLatestProducts" ||
+      //       this.activeTab == "/bsIndex/bsSpotProducts" ||
+      //       this.activeTab == "/bsIndex/bsVIPProducts" ||
+      //       this.activeTab == "/bsIndex/bsMyCollection"
+      //     ) {
+      //       eventBus.$emit("showCart", true);
+      //     } else {
+      //       eventBus.$emit("showCart", false);
+      //     }
+      //   };
+      //   if (this.activeTab == "/bsIndex/bsProductSearchIndex") {
+      //     val.onscroll = fun;
+      //   } else {
+      //     val.removeEventListener("scroll", fun, false);
+      //   }
+      // });
     },
     // 刷新tab标签
     triggerTab() {
@@ -243,8 +246,8 @@ export default {
         cancelButtonText: "取消"
       })
         .then(() => {
-          this.$store.commit("closeTabAll");
-          this.$router.push("/bsIndex/bsHome");
+          this.$store.commit("closeTabAll", this.$router);
+          // this.$router.push("/bsIndex/bsHome");
           this.$common.handlerMsgState({
             msg: "关闭成功!",
             type: "success"
@@ -275,40 +278,43 @@ export default {
     ...mapState(["tabList"])
   },
   watch: {
-    activeTab(newN, oldN) {
-      this.$store.commit("handlerOldTabName", oldN);
-      if (newN == "/bsIndex/bsProductSearchIndex") {
-        this.handleScroll();
-      } else {
-        if (
-          newN == "/bsIndex/bsLatestProducts" ||
-          newN == "/bsIndex/bsSpotProducts" ||
-          newN == "/bsIndex/bsVIPProducts" ||
-          newN == "/bsIndex/bsMyCollection"
-        ) {
-          // this.showSearch = false;
-          eventBus.$emit("showCart", true);
-        } else if (
-          this.tabList.find(val => val.name == newN).linkUrl ==
-          "/bsIndex/bsProductSearchIndex"
-        ) {
-          // this.showSearch = false;
-          eventBus.$emit("showCart", true);
-        } else {
-          // this.showSearch = false;
-          eventBus.$emit("showCart", false);
-        }
+    activeTab(newN) {
+      // this.$store.commit("handlerOldTabName", oldN);
+      // if (newN == "/bsIndex/bsProductSearchIndex") {
+      //   // this.handleScroll();
+      // } else {
+      if (
+        newN == "/bsIndex/bsProductSearchIndex" ||
+        newN == "/bsIndex/bsLatestProducts" ||
+        newN == "/bsIndex/bsSpotProducts" ||
+        newN == "/bsIndex/bsVIPProducts" ||
+        newN == "/bsIndex/bsMyCollection"
+      ) {
+        console.log(newN);
+        // this.showSearch = false;
+        eventBus.$emit("showCart", true);
       }
+      //  else if (
+      //   this.tabList.find(val => val.name == newN).linkUrl ==
+      //   "/bsIndex/bsProductSearchIndex"
+      // ) {
+      //   // this.showSearch = false;
+      //   eventBus.$emit("showCart", true);
+      // } else {
+      //   // this.showSearch = false;
+      //   eventBus.$emit("showCart", false);
+      // }
     }
+    // }
   },
   created() {},
   mounted() {
-    eventBus.$on("startScroll", () => {
-      this.handleScroll();
-    });
+    this.handleScroll();
+    // eventBus.$on("startScroll", () => {
+    //   this.handleScroll();
+    // });
   },
   beforeDestroy() {
-    this.showSearch = false;
     eventBus.$emit("showCart", false);
   }
 };

@@ -69,7 +69,11 @@
             <span style="margin-left: 15px">{{ scope.row.customerName }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="siteRegion" label="站点"></el-table-column>
+        <el-table-column
+          prop="siteRegion"
+          label="站点"
+          width="100"
+        ></el-table-column>
         <el-table-column
           prop="shareUrl"
           width="350"
