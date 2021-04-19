@@ -522,6 +522,7 @@ export default {
         size: []
       },
       clienFormData: {
+        title: null,
         defaultFormula: null,
         customerId: null,
         customerName: null,
@@ -1063,7 +1064,10 @@ export default {
     // 关闭提交订单
     closeSub() {
       this.clienFormData = {
+        title: null,
         defaultFormula: null,
+        customerId: null,
+        customerName: null,
         quotationProductList: [],
         profit: 0,
         offerMethod: "汕头",
@@ -1075,7 +1079,7 @@ export default {
         decimalPlaces: 3,
         rejectionMethod: "四舍五入",
         miniPrice: 0,
-        miniPriceDecimalPlaces: 0
+        miniPriceDecimalPlaces: 1
       };
       this.subDialogVisible = false;
     },
