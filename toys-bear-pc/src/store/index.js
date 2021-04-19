@@ -306,13 +306,13 @@ const store = new Vuex.Store({
     //关闭tab页
     closeTab(state, n) {
       let tab = state.tabList;
+      console.log(n, state.oldTabName);
       tab.forEach((val, i) => {
         if (val.name == n) {
           tab.splice(i, 1);
           const currentOption = tab.find(va => va.name == state.oldTabName);
           if (currentOption) {
             state.activeTab = state.oldTabName;
-            console.log(currentOption);
             router.push(currentOption.linkUrl);
           } else {
             state.activeTab = tab[tab.length - 1].name;

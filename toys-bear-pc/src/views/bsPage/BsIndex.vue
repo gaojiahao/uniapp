@@ -286,8 +286,8 @@ export default {
     ...mapState(["tabList"])
   },
   watch: {
-    activeTab(newN) {
-      // this.$store.commit("handlerOldTabName", oldN);
+    activeTab(newN, oldN) {
+      this.$store.commit("handlerOldTabName", oldN);
       // if (newN == "/bsIndex/bsProductSearchIndex") {
       //   // this.handleScroll();
       // } else {
