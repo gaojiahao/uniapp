@@ -329,7 +329,7 @@
           </div>
         </div>
         <!-- 分页 -->
-        <center style="padding:20px 0;">
+        <!-- <center style="padding:20px 0;">
           <el-pagination
             layout="total, sizes, prev, pager, next, jumper"
             :page-sizes="[12, 24, 36, 48]"
@@ -340,7 +340,7 @@
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"
           ></el-pagination>
-        </center>
+        </center> -->
       </div>
     </div>
     <!-- 导出订单模板dialog -->
@@ -377,7 +377,7 @@ export default {
       handerTabData: [],
       tableData: [],
       currentPage: 1,
-      pageSize: 10,
+      pageSize: 500,
       totalCount: 0,
       itemList: {}
     };
@@ -829,12 +829,34 @@ export default {
             overflow: hidden; /*超出部分隐藏*/
             white-space: nowrap; /*不换行*/
             text-overflow: ellipsis; /*超出部分文字以...显示*/
-            .factoryName {
-              cursor: pointer;
-            }
           }
           .factory {
             color: #3368a9;
+            display: flex;
+            align-items: center;
+            .factoryName {
+              cursor: pointer;
+            }
+            .icons {
+              display: flex;
+              .cartPhoneIcon,
+              .cartInfoIcon {
+                width: 20px;
+                height: 20px;
+                margin-left: 15px;
+                cursor: pointer;
+              }
+              .cartPhoneIcon {
+                background: url("~@/assets/images/cartPhoneIcon.png") no-repeat
+                  center;
+                background-size: contain;
+              }
+              .cartInfoIcon {
+                background: url("~@/assets/images/cartInfoIcon.png") no-repeat
+                  center;
+                background-size: contain;
+              }
+            }
           }
           .name {
             margin-top: 8px;

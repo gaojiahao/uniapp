@@ -180,6 +180,7 @@ export default {
           type: "danger"
         });
       }
+      this.getSearchCompanyShareOrdersPage();
     },
     // 搜索
     search() {
@@ -189,7 +190,6 @@ export default {
   },
   created() {
     this.getDefaultSites();
-    this.getSearchCompanyShareOrdersPage();
   },
   mounted() {}
 };

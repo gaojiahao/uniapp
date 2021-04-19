@@ -235,7 +235,9 @@ myAxios.install = function(Vue) {
   instance.interceptors.response.use(
     res => {
       // loaddingOptions[res.config.url] = false;
-      $Store.commit("updateAppLoading", false);
+      v.prototype.$nextTick(() => {
+        $Store.commit("updateAppLoading", false);
+      });
       /** 全局设置请求时长和请求内容 */
       const myUrl = res.config.url;
       let httpDate;
