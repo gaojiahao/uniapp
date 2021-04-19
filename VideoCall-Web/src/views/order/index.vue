@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 17:59:28
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\order\index.vue
- * @LastEditTime: 2021-04-15 16:56:31
+ * @LastEditTime: 2021-04-19 20:51:17
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -11,19 +11,14 @@
 <template>
     <div class="order">
         <!-- 新增择样 -->
-        <template v-if="samplingStatus">
-            <AddSampling @save="save"></AddSampling>
-        </template>
-        <template v-else>
-            <Product :tab_select="tab_select" @chang-tab-type="changTabType" @chang-type="changType" @change-product-list="changeProductList" :sampleSelection="sampleSelection"></Product>
-            <!-- 聊天 -->
-            <Chart></Chart>
-            <!-- 择样购物车 -->
-            <ProductList @change-product-list="changeProductList" :isProductList="isProductList" :sampleSelection="sampleSelection"></ProductList>
-        </template>
+        <AddSampling @save="save" v-if="samplingStatus&&isAdmin"></AddSampling>
+        <Product :tab_select="tab_select" @chang-tab-type="changTabType" @chang-type="changType" @change-product-list="changeProductList" :sampleSelection="sampleSelection" v-if="sampleSelection.number"></Product>
+        <Chart v-show="sampleSelection.number||!isAdmin"></Chart>
+        <ProductList @change-product-list="changeProductList" :isProductList="isProductList" :sampleSelection="sampleSelection" v-if="sampleSelection.number"></ProductList>
     </div>
 </template>
 <script>
+import * as Cookies from "js-cookie";
 import ProductList from "@components/order/productList";
 import Chart from "@components/public/chart";
 import Product from "@components/order/product";
@@ -41,7 +36,11 @@ export default {
             samplingStatus: true,  //采样状态
             tab_select: 'order',
             isProductList:false,
-            sampleSelection:{},
+            sampleSelection:{
+                number:'',
+                code:''    
+            },
+            isAdmin:null
         }
     },
     methods: {
@@ -60,6 +59,9 @@ export default {
             this.isProductList = this.isProductList ? false:true;
         }
     },
+    created(){
+        this.isAdmin = Cookies.get("isAdmin")=='true' ? true : false;
+    }
 }
 </script>
 <style lang="less" scoped>

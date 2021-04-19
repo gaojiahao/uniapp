@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 15:30:49
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-17 10:18:59
+ * @LastEditTime: 2021-04-19 15:31:44
  */
 import Fly from "flyio/dist/npm/fly";
 // 请求地址引入
@@ -39,6 +39,8 @@ fly.interceptors.request.use(request => {
       '/api/Meeting/QuitMeetingRoom',
       '/api/Meeting/QueryMeetingRoomMembers',
       '/api/SampleOrder/QuerySampleOrderDetails',
+      '/api/System/SendSMS',
+      '/api/TokenAuth​/VideoMeetingLoginQRCode',
     ]
     var a = noAuth.indexOf(request.url);
     if(a!=-1){

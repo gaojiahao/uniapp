@@ -49,10 +49,8 @@ d<!--
               <Input v-model="formValidate['mettingNumber']" type="number" :style="{width:'300px',marginLeft: '-27px'}" placeholder="请输入1-8" :maxlength="4"></Input><span style="margin-left:10px;color:#666666">人</span>
             </FormItem>
             <FormItem prop="settings">
-              <CheckboxGroup v-model="formValidate.settings" :style="{marginLeft: '-150px'}">
-                <Checkbox label="isM">打开麦克风</Checkbox>
-                <Checkbox label="isC">打开摄像头</Checkbox>
-              </CheckboxGroup>    
+                <Checkbox v-model="formValidate.settings.isMic" :style="{marginLeft: '-150px'}">打开麦克风</Checkbox>
+                <Checkbox v-model="formValidate.settings.isCar">打开摄像头</Checkbox>
             </FormItem>
             <FormItem>
               <Button type="primary" @click="save" :style="{width:'300px',marginLeft: '-50px',height:'36px'}" >{{$t("createMeeting.button")}}</Button>
@@ -109,7 +107,10 @@ export default {
         startTime:'',
         endTime:'',
         mettingNumber:'',
-        settings:['isM','isC']
+        settings:{
+          isMic:true,
+          isCar:true
+        }
       },
       ruleValidate:{
         companyId: [
@@ -159,8 +160,10 @@ export default {
                 Cookies.set("attendeeMode", this.attendeeMode);
                 Cookies.set("videoProfile", this.videoProfile);
                 Cookies.set("uid", res.data.meetingRoomMemberId);
-                Cookies.set("companyName", res.data.companyName);   
-                this.$router.push('/'); 
+                Cookies.set("companyName", res.data.companyName);
+                window.sessionStorage.setItem("isMic",this.formValidate.settings.isMic);
+                window.sessionStorage.setItem("isCar",this.formValidate.settings.isCar); 
+                this.$router.push('/');
               } else {
                 this.$Message.error({
                   background: true,

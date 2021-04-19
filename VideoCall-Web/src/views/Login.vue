@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 16:28:17
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-17 12:33:34
+ * @LastEditTime: 2021-04-19 16:11:47
 -->
 <template>
   <div class="login" ref="login">
@@ -252,7 +252,7 @@ export default {
           this.$loading.hide();
           this.$Message.error({
             background: true,
-            content: '温馨提示：'+err.data.errors['TargetId'][0]+','+err.data.errors['TargetCode'][0]
+            content: '温馨提示：'+ err.data.errors['TargetCode'][0]
           });
         });
     },
@@ -592,25 +592,6 @@ export default {
         this.initWebSocket();
         this.countDownQrCode();
       }
-      // const TIME_COUNT = 20
-      // const TIME_COUNT = 300;
-      // if (!this.timer) {
-      //   let count = TIME_COUNT;
-      //   this.showQrCode = false;
-      //   this.qrcodeTitle = "请用小竹熊 云科技App扫码登录";
-      //   clearInterval(this.qrTimer);
-      //   this.qrTimer = setInterval(() => {
-      //     if (count > 0 && count <= TIME_COUNT) {
-      //       count--;
-      //     } else {
-      //       this.ws && this.ws.close();
-      //       this.showQrCode = true;
-      //       this.qrcodeTitle = "二维码已失效，点击刷新";
-      //       clearInterval(this.qrTimer);
-      //       this.qrTimer = null;
-      //     }
-      //   }, 1000);
-      // }
     },
   },
   created() {

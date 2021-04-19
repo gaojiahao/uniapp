@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 19:15:58
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\index.vue
- * @LastEditTime: 2021-04-17 12:25:18
+ * @LastEditTime: 2021-04-19 16:48:19
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -194,6 +194,8 @@ export default {
         this.testTimer();
         this.roomStatus = this.$route.params.status||'';
         this.flag = Cookies.get("isAdmin");
+        // this.isMic = window.sessionStorage.getItem(("isMic")=='true'?true:false);
+        // this.isCar = window.sessionStorage.getItem(("isCar")=='true'?true:false);
         // if(!this.flag){
         //     this.isShowReconnection = false;
         // }

@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 15:46:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\user\userList.vue
- * @LastEditTime: 2021-04-14 17:16:33
+ * @LastEditTime: 2021-04-19 20:11:34
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -125,7 +125,8 @@ export default {
             }
         }
         .name{
-            margin-left: 10px;    
+            margin-left: 10px;
+            line-height: 24px; 
         }
         .action{
             margin-left: auto;

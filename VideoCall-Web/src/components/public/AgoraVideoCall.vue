@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import * as Cookies from "js-cookie";
 import { merge } from "lodash";
 import {
   CloseMeetingRoom,
@@ -54,7 +55,7 @@ export default {
     async join() {
       // debugger
       var $=this;
-      // AgoraRTC.setLogLevel(3);  //日志级别0,1,2,3,4
+      AgoraRTC.setLogLevel(4);  //日志级别0,1,2,3,4
       $.client.enableDualStream().then(() => {
         console.log("Enable Dual stream success!");
       }).catch(err => {
@@ -100,6 +101,9 @@ export default {
       }
       await $.client.publish([this.localAudioTrack, this.localVideoTrack]);
       console.log("publish success");
+      //初始化摄像头和麦克风
+      // await $.localVideoTrack.setEnabled(window.sessionStorage.getItem("isCar")=='true'?true:false);
+      // await $.localAudioTrack.setEnabled(window.sessionStorage.getItem("isMic")=='true'?true:false);
       this.testNetWork();
     },
     async leave(){
@@ -127,6 +131,7 @@ export default {
     },
     //订阅远端用户
     async subscribe(user, mediaType) {
+      // debugger
       var $ = this;
       const uid = user.uid;
       // subscribe to a remote user
@@ -224,8 +229,8 @@ export default {
       // 获取下行统计数据
       var downlinkVideoStats =  $.client.getRemoteVideoStats();
 
-      console.log("uplink video stats", uplinkVideoStats);
-      console.log("downlink video stats", downlinkVideoStats);
+      // console.log("uplink video stats", uplinkVideoStats);
+      // console.log("downlink video stats", downlinkVideoStats);
     },
     //通话前设备检测
     testDevices(){
@@ -296,7 +301,7 @@ export default {
     },
     //初始化
     async init(){
-       let $ = this;
+      let $ = this;
       $.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
       //摄像头插入变化
       AgoraRTC.onCameraChanged = (info) => {
@@ -314,7 +319,6 @@ export default {
   created() {
     this.init();
     this.config = JSON.parse(window.localStorage.getItem("SPHY_LOGIN_TOKEN"));
-
     this.code = window.localStorage.getItem("mac");
   },
 

@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:37:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\product.vue
- * @LastEditTime: 2021-04-19 12:16:36
+ * @LastEditTime: 2021-04-19 20:25:46
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -279,7 +279,8 @@ export default {
                 code:this.sampleSelection.number,
                 verifyCode:this.sampleSelection.code,
                 id:this.productInfo.id,
-                roomNumber: this.roomNumber
+                roomNumber: this.roomNumber,
+                type:1
             };
             return new Promise((resolve, reject) => {
                 AddSampleOrderDetail(params).then(res => {
