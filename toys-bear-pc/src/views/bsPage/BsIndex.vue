@@ -22,8 +22,16 @@
               :label="item.label"
             >
               <span slot="label">
-                <i class="el-icon-refresh" @click.stop="refresh()"></i>
-                {{ item.label }}
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  :content="item.label"
+                  placement="top"
+                >
+                  <span style="width:90px;padding:0;">
+                    {{ item.label }}
+                  </span>
+                </el-tooltip>
               </span>
 
               <div class="myScrollbar" ref="myScrollbar">
