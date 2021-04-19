@@ -300,7 +300,7 @@ export default {
             shareOrderNumber: this.orderInfo.orderNumber,
             languageType: this.globalLang === "zh-CN" ? 2 : 1
           },
-          { responseType: "blob" }
+          { responseType: "blob", timeout: 1000000000 }
         )
         .then(res => {
           const fileName = this.orderInfo.companyName

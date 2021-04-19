@@ -62,7 +62,7 @@
           id="example_video"
           :width="middleImgWidth"
           :height="middleImgHeight"
-          class="video-js vjs-default-skin "
+          class="video-js vjs-default-skin"
           controls
           poster=""
         >
@@ -534,5 +534,10 @@ export default {
 .el-carousel__arrow {
   width: 100px;
   height: 100px;
+}
+//视频窗口大小
+.video-js {
+  width: 524px;
+  height: 393px;
 }
 </style>
