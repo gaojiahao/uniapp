@@ -186,20 +186,15 @@ export default {
           name: this.item.offerNumber,
           toName: "编辑" + this.item.offerNumber
         };
-        // const tabList = this.$store.state.tabList;
-        // const flag = tabList.find(
-        //   val => val.name === "编辑" + this.item.offerNumber
-        // );
-        this.$store.commit("closeOfferTab", option);
-        // if (tabList.length < 2) {
-        //   return false;
-        // } else {
-        //   if (!flag) {
-        //     this.$store.commit("closeOfferTabNoPush", option);
-        //   } else {
-        //     this.$store.commit("closeOfferTab", option);
-        //   }
-        // }
+        const tabList = this.$store.state.tabList;
+        const flag = tabList.find(
+          val => val.name === "编辑" + this.item.offerNumber
+        );
+        if (tabList.length < 1) {
+          return false;
+        } else {
+          if (flag) this.$store.commit("closeOfferTab", option);
+        }
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
