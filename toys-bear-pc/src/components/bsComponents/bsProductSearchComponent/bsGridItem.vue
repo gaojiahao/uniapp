@@ -109,26 +109,34 @@ export default {
       };
       this.$store.commit("myAddTab", fd);
     },
-    // 去厂商详情页
+    // 去厂商详情页 || 去展厅详情页
     async toFactory(item) {
-      const fd = {
-        name: item.supplierNumber,
-        linkUrl: "/bsIndex/bsVendorQuery",
-        component: "bsMyClientsDetail",
-        refresh: true,
-        noPush: true,
-        label: item.supplierName,
-        value: {
-          companyNumber: item.supplierNumber,
-          companyLogo: item.supplierPersonnelLogo,
-          companyName: item.supplierName,
-          contactsMan: item.supplierPersonnelName,
-          phoneNumber: item.supplierPhone,
-          address: item.supplierAddres || item.supplierAddress
-        }
-      };
-      this.$router.push("/bsIndex/bsVendorQuery");
-      this.$store.commit("myAddTab", fd);
+      if (item.isIntegral) {
+        const fd = {
+          name: item.supplierNumber,
+          linkUrl: "/bsIndex/bsVendorQuery",
+          component: "bsMyClientsDetail",
+          refresh: true,
+          noPush: true,
+          label: item.supplierName,
+          value: {
+            companyNumber: item.supplierNumber,
+            companyLogo: item.supplierPersonnelLogo,
+            companyName: item.supplierName,
+            contactsMan: item.supplierPersonnelName,
+            phoneNumber: item.supplierPhone,
+            address: item.supplierAddres || item.supplierAddress
+          }
+        };
+        this.$router.push("/bsIndex/bsVendorQuery");
+        this.$store.commit("myAddTab", fd);
+      } else {
+        // 去展厅
+        this.$common.handlerMsgState({
+          msg: "展厅首页敬请期待",
+          type: "warning"
+        });
+      }
     },
     // 收藏
     async addCollect(item) {

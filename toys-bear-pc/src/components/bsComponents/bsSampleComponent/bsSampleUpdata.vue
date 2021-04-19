@@ -20,6 +20,8 @@
           ref="collecTable"
           :header-cell-style="{ backgroundColor: '#f9fafc' }"
         >
+          <el-table-column label="序号" type="index" align="center" width="70">
+          </el-table-column>
           <el-table-column prop="img" label="产品" align="center" width="300">
             <template slot-scope="scope">
               <div class="imgBox">
