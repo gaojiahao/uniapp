@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 16:54:22
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\video\index.vue
- * @LastEditTime: 2021-04-16 11:04:50
+ * @LastEditTime: 2021-04-19 11:29:27
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -24,6 +24,7 @@
                 :appId="appId"
                 :videoId="videoId"
                 :userlist="userlist"
+                :isAdmin="isAdmin"
                 :uid="uid" ref="video"></AgoraVideoCall>
             <!-- <template v-if="isSelect&&videoList.length==2">
                 <div class="video_wrap">
@@ -65,10 +66,6 @@
             </div> -->
             <div id="video_list_shrinkage" class="userlist" v-for="">
                 <div class="user" @click="selectAll(true)"><div class="active"></div></div>
-                <!-- <div class="user" @click="selectAll(false)"></div>
-                <div class="user" @click="selectAll(false)"></div>
-                <div class="user" @click="selectAll(false)"></div>
-                <div class="user" @click="selectAll(false)"></div> -->
             </div>
         </div>
         <EndModal></EndModal>
@@ -119,6 +116,7 @@ export default {
             baseMode: Cookies.get("baseMode") || "avc",
             uid: Cookies.get("uid") || null,
             videoId: Cookies.get("videoId") || null,
+            isAdmin: Cookies.get("isAdmin") || false,
         };
     },
     methods: {

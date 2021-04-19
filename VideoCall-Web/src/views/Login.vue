@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 16:28:17
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-17 11:57:27
+ * @LastEditTime: 2021-04-17 12:33:34
 -->
 <template>
   <div class="login" ref="login">
@@ -636,7 +636,7 @@ export default {
     width: 100%;
     color: #464c5b;
     background: #fff;
-    height: 900px;
+    height: 909px;
     .wrapper_dropdown{
       float: right;
       margin: 10px;

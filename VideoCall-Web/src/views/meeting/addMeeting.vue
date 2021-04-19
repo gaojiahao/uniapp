@@ -114,6 +114,7 @@ export default {
                 Cookies.set("videoProfile", this.videoProfile);
                 Cookies.set("uid", res.data.meetingRoomMemberId);
                 Cookies.set("videoId", this.formValidate.videoId);
+                Cookies.set("companyName", res.data.companyName);
                 this.$router.push('/');  
               } else {
                 this.$Message.error({

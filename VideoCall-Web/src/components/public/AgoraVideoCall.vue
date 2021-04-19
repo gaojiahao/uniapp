@@ -1,5 +1,8 @@
 <template>
   <div id="ag-canvas">
+    <!-- <div id="video_list_shrinkage" class="userlist" v-for="">
+      <div class="user" @click="selectAll(true)"><div class="active"></div></div>
+    </div> -->
   </div>
 </template>
 
@@ -29,6 +32,7 @@ export default {
       userId:null,
       audioDevices:[],
       videoDevices:[],
+      uList:{}
     };
   },
 
@@ -41,7 +45,8 @@ export default {
     "appId",
     "uid",
     "videoId",
-    "userlist"
+    "userlist",
+    "isAdmin"
   ],
 
   methods: {
@@ -77,7 +82,22 @@ export default {
         )
       ]);
       //主持人的大画面
-      $.localVideoTrack.play("ag-canvas");
+      if($.isAdmin=='true'){
+        $.localVideoTrack.play("ag-canvas");
+      } else {
+        const playerContainer = document.createElement("div");
+        // 给这个 DIV 节点指定一个 ID，这里指定的是远端用户的 UID。下面缩略图画面
+        playerContainer.id = $.uid;
+        playerContainer.className = "user";
+        playerContainer.style.width = "99px";
+        playerContainer.style.height = "66px";
+        playerContainer.style.marginLeft = "5px";
+        playerContainer.style.marginRight = "5px";
+        playerContainer.style.border = "1px solid #FFFFFF";
+        // playerContainer.onclick = function () { $.copyNodeVide(playerContainer.id) };
+        document.getElementById("video_list_shrinkage").appendChild(playerContainer);
+        $.localVideoTrack.play(playerContainer);
+      }
       await $.client.publish([this.localAudioTrack, this.localVideoTrack]);
       console.log("publish success");
       this.testNetWork();
@@ -107,27 +127,35 @@ export default {
     },
     //订阅远端用户
     async subscribe(user, mediaType) {
+      var $ = this;
       const uid = user.uid;
       // subscribe to a remote user
       await this.client.subscribe(user, mediaType);
       console.log("subscribe success");
       if (mediaType === 'video') {
-         const remoteVideoTrack = user.videoTrack;
+        const remoteVideoTrack = user.videoTrack;
         // 动态插入一个 DIV 节点作为播放远端视频轨道的容器。
-        const playerContainer = document.createElement("li");
-        // 给这个 DIV 节点指定一个 ID，这里指定的是远端用户的 UID。下面缩略图画面
-        playerContainer.id = user.uid.toString();
-        playerContainer.className = "user";
-        playerContainer.style.width = "99px";
-        playerContainer.style.height = "66px";
-        playerContainer.style.marginLeft = "5px";
-        playerContainer.style.marginRight = "5px";
-        playerContainer.style.border = "1px solid #FFFFFF";
-        document.getElementById("video_list_shrinkage").appendChild(playerContainer);
-        // document.body.append(playerContainer);
-        // 订阅完成，播放远端音视频。
-        // 传入 DIV 节点，让 SDK 在这个节点下创建相应的播放器播放远端视频。
-        remoteVideoTrack.play(playerContainer);
+        for(var i=0;i<$.userlist.length;i++){
+          if(uid==$.userlist[i]['id']){
+            if($.userlist[i]['isMaster']){
+              remoteVideoTrack.play("ag-canvas");  
+            } else {
+              const playerContainer = document.createElement("div");
+              // 给这个 DIV 节点指定一个 ID，这里指定的是远端用户的 UID。下面缩略图画面
+              playerContainer.id = user.uid.toString();
+              playerContainer.className = "user";
+              playerContainer.style.width = "99px";
+              playerContainer.style.height = "66px";
+              playerContainer.style.marginLeft = "5px";
+              playerContainer.style.marginRight = "5px";
+              playerContainer.style.border = "1px solid #FFFFFF";
+              document.getElementById("video_list_shrinkage").appendChild(playerContainer);
+              // 订阅完成，播放远端音视频。
+              // 传入 DIV 节点，让 SDK 在这个节点下创建相应的播放器播放远端视频。
+              remoteVideoTrack.play(playerContainer);
+            }
+          }  
+        }
       }
       if (mediaType === 'audio') {
         user.audioTrack.play();
@@ -139,6 +167,10 @@ export default {
       const id = user.uid;
       // remoteUsers[id] = user;
       this.subscribe(user, mediaType);
+      this.uList[id] = {
+        user:user,
+        mediaType:mediaType
+      }
       // this.$parent.$parent.$parent.$parent.$parent.getQueryMeetingRoomMembers();
     },
     //用户取消发布订阅
@@ -300,9 +332,32 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less" scoped>
 #ag-canvas {
   height: 100%;
+  .userlist {
+    width: 100%;
+    height: 66px;
+    position: absolute;
+    bottom: 16px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    .user {
+        width: 99px;
+        height: 66px;
+        background: #dcdee2;
+        margin-left: 5px;
+        margin-right: 5px;
+        border: 1px solid #FFFFFF;
+    }
+    .active {
+        background: url('~@assets/images/suo.webp');
+        background-repeat: no-repeat;
+        width: 97px;
+        height: 64px;
+    }
+}
 }
 
 .ag-item :first-child {
