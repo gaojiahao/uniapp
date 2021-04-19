@@ -302,7 +302,7 @@ export default {
     })
   },
   beforeDestroy() {
-    eventBus.$off("resetProducts")
+    eventBus.$off("resetProducts");
   }
 };
 </script>
