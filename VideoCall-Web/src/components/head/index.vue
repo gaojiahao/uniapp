@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 14:55:25
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\head\index.vue
- * @LastEditTime: 2021-04-16 11:00:07
+ * @LastEditTime: 2021-04-20 09:52:45
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -51,6 +51,7 @@
 </template>
 <script>
 import * as Cookies from "js-cookie";
+import Clipboard from 'clipboard'
 export default {
   name: "Heads",
   components: {
@@ -65,9 +66,19 @@ export default {
     };
   },
   methods: {
-      copyUrl(){
-        this.$Message.success({top:250,content:'复制分享链接成功！'});    
-      }
+    copyUrl(){
+        var Url = process.env.VUE_APP_PATH+`/videoMeeting/addMeeting?roomNumber=${this.channel}` // 点击文字复制的地址
+        var clipboard = new Clipboard('.iconzhifeiji', {
+            text: function () {
+                return Url
+            }
+        });
+        clipboard.on('success', e => {
+            this.$Message.success({top:250,content:'复制分享链接成功！'});
+            // 释放内存
+            clipboard.destroy()
+        })
+    }
   },
   created(){
     this.$Message.config({

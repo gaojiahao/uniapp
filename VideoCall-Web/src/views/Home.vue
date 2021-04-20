@@ -25,7 +25,7 @@
               <Video :isCollapsed="isCollapsed" ref='video' @change-devices="changeDevices" :userlist="userlist"></Video>
             </Content>
             <Sider ref="side2" hide-trigger :width="311">
-              <Order></Order>
+              <Order :userlist="userlist"></Order>
             </Sider>
         </Layout>
         <Footer>

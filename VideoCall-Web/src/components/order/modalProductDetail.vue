@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-11-03 16:35:57
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-19 12:25:21
+ * @LastEditTime: 2021-04-20 17:23:13
 -->
 <template>
     <Modal v-model="show" title="  " @on-ok="ok" @on-cancel="cancel" width="1048" class="modalDetail">
@@ -54,64 +54,64 @@
                         <div class="active">{{modalProductInfo.productName}}</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items">price：</div>
+                        <div class="product_info_list_items">单价：</div>
                     </Col>
                     <Col span="12">
                         <div class="product_info_list_items red"><span>$</span><span class="font_size_20">{{modalProductInfo.quoteThePrice}}</span></div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items">Item No：</div>
+                        <div class="product_info_list_items">公司编号：</div>
                     </Col>
                     <Col span="12">
                         <div class="product_info_list_items"><span></span>{{modalProductInfo.number}}</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items">FA No：</div>
+                        <div class="product_info_list_items">产商编号：</div>
                     </Col>
                     <Col span="12">
                         <div class="product_info_list_items"><span></span>{{modalProductInfo.factoryNo}}</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items">Packing：</div>
+                        <div class="product_info_list_items">包装：</div>
                     </Col>
                     <Col span="12">
                         <div class="product_info_list_items"><span></span>{{modalProductInfo.chinesePack}}</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items">Product Size：</div>
+                        <div class="product_info_list_items">产品规格：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items"><span></span>{{modalProductInfo.productLength}}*{{modalProductInfo.productWidth}}*{{modalProductInfo.productHeight}}</div>
+                        <div class="product_info_list_items"><span></span>{{modalProductInfo.productLength||0}}*{{modalProductInfo.productWidth||0}}*{{modalProductInfo.productHeight||0}}</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items">Package Size：</div>
+                        <div class="product_info_list_items">包装规格：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items"><span></span>{{modalProductInfo.innerBoxLength}}*{{modalProductInfo.innerBoxWidth}}*{{modalProductInfo.innerBoxHeight}}</div>
+                        <div class="product_info_list_items"><span></span>{{modalProductInfo.innerBoxLength||0}}*{{modalProductInfo.innerBoxWidth||0}}*{{modalProductInfo.innerBoxHeight||0}}</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items">Carton Size：</div>
+                        <div class="product_info_list_items">外箱规格：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items"><span></span>17.00</div>
+                        <div class="product_info_list_items"><span></span>{{modalProductInfo.outerBoxLength||0}}*{{modalProductInfo.outerBoxWidth||0}}*{{modalProductInfo.outerBoxHeight||0}}</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items">Inner Box/Outer Packing：</div>
+                        <div class="product_info_list_items">内箱/装箱量：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items"><span></span>17.00</div>
+                        <div class="product_info_list_items"><span></span>{{modalProductInfo.innerBoxCount||0}}/{{modalProductInfo.outerBoxLoadCapa||0}}</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items">CBM/CUFT：</div>
+                        <div class="product_info_list_items">体积/材积：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items"><span></span>17.00</div>
+                        <div class="product_info_list_items"><span></span>{{modalProductInfo.outerBoxBulkFeet||0}}/{{modalProductInfo.outerBoxBulkStere||0}}</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items">G.W/N.W：</div>
+                        <div class="product_info_list_items">毛重/净重：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items"><span></span>17.00</div>
+                        <div class="product_info_list_items"><span></span>{{modalProductInfo.outerBoxGrossWeight||0}}/{{modalProductInfo.outerBoxNetWeight||0}}</div>
                     </Col>
                 </Row>
             </div>

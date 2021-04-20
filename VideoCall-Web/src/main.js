@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\main.js
- * @LastEditTime: 2021-04-14 14:57:42
+ * @LastEditTime: 2021-04-20 15:00:56
  * @LastEditors: sueRimn
  * @Descripttion:
  * @version: 1.0.0
@@ -28,7 +28,6 @@ Vue.use(ViewUI);
 Vue.use(VueI18n);
 Vue.use(Loading);
 Vue.use(FromLoading);
-
 Vue.prototype.$Message = ViewUI.Message;
 
 Vue.locale = () => {};

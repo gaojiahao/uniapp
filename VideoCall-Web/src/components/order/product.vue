@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:37:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\product.vue
- * @LastEditTime: 2021-04-19 20:25:46
+ * @LastEditTime: 2021-04-20 16:44:56
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <div class="title right">
-                    <i class="iconfont iconqiehuan" @click="changType"></i>
+                    <i class="iconfont iconqiehuan" @click="changType" v-if="isAdmin"></i>
                 </div>
             </div>     
         </div>
@@ -56,7 +56,7 @@
         </div>
         <!-- 当前产品 -->
         <div class="now_product" v-else>
-            <Row class="ipput_wrap">
+            <Row class="ipput_wrap" v-if="isAdmin">
                 <Col span="6"><div class="text">公司编号</div></Col>
                 <Col span="12"><Input v-model="companyNumber" class="iipput_wrap_box" :style="{width:'137px'}" clearable /></Col>
                 <Col span="6"><Button type="primary" :style="{width:'60px',marginLeft: '11px'}" @click="getProductInfo">确定</Button></Col>
@@ -113,10 +113,25 @@
                     </div>
                 </Col>
             </Row>
-            <div class="action" v-if="this.productInfo.id">
-                <Button type="primary" shape="circle" style="width:88px;margin:0 9px 0 58.5px;" @click="addSelection">加入择样</Button>
-                <Button type="warning" shape="circle" style="width:88px;margin:0 58.5px 0 9px;"  @click="delSelection">删除</Button>
+            <div class="action" v-if="this.productInfo.id&&isAdmin">
+                <Button type="primary" shape="circle" style="width:88px;margin:0 9px 0 58.5px;" @click="sureFlag = true">加入择样</Button>
+                <Modal v-model="sureFlag" title="温馨提示" @on-ok="addSelection" @on-cancel="cancelSelection">
+                    <Icon type="ios-alert-outline" style="color:#ff9900;font-size:18px"/><span>确认加入择样？</span>
+                </Modal>
+                <Button type="warning" shape="circle" style="width:88px;margin:0 58.5px 0 9px;"  @click="delFlag = true">删除</Button>
+                <Modal v-model="delFlag" title="温馨提示" @on-ok="delSelection" @on-cancel="cancelDel">
+                    <Icon type="ios-alert-outline" style="color:#ed4014;font-size:18px"/><span>确认删除择样？</span>
+                </Modal>
             </div>
+            <Row class="product_wrap" v-if="!this.productInfo.id">
+                <Col span="8">
+                </Col>
+                <Col span="8" style="text-align: center">
+                    暂无数据
+                </Col>
+                <Col span="8">
+                </Col>
+            </Row>
         </div>
         <!-- 产品详情页 -->
         <ModalProductDetail @show-modal-detail="showModalDetail" :showModal="showModal" :modalProductInfo="modalProductInfo"></ModalProductDetail>
@@ -128,7 +143,8 @@ import ModalProductDetail from "@components/order/modalProductDetail";
 import {
   QueryProductByCompanyNumber,
   AddSampleOrderDetail,
-  QuerySampleOrderDetails
+  QuerySampleOrderDetails,
+  DeleteSampleOrderDetail
 } from "@service/meetingService";
 
 export default {
@@ -218,7 +234,10 @@ export default {
             totalBulkStere: 0,
             totalCount: 0,
             totalKuanshu: 0,
-            roomNumber:null
+            roomNumber:null,
+            isAdmin:false,
+            sureFlag:false,
+            delFlag:false
         }
     },
     watch:{
@@ -226,6 +245,12 @@ export default {
             handler(val){
                 this.flag = val;
             }
+        },
+        sampleSelection:{
+            handler(val){
+                this.getQuerySampleOrderDetails();
+            },
+            deep:true
         }
     },
     methods:{
@@ -257,8 +282,26 @@ export default {
             var params = {
                 companyNumber:this.companyNumber,
                 companyApiHost:window.localStorage.getItem('mac'),
-                roomNumber: this.roomNumber
+                roomNumber: this.roomNumber,
+                code:this.sampleSelection.number,
+                verifyCode:this.sampleSelection.code
             };
+            return new Promise((resolve, reject) => {
+                QueryProductByCompanyNumber(params).then(res => {
+                    if (res.success) {
+                        this.productInfo = res.data;
+                        this.$emit('saveProductInfo','saveProductInfo',params);
+                    } else {
+                        this.$Message.error({
+                        background: true,
+                        content: res.result.msg
+                        });
+                        this.$FromLoading.hide();
+                    }
+                });
+            });
+        },
+        getProductInfo2(params){
             return new Promise((resolve, reject) => {
                 QueryProductByCompanyNumber(params).then(res => {
                     if (res.success) {
@@ -273,6 +316,9 @@ export default {
                 });
             });
         },
+        cancelSelection(){
+            this.sureFlag = false;
+        },
         //新增择样
         addSelection(){
             var params = {
@@ -280,7 +326,14 @@ export default {
                 verifyCode:this.sampleSelection.code,
                 id:this.productInfo.id,
                 roomNumber: this.roomNumber,
-                type:1
+                type:1,
+                sampleOrderProductInfo:[
+                    {
+                        id:this.productInfo.id,
+                        productName:this.productInfo.productName,
+                        boxCount:1,
+                    }
+                ]
             };
             return new Promise((resolve, reject) => {
                 AddSampleOrderDetail(params).then(res => {
@@ -300,6 +353,9 @@ export default {
                 });
             });        
         },
+        cancelDel(){
+            this.delFlag = false;
+        },
         //删除择样
         delSelection(){
             var params = {
@@ -313,13 +369,13 @@ export default {
                     if (res.success) {
                         this.$Message.info({
                             background: true,
-                            content: res.result.msg
+                            content: res.message
                         });
                         this.$FromLoading.hide();
                     } else {
                         this.$Message.error({
                             background: true,
-                            content: res.result.msg
+                            content: res.message
                         });
                         this.$FromLoading.hide();
                     }
@@ -360,6 +416,7 @@ export default {
     },
     created(){
         this.roomNumber=Cookies.get('channel');
+        this.isAdmin=Cookies.get("isAdmin")=='true' ? true : false;
         this.getQuerySampleOrderDetails();
     }
 }

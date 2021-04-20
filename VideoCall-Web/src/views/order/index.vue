@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 17:59:28
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\order\index.vue
- * @LastEditTime: 2021-04-19 20:51:17
+ * @LastEditTime: 2021-04-20 16:52:46
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -12,8 +12,8 @@
     <div class="order">
         <!-- 新增择样 -->
         <AddSampling @save="save" v-if="samplingStatus&&isAdmin"></AddSampling>
-        <Product :tab_select="tab_select" @chang-tab-type="changTabType" @chang-type="changType" @change-product-list="changeProductList" :sampleSelection="sampleSelection" v-if="sampleSelection.number"></Product>
-        <Chart v-show="sampleSelection.number||!isAdmin"></Chart>
+        <Product :tab_select="tab_select" @chang-tab-type="changTabType" @chang-type="changType" @change-product-list="changeProductList" @saveProductInfo="saveProductInfo" :sampleSelection="sampleSelection" v-if="sampleSelection.number" ref="product"></Product>
+        <Chart v-show="sampleSelection.number||!isAdmin" ref="chart" @getSampleOrderDetails="getSampleOrderDetails" @getProduct="getProduct" :userlist="userlist"></Chart>
         <ProductList @change-product-list="changeProductList" :isProductList="isProductList" :sampleSelection="sampleSelection" v-if="sampleSelection.number"></ProductList>
     </div>
 </template>
@@ -25,6 +25,14 @@ import Product from "@components/order/product";
 import AddSampling from "@components/order/addSampling";
 export default {
     name:'Order',
+    props:{
+        userlist: {
+            type: Array,
+            default () {
+                return []
+            }
+        },
+    },
     components:{
         ProductList,
         Chart,
@@ -47,6 +55,7 @@ export default {
         save(val){
             this.sampleSelection = val;
             this.samplingStatus = false;
+            this.$refs.chart.send('saveSelection',val);
         },
         changTabType(value){
             this.tab_select = value;
@@ -54,9 +63,30 @@ export default {
         changType(value,tab_select){
             this.samplingStatus = value;
             this.tab_select = tab_select;
+            this.sampleSelection = {
+                number:'',
+                code:''    
+            };
         },
         changeProductList(){
             this.isProductList = this.isProductList ? false:true;
+        },
+        //择样单消息回调
+        getSampleOrderDetails(val){
+            this.$set(this.sampleSelection,'number',val.number);
+            this.$set(this.sampleSelection,'code',val.code);
+            if(this.$refs.product){
+                this.$refs.product.changTabType('order');
+            }
+        },
+        //当前产品消息发送
+        saveProductInfo(type,val){
+            this.$refs.chart.send(type,val);
+        },
+        //当前产品消息回调
+        getProduct(val){
+            debugger
+            this.$refs.product.getProductInfo2(val);
         }
     },
     created(){

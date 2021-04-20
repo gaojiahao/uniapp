@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:26:36
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\public\chart.vue
- * @LastEditTime: 2021-04-19 20:46:40
+ * @LastEditTime: 2021-04-20 17:01:48
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -71,7 +71,15 @@ import {AGORA_APP_ID} from "@root/agora.config";
 import util from "@utils/util.js";
 
 export default {
-    name:'Chart',  
+    name:'Chart', 
+    props:{
+        userlist: {
+            type: Array,
+            default () {
+                return []
+            }
+        },
+    }, 
     data(){
         return {
             loading:false,
@@ -83,21 +91,34 @@ export default {
         }
     },
     methods: {
-        send(){
-            this.channel.sendMessage({ text: this.chartValue }).then(() => {
+        send(type,val){
             /* 频道消息发送成功的处理逻辑 */
-                this.chartHistory.push({
-                    id:this.uid,
-                    name:'我',
-                    content: this.chartValue,
-                    date: util.getNowTime(),
-                    isMy: true
-                });
-                this.chartValue = "";
-                this.scrollToBottom();
-            }).catch(error => {
-            /* 频道消息发送失败的处理逻辑 */
-            })
+            if(type=='saveSelection'||type=='saveProductInfo'){
+                var obj = {
+                    type:type,
+                    ...val
+                };
+                obj = JSON.stringify(obj);
+                this.channel.sendMessage({ text: obj }).then(() => {
+                        
+                }).catch(error => {
+                /* 频道消息发送失败的处理逻辑 */
+                })
+            } else{ 
+                this.channel.sendMessage({ text: this.chartValue }).then(() => {
+                    this.chartHistory.push({
+                        id:this.uid,
+                        name:'我',
+                        content: this.chartValue,
+                        date: util.getNowTime(),
+                        isMy: true
+                    });
+                    this.chartValue = "";
+                    this.scrollToBottom();
+                }).catch(error => {
+                /* 频道消息发送失败的处理逻辑 */
+                })
+            }
         },
         scrollToBottom () {
             var me = this;
@@ -114,6 +135,7 @@ export default {
         },
         //登入
         async login(){
+            var me = this;
             await this.client.login({ token:  this.appId, uid: this.uid }).then(() => {
                 console.log('聊天登录成功');
             }).catch(err => {
@@ -129,15 +151,32 @@ export default {
             /* 加入频道失败的处理逻辑 */
             });
             this.channel.on('ChannelMessage', ({ text }, senderId) => { // text 为收到的频道消息文本，senderId 为发送方的 User ID
-                this.chartHistory.push({
-                    id:senderId,
-                    name:senderId,
-                    content: text,
-                    date: util.getNowTime(),
-                    isMy: false
-                });
-                this.scrollToBottom();
-                /* 收到频道消息的处理逻辑 */
+                var name = '';
+                if(me.userlist.length){
+                    for(var i=0;i<me.userlist.length;i++){
+                        if(senderId==me.userlist[i]['id']){
+                            name = me.userlist[i]['nickname'];
+                            break
+                        }
+                    }
+                }
+                if(text.indexOf("saveSelection")!=-1){
+                    var obj = JSON.parse(text);
+                    this.$emit('getSampleOrderDetails',obj);
+                } else if(text.indexOf("saveProductInfo")!=-1){
+                    var obj = JSON.parse(text);
+                    this.$emit('getProduct',obj);    
+                } else {
+                    this.chartHistory.push({
+                        id:senderId,
+                        name:name,
+                        content: text,
+                        date: util.getNowTime(),
+                        isMy: false
+                    });
+                    this.scrollToBottom();
+                    /* 收到频道消息的处理逻辑 */
+                }
             });
         },
         //登出

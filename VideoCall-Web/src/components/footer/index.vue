@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 19:15:58
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\index.vue
- * @LastEditTime: 2021-04-19 16:48:19
+ * @LastEditTime: 2021-04-20 10:07:06
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -53,7 +53,7 @@
             </Col>
             <Col span="8">
                 <div class="settings">
-                    <div class="timer item">
+                    <div class="timer item" v-if="flag">
                         <i class="iconfont iconshezhi icon" @click="showModalDetail(true)"></i>
                     </div>
                     <div class="timer item">
@@ -193,7 +193,7 @@ export default {
     created() {
         this.testTimer();
         this.roomStatus = this.$route.params.status||'';
-        this.flag = Cookies.get("isAdmin");
+        this.flag =  Cookies.get("isAdmin")=='true' ? true : false;
         // this.isMic = window.sessionStorage.getItem(("isMic")=='true'?true:false);
         // this.isCar = window.sessionStorage.getItem(("isCar")=='true'?true:false);
         // if(!this.flag){
