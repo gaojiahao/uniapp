@@ -214,7 +214,9 @@
           </el-table-column>
         </el-table>
       </div>
-      <!-- 统计 -->
+    </div>
+    <!-- 统计 -->
+    <div class="tableBtoBox">
       <div class="tableBto">
         <div class="right">
           <p class="item">
@@ -252,8 +254,9 @@
           >
         </div>
       </div>
-      <!-- 分页 -->
-      <!-- <center style="padding:20px 0;">
+    </div>
+    <!-- 分页 -->
+    <!-- <center style="padding:20px 0;">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
           :page-sizes="[12, 24, 36, 48]"
@@ -265,7 +268,6 @@
           @size-change="handleSizeChange"
         ></el-pagination>
       </center> -->
-    </div>
     <!-- 提交信息 -->
     <el-dialog
       title="修改报价信息"
@@ -696,7 +698,6 @@ export default {
       for (const key in this.itemList) {
         this.clienFormData[key] = this.itemList[key];
       }
-      console.log(this.itemList, this.clienFormData);
     },
     // 提交新增客户
     subMyClient() {
@@ -766,7 +767,6 @@ export default {
     },
     // 选择客户
     changeCustomer(val) {
-      console.log(val);
       for (let i = 0; i < this.clientList.length; i++) {
         if (this.clientList[i].id == val) {
           this.clienFormData.customerName = this.clientList[i].name;
@@ -803,7 +803,6 @@ export default {
     },
     // 获取该订单报价公式详情
     async getProductOfferNumber() {
-      console.log(this.item.offerNumber);
       if (this.item.offerNumber.indexOf("S") < 0) {
         const fd = {
           OfferNumber: this.item.offerNumber
@@ -1256,6 +1255,7 @@ export default {
     }
   }
   .bsSampleTable {
+    margin-bottom: 80px;
     .top {
       height: 55px;
       font-size: 15px;
@@ -1268,13 +1268,20 @@ export default {
       align-items: center;
       justify-content: space-between;
     }
-
+  }
+  .tableBtoBox {
+    position: fixed;
+    right: 27px;
+    bottom: 0px;
+    width: 1652px;
+    z-index: 30;
     .tableBto {
       display: flex;
       align-items: center;
       height: 80px;
-      padding-left: 10px;
+      padding: 0 30px;
       box-sizing: border-box;
+      background-color: #fff;
       .right {
         flex: 1;
         display: flex;

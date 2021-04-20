@@ -385,12 +385,23 @@
         case undefined:
         case "null":
         case "undefined":
-          list[i].supplierPhoneValue = "  "
+          list[i].supplierPhoneValue = ""
           break;
         default:
           list[i].supplierPhoneValue = list[i].supplierPhone
       }
-      html += " <tr>" + "<td> <img class='imgUrl' src=" + list[i].imgUrl + " alt=''></td>" +
+      switch (list[i].imgUrl) {
+        case "":
+        case null:
+        case undefined:
+        case "null":
+        case "undefined":
+          list[i].imgUrlVal = ""
+          break;
+        default:
+          list[i].imgUrlVal = list[i].imgUrl[0]
+      }
+      html += " <tr>" + "<td> <img class='imgUrl' src=" +  list[i].imgUrlVal + " alt=''></td>" +
         " <td > " + list[i].pr_na + "</td > " +
         "<td>" + list[i].client_nuValue + "</td>" + "<td>" + list[i].fa_no + "</td>" +
         "<td>" + list[i].ch_pa + "</td>" + "<td>" + list[i].in_en + "/" + list[i].ou_lo + "</td > " +
