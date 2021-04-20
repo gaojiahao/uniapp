@@ -730,7 +730,7 @@ export default {
     async submitOrder() {
       this.$refs.addSubmitOrderRef.validate(async valid => {
         if (valid) {
-          this.openSub(true);
+          await this.openSub(true);
           this.subDialogVisible = false;
           this.getProductOfferNumber();
         }
