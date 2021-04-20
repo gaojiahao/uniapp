@@ -929,6 +929,7 @@ export default {
             });
             // this.$store.commit("popOfferProductList", row);
             this.getProductOfferDetailPage();
+            eventBus.$emit("resetSamplelist");
           } else {
             this.$common.handlerMsgState({
               msg: res.data.result.msg,

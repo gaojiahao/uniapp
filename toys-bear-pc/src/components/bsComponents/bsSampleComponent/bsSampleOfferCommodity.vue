@@ -50,7 +50,7 @@
       <center style="padding:20px 0;" v-if="isCart === false">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
-          :page-sizes="[10, 20, 30, 40]"
+          :page-sizes="[12, 24, 36, 48]"
           background
           :total="totalCount"
           :page-size="pageSize"
@@ -88,7 +88,7 @@ export default {
       isCart: false,
       isGrid: "bsGridComponent",
       totalCount: 0,
-      pageSize: 10,
+      pageSize: 12,
       currentPage: 1
     };
   },
