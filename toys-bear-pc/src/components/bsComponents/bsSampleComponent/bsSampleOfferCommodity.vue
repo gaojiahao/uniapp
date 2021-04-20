@@ -47,7 +47,7 @@
       </div>
 
       <!-- 分页 -->
-      <center style="padding:20px 0;" v-if="typeId === 1">
+      <center style="padding:20px 0;" v-if="typeId != 1">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
           :page-sizes="[12, 24, 36, 48]"

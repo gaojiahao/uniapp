@@ -37,12 +37,12 @@
               >
                 编号
               </el-checkbox>
-              <el-checkbox
+              <!-- <el-checkbox
                 @change="handleCheckedScreensChange"
                 v-model="searchForm.packName"
               >
                 包装
-              </el-checkbox>
+              </el-checkbox> -->
             </div>
             <div>
               <span class="text">是否精准：</span>
@@ -58,14 +58,14 @@
           <div class="parameter">
             <el-form :model="advancedFormdata">
               <div class="left">
-                <el-form-item label="出厂货号：" placeholder="请输入内容">
+                <!-- <el-form-item label="出厂货号：" placeholder="请输入内容">
                   <el-input
                     size="medium"
                     style="width: 200px; "
                     clearable
                     v-model="advancedFormdata.fa_no"
                   ></el-input>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="包装方式：">
                   <el-select
                     filterable
@@ -180,7 +180,7 @@
           </div>
         </div>
         <!-- 标准筛选 -->
-        <div class="standardScreening" v-show="screeningFlag == false">
+        <!-- <div class="standardScreening" v-show="screeningFlag == false">
           <span class="myLabel">标准筛选:</span>
           <el-checkbox
             v-model="synthesis"
@@ -213,7 +213,7 @@
           >
             包装
           </el-checkbox>
-        </div>
+        </div> -->
         <div class="productClass">
           <span class="myLabel">产品分类:</span>
           <div :class="{ tags: true, showOneCate: isOneDownCate }">

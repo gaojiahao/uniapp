@@ -131,7 +131,7 @@
             <i class="infoIcon"></i>
             <span>在线咨询</span>
           </p>
-          <el-tooltip
+          <!-- <el-tooltip
             class="item"
             effect="dark"
             :content="
@@ -143,7 +143,17 @@
               <i class="phoneIcon"></i>
               <span>联系电话</span>
             </p>
-          </el-tooltip>
+          </el-tooltip> -->
+          <p class="item myHover">
+            <i class="phoneIcon"></i>
+            <span>{{
+              productDetail.supplierPhone || productDetail.exhibitionPhone
+            }}</span>
+          </p>
+          <p class="item myHover" v-if="productDetail.qq">
+            <i class="qqIcon"></i>
+            <span>{{}}</span>
+          </p>
           <p class="item myHover" @click="toFactory(productDetail)">
             <i class="shopIcon"></i>
             <span>厂商店铺</span>
@@ -517,6 +527,14 @@ export default {
             margin-right: 15px;
             background: url("~@/assets/images/onlinePhoneIcon.png") no-repeat
               center;
+            background-size: contain;
+          }
+          .qqIcon {
+            min-width: 28px;
+            width: 28px;
+            height: 28px;
+            margin-right: 15px;
+            background: url("~@/assets/images/QQ.png") no-repeat center;
             background-size: contain;
           }
           .shopIcon {
