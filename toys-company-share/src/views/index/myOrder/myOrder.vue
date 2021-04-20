@@ -109,7 +109,14 @@ export default {
             shareOrderNumber: orderNumber,
             languageType: this.globalLang === "zh-CN" ? 2 : 1
           },
-          { responseType: "blob", timeout: 1000000000 }
+
+          {
+            headers: {
+              "content-type": "application/json"
+            },
+            responseType: "blob",
+            timeout: 100000000000
+          }
         )
         .then(res => {
           console.log(res);
