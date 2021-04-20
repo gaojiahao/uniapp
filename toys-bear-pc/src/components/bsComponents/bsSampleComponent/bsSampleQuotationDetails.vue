@@ -1,101 +1,10 @@
 <template>
   <div class="bsSampleQuotationDetails">
     <div class="title">报价详情</div>
-    <div class="hander">
-      <div class="handerTop">
-        <div class="flex_t">
-          <p>
-            报价单号：<span class="pId">{{ itemList.offerNumber }} </span>
-          </p>
-          <p>
-            客户名称：<span>{{ itemList.customerName }} </span>
-          </p>
-          <p>
-            操作员：<span style="color: #2d7fe4">{{ itemList.linkman }} </span>
-          </p>
-          <p>
-            状态：<span
-              :style="{
-                color: itemList.status == 0 ? '#3368A9' : '#2D7FE4'
-              }"
-              >{{
-                itemList.status == 0
-                  ? "未审核"
-                  : itemList.status == 1
-                  ? "审核通过"
-                  : "审核不通过"
-              }}
-            </span>
-          </p>
-        </div>
-        <div class="flex_b">
-          <p>
-            报价时间：<span v-if="itemList.createdOn"
-              >{{ itemList.createdOn.replace(/T/, " ") }}
-            </span>
-          </p>
-          <p>
-            报价备注：<span>{{ itemList.title }} </span>
-          </p>
-        </div>
-      </div>
-      <div class="handerTab">
-        <el-table
-          :header-cell-style="{ backgroundColor: '#f9fafc' }"
-          :data="handerTabData"
-          style="width: 100%"
-          row-key="id"
-          border
-          lazy
-        >
-          <!-- <el-table-column
-            align="center"
-            prop="offerMethod"
-            label="报价方式"
-            width="180"
-          >
-          </el-table-column> -->
-          <el-table-column align="center" prop="profit" label="利润率">
-          </el-table-column>
-          <el-table-column
-            align="center"
-            prop="totalCost"
-            label="总费用"
-            width="180"
-          >
-          </el-table-column>
-          <el-table-column
-            align="center"
-            prop="exchange"
-            label="汇率"
-            width="180"
-          >
-          </el-table-column>
-          <el-table-column align="center" prop="decimalPlaces" label="小数位数">
-          </el-table-column>
-
-          <el-table-column align="center" prop="cu_deName" label="币种">
-          </el-table-column>
-          <el-table-column align="center" prop="size" label="每车尺寸">
-          </el-table-column>
-          <el-table-column
-            align="center"
-            prop="rejectionMethod"
-            label="取舍方式"
-          >
-          </el-table-column>
-          <el-table-column align="center" prop="miniPrice" label="价钱小于">
-          </el-table-column>
-          <el-table-column
-            align="center"
-            prop="miniPriceDecimalPlaces"
-            label="小数位数"
-          >
-          </el-table-column>
-        </el-table>
-      </div>
-    </div>
-
+    <bsSampleQuotationTopComponent
+      :itemList="itemList"
+      :handerTabData="handerTabData"
+    ></bsSampleQuotationTopComponent>
     <div class="bsSampleTable">
       <div class="top">
         <div class="left">报价商品列表({{ tableData.length }})</div>
@@ -122,10 +31,18 @@
                   :src="scope.row.imgUrlList && scope.row.imgUrlList[0]"
                 >
                   <div slot="placeholder" class="errorImg">
-                    <img src="~@/assets/images/imgError.png" alt />
+                    <img
+                      style="width: 55px; height: 60px"
+                      src="~@/assets/images/imgError.png"
+                      alt
+                    />
                   </div>
                   <div slot="error" class="errorImg">
-                    <img src="~@/assets/images/imgError.png" alt />
+                    <img
+                      style="width: 55px; height: 60px"
+                      src="~@/assets/images/imgError.png"
+                      alt
+                    />
                   </div>
                 </el-image>
                 <div class="productName">
@@ -329,7 +246,7 @@
           </div>
         </div>
         <!-- 分页 -->
-        <center style="padding:20px 0;">
+        <!-- <center style="padding:20px 0;">
           <el-pagination
             layout="total, sizes, prev, pager, next, jumper"
             :page-sizes="[12, 24, 36, 48]"
@@ -340,7 +257,7 @@
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"
           ></el-pagination>
-        </center>
+        </center> -->
       </div>
     </div>
     <!-- 导出订单模板dialog -->
@@ -360,10 +277,12 @@
 
 <script>
 import bsExportOrder from "@/components/commonComponent/exportOrderComponent";
+import bsSampleQuotationTopComponent from "@/components/bsComponents/bsSampleComponent/bsSampleQuotationTopComponent";
 export default {
   name: "bsSampleQuotationDetails",
   components: {
-    bsExportOrder
+    bsExportOrder,
+    bsSampleQuotationTopComponent
   },
   props: {
     item: {
@@ -377,7 +296,7 @@ export default {
       handerTabData: [],
       tableData: [],
       currentPage: 1,
-      pageSize: 10,
+      pageSize: 500,
       totalCount: 0,
       itemList: {}
     };
@@ -748,36 +667,36 @@ export default {
       transform: translate(0, -50%);
     }
   }
-  .hander {
-    .handerTop {
-      padding-top: 26px;
-      .flex_t {
-        display: flex;
-        align-content: center;
-        margin-bottom: 18px;
-        p {
-          width: 235px;
-          margin-right: 30px;
-          font-weight: 400;
-          .pId {
-            font-weight: 700;
-            font-size: 15px;
-          }
-        }
-      }
-      .flex_b {
-        display: flex;
-        align-content: center;
-        p {
-          margin-right: 30px;
-          width: 235px;
-        }
-      }
-    }
-    .handerTab {
-      margin-top: 25px;
-    }
-  }
+  // .hander {
+  //   .handerTop {
+  //     padding-top: 26px;
+  //     .flex_t {
+  //       display: flex;
+  //       align-content: center;
+  //       margin-bottom: 18px;
+  //       p {
+  //         width: 235px;
+  //         margin-right: 30px;
+  //         font-weight: 400;
+  //         .pId {
+  //           font-weight: 700;
+  //           font-size: 15px;
+  //         }
+  //       }
+  //     }
+  //     .flex_b {
+  //       display: flex;
+  //       align-content: center;
+  //       p {
+  //         margin-right: 30px;
+  //         width: 235px;
+  //       }
+  //     }
+  //   }
+  //   .handerTab {
+  //     margin-top: 25px;
+  //   }
+  // }
 
   .bsSampleTable {
     padding-top: 15px;
@@ -829,12 +748,34 @@ export default {
             overflow: hidden; /*超出部分隐藏*/
             white-space: nowrap; /*不换行*/
             text-overflow: ellipsis; /*超出部分文字以...显示*/
-            .factoryName {
-              cursor: pointer;
-            }
           }
           .factory {
             color: #3368a9;
+            display: flex;
+            align-items: center;
+            .factoryName {
+              cursor: pointer;
+            }
+            .icons {
+              display: flex;
+              .cartPhoneIcon,
+              .cartInfoIcon {
+                width: 20px;
+                height: 20px;
+                margin-left: 15px;
+                cursor: pointer;
+              }
+              .cartPhoneIcon {
+                background: url("~@/assets/images/cartPhoneIcon.png") no-repeat
+                  center;
+                background-size: contain;
+              }
+              .cartInfoIcon {
+                background: url("~@/assets/images/cartInfoIcon.png") no-repeat
+                  center;
+                background-size: contain;
+              }
+            }
           }
           .name {
             margin-top: 8px;

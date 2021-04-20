@@ -11,13 +11,13 @@
         :cell-style="{ padding: 0, margin: 0 }"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
       >
-        <el-table-column label="序号" type="index" align="center" width="70">
-        </el-table-column>
         <el-table-column
           width="30"
           lable="选择"
           type="selection"
         ></el-table-column>
+        <el-table-column label="序号" type="index" align="center" width="60">
+        </el-table-column>
         <el-table-column :autoFit="true" label="产品" width="300">
           <template slot-scope="scope">
             <div class="imgBox">
@@ -412,7 +412,7 @@
               <el-input
                 maxlength="50"
                 show-word-limit
-                v-model="clienFormData.remark"
+                v-model="clienFormData.title"
               ></el-input>
             </el-form-item>
           </el-form>
@@ -522,6 +522,7 @@ export default {
         size: []
       },
       clienFormData: {
+        title: null,
         defaultFormula: null,
         customerId: null,
         customerName: null,
@@ -912,7 +913,6 @@ export default {
             msg: "删除成功",
             type: "success"
           });
-          console.log(this.tableData);
           eventBus.$emit("resetMyCart", this.tableData);
           this.$store.commit("resetShoppingCart", selectProducts);
         })
@@ -1064,7 +1064,10 @@ export default {
     // 关闭提交订单
     closeSub() {
       this.clienFormData = {
+        title: null,
         defaultFormula: null,
+        customerId: null,
+        customerName: null,
         quotationProductList: [],
         profit: 0,
         offerMethod: "汕头",
@@ -1076,7 +1079,7 @@ export default {
         decimalPlaces: 3,
         rejectionMethod: "四舍五入",
         miniPrice: 0,
-        miniPriceDecimalPlaces: 0
+        miniPriceDecimalPlaces: 1
       };
       this.subDialogVisible = false;
     },

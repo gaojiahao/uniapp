@@ -109,7 +109,7 @@ export default {
             shareOrderNumber: orderNumber,
             languageType: this.globalLang === "zh-CN" ? 2 : 1
           },
-          { responseType: "blob" }
+          { responseType: "blob", timeout: 1000000000 }
         )
         .then(res => {
           const fileName = companyName

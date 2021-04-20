@@ -30,7 +30,9 @@
     </div>
     <div class="productListBox">
       <!-- 产品列表 -->
-      <div class="bsGridComponent">
+      <bsProductSearchIndex v-if="isCart === true"></bsProductSearchIndex>
+
+      <div class="bsGridComponent" v-if="isCart === false">
         <bsSampleOfferProductList
           @pushOfferProductList="pushOfferProductList"
           @popOfferProductList="popOfferProductList"
@@ -45,7 +47,7 @@
       </div>
 
       <!-- 分页 -->
-      <center style="padding:20px 0;">
+      <center style="padding:20px 0;" v-if="isCart === false">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
           :page-sizes="[10, 20, 30, 40]"
@@ -63,11 +65,14 @@
 <script>
 // import { mapState } from "vuex";
 import bsSampleOfferProductList from "@/components/bsComponents/bsSampleComponent/bsSampleOfferProductList";
+import bsProductSearchIndex from "@/views/bsPage/bsProductSearch/bsProductSearchIndex/BsProductSearchIndex.vue";
+
 import eventBus from "@/assets/js/common/eventBus.js";
 export default {
   name: "bsSampleOfferCommodity",
   components: {
-    bsSampleOfferProductList
+    bsSampleOfferProductList,
+    bsProductSearchIndex
   },
   props: {
     item: {
@@ -81,6 +86,7 @@ export default {
       offerProductList: [],
       formDate: {},
       productList: [],
+      isCart: false,
       isGrid: "bsGridComponent",
       totalCount: 0,
       pageSize: 10,
@@ -121,7 +127,6 @@ export default {
     },
     // 添加商品
     pushOfferProductList(item) {
-      console.log(item);
       this.offerProductList.push(item);
     },
     //   产品列表
@@ -186,20 +191,15 @@ export default {
           name: this.item.offerNumber,
           toName: "编辑" + this.item.offerNumber
         };
-        // const tabList = this.$store.state.tabList;
-        // const flag = tabList.find(
-        //   val => val.name === "编辑" + this.item.offerNumber
-        // );
-        this.$store.commit("closeOfferTab", option);
-        // if (tabList.length < 2) {
-        //   return false;
-        // } else {
-        //   if (!flag) {
-        //     this.$store.commit("closeOfferTabNoPush", option);
-        //   } else {
-        //     this.$store.commit("closeOfferTab", option);
-        //   }
-        // }
+        const tabList = this.$store.state.tabList;
+        const flag = tabList.find(
+          val => val.name === "编辑" + this.item.offerNumber
+        );
+        if (tabList.length < 1) {
+          return false;
+        } else {
+          if (flag) this.$store.commit("closeOfferTab", option);
+        }
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -211,8 +211,12 @@ export default {
     //切换
     checkTabstypeId(num) {
       this.typeId = num;
-      this.myOfferProductList = [];
-      this.getProductList();
+      if (num === 1) {
+        this.isCart = true;
+      } else {
+        this.isCart = false;
+        this.getProductList();
+      }
     },
     // 切換頁容量
     handleSizeChange(pageSize) {

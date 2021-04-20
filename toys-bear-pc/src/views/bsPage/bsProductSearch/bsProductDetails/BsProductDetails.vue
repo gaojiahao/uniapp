@@ -7,8 +7,8 @@
           v-if="productDetail.imgUrlList"
           :middleImgWidth="524"
           :middleImgHeight="393"
-          :thumbnailHeight="55"
-          :thumbnailWidth="78"
+          :thumbnailHeight="65"
+          :thumbnailWidth="96"
           :thumbnailCount="5"
           :imageUrls="productDetail.imgUrlList"
           :videoAddress="productDetail.videoAddress"
@@ -258,6 +258,7 @@ export default {
           type: "warning"
         });
       }
+      eventBus.$emit("resetMyCart", this.shoppingList);
     },
     // 收藏
     async addCollect(item) {
@@ -277,7 +278,7 @@ export default {
           });
         }
         item.isFavorite = !item.isFavorite;
-        eventBus.$emit("resetProductCollection", item);
+        eventBus.$emit("resetProducts", item);
       }
     },
     // 获取产品详情
@@ -287,6 +288,7 @@ export default {
       });
       if (res.data.result.code === 200) {
         this.productDetail = res.data.result.item;
+        this.productDetail.isShopping = this.item.isShopping;
         console.log(this.productDetail, "产品详情");
       } else {
         this.$common.handlerMsgState({

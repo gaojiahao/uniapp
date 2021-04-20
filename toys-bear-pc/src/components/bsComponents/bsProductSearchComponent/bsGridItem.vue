@@ -62,7 +62,7 @@
             <span>{{ item.fa_no }}</span>
           </p>
         </div>
-        <div class="right" @click.stop="handlerShopping(item)">
+        <div class="right" @click.stop="handlerShopping">
           <i v-if="item.isShopping" class="shoppingCartActive"></i>
           <i v-else class="shoppingCart"></i>
         </div>
@@ -109,26 +109,34 @@ export default {
       };
       this.$store.commit("myAddTab", fd);
     },
-    // 去厂商详情页
+    // 去厂商详情页 || 去展厅详情页
     async toFactory(item) {
-      const fd = {
-        name: item.supplierNumber,
-        linkUrl: "/bsIndex/bsVendorQuery",
-        component: "bsMyClientsDetail",
-        refresh: true,
-        noPush: true,
-        label: item.supplierName,
-        value: {
-          companyNumber: item.supplierNumber,
-          companyLogo: item.supplierPersonnelLogo,
-          companyName: item.supplierName,
-          contactsMan: item.supplierPersonnelName,
-          phoneNumber: item.supplierPhone,
-          address: item.supplierAddres || item.supplierAddress
-        }
-      };
-      this.$router.push("/bsIndex/bsVendorQuery");
-      this.$store.commit("myAddTab", fd);
+      if (item.isIntegral) {
+        const fd = {
+          name: item.supplierNumber,
+          linkUrl: "/bsIndex/bsVendorQuery",
+          component: "bsMyClientsDetail",
+          refresh: true,
+          noPush: true,
+          label: item.supplierName,
+          value: {
+            companyNumber: item.supplierNumber,
+            companyLogo: item.supplierPersonnelLogo,
+            companyName: item.supplierName,
+            contactsMan: item.supplierPersonnelName,
+            phoneNumber: item.supplierPhone,
+            address: item.supplierAddres || item.supplierAddress
+          }
+        };
+        this.$router.push("/bsIndex/bsVendorQuery");
+        this.$store.commit("myAddTab", fd);
+      } else {
+        // 去展厅
+        this.$common.handlerMsgState({
+          msg: "展厅首页敬请期待",
+          type: "warning"
+        });
+      }
     },
     // 收藏
     async addCollect(item) {
@@ -148,7 +156,7 @@ export default {
         productNumber: item.productNumber
       });
       if (res.data.result.code === 200) {
-        eventBus.$emit("resetMyCollection");
+        eventBus.$emit("resetProducts", item);
       } else {
         this.$common.handlerMsgState({
           msg: "收藏失败",
@@ -157,32 +165,35 @@ export default {
       }
     },
     // 加购
-    handlerShopping(item) {
-      if (this.shoppingList.length >= 500 && !item.isShopping) {
+    handlerShopping() {
+      if (this.shoppingList.length >= 500 && !this.item.isShopping) {
         this.$common.handlerMsgState({
           msg: "购物车已满500条",
           type: "warning"
         });
         return;
       }
-      item.isShopping = !item.isShopping;
-      if (item.isShopping) {
-        item.shoppingCount = 1;
-        this.$store.commit("pushShopping", item);
+      this.item.isShopping = !this.item.isShopping;
+      if (this.item.isShopping) {
+        this.item.shoppingCount = 1;
+        this.$store.commit("pushShopping", this.item);
         this.$common.handlerMsgState({
           msg: "加购成功",
           type: "success"
         });
       } else {
-        item.shoppingCount = 0;
-        this.$store.commit("popShopping", item);
+        this.item.shoppingCount = 0;
+        this.$store.commit("popShopping", this.item);
         this.$common.handlerMsgState({
           msg: "取消加购成功",
           type: "warning"
         });
       }
-      this.$forceUpdate();
       eventBus.$emit("resetMyShoppingCart");
+      eventBus.$emit("resetProducts", this.item);
+      this.$nextTick(() => {
+        this.$forceUpdate();
+      });
     }
   },
   created() {},

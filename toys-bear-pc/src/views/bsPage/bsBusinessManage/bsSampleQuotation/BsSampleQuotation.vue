@@ -252,6 +252,13 @@ export default {
   methods: {
     // 导出找样
     exportOrder(row) {
+      if (!row.total) {
+        this.$common.handlerMsgState({
+          msg: "该报价单没有产品信息",
+          type: "danger"
+        });
+        return false;
+      }
       this.orderRow = {
         sampleNumber: row.offerNumber,
         name: row.customerName,

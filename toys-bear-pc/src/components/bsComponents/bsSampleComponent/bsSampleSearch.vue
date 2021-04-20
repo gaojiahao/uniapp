@@ -10,6 +10,7 @@
         <div class="left">
           <el-form-item label="报价客户：" prop="linkman">
             <el-select
+              :disabled="isEdit"
               style="width: 190px; margin: 0 15px;"
               v-model="clienFormData.customerId"
               placeholder="请输入/选择客户"
@@ -34,6 +35,7 @@
           </el-form-item>
           <el-form-item label="报价备注：" prop="title">
             <el-input
+              :disabled="isEdit"
               style="width: 586px; margin: 0 15px;"
               v-model="clienFormData.title"
               maxlength="50"
@@ -44,6 +46,7 @@
           <el-form-item label="默认公式：" prop="defaultFormula">
             <el-select
               style="width: 120px; margin: 0 15px;"
+              :disabled="isEdit"
               v-model="clienFormData.defaultFormula"
               placeholder="请选择"
             >
@@ -59,6 +62,7 @@
           <el-form-item label="利润率：" prop="profit">
             <el-input
               style="width: 120px; margin: 0 15px;"
+              :disabled="isEdit"
               v-model="clienFormData.profit"
               placeholder="0"
             >
@@ -68,6 +72,7 @@
           <el-form-item label="汇率：" prop="exchange">
             <el-input
               style="width: 120px; margin: 0 15px;"
+              :disabled="isEdit"
               v-model="clienFormData.exchange"
               placeholder=" "
             ></el-input>
@@ -75,6 +80,7 @@
           <el-form-item label="币种：" prop="cu_deName">
             <el-select
               style="width: 120px; margin: 0 15px;"
+              :disabled="isEdit"
               v-model="clienFormData.cu_deName"
             >
               <el-option
@@ -88,6 +94,7 @@
           </el-form-item>
           <el-form-item label="每车尺寸：" prop="size">
             <el-select
+              :disabled="isEdit"
               v-model="clienFormData.size"
               style="width: 134px;; margin: 0 15px;"
               placeholder="请选择尺码"
@@ -105,6 +112,7 @@
           <el-form-item label="报价方式：" prop="offerMethod">
             <el-select
               style="width: 120px; margin: 0 15px;"
+              :disabled="isEdit"
               v-model="clienFormData.offerMethod"
               placeholder=""
             >
@@ -120,6 +128,7 @@
           <el-form-item label="总费用：" prop="totalCost">
             <el-input
               style="width: 120px;; margin: 0 15px;"
+              :disabled="isEdit"
               v-model="clienFormData.totalCost"
               placeholder=" "
             ></el-input>
@@ -128,6 +137,7 @@
             <el-select
               style="width:100%;"
               v-model="clienFormData.decimalPlaces"
+              :disabled="isEdit"
               placeholder="请选择小数位数"
             >
               <el-option
@@ -142,6 +152,7 @@
           <el-form-item label="取舍方式：" prop="rejectionMethod">
             <el-select
               style="width: 345px; margin: 0 15px;"
+              :disabled="isEdit"
               v-model="clienFormData.rejectionMethod"
               placeholder="请选择取舍方式"
             >
@@ -159,6 +170,7 @@
           <el-form-item label="价格小于：" prop="miniPrice">
             <el-input
               style="width: 120px;"
+              :disabled="isEdit"
               v-model="clienFormData.miniPrice"
               placeholder=" "
             ></el-input>
@@ -168,6 +180,7 @@
             <el-select
               v-model="clienFormData.miniPriceDecimalPlaces"
               style="width: 120px;"
+              :disabled="isEdit"
               placeholder="请选择小数位数："
             >
               <el-option
@@ -238,6 +251,12 @@ export default {
   props: {
     searchFormData: {
       type: Object
+    },
+    isEdit: {
+      type: Boolean,
+      default: () => {
+        return true;
+      }
     }
   },
   watch: {
@@ -259,7 +278,6 @@ export default {
           this.options.cu_deList.forEach(val => {
             if (val.itemCode === newVal)
               this.clienFormData.cu_de = val.parameter;
-            console.log(this.clienFormData.cu_de, this.clienFormData.cu_deName);
           });
         }
       }
@@ -268,7 +286,6 @@ export default {
       deep: true,
       handler(newVal) {
         if (newVal) {
-          console.log(newVal);
           const obj = JSON.parse(newVal);
           this.clienFormData.profit = obj.profit;
           this.clienFormData.offerMethod = obj.offerMethod;
@@ -372,16 +389,17 @@ export default {
       }
     );
   },
+  beforeDestroy() {
+    eventBus.$off("getSearchForm" + this.searchFormData.offerNumber);
+  },
   methods: {
     //请求条件
     async getProductOfferByNumber() {
-      console.log(this.searchFormData);
       const res = await this.$http.post("/api/GetProductOfferByNumber", {
         offerNumber: this.searchFormData.offerNumber
       });
       if (res.data.result.code === 200) {
         this.clienFormData = res.data.result.item;
-        console.log(this.clienFormData);
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -403,7 +421,7 @@ export default {
           type: "danger"
         });
       }
-      // eventBus.$emit("resetOffProduct");
+      eventBus.$emit("resetOffProduct");
     },
     // 获取系统配置项
     async getSelectCompanyOffer() {

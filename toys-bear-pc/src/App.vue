@@ -158,7 +158,7 @@ export default {
   height: 100px;
   margin-left: -50px;
   margin-top: -50px;
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
   left: 50%;
   top: 50%;

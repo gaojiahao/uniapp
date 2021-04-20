@@ -2,8 +2,179 @@
   <div class="productSearch">
     <template v-if="!imageSearchValue">
       <div class="advancedSearchBox">
-        <bsProductSearch />
-        <div class="standardScreening">
+        <bsProductSearch @screeningShow="screeningShow" :isCart="isCart" />
+        <!-- 高级筛选 -->
+        <div class="advancedScreening " v-show="screeningFlag == true">
+          <div class="title">高级筛选:</div>
+          <div class="queryCondition">
+            <div>
+              <span class="text">综合：</span>
+              <el-checkbox
+                v-model="synthesis"
+                @change="handleSynthesis"
+                style="margin-right: 30px;"
+              >
+                综合查询
+              </el-checkbox>
+            </div>
+            <div>
+              <span class="text">搜索类型：</span>
+              <el-checkbox
+                @change="handleCheckedScreensChange"
+                v-model="searchForm.fa_no"
+              >
+                货号
+              </el-checkbox>
+              <el-checkbox
+                @change="handleCheckedScreensChange"
+                v-model="searchForm.name"
+              >
+                名称
+              </el-checkbox>
+              <el-checkbox
+                @change="handleCheckedScreensChange"
+                v-model="searchForm.number"
+              >
+                编号
+              </el-checkbox>
+              <el-checkbox
+                @change="handleCheckedScreensChange"
+                v-model="searchForm.packName"
+              >
+                包装
+              </el-checkbox>
+            </div>
+            <div>
+              <span class="text">是否精准：</span>
+              <el-radio-group v-model="isAccurate">
+                <el-radio label="模糊"></el-radio>
+                <el-radio label="精准"></el-radio>
+              </el-radio-group>
+            </div>
+          </div>
+          <div class="parameter">
+            <el-form :model="advancedFormdata">
+              <div class="left">
+                <el-form-item label="出厂货号：" placeholder="请输入内容">
+                  <el-input
+                    size="medium"
+                    style="width: 200px; "
+                    v-model="advancedFormdata.fa_no"
+                  ></el-input>
+                </el-form-item>
+                <el-form-item label="包装方式：">
+                  <el-select
+                    size="medium"
+                    style="width: 200px; heigth:35px"
+                    v-model="advancedFormdata.ch_pa"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in chpaList"
+                      :key="item.pa_nu"
+                      :label="item.ch_pa"
+                      :value="item.ch_pa"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item style="margin:0" label="是否图片：">
+                  <el-radio-group v-model="advancedFormdata.isUpInsetImg">
+                    <el-radio label="是"></el-radio>
+                    <el-radio label="否"></el-radio>
+                  </el-radio-group>
+                </el-form-item>
+              </div>
+              <div class="right">
+                <el-form-item label="产品规格：">
+                  <el-input
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    size="medium"
+                    placeholder="长"
+                    style="width: 55px; "
+                    v-model="advancedFormdata.pr_le"
+                  ></el-input
+                  ><span>-</span>
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="宽"
+                    style="width: 55px; "
+                    v-model="advancedFormdata.pr_wi"
+                  ></el-input
+                  ><span>-</span>
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="高"
+                    style="width: 55px; "
+                    v-model="advancedFormdata.pr_hi"
+                  ></el-input>
+                  &nbsp;<span>CM</span>
+                </el-form-item>
+                <el-form-item label="外箱规格：">
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="长"
+                    style="width: 55px; "
+                    v-model="advancedFormdata.ou_le"
+                  ></el-input
+                  ><span>-</span>
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="宽"
+                    style="width: 55px; "
+                    v-model="advancedFormdata.ou_wi"
+                  ></el-input
+                  ><span>-</span>
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="高"
+                    style="width: 55px; "
+                    v-model="advancedFormdata.ou_hi"
+                  ></el-input>
+                  &nbsp;<span>CM</span>
+                </el-form-item>
+                <el-form-item label="包装规格：">
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="长"
+                    style="width: 55px; "
+                    v-model="advancedFormdata.in_le"
+                  ></el-input
+                  ><span>-</span>
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="宽"
+                    style="width: 55px; "
+                    v-model="advancedFormdata.in_wi"
+                  ></el-input
+                  ><span>-</span>
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="高"
+                    style="width: 55px; "
+                    v-model="advancedFormdata.in_hi"
+                  ></el-input>
+                  &nbsp;<span>CM</span>
+                </el-form-item>
+              </div>
+            </el-form>
+          </div>
+          <div class="confirm">
+            <el-button type="primary" @click="confirmAdvanced">
+              确 定
+            </el-button>
+          </div>
+        </div>
+        <!-- 标准筛选 -->
+        <div class="standardScreening" v-show="screeningFlag == false">
           <span class="myLabel">标准筛选:</span>
           <el-checkbox
             v-model="synthesis"
@@ -360,12 +531,21 @@ export default {
     bsGridComponent,
     VueCropper
   },
+  props: {
+    isCart: {
+      type: Boolean
+    }
+  },
   data() {
     return {
       loading: false,
       baseImg: null,
       fileinfo: null,
       isShowCropper: false,
+      advancedFormdata: {}, //高级搜索条件
+      screeningFlag: false,
+      isAccurate: "",
+      chpaList: [],
       // 裁剪组件的基础配置option
       option: {
         img: "", // 裁剪图片的地址
@@ -536,6 +716,7 @@ export default {
     // 获取产品列表请求
     async getProductList(flag) {
       this.$store.commit("searchValues", null);
+
       const fd = {
         name: this.searchForm.keyword,
         skipCount: this.currentPage,
@@ -545,15 +726,46 @@ export default {
         maxPrice: this.searchForm.maxPrice,
         startTime: this.searchForm.time.length ? this.searchForm.time[0] : null,
         endTime: this.searchForm.time.length ? this.searchForm.time[1] : null,
-        precisionSearch: JSON.stringify({
-          fa_no: this.searchForm.fa_no ? 1 : 0,
-          number: this.searchForm.number ? 1 : 0,
-          name: this.searchForm.name ? 1 : 0,
-          packName: this.searchForm.packName ? 1 : 0
-        }),
+        // precisionSearch: JSON.stringify({
+        //   fa_no: this.searchForm.fa_no ? 1 : 0,
+        //   number: this.searchForm.number ? 1 : 0,
+        //   name: this.searchForm.name ? 1 : 0,
+        //   packName: this.searchForm.packName ? 1 : 0
+        // }),
         sortOrder: this.sortOrder,
-        sortType: this.sortType
+        sortType: this.sortType,
+        // 高级搜索条件
+        fa_no: this.advancedFormdata.fa_no,
+        isUpInsetImg: this.advancedFormdata.isUpInsetImg,
+        ch_pa: this.advancedFormdata.ch_pa,
+        pr_le: this.advancedFormdata.pr_le,
+        pr_wi: this.advancedFormdata.pr_wi,
+        pr_hi: this.advancedFormdata.pr_hi,
+        ou_le: this.advancedFormdata.ou_le,
+        ou_wi: this.advancedFormdata.ou_wi,
+        ou_hi: this.advancedFormdata.ou_hi,
+        in_le: this.advancedFormdata.in_le,
+        in_wi: this.advancedFormdata.in_wi,
+        in_hi: this.advancedFormdata.in_hi
       };
+      switch (this.isAccurate) {
+        case "精准":
+          fd.precisionSearch = JSON.stringify({
+            fa_no: this.searchForm.fa_no ? 2 : 0,
+            name: this.searchForm.name ? 2 : 0,
+            number: this.searchForm.number ? 2 : 0,
+            packName: this.searchForm.packName ? 2 : 0
+          });
+          break;
+        default:
+          fd.precisionSearch = JSON.stringify({
+            fa_no: this.searchForm.fa_no ? 1 : 0,
+            name: this.searchForm.name ? 1 : 0,
+            number: this.searchForm.number ? 1 : 0,
+            packName: this.searchForm.packName ? 1 : 0
+          });
+          break;
+      }
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "")
           delete fd[key];
@@ -582,6 +794,7 @@ export default {
         });
       }
       if (flag) this.getProductCategoryList();
+      this.GetProductChpaList();
     },
     // 切換頁容量
     handleSizeChange(pageSize) {
@@ -611,9 +824,23 @@ export default {
         });
       }
     },
+    //   获取包装方式
+    async GetProductChpaList() {
+      const res = await this.$http.post("/api/GetProductChpaList", {});
+      if (res.data.result.code === 200) {
+        this.chpaList = res.data.result.item;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
+
     // 选择综合
     handleSynthesis(flag) {
       if (flag) {
+        this.isAccurate = "";
         this.searchForm.fa_no = 0;
         this.searchForm.number = 0;
         this.searchForm.name = 0;
@@ -625,6 +852,14 @@ export default {
       if (flag) {
         this.synthesis = null;
       }
+    },
+    //高级搜索
+    async screeningShow() {
+      this.screeningFlag = !this.screeningFlag;
+    },
+    // 确认高级搜索
+    confirmAdvanced() {
+      this.getProductList(false);
     },
     // 切换产品列表样式
     handerIsGrid(type) {
@@ -694,23 +929,15 @@ export default {
     eventBus.$on("openUpload", file => {
       this.uploadPic(file);
     });
+    eventBus.$on("resetMyCollection", () => {
+      this.getCollectList();
+    });
     // 取消收藏
-    eventBus.$on("resetProducts", list => {
-      if (list.length) {
-        for (let i = 0; i < this.productList.length; i++) {
-          for (let j = 0; j < list.length; j++) {
-            if (this.productList[i].productNumber == list[j].productNumber) {
-              this.productList[i].isFavorite = true;
-              break;
-            } else {
-              this.productList[i].isFavorite = false;
-            }
-          }
+    eventBus.$on("resetProducts", item => {
+      for (let i = 0; i < this.productList.length; i++) {
+        if (this.productList[i].productNumber == item.productNumber) {
+          this.productList[i].isFavorite = item.isFavorite;
         }
-      } else {
-        this.productList.forEach(val => {
-          val.isFavorite = false;
-        });
       }
     });
     eventBus.$on("resetProductCollection", item => {
@@ -784,6 +1011,7 @@ export default {
   },
   beforeDestroy() {
     this.clearRootEvent();
+    eventBus.$off("resetProducts");
   }
 };
 </script>
@@ -793,6 +1021,7 @@ export default {
   .advancedSearchBox {
     background-color: #fff;
     width: 100%;
+    .advancedScreening,
     .standardScreening,
     .productClass,
     .twoLevelClass {
@@ -811,6 +1040,71 @@ export default {
             border-radius: 50%;
           }
         }
+      }
+    }
+    @{deep} .advancedScreening {
+      display: flex;
+      height: 147px;
+      .el-checkbox {
+        .el-checkbox__input {
+          border-radius: 50%;
+          .el-checkbox__inner {
+            border-radius: 50%;
+          }
+        }
+      }
+      .title {
+        display: flex;
+        align-items: center;
+      }
+      .queryCondition {
+        width: 468px;
+        height: 147px;
+        opacity: 1;
+        border: 1px solid #dcdfe6;
+        border-radius: 5px;
+        padding: 20px 0;
+        margin: 0 20px;
+        box-sizing: border-box;
+        div {
+          display: flex;
+          align-items: center;
+          padding: 10px 10px;
+          .text {
+            width: 80px;
+            text-align: right;
+          }
+        }
+      }
+      .parameter {
+        width: 626px;
+        form {
+          display: flex;
+          .el-form-item {
+            height: 36px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            .el-form-item__content {
+              line-height: 36px;
+            }
+          }
+          span {
+            color: #999999;
+            text-align: center;
+          }
+          .left {
+            flex: 1;
+          }
+          .right {
+            flex: 1;
+          }
+        }
+      }
+      .confirm {
+        display: flex;
+        align-self: flex-end;
+        margin-left: 20px;
       }
     }
     .productClass,

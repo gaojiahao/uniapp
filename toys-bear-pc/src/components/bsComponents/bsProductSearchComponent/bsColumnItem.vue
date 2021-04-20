@@ -160,7 +160,7 @@ export default {
         productNumber: item.productNumber
       });
       if (res.data.result.code === 200) {
-        eventBus.$emit("resetMyCollection");
+        eventBus.$emit("resetProducts", item);
       } else {
         this.$common.handlerMsgState({
           msg: "收藏失败",
@@ -194,6 +194,8 @@ export default {
         });
       }
       this.$forceUpdate();
+      eventBus.$emit("resetMyShoppingCart");
+      eventBus.$emit("resetProducts", this.item);
     }
   },
   computed: {
