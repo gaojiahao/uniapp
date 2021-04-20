@@ -12,7 +12,7 @@
     </div>
     <div class="searchBox">
       <div class="left">
-        <div class="item">
+        <div class="item" style="min-width:350px">
           <span class="label">关键字：</span>
           <el-input
             v-focus
@@ -20,7 +20,7 @@
             size="medium"
             clearable
             v-model="keyword"
-            placeholder="请输入关键词"
+            placeholder="输入关键词+空格可模糊搜索"
             @keyup.native.enter="search"
           ></el-input>
         </div>
