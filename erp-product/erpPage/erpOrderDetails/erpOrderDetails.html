@@ -188,6 +188,11 @@
       <!-- 分页 -->
       <div class="pageBox">
         <ul>
+            <li style="border: 0;"> <select id="changePage" onChange="handelChangePage()">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+              </select></li>
           <li style="border: 0;"> 共</li>
           <li style="border: 0;">
             <input id="totalCountPage" type="text" value="0">
@@ -484,6 +489,11 @@
   //     }
   //   }
   // }
+
+  function handelChangePage(){
+      data.maxResultCount = $("#changePage").val()
+      getSampleOrderDetailPageThree()
+  }
   // 上一页
   function previousPage() {
     var numberPage = $("#numberPage").val()
