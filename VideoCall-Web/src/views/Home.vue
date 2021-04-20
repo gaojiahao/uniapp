@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\Home.vue
- * @LastEditTime: 2021-04-16 15:17:43
+ * @LastEditTime: 2021-04-20 09:17:40
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -111,7 +111,7 @@ export default {
   created() {
     this.$loading.hide();
     this.$FromLoading.hide();
-    this.config = JSON.parse(window.localStorage.getItem("SPHY_LOGIN_TOKEN"));
+    this.config = JSON.parse(window.sessionStorage.getItem("SPHY_LOGIN_TOKEN"));
     this.roomNumber = Cookies.get("channel");
     this.getQueryMeetingRoomMembers();
   }

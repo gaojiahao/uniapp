@@ -179,7 +179,7 @@ export default {
   },
   created(){
     this.$loading.hide();
-    var config = JSON.parse(window.localStorage.getItem("SPHY_LOGIN_TOKEN"));
+    var config = JSON.parse(window.sessionStorage.getItem("SPHY_LOGIN_TOKEN"));
     this.companys = config.companyInfos;
     this.formValidate.channel = config.roomNumber;
   }

@@ -318,7 +318,7 @@ export default {
   },
   created() {
     this.init();
-    this.config = JSON.parse(window.localStorage.getItem("SPHY_LOGIN_TOKEN"));
+    this.config = JSON.parse(window.sessionStorage.getItem("SPHY_LOGIN_TOKEN"));
     this.code = window.localStorage.getItem("mac");
   },
 

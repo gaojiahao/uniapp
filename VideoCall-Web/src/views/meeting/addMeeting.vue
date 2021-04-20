@@ -146,7 +146,7 @@ export default {
       var globalToken = {
         token : this.generateUUID(),
       };
-      window.localStorage.setItem('SPHY_LOGIN_TOKEN', JSON.stringify(globalToken));
+      window.sessionStorage.setItem('SPHY_LOGIN_TOKEN', JSON.stringify(globalToken));
     },
     generateUUID() {
       var d = new Date().getTime();

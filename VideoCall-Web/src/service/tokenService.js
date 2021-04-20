@@ -4,7 +4,7 @@ import store from "../store";
 
 const fly = new Fly();
 // fly请求 设置拦截器
-const storage = window["localStorage"]; //window[isPC||window.isApp ? 'localStorage' : 'sessionStorage'];
+const storage = window["sessionStorage"]; //window[isPC||window.isApp ? 'localStorage' : 'sessionStorage'];
 const SPHY_TOKEN_KEY = "SPHY_LOGIN_TOKEN";
 
 let globalToken;
