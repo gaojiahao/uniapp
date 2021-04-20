@@ -109,7 +109,7 @@
             </span>
             <span class="stock">
               库存：
-              <span>--</span>
+              <span class="tockValue">--</span>
             </span>
           </p>
           <p>
@@ -472,6 +472,9 @@ export default {
           }
           .stock {
             margin-left: 55px;
+            .tockValue {
+              color: #ff3e3e;
+            }
           }
           .proveIcon {
             width: 16px;
