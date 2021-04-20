@@ -599,17 +599,17 @@ export default {
           required: true,
           message: "请选择取舍方式",
           trigger: "change"
-        },
-        miniPrice: {
-          required: true,
-          message: "请输入价格",
-          trigger: "blur"
-        },
-        miniPriceDecimalPlaces: {
-          required: true,
-          message: "请选择小数位数",
-          trigger: "change"
         }
+        // miniPrice: {
+        //   required: true,
+        //   message: "请输入价格",
+        //   trigger: "blur"
+        // },
+        // miniPriceDecimalPlaces: {
+        //   required: true,
+        //   message: "请选择小数位数",
+        //   trigger: "change"
+        // }
       },
       customerTemplate: [],
       isIndeterminate: false,
@@ -1022,6 +1022,9 @@ export default {
           if (this.userInfo.commparnyList[0].companyType == "Sales") {
             this.clienFormData.productOfferType = "company";
           }
+          this.clienFormData.miniPrice = this.clienFormData.miniPrice || 0;
+          this.clienFormData.miniPriceDecimalPlaces =
+            this.clienFormData.miniPriceDecimalPlaces || 0;
           const res = await this.$http.post(
             "/api/CreateProductOffer",
             this.clienFormData

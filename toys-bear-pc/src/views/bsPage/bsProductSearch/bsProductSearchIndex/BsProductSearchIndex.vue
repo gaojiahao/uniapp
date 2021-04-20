@@ -174,7 +174,7 @@
             </el-form>
           </div>
           <div class="confirm">
-            <el-button type="primary" @click="confirmAdvanced">
+            <el-button type="primary" size="medium" @click="confirmAdvanced">
               确 定
             </el-button>
           </div>
