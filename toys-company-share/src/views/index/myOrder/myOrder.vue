@@ -112,6 +112,7 @@ export default {
           { responseType: "blob", timeout: 1000000000 }
         )
         .then(res => {
+          console.log(res);
           const fileName = companyName
             ? companyName + "_" + this.getCurrentTime() + ".xlsx"
             : this.getCurrentTime() + ".xlsx";

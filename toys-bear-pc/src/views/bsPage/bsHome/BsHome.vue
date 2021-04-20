@@ -468,10 +468,16 @@ export default {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    .dataInfo {
+      margin-left: 10px;
+    }
+    .myWorkbench {
+      margin-right: 10px;
+    }
     .dataInfo,
     .myWorkbench {
-      width: 821px;
-      height: 190px;
+      flex: 1;
+      min-height: 190px;
       background: #ffffff;
       border-radius: 4px;
       margin-bottom: 20px;
@@ -540,10 +546,12 @@ export default {
         padding-top: 5px;
         box-sizing: border-box;
         display: flex;
+        flex-wrap: wrap;
         .item {
           width: 185px;
           text-align: center;
           cursor: pointer;
+          margin-bottom: 20px;
           p {
             line-height: 34px;
             &.total {
@@ -571,7 +579,8 @@ export default {
     .item {
       height: 110px;
       background-color: #fff;
-      width: 261px;
+      width: 15.7%;
+      // min-width: 261px;
       border-radius: 4px;
       margin-bottom: 20px;
       padding: 0 25px;
@@ -589,12 +598,18 @@ export default {
         .title {
           font-size: 20px;
           font-weight: 700;
+          overflow: hidden; /*超出部分隐藏*/
+          white-space: nowrap; /*不换行*/
+          text-overflow: ellipsis; /*超出部分文字以...显示*/
         }
         .text {
           font-size: 14px;
           font-weight: 400;
           color: #999999;
           line-height: 34px;
+          overflow: hidden; /*超出部分隐藏*/
+          white-space: nowrap; /*不换行*/
+          text-overflow: ellipsis; /*超出部分文字以...显示*/
         }
       }
       .imgBox {
@@ -726,7 +741,7 @@ export default {
       }
     }
     .right {
-      width: 652px;
+      // width: 652px;
       height: 440px;
       background-color: #fff;
       border-radius: 4px;

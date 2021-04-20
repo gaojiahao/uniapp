@@ -663,9 +663,9 @@ export default {
   created() {},
   mounted() {
     this.getProductOfferNumber();
-    // eventBus.$on("resetOffProduct", () => {
-    //   this.getProductOfferDetailPage();
-    // });
+    eventBus.$on("resetOffProduct", () => {
+      this.getProductOfferDetailPage();
+    });
   },
   beforeDestroy() {
     eventBus.$off("resetOffProduct");
@@ -928,6 +928,7 @@ export default {
             });
             // this.$store.commit("popOfferProductList", row);
             this.getProductOfferDetailPage();
+            eventBus.$emit("resetSamplelist");
           } else {
             this.$common.handlerMsgState({
               msg: res.data.result.msg,
@@ -948,6 +949,7 @@ export default {
       //   offerNumber: .offerNumber,
       //   list: this.offerProductList
       // };
+      this.item.topValue = this.itemList;
       const fd = {
         name: this.item.offerNumber,
         linkUrl: "/bsIndex/bsSampleQuotation",

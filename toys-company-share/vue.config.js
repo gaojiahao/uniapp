@@ -1,4 +1,8 @@
 const webpack = require("webpack");
+const path = require("path");
+function resolve(dir) {
+  return path.join(__dirname, dir);
+}
 const proEnv = require("./config/pro.env"); // 生产环境
 const testEnv = require("./config/test.env"); // 测试环境
 const devEnv = require("./config/dev.env"); // 本地环境
@@ -19,8 +23,20 @@ switch (env) {
 }
 console.log(target);
 const config = {
+  productionSourceMap: false,
   publicPath: "/",
   lintOnSave: true, // 是否在开发环境下每次保存代码时都启用 eslint验证
+  chainWebpack(config) {
+    config.resolve.alias
+      .set("style", resolve("public/style"))
+      .set("api", resolve("src/api"))
+      .set("tools", resolve("src/tools"))
+      .set("components", resolve("src/components"))
+      .set("echarts", resolve("src/echarts"))
+      .set("echarts", resolve("node_modules/echarts"));
+
+    config.output.filename("[name].[hash].js").end();
+  },
   configureWebpack: {
     // 警告 webpack 的性能提示
     performance: {
@@ -49,8 +65,8 @@ const config = {
 if (env !== "production") {
   config.devServer = {
     open: true, // 开启自动打开浏览器
-    host: "localhost", // 地址
-    port: "8080", // 端口
+    // host: "localhost", // 地址
+    // port: "8080", // 端口
     disableHostCheck: true,
     proxy: {
       "/api": {

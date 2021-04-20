@@ -133,9 +133,9 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-#app {
-  width: 1920px;
-}
+// #app {
+//   width: 1920px;
+// }
 @deep: ~">>>";
 @{deep} .el-loading-spinner .circular {
   width: 100px;

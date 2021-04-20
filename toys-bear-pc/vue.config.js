@@ -1,5 +1,9 @@
 const { devEnv, testEnv, proEnv } = require("./src/assets/js/config/config.js");
 const webpack = require("webpack");
+const path = require("path");
+function resolve(dir) {
+  return path.join(__dirname, dir);
+}
 const CompressionWebpackPlugin = require("compression-webpack-plugin");
 const productionGzipExtensions = ["js", "css", "html", "svg", "less"];
 const env = process.env.NODE_ENV;
@@ -69,6 +73,17 @@ const config = {
   productionSourceMap: false,
   publicPath: "/new/",
   lintOnSave: true, // 是否在开发环境下每次保存代码时都启用 eslint验证
+  chainWebpack(config) {
+    config.resolve.alias
+      .set("style", resolve("public/style"))
+      .set("api", resolve("src/api"))
+      .set("tools", resolve("src/tools"))
+      .set("components", resolve("src/components"))
+      .set("echarts", resolve("src/echarts"))
+      .set("echarts", resolve("node_modules/echarts"));
+
+    config.output.filename("[name].[hash].js").end();
+  },
   configureWebpack: configureWebpack
 };
 
