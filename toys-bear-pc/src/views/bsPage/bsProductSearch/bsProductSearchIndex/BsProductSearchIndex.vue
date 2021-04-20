@@ -2,7 +2,7 @@
   <div class="productSearch">
     <template v-if="!imageSearchValue">
       <div class="advancedSearchBox">
-        <bsProductSearch @screeningShow="screeningShow" :isCart="isCart" />
+        <bsProductSearch ref="searchRef" @screeningShow="screeningShow" />
         <!-- 高级筛选 -->
         <div class="advancedScreening " v-show="screeningFlag == true">
           <div class="title">高级筛选:</div>
@@ -46,7 +46,10 @@
             </div>
             <div>
               <span class="text">是否精准：</span>
-              <el-radio-group v-model="isAccurate">
+              <el-radio-group
+                v-model="isAccurate"
+                @change="handleCheckedScreensChange"
+              >
                 <el-radio label="模糊"></el-radio>
                 <el-radio label="精准"></el-radio>
               </el-radio-group>
@@ -59,13 +62,16 @@
                   <el-input
                     size="medium"
                     style="width: 200px; "
+                    clearable
                     v-model="advancedFormdata.fa_no"
                   ></el-input>
                 </el-form-item>
                 <el-form-item label="包装方式：">
                   <el-select
+                    filterable
                     size="medium"
                     style="width: 200px; heigth:35px"
+                    clearable
                     v-model="advancedFormdata.ch_pa"
                     placeholder="请选择"
                   >
@@ -531,11 +537,6 @@ export default {
     bsGridComponent,
     VueCropper
   },
-  props: {
-    isCart: {
-      type: Boolean
-    }
-  },
   data() {
     return {
       loading: false,
@@ -736,7 +737,7 @@ export default {
         sortType: this.sortType,
         // 高级搜索条件
         fa_no: this.advancedFormdata.fa_no,
-        isUpInsetImg: this.advancedFormdata.isUpInsetImg,
+        isUpInsetImg: this.advancedFormdata.isUpInsetImg == "是" ? true : false,
         ch_pa: this.advancedFormdata.ch_pa,
         pr_le: this.advancedFormdata.pr_le,
         pr_wi: this.advancedFormdata.pr_wi,
@@ -770,6 +771,7 @@ export default {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "")
           delete fd[key];
       }
+      console.log(fd);
       const res = await this.$http.post("/api/SearchBearProductPage", fd);
       const { code, item, msg } = res.data.result;
       if (code === 200) {
@@ -859,6 +861,7 @@ export default {
     },
     // 确认高级搜索
     confirmAdvanced() {
+      this.searchForm.keyword = this.$refs.searchRef.searchForm.keyword;
       this.getProductList(false);
     },
     // 切换产品列表样式
