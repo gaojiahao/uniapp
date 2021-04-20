@@ -661,9 +661,9 @@ export default {
   created() {},
   mounted() {
     this.getProductOfferNumber();
-    // eventBus.$on("resetOffProduct", () => {
-    //   this.getProductOfferDetailPage();
-    // });
+    eventBus.$on("resetOffProduct", () => {
+      this.getProductOfferDetailPage();
+    });
   },
   beforeDestroy() {
     eventBus.$off("resetOffProduct");
@@ -949,6 +949,7 @@ export default {
       //   offerNumber: .offerNumber,
       //   list: this.offerProductList
       // };
+      this.item.topValue = this.itemList;
       const fd = {
         name: this.item.offerNumber,
         linkUrl: "/bsIndex/bsSampleQuotation",

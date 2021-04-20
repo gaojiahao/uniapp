@@ -84,7 +84,6 @@ export default {
       num: null,
       typeId: 0,
       offerProductList: [],
-      formDate: {},
       productList: [],
       isCart: false,
       isGrid: "bsGridComponent",
@@ -166,9 +165,6 @@ export default {
         });
       }
     },
-    callback(val) {
-      this.formDate = val;
-    },
     //返回编辑页面
     async handleAffirm() {
       eventBus.$emit("getSearchForm" + this.item.offerNumber, this.callback);
@@ -176,10 +172,10 @@ export default {
         productNumber: item.productNumber,
         boxNumber: item.boxNumber
       }));
-      this.formDate.quotationProductList = quotationProductList;
+      this.item.topValue.quotationProductList = quotationProductList;
       const res = await this.$http.post(
         "/api/UpdateProductOffer",
-        this.formDate
+        this.item.topValue
       );
       if (res.data.result.code === 200) {
         this.$common.handlerMsgState({
