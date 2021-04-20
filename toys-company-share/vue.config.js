@@ -65,8 +65,8 @@ const config = {
 if (env !== "production") {
   config.devServer = {
     open: true, // 开启自动打开浏览器
-    host: "localhost", // 地址
-    port: "8080", // 端口
+    // host: "localhost", // 地址
+    // port: "8080", // 端口
     disableHostCheck: true,
     proxy: {
       "/api": {
