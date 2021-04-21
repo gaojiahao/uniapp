@@ -13,23 +13,221 @@
   <title>产品详情</title>
   <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="./static/css/base.css">
   <link rel="stylesheet" href="./static/css/index.css">
   <script src="./static/js/jquery.min.js"></script>
   <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 <body>
-  <div class="container-fluid">
-    <div class="hander">
+ 
+    <div class="header">
         <div class="title">
             成卓玩具厂
         </div>
-        <ul class="">
-            <li>联系人： <span>张老板</span></li>
-            <li>联系电话： <span>15986830618</span></li>
-        </ul>
+        <div class="contact">
+            <p>联系人： <span>张老板</span></p>
+            <p>联系电话： <span>15986830618</span></p>
+        </div>
     </div>
-    
-  </div>
+    <div class="main">
+        <div class="mainBox">
+            <div class="slideshow">
+                <div class="item">
+                    <div class="itemMain">
+                        <img src="./static/images/logo.png" alt="">
+                        <p>玩具名称玩具名称玩具名称玩具</p>
+                        <p>￥<span>98.00</span></p>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="itemMain">
+                        <img src="./static/images/logo.png" alt="">
+                        <p>玩具名称玩具名称玩具名称玩具</p>
+                        <p>￥<span>98.00</span></p>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="itemMain">
+                        <img src="./static/images/logo.png" alt="">
+                        <p>玩具名称玩具名称玩具名称玩具</p>
+                        <p>￥<span>98.00</span></p>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="itemMain">
+                        <img src="./static/images/logo.png" alt="">
+                        <p>玩具名称玩具名称玩具名称玩具</p>
+                        <p>￥<span>98.00</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="search">
+                <div class="sork">
+                    <div> <p>时间</p>  <span class="arrowsTrue"></span></div>
+                    <div><p>价格</p> <span class="arrowsFlag"></span></div>
+                </div>
+                <div class="searchInput">
+                    <div class="searchInput_l">
+                        <img src="./static/images/fdj.png" alt="">
+                        <input type="text" placeholder="请输入关键字">
+                    </div>
+                    <div class="searchInput_r">搜索</div>
+                </div>
+                <div class="triggerIcon">
+                    <div class="gridActiveIcon" onclick="cutGridActive()"></div>
+                    <div class="gridIcon" onclick="cutGrid()"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tableBox">
+        <ul id="tableList" style="display:block;">
+            <li>
+                <div class="itemMain">
+                    <img src="./static/images/logo.png" alt="">
+                    <p>玩具名称玩具名称玩具名称玩具</p>
+                    <p>￥<span>98.00</span></p>
+                </div>
+            </li>
+            <li>
+                <div class="itemMain">
+                    <img src="./static/images/logo.png" alt="">
+                    <p>玩具名称玩具名称玩具名称玩具</p>
+                    <p>￥<span>98.00</span></p>
+                </div>
+            </li>
+            <li>
+                <div class="itemMain">
+                    <img src="./static/images/logo.png" alt="">
+                    <p>玩具名称玩具名称玩具名称玩具</p>
+                    <p>￥<span>98.00</span></p>
+                </div>
+            </li>
+            <li>
+                <div class="itemMain">
+                    <img src="./static/images/logo.png" alt="">
+                    <p>玩具名称玩具名称玩具名称玩具</p>
+                    <p>￥<span>98.00</span></p>
+                </div>
+            </li>
+            <li>
+                <div class="itemMain">
+                    <img src="./static/images/logo.png" alt="">
+                    <p>玩具名称玩具名称玩具名称玩具</p>
+                    <p>￥<span>98.00</span></p>
+                </div>
+            </li>
+        </ul>
+          <!-- 分页 -->
+          <ul id="gridTableList" style="display:none;">
+              <li>
+                <div class="listLeft">
+                    <img src="./static/images/logo.png" alt="">
+                    <p>￥<span>98.00</span></p>
+                </div>
+                <div class="listRight">
+                    <h3>99式坦克军事系列积木套装....</h3>
+                   <p>  出厂货号：<span></span></p>
+                   <p> 包装：<span></span></p>
+                   <p>  彩盒产品规格：<span>0X0X0(CM)</span></p>
+                   <p> 外箱规格： <span>68X46X74(CM)</span></p>
+                   <p> 包装规格：<span>  14X11.3X4(CM)</span></p>
+                   <p> 装箱量：<span> 2/288(PCS)</span></p>
+                   <p> 体积/材积：<span> 0.231(CBM)/8.17(CUFT)</span></p>
+                   <p> 毛重/净重：<span> 21/18(kg)</span></p>
+                </div>
+              </li>
+              <li>
+                  
+            </li>
+          </ul>
+
+      <div class="pageBox">
+        <ul>
+            <li> <select id="changePage" onChange="handelChangePage()">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+              </select></li>
+          <li style="border: 0;"> 共</li>
+          <li style="border: 0;">
+            <input id="totalCountPage" type="text" value="0">
+          </li>
+          <li style="border: 0;"> 条</li>
+          <li onclick="previousPage()">
+            上一页
+          </li>
+          <li style="margin: 5px 10px;">
+            <input id="numberPage" type="text" value="1">
+          </li>
+          <li onclick="nextPage()">
+            下一页
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer">
+      <div>
+          <p>资料来源： <span>耀昇展厅</span></p>
+          <p> 技术支持：<span>深圳宏升软件技术开发有限公司</span></p>
+      </div>
+        
+    </div>
 </body>
+<script>
+
+
+
+//切换产品样式
+function cutGridActive(){
+    document.getElementById('tableList').style.display ='none';
+    document.getElementById('gridTableList').style.display ='block';
+}
+function cutGrid(){
+    document.getElementById('tableList').style.display ='block';
+    document.getElementById('gridTableList').style.display ='none';
+}
+     //分页条数
+  function handelChangePage(){
+    data.maxResultCount = $("#changePage").val()
+  }
+  // 上一页
+  function previousPage() {
+    var numberPage = $("#numberPage").val()
+    numberPage--
+    if (numberPage < 1) {
+      alert("已经是第一页了");
+      $("#numberPage").val(1);
+    } else {
+      $("#numberPage").val(numberPage)
+      data.skipCount = numberPage;
+      
+    }
+  }
+  // 下一页
+  function nextPage() {
+    var numberPage = $("#numberPage").val()
+    if (orderList.length < data.maxResultCount) {
+      return false
+    } else {
+      numberPage++
+      $("#numberPage").val(numberPage)
+      var totalCount = $("#totalCountPage").val()
+      // var num = numberPage--;
+      // $("#numberPage").val(num)
+      // data.skipCount = num;
+      if (numberPage * data.maxResultCount > totalCount) {
+        if (numberPage >= Math.ceil(totalCount / data.maxResultCount) + 1) {
+          numberPage--;
+          $("#numberPage").val(numberPage)
+          return false
+        }
+      }
+      data.skipCount = numberPage;
+     
+    }
+}
+
+</script>
 </html>
