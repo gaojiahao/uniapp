@@ -190,3 +190,10 @@
   white-space: nowrap; /*不换行*/
   text-overflow: ellipsis; /*超出部分文字以...显示*/
 }
+@{deep} .el-checkbox__input.is-checked .el-checkbox__inner::after {
+  transform:rotate(45deg);
+  -ms-transform:rotate(45deg); /* IE 9 */
+  -moz-transform:rotate(45deg);/* Firefox */
+  -webkit-transform:rotate(45deg);/* Safari 和 Chrome */
+  -o-transform:rotate(45deg);/* Opera */
+}
