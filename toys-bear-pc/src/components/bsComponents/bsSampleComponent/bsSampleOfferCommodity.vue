@@ -30,9 +30,9 @@
     </div>
     <div class="productListBox">
       <!-- 产品列表 -->
-      <bsProductSearchIndex v-if="isCart === true"></bsProductSearchIndex>
+      <bsProductSearchIndex v-if="typeId === 1"></bsProductSearchIndex>
 
-      <div class="bsGridComponent" v-if="isCart === false">
+      <div class="bsGridComponent" v-if="typeId != 1">
         <bsSampleOfferProductList
           @pushOfferProductList="pushOfferProductList"
           @popOfferProductList="popOfferProductList"
@@ -47,10 +47,10 @@
       </div>
 
       <!-- 分页 -->
-      <center style="padding:20px 0;" v-if="isCart === false">
+      <center style="padding:20px 0;" v-if="typeId != 1">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
-          :page-sizes="[10, 20, 30, 40]"
+          :page-sizes="[12, 24, 36, 48]"
           background
           :total="totalCount"
           :page-size="pageSize"
@@ -84,12 +84,10 @@ export default {
       num: null,
       typeId: 0,
       offerProductList: [],
-      formDate: {},
       productList: [],
-      isCart: false,
       isGrid: "bsGridComponent",
       totalCount: 0,
-      pageSize: 10,
+      pageSize: 12,
       currentPage: 1
     };
   },
@@ -166,9 +164,6 @@ export default {
         });
       }
     },
-    callback(val) {
-      this.formDate = val;
-    },
     //返回编辑页面
     async handleAffirm() {
       eventBus.$emit("getSearchForm" + this.item.offerNumber, this.callback);
@@ -176,10 +171,10 @@ export default {
         productNumber: item.productNumber,
         boxNumber: item.boxNumber
       }));
-      this.formDate.quotationProductList = quotationProductList;
+      this.item.topValue.quotationProductList = quotationProductList;
       const res = await this.$http.post(
         "/api/UpdateProductOffer",
-        this.formDate
+        this.item.topValue
       );
       if (res.data.result.code === 200) {
         this.$common.handlerMsgState({
@@ -211,12 +206,7 @@ export default {
     //切换
     checkTabstypeId(num) {
       this.typeId = num;
-      if (num === 1) {
-        this.isCart = true;
-      } else {
-        this.isCart = false;
-        this.getProductList();
-      }
+      this.getProductList();
     },
     // 切換頁容量
     handleSizeChange(pageSize) {

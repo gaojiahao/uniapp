@@ -208,45 +208,47 @@
             </template>
           </el-table-column>
         </el-table>
-        <!-- 统计 -->
-        <div class="tableBtoBox">
-          <div class="tableBto">
-            <div class="right">
-              <p class="item">
-                <span class="itemTitle">总款数：</span>
-                <span>{{ tableData.length }}</span>
-              </p>
-              <p class="item">
-                <span class="itemTitle">总箱数：</span>
-                <span>{{ myTotalQuantity(tableData) }}</span>
-              </p>
-              <p class="item">
-                <span class="itemTitle">总体积/总材积：</span>
-                <span
-                  >{{ handleOffer(myTotalVolume(tableData).outerBoxStere) }}/{{
-                    handleOffer(myTotalVolume(tableData).outerBoxFeet)
-                  }}</span
-                >
-              </p>
-              <p class="item">
-                <span class="itemTitle">总毛重/总净重：</span>
-                <span
-                  >{{ handleOffer(totalMaozhong()) }}/{{
-                    handleOffer(totalJingzhong())
-                  }}(KG)</span
-                >
-              </p>
-              <p class="item">
-                <span class="itemTitle">总金额：</span>
-                <span class="price"
-                  >{{ item.cu_de + handleOffer(myTotalPrice(tableData)) }}
-                </span>
-              </p>
-            </div>
-          </div>
+      </div>
+    </div>
+    <!-- 统计 -->
+    <div class="tableBtoBox">
+      <div class="tableBto">
+        <div class="right">
+          <p class="item">
+            <span class="itemTitle">总款数：</span>
+            <span>{{ tableData.length }}</span>
+          </p>
+          <p class="item">
+            <span class="itemTitle">总箱数：</span>
+            <span>{{ myTotalQuantity(tableData) }}</span>
+          </p>
+          <p class="item">
+            <span class="itemTitle">总体积/总材积：</span>
+            <span
+              >{{ handleOffer(myTotalVolume(tableData).outerBoxStere) }}/{{
+                handleOffer(myTotalVolume(tableData).outerBoxFeet)
+              }}</span
+            >
+          </p>
+          <p class="item">
+            <span class="itemTitle">总毛重/总净重：</span>
+            <span
+              >{{ handleOffer(totalMaozhong()) }}/{{
+                handleOffer(totalJingzhong())
+              }}(KG)</span
+            >
+          </p>
+          <p class="item">
+            <span class="itemTitle">总金额：</span>
+            <span class="price"
+              >{{ item.cu_de + handleOffer(myTotalPrice(tableData)) }}
+            </span>
+          </p>
         </div>
-        <!-- 分页 -->
-        <!-- <center style="padding:20px 0;">
+      </div>
+    </div>
+    <!-- 分页 -->
+    <!-- <center style="padding:20px 0;">
           <el-pagination
             layout="total, sizes, prev, pager, next, jumper"
             :page-sizes="[12, 24, 36, 48]"
@@ -258,8 +260,6 @@
             @size-change="handleSizeChange"
           ></el-pagination>
         </center> -->
-      </div>
-    </div>
     <!-- 导出订单模板dialog -->
     <transition name="el-zoom-in-center">
       <el-dialog
@@ -558,7 +558,6 @@ export default {
         outerBoxFeet
       };
     },
-    onSubmit() {},
     // 计算总箱数量
     myTotalQuantity() {
       let number = 0;
@@ -667,39 +666,9 @@ export default {
       transform: translate(0, -50%);
     }
   }
-  // .hander {
-  //   .handerTop {
-  //     padding-top: 26px;
-  //     .flex_t {
-  //       display: flex;
-  //       align-content: center;
-  //       margin-bottom: 18px;
-  //       p {
-  //         width: 235px;
-  //         margin-right: 30px;
-  //         font-weight: 400;
-  //         .pId {
-  //           font-weight: 700;
-  //           font-size: 15px;
-  //         }
-  //       }
-  //     }
-  //     .flex_b {
-  //       display: flex;
-  //       align-content: center;
-  //       p {
-  //         margin-right: 30px;
-  //         width: 235px;
-  //       }
-  //     }
-  //   }
-  //   .handerTab {
-  //     margin-top: 25px;
-  //   }
-  // }
-
   .bsSampleTable {
     padding-top: 15px;
+    margin-bottom: 80px;
     .top {
       height: 55px;
       font-size: 15px;
@@ -783,31 +752,36 @@ export default {
         }
       }
     }
-    .tableBtoBox {
+  }
+  .tableBtoBox {
+    width: 1652px;
+    position: fixed;
+    right: 27px;
+    bottom: 0px;
+    z-index: 30;
+    .tableBto {
       width: 100%;
-      .tableBto {
+      display: flex;
+      align-items: center;
+      background-color: #fff;
+      height: 80px;
+      padding: 0 30px;
+      box-sizing: border-box;
+      .right {
+        flex: 1;
         display: flex;
+        justify-content: flex-end;
         align-items: center;
-        background-color: #fff;
-        height: 80px;
-        padding-left: 10px;
-        box-sizing: border-box;
-        .right {
-          flex: 1;
+        .item {
+          margin-right: 15px;
           display: flex;
-          justify-content: flex-end;
           align-items: center;
-          .item {
-            margin-right: 15px;
-            display: flex;
-            align-items: center;
-            // .itemTitle {
-            // }
-            .price {
-              color: #eb1515;
-              font-weight: 700;
-              font-size: 18px;
-            }
+          // .itemTitle {
+          // }
+          .price {
+            color: #eb1515;
+            font-weight: 700;
+            font-size: 18px;
           }
         }
       }

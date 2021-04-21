@@ -306,6 +306,7 @@ export default {
           const fileName = this.orderInfo.companyName
             ? this.orderInfo.companyName + "_" + this.getCurrentTime() + ".xlsx"
             : this.getCurrentTime() + ".xlsx";
+          console.log(res);
           const blob = res.data;
           if (window.navigator && window.navigator.msSaveOrOpenBlob) {
             // 兼容IE

@@ -181,6 +181,7 @@ router.beforeEach(async (to, from, next) => {
       if (res.data.result.code === 200) {
         const obj = { accessToken: res.data.result.item };
         store.commit("setToken", obj);
+        store.commit("initShoppingCart", []);
       }
       if (to.path == "/login") {
         next();

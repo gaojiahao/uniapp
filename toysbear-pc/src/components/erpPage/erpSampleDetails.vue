@@ -70,6 +70,7 @@
           >
             <template slot-scope="scope">
               <el-image
+                class="tableImg"
                 style="width: 57px; height: 47px;"
                 :preview-src-list="scope.row.imgUrl"
                 :src="scope.row.imgUrl && scope.row.imgUrl[0]"
@@ -407,9 +408,17 @@ export default {
       height: 110px;
       padding: 15px;
       box-sizing: border-box;
-      .hallLogo {
+      @{deep} .hallLogo {
         width: 80px;
         height: 80px;
+        position: relative;
+        img {
+          width: 80px;
+          height: 80px;
+          position: absolute;
+          left: 0;
+          top: 0;
+        }
       }
     }
     .right {
@@ -482,5 +491,17 @@ export default {
   overflow: hidden;
   white-space: nowrap; /*不换行*/
   text-overflow: ellipsis; /*超出部分文字以...显示*/
+}
+@{deep} .tableImg {
+  width: 57px;
+  height: 47px;
+  position: relative;
+  img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 57px;
+    height: 47px;
+  }
 }
 </style>

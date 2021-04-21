@@ -70,6 +70,9 @@ import bsHallBusinessOrderDetails from "@/views/bsPage/bsBusinessManage/bsHallBu
 // 站点列表
 import bsSiteLlis from "@/views/bsPage/bsSiteSharing/bsSiteLlis/BsSiteLlis.vue";
 
+// 站点设置
+import bsSiteSettings from "@/views/bsPage/bsSiteSharing/bsSiteSettings/BsSiteSettings.vue";
+
 // 客户订单
 import bsCustomerOrder from "@/views/bsPage/bsSiteSharing/bsCustomerOrder/BsCustomerOrder.vue";
 
@@ -84,6 +87,8 @@ import bsMyCollection from "@/views/bsPage/bsProductSearch/bsMyCollection/BsMyCo
 //  最新产品
 import bsLatestProducts from "@/views/bsPage/bsProductSearch/bsLatestProducts/BsLatestProducts.vue";
 
+// 浏览足迹
+import bsBrowsingFootprints from "@/views/bsPage/bsProductSearch/bsBrowsingFootprints/BsBrowsingFootprints.vue";
 //  现货产品
 import bsSpotProducts from "@/views/bsPage/bsProductSearch/bsSpotProducts/BsSpotProducts.vue";
 
@@ -145,6 +150,7 @@ export default {
     bsClientOrderDetails,
     bsHallBusinessOrderDetails,
     bsSiteLlis,
+    bsSiteSettings,
     bsCustomerOrder,
     bsBrowsingHistory,
     bsProductSearchIndex,
@@ -152,6 +158,7 @@ export default {
     bsLatestProducts,
     bsSpotProducts,
     bsVIPProducts,
+    bsBrowsingFootprints,
     bsAccountManage,
     bsQuotationSettings,
     bsPushSettings,
@@ -298,6 +305,8 @@ export default {
         newN == "/bsIndex/bsMyCollection"
       ) {
         eventBus.$emit("showCart", true);
+      } else {
+        eventBus.$emit("showCart", false);
       }
     }
   },

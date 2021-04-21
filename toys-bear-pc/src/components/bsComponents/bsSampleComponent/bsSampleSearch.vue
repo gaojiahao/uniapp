@@ -382,12 +382,6 @@ export default {
   },
   mounted() {
     this.getProductOfferByNumber();
-    eventBus.$on(
-      "getSearchForm" + this.searchFormData.offerNumber,
-      callback => {
-        callback(this.clienFormData);
-      }
-    );
   },
   beforeDestroy() {
     eventBus.$off("getSearchForm" + this.searchFormData.offerNumber);

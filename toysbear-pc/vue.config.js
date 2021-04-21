@@ -1,4 +1,8 @@
 const webpack = require("webpack");
+const path = require("path");
+function resolve(dir) {
+  return path.join(__dirname, dir);
+}
 const CompressionWebpackPlugin = require("compression-webpack-plugin");
 const productionGzipExtensions = ["js", "css", "html", "svg", "less"];
 
@@ -89,6 +93,17 @@ module.exports = {
         }
       }
     }
+  },
+  chainWebpack(config) {
+    config.resolve.alias
+      .set("style", resolve("public/style"))
+      .set("api", resolve("src/api"))
+      .set("tools", resolve("src/tools"))
+      .set("components", resolve("src/components"))
+      .set("echarts", resolve("src/echarts"))
+      .set("echarts", resolve("node_modules/echarts"));
+
+    config.output.filename("[name].[hash].js").end();
   },
   configureWebpack: configureWebpack
 };

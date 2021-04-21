@@ -25,6 +25,7 @@ const store = new Vuex.Store({
       keyword: "", // 关键字
       name: "", // 产品名称
       ch_pa: "", // 包装方式
+      pa_nu: "", // 包装方式
       minPrice: "", // 最低价格
       maxPrice: "", // 最高价格
       pr_le: "", // 产品规格 长
@@ -51,6 +52,7 @@ const store = new Vuex.Store({
       state.searchForm.keyword = ""; // 关键字
       state.searchForm.name = ""; // 产品名称
       state.searchForm.ch_pa = ""; // 包装方式
+      state.searchForm.pa_nu = ""; // 包装
       state.searchForm.minPrice = ""; // 最低价格
       state.searchForm.maxPrice = ""; // 最高价格
       state.searchForm.pr_le = ""; // 产品规格 长

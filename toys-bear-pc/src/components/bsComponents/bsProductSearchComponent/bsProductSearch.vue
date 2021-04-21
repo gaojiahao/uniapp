@@ -8,7 +8,7 @@
         ref="focusKeyword"
         @keyup.native.enter="searchProducts"
         style="width: 340px;margin: 0 15px;"
-        placeholder="请输入关键词"
+        placeholder="输入关键词+空格可模糊搜索"
         v-model="searchForm.keyword"
         clearable
       >
@@ -44,12 +44,7 @@
         ></i>
       </div>
     </div>
-    <el-button
-      type="warning"
-      size="medium"
-      @click="toShoppingCart"
-      v-show="isCart === true"
-    >
+    <el-button type="warning" size="medium" @click="toShoppingCart">
       <i class="whiteCart"></i>
       <span>购物车</span>
       <span>({{ shoppingList && shoppingList.length }})</span>
@@ -61,11 +56,6 @@
 import eventBus from "@/assets/js/common/eventBus";
 import { mapGetters } from "vuex";
 export default {
-  props: {
-    isCart: {
-      type: Boolean
-    }
-  },
   data() {
     return {
       advanced: true,
@@ -114,7 +104,6 @@ export default {
     // 切换高级搜索
     advancedSearchProducts() {
       this.advanced = !this.advanced;
-
       this.$emit("screeningShow");
     }
   },

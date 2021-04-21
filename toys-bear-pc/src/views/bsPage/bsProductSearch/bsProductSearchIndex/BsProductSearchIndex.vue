@@ -2,7 +2,7 @@
   <div class="productSearch">
     <template v-if="!imageSearchValue">
       <div class="advancedSearchBox">
-        <bsProductSearch @screeningShow="screeningShow" :isCart="isCart" />
+        <bsProductSearch ref="searchRef" @screeningShow="screeningShow" />
         <!-- 高级筛选 -->
         <div class="advancedScreening " v-show="screeningFlag == true">
           <div class="title">高级筛选:</div>
@@ -37,16 +37,19 @@
               >
                 编号
               </el-checkbox>
-              <el-checkbox
+              <!-- <el-checkbox
                 @change="handleCheckedScreensChange"
                 v-model="searchForm.packName"
               >
                 包装
-              </el-checkbox>
+              </el-checkbox> -->
             </div>
             <div>
               <span class="text">是否精准：</span>
-              <el-radio-group v-model="isAccurate">
+              <el-radio-group
+                v-model="isAccurate"
+                @change="handleCheckedScreensChange"
+              >
                 <el-radio label="模糊"></el-radio>
                 <el-radio label="精准"></el-radio>
               </el-radio-group>
@@ -55,17 +58,20 @@
           <div class="parameter">
             <el-form :model="advancedFormdata">
               <div class="left">
-                <el-form-item label="出厂货号：" placeholder="请输入内容">
+                <!-- <el-form-item label="出厂货号：" placeholder="请输入内容">
                   <el-input
                     size="medium"
                     style="width: 200px; "
+                    clearable
                     v-model="advancedFormdata.fa_no"
                   ></el-input>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="包装方式：">
                   <el-select
+                    filterable
                     size="medium"
                     style="width: 200px; heigth:35px"
+                    clearable
                     v-model="advancedFormdata.ch_pa"
                     placeholder="请选择"
                   >
@@ -168,13 +174,13 @@
             </el-form>
           </div>
           <div class="confirm">
-            <el-button type="primary" @click="confirmAdvanced">
+            <el-button type="primary" size="medium" @click="confirmAdvanced">
               确 定
             </el-button>
           </div>
         </div>
         <!-- 标准筛选 -->
-        <div class="standardScreening" v-show="screeningFlag == false">
+        <!-- <div class="standardScreening" v-show="screeningFlag == false">
           <span class="myLabel">标准筛选:</span>
           <el-checkbox
             v-model="synthesis"
@@ -207,7 +213,7 @@
           >
             包装
           </el-checkbox>
-        </div>
+        </div> -->
         <div class="productClass">
           <span class="myLabel">产品分类:</span>
           <div :class="{ tags: true, showOneCate: isOneDownCate }">
@@ -531,11 +537,6 @@ export default {
     bsGridComponent,
     VueCropper
   },
-  props: {
-    isCart: {
-      type: Boolean
-    }
-  },
   data() {
     return {
       loading: false,
@@ -736,7 +737,7 @@ export default {
         sortType: this.sortType,
         // 高级搜索条件
         fa_no: this.advancedFormdata.fa_no,
-        isUpInsetImg: this.advancedFormdata.isUpInsetImg,
+        isUpInsetImg: this.advancedFormdata.isUpInsetImg == "是" ? true : false,
         ch_pa: this.advancedFormdata.ch_pa,
         pr_le: this.advancedFormdata.pr_le,
         pr_wi: this.advancedFormdata.pr_wi,
@@ -770,6 +771,7 @@ export default {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "")
           delete fd[key];
       }
+      console.log(fd);
       const res = await this.$http.post("/api/SearchBearProductPage", fd);
       const { code, item, msg } = res.data.result;
       if (code === 200) {
@@ -859,6 +861,7 @@ export default {
     },
     // 确认高级搜索
     confirmAdvanced() {
+      this.searchForm.keyword = this.$refs.searchRef.searchForm.keyword;
       this.getProductList(false);
     },
     // 切换产品列表样式

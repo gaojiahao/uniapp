@@ -224,6 +224,7 @@
 
 <script>
 import bsExportOrder from "@/components/commonComponent/exportOrderComponent";
+import eventBus from "@/assets/js/common/eventBus.js";
 export default {
   name: "bsSampleQuotation",
   components: {
@@ -368,6 +369,12 @@ export default {
   created() {},
   mounted() {
     this.getCompanySamplelistPage();
+    eventBus.$on("resetSamplelist", () => {
+      this.getCompanySamplelistPage();
+    });
+  },
+  beforeDestroy() {
+    eventBus.$off("resetSamplelist");
   }
 };
 </script>
