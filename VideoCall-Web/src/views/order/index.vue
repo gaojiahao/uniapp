@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 17:59:28
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\order\index.vue
- * @LastEditTime: 2021-04-20 16:52:46
+ * @LastEditTime: 2021-04-21 11:57:39
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -70,6 +70,9 @@ export default {
         },
         changeProductList(){
             this.isProductList = this.isProductList ? false:true;
+            if(!this.isProductList){
+                this.$refs.product.getQuerySampleOrderDetails();
+            }
         },
         //择样单消息回调
         getSampleOrderDetails(val){

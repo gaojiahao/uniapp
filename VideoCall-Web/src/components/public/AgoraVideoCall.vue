@@ -339,6 +339,11 @@ export default {
 <style lang="less" scoped>
 #ag-canvas {
   height: 100%;
+  // display: grid;
+  // grid-gap: 10px;
+  // justify-items: center;
+  // grid-template-rows: repeat(12,auto);
+  // grid-template-columns: repeat(24,auto);
   .userlist {
     width: 100%;
     height: 66px;

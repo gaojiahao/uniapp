@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 16:28:17
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-19 16:11:47
+ * @LastEditTime: 2021-04-20 20:07:19
 -->
 <template>
   <div class="login" ref="login">
@@ -424,7 +424,7 @@ export default {
           if(data.success){
             this.$Message.info({
               background: true,
-              content: '温馨提示：'+err.message
+              content: '温馨提示：'+data.message
             });
             this.countDown();
           }

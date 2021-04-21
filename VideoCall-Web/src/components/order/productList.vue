@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:15:36
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\productList.vue
- * @LastEditTime: 2021-04-20 16:35:04
+ * @LastEditTime: 2021-04-21 11:52:13
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -19,7 +19,7 @@
             <div class="title">
                 <div class="item">悦翔展厅：择样单</div><div class="item" style="margin-left:47px">本次代号： {{sampleSelection.number}}</div>
             </div>
-            <Table :columns="columns2" :data="data2" height="700" :loading="loading">
+            <Table :columns="columns2" :data="data2" height="700" :loading="loading" class="from">
                 <template slot-scope="{ row, index }" slot="action">
                     <Icon type="ios-trash-outline" style="font-size:24px" @click="delSelection(row.id)" />
                 </template>
@@ -41,12 +41,16 @@
                 </div>
                 <div class="item">
                     <div class="label">总毛重/总净重：</div>
-                    <div class="text">{{totalCount}}(KG)</div>
+                    <div class="text">{{totalGrossWeight}}/{{totalNetWeight}}(KG)</div>
                 </div>
                 <div class="item">
                     <div class="label">总体积/总材积：</div>
-                    <div class="text">{{totalBulkStere}} cbm</div>
-                    <div class="text">{{totalBulkFeet}} cuft</div>
+                    <div class="text">{{totalBulkFeet}} cbm</div>
+                    <div class="text">{{totalBulkStere}} cuft</div>
+                </div>
+                <div class="item">
+                    <div class="label">总个数：</div>
+                    <div class="text">{{totalCount}}</div>
                 </div>
                 <div class="item">
                     <div class="label">总箱数：</div>
@@ -62,6 +66,7 @@
 </template>
 <script>
 import * as Cookies from "js-cookie";
+import util from "@utils/util";
 import {
   QuerySampleOrderDetails,
   DeleteSampleOrderDetail,
@@ -279,6 +284,7 @@ export default {
                     key: 'tempAmount',
                     align: 'center',
                     render: (h, params) => {
+                        var me = this;
                         return h('div', [
                             h('Input', {
                                 style: {
@@ -295,8 +301,29 @@ export default {
                                 number:'true',
                                 on: {
                                     'on-change': (event) => {
+                                        //先算箱数差值
+                                        var translate = parseInt(event.currentTarget.value)-parseInt(this.data2[params.index][params.column.key]);
+                                        me.totalBoxCount = parseInt(me.totalBoxCount)+translate;
                                         this.data2[params.index][params.column.key] = event.currentTarget.value;
-                                        this.data2[params.index]['totalAmount'] = this.data2[params.index]['factoryPrice'] * this.data2[params.index][params.column.key] * this.data2[params.index]['outerBoxLoadCapa']
+                                        this.data2[params.index]['totalAmount'] = this.data2[params.index]['factoryPrice'] * this.data2[params.index][params.column.key] * this.data2[params.index]['outerBoxLoadCapa'];
+                                        //差值金额
+                                        var moenyT = params.row.factoryPrice*translate*params.row.outerBoxLoadCapa||0;
+                                        me.totalAmount = (me.totalAmount+moenyT).toFixed(2);
+                                        //差值个数
+                                        var countT = translate*params.row.outerBoxLoadCapa||0;
+                                        me.totalCount = me.totalCount+countT;
+                                        //差值体积
+                                        var tjT = translate*params.row.outerBoxBulkFeet||0;
+                                        me.totalBulkFeet = (me.totalBulkFeet+tjT).toFixed(2);
+                                        //差值材积
+                                        var jzT = translate*params.row.outerBoxBulkStere||0;
+                                        me.totalBulkStere = (me.totalBulkStere+jzT).toFixed(2);
+                                        //差值毛重
+                                        var mzT = translate*params.row.outerBoxGrossWeight||0;
+                                        me.totalGrossWeight = (me.totalGrossWeight+mzT).toFixed(2);
+                                        //差值净重
+                                        var jzT = translate*params.row.outerBoxNetWeight||0;
+                                        me.totalNetWeight = (me.totalNetWeight+jzT).toFixed(2);
                                     }
                                 }
                             }),
@@ -305,8 +332,8 @@ export default {
                                     marginTop: '4px',
                                     fontSize: '12px',
                                     color:'#FF3E3E',
-                                },  
-                            }, params.row.outerBoxLoadCapa+'pcs'),
+                                },
+                            }, params.row.outerBoxLoadCapa*params.row.tempAmount+'pcs'),
                         ])
                     },
                     width: 120
@@ -327,13 +354,13 @@ export default {
                                     marginTop: '4px',
                                     color:'#FF3E3E',
                                 },
-                            }, params.row.innerBoxCount+'cbm'),
+                            }, (params.row.outerBoxBulkFeet*params.row.tempAmount).toFixed(2)+'cbm'),
                             h('div', {
                                 style: {
                                     marginTop: '4px',
                                     color:'#FF3E3E',
                                 },  
-                            }, params.row.outerBoxLoadCapa+'cuft'),
+                            }, (params.row.outerBoxBulkStere*params.row.tempAmount).toFixed(2)+'cuft'),
                         ])
                     },
                     width: 142
@@ -349,7 +376,7 @@ export default {
                                     marginTop: '4px',
                                     color:'#FF3E3E',
                                 },
-                            },'$'+params.row.totalAmount),
+                            },'$'+(params.row.factoryPrice*params.row.tempAmount*params.row.outerBoxLoadCapa||0).toFixed(2)),
                         ])
                     },
                     width: 140    
@@ -404,6 +431,8 @@ export default {
                         this.totalBulkStere=res.data.totalBulkStere;
                         this.totalCount=res.data.totalCount;
                         this.totalKuanshu=res.data.totalKuanshu;
+                        this.totalGrossWeight=res.data.totalGrossWeight;
+                        this.totalNetWeight=res.data.totalNetWeight;
                         this.$FromLoading.hide();
                         this.loading=false;
                     } else {
@@ -449,7 +478,7 @@ export default {
             var arr= [];
             for(var i=0;i<this.data2.length;i++){
                 var obj = {
-                    id:this.data2[i]['id'],
+                    companyNumber:this.data2[i]['companyNumber'],
                     productName:this.data2[i]['productName'],
                     boxCount:this.data2[i]['tempAmount']
                 }
@@ -462,7 +491,6 @@ export default {
                 type:2,
                 sampleOrderProductInfo:arr
             };
-            debugger
             this.loading = true;
             return new Promise((resolve, reject) => {
                 AddSampleOrderDetail(params).then(res => {
@@ -472,6 +500,7 @@ export default {
                             content: res.message
                         });
                         this.$FromLoading.hide();
+                        this.getQuerySampleOrderDetails();
                         this.loading=false;
                     } else {
                         this.$Message.error({

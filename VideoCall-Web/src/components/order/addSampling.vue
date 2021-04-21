@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:58:11
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\addSampling.vue
- * @LastEditTime: 2021-04-14 20:47:23
+ * @LastEditTime: 2021-04-20 17:47:22
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -18,7 +18,7 @@
         </div>   
         <div class="content">
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="0">
-                <FormItem  prop="number">
+                <FormItem prop="number">
                     <Input v-model="formValidate.number" placeholder="请输入择样单号"></Input>
                 </FormItem>
                 <FormItem prop="code">
@@ -43,13 +43,23 @@ export default {
                 code:''    
             },
             ruleValidate:{
-
+                number: [
+                    { required: true, message: '请输入择样单号', trigger: 'blur' }
+                ],
+                code: [
+                    { required: true, message: '请输入验证码', trigger: 'blur' }
+                ],
             },
         }
     },
     methods:{
         save(){
-            this.$emit('save',this.formValidate);
+            this.$refs['formValidate'].validate((valid) => {
+                if (valid) {
+                    this.$emit('save',this.formValidate);
+                }
+            });
+            //this.$emit('save',this.formValidate);
         },
     }
 }

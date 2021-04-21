@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 16:54:22
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\video\index.vue
- * @LastEditTime: 2021-04-19 11:29:27
+ * @LastEditTime: 2021-04-20 19:47:13
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -68,7 +68,7 @@
                 <div class="user" @click="selectAll(true)"><div class="active"></div></div>
             </div>
         </div>
-        <EndModal></EndModal>
+        <EndModal :isShow="isShow"></EndModal>
     </div> 
 </template>
 <script>
@@ -117,6 +117,7 @@ export default {
             uid: Cookies.get("uid") || null,
             videoId: Cookies.get("videoId") || null,
             isAdmin: Cookies.get("isAdmin") || false,
+            isShow:false
         };
     },
     methods: {

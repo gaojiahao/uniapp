@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 19:15:58
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\index.vue
- * @LastEditTime: 2021-04-20 10:07:06
+ * @LastEditTime: 2021-04-20 20:01:42
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -162,7 +162,7 @@ export default {
         },
         sureClose(){
             this.isShowEsc = false;
-            if(this.flag=='true'){
+            if(this.flag){
                 this.$emit('endMeeting');    
             } else {
                 this.$emit('leave');    

@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:37:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\product.vue
- * @LastEditTime: 2021-04-20 16:44:56
+ * @LastEditTime: 2021-04-21 11:13:08
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -43,7 +43,7 @@
                         总个数：{{totalCount}}
                     </Col>
                     <Col span="24">
-                        总体积/总材积：{{totalBulkStere}}/{{totalBulkFeet}}
+                        总体积/总材积：{{totalBulkFeet}}/{{totalBulkStere}}
                     </Col>
                     <Col span="19">
                         总金额：<span class="red">￥{{totalAmount}}</span>
@@ -58,7 +58,7 @@
         <div class="now_product" v-else>
             <Row class="ipput_wrap" v-if="isAdmin">
                 <Col span="6"><div class="text">公司编号</div></Col>
-                <Col span="12"><Input v-model="companyNumber" class="iipput_wrap_box" :style="{width:'137px'}" clearable /></Col>
+                <Col span="12"><Input v-model="companyNumber" class="iipput_wrap_box" :style="{width:'137px'}" clearable @on-change="getProductInfo" @on-enter="getProductInfo" @keyup.enter.native="getProductInfo" /></Col>
                 <Col span="6"><Button type="primary" :style="{width:'60px',marginLeft: '11px'}" @click="getProductInfo">确定</Button></Col>
             </Row>
             <Row class="product_wrap" v-if="this.productInfo.id">
@@ -109,7 +109,7 @@
                     </div>
                     <div class="now_item">
                         <div class="title">毛重/净重：</div>
-                        <div class="text"></div>（kg）
+                        <div class="text"></div>（KG）
                     </div>
                 </Col>
             </Row>
@@ -324,13 +324,12 @@ export default {
             var params = {
                 code:this.sampleSelection.number,
                 verifyCode:this.sampleSelection.code,
-                id:this.productInfo.id,
                 roomNumber: this.roomNumber,
                 type:1,
                 sampleOrderProductInfo:[
                     {
                         id:this.productInfo.id,
-                        productName:this.productInfo.productName,
+                        companyNumber:this.productInfo.companyNumber,
                         boxCount:1,
                     }
                 ]
@@ -361,7 +360,7 @@ export default {
             var params = {
                 code:this.sampleSelection.number,
                 verifyCode:this.sampleSelection.code,
-                id:this.productInfo.id,
+                id:this.productInfo.sampleOrderDetailId,
                 roomNumber: this.roomNumber
             };
             return new Promise((resolve, reject) => {

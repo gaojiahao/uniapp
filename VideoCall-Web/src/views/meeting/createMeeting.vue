@@ -161,17 +161,24 @@ export default {
                 Cookies.set("videoProfile", this.videoProfile);
                 Cookies.set("uid", res.data.meetingRoomMemberId);
                 Cookies.set("companyName", res.data.companyName);
+                Cookies.set("endTime", this.formValidate.endTime);
                 window.sessionStorage.setItem("isMic",this.formValidate.settings.isMic);
                 window.sessionStorage.setItem("isCar",this.formValidate.settings.isCar); 
                 this.$router.push('/');
               } else {
                 this.$Message.error({
                   background: true,
-                  content: res.result.msg
+                  content: res.message
                 });
                 this.$FromLoading.hide();
               }
             });
+          }).catch(err=>{
+            this.$Message.error({
+              background: true,
+              content: err.message
+            });
+            this.$FromLoading.hide();  
           });
         }
       })
