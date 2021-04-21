@@ -12,6 +12,7 @@
   <title>产品详情</title>
   <!-- 初始化样式 -->
   <link rel="stylesheet" href="./static/css/base.css">
+  <link rel="stylesheet" href="http://at.alicdn.com/t/font_1900734_1xnu2j2delu.css">
   <!-- 文件样式 -->
   <link rel="stylesheet" href="./static/css/productDetails.css">
   <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
@@ -48,21 +49,53 @@
           <div class="showlarge">
             <img src="./static/images/product3.png">
           </div>
+          <div class="product3D"></div>
         </div>
         <div class="product-img">
-          <img src="./static/images/product3.png">
-          <img src="./static/images/product4.png">
-          <img src="./static/images/product3.png">
-          <img src="./static/images/product4.png">
-          <img src="./static/images/product3.png">
-          <img src="./static/images/product4.png">
-          <img src="./static/images/product3.png">
-          <img src="./static/images/product4.png">
-          <img src="./static/images/product3.png">
+          <div class="leftItem" onclick="handlerDirection('left')">
+            <span class="iconfont icon-dajiantouzuo"></span>
+          </div>
+          <div class="itemBox">
+            <div class="imgWrap">
+              <img src="./static/images/product3.png">
+              <img src="./static/images/product4.png">
+              <img src="./static/images/product3.png">
+              <img src="./static/images/product4.png">
+              <img src="./static/images/product3.png">
+              <img src="./static/images/product4.png">
+              <img src="./static/images/product3.png">
+              <img src="./static/images/product4.png">
+              <img src="./static/images/product3.png">
+            </div>
+          </div>
+          <div class="rightItem"  onclick="handlerDirection('right')">
+            <span class="iconfont icon-dajiantouyou"></span>
+          </div>
         </div>
       </div>
     </div>
-    <div class="right"></div>
+    <div class="right">
+      <div class="productName">
+        99式坦克军事系列积木套装
+        <div class="btns">
+          <i class="fanhui"></i>
+          <i class="fenxiang"></i>
+        </div>
+      </div>
+      <div class="productPrice">
+        ￥98.00
+      </div>
+      <div class="context">
+        <p>出厂货号：<span class="value">123-321</span></p>
+        <p>包装：<span class="value">彩盒</span></p>
+        <p>产品规格：<span class="value">0X0X0(CM)</span></p>
+        <p>外箱规格：<span class="value">68X46X74(CM)</span></p>
+        <p>包装规格：<span class="value">14X11.3X4(CM)</span></p>
+        <p>装箱量：<span class="value">2/288(PCS)</span></p>
+        <p>体积/材积：<span class="value">0.231(CBM)/8.17(CUFT)</span></p>
+        <p>体毛重/净重：<span class="value">1/18(KG)</span></p>
+      </div>
+    </div>
   </div>
 </body>
 <script>
@@ -164,8 +197,8 @@ magnifier_box[i].MYmagnifier();
 $(function() {
 	//鼠标移入产品小图事件
 	$(".product-img img").mouseenter(function(){//鼠标悬浮在不同的产品小图片时外加黑色边框并且主图将其显示出来
-		$(".product-img img").css({"border":"2px solid #FFF"});
-		$(this).css({"border":"2px solid #000"});//this获取的是当前鼠标移入的元素，设置黑色边框
+		$(".product-img img").css({"opacity":"0.7"});
+		$(this).css({"opacity":"1"});//this获取的是当前鼠标移入的元素，设置黑色边框
 		var imgsrc=$(this).attr("src");//获取当前鼠标移入元素的src属性值将其赋值给主图元素
 		$(".show").attr("src",imgsrc);
 		$(".showlarge img").attr("src",imgsrc);//将鼠标选中的图传给放大图元素的src属性
@@ -211,7 +244,42 @@ $(function() {
 		$(".showbox").hide();//小框隐藏
 		$(".showlarge").hide();//放大图隐藏
 	});
-	
+	$(".showlarge").mouseenter(function(){
+		$(".showbox").hide();//小框隐藏
+		$(".showlarge").hide();//放大图隐藏
+	});
 });
+</script>
+<script>
+  var isHandlerDirectionTimeID = null;
+  var isHandlerDirection = true;
+    function handlerDirection(direction) {
+      clearTimeout(isHandlerDirectionTimeID);
+      if(isHandlerDirection) {
+        var imgWrapWidth = $(".itemBox").width();
+        var imgWidth = $(".imgWrap").width();
+        var imgLeft = $(".imgWrap").position().left;
+        var imgItemWidth = 93;
+        var difference = imgWidth - imgWrapWidth;
+        switch (direction) {
+          case "left":
+            if (imgLeft >= 0) {
+              return false;
+            }
+            $(".product-img .itemBox .imgWrap").animate({left:(imgLeft += imgItemWidth) + "px"});
+            break;
+          case "right":
+            if (imgLeft <= -difference) {
+              return false;
+            }
+            $(".product-img .itemBox .imgWrap").animate({left:(imgLeft -= imgItemWidth) + "px"});
+            break;
+          }
+          isHandlerDirection = false
+      }
+      isHandlerDirectionTimeID = setTimeout(function() {
+        isHandlerDirection = true
+      }, 500)
+    }
 </script>
 </html>

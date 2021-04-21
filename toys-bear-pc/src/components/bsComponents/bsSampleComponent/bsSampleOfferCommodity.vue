@@ -30,9 +30,10 @@
     </div>
     <div class="productListBox">
       <!-- 产品列表 -->
-      <bsProductSearchIndex v-if="typeId === 1"></bsProductSearchIndex>
+      <!-- <bsProductSearchIndex v-if="typeId === 1"></bsProductSearchIndex> -->
 
-      <div class="bsGridComponent" v-if="typeId != 1">
+      <!-- <div class="bsGridComponent" v-if="typeId != 1"> -->
+      <div class="bsGridComponent">
         <bsSampleOfferProductList
           @pushOfferProductList="pushOfferProductList"
           @popOfferProductList="popOfferProductList"
@@ -47,7 +48,8 @@
       </div>
 
       <!-- 分页 -->
-      <center style="padding:20px 0;" v-if="typeId != 1">
+      <!-- <center style="padding:20px 0;" v-if="typeId != 1"> -->
+      <center style="padding:20px 0;">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
           :page-sizes="[12, 24, 36, 48]"
@@ -65,14 +67,13 @@
 <script>
 // import { mapState } from "vuex";
 import bsSampleOfferProductList from "@/components/bsComponents/bsSampleComponent/bsSampleOfferProductList";
-import bsProductSearchIndex from "@/views/bsPage/bsProductSearch/bsProductSearchIndex/BsProductSearchIndex.vue";
+// import bsProductSearchIndex from "@/views/bsPage/bsProductSearch/bsProductSearchIndex/BsProductSearchIndex.vue";
 
 import eventBus from "@/assets/js/common/eventBus.js";
 export default {
   name: "bsSampleOfferCommodity",
   components: {
-    bsSampleOfferProductList,
-    bsProductSearchIndex
+    bsSampleOfferProductList
   },
   props: {
     item: {
