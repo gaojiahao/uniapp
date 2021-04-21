@@ -22,26 +22,48 @@
 
 </head>
 <body>
-  <div class="product">
-    <div class="showimg">
-    <img class="show" src="./static/images/product3.png">
-    <div class="showbox"></div>
-    <div class="showlarge">
-    <img src="./static/images/product3.png">
+  <div class="header">
+    <div class="headerBox">
+      <div class="factoryName">
+        成卓玩具厂
+        <div class="contactMethod">
+          <span class="item person">联系人：<span class="itemValue">张老板</span></span>
+          <span class="item phone">联系电话：<span class="itemValue">15986830618</span></span>
+        </div>
+      </div>
     </div>
+  </div>
+  <div class="breadBox">
+    <ol class="breadcrumb">
+      <li><a href="./index.html">首页</a></li>
+      <li class="active">99式坦克军事系列积木套装</li>
+    </ol>
+  </div>
+  <div class="productBox">
+    <div class="left">
+      <div class="product">
+        <div class="showimg">
+          <img class="show" src="./static/images/product3.png">
+          <div class="showbox"></div>
+          <div class="showlarge">
+            <img src="./static/images/product3.png">
+          </div>
+        </div>
+        <div class="product-img">
+          <img src="./static/images/product3.png">
+          <img src="./static/images/product4.png">
+          <img src="./static/images/product3.png">
+          <img src="./static/images/product4.png">
+          <img src="./static/images/product3.png">
+          <img src="./static/images/product4.png">
+          <img src="./static/images/product3.png">
+          <img src="./static/images/product4.png">
+          <img src="./static/images/product3.png">
+        </div>
+      </div>
     </div>
-    <div class="product-img">
-    <img src="./static/images/product3.png">
-    <img src="./static/images/product4.png">
-    <img src="./static/images/product3.png">
-    <img src="./static/images/product4.png">
-    <img src="./static/images/product3.png">
-    <img src="./static/images/product4.png">
-    <img src="./static/images/product3.png">
-    <img src="./static/images/product4.png">
-    <img src="./static/images/product3.png">
-    </div>
-    </div>
+    <div class="right"></div>
+  </div>
 </body>
 <script>
   /**该插件的使用基于jQuery**/
@@ -131,6 +153,7 @@ temp[i] = args[n][i];
 }
 return temp;
 }
+window.HTMLElement = window.HTMLElement || Element;
 HTMLElement.prototype.MYmagnifier = mymagnifier;
 var magnifier_box=document.getElementsByClassName("magnifier");
 for(var i=0;i<magnifier_box.length;i++){
