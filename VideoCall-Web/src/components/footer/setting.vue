@@ -4,13 +4,13 @@
  * @Author: gaojiahao
  * @Date: 2020-11-03 16:35:57
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-17 12:28:04
+ * @LastEditTime: 2021-04-21 14:20:09
 -->
 <template>
     <Modal v-model="show" title="设置" @on-ok="ok" @on-cancel="cancel" width="430" draggable class="setting">
         <div class="setting_panel">
             <Tabs value="name1" :animated="false">
-                <TabPane label="房间设置" name="name1">
+                <TabPane label="房间设置" name="name1" v-if="flag">
                     <div class="setting_room_wrap">
                         <div class="item">
                             <div class="icon">
@@ -128,7 +128,8 @@ export default {
                 settings:['isM','isC']
             },
             videoDevice:'',
-            audioDevice:''
+            audioDevice:'',
+            flag:false
         }
     },
     watch:{
@@ -157,6 +158,7 @@ export default {
     },
     created(){
         this.formValidate.id = Cookies.get("channel");
+        this.flag =  Cookies.get("isAdmin")=='true' ? true : false;
     }
 }
 </script>

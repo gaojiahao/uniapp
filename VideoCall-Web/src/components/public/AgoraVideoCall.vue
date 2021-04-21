@@ -1,8 +1,6 @@
 <template>
   <div id="ag-canvas">
-    <!-- <div id="video_list_shrinkage" class="userlist" v-for="">
-      <div class="user" @click="selectAll(true)"><div class="active"></div></div>
-    </div> -->
+    <div id='default' class="user" style="width: 99px;height: 66px;grid-area: 12 / 1 / 13 / 4;z-index: 1;border: 1px solid rgb(255, 255, 255);"><div class="active"></div></div>
   </div>
 </template>
 
@@ -33,7 +31,8 @@ export default {
       userId:null,
       audioDevices:[],
       videoDevices:[],
-      uList:{}
+      uList:{},
+      count:1
     };
   },
 
@@ -83,27 +82,17 @@ export default {
         )
       ]);
       //主持人的大画面
-      if($.isAdmin=='true'){
-        $.localVideoTrack.play("ag-canvas");
-      } else {
-        const playerContainer = document.createElement("div");
-        // 给这个 DIV 节点指定一个 ID，这里指定的是远端用户的 UID。下面缩略图画面
-        playerContainer.id = $.uid;
-        playerContainer.className = "user";
-        playerContainer.style.width = "99px";
-        playerContainer.style.height = "66px";
-        playerContainer.style.marginLeft = "5px";
-        playerContainer.style.marginRight = "5px";
-        playerContainer.style.border = "1px solid #FFFFFF";
-        // playerContainer.onclick = function () { $.copyNodeVide(playerContainer.id) };
-        document.getElementById("video_list_shrinkage").appendChild(playerContainer);
-        $.localVideoTrack.play(playerContainer);
-      }
+      const playerContainer = document.createElement("div");
+      // 给这个 DIV 节点指定一个 ID，这里指定的是远端用户的 UID。下面缩略图画面
+      playerContainer.id = $.uid;
+      playerContainer.className = "user-video";
+      playerContainer.style.width = "100%";
+      playerContainer.style.height = "100%";
+      playerContainer.style.gridArea = "span 12/span 24/13/25";
+      document.getElementById("ag-canvas").appendChild(playerContainer);
+      $.localVideoTrack.play(playerContainer);
       await $.client.publish([this.localAudioTrack, this.localVideoTrack]);
       console.log("publish success");
-      //初始化摄像头和麦克风
-      // await $.localVideoTrack.setEnabled(window.sessionStorage.getItem("isCar")=='true'?true:false);
-      // await $.localAudioTrack.setEnabled(window.sessionStorage.getItem("isMic")=='true'?true:false);
       this.testNetWork();
     },
     async leave(){
@@ -131,39 +120,91 @@ export default {
     },
     //订阅远端用户
     async subscribe(user, mediaType) {
-      // debugger
+      debugger
       var $ = this;
       const uid = user.uid;
       // subscribe to a remote user
       await this.client.subscribe(user, mediaType);
+      var count =document.getElementById("ag-canvas").childNodes;
+      var userLength = count.length;
       console.log("subscribe success");
       if (mediaType === 'video') {
         const remoteVideoTrack = user.videoTrack;
         // 动态插入一个 DIV 节点作为播放远端视频轨道的容器。
         for(var i=0;i<$.userlist.length;i++){
           if(uid==$.userlist[i]['id']){
-            if($.userlist[i]['isMaster']){
-              remoteVideoTrack.play("ag-canvas");  
-            } else {
-              const playerContainer = document.createElement("div");
-              // 给这个 DIV 节点指定一个 ID，这里指定的是远端用户的 UID。下面缩略图画面
-              playerContainer.id = user.uid.toString();
-              playerContainer.className = "user";
-              playerContainer.style.width = "99px";
-              playerContainer.style.height = "66px";
-              playerContainer.style.marginLeft = "5px";
-              playerContainer.style.marginRight = "5px";
-              playerContainer.style.border = "1px solid #FFFFFF";
-              document.getElementById("video_list_shrinkage").appendChild(playerContainer);
-              // 订阅完成，播放远端音视频。
-              // 传入 DIV 节点，让 SDK 在这个节点下创建相应的播放器播放远端视频。
-              remoteVideoTrack.play(playerContainer);
-            }
+            // if($.userlist[i]['isMaster']){
+            const playerContainer = document.createElement("div");
+            playerContainer.id = user.uid.toString();
+            playerContainer.className = "user-video";
+            playerContainer.style.width = "99px";
+            playerContainer.style.height = "66px";
+            playerContainer.style.gridArea = `12 / ${1 * userLength} / 13 / ${4 * userLength}`;  //
+            playerContainer.style.zIndex = 1;
+            playerContainer.style.border = "1px solid #FFFFFF";
+            playerContainer.onclick = function () { $.setMainVideo(playerContainer.id) };
+            document.getElementById("ag-canvas").appendChild(playerContainer);
+            remoteVideoTrack.play(playerContainer);
           }  
         }
       }
       if (mediaType === 'audio') {
         user.audioTrack.play();
+      }
+    },
+    //设置主视频页面
+    setMainVideo(val){
+      var $=this;
+      var items =document.getElementById("ag-canvas").childNodes;
+      var count = 0;
+      if(val=='default'){
+        var flag = items.length-1;
+        switch(flag){
+          case 1:
+            break;
+          case 2:
+            this.setMulitVideo(items,2);
+            break;
+          default:
+            break
+        } 
+      } else {
+        for(var i=0;i<items.length;i++){
+          console.log(items[i]);
+          if(items[i]['id']==val){
+            items[i].style.width = "100%";
+            items[i].style.height = "100%";
+            items[i].style.gridArea = "span 12/span 24/13/25";
+            items[i].style.zIndex = 0;
+            items[i].style.border = "unset";
+          } else {
+            count++;
+            items[i].style.width = "99px";
+            items[i].style.height = "66px";
+            items[i].style.gridArea = `12 / ${1 * count} / 13 / ${4 * count}`;  //
+            items[i].style.zIndex = 1;
+            items[i].style.border = "1px solid #FFFFFF";
+            items[i].style.display = "block"; 
+            items[i].onclick = function (e) { $.setMainVideo(e.currentTarget.id) };
+          }
+        }
+      }
+    },
+    setMulitVideo(items,type){
+      var $=this;
+      var count = 0;
+      for(var i=0;i<items.length;i++){
+          if(items[i]['id']=='default'){
+            items[i].style.display = "none";  
+          } else {
+            items[i].style.width = "100%";
+            items[i].style.height = "100%";
+            items[i].style.gridArea = `4 / ${1 + (count*12)} / 11 / ${13 +(13*count)}`;
+            items[i].style.zIndex = 0;
+            items[i].style.border = "1px solid #FFFFFF";
+            items[i].onclick = function (e) { $.setMainVideo(e.currentTarget.id) };
+            count++;
+          }
       }
     },
     //用户发布订阅
@@ -176,7 +217,6 @@ export default {
         user:user,
         mediaType:mediaType
       }
-      // this.$parent.$parent.$parent.$parent.$parent.getQueryMeetingRoomMembers();
     },
     //用户取消发布订阅
     handleUserUnpublished(user,mediaType) {
@@ -185,7 +225,6 @@ export default {
         const playerContainer = document.getElementById(user.uid.toString());
         // 销毁这个节点。
         playerContainer.remove();
-        // this.$parent.$parent.$parent.$parent.$parent.getQueryMeetingRoomMembers();
       }
     },
     //结束会议
@@ -321,52 +360,32 @@ export default {
     this.config = JSON.parse(window.sessionStorage.getItem("SPHY_LOGIN_TOKEN"));
     this.code = window.localStorage.getItem("mac");
   },
-
-  mounted() {
-
-  },
-
-  beforeUpdate() {
-    
-  },
-
-  beforeDestroy () {
-    
-  }
 };
 </script>
 
 <style lang="less" scoped>
 #ag-canvas {
   height: 100%;
-  // display: grid;
-  // grid-gap: 10px;
-  // justify-items: center;
-  // grid-template-rows: repeat(12,auto);
-  // grid-template-columns: repeat(24,auto);
-  .userlist {
-    width: 100%;
+  display: grid;
+  grid-gap: 10px;
+  justify-items: center;
+  grid-template-rows: repeat(12,auto);
+  grid-template-columns: repeat(24,auto);
+  .user {
+    width: 99px;
     height: 66px;
-    position: absolute;
-    bottom: 16px;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    .user {
-        width: 99px;
-        height: 66px;
-        background: #dcdee2;
-        margin-left: 5px;
-        margin-right: 5px;
-        border: 1px solid #FFFFFF;
-    }
+    background: #dcdee2;
+    margin-left: 5px;
+    margin-right: 5px;
+    border: 1px solid #FFFFFF;
     .active {
-        background: url('~@assets/images/suo.webp');
-        background-repeat: no-repeat;
-        width: 97px;
-        height: 64px;
+      background: url('~@assets/images/suo.webp');
+      background-repeat: no-repeat;
+      width: 97px;
+      height: 64px;
     }
-}
+  }
+
 }
 
 .ag-item :first-child {

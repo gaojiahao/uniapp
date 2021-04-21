@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 16:54:22
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\video\index.vue
- * @LastEditTime: 2021-04-20 19:47:13
+ * @LastEditTime: 2021-04-21 14:51:50
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -64,9 +64,6 @@
             <div class="bg" v-else>
                 <img :src="test" style="width:100%;height:807px;">
             </div> -->
-            <div id="video_list_shrinkage" class="userlist" v-for="">
-                <div class="user" @click="selectAll(true)"><div class="active"></div></div>
-            </div>
         </div>
         <EndModal :isShow="isShow"></EndModal>
     </div> 

@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 19:15:58
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\index.vue
- * @LastEditTime: 2021-04-20 20:01:42
+ * @LastEditTime: 2021-04-21 14:19:10
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -53,7 +53,7 @@
             </Col>
             <Col span="8">
                 <div class="settings">
-                    <div class="timer item" v-if="flag">
+                    <div class="timer item">
                         <i class="iconfont iconshezhi icon" @click="showModalDetail(true)"></i>
                     </div>
                     <div class="timer item">
