@@ -271,5 +271,56 @@
     margin-left: 20px;
     margin-bottom: 20px;
     display: inline-block;
+    vertical-align: top;
+  }
+  
+  .otherProducts .otherContent .otherItem .itemImgBox {
+    width: 100%;
+    height: 215px;
+  }
+  .otherProducts .otherContent .otherItem .itemImgBox img {
+    width: 248px;
+    height: 176px;
+    margin-left: 18px;
+    margin-top: 18px;
+    vertical-align: top;
+  }
+  .otherProducts .otherContent .otherItem .itemContext {
+    width: 100%;
+    height: 75px;
+  }
+  .otherProducts .otherContent .otherItem .itemContext {
+    padding: 0 18px;
+    font-size: 16px;
+    font-weight: 400;
+  }
+  .otherProducts .otherContent .otherItem .itemContext .name {
+    line-height: 30px;
+    overflow: hidden; /*超出部分隐藏*/
+    white-space: nowrap; /*不换行*/
+    text-overflow: ellipsis; /*超出部分文字以...显示*/
+  }
+  .otherProducts .otherContent .otherItem .itemContext .price {
+    color: #FF5050;
+    font-size: 14px;
+    line-height: 30px;
+  }
+  .otherProducts .otherContent .otherItem .itemContext .price .priceVal {
+    font-size: 20px;
+  }
+  .footer {
+    margin-top: 48px;
+    height: 77px;
+    line-height: 77px;
+    width: 100%;
+    background: #ebebeb;
+    opacity: 0.8;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: center;
+    color: #333333;
+  }
+  .footer .laiyuan {
+    margin-right: 105px;
   }
   
