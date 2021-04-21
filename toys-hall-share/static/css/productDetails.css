@@ -76,7 +76,7 @@
     font-size: 0;
   }
   .product-img .itemBox .imgWrap img{
-    width: 76px;
+    width: 78px;
     height: 55px;
     opacity: 1;
     border: 1px solid #e9e9e9;
@@ -229,5 +229,47 @@
   
   .productBox .right .context p .value {
     color: #333;
+  }
+  .otherProducts {
+    width: 1240px;
+    height: 699px;
+    opacity: 1;
+    background: #ffffff;
+    border: 1px solid #e9e9e9;
+    margin: 20px auto;
+  }
+  .otherProducts .title {
+    height: 75px;
+    line-height: 75px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #333333;
+    margin-left: 38px;
+    position: relative;
+  }
+  .otherProducts .title .titleIcon {
+    position: absolute;
+    width: 5px;
+    height: 20px;
+    background-color: #1FBFCB;
+    left: -20px;
+    top: 28px;
+    border-radius: 3px;
+  }
+  
+  .otherProducts .otherContent {
+    height: 600px;
+    width: 100%;
+    font-size: 0;
+  }
+  .otherProducts .otherContent .otherItem {
+    width: 284px;
+    height: 290px;
+    opacity: 1;
+    background: #ffffff;
+    border: 1px solid #e9e9e9;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    display: inline-block;
   }
   
