@@ -12,6 +12,18 @@
     border: 1px solid #ebebeb;
     border-radius: 6px;
   }
+  .showimg .product3D {
+    position: absolute;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 48px;
+    height: 48px;
+    right: 17px;
+    bottom: 24px;
+    background: url("../images/3DIcon.png") no-repeat center;
+    background-size: contain;
+    cursor: pointer;
+  }
   .show{
     width: 539px;
     height: 393px;
@@ -47,16 +59,21 @@
   }
   .product-img .rightItem {
     right: 0;
+    top: 0;
   }
   .product-img .itemBox {
     width: 491px;
     height: 55px;
     left: 25px;
     overflow: hidden;
+    position: relative;
   }
   .product-img .itemBox .imgWrap {
-    width: 491px;
     white-space:nowrap;
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 0;
   }
   .product-img .itemBox .imgWrap img{
     width: 76px;
@@ -192,5 +209,25 @@
     display: inline-block;
     width: 40px;
     height: 40px;
+    cursor: pointer;
+  }
+  .productBox .right .productPrice {
+    margin-top: 14px;
+    font-size: 24px;
+    font-weight: 400;
+    color: #ff5050;
+  }
+  
+  .productBox .right .context {
+    color: #999999;
+    font-size: 16px;
+    margin-top: 20px;
+  }
+  .productBox .right .context p {
+    margin-bottom: 10px;
+  }
+  
+  .productBox .right .context p .value {
+    color: #333;
   }
   

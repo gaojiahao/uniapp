@@ -49,9 +49,10 @@
           <div class="showlarge">
             <img src="./static/images/product3.png">
           </div>
+          <div class="product3D"></div>
         </div>
         <div class="product-img">
-          <div class="leftItem">
+          <div class="leftItem" onclick="handlerDirection('left')">
             <span class="iconfont icon-dajiantouzuo"></span>
           </div>
           <div class="itemBox">
@@ -67,7 +68,7 @@
               <img src="./static/images/product3.png">
             </div>
           </div>
-          <div class="rightItem">
+          <div class="rightItem"  onclick="handlerDirection('right')">
             <span class="iconfont icon-dajiantouyou"></span>
           </div>
         </div>
@@ -80,6 +81,19 @@
           <i class="fanhui"></i>
           <i class="fenxiang"></i>
         </div>
+      </div>
+      <div class="productPrice">
+        ￥98.00
+      </div>
+      <div class="context">
+        <p>出厂货号：<span class="value">123-321</span></p>
+        <p>包装：<span class="value">彩盒</span></p>
+        <p>产品规格：<span class="value">0X0X0(CM)</span></p>
+        <p>外箱规格：<span class="value">68X46X74(CM)</span></p>
+        <p>包装规格：<span class="value">14X11.3X4(CM)</span></p>
+        <p>装箱量：<span class="value">2/288(PCS)</span></p>
+        <p>体积/材积：<span class="value">0.231(CBM)/8.17(CUFT)</span></p>
+        <p>体毛重/净重：<span class="value">1/18(KG)</span></p>
       </div>
     </div>
   </div>
@@ -230,7 +244,42 @@ $(function() {
 		$(".showbox").hide();//小框隐藏
 		$(".showlarge").hide();//放大图隐藏
 	});
-	
+	$(".showlarge").mouseenter(function(){
+		$(".showbox").hide();//小框隐藏
+		$(".showlarge").hide();//放大图隐藏
+	});
 });
+</script>
+<script>
+  var isHandlerDirectionTimeID = null;
+  var isHandlerDirection = true;
+    function handlerDirection(direction) {
+      clearTimeout(isHandlerDirectionTimeID);
+      if(isHandlerDirection) {
+        var imgWrapWidth = $(".itemBox").width();
+        var imgWidth = $(".imgWrap").width();
+        var imgLeft = $(".imgWrap").position().left;
+        var imgItemWidth = 93;
+        var difference = imgWidth - imgWrapWidth;
+        switch (direction) {
+          case "left":
+            if (imgLeft >= 0) {
+              return false;
+            }
+            $(".product-img .itemBox .imgWrap").animate({left:(imgLeft += imgItemWidth) + "px"});
+            break;
+          case "right":
+            if (imgLeft <= -difference) {
+              return false;
+            }
+            $(".product-img .itemBox .imgWrap").animate({left:(imgLeft -= imgItemWidth) + "px"});
+            break;
+          }
+          isHandlerDirection = false
+      }
+      isHandlerDirectionTimeID = setTimeout(function() {
+        isHandlerDirection = true
+      }, 500)
+    }
 </script>
 </html>
