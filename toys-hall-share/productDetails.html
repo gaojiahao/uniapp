@@ -10,25 +10,181 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>产品详情</title>
+  <!-- 初始化样式 -->
+  <link rel="stylesheet" href="./static/css/base.css">
+  <!-- 文件样式 -->
+  <link rel="stylesheet" href="./static/css/productDetails.css">
   <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <script src="./static/js/jquery.min.js"></script>
+  <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 </head>
 <body>
-  <div class="dropdown">
-    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-      Dropdown
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-      <li><a href="#">Action</a></li>
-      <li><a href="#">Another action</a></li>
-      <li><a href="#">Something else here</a></li>
-      <li role="separator" class="divider"></li>
-      <li><a href="#">Separated link</a></li>
-    </ul>
-  </div>
+  <div class="product">
+    <div class="showimg">
+    <img class="show" src="./static/images/product3.png">
+    <div class="showbox"></div>
+    <div class="showlarge">
+    <img src="./static/images/product3.png">
+    </div>
+    </div>
+    <div class="product-img">
+    <img src="./static/images/product3.png">
+    <img src="./static/images/product4.png">
+    <img src="./static/images/product3.png">
+    <img src="./static/images/product4.png">
+    <img src="./static/images/product3.png">
+    </div>
+    </div>
 </body>
-<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script>
+  /**该插件的使用基于jQuery**/
+
+var mymagnifier=function(opts){
+opts = mymagnifier.prototype.extendObj(mymagnifier.prototype.defaults,opts);
+mymagnifier.prototype.magnifier(opts);
+}
+/**默认参数块**/ 
+mymagnifier.prototype.defaults = {
+img:"img", 
+bigimg:"bigs",
+mark:"mark"
+};
+
+mymagnifier.prototype.magnifier=function(opts){
+var img = document.getElementById(opts.img);
+var bigimg = document.getElementById(opts.bigimg);
+var mark = document.getElementById(opts.mark);
+var magnifier=img.parentNode;
+console.log(magnifier.className+"+"+magnifier.getBoundingClientRect().left+"+"+magnifier.getBoundingClientRect().top);
+var x,y,l,t,L,T,mL,mT;
+img.onmouseover=function(){
+mark.style.display="block";
+bigimg.style.display="block";
+}
+img.onmouseout=function(){
+mark.style.display="none";
+bigimg.style.display="none";
+}
+img.onmousemove=function(e){
+//获取鼠标相对浏览器的坐标
+x=e.clientX;
+y=e.clientY;
+//console.log("x"+x,"y"+y)
+l=img.offsetLeft;
+t=img.offsetTop;
+mark.style.left=(x-l-mark.offsetWidth/2-magnifier.getBoundingClientRect().left)+"px";
+mark.style.top=(y-t-mark.offsetHeight/2-magnifier.getBoundingClientRect().top)+"px";
+// 移动区边界距离边界的距离
+mL=mark.offsetLeft;
+mT=mark.offsetTop;
+//最小范围
+/*console.log("mL"+mL,"mT"+mT)*/
+if(mL<=0){
+mark.style.left="0";
+}
+if(mT<=0){
+mark.style.top="0"
+}
+// 最大范围
+if(mL>=img.offsetWidth-mark.offsetWidth){
+mark.style.left=img.offsetWidth-mark.offsetWidth+"px";
+}
+if(mT>=img.offsetHeight-mark.offsetHeight){
+mark.style.top=img.offsetHeight-mark.offsetHeight+"px";
+}
+//显示区的宽高
+L=bigimg.offsetWidth;
+T=bigimg.offsetHeight;
+// console.log(L,T);
+//获取放大的倍数
+bigimg.style.left="-"+(mL/(img.offsetWidth/L))+"px";
+bigimg.style.top="-"+(mT/(img.offsetHeight/T))+"px";
+// console.log(bigimg.style.left,bigimg.style.top)
+}
+}
+
+
+//js继承
+mymagnifier.prototype.cloneObj=function(oldObj) { //复制对象方法
+if (typeof(oldObj) != "object") return oldObj;
+if (oldObj == null) return oldObj;
+var newObj = new Object();
+for (var i in oldObj)
+newObj[i] = mymagnifier.prototype.cloneObj(oldObj[i]);
+return newObj;
+};
+mymagnifier.prototype.extendObj=function() { //扩展对象
+var args = arguments;
+if (args.length < 2) return;
+var temp = mymagnifier.prototype.cloneObj(args[0]); //调用复制对象方法
+for (var n = 1; n < args.length; n++) {
+for (var i in args[n]) {
+temp[i] = args[n][i];
+}
+}
+return temp;
+}
+HTMLElement.prototype.MYmagnifier = mymagnifier;
+var magnifier_box=document.getElementsByClassName("magnifier");
+for(var i=0;i<magnifier_box.length;i++){
+magnifier_box[i].MYmagnifier();
+}
+</script>
+<script>
+$(function() {
+	//鼠标移入产品小图事件
+	$(".product-img img").mouseenter(function(){//鼠标悬浮在不同的产品小图片时外加黑色边框并且主图将其显示出来
+		$(".product-img img").css({"border":"2px solid #FFF"});
+		$(this).css({"border":"2px solid #000"});//this获取的是当前鼠标移入的元素，设置黑色边框
+		var imgsrc=$(this).attr("src");//获取当前鼠标移入元素的src属性值将其赋值给主图元素
+		$(".show").attr("src",imgsrc);
+		$(".showlarge img").attr("src",imgsrc);//将鼠标选中的图传给放大图元素的src属性
+	});
+	//鼠标移入产品主图时出现放大的细节图和小框 
+	$(".showimg").mouseenter(function(){
+		$(".showbox").show();
+		$(".showlarge").show();
+	});
+	//鼠标在产品主图移动事件
+	$(".showimg").mousemove(function(e){
+		var mousex=e.clientX;//获取鼠标当前对于浏览器可视区的X坐标
+		var mousey=e.clientY;
+		var imgx=$(".showimg").offset().left;//获得产品主图对于文档的偏移坐标
+		var imgy=$(".showimg").offset().top;
+		//小框的left值是鼠标位移减去产品图元素偏移坐标减去小框宽度的一半，使鼠标保持位于小框的中间
+		var boxleft=mousex-imgx-$(".showbox").width()/2;//计算小框对于产品主图元素的距离用来定位
+		var boxtop=mousey-imgy-$(".showbox").height()/2;
+		//鼠标移动小框位置跟着变化
+		$(".showbox").css({"top":boxtop,"left":boxleft});
+		//计算小框移动的最大范围
+		var maxtop=$(".showimg").height()-$(".showbox").height();
+		var maxleft=$(".showimg").width()-$(".showbox").width();
+		//判断小框移动的边界
+		if(boxtop<=0){
+			$(".showbox").css("top","0");
+		}else if(boxtop>maxtop){
+			$(".showbox").css("top",maxtop);
+		}
+		if(boxleft<=0){
+			$(".showbox").css("left","0");
+		}else if(boxleft>maxleft){
+			$(".showbox").css("left",maxleft);
+		}
+		//设置放大图的位置偏移量，获取小框偏移量乘放大倍数，注意！！！放大图偏移量应设置为负值
+		var showleft=-$(".showbox").position().left*2;//position()方法返回当前元素相对于父元素的位置（偏移）
+		var showtop=-$(".showbox").position().top*2;
+		//此处获取小框偏移量不应该使用前面计算出来的boxtop和boxleft值，因可能会出现超出移动的边界
+		$(".showlarge img").css({"left":showleft,"top":showtop});
+	});
+	//鼠标离开产品主图元素事件，此处使用mouseleave事件只有在鼠标指针离开被选元素时才会触发，mouseout鼠标指针离开被选元素和其任何子元素都会触发。
+	$(".showimg").mouseleave(function(){
+		$(".showbox").hide();//小框隐藏
+		$(".showlarge").hide();//放大图隐藏
+	});
+	
+});
+</script>
 </html>
