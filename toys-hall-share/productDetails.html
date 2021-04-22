@@ -18,6 +18,12 @@
   <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <script src="./static/js/jquery.min.js"></script>
+  <script src="./static/js/template.js"></script>
+  <!-- 封装复制插件 -->
+  <script src="./static/js/myClipboard.js"></script>
+  <script src="./static/js/clipboard.js"></script>
+  <script src="./static/js/json2.js"></script>
+  <script src="./static/js/myLocalStorage.js"></script>
   <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
@@ -26,10 +32,12 @@
     <div class="header">
       <div class="headerBox">
         <div class="factoryName">
-          成卓玩具厂
+          <span id="ma_na">
+
+          </span>
           <div class="contactMethod">
-            <span class="item person">联系人：<span class="itemValue">张老板</span></span>
-            <span class="item phone">联系电话：<span class="itemValue">15986830618</span></span>
+            <span class="item person">联系人：<span class="itemValue" id="linkman"></span></span>
+            <span class="item phone">联系电话：<span class="itemValue" id="handset"></span></span>
           </div>
         </div>
       </div>
@@ -37,7 +45,8 @@
     <div class="breadBox">
       <ol class="breadcrumb">
         <li><a href="./index.html">首页</a></li>
-        <li class="active">99式坦克军事系列积木套装</li>
+        <li class="middle">></li>
+        <li class="active" id="activeRoute"></li>
       </ol>
     </div>
     <!-- 产品信息轮播图放大镜 -->
@@ -46,10 +55,12 @@
         <div class="left">
           <div class="product">
             <div class="showimg">
-              <img class="show" src="./static/images/product3.png">
+              <div id="showImgID">
+                <img class="show"  src="./static/images/logo.png">
+              </div>
               <div class="showbox"></div>
-              <div class="showlarge">
-                <img src="./static/images/product3.png">
+              <div class="showlarge" id="showlarge">
+                <img src="./static/images/logo.png">
               </div>
               <div class="product3D"></div>
             </div>
@@ -58,16 +69,8 @@
                 <span class="iconfont icon-dajiantouzuo"></span>
               </div>
               <div class="itemBox">
-                <div class="imgWrap">
-                  <img src="./static/images/product3.png">
-                  <img src="./static/images/product4.png">
-                  <img src="./static/images/product3.png">
-                  <img src="./static/images/product4.png">
-                  <img src="./static/images/product3.png">
-                  <img src="./static/images/product4.png">
-                  <img src="./static/images/product3.png">
-                  <img src="./static/images/product4.png">
-                  <img src="./static/images/product3.png">
+                <div class="imgWrap" id="imgWrap">
+                  <!-- <img src="./static/images/product3.png"> -->
                 </div>
               </div>
               <div class="rightItem"  onclick="handlerDirection('right')">
@@ -76,26 +79,41 @@
             </div>
           </div>
         </div>
-        <div class="right">
+        <div class="right" id="rightContext">
           <div class="productName">
-            99式坦克军事系列积木套装
             <div class="btns">
               <i class="fanhui"></i>
-              <i class="fenxiang"></i>
+              <i class="fenxiang" id="fuzhi" data-clipboard-text="http://192.168.1.14:8080/"></i>
             </div>
           </div>
           <div class="productPrice">
-            ￥98.00
           </div>
           <div class="context">
-            <p>出厂货号：<span class="value">123-321</span></p>
-            <p>包装：<span class="value">彩盒</span></p>
-            <p>产品规格：<span class="value">0X0X0(CM)</span></p>
-            <p>外箱规格：<span class="value">68X46X74(CM)</span></p>
-            <p>包装规格：<span class="value">14X11.3X4(CM)</span></p>
-            <p>装箱量：<span class="value">2/288(PCS)</span></p>
-            <p>体积/材积：<span class="value">0.231(CBM)/8.17(CUFT)</span></p>
-            <p>体毛重/净重：<span class="value">1/18(KG)</span></p>
+            <p>出厂货号：<span class="value"></span></p>
+            <p>包装：<span class="value"></span></p>
+            <p>产品规格：<span class="value"></span></p>
+            <p>外箱规格：<span class="value"></span></p>
+            <p>包装规格：<span class="value"></span></p>
+            <p>装箱量：<span class="value"></span></p>
+            <p>体积/材积：<span class="value"></span></p>
+            <p>体毛重/净重：<span class="value"></span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 3D弹框 -->
+    <button style="display: none;" type="button" id="open3D" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button>
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <!-- <iframe width="100%" height="576px" src="http://img.toysbear.com/360PorductImg/YS0479485/index.html" frameborder="0"></iframe> -->
+            <!-- <iframe width="100%" height="576px" src="" frameborder="0"></iframe> -->
+            <object type="text/html" data="http://img.toysbear.com/360PorductImg/YS0479485/index.html" style="width:100%; height:100%">
+            </object>
           </div>
         </div>
       </div>
@@ -105,79 +123,7 @@
       <div class="title">
         <i class="titleIcon"></i>
         其他产品</div>
-        <div class="otherContent">
-          <div class="otherItem">
-            <div class="itemImgBox">
-              <img src="./static/images/product3.png" alt="">
-            </div>
-            <div class="itemContext">
-              <div class="name">玩具名称玩具名称玩具名称玩具</div>
-              <div class="price">￥<span class="priceVal">98.00</span></div>
-            </div>
-          </div>
-          <div class="otherItem">
-            <div class="itemImgBox">
-              <img src="./static/images/product3.png" alt="">
-            </div>
-            <div class="itemContext">
-              <div class="name">玩具名称玩具名称玩具名称玩具</div>
-              <div class="price">￥<span class="priceVal">98.00</span></div>
-            </div>
-          </div>
-          <div class="otherItem">
-            <div class="itemImgBox">
-              <img src="./static/images/product3.png" alt="">
-            </div>
-            <div class="itemContext">
-              <div class="name">玩具名称玩具名称玩具名称玩具</div>
-              <div class="price">￥<span class="priceVal">98.00</span></div>
-            </div>
-          </div>
-          <div class="otherItem">
-            <div class="itemImgBox">
-              <img src="./static/images/product3.png" alt="">
-            </div>
-            <div class="itemContext">
-              <div class="name">玩具名称玩具名称玩具名称玩具</div>
-              <div class="price">￥<span class="priceVal">98.00</span></div>
-            </div>
-          </div>
-          <div class="otherItem">
-            <div class="itemImgBox">
-              <img src="./static/images/product3.png" alt="">
-            </div>
-            <div class="itemContext">
-              <div class="name">玩具名称玩具名称玩具名称玩具</div>
-              <div class="price">￥<span class="priceVal">98.00</span></div>
-            </div>
-          </div>
-          <div class="otherItem">
-            <div class="itemImgBox">
-              <img src="./static/images/product3.png" alt="">
-            </div>
-            <div class="itemContext">
-              <div class="name">玩具名称玩具名称玩具名称玩具</div>
-              <div class="price">￥<span class="priceVal">98.00</span></div>
-            </div>
-          </div>
-          <div class="otherItem">
-            <div class="itemImgBox">
-              <img src="./static/images/product3.png" alt="">
-            </div>
-            <div class="itemContext">
-              <div class="name">玩具名称玩具名称玩具名称玩具</div>
-              <div class="price">￥<span class="priceVal">98.00</span></div>
-            </div>
-          </div>
-          <div class="otherItem">
-            <div class="itemImgBox">
-              <img src="./static/images/product3.png" alt="">
-            </div>
-            <div class="itemContext">
-              <div class="name">玩具名称玩具名称玩具名称玩具</div>
-              <div class="price">￥<span class="priceVal">98.00</span></div>
-            </div>
-          </div>
+        <div class="otherContent" id="otherItemBox">
         </div>
     </div>
     <!-- 底部 -->
@@ -186,6 +132,77 @@
       <span>技术支持：深圳小竹熊软件技术开发有限公司</span>
     </div>
 </body>
+<!-- <%for(var i = 0; i < minHallList.length; i++) {%> 
+  <%=minHallList[i].adTitle%>
+  <%}%>-->
+
+<!-- 工厂名称 -->
+<script id="factoryTp" type="text/html">
+  <%=data.ma_na%>
+</script>
+<!-- 联系人 -->
+<script id="linkmanTp" type="text/html">
+  <%=data.linkman%>
+</script>
+<!-- 联系电话 -->
+<script id="handsetTp" type="text/html">
+  <%=data.handset%>
+</script>
+<!-- 面包屑模板 -->
+<script id="branchTp" type="text/html">
+  <%=data.ProductName%>
+</script>
+<!-- 产品图片模板 -->
+<script id="imgTp" type="text/html">
+  <img class="show"  src="<%=data.ProductImages[0]%>">
+</script>
+<!-- 产品缩略图模板 -->
+<script id="minImgTp" type="text/html">
+  <%for(var i = 0; i < data.ProductImages.length; i++) {%> 
+    <img src="<%=data.ProductImages[i]%>">
+  <%}%>
+</script>
+<!-- 产品放大图模板 -->
+<script id="bigTp" type="text/html">
+    <img src="<%=data.ProductImages[0]%>">
+</script>
+<!-- 其他产品模板 -->
+<script id="otherTp" type="text/html">
+  <%for(var i = 0; i < list.length; i++) {%> 
+  <div class="otherItem" value="<%=i%>">
+    <div class="itemImgBox">
+      <img src="<%=list[i].ProductImages[0]%>" alt="">
+    </div>
+    <div class="itemContext">
+      <div class="name"><%=list[i].ProductName%></div>
+      <div class="price">￥<span class="priceVal"><%=list[i].FactoryPrice%></span></div>
+    </div>
+  </div>
+  <%}%>
+</script>
+<!-- 产品信息模板 -->
+<script id="productInfoTp" type="text/html">
+  <div class="productName">
+    <%=data.ProductName%>
+    <div class="btns">
+      <i class="fanhui"></i>
+      <i class="fenxiang" id="fuzhi" data-clipboard-text="http://192.168.1.14:8080/"></i>
+    </div>
+  </div>
+  <div class="productPrice">
+    ￥<%=data.FactoryPrice%>
+  </div>
+  <div class="context">
+    <p>出厂货号：<span class="value"><%=data.FactoryNo%></span></p>
+    <p>包装：<span class="value"><%=data.ChinesePack%></span></p>
+    <p>产品规格：<span class="value"><%=data.ProductLength%>X<%=data.ProductWidth%>X<%=data.ProductHeight%>(CM)</span></p>
+    <p>外箱规格：<span class="value"><%=data.OuterBoxLength%>X<%=data.OuterBoxWidth%>X<%=data.OuterBoxHeight%>(CM)</span></p>
+    <p>包装规格：<span class="value"><%=data.InnerBoxLength%>X<%=data.InnerBoxWidth%>X<%=data.InnerBoxHeight%>(CM)</span></p>
+    <p>装箱量：<span class="value"><%=data.InnerBoxCount%>/<%=data.OuterBoxLoadCapa%>(PCS)</span></p>
+    <p>体积/材积：<span class="value"><%=data.OuterBoxBulkStere%>(CBM)/<%=data.OuterBoxBulkFeet%>(CUFT)</span></p>
+    <p>毛重/净重：<span class="value"><%=data.OuterBoxGrossWeight%>/<%=data.OuterBoxNetWeight%>(KG)</span></p>
+  </div>
+</script>
 <script>
   /**该插件的使用基于jQuery**/
 
@@ -393,5 +410,144 @@ $(function() {
         isHandlerDirection = true
       }, 500)
     }
+</script>
+<script>
+  $(function () {
+    var options = {
+        handlerID: 'fuzhi',
+        textID: 'fuzhi',
+        isAttr: true,
+        type:'copy'
+      }
+      try {
+        if(ClipboardJS) {
+          options.Clipboard = ClipboardJS
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    // 复制
+    var c1 = new ClipBoard(options);
+    // 返回
+    $(".fanhui").click(function () {
+      location.href = "/"
+    })
+    // 分享
+    $(".fenxiang").click(function () {
+      c1.attach(); // 触发复制/剪切功能
+    })
+    // 打开3D事件
+    $(".product3D").click(function () {
+      $("#open3D").click();
+      $("#imageFullScreen").css({
+        width: "100%",
+        height: "100%"
+      })
+    })
+  })
+</script>
+<script>
+  var keyGuid = window.localStorage.getItem("keyGuid");
+  $(function () {
+    $.get("https://hall.toysbear.com/api/Manufacturer/ManufacturerInfo?keyGuid=" + (keyGuid || "BE9757F5-E2B7-43DC-BABC-09251BCE3C72"), function (res) {
+      if(res.Code == 1) {
+        var factoryInfo = res.Data;
+        // 厂商
+        var html = template(document.getElementById('factoryTp').innerHTML, {
+          data: factoryInfo
+        });
+        document.getElementById("ma_na").innerHTML = html;
+        // 联系人
+        var html = template(document.getElementById('linkmanTp').innerHTML, {
+          data: factoryInfo
+        });
+        document.getElementById("linkman").innerHTML = html;
+        // 联系电话
+        var html = template(document.getElementById('handsetTp').innerHTML, {
+          data: factoryInfo
+        });
+        document.getElementById("handset").innerHTML = html;
+      } else {
+        alert(res.Message);
+      }
+    });
+    var CompanyNumber = window.localStorage.getItem("CompanyNumber");
+    $.get("https://hall.toysbear.com/api/Product/ProductInfo?companyNumber=" + (CompanyNumber || "TY000001"), function (res) {
+       if(res.Code === 1) {
+        var productValue = res.Data;
+        // 面包屑
+        var html = template(document.getElementById('branchTp').innerHTML, {
+            data: productValue
+          });
+          document.getElementById("activeRoute").innerHTML = html;
+        // 产品图片
+        var html = template(document.getElementById('imgTp').innerHTML, {
+            data: productValue
+          });
+          document.getElementById("showImgID").innerHTML = html;
+        // 缩略图
+        var html = template(document.getElementById('minImgTp').innerHTML, {
+            data: productValue
+          });
+          document.getElementById("imgWrap").innerHTML = html;
+        // 放大图
+        var html = template(document.getElementById('bigTp').innerHTML, {
+            data: productValue
+          });
+          document.getElementById("showlarge").innerHTML = html;
+        // 产品信息
+        var html = template(document.getElementById('productInfoTp').innerHTML, {
+            data: productValue
+          });
+          document.getElementById("rightContext").innerHTML = html;
+          var options = {
+            handlerID: 'fuzhi',
+            textID: 'fuzhi',
+            isAttr: true,
+            type:'copy'
+          }
+          try {
+            if(ClipboardJS) {
+              options.Clipboard = ClipboardJS
+            }
+          } catch (err) {
+            console.log(err);
+          }
+          // 复制
+          var c1 = new ClipBoard(options);
+          // 返回
+          $(".fanhui").click(function () {
+            location.href = "/"
+          })
+          // 分享
+          $(".fenxiang").click(function () {
+            c1.attach(); // 触发复制/剪切功能
+          })
+          // console.log(productValue);
+          $.get("https://hall.toysbear.com/api/Product/ProductList", { keyWord: productValue.ProductName.substring(0, 2), pageIndex: 1, pageSize: 8 }, function (result) {
+            if(result.Code === 1) {
+              var productList = result.Data.ProductInfo.Items
+            // 渲染其他产品
+            var html = template(document.getElementById('otherTp').innerHTML, {
+                list: productList
+              });
+              document.getElementById("otherItemBox").innerHTML = html;
+              $(".otherItem").click(function (e) {
+                console.log(productList[e.currentTarget.getAttribute("value")]);
+                var currentProductDetails = productList[e.currentTarget.getAttribute("value")];
+                // var currentUser = userList[];
+                window.localStorage.setItem("CompanyNumber", currentProductDetails.CompanyNumber);
+                window.open(location.href);
+              })
+            } else {
+              alert(result.Message)
+            }
+          });
+       } else {
+         alert(res.Message)
+       }
+       window.localStorage.removeItem("CompanyNumber");
+    });
+  })
 </script>
 </html>

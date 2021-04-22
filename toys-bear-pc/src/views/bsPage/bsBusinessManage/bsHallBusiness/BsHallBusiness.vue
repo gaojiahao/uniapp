@@ -196,7 +196,7 @@
             orderNumber: orderRow.orderNumber,
             the_nu: orderRow.the_nu,
             name: orderRow.fromCompanyName,
-            api: '/api/GetOfferOrderExcel'
+            api: '/api/GetSampleOrderExcel'
           }"
         />
       </el-dialog>
