@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 16:54:22
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\video\index.vue
- * @LastEditTime: 2021-04-21 14:51:50
+ * @LastEditTime: 2021-04-22 14:44:43
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -133,7 +133,7 @@ export default {
 <style lang="less" scoped>
     .video{
         width:100%;
-        height: 807px;
+        height: 100%;
         position: relative;
         overflow-y: hidden;
         .error {
@@ -153,7 +153,7 @@ export default {
         .box {
             position: relative;
             width: 100%;
-            height: 807px;
+            height: 100%;
             .userlist {
                 width: 100%;
                 height: 66px;

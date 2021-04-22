@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:15:36
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\productList.vue
- * @LastEditTime: 2021-04-21 11:52:13
+ * @LastEditTime: 2021-04-22 16:26:24
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -21,7 +21,7 @@
             </div>
             <Table :columns="columns2" :data="data2" height="700" :loading="loading" class="from">
                 <template slot-scope="{ row, index }" slot="action">
-                    <Icon type="ios-trash-outline" style="font-size:24px" @click="delSelection(row.id)" />
+                    <Icon type="ios-trash-outline" style="font-size:24px" @click="delSelection(row.id)" v-if="flag" />
                 </template>
                 <!-- <template slot="footer">
                     <div class="footer_page">
@@ -33,7 +33,7 @@
             </Table>
             <div class="total">
                 <div class="item">
-                    <Button type="primary" shape="circle" style="width:88px;margin: 6px 6px 0 0;" @click="save">提交</Button>
+                    <Button type="primary" shape="circle" style="width:88px;margin: 6px 6px 0 0;" @click="save" v-if="flag">提交</Button>
                 </div>
                 <div class="item">
                     <div class="label">总价：</div>
@@ -211,7 +211,7 @@ export default {
                                     fontSize: '12px',
                                     color: '#333333'
                                 },
-                            },'公司编号：' + params.row.number),
+                            },'公司编号：' + params.row.companyNumber),
                             h('div', {
                                 style: {
                                     marginTop: '4px',
@@ -296,7 +296,8 @@ export default {
                                     type:'number',
                                     style:{
                                         textAlign: 'center',
-                                    }
+                                    },
+                                    disabled:me.flag?false:true
                                 },
                                 number:'true',
                                 on: {
@@ -404,8 +405,11 @@ export default {
             totalBulkStere: 0,
             totalCount: 0,
             totalKuanshu: 0,
+            totalGrossWeight:0,
+            totalNetWeight:0,
             roomNumber:null,
-            loading:true
+            loading:true,
+            flag:false
         }
     },
     methods: {
@@ -516,6 +520,7 @@ export default {
     },
     created(){
         this.roomNumber=Cookies.get('channel');
+        this.flag =  Cookies.get("isAdmin")=='true' ? true : false;
     }
 }
 </script>

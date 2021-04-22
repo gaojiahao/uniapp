@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 16:28:17
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-20 20:07:19
+ * @LastEditTime: 2021-04-22 14:30:04
 -->
 <template>
   <div class="login" ref="login">
@@ -613,13 +613,18 @@ export default {
 
 <style lang="less" scoped>
 .login{
+  width: 100%;
+  height: 100%;
   .wrapper {
     width: 100%;
     color: #464c5b;
     background: #fff;
-    height: 909px;
+    height: 100%;
+    position: relative;
     .wrapper_dropdown{
-      float: right;
+      position: absolute;
+      top: 0;
+      right: 0;
       margin: 10px;
       a{
         color: #17233d;

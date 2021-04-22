@@ -1,12 +1,18 @@
 <template>
   <div id="ag-canvas">
-    <div id='default' class="user" style="width: 99px;height: 66px;grid-area: 12 / 1 / 13 / 4;z-index: 1;border: 1px solid rgb(255, 255, 255);"><div class="active"></div></div>
+    <div id='default' class="user" style="width: 99px;height: 66px;grid-area: 12 / 1 / 13 / 4;z-index: 1;border: 1px solid rgb(255, 255, 255);" @click.stop="setMainVideo('default')"><div class="active"></div></div>
+    <!-- <div id='1' class="user" style="width: 99px;height: 66px;grid-area: 12 / 2 / 13 / 8;z-index: 1;border: 1px solid rgb(255, 255, 255);background:white"></div>
+    <div id='2' class="user" style="width: 99px;height: 66px;grid-area: 12 / 3 / 13 / 12;z-index: 1;border: 1px solid rgb(255, 255, 255);background:white"></div>
+    <div id='3' class="user" style="width: 99px;height: 66px;grid-area: 12 / 4 / 13 / 16;z-index: 1;border: 1px solid rgb(255, 255, 255);background:white"></div>
+    <div id='4' class="user" style="width: 99px;height: 66px;grid-area: 12 / 5 / 13 / 20;z-index: 1;border: 1px solid rgb(255, 255, 255);background:white"></div> -->
   </div>
 </template>
 
 <script>
+import AgoraRTC from "agora-rtc-sdk-ng"
 import * as Cookies from "js-cookie";
 import { merge } from "lodash";
+import video from '@mixins/video';
 import {
   CloseMeetingRoom,
   JoinMeetingRoom,
@@ -35,7 +41,6 @@ export default {
       count:1
     };
   },
-
   props: [
     "transcode",
     "attendeeMode",
@@ -48,7 +53,7 @@ export default {
     "userlist",
     "isAdmin"
   ],
-
+  mixins:[video],
   methods: {
     //发布频道与加入
     async join() {
@@ -133,6 +138,7 @@ export default {
         // 动态插入一个 DIV 节点作为播放远端视频轨道的容器。
         for(var i=0;i<$.userlist.length;i++){
           if(uid==$.userlist[i]['id']){
+            console.log($.userlist);
             // if($.userlist[i]['isMaster']){
             const playerContainer = document.createElement("div");
             playerContainer.id = user.uid.toString();
@@ -154,8 +160,15 @@ export default {
     },
     //设置主视频页面
     setMainVideo(val){
+      debugger
       var $=this;
-      var items =document.getElementById("ag-canvas").childNodes;
+      var itemList =document.getElementById("ag-canvas").childNodes;
+      var items=[];
+      for(var i=0;i<itemList.length;i++){
+        if(itemList[i].nodeName!='#text'){
+          items.push(itemList[i]);
+        }
+      };
       var count = 0;
       if(val=='default'){
         var flag = items.length-1;
@@ -165,6 +178,15 @@ export default {
           case 2:
             this.setMulitVideo(items,2);
             break;
+          case 3:
+            this.setMulitVideo(items,3);
+            break;
+          case 4:
+            this.setMulitVideo(items,4);
+          case 5:
+            this.setMulitVideo(items,5);
+          case 6:
+            this.setMulitVideo(items,6);
           default:
             break
         } 
@@ -188,23 +210,6 @@ export default {
             items[i].onclick = function (e) { $.setMainVideo(e.currentTarget.id) };
           }
         }
-      }
-    },
-    setMulitVideo(items,type){
-      var $=this;
-      var count = 0;
-      for(var i=0;i<items.length;i++){
-          if(items[i]['id']=='default'){
-            items[i].style.display = "none";  
-          } else {
-            items[i].style.width = "100%";
-            items[i].style.height = "100%";
-            items[i].style.gridArea = `4 / ${1 + (count*12)} / 11 / ${13 +(13*count)}`;
-            items[i].style.zIndex = 0;
-            items[i].style.border = "1px solid #FFFFFF";
-            items[i].onclick = function (e) { $.setMainVideo(e.currentTarget.id) };
-            count++;
-          }
       }
     },
     //用户发布订阅
@@ -386,103 +391,6 @@ export default {
     }
   }
 
-}
-
-.ag-item :first-child {
-  border-radius: 6px;
-}
-.ag-item {
-  border-radius: 6px;
-  border: 2px #00b6ed solid;
-  background: url("~@assets/images/avatar.png") center no-repeat;
-  height: 100%;
-  width: 100%;
-}
-
-#ag-resize-container {
-  background-image: none !important;
-  background-color: black;
-  display: flex;
-  justify-content: center;
-  height: center;
-}
-
-#ag-resize-container .ag-item {
-  border: none !important;
-}
-
-/* button group */
-.ag-btn-group {
-  height: 70px;
-  width: calc(100% - 60px);
-  margin: 0 auto;
-  position: absolute;
-  bottom: 0;
-  background: transparent;
-  z-index: 11;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
-
-.ag-btn-group:hover,
-.ag-btn-group.active {
-  background: rgba(18, 74, 99, 0.8);
-}
-
-.ag-btn {
-  z-index: 12;
-  opacity: 0;
-  color: white;
-  /* width: 35px;
-    height: 35px; */
-  cursor: pointer;
-  font-size: 60px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-}
-.ag-btn:hover {
-  color: #00b6ed;
-}
-
-.ag-btn.disabled,
-.ag-btn.disabled:hover {
-  color: #637c8e;
-  cursor: not-allowed;
-}
-
-.ag-btn-group:hover .ag-btn,
-.ag-btn-group.active .ag-btn {
-  opacity: 1;
-}
-.ag-btn.off.videoControlBtn .ag-icon-camera {
-  display: none;
-}
-.ag-btn.videoControlBtn .ag-icon-camera-off {
-  display: none;
-}
-.ag-btn.videoControlBtn .ag-icon-camera {
-  display: inline-block;
-}
-.ag-btn.off.videoControlBtn .ag-icon-camera-off {
-  display: inline-block;
-}
-.ag-btn.off.audioControlBtn .ag-icon-mic {
-  display: none;
-}
-.ag-btn.audioControlBtn .ag-icon-mic-off {
-  display: none;
-}
-.ag-btn.audioControlBtn .ag-icon-mic {
-  display: inline-block;
-}
-.ag-btn.off.audioControlBtn .ag-icon-mic-off {
-  display: inline-block;
-}
-
-video {
-  max-width: unset !important;
 }
 </style>
 

@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 19:15:58
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\index.vue
- * @LastEditTime: 2021-04-21 14:19:10
+ * @LastEditTime: 2021-04-21 20:14:53
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -100,6 +100,7 @@ export default {
         roomStatus:{
             handler(val){
                 if(val==1){
+                    debugger
                     this.isShowReconnection = true;
                 } else {
                     this.isShowReconnection = false;
@@ -194,6 +195,7 @@ export default {
         this.testTimer();
         this.roomStatus = this.$route.params.status||'';
         this.flag =  Cookies.get("isAdmin")=='true' ? true : false;
+        this.$parent.$parent.$parent.$refs.video.$refs.video.join();
         // this.isMic = window.sessionStorage.getItem(("isMic")=='true'?true:false);
         // this.isCar = window.sessionStorage.getItem(("isCar")=='true'?true:false);
         // if(!this.flag){

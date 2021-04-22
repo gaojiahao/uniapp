@@ -90,7 +90,8 @@ export default {
 
       },
       videoDevices:[],
-      roomNumber:''
+      roomNumber:'',
+      mac:''
     };
   },
   methods: {
@@ -161,6 +162,11 @@ export default {
   created(){
     this.initRMT();
     this.roomNumber = this.$route.query.roomNumber;
+    this.mac = window.localStorage.getItem('mac') || '';
+    if(!this.mac){
+      this.mac = this.generateUUID();
+      window.localStorage.setItem('mac',this.mac);
+    }
     Cookies.set("channel", this.roomNumber);
     this.tempSetToken();
   }

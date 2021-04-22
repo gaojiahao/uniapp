@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-11-03 16:35:57
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-20 19:01:26
+ * @LastEditTime: 2021-04-22 16:45:17
 -->
 <template>
     <Modal v-model="show" title="  " @on-ok="ok" @on-cancel="cancel" width="1048" class="modalDetail">
@@ -57,13 +57,13 @@
                         <div class="product_info_list_items">单价：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items red"><span>$</span><span class="font_size_20">{{modalProductInfo.quoteThePrice}}</span></div>
+                        <div class="product_info_list_items red"><span>$</span><span class="font_size_20">{{modalProductInfo.quoteThePrice||0}}</span></div>
                     </Col>
                     <Col span="12">
                         <div class="product_info_list_items">公司编号：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items"><span></span>{{modalProductInfo.number}}</div>
+                        <div class="product_info_list_items"><span></span>{{modalProductInfo.companyNumber}}</div>
                     </Col>
                     <Col span="12">
                         <div class="product_info_list_items">产商编号：</div>

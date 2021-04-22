@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-13 15:56:18
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\loginFooter.vue
- * @LastEditTime: 2021-04-13 15:57:27
+ * @LastEditTime: 2021-04-22 14:37:18
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -24,7 +24,7 @@
 </template>
 <style lang="less" scoped>
 .footer {
-    position: relative;
+    position: absolute;
     width: 100%;
     text-align: center;
     line-height: 24px;
@@ -35,6 +35,7 @@
     background: #2684D1;
     border-top: solid 1px #ddd;
     overflow: hidden;
+    bottom: 0;
     .footer_wrap{
         padding-top:18px;
         .footer_wrap_first{
