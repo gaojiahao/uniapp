@@ -5,22 +5,27 @@
   <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="renderer" content="webkit">
-  <title>产品详情</title>
-  <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <link rel="stylesheet" href="./static/css/base.css">
-  <link rel="stylesheet" href="./static/css/index.css">
-  <script src="./static/js/jquery.min.js"></script>
-  <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <title>产品详情</title>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="./static/css/base.css">
+    <link rel="stylesheet" href="./static/css/index.css">
+    <script src="./static/js/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
+    </script>
 </head>
+
 <body>
- 
+
     <div class="header">
         <div class="title">
             成卓玩具厂
@@ -64,8 +69,12 @@
             </div>
             <div class="search">
                 <div class="sork">
-                    <div> <p>时间</p>  <span class="arrowsTrue"></span></div>
-                    <div><p>价格</p> <span class="arrowsFlag"></span></div>
+                    <div>
+                        <p>时间</p> <span class="arrowsTrue"></span>
+                    </div>
+                    <div>
+                        <p>价格</p> <span class="arrowsFlag"></span>
+                    </div>
                 </div>
                 <div class="searchInput">
                     <div class="searchInput_l">
@@ -75,159 +84,265 @@
                     <div class="searchInput_r">搜索</div>
                 </div>
                 <div class="triggerIcon">
-                    <div class="gridActiveIcon" onclick="cutGridActive()"></div>
-                    <div class="gridIcon" onclick="cutGrid()"></div>
+                    <div id="cutGridIcon" class="gridActiveIcon"></div>
+                    <div id="cutColumnIcon" class="columnIcon"></div>
                 </div>
             </div>
         </div>
     </div>
     <div class="tableBox">
-        <ul id="tableList" style="display:block;">
-            <li>
+        <ul id="gridList" style="display:block;">
+            <!-- <li>
                 <div class="itemMain">
                     <img src="./static/images/logo.png" alt="">
                     <p>玩具名称玩具名称玩具名称玩具</p>
                     <p>￥<span>98.00</span></p>
                 </div>
-            </li>
-            <li>
-                <div class="itemMain">
-                    <img src="./static/images/logo.png" alt="">
-                    <p>玩具名称玩具名称玩具名称玩具</p>
-                    <p>￥<span>98.00</span></p>
-                </div>
-            </li>
-            <li>
-                <div class="itemMain">
-                    <img src="./static/images/logo.png" alt="">
-                    <p>玩具名称玩具名称玩具名称玩具</p>
-                    <p>￥<span>98.00</span></p>
-                </div>
-            </li>
-            <li>
-                <div class="itemMain">
-                    <img src="./static/images/logo.png" alt="">
-                    <p>玩具名称玩具名称玩具名称玩具</p>
-                    <p>￥<span>98.00</span></p>
-                </div>
-            </li>
-            <li>
-                <div class="itemMain">
-                    <img src="./static/images/logo.png" alt="">
-                    <p>玩具名称玩具名称玩具名称玩具</p>
-                    <p>￥<span>98.00</span></p>
-                </div>
-            </li>
+            </li> -->
         </ul>
-          <!-- 分页 -->
-          <ul id="gridTableList" style="display:none;">
-              <li>
+        <!-- 一行两个 -->
+        <ul id="columnList" style="display:none;">
+            <!-- <li>
                 <div class="listLeft">
                     <img src="./static/images/logo.png" alt="">
                     <p>￥<span>98.00</span></p>
                 </div>
                 <div class="listRight">
                     <h3>99式坦克军事系列积木套装....</h3>
-                   <p>  出厂货号：<span></span></p>
-                   <p> 包装：<span></span></p>
-                   <p>  彩盒产品规格：<span>0X0X0(CM)</span></p>
-                   <p> 外箱规格： <span>68X46X74(CM)</span></p>
-                   <p> 包装规格：<span>  14X11.3X4(CM)</span></p>
-                   <p> 装箱量：<span> 2/288(PCS)</span></p>
-                   <p> 体积/材积：<span> 0.231(CBM)/8.17(CUFT)</span></p>
-                   <p> 毛重/净重：<span> 21/18(kg)</span></p>
+                    <p> 出厂货号：<span></span></p>
+                    <p> 包装：<span></span></p>
+                    <p> 彩盒产品规格：<span>0X0X0(CM)</span></p>
+                    <p> 外箱规格： <span>68X46X74(CM)</span></p>
+                    <p> 包装规格：<span> 14X11.3X4(CM)</span></p>
+                    <p> 装箱量：<span> 2/288(PCS)</span></p>
+                    <p> 体积/材积：<span> 0.231(CBM)/8.17(CUFT)</span></p>
+                    <p> 毛重/净重：<span> 21/18(kg)</span></p>
                 </div>
-              </li>
-              <li>
-                  
             </li>
-          </ul>
+            <li>
 
-      <div class="pageBox">
-        <ul>
-            <li> <select id="changePage" onChange="handelChangePage()">
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="30">30</option>
-              </select></li>
-          <li style="border: 0;"> 共</li>
-          <li style="border: 0;">
-            <input id="totalCountPage" type="text" value="0">
-          </li>
-          <li style="border: 0;"> 条</li>
-          <li onclick="previousPage()">
-            上一页
-          </li>
-          <li style="margin: 5px 10px;">
-            <input id="numberPage" type="text" value="1">
-          </li>
-          <li onclick="nextPage()">
-            下一页
-          </li>
+            </li> -->
         </ul>
-      </div>
+        <!-- 分页 -->
+        <div class="pageBox">
+            <ul>
+                <li> <select id="changePage" onChange="handelChangePage()">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                    </select></li>
+                <li style="border: 0;"> 共</li>
+                <li style="border: 0;">
+                    <input id="totalCountPage" type="text" value="0">
+                </li>
+                <li style="border: 0;"> 条</li>
+                <li onclick="previousPage()">
+                    上一页
+                </li>
+                <li style="margin: 5px 10px;">
+                    <input id="numberPage" type="text" value="1">
+                </li>
+                <li onclick="nextPage()">
+                    下一页
+                </li>
+            </ul>
+        </div>
     </div>
     <div class="footer">
-      <div>
-          <p>资料来源： <span>耀昇展厅</span></p>
-          <p> 技术支持：<span>深圳宏升软件技术开发有限公司</span></p>
-      </div>
-        
+        <div>
+            <p>资料来源： <span>耀昇展厅</span></p>
+            <p> 技术支持：<span>深圳宏升软件技术开发有限公司</span></p>
+        </div>
+
     </div>
 </body>
+
 <script>
-
-
-
-//切换产品样式
-function cutGridActive(){
-    document.getElementById('tableList').style.display ='none';
-    document.getElementById('gridTableList').style.display ='block';
-}
-function cutGrid(){
-    document.getElementById('tableList').style.display ='block';
-    document.getElementById('gridTableList').style.display ='none';
-}
-     //分页条数
-  function handelChangePage(){
-    data.maxResultCount = $("#changePage").val()
-  }
-  // 上一页
-  function previousPage() {
-    var numberPage = $("#numberPage").val()
-    numberPage--
-    if (numberPage < 1) {
-      alert("已经是第一页了");
-      $("#numberPage").val(1);
-    } else {
-      $("#numberPage").val(numberPage)
-      data.skipCount = numberPage;
-      
+    // 初始化
+    var data = {
+        skipCount: 1,
+        maxResultCount: 10,
     }
-  }
-  // 下一页
-  function nextPage() {
-    var numberPage = $("#numberPage").val()
-    if (orderList.length < data.maxResultCount) {
-      return false
-    } else {
-      numberPage++
-      $("#numberPage").val(numberPage)
-      var totalCount = $("#totalCountPage").val()
-      // var num = numberPage--;
-      // $("#numberPage").val(num)
-      // data.skipCount = num;
-      if (numberPage * data.maxResultCount > totalCount) {
-        if (numberPage >= Math.ceil(totalCount / data.maxResultCount) + 1) {
-          numberPage--;
-          $("#numberPage").val(numberPage)
-          return false
+    var tableDate = [];
+
+    function getgridTableList(list) {
+        var gridTableList = document.getElementById('gridTableList');
+        $("#gridTableList").empty();
+        for (var i = 0; i < list.length; i++) {
+            var html = ""
+            //   switch () {
+            //     case "":
+            //     case null:
+            //     case undefined:
+            //     case "null":
+            //     case "undefined":
+            //       list[i]. = "  "
+            //       break;
+            //     default:
+            //       list[i].
+            //   }
+            html += " <li> <div class='listLeft'><img  alt='' src=" + list[i].img + "><p>￥<span>" + list[i].num +
+                "</span></p></div><div class='listRight'><h3>" +
+                list[i].tit + "</h3><p>出厂货号：<span>" + list[i].h + "</span></p><p> 包装：<span>" + list[i].h +
+                "</span></p><p>彩盒产品规格：<span>" + list[i].r + "</span></p><p>外箱规格：<span>" +
+                list[i].a + "</span></p> <p> 包装规格： <span> " + list[i].a +
+                " </span></p><p> 装箱量：<span>" + list[i].a + "</span></p><p> 体积 / 材积：<span> " + list[i].a +
+                "</span></p><p>毛重 / 净重：<span>" + list[i].a + " </span></p></div></li>"
+            $("#gridTableList").append(html);
         }
-      }
-      data.skipCount = numberPage;
-     
     }
-}
+    var arr = [{
+        img: "./static/images/logo.png",
+        num: 98,
+        tit: '99式坦克军事系列积木套装....',
+        h: "22",
+        r: "0X0X0(CM)",
+        a: "68X46X74(CM)",
 
+    }]
+    var arrGridList = [{
+            img: './static/images/logo.png',
+            name: "玩具名称玩具名称玩具名称玩具",
+            num: 98.00
+        },
+        {
+            img: './static/images/logo.png',
+            name: "玩具名称玩具名称玩具名称玩具",
+            num: 98.00
+        },
+        {
+            img: './static/images/logo.png',
+            name: "玩具名称玩具名称玩具名称玩具",
+            num: 98.00
+        },
+        {
+            img: './static/images/logo.png',
+            name: "玩具名称玩具名称玩具名称玩具",
+            num: 98.00
+        }, {
+            img: './static/images/logo.png',
+            name: "玩具名称玩具名称玩具名称玩具",
+            num: 98.00
+        }
+    ]
+    getGridList(arrGridList)
+    // 渲染列表
+    function getGridList(list) {
+        // var gridList = document.getElementById('gridList');
+        $("#gridList").empty();
+        for (var i = 0; i < list.length; i++) {
+            var html = ""
+            //   switch () {
+            //     case "":
+            //     case null:
+            //     case undefined:
+            //     case "null":
+            //     case "undefined":
+            //       list[i]. = "  "
+            //       break;
+            //     default:
+            //       list[i].
+            //   }
+            html += " <li><div class='itemMain'> <img alt='' src=" + list[i].img + "><p>" + list[i].name +
+                "</p><p>￥<span>" +
+                list[i].num + "</span></p></div></li>"
+            $("#gridList").append(html);
+        }
+    }
+    getColumnList(arr)
+    // 渲染列表gridTable
+    function getColumnList(list) {
+        // var columnList = document.getElementById('columnList');
+        $("#columnList").empty();
+        for (var i = 0; i < list.length; i++) {
+            var html = ""
+            //   switch () {
+            //     case "":
+            //     case null:
+            //     case undefined:
+            //     case "null":
+            //     case "undefined":
+            //       list[i]. = "  "
+            //       break;
+            //     default:
+            //       list[i].
+            //   }
+            html += " <li> <div class='listLeft'><img  alt='' src=" + list[i].img + "><p>￥<span>" + list[i].num +
+                "</span></p></div><div class='listRight'><h3>" +
+                list[i].tit + "</h3><p>出厂货号：<span>" + list[i].h + "</span></p><p> 包装：<span>" + list[i].h +
+                "</span></p><p>彩盒产品规格：<span>" + list[i].r + "</span></p><p>外箱规格：<span>" +
+                list[i].a + "</span></p> <p> 包装规格： <span> " + list[i].a +
+                " </span></p><p> 装箱量：<span>" + list[i].a + "</span></p><p> 体积 / 材积：<span> " + list[i].a +
+                "</span></p><p>毛重 / 净重：<span>" + list[i].a + " </span></p></div></li>"
+            $("#columnList").append(html);
+        }
+    }
+    //切换产品样式
+    $("#cutGridIcon").click(function () {
+        document.getElementById('gridList').style.display = 'block';
+        document.getElementById('columnList').style.display = 'none';
+        // document.getElementById("cutGridIcon").classList.replace("gridIcon","gridActiveIcon"); 
+        $("#cutGridIcon").addClass("gridActiveIcon");
+        $("#cutGridIcon").removeClass("gridIcon");
+
+        //    背景图片切换
+        $("#cutColumnIcon").removeClass("columnActiveIcon");
+        $("#cutColumnIcon").addClass("columnIcon");
+    });
+
+    $("#cutColumnIcon").click(function () {
+        document.getElementById('gridList').style.display = 'none';
+        document.getElementById('columnList').style.display = 'block';
+        $("#cutGridIcon").addClass("gridIcon");
+        $("#cutGridIcon").removeClass("gridActiveIcon");
+        $("#cutColumnIcon").removeClass("columnIcon");
+        $("#cutColumnIcon").addClass("columnActiveIcon");
+        // document.getElementById("cutGridIcon").classList.replace("gridActiveIcon","gridIcon"); 
+    });
+    //   搜索
+    $(".searchInput_r").click(function () {
+        console.log(2222);
+    })
+    //分页条数
+    function handelChangePage() {
+        data.maxResultCount = $("#changePage").val()
+    }
+    // 上一页
+    function previousPage() {
+        var numberPage = $("#numberPage").val()
+        numberPage--
+        if (numberPage < 1) {
+            alert("已经是第一页了");
+            $("#numberPage").val(1);
+        } else {
+            $("#numberPage").val(numberPage)
+            data.skipCount = numberPage;
+
+        }
+    }
+    // 下一页
+    function nextPage() {
+        var numberPage = $("#numberPage").val()
+        if (tableDate.length < data.maxResultCount) {
+            return false
+        } else {
+            numberPage++
+            $("#numberPage").val(numberPage)
+            var totalCount = $("#totalCountPage").val()
+            // var num = numberPage--;
+            // $("#numberPage").val(num)
+            // data.skipCount = num;
+            if (numberPage * data.maxResultCount > totalCount) {
+                if (numberPage >= Math.ceil(totalCount / data.maxResultCount) + 1) {
+                    numberPage--;
+                    $("#numberPage").val(numberPage)
+                    return false
+                }
+            }
+            data.skipCount = numberPage;
+
+        }
+    }
 </script>
+
 </html>
