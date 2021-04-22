@@ -29,10 +29,19 @@
     width: 1264px;
     margin: 0 auto;
     padding-top: 54px;
+    overflow: hidden;
+    position: relative;
 }
 .slideshow{
-  width: 100%;
+  /* width: 100%; */
   height: 290px;
+  /* overflow: hidden; */
+  /* white-space: nowrap; */
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+
 }
 .slideshow .item{
     width: 280px;
@@ -40,29 +49,36 @@
     background: #ffffff;
     border-radius: 10px;
     margin:0  18px;
-    float: left;
+    /* float: left; */
+    display: inline-block;
 }
 .itemMain{
     margin: 18px;
+    text-align: center;
 }
 .itemMain img{
     width: 100%;
     height: 175px;
 }
-.itemMain p:nth-of-type(1){
+.itemMainName{
     height: 22px;
     line-height: 22px;
     font-size: 16px;
     font-weight: 400;
     color: #333333;
     margin: 20px 0 10px 0;
+    text-align: center;
+    overflow: hidden; /*超出部分隐藏*/
+    white-space: nowrap; /*不换行*/
+    text-overflow: ellipsis; /*超出部分文字以...显示*/
 }
-.itemMain p:nth-of-type(2){
+.itemMainPrice{
     height: 22px;
     line-height: 22px;
     font-size: 16px;
     font-weight: 400;
     color: #FF5050;
+    text-align: center;
 }
 .mainBox .search{
     height: 36px;
