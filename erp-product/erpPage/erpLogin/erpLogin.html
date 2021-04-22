@@ -112,6 +112,7 @@
 
 </html>
 <script>
+  var isCallbackComfim = true;
   var timeID = null;
   if (timeID) clearInterval(timeID);
   $(function () {
@@ -201,6 +202,7 @@
     };
     // 监听结果
     function getUserConfirm() {
+      isCallbackComfim = false;
       $.ajax({
         type: "post",
         url: baseUrl + "/api/UserConfirm",
@@ -210,13 +212,12 @@
           Utoken: token
         }
       }).then(function (res) {
+        isCallbackComfim = true;
         if (res.result.isLogin) {
           clearInterval(qrTimer);
           window.localStorage.setItem("token", res.result.accessToken);
           qrTimer = null;
           window.location.href = 'https://www.toysbear.com/erpProduct/erpPage/erpOrder/erpOrder.html';
-        } else {
-          alert(res.result.message);
         }
       })
     };
@@ -247,8 +248,10 @@
     function initWebSocket(data) {
       if (typeof WebSocket === "undefined") {
         // 轮询监听结果
-        timeID = setInterval(() => {
-          getUserConfirm();
+        timeID = setInterval(function() {
+          if (isCallbackComfim) {
+            getUserConfirm()
+          };
         }, 1000)
       } else {
         // 初始化weosocket
