@@ -60,7 +60,7 @@
             <div id="qrcode"></div>
             <p class="qrInfo">请用小竹熊App扫一扫登录</p>
             <div class="refresh">
-              <div class="refreshIcon" @click="getQrCodeUrl">
+              <div class="refreshIcon">
                 <i class="iconfont icon-refresh"></i>
               </div>
             </div>
@@ -315,6 +315,7 @@
               showQrCode = true;
               qrcodeTitle = "二维码已失效，点击刷新";
               clearInterval(qrTimer);
+              clearInterval(timeID);
               qrTimer = null;
               // 二维码过期
               $(".qrInfo").innerHTML = qrcodeTitle;
@@ -371,6 +372,10 @@
         })
       }
     }
+    // 二维码过期重新获取二维码
+    $(".refreshIcon").click(function () {
+      initWsAndQrcode();
+    })
     $(".refresh").click(function () {
       initWsAndQrcode();
     })
