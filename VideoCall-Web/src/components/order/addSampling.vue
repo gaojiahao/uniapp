@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:58:11
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\addSampling.vue
- * @LastEditTime: 2021-04-20 17:47:22
+ * @LastEditTime: 2021-04-22 17:34:46
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -79,7 +79,7 @@ export default {
         .head {
             display: flex;
             .active {
-                background: url('~@assets/images/tab_active.webp');
+                background: url('~@assets/images/tab_active.png');
                 background-size: cover;//注意：一定要把这个属性配合fixed使用；
                 background-repeat: no-repeat;
                 height: 35px;

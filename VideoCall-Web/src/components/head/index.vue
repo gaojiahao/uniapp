@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 14:55:25
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\head\index.vue
- * @LastEditTime: 2021-04-20 09:52:45
+ * @LastEditTime: 2021-04-22 17:46:11
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -60,7 +60,7 @@ export default {
   data() {
     return {
       logUrl: require("@assets/default/logo.png"),
-      titleUrl: require("@assets/images/title.webp"),
+      titleUrl: require("@assets/images/title.png"),
       companyName:"",
       channel: "",
     };
@@ -146,7 +146,7 @@ export default {
                 margin-left: 10px;
                 display: flex;
                 .qq {
-                    background: url('~@assets/images/qq2.webp');
+                    background: url('~@assets/images/qq2.png');
                     background-repeat: no-repeat;
                     margin-top: 25.5px;
                     width: 13px;

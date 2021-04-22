@@ -384,7 +384,7 @@ export default {
     margin-right: 5px;
     border: 1px solid #FFFFFF;
     .active {
-      background: url('~@assets/images/suo.webp');
+      background: url('~@assets/images/suo.png');
       background-repeat: no-repeat;
       width: 97px;
       height: 64px;

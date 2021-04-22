@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 16:54:22
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\video\index.vue
- * @LastEditTime: 2021-04-22 14:44:43
+ * @LastEditTime: 2021-04-22 17:37:36
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -171,7 +171,7 @@ export default {
                     border: 1px solid #FFFFFF;
                 }
                 .active {
-                    background: url('~@assets/images/suo.webp');
+                    background: url('~@assets/images/suo.png');
                     background-repeat: no-repeat;
                     width: 97px;
                     height: 64px;

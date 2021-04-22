@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-13 15:56:18
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\loginFooter.vue
- * @LastEditTime: 2021-04-22 14:37:18
+ * @LastEditTime: 2021-04-22 17:46:03
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -42,7 +42,7 @@
             display: flex;
             justify-content:center;
             .qq {
-                background: url('~@assets/images/qq2.webp');
+                background: url('~@assets/images/qq2.png');
                 background-repeat: no-repeat;
                 margin-top: 4px;
                 width: 13px;

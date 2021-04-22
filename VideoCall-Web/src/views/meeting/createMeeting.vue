@@ -99,7 +99,7 @@ export default {
     };
     return {
       logUrl: require("@assets/default/logo.png"),
-      titleUrl: require("@assets/images/title_s.webp"),
+      titleUrl: require("@assets/images/title_s.png"),
       formValidate:{
         channel:'111111111111111',
         companyId:'',

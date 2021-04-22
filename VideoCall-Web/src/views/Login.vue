@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 16:28:17
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-22 14:30:04
+ * @LastEditTime: 2021-04-22 17:51:38
 -->
 <template>
   <div class="login" ref="login">
@@ -115,10 +115,8 @@ export default {
       var userCode = localStorage.getItem("userCode");
       return {
         logUrl: require("@assets/default/logo.png"),
-        titleUrl: require("@assets/images/title_s.webp"),
-        qrCodeUrl: require("@assets/images/default_qrcode.webp"),
-        qrCodePic: require("@assets/images/qrcodeLogin.webp"),
-        loginPic: require("@assets/images/pc_login.webp"),
+        titleUrl: require("@assets/images/title_s.png"),
+        qrCodeUrl: require("@assets/images/default_qrcode.png"),
         mail: "",
         userCode: userCode || "",
         passWord: "",
@@ -240,6 +238,7 @@ export default {
                   Cookies.set("attendeeMode", this.attendeeMode);
                   Cookies.set("videoProfile", this.videoProfile);
                   Cookies.set("uid", data.data.meetingRoomMemberId);
+                  Cookies.set("companyName", data.data.companyName||'');
                   this.$router.push({name:'Home',params:{status:data.data.status}}); 
                   break;
                 default:
@@ -284,6 +283,7 @@ export default {
                   Cookies.set("attendeeMode", this.attendeeMode);
                   Cookies.set("videoProfile", this.videoProfile);
                   Cookies.set("uid", data.data.meetingRoomMemberId);
+                  Cookies.set("companyName", data.data.companyName||'');
                   this.$router.push({name:'Home',params:{status:data.data.status}}); 
                   break;
                 default:

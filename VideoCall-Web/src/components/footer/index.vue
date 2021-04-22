@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 19:15:58
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\index.vue
- * @LastEditTime: 2021-04-21 20:14:53
+ * @LastEditTime: 2021-04-22 17:53:21
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -235,7 +235,7 @@ export default {
           margin-right: 5px;
         }
         .closeOff {
-            background: url('~@assets/images/close.webp');
+            background: url('~@assets/images/close.png');
             background-repeat: no-repeat;
             width: 33px;
             height: 33px;
@@ -286,7 +286,7 @@ export default {
             height:59px;
             width: 51px;
             .netWork {
-                background: url('~@assets/images/netWork4.webp');
+                background: url('~@assets/images/netWork4.png');
                 background-repeat: no-repeat;
                 width: 18px;
                 height: 19px;

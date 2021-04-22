@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-08 14:46:21
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\public\endingMettingModal.vue
- * @LastEditTime: 2021-04-20 20:13:17
+ * @LastEditTime: 2021-04-22 17:53:29
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -143,7 +143,7 @@ export default {
             margin-right: 5px;
             }
             .closeOff {
-                background: url('~@assets/images/close.webp');
+                background: url('~@assets/images/close.png');
                 background-repeat: no-repeat;
                 width: 33px;
                 height: 33px;
