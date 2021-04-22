@@ -112,6 +112,8 @@
 
 </html>
 <script>
+  var timeID = null;
+  if (timeID) clearInterval(timeID);
   $(function () {
     // var baseUrl = "https://www.toysbear.com";
     var baseWsUrl = "wss://impush.toysbear.com/ws?UserId=";
@@ -244,7 +246,10 @@
     // 初始化 webSocket
     function initWebSocket(data) {
       if (typeof WebSocket === "undefined") {
-        alert("您的浏览器不支持WebSocket");
+        // 轮询监听结果
+        timeID = setInterval(() => {
+          getUserConfirm();
+        }, 1000)
       } else {
         // 初始化weosocket
         // 测试
