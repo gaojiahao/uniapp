@@ -614,6 +614,7 @@ export default {
       if (res.data.result.code === 200) {
         this.sitesList = [{ name: "全部", id: null }, ...res.data.result.item];
         this.handSitesList = res.data.result.item;
+        console.log(this.handSitesList, 123);
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -735,6 +736,25 @@ export default {
     },
     // 打开新增分享
     openAddClien() {
+      this.clienFormData = {
+        miniPrice: 0,
+        miniPriceDecimalPlaces: 1,
+        url: null,
+        isExportExcel: false,
+        profit: 0,
+        expireTime: null,
+        customerInfoId: null,
+        offerMethod: "汕头",
+        currencyType: "¥",
+        currencyTypeName: "RMB",
+        totalCost: "0",
+        exchange: 0,
+        size: "24",
+        decimalPlaces: 3,
+        rejectionMethod: "四舍五入",
+        websiteInfoId: null,
+        isCustomerInfo: true
+      };
       this.clienFormData.totalCost = 0;
       this.clienFormData.url = null;
       this.clienFormData.customerInfoId = null;
@@ -761,12 +781,35 @@ export default {
     },
     // 打开编辑分享
     openEdit(row) {
+      this.clienFormData = {
+        miniPrice: 0,
+        miniPriceDecimalPlaces: 1,
+        url: null,
+        isExportExcel: false,
+        profit: 0,
+        expireTime: null,
+        customerInfoId: null,
+        offerMethod: "汕头",
+        currencyType: "¥",
+        currencyTypeName: "RMB",
+        totalCost: "0",
+        exchange: 0,
+        size: "24",
+        decimalPlaces: 3,
+        rejectionMethod: "四舍五入",
+        websiteInfoId: null,
+        isCustomerInfo: true
+      };
       this.defaultFormula = null;
       this.dialogTitle = "编辑站点";
       for (const key in row) {
         this.clienFormData[key] = row[key];
       }
-      this.clienFormData.customerInfoId = row.customerId;
+      for (let i = 0; i < this.clientList.length; i++) {
+        if (this.clientList[i].id == row.customerId) {
+          this.clienFormData.customerInfoId = row.customerId;
+        }
+      }
       this.addClienDialog = true;
     },
     // 生成二维码
@@ -885,6 +928,7 @@ export default {
       const res = await this.$http.post("/api/SearchCustomerInfosPage", fd);
       if (res.data.result.code === 200) {
         this.clientList = res.data.result.item.items;
+        console.log(this.clientList);
         this.clientListTotalCount = res.data.result.item.totalCount;
       }
     },
