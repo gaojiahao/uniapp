@@ -15,7 +15,7 @@
             @keyup.native.enter="search"
           ></el-input>
         </div>
-        <div class="item" style="width: 200px">
+        <div class="item">
           <span class="label">站点：</span>
           <el-select
             v-model="websiteInfoId"
@@ -200,16 +200,20 @@
         :model="clienFormData"
       >
         <el-form-item label="站点域名：" prop="url">
-          <div style="display: flex; margin-bottom: 10px">
+          <div>
             <el-tag
-              @click="clienFormData.url = item"
+              @click="handlerTag(item)"
               style="margin-right: 10px; cursor: pointer"
-              v-for="(item, key) of defaultShareDomain"
-              :key="item"
-              >{{ key }}</el-tag
+              :effect="
+                clienFormData.websiteInfoId == item.id ? 'dark' : 'plain'
+              "
+              v-for="item in handSitesList"
+              :key="item.id"
+              >{{ item.name }}</el-tag
             >
           </div>
           <el-input
+            style="display:none;"
             v-model="clienFormData.url"
             placeholder="请输入站点域名"
             clearable
@@ -478,6 +482,7 @@ export default {
   },
   data() {
     return {
+      handSitesList: [],
       websiteInfoId: null,
       userId: null,
       sitesList: [],
@@ -506,7 +511,7 @@ export default {
       clientListTotalCount: 0,
       clientList: [],
       addClienDialog: false,
-      dialogTitle: "新增分享",
+      dialogTitle: "新增站点",
       defaultShareDomain: [],
       clienFormData: {
         miniPrice: 0,
@@ -523,7 +528,8 @@ export default {
         exchange: 0,
         size: "24",
         decimalPlaces: 3,
-        rejectionMethod: "四舍五入"
+        rejectionMethod: "四舍五入",
+        websiteInfoId: null
       },
       options: {
         // 报价配置项
@@ -567,12 +573,18 @@ export default {
     };
   },
   methods: {
+    // 点击站点选中站点
+    handlerTag(item) {
+      this.clienFormData.url = item.url;
+      this.clienFormData.websiteInfoId = item.id;
+    },
     // 获取站点列表
     async getDefaultSites() {
       const res = await this.$http.post("/api/SearchDropdownWebsiteInfos", {});
       console.log(res);
       if (res.data.result.code === 200) {
         this.sitesList = [{ name: "全部", id: null }, ...res.data.result.item];
+        this.handSitesList = res.data.result.item;
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -695,7 +707,7 @@ export default {
       this.clienFormData.totalCost = 0;
       this.clienFormData.url = null;
       this.clienFormData.customerInfoId = null;
-      this.dialogTitle = "新增分享";
+      this.dialogTitle = "新增站点";
       this.defaultFormula = JSON.stringify(this.customerTemplate[0]);
       this.$nextTick(() => {
         this.addClienDialog = true;
@@ -719,7 +731,7 @@ export default {
     // 打开编辑分享
     openEdit(row) {
       this.defaultFormula = null;
-      this.dialogTitle = "编辑分享";
+      this.dialogTitle = "编辑站点";
       for (const key in row) {
         this.clienFormData[key] = row[key];
       }
@@ -807,7 +819,7 @@ export default {
       this.$refs.addClientFormRef.validate(async valid => {
         if (valid) {
           let url = "/api/CreateWebsiteShareInfo";
-          if (this.dialogTitle === "编辑分享")
+          if (this.dialogTitle === "编辑站点")
             url = "/api/UpdateWebsiteShareInfo";
           console.log(this.clienFormData);
           const res = await this.$http.post(url, this.clienFormData);
