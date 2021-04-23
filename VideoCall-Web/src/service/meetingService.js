@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-13 15:01:44
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\service\meetingService.js
- * @LastEditTime: 2021-04-15 16:06:43
+ * @LastEditTime: 2021-04-23 17:05:30
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -42,6 +42,13 @@ export let QuitMeetingRoom = (data = {}) => {
 export let QueryMeetingRoomMembers = (data = {}) => {
     return $flyio.ajax({
         url: '/api/Meeting/QueryMeetingRoomMembers',
+        data: data
+    })
+};
+//修改会议室结束时间
+export let Update = (data = {}) => {
+    return $flyio.post({
+        url: '/api/Meeting/Update',
         data: data
     })
 };

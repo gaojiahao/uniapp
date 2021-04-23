@@ -78,7 +78,7 @@ export default {
         });
         return false;
       } else {
-        debugger
+        // debugger
         this.havecCamera = true;
         if(!$.videoId){
           $.nowVideoId = $.videoDevices[0]['deviceId'];
