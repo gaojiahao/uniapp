@@ -50,6 +50,19 @@
           </el-select>
         </div>
         <div class="item">
+          <span class="label">时间段：</span>
+          <el-date-picker
+            size="medium"
+            value-format="yyyy-MM-ddTHH:mm:ss"
+            v-model="dateTime"
+            type="datetimerange"
+            range-separator="至"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+          >
+          </el-date-picker>
+        </div>
+        <div class="item">
           <el-button
             @click="search"
             type="primary"
@@ -482,6 +495,7 @@ export default {
   },
   data() {
     return {
+      dateTime: null,
       handSitesList: [],
       websiteInfoId: null,
       userId: null,
@@ -626,7 +640,9 @@ export default {
         maxResultCount: this.pageSize,
         keyword: this.keyword,
         websiteInfoId: this.websiteInfoId,
-        userId: this.userId
+        userId: this.userId,
+        startTime: this.dateTime && this.dateTime[0],
+        endTime: this.dateTime && this.dateTime[1]
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
