@@ -4,12 +4,12 @@
  * @Author: gaojiahao
  * @Date: 2020-11-03 16:35:57
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-21 14:20:09
+ * @LastEditTime: 2021-04-23 15:04:06
 -->
 <template>
     <Modal v-model="show" title="设置" @on-ok="ok" @on-cancel="cancel" width="430" draggable class="setting">
         <div class="setting_panel">
-            <Tabs value="name1" :animated="false">
+            <Tabs :value="modal" :animated="false">
                 <TabPane label="房间设置" name="name1" v-if="flag">
                     <div class="setting_room_wrap">
                         <div class="item">
@@ -86,6 +86,19 @@
                                 </Select>
                             </div>    
                         </div>
+                        <div class="item">
+                            <div class="icon">
+                                <Icon type="ios-calendar-outline" />       
+                            </div>
+                            <div class="title">
+                                视频清晰度
+                            </div>
+                            <div class="text">
+                                <Select v-model="videoEncoder" :style="{width:'200px',float: 'left'}" clearable  @on-select="onChangeVideoEncoder">
+                                    <Option v-for="(item,index) in videoEncoderList" :value="item.value" :key="index">{{ item.name }}</Option>
+                                </Select>
+                            </div>    
+                        </div>
                     </div>
                 </TabPane>
             </Tabs>
@@ -129,7 +142,23 @@ export default {
             },
             videoDevice:'',
             audioDevice:'',
-            flag:false
+            flag:false,
+            modal:'name1',
+            videoEncoder:'720p_6',
+            videoEncoderList:[
+                {
+                    name:'480p',
+                    value:'480p_4'
+                },
+                {
+                    name:'720p',
+                    value:'720p_6'
+                },
+                {
+                    name:'1080p',
+                    value:'1080p_5'
+                }
+            ]
         }
     },
     watch:{
@@ -138,6 +167,18 @@ export default {
                 this.show = val;
             }
         },
+        videoDevices:{
+            handler(val){
+                this.videoDevice = this.videoDevices[0]&&this.videoDevices[0]['deviceId'];
+            },
+            deep:true
+        },
+        audioDevices:{
+            handler(val){
+                this.audioDevice = this.audioDevices[0]&&this.audioDevices[0]['deviceId'];
+            },
+            deep:true
+        }
     },
     methods: {
         ok(){
@@ -151,6 +192,9 @@ export default {
         },
         onChangeAudioDevice(val){
             this.$emit('change-devices','',val.value);        
+        },
+        onChangeVideoEncoder(val){
+            this.$emit('change-video-encoder',val.value);           
         }
     },
     mounted() {
@@ -159,6 +203,7 @@ export default {
     created(){
         this.formValidate.id = Cookies.get("channel");
         this.flag =  Cookies.get("isAdmin")=='true' ? true : false;
+        this.modal = this.flag ? 'name1':'name2';
     }
 }
 </script>
@@ -200,10 +245,10 @@ export default {
             }
             .title{
                 margin-left: 10px;
-                width: 56px;
+                width: 80px;
             }
             .text{
-                margin-left: 51px;
+                // margin-left: 51px;
             }
             .action {
                 margin-left: 15px;

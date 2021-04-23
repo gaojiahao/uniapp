@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 19:15:58
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\index.vue
- * @LastEditTime: 2021-04-22 17:53:21
+ * @LastEditTime: 2021-04-23 14:55:28
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -65,7 +65,7 @@
                 </div>
             </Col>
         </Row>
-        <Setting @show-modal-detail="showModalDetail" :showModal="showModal" :videoDevices="videoDevices" :audioDevices="audioDevices" @change-devices="changeDevices"></Setting>
+        <Setting @show-modal-detail="showModalDetail" :showModal="showModal" :videoDevices="videoDevices" :audioDevices="audioDevices" @change-devices="changeDevices" @change-video-encoder="changeVideoEncoder"></Setting>
         <EscModal @sure-close="sureClose" @cancel-close="cancelClose" :isShowEsc="isShowEsc"></EscModal>
         <ReconnectionModal @reconnection-close="reconnectionClose" @cancel-reconnection="cancelReconnection" :isShowReconnection="isShowReconnection"></ReconnectionModal>
     </div>
@@ -189,6 +189,9 @@ export default {
         },
         changeDevices(videoId,audioId){
             this.$emit('change-devices',videoId,audioId);
+        },
+        changeVideoEncoder(val){
+            this.$emit('change-video-encoder',val);    
         }
     },
     created() {

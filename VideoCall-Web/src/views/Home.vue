@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\Home.vue
- * @LastEditTime: 2021-04-20 09:17:40
+ * @LastEditTime: 2021-04-23 14:54:18
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -30,6 +30,7 @@
         </Layout>
         <Footer>
           <Footers @leave="leave" @endMeeting="endMeeting" @set-volum="setVolum" @get-devices="getDevices" :videoDevices="videoDevices" :audioDevices="audioDevices" @change-devices="changeDevices" 
+             @change-video-encoder="changeVideoEncoder"
            ></Footers>
         </Footer>
     </Layout>
@@ -89,6 +90,10 @@ export default {
     //改变设备
     changeDevices(videoId,audioId){
       this.$refs.video.$refs.video.changeDevices(videoId,audioId);
+    },
+    //改变摄像头分辨率
+    changeVideoEncoder(val){
+      this.$refs.video.$refs.video.setVideoEncoder(val);  
     },
     getQueryMeetingRoomMembers(){
       return new Promise((resolve, reject) => {

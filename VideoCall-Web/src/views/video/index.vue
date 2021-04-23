@@ -3,17 +3,17 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 16:54:22
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\video\index.vue
- * @LastEditTime: 2021-04-22 17:37:36
+ * @LastEditTime: 2021-04-23 15:59:16
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
 -->
 <template>
     <div class="video">
-        <!-- <div class="error">
+        <div class="error">
             <img :src="cameraPic">
             <p class="text">您的设备未检测到摄像头</p> 
-        </div> -->
+        </div>
         <div class="box">
             <AgoraVideoCall 
                 :videoProfile="videoProfile"

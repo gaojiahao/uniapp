@@ -85,7 +85,7 @@ export default {
       baseMode: "avc",
       transcode: "interop",
       attendeeMode: "video",
-      videoProfile: "120_3",  //省流量测试
+      videoProfile: "720p_6",  //省流量测试
       ruleValidate:{
 
       },

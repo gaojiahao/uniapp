@@ -1,9 +1,9 @@
 <template>
   <div id="ag-canvas">
-    <div class="error">
+    <!-- <div class="error">
       <img :src="cameraPic">
       <p class="text" v-if="!havecCamera">您的设备未检测到摄像头</p> 
-    </div>
+    </div> -->
     <div id='default' class="user" style="width: 99px;height: 66px;grid-area: 12 / 1 / 13 / 3;z-index: 1;border: 1px solid rgb(255, 255, 255);" @click.stop="setMainVideo('default')"><div class="active"></div></div>
     <!-- <div id='1' class="user" style="width: 99px;height: 66px;grid-area: 12 / 3 / 13 / 6;z-index: 1;border: 1px solid rgb(255, 255, 255);background:white"></div>
     <div id='2' class="user" style="width: 99px;height: 66px;grid-area: 12 / 6 / 13 / 9;z-index: 1;border: 1px solid rgb(255, 255, 255);background:white"></div>
@@ -48,7 +48,8 @@ export default {
       uList:{},
       count:1,
       isMultMode:false,   //是否多人模式
-      havecCamera:false   //是否有摄像头
+      havecCamera:false,   //是否有摄像头
+      nowVideoId:'',
     };
   },
   props: [
@@ -67,7 +68,7 @@ export default {
   methods: {
     //发布频道与加入
     async join() {
-      debugger
+      // debugger
       var $=this;
       await $.testDevices();
       if(!$.videoDevices.length){
@@ -76,8 +77,16 @@ export default {
           content: '温馨提示：未检测到摄像头'
         });
         return false;
+      } else {
+        debugger
+        this.havecCamera = true;
+        if(!$.videoId){
+          $.nowVideoId = $.videoDevices[0]['deviceId'];
+        } else {
+          $.nowVideoId = $.videoId;
+        }
       }
-      AgoraRTC.setLogLevel(4);  //日志级别0,1,2,3,4
+      AgoraRTC.setLogLevel(0);  //日志级别0,1,2,3,4
       $.client.enableDualStream().then(() => {
         console.log("Enable Dual stream success!");
       }).catch(err => {
@@ -107,7 +116,7 @@ export default {
         $.client.join($.appId, $.channel, $.token || null,$.uid),
         AgoraRTC.createMicrophoneAudioTrack(),
         AgoraRTC.createCameraVideoTrack(
-          {encoderConfig: "120_1",cameraId:$.videoId}   //只有谷歌支持最低的，别的浏览器最低480p
+          {encoderConfig: $.videoProfile,cameraId:$.nowVideoId}   //只有谷歌支持最低的，别的浏览器最低480p
         )
       ]);
       //主持人的大画面
@@ -386,6 +395,17 @@ export default {
     //开启/关闭麦克风
     async setEnabledAudio(value){
       await this.localAudioTrack.setEnabled(value);
+    },
+    //设置视频编码格式
+    async setVideoEncoder(value){
+      this.localVideoTrack.setEncoderConfiguration(value).then(res => {
+        this.$Message.info({
+          background: true,
+          content: '温馨提示：切换清晰度成功'
+        });   
+      }).catch(e=>{
+        console.log(e);
+      })
     },
     //初始化
     async init(){

@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-02 15:18:13
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\mixins\video.js
- * @LastEditTime: 2021-04-23 10:44:10
+ * @LastEditTime: 2021-04-23 15:18:49
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -34,6 +34,7 @@ export default {
                 }
                 }
             } else if(type==3){
+                debugger
                 for(var i=0;i<items.length;i++){
                 if(i==0){
                     items[i].style.display = "none";  

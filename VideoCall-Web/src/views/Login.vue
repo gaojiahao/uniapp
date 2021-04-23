@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 16:28:17
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-23 10:58:28
+ * @LastEditTime: 2021-04-23 15:05:38
 -->
 <template>
   <div class="login" ref="login">
@@ -179,7 +179,7 @@ export default {
         baseMode: "avc",
         transcode: "interop",
         attendeeMode: "video",
-        videoProfile: "120_3",
+        videoProfile: "720p_6",
         sendBottonStatus:true,
         timer:null,
         count: '',
