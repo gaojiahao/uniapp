@@ -416,12 +416,26 @@
           >
           </el-date-picker>
         </el-form-item>
-        <center>
-          <template>
-            <el-button type="primary" @click="subProcessingLog"
-              >提 交</el-button
+        <div class="isData">
+          <div class="label">
+            <span>客户提交订单，是否需填资料：</span>
+            <el-radio v-model="clienFormData.isCustomerInfo" :label="true"
+              >是</el-radio
             >
-            <el-button plain @click="addClienDialog = false">取 消</el-button>
+            <el-radio v-model="clienFormData.isCustomerInfo" :label="false"
+              >否</el-radio
+            >
+          </div>
+        </div>
+        <center style="margin-top: 10px;">
+          <template>
+            <el-button type="primary" @click="subProcessingLog">确定</el-button>
+            <el-button
+              style="margin-left: 30px;"
+              plain
+              @click="addClienDialog = false"
+              >取消</el-button
+            >
           </template>
         </center>
       </el-form>
@@ -543,7 +557,8 @@ export default {
         size: "24",
         decimalPlaces: 3,
         rejectionMethod: "四舍五入",
-        websiteInfoId: null
+        websiteInfoId: null,
+        isCustomerInfo: null
       },
       options: {
         // 报价配置项
@@ -1020,5 +1035,8 @@ export default {
     padding-top: 20px;
     border-top: 1px solid #dcdfe6;
   }
+}
+.isData {
+  margin-left: 20px;
 }
 </style>
