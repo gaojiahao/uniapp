@@ -1,7 +1,8 @@
-.header{
+.header {
     height: 110px;
 }
-.header .title{
+
+.header .title {
     width: 50%;
     font-size: 36px;
     font-weight: 700;
@@ -10,57 +11,66 @@
     line-height: 110px;
     float: left;
 }
-.header .contact{
+
+.header .contact {
     width: 50%;
-    float: left;
+    float: right;
     text-align: center;
 }
-.contact p{
+
+.contact p {
     line-height: 110px;
     float: left;
     margin: 0 29px;
 }
-.main{
+
+.main {
     width: 100%;
     height: 500px;
     background: url('../images/main_bg.png') no-repeat center;
 }
-.mainBox{
+
+#mainBox {
     width: 1264px;
     margin: 0 auto;
-    padding-top: 54px;
+    height: 353px;
+    padding-top: 63px;
     overflow: hidden;
-    position: relative;
 }
-.slideshow{
-  /* width: 100%; */
-  height: 290px;
-  /* overflow: hidden; */
-  /* white-space: nowrap; */
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
 
+#slideshow {
+    height: 290px;
+    white-space: nowrap;
+    /* overflow: hidden; */
+    /* position: absolute; */
 }
-.slideshow .item{
+
+.clear {
+    clear: both;
+    content: " ";
+    display: block;
+}
+
+#slideshow .item {
     width: 280px;
     height: 290px;
     background: #ffffff;
     border-radius: 10px;
-    margin:0  18px;
-    /* float: left; */
+    margin: 0 18px;
     display: inline-block;
 }
-.itemMain{
+
+.itemMain {
     margin: 18px;
     text-align: center;
 }
-.itemMain img{
+
+.itemMain img {
     width: 100%;
     height: 175px;
 }
-.itemMainName{
+
+.itemMainName {
     height: 22px;
     line-height: 22px;
     font-size: 16px;
@@ -68,11 +78,15 @@
     color: #333333;
     margin: 20px 0 10px 0;
     text-align: center;
-    overflow: hidden; /*超出部分隐藏*/
-    white-space: nowrap; /*不换行*/
-    text-overflow: ellipsis; /*超出部分文字以...显示*/
+    overflow: hidden;
+    /*超出部分隐藏*/
+    white-space: nowrap;
+    /*不换行*/
+    text-overflow: ellipsis;
+    /*超出部分文字以...显示*/
 }
-.itemMainPrice{
+
+.itemMainPrice {
     height: 22px;
     line-height: 22px;
     font-size: 16px;
@@ -80,49 +94,58 @@
     color: #FF5050;
     text-align: center;
 }
-.mainBox .search{
+
+.search {
     height: 36px;
     width: 1264px;
     margin: 0 auto;
     margin-top: 95px;
 }
- .search .sork{
+
+.search .sork {
     float: left;
     margin-left: 30px;
 }
-.search .sork div{
+
+.search .sork div {
     line-height: 36px;
     float: left;
     margin: 0 30px;
     cursor: pointer;
 }
-.search .sork div p{
+
+.search .sork div p {
     float: left;
     margin-right: 10px;
 }
-.search .sork div span{
+
+.search .sork div span {
     float: left;
     width: 17px;
     height: 17px;
-    display:block;
+    display: block;
     margin-top: 10px;
 }
-.arrowsTrue{
+
+.arrowsTrue {
     display: inline-block;
     vertical-align: middle;
     background: url('../images/arrowsTrue.png') no-repeat center;
 }
+
 .arrowsFlag {
     display: inline-block;
     vertical-align: middle;
     background: url('../images/arrowsFlag.png') no-repeat center;
 }
-.search .searchInput{
+
+.search .searchInput {
     margin-left: 220px;
     width: 402px;
     height: 36px;
     float: left;
 }
+
 .searchInput_l {
     width: 315px;
     height: 36px;
@@ -133,15 +156,18 @@
     border-bottom-left-radius: 5px;
     line-height: 36px;
 }
-.searchInput_l img{
-   margin: 0px 0 0 10px;
+
+.searchInput_l img {
+    margin: 0px 0 0 10px;
 }
-.searchInput_l  input{
+
+.searchInput_l input {
     width: 280px;
-    padding:0  10px;
+    padding: 0 10px;
     height: 36px;
 }
-.searchInput_r{
+
+.searchInput_r {
     height: 36px;
     width: 85px;
     float: left;
@@ -153,112 +179,135 @@
     border-bottom-right-radius: 5px;
     cursor: pointer;
 }
-.triggerIcon{
+
+.triggerIcon {
     height: 36px;
     width: 100px;
     padding-top: 10px;
     float: right;
 }
-.triggerIcon div{
+
+.triggerIcon div {
     width: 17px;
     height: 17px;
     float: left;
     margin: 0 13px;
     cursor: pointer;
 }
-.gridIcon{
+
+.gridIcon {
     background: url("../images/gridIcon.png") no-repeat center;
 }
-.gridActiveIcon{
+
+.gridActiveIcon {
     background: url("../images/gridActiveIcon.png") no-repeat center;
 }
 
-.columnActiveIcon{
+.columnActiveIcon {
     background: url("../images/columnActiveIcon.png") no-repeat center;
 }
-.columnIcon{
+
+.columnIcon {
     background: url("../images/columnIcon.png") no-repeat center;
 }
-.tableBox{
+
+.tableBox {
     width: 1240px;
     margin: 0 auto;
-    overflow:hidden;
+    overflow: hidden;
     border: 1px solid #e9e9e9;
 }
-.tableBox #gridList{
-    overflow:hidden;
-    margin:10px 15px;
+
+.tableBox #gridList {
+    overflow: hidden;
+    margin: 10px 15px;
 }
-.tableBox #gridList li{
-    margin:10px;
+
+.tableBox #gridList li {
+    margin: 10px;
     width: 280px;
     height: 290px;
     border: 1px solid #e9e9e9;
     float: left;
 }
-#columnList{
-    overflow:hidden;
-    margin:10px 15px;
-  
+
+#columnList {
+    overflow: hidden;
+    margin: 10px 15px;
+
 }
-#columnList li{
+
+#columnList li {
     width: 580px;
     height: 254px;
     border: 1px solid #e9e9e9;
     float: left;
-    margin:10px;
+    margin: 10px;
 }
-.listLeft{
+
+.listLeft {
     float: left;
     margin: 16px;
     margin-bottom: 0;
 }
-.listLeft img{
+
+.listLeft img {
     width: 250px;
     height: 180px;
 }
-.listLeft p{
+
+.listLeft p {
     height: 52px;
     line-height: 52px;
     text-align: center;
     font-weight: 400;
     color: #ff5050;
 }
-.listRight{
+
+.listRight {
     width: 290px;
     overflow: hidden;
     float: left;
 }
-.listRight h3{
+
+.listRight h3 {
     width: 100%;
     font-size: 16px;
     text-align: left;
     color: #000000;
     font-weight: 400;
     line-height: 50px;
-    overflow: hidden; /*超出部分隐藏*/
-    white-space: nowrap; /*不换行*/
-    text-overflow: ellipsis; /*超出部分文字以...显示*/
+    overflow: hidden;
+    /*超出部分隐藏*/
+    white-space: nowrap;
+    /*不换行*/
+    text-overflow: ellipsis;
+    /*超出部分文字以...显示*/
 }
-.listRight p{
+
+.listRight p {
     color: #999999;
     line-height: 24px;
 }
-.listRight p span{
+
+.listRight p span {
     color: #000000;
 }
+
 /* 分页样式 */
-.pageBox{
+.pageBox {
     width: 1200px;
     height: 45px;
     margin: 20px auto;
 }
-.pageBox ul{
+
+.pageBox ul {
     width: 400px;
     height: 45px;
     margin: 0 auto;
 }
-.pageBox ul li{
+
+.pageBox ul li {
     margin: 5px 0;
     padding: 0 6px;
     height: 30px;
@@ -270,7 +319,8 @@
     cursor: pointer;
     overflow: hidden;
 }
-#changePage{
+
+#changePage {
     width: 50px;
     height: 28px;
     background-image: none;
@@ -281,7 +331,7 @@
     border: 0;
 }
 
-#numberPage{
+#numberPage {
     width: 25px;
     border: 0;
     height: 28px;
@@ -291,7 +341,8 @@
     padding: 0;
     margin: 0;
 }
-#totalCountPage{
+
+#totalCountPage {
     width: 25px;
     border: 0;
     height: 28px;
@@ -301,17 +352,20 @@
     padding: 0;
     margin: 0;
 }
-.footer{
+
+.footer {
     width: 100%;
     height: 77px;
     margin-top: 30px;
     background: #ebebeb;
 }
-.footer div{
+
+.footer div {
     width: 600px;
     margin: 0 auto;
 }
-.footer div p{
+
+.footer div p {
     text-align: center;
     line-height: 77px;
     float: left;

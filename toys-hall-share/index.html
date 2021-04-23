@@ -26,107 +26,37 @@
 <body>
     <div class="header">
         <div class="title">
-            成卓玩具厂
+            <span id="factoryTp"></span>
         </div>
         <div class="contact">
-            <p>联系人： <span>张老板</span></p>
-            <p>联系电话： <span>15986830618</span></p>
+            <p>联系人： <span id="linkmanTp"></span></p>
+            <p>联系电话： <span id="handsetTp"></span></p>
         </div>
     </div>
     <div class="main">
-        <div class="mainBox">
-            <div class="slideshow">
-                <div class="item">
-                    <div class="itemMain">
-                        <img src="./static/images/logo.png" alt="">
-                        <p>玩具名称玩具名称玩具名称玩具</p>
-                        <p>￥<span>98.00</span></p>
-                    </div>
+        <div id="mainBox">
+            <ul id="slideshow">
+            </ul>
+        </div>
+        <div class="search">
+            <div class="sork">
+                <div>
+                    <p>时间</p> <span id="isTime" class="arrowsFlag"></span>
                 </div>
-                <div class="item">
-                    <div class="itemMain">
-                        <img src="./static/images/logo.png" alt="">
-                        <p>玩具名称玩具名称玩具名称玩具</p>
-                        <p>￥<span>98.00</span></p>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="itemMain">
-                        <img src="./static/images/logo.png" alt="">
-                        <p>玩具名称玩具名称玩具名称玩具</p>
-                        <p>￥<span>98.00</span></p>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="itemMain">
-                        <img src="./static/images/logo.png" alt="">
-                        <p class="itemMainName">玩具名称玩具名称玩具名称玩具</p>
-                        <p class="itemMainPrice">￥<span>98.00</span></p>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="itemMain">
-                        <img src="./static/images/logo.png" alt="">
-                        <p>玩具名称玩具名称玩具名称玩具</p>
-                        <p>￥<span>98.00</span></p>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="itemMain">
-                        <img src="./static/images/logo.png" alt="">
-                        <p class="itemMainName">玩具名称玩具名称玩具名称玩具</p>
-                        <p class="itemMainPrice">￥<span>98.00</span></p>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="itemMain">
-                        <img src="./static/images/logo.png" alt="">
-                        <p>玩具名称玩具名称玩具名称玩具</p>
-                        <p>￥<span>98.00</span></p>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="itemMain">
-                        <img src="./static/images/logo.png" alt="">
-                        <p class="itemMainName">玩具名称玩具名称玩具名称玩具</p>
-                        <p class="itemMainPrice">￥<span>98.00</span></p>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="itemMain">
-                        <img src="./static/images/logo.png" alt="">
-                        <p>玩具名称玩具名称玩具名称玩具</p>
-                        <p>￥<span>98.00</span></p>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="itemMain">
-                        <img src="./static/images/logo.png" alt="">
-                        <p class="itemMainName">玩具名称玩具名称玩具名称玩具</p>
-                        <p class="itemMainPrice">￥<span>98.00</span></p>
-                    </div>
+                <div>
+                    <p>价格</p> <span id="isPrice" class="arrowsFlag"></span>
                 </div>
             </div>
-            <div class="search">
-                <div class="sork">
-                    <div>
-                        <p>时间</p> <span id="isTime" class="arrowsFlag"></span>
-                    </div>
-                    <div>
-                        <p>价格</p> <span id="isPrice" class="arrowsFlag"></span>
-                    </div>
+            <div class="searchInput">
+                <div class="searchInput_l">
+                    <img src="./static/images/fdj.png" alt="">
+                    <input id="keyWord" type="text" placeholder="请输入关键字">
                 </div>
-                <div class="searchInput">
-                    <div class="searchInput_l">
-                        <img src="./static/images/fdj.png" alt="">
-                        <input id="keyWord" type="text" placeholder="请输入关键字">
-                    </div>
-                    <div class="searchInput_r">搜索</div>
-                </div>
-                <div class="triggerIcon">
-                    <div id="cutGridIcon" class="gridActiveIcon"></div>
-                    <div id="cutColumnIcon" class="columnIcon"></div>
-                </div>
+                <div class="searchInput_r">搜索</div>
+            </div>
+            <div class="triggerIcon">
+                <div id="cutGridIcon" class="gridActiveIcon"></div>
+                <div id="cutColumnIcon" class="columnIcon"></div>
             </div>
         </div>
     </div>
@@ -180,99 +110,110 @@
     }
     var tableDate = [];
     $(document).ready(function () {
-        getProductkeyGuid()
         getProductList()
-        // slideList()
+        getProductkeyGuid()
     })
 
-    function slideList() {
-        // //定义一个变量存储边距
-        // var num = 0;
-        // //让边距不停减小，左移
-        // var timeer
-
-        // function autoPlay() {
-        //     timeer = setInterval(function () {
-        //         num -= 1;
-        //         //当移动四张图片后，边距为-2000，这时候让Ul跳转回初始位置
-        //         if (num <= -2800) {
-        //             num = 0
-        //         };
-        //         $('.slideshow').css('marginLeft', num);
-        //     }, 10)
-        // }
-        // //运行定义的移动方法
-        // autoPlay();
-
-        // //鼠标移入清除移动，离开时继续运行
-        // $('.item').hover(function () {
-        //     //停止滚动
-        //     clearInterval(timeer);
-        //     //给相邻的元素添加淡入效果0.5的透明度
-        //     $(this).siblings().fadeTo(0, 0.5);
-        // }, function () {
-        //     //继续滚动
-        //     autoPlay(),
-        //         //鼠标移出相邻图片的透明度改成1
-        //         $(this).siblings().fadeTo(0, 1);
-        // })
-
-        var box = $('.slideshow');
-        var ul = box.getElementsByTagName("ul")[0];//获取ul
-        var lis = ul.getElementsByTagName("li");//获取所有的li元素
-        var speed = 2;//速度
-        ul.innerHTML += ul.innerHTML;//相当于克隆
-        ul.style.width = lis.length*lis[0].offsetWidth+'px';//计算赋值ul的宽度
-        //滚动方法
-   function move (){
-       // 如果当前left值 <= 负ul/2的宽度 给left值重新定位成0
-       if(ul.offsetLeft<=-ul.offsetWidth/2){
-            ul.style.left = "0";
-         }
-       //像左边滚动
-        ul.style.left = ul.offsetLeft - speed + 'px';
-    }
-    //定时器
-     var timer = setInterval(move,30);
-     //鼠标经过控制暂停滚动
-     box.onmouseover = function () {
-     	 clearInterval(timer);
-     }
-    box.onmouseout = function () {
-     timer = setInterval(move,30);
-   }
-
-    }
     // 请求厂商信息
     function getProductkeyGuid() {
-        $.get(url + "/api/Manufacturer/ManufacturerInfo", {
-                keyGuid: "BE9757F5-E2B7-43DC-BABC-09251BCE3C72"
-            },
-            function (data) {
-                console.log(data);
-            });
+        var keyGuid = window.localStorage.getItem("keyGuid");
+        $.get("https://hall.toysbear.com/api/Manufacturer/ManufacturerInfo?keyGuid=" + (keyGuid ||
+            "BE9757F5-E2B7-43DC-BABC-09251BCE3C72"), function (res) {
+            if (res.Code == 1) {
+                // 厂商
+                document.getElementById('factoryTp').innerHTML = res.Data.ma_na
+                //  <!-- 联系人 -->
+                document.getElementById('linkmanTp').innerHTML = res.Data.linkman
+                //  <!-- 电话 -->
+                document.getElementById('handsetTp').innerHTML = res.Data.handset
 
+            } else {
+                alert(res.Message);
+            }
+        })
     }
     // 请求列表
     function getProductList() {
-        console.log(data);
-        $.get(url + "/api/Product/ProductList", data, function (data) {
-
-            console.log(data.Data.ProductInfo.Items);
-            if (document.getElementById('gridList').style.display === "block") {
-                getGridList(data.Data.ProductInfo.Items)
-                tableDate = data.Data.ProductInfo.Items
-                // tableDate.slice(0,10)
+        $.get(url + "/api/Product/ProductList", data, function (res) {
+            if (res.Code == 1) {
+                tableDate = res.Data.ProductInfo.Items;
+                if (document.getElementById('slideshow').scrollWidth < 1300) {
+                    getSlideshowList(tableDate)
+                }
+                if (document.getElementById('gridList').style.display === "block") {
+                    getGridList(tableDate)
+                } else {
+                    getColumnList(tableDate)
+                }
+                $("#totalCountPage").val(res.Data.ProductInfo.TotalCount)
+                $("#keyWord").val("");
+                data.keyWord = "";
+                delete data.keyWord
             } else {
-                getColumnList(data.Data.ProductInfo.Items)
-                tableDate = data.Data.ProductInfo.Items
+                alert(res.Message);
             }
-            $("#totalCountPage").val(data.Data.ProductInfo.TotalCount)
-            $("#keyWord").val("");
-            data.keyWord = "";
-            delete data.keyWord
         });
+    }
+    // 渲染滚动列表
+    function getSlideshowList(list) {
+        $("#slideshow").empty();
+        for (var i = 0; i < list.length; i++) {
+            var html = ""
+            switch (list[i].ProductImages) {
+                case "":
+                case null:
+                case undefined:
+                case "null":
+                case "undefined":
+                    list[i].imgUrlVal = ""
+                    break;
+                default:
+                    list[i].imgUrlVal = list[i].ProductImages[0]
+            }
+            html += " <li onclick='toDetails(" + i + ")' class='item'><div class='itemMain'> <img alt='' src=" + list[i]
+                .imgUrlVal +
+                "><p class='itemMainName'>" + list[i]
+                .ProductName +
+                "</p><p class='itemMainPrice'>￥<span>" +
+                list[i].FactoryPrice + "</span></p></div></li>"
+            $("#slideshow").append(html);
+        }
+        if (list.length > 4) {
+            slideList()
+        }
+    }
+    // 滚动事件
+    function slideList() {
+        //定义一个变量存储边距
+        var num = 0;
+        //让边距不停减小，左移
+        var timeer
+        var mainBox = document.getElementById('mainBox').clientWidth
+        var scrollWidth = document.getElementById('slideshow').scrollWidth
 
+        function autoPlay() {
+            timeer = setInterval(function () {
+                num -= 1
+                //当移动四张图片后，边距为-2000，这时候让Ul跳转回初始位置
+                if (num <= -(scrollWidth - mainBox)) {
+                    num = 0
+                };
+                $('#slideshow').css('marginLeft', num);
+            }, 10)
+        }
+        autoPlay();
+        //鼠标移入清除移动，离开时继续运行
+        $('.item').hover(function () {
+            //停止滚动
+            clearInterval(timeer);
+            //给相邻的元素添加淡入效果0.5的透明度
+            $(this).siblings().fadeTo(0, 0.5);
+        }, function () {
+            //继续滚动
+            autoPlay(),
+                //鼠标移出相邻图片的透明度改成1
+                $(this).siblings().fadeTo(0, 1);
+        })
     }
     // 渲染列表
     function getGridList(list) {
@@ -291,9 +232,11 @@
                 default:
                     list[i].imgUrlVal = list[i].ProductImages[0]
             }
-            html += " <li><div class='itemMain'> <img alt='' src=" + list[i].imgUrlVal + "><p>" + list[i]
+            html += "<li onclick='toDetails(" + i + ")'><div   class='itemMain'> <img alt='' src=" + list[i].imgUrlVal +
+                "><p class='itemMainName'>" +
+                list[i]
                 .ProductName +
-                "</p><p>￥<span>" +
+                "</p><p class='itemMainPrice'>￥<span>" +
                 list[i].FactoryPrice + "</span></p></div></li>"
             $("#gridList").append(html);
         }
@@ -326,24 +269,126 @@
                 default:
                     list[i].imgUrlVal = list[i].ProductImages[0]
             }
-            html += " <li> <div class='listLeft'><img  alt='' src=" + list[i].imgUrlVal + "><p>￥<span>" + list[i]
+            switch (list[i].ProductLength) {
+                case "":
+                case null:
+                case undefined:
+                case "null":
+                case "undefined":
+                    list[i].ProductLengthVal = "  "
+                    break;
+                default:
+                    list[i].ProductLengthVal = list[i].ProductLength
+            }
+            switch (list[i].ProductWidth) {
+                case "":
+                case null:
+                case undefined:
+                case "null":
+                case "undefined":
+                    list[i].ProductWidthVal = "  "
+                    break;
+                default:
+                    list[i].ProductWidthVal = list[i].ProductWidth
+            }
+            switch (list[i].ProductHeight) {
+                case "":
+                case null:
+                case undefined:
+                case "null":
+                case "undefined":
+                    list[i].ProductHeightVal = "  "
+                    break;
+                default:
+                    list[i].ProductHeightVal = list[i].ProductHeight
+            }
+            switch (list[i].InnerBoxLength) {
+                case "":
+                case null:
+                case undefined:
+                case "null":
+                case "undefined":
+                    list[i].InnerBoxLengthVal = "  "
+                    break;
+                default:
+                    list[i].InnerBoxLengthVal = list[i].InnerBoxLength
+            }
+            switch (list[i].InnerBoxWidth) {
+                case "":
+                case null:
+                case undefined:
+                case "null":
+                case "undefined":
+                    list[i].InnerBoxWidthVal = "  "
+                    break;
+                default:
+                    list[i].InnerBoxWidthVal = list[i].InnerBoxWidth
+            }
+            switch (list[i].InnerBoxHeight) {
+                case "":
+                case null:
+                case undefined:
+                case "null":
+                case "undefined":
+                    list[i].InnerBoxHeightVal = "  "
+                    break;
+                default:
+                    list[i].InnerBoxHeightVal = list[i].InnerBoxHeight
+            }
+            switch (list[i].OuterBoxGrossWeight) {
+                case "":
+                case null:
+                case undefined:
+                case "null":
+                case "undefined":
+                    list[i].OuterBoxGrossWeightVal = "  "
+                    break;
+                default:
+                    list[i].OuterBoxGrossWeightVal = list[i].OuterBoxGrossWeight
+            }
+            switch (list[i].OuterBoxNetWeight) {
+                case "":
+                case null:
+                case undefined:
+                case "null":
+                case "undefined":
+                    list[i].OuterBoxNetWeightVal = "  "
+                    break;
+                default:
+                    list[i].OuterBoxNetWeightVal = list[i].OuterBoxNetWeight
+            }
+
+
+            html += " <li onclick='toDetails(" + i + ")'> <div class='listLeft'><img  alt='' src=" + list[i].imgUrlVal +
+                "><p>￥<span>" +
+                list[i]
                 .FactoryPriceVal +
                 "</span></p></div><div class='listRight'><h3>" +
-                list[i].ProductName + "</h3><p>出厂货号：<span>" + list[i].FactoryNo + "</span></p><p> 包装：<span>" + list[i]
+                list[i].ProductName + "</h3><p>出厂货号：<span>" + list[i].FactoryNo +
+                "</span></p><p> 包装：<span>" + list[i]
                 .ChinesePack +
-                "</span></p><p>产品规格：<span>" + list[i].ProductLength + "/" + list[i].ProductWidth + "/" + list[i]
-                .ProductHeight + "(CM)</span></p><p>外箱规格：<span>" +
+                "</span></p><p>产品规格：<span>" + list[i].ProductLengthVal + "/" + list[i].ProductWidthVal + "/" +
+                list[i]
+                .ProductHeightVal + "(CM)</span></p><p>外箱规格：<span>" +
                 list[i].OuterBoxLength + "/" + list[i].OuterBoxWidth + "/" + list[i].OuterBoxHeight +
-                "(CM)</span></p> <p> 包装规格： <span> " + list[i].InnerBoxLength + "/" + list[i].InnerBoxWidth + "/" + list[
-                    i].InnerBoxHeight +
+                "(CM)</span></p> <p> 包装规格： <span> " + list[i].InnerBoxLengthVal + "/" + list[i].InnerBoxWidthVal +
+                "/" + list[
+                    i].InnerBoxHeightVal +
                 "(CM)</span></p><p> 装箱量：<span>" + list[i].OuterBoxLoadCapa + "(" + list[i].BoxUnit +
-                ")</span></p><p> 体积 / 材积：<span> " + list[i].OuterBoxBulkStere + "(CBM)/" + list[i].OuterBoxBulkFeet +
-                "(CUFT)</span></p><p>毛重 / 净重：<span>" + list[i].OuterBoxGrossWeight + "/" + list[i].OuterBoxNetWeight +
+                ")</span></p><p> 体积 / 材积：<span> " + list[i].OuterBoxBulkStere + "(CBM)/" + list[i]
+                .OuterBoxBulkFeet +
+                "(CUFT)</span></p><p>毛重 / 净重：<span>" + list[i].OuterBoxGrossWeight + "/" + list[i]
+                .OuterBoxNetWeight +
                 " (kg)</span></p></div></li>"
             $("#columnList").append(html);
         }
     }
-
+    // 跳转产品详情
+    function toDetails(index) {
+        window.localStorage.setItem("CompanyNumber", tableDate[index].CompanyNumber);
+        window.location.href = "./productDetails.html"
+        // window.open = "https://www.baidu.com"
+    }
     //切换产品样式
     $("#cutGridIcon").click(function () {
         document.getElementById('gridList').style.display = 'block';
