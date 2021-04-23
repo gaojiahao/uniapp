@@ -1,10 +1,13 @@
 <template>
   <div id="ag-canvas">
-    <div id='default' class="user" style="width: 99px;height: 66px;grid-area: 12 / 1 / 13 / 4;z-index: 1;border: 1px solid rgb(255, 255, 255);" @click.stop="setMainVideo('default')"><div class="active"></div></div>
-    <!-- <div id='1' class="user" style="width: 99px;height: 66px;grid-area: 12 / 2 / 13 / 8;z-index: 1;border: 1px solid rgb(255, 255, 255);background:white"></div>
-    <div id='2' class="user" style="width: 99px;height: 66px;grid-area: 12 / 3 / 13 / 12;z-index: 1;border: 1px solid rgb(255, 255, 255);background:white"></div>
-    <div id='3' class="user" style="width: 99px;height: 66px;grid-area: 12 / 4 / 13 / 16;z-index: 1;border: 1px solid rgb(255, 255, 255);background:white"></div>
-    <div id='4' class="user" style="width: 99px;height: 66px;grid-area: 12 / 5 / 13 / 20;z-index: 1;border: 1px solid rgb(255, 255, 255);background:white"></div> -->
+    <div id='default' class="user" style="width: 99px;height: 66px;grid-area: 12 / 1 / 13 / 3;z-index: 1;border: 1px solid rgb(255, 255, 255);" @click.stop="setMainVideo('default')"><div class="active"></div></div>
+    <!-- <div id='1' class="user" style="width: 99px;height: 66px;grid-area: 12 / 3 / 13 / 6;z-index: 1;border: 1px solid rgb(255, 255, 255);background:white"></div>
+    <div id='2' class="user" style="width: 99px;height: 66px;grid-area: 12 / 6 / 13 / 9;z-index: 1;border: 1px solid rgb(255, 255, 255);background:white"></div>
+    <div id='3' class="user" style="width: 99px;height: 66px;grid-area: 12 / 9 / 13 / 12;z-index: 1;border: 1px solid rgb(255, 255, 255);background:white"></div>
+    <div id='4' class="user" style="width: 99px;height: 66px;grid-area: 12 / 12 / 13 / 15;z-index: 1;border: 1px solid rgb(255, 255, 255);background:white"></div>
+    <div id='5' class="user" style="width: 99px;height: 66px;grid-area: 12 / 15 / 13 / 18;z-index: 1;border: 1px solid rgb(255, 255, 255);background:white"></div>
+    <div id='6' class="user" style="width: 99px;height: 66px;grid-area: 12 / 18 / 13 / 21;z-index: 1;border: 1px solid rgb(255, 255, 255);background:white"></div>
+    <div id='7' class="user" style="width: 99px;height: 66px;grid-area: 12 / 21 / 13 / 24;z-index: 1;border: 1px solid rgb(255, 255, 255);background:white"></div> -->
   </div>
 </template>
 
@@ -38,7 +41,8 @@ export default {
       audioDevices:[],
       videoDevices:[],
       uList:{},
-      count:1
+      count:1,
+      isMultMode:false,   //是否多人模式
     };
   },
   props: [
@@ -125,13 +129,19 @@ export default {
     },
     //订阅远端用户
     async subscribe(user, mediaType) {
-      debugger
+      // debugger
       var $ = this;
       const uid = user.uid;
       // subscribe to a remote user
       await this.client.subscribe(user, mediaType);
-      var count =document.getElementById("ag-canvas").childNodes;
-      var userLength = count.length;
+      var itemList =document.getElementById("ag-canvas").childNodes;
+      var items=[];
+      for(var i=0;i<itemList.length;i++){
+        if(itemList[i].nodeName!='#text'){
+          items.push(itemList[i]);
+        }
+      };
+      var userLength = items.length;
       console.log("subscribe success");
       if (mediaType === 'video') {
         const remoteVideoTrack = user.videoTrack;
@@ -153,6 +163,10 @@ export default {
             remoteVideoTrack.play(playerContainer);
           }  
         }
+        //如果当前是多人模式，就修改成多人样式
+        if(this.isMultMode){
+          this.setMainVideo('default');
+        }
       }
       if (mediaType === 'audio') {
         user.audioTrack.play();
@@ -160,7 +174,7 @@ export default {
     },
     //设置主视频页面
     setMainVideo(val){
-      debugger
+      // debugger
       var $=this;
       var itemList =document.getElementById("ag-canvas").childNodes;
       var items=[];
@@ -172,6 +186,7 @@ export default {
       var count = 0;
       if(val=='default'){
         var flag = items.length-1;
+        this.isMultMode = true;
         switch(flag){
           case 1:
             break;
@@ -183,14 +198,24 @@ export default {
             break;
           case 4:
             this.setMulitVideo(items,4);
+            break;
           case 5:
             this.setMulitVideo(items,5);
+            break;
           case 6:
             this.setMulitVideo(items,6);
+            break;
+          case 7:
+            this.setMulitVideo(items,7);
+            break;
+          case 8:
+            this.setMulitVideo(items,8);
+            break;
           default:
             break
         } 
       } else {
+        this.isMultMode = false;
         for(var i=0;i<items.length;i++){
           console.log(items[i]);
           if(items[i]['id']==val){

@@ -138,6 +138,7 @@ export default {
         .getDevices()
         .then(res => {
           this.videoDevices = res.videoDevices;
+          this.formValidate['videoId'] = this.videoDevices[0]&&this.videoDevices[0]['deviceId'];
         })
         .catch(err => {
           console.log(err);

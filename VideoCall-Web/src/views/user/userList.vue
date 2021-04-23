@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 15:46:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\user\userList.vue
- * @LastEditTime: 2021-04-20 10:03:51
+ * @LastEditTime: 2021-04-22 18:04:15
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -29,11 +29,11 @@
                 <div class="name">
                     {{item.nickname}}
                 </div>
-                <div class="action" v-if="isAdmin">
+                <div class="action">
                     {{item.isMaster?'主持人':''}}
-                    <i class="iconfont icon21maikefeng text" :class="[item.isMic ? 'outline':'eye']" @click="setMic(index)"></i>
-                    <i class="iconfont iconshexiangtou text" :class="[item.isCar ? 'outline':'eye']" @click="setCar(index)"></i>
-                    <Dropdown>
+                    <i class="iconfont icon21maikefeng text" :class="[item.isMic ? 'outline':'eye']" @click="setMic(index)"  v-if="isAdmin"></i>
+                    <i class="iconfont iconshexiangtou text" :class="[item.isCar ? 'outline':'eye']" @click="setCar(index)"  v-if="isAdmin"></i>
+                    <Dropdown  v-if="isAdmin">
                         <a href="javascript:void(0)">
                             <i class="iconfont iconzu1306 text"></i>
                         </a>
