@@ -558,7 +558,7 @@ export default {
         decimalPlaces: 3,
         rejectionMethod: "四舍五入",
         websiteInfoId: null,
-        isCustomerInfo: null
+        isCustomerInfo: true
       },
       options: {
         // 报价配置项
