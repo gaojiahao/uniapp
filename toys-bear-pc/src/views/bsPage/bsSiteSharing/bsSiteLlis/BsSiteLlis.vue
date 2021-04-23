@@ -15,6 +15,40 @@
             @keyup.native.enter="search"
           ></el-input>
         </div>
+        <div class="item" style="width: 200px">
+          <span class="label">站点：</span>
+          <el-select
+            v-model="websiteInfoId"
+            size="medium"
+            clearable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in sitesList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </div>
+        <div class="item" v-if="userInfo.userInfo.isMain">
+          <span class="label">业务员：</span>
+          <el-select
+            v-model="userId"
+            size="medium"
+            clearable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in staffList"
+              :key="item.id"
+              :label="item.linkman"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </div>
         <div class="item">
           <el-button
             @click="search"
@@ -84,7 +118,6 @@
           prop="customerName"
           label="客户"
           align="center"
-          width="180"
         ></el-table-column>
         <el-table-column label="登录码" align="center">
           <template slot-scope="scope">
@@ -100,12 +133,14 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="创建时间" align="center">
+        <el-table-column label="创建时间" align="center" width="100">
           <template slot-scope="scope">
             <span> {{ scope.row.createdOn.replace(/T.*/, "") }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="有效期" align="center">
+        <el-table-column label="业务员" align="center" prop="createdBy">
+        </el-table-column>
+        <el-table-column label="有效期" align="center" width="100">
           <template slot-scope="scope">
             {{
               (scope.row.expireTime && scope.row.expireTime.split("T")[0]) ||
@@ -127,10 +162,6 @@
               @click.stop="openEdit(scope.row)"
               >编辑</el-button
             >
-            <!-- <el-popconfirm
-              title="确定要删除此分享吗？"
-              @confirm="handleDelete(scope.row)"
-            > -->
             <el-button
               size="mini"
               type="warning"
@@ -138,7 +169,6 @@
               slot="reference"
               >删除</el-button
             >
-            <!-- </el-popconfirm> -->
           </template>
         </el-table-column>
       </el-table>
@@ -440,6 +470,7 @@
 
 <script>
 import VueQr from "vue-qr";
+import { mapState } from "vuex";
 export default {
   name: "bsSiteLlis",
   components: {
@@ -447,6 +478,10 @@ export default {
   },
   data() {
     return {
+      websiteInfoId: null,
+      userId: null,
+      sitesList: [],
+      staffList: [],
       clientCurrentPage: 1,
       clientPageSize: 99,
       clientKeyword: "",
@@ -532,6 +567,33 @@ export default {
     };
   },
   methods: {
+    // 获取站点列表
+    async getDefaultSites() {
+      const res = await this.$http.post("/api/SearchDropdownWebsiteInfos", {});
+      console.log(res);
+      if (res.data.result.code === 200) {
+        this.sitesList = [{ name: "全部", id: null }, ...res.data.result.item];
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
+    // 获取公司下的员工列表
+    async getStaffList() {
+      const res = await this.$http.post("/api/CompanyUserList", {
+        orgCompanyID: this.$store.state.userInfo.commparnyList[0].commparnyId
+      });
+      if (res.data.result.code === 200) {
+        this.staffList = res.data.result.item.personnels;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
     // 获取系统配置项
     async getSelectCompanyOffer() {
       const res = await this.$http.post("/api/GetSelectCompanyOffer", {
@@ -550,7 +612,9 @@ export default {
       const fd = {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
-        keyword: this.keyword
+        keyword: this.keyword,
+        websiteInfoId: this.websiteInfoId,
+        userId: this.userId
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -559,10 +623,8 @@ export default {
       }
       const res = await this.$http.post("/api/SearchWebsiteShareInfosPage", fd);
       if (res.data.result.code === 200) {
-        this.totalCount = res.data.result.item.shareInfos.totalCount;
-        this.tableData = res.data.result.item.shareInfos.items;
-        this.defaultShareDomain = res.data.result.item.defaultShareDomain;
-        console.log(this.tableData);
+        this.totalCount = res.data.result.item.totalCount;
+        this.tableData = res.data.result.item.items;
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -789,9 +851,14 @@ export default {
       this.getDataList();
     }
   },
+  computed: {
+    ...mapState(["userInfo"])
+  },
   created() {
     this.getDataList();
     this.getClientList();
+    this.getStaffList();
+    this.getDefaultSites();
     this.getSelectProductOfferFormulaList();
   },
   mounted() {
