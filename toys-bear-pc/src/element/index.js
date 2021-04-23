@@ -31,6 +31,7 @@ import {
   Pagination,
   Card,
   Col,
+  Tag,
   Tooltip,
   Badge
 } from "element-ui";
@@ -65,6 +66,7 @@ const element = {
     Vue.use(Pagination);
     Vue.use(Tooltip);
     Vue.use(Col);
+    Vue.use(Tag);
     Vue.use(Card);
     Vue.use(Scrollbar);
     Vue.use(Badge);

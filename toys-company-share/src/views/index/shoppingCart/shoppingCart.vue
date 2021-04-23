@@ -353,7 +353,7 @@
           </div>
         </div>
         <!-- 提交信息 -->
-        <div class="contactInfoBox">
+        <div class="contactInfoBox" v-if="userInfo.isCustomerInfo">
           <div class="title">{{ myShoppingCartLang.contactInformation }}</div>
           <div class="userInfoBox">
             <el-form

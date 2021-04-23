@@ -24,9 +24,26 @@
         >
           <el-option
             v-for="item in sitesList"
-            :key="item.value"
-            :label="item.key"
-            :value="item.value"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
+      </div>
+      <div class="item" v-if="userInfo.userInfo.isMain">
+        <span class="label">业务员：</span>
+        <el-select
+          v-model="userId"
+          size="medium"
+          clearable
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="item in staffList"
+            :key="item.id"
+            :label="item.linkman"
+            :value="item.id"
           >
           </el-option>
         </el-select>
@@ -69,23 +86,18 @@
             <span style="margin-left: 15px">{{ scope.row.customerName }}</span>
           </template>
         </el-table-column>
+        <el-table-column prop="siteRegion" label="站点"></el-table-column>
         <el-table-column
-          prop="siteRegion"
-          label="站点"
-          width="100"
-        ></el-table-column>
-        <el-table-column
-          prop="shareUrl"
-          width="350"
-          label="网址"
-        ></el-table-column>
-        <el-table-column prop="email" label="登录邮箱"></el-table-column>
-        <el-table-column
-          prop="createdOn"
-          label="登录时间"
-          width="150"
+          prop="createdBy"
+          label="业务员"
           align="center"
-        >
+        ></el-table-column>
+        <el-table-column
+          prop="email"
+          label="登录邮箱"
+          align="center"
+        ></el-table-column>
+        <el-table-column prop="createdOn" label="浏览时间" align="center">
           <template slot-scope="scope">
             <span>
               {{ scope.row.createdOn.replace(/T/, " ") }}
@@ -110,10 +122,12 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "bsBrowsingHistory",
   data() {
     return {
+      userId: null,
       zhandian: null,
       keyword: null,
       dateTime: null,
@@ -131,7 +145,8 @@ export default {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         keyword: this.keyword,
-        url: this.zhandian,
+        userId: this.userId,
+        websiteInfoId: this.zhandian,
         startTime: this.dateTime && this.dateTime[0],
         endTime: this.dateTime && this.dateTime[1]
       };
@@ -168,12 +183,10 @@ export default {
     },
     // 获取站点列表
     async getDefaultSites() {
-      const res = await this.$http.post("/api/GetDefaultSites", {});
+      const res = await this.$http.post("/api/SearchDropdownWebsiteInfos", {});
+      console.log(res);
       if (res.data.result.code === 200) {
-        this.sitesList = [
-          { key: "全部", value: null },
-          ...res.data.result.item
-        ];
+        this.sitesList = [{ name: "全部", id: null }, ...res.data.result.item];
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -191,7 +204,10 @@ export default {
   created() {
     this.getDefaultSites();
   },
-  mounted() {}
+  mounted() {},
+  computed: {
+    ...mapState(["userInfo"])
+  }
 };
 </script>
 <style scoped lang="less">

@@ -1,5 +1,9 @@
 <template>
-  <div class="bsGridItem">
+  <div
+    class="bsGridItem"
+    @mouseenter="showDetails(true)"
+    @mouseleave="showDetails(false)"
+  >
     <div class="itemImg" @click="toProductDetails">
       <el-image
         style="width: 222px; height: 166px"
@@ -47,6 +51,13 @@
         class="iconClient clientIcon"
         @click.stop="addCollect(item)"
       ></i>
+      <!-- 找相似，找同款 -->
+      <div class="similaritySame">
+        <div class="simiBox">
+          <div class="similarity">找相似</div>
+          <div class="same">找同款</div>
+        </div>
+      </div>
     </div>
     <div class="content">
       <div class="productName">
@@ -88,6 +99,65 @@
         </template>
       </div>
     </div>
+    <!-- 详细版 -->
+    <el-collapse-transition>
+      <div
+        class="showDetails"
+        @mouseenter="showDetails(true)"
+        @mouseleave="showDetails(false)"
+        v-show="isShowDetails == item.productNumber"
+      >
+        <p class="item">
+          <span class="title">包装：</span>
+          <span class="conText">{{ item.ch_pa }}</span>
+        </p>
+        <p class="item">
+          <span class="title">产品规格：</span>
+          <span class="conText">
+            {{ item.pr_le }} x {{ item.pr_wi }} x {{ item.pr_hi }} (cm)
+          </span>
+        </p>
+        <p class="item">
+          <span class="title">外箱规格：</span>
+          <span class="conText">
+            {{ item.ou_le }} x {{ item.ou_wi }} x {{ item.ou_hi }}(cm)
+          </span>
+        </p>
+        <p class="item">
+          <span class="title">包装规格：</span>
+          <span class="conText">
+            {{ item.in_le }} x {{ item.in_wi }} x {{ item.in_hi }}(cm)
+          </span>
+        </p>
+        <p class="item">
+          <span class="title">装箱量：</span>
+          <span class="conText">{{ item.in_en }}/{{ item.ou_lo }}(pcs)</span>
+        </p>
+        <p class="item">
+          <span class="title">体积/材积：</span>
+          <span class="conText">
+            {{ item.bulk_stere }}(cbm)/{{ item.bulk_feet }}(cuft)
+          </span>
+        </p>
+        <p class="item">
+          <span class="title">毛重/净重：</span>
+          <span class="conText">{{ item.gr_we }}/{{ item.ne_we }}(kg)</span>
+        </p>
+        <div class="sourceBox" @click="toFactory(item)">
+          <i class="sourceIcon"></i>
+          <template v-if="item.isIntegral">
+            <span class="text">
+              {{ item.supplierName }}
+            </span>
+          </template>
+          <template v-else>
+            <span class="text">
+              {{ item.exhibitionName }}
+            </span>
+          </template>
+        </div>
+      </div>
+    </el-collapse-transition>
   </div>
 </template>
 
@@ -101,9 +171,17 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      isShowDetails: null
+    };
   },
   methods: {
+    // 显示明细
+    showDetails(flag) {
+      console.log(123456, flag);
+      if (flag) this.isShowDetails = this.item.productNumber;
+      else this.isShowDetails = null;
+    },
     // 去产品详情页
     async toProductDetails() {
       const fd = {
@@ -228,6 +306,8 @@ export default {
   flex-direction: column;
   justify-content: flex-start;
   border-radius: 4px;
+  position: relative;
+  transition: all 0.5s;
   .itemImg {
     position: relative;
     display: flex;
@@ -304,6 +384,44 @@ export default {
     .vipProductIcon {
       background: url("~@/assets/images/vipProductIcon.png") center no-repeat;
       background-size: contain;
+    }
+    .similaritySame {
+      position: absolute;
+      box-sizing: border-box;
+      padding: 0 15px;
+      width: 100%;
+      left: 0;
+      top: 148px;
+      transition: all 1s;
+      opacity: 0;
+      .simiBox {
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        .similarity,
+        .same {
+          width: 110px;
+          height: 34px;
+          background-color: #f9723e;
+          color: #fff;
+          opacity: 0.8;
+          line-height: 34px;
+          text-align: center;
+          &:hover {
+            background-color: #ec644a;
+          }
+        }
+      }
+    }
+  }
+  &:hover {
+    margin-top: 15px;
+    box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+    .showDetails {
+      box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+    }
+    .itemImg .similaritySame {
+      opacity: 1;
     }
   }
   .content {
@@ -393,6 +511,53 @@ export default {
       align-items: center;
       color: #3368a9;
       cursor: pointer;
+      .sourceIcon {
+        width: 18px;
+        min-width: 18px;
+        height: 18px;
+        margin-right: 16px;
+        background: url("~@/assets/images/sourceIcon.png") no-repeat center;
+        background-size: contain;
+      }
+      .text {
+        overflow: hidden; /*超出部分隐藏*/
+        white-space: nowrap; /*不换行*/
+        text-overflow: ellipsis; /*超出部分文字以...显示*/
+      }
+    }
+  }
+  .showDetails {
+    position: absolute;
+    width: 100%;
+    left: -1px;
+    top: 270px;
+    z-index: 1;
+    opacity: 1;
+    border-left: 1px solid #dcdfe6;
+    border-right: 1px solid #dcdfe6;
+    border-bottom: 1px solid #dcdfe6;
+    background-color: #fff;
+    border-radius: 4px;
+    .item {
+      padding: 4px 16px;
+      box-sizing: border-box;
+      overflow: hidden; /*超出部分隐藏*/
+      white-space: nowrap; /*不换行*/
+      text-overflow: ellipsis; /*超出部分文字以...显示*/
+      .title {
+        color: #999;
+      }
+    }
+    .sourceBox {
+      height: 48px;
+      padding: 0 16px;
+      box-sizing: border-box;
+      border-top: 1px solid #e5e5e5;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      color: #3368a9;
       .sourceIcon {
         width: 18px;
         min-width: 18px;
