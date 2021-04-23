@@ -173,7 +173,6 @@ export default {
   methods: {
     // 找相似
     similarityEvent() {
-      console.log("找相似", this.item);
       const value = JSON.parse(JSON.stringify(this.item));
       value.type = "similarity";
       const fd = {
@@ -188,7 +187,6 @@ export default {
     },
     // 找同款
     sameEvent() {
-      console.log("找同款", this.item);
       const value = JSON.parse(JSON.stringify(this.item));
       value.type = "same";
       const fd = {
