@@ -7,7 +7,40 @@
         <span class="orderNumber">{{ item.orderNumber }}</span>
       </li>
       <div class="clientContentBox">
-        <div class="left">
+        <li class="clientItem">
+          <span>客户：</span>
+          <span class="content">{{ item.customerName }}</span>
+        </li>
+        <li class="clientItem">
+          <span>业务员：</span>
+          <span class="content">{{ item.createdBy }}</span>
+        </li>
+        <li class="clientItem">
+          <span>公司名称：</span>
+          <span class="content">{{ item.companyName }}</span>
+        </li>
+        <li class="clientItem">
+          <span>联系人：</span>
+          <span class="content">{{ item.email }}</span>
+        </li>
+        <li class="clientItem">
+          <span>邮箱：</span>
+          <span class="content">{{ item.remark }}</span>
+        </li>
+      </div>
+      <div class="clientContentBox">
+        <li class="clientItem">
+          <span>择样时间：</span>
+          <span class="content">
+            {{ item.createdOn && item.createdOn.replace(/T/, " ") }}
+          </span>
+        </li>
+        <li class="remark">
+          <span>备注：</span>
+          <span class="content">{{ item.remark }}</span>
+        </li>
+      </div>
+      <!-- <div class="left">
           <li class="clientItem">
             <span>客户：</span>
             <span class="content">{{ item.customerName }}</span>
@@ -21,9 +54,15 @@
         </div>
         <div class="middle">
           <li class="clientItem">
-            <span>联系人：</span>
-            <span class="content">{{ item.contactName }}</span>
+            <span>业务员：</span>
+            <span class="content">{{ item.createdBy }}</span>
           </li>
+          <li class="clientItem">
+            <span>备注：</span>
+            <span class="content">{{ item.remark }}</span>
+          </li>
+        </div>
+        <div class="right">
           <li class="clientItem">
             <span>公司名称：</span>
             <span class="content">{{ item.companyName }}</span>
@@ -31,15 +70,10 @@
         </div>
         <div class="right">
           <li class="clientItem">
-            <span>邮箱：</span>
+            <span>联系人：</span>
             <span class="content">{{ item.email }}</span>
           </li>
-          <li class="clientItem">
-            <span>备注：</span>
-            <span class="content">{{ item.remark }}</span>
-          </li>
-        </div>
-      </div>
+        </div> -->
     </ul>
     <div class="tableBox">
       <div class="tableTitle">
@@ -542,23 +576,25 @@ export default {
     }
   }
   .customerInfoBox {
-    padding: 20px 0;
+    // padding: 20px 0;
     .itemBox {
       line-height: 34px;
+      margin-top: 20px;
       .orderNumber {
         font-weight: 700;
       }
     }
     .clientContentBox {
+      margin-top: 12px;
       display: flex;
-      .left,
-      .middle,
-      .right {
-        min-width: 250px;
-        .clientItem {
-          line-height: 34px;
-          margin-right: 20px;
-        }
+      .clientItem {
+        width: 300px;
+      }
+      .remark {
+        flex: 1;
+      }
+      &:last-of-type {
+        padding-bottom: 20px;
       }
     }
   }
