@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 16:28:17
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-22 17:51:38
+ * @LastEditTime: 2021-04-23 10:58:28
 -->
 <template>
   <div class="login" ref="login">
@@ -251,7 +251,7 @@ export default {
           this.$loading.hide();
           this.$Message.error({
             background: true,
-            content: '温馨提示：'+ err.data.errors['TargetCode'][0]
+            content: '温馨提示：'+ err.data&&err.data.errors&&err.data.errors['TargetCode'][0] || err.data.message
           });
         });
     },

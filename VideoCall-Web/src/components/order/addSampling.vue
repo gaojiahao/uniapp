@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:58:11
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\addSampling.vue
- * @LastEditTime: 2021-04-22 17:34:46
+ * @LastEditTime: 2021-04-23 12:22:32
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -92,9 +92,8 @@ export default {
                 }
             }
             .title {
-                margin-top: 10px;
                 margin-left: 10px;
-                line-height: 35px;
+                line-height: 45px;
             }
             .right {
                 margin-left: auto;

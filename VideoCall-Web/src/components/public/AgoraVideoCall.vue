@@ -1,5 +1,9 @@
 <template>
   <div id="ag-canvas">
+    <div class="error">
+      <img :src="cameraPic">
+      <p class="text" v-if="!havecCamera">您的设备未检测到摄像头</p> 
+    </div>
     <div id='default' class="user" style="width: 99px;height: 66px;grid-area: 12 / 1 / 13 / 3;z-index: 1;border: 1px solid rgb(255, 255, 255);" @click.stop="setMainVideo('default')"><div class="active"></div></div>
     <!-- <div id='1' class="user" style="width: 99px;height: 66px;grid-area: 12 / 3 / 13 / 6;z-index: 1;border: 1px solid rgb(255, 255, 255);background:white"></div>
     <div id='2' class="user" style="width: 99px;height: 66px;grid-area: 12 / 6 / 13 / 9;z-index: 1;border: 1px solid rgb(255, 255, 255);background:white"></div>
@@ -25,6 +29,7 @@ import {
 export default {
   data() {
     return {
+      cameraPic: require("@assets/images/camera-lg.png"),
       config:{},
       code:'',
       client: {},
@@ -43,6 +48,7 @@ export default {
       uList:{},
       count:1,
       isMultMode:false,   //是否多人模式
+      havecCamera:false   //是否有摄像头
     };
   },
   props: [
@@ -61,8 +67,16 @@ export default {
   methods: {
     //发布频道与加入
     async join() {
-      // debugger
+      debugger
       var $=this;
+      await $.testDevices();
+      if(!$.videoDevices.length){
+        this.$Message.error({
+          background: true,
+          content: '温馨提示：未检测到摄像头'
+        });
+        return false;
+      }
       AgoraRTC.setLogLevel(4);  //日志级别0,1,2,3,4
       $.client.enableDualStream().then(() => {
         console.log("Enable Dual stream success!");
@@ -76,11 +90,17 @@ export default {
         console.log('链接状态',cur);
       });
       $.client.on("user-joined",(user)=>{
-        console.log('用户加入了',user);
+        this.$Message.info({
+          background: true,
+          content: user.uid+'用户加入了会议室!'
+        });
         this.$parent.$parent.$parent.$parent.$parent.getQueryMeetingRoomMembers();
       });
       $.client.on("user-left",(user)=>{
-        console.log('用户离开了',user);
+        this.$Message.info({
+          background: true,
+          content: user.uid+'用户离开了会议室!'
+        });
         this.$parent.$parent.$parent.$parent.$parent.getQueryMeetingRoomMembers();
       });
       [ $.userId, $.localAudioTrack, $.localVideoTrack ] = await Promise.all([
@@ -302,9 +322,11 @@ export default {
       // console.log("downlink video stats", downlinkVideoStats);
     },
     //通话前设备检测
-    testDevices(){
-      AgoraRTC.getDevices()
+    async testDevices(){
+      await AgoraRTC.getDevices()
         .then(devices => {
+          this.audioDevices=[];
+          this.videoDevices=[];
           for(var i in devices){
             if(devices[i]['kind']=='audioinput'){
               this.audioDevices.push({
@@ -335,9 +357,6 @@ export default {
           //     console.log("本地音频级别：", level);
           //   }, 1000);
         });
-    },
-    getDevices(){
-
     },
     //切换设备
     changeDevices(videoId,audioId){
@@ -373,15 +392,36 @@ export default {
       let $ = this;
       $.client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
       //摄像头插入变化
-      AgoraRTC.onCameraChanged = (info) => {
-        console.log("camera changed!", info.state, info.device);
+      AgoraRTC.onCameraChanged = async (changedDevice) => {
+        if (changedDevice.state === "ACTIVE") {
+          this.$Message.info({
+            background: true,
+            content: '温馨提示：设备已插入'
+          });
+          debugger
+          $.localVideoTrack&&$.localVideoTrack.setDevice(changedDevice.device.deviceId);
+          location.reload();
+        // 拔出设备为当前设备时，切换到一个已有的设备。
+        } else if (changedDevice.device.label === $.localVideoTrack&&$.localVideoTrack.getTrackLabel()) {
+          this.$Message.info({
+            background: true,
+            content: '温馨提示：设备已切换'
+          });
+          const oldCameras = await AgoraRTC.getCameras();
+          oldCameras[0] &&  $.localVideoTrack.setDevice(oldCameras[0].deviceId);
+        } else if(changedDevice.state === "INACTIVE") {
+          this.$Message.error({
+            background: true,
+            content: '温馨提示：设备已拔出'
+          });  
+        }
       };
       //音频插入变化
       AgoraRTC.onMicrophoneChanged = (info) => {
         console.log("microphone changed!", info.state, info.device);
       };
       AgoraRTC.enableLogUpload();
-      await this.testDevices();
+      // await this.testDevices();
       // await this.join();
     }
   },
@@ -401,6 +441,20 @@ export default {
   justify-items: center;
   grid-template-rows: repeat(12,auto);
   grid-template-columns: repeat(24,auto);
+  .error {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: auto;
+    margin-left: -78px;
+    margin-top: -73.5px;
+    width: 156px;
+    height: 147px;
+    .text {
+        color:#fff;
+        text-align: center;
+    }
+  }
   .user {
     width: 99px;
     height: 66px;
