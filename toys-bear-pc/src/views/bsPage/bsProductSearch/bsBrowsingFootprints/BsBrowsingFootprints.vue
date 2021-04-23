@@ -203,7 +203,7 @@ export default {
         });
       }
     });
-    // this.getCollectList();
+    this.getCollectList();
   },
   beforeDestroy() {
     eventBus.$off("resetProducts");

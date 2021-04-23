@@ -2,7 +2,7 @@
   <div class="bsGridItem">
     <div class="itemImg" @click="toProductDetails">
       <el-image
-        style="width:222px;height:166px;"
+        style="width: 222px; height: 166px"
         fit="contain"
         :src="item.img"
         lazy
@@ -14,6 +14,13 @@
           <img :src="require('@/assets/images/imgError.png')" />
         </div>
       </el-image>
+      <div
+        @click.stop="handlerDeleteBrowsing(item)"
+        class="BrowsingFootprintsIcon"
+        v-if="$route.path === '/bsIndex/bsBrowsingFootprints'"
+      >
+        <i class="el-icon-delete"></i>
+      </div>
       <div
         class="spotProductIcon"
         v-if="$route.path === '/bsIndex/bsSpotProducts'"
@@ -194,6 +201,10 @@ export default {
       this.$nextTick(() => {
         this.$forceUpdate();
       });
+    },
+    // 删除浏览记录
+    handlerDeleteBrowsing(item) {
+      console.log(item);
     }
   },
   created() {},
@@ -256,6 +267,7 @@ export default {
         -ms-interpolation-mode: nearest-neighbor;
       }
     }
+    .BrowsingFootprintsIcon,
     .spotProductIcon,
     .newProductIcon,
     .vipProductIcon {
@@ -264,6 +276,20 @@ export default {
       top: 16px;
       width: 45px;
       height: 45px;
+    }
+    .BrowsingFootprintsIcon {
+      width: 40px;
+      height: 40px;
+      opacity: 0.68;
+      background: #333333;
+      border-bottom-right-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .BrowsingFootprintsIcon i {
+      font-size: 20px;
+      color: #ffffff;
     }
     .spotProductIcon {
       width: 40px;

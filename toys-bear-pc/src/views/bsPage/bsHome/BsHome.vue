@@ -32,10 +32,75 @@
           <span>数据统计</span>
         </div>
         <div class="content">
-          <div class="item" v-for="item in 4" :key="item">
+          <!-- <div class="item" v-for="item in 4" :key="item">
             <p class="total">敬请期待</p>
             <p :class="{ today: true, active: item > 2 }">今日:敬请期待</p>
             <p class="text">敬请期待</p>
+          </div> -->
+
+          <div class="item">
+            <p class="total">{{ statisticsData.hallOrderTotal }}</p>
+            <p
+              :class="{
+                today: true,
+                active: statisticsData.hallOrderTotalToday > 0
+              }"
+            >
+              <img
+                :src="statisticsData.hallOrderTotalToday > 0 ? up_t : up_f"
+                alt=""
+              />
+              今日:{{ statisticsData.hallOrderTotalToday }}
+            </p>
+            <p class="text">展厅业务总数</p>
+          </div>
+          <div class="item">
+            <p class="total">{{ statisticsData.sampleOfferTotal }}</p>
+            <p
+              :class="{
+                today: true,
+                active: statisticsData.sampleOfferTotalToday > 0
+              }"
+            >
+              <img
+                :src="statisticsData.sampleOfferTotalToday > 0 ? up_t : up_f"
+                alt=""
+              />
+              今日:{{ statisticsData.sampleOfferTotalToday }}
+            </p>
+            <p class="text">找样报价总数</p>
+          </div>
+          <div class="item">
+            <p class="total">{{ statisticsData.purchaseTotal }}</p>
+            <p
+              :class="{
+                today: true,
+                active: statisticsData.purchaseTotalToday > 0
+              }"
+            >
+              <img
+                :src="statisticsData.purchaseTotalToday > 0 ? up_t : up_f"
+                alt=""
+              />
+              今日:{{ statisticsData.purchaseTotalToday }}
+            </p>
+            <p class="text">采购订单总数</p>
+          </div>
+          <div class="item">
+            <p class="total">{{ statisticsData.shareTotal }}</p>
+            <p
+              :class="{
+                today: true,
+                active: statisticsData.shareTotalToday > 0
+              }"
+            >
+              <img
+                :src="statisticsData.shareTotalToday > 0 ? up_t : up_f"
+                alt=""
+              />
+              今日:{{ statisticsData.shareTotalToday }}
+            </p>
+            <p class="text">客户订单总数</p>
           </div>
         </div>
       </div>
@@ -107,7 +172,7 @@
       <div class="right">
         <div class="titleBox">
           <div class="hotBox">
-            <el-radio-group v-model="hotValue">
+            <el-radio-group v-model="hotValue" @change="changeHot">
               <el-radio-button
                 v-for="(item, i) in hotList"
                 :key="i"
@@ -116,7 +181,7 @@
             </el-radio-group>
           </div>
           <div class="dayBox">
-            <el-radio-group v-model="dayValue" size="mini">
+            <el-radio-group v-model="dayValue" size="mini" @change="changeTime">
               <el-radio-button
                 v-for="(item, i) in dayList"
                 :key="i"
@@ -148,14 +213,14 @@
                 <div class="productInfo">
                   <el-image
                     style="width: 70px; height: 54px"
-                    :src="scope.row.img"
+                    :src="scope.row.imgUrl"
                     fit="contain"
                   >
                   </el-image>
                   <div class="infoBox">
                     <div class="name">{{ scope.row.name }}</div>
                     <div class="price">
-                      <span>{{ scope.row.pr_no }}</span>
+                      <span>{{ scope.row.PackName }}</span>
                       <span>{{ scope.row.price }}</span>
                     </div>
                   </div>
@@ -192,6 +257,7 @@
 </template>
 
 <script>
+import { calculateDate } from "@/assets/js/common/common.js";
 import { slider, slideritem } from "vue-concise-slider"; // 引入slider组件
 export default {
   name: "bsHome",
@@ -214,6 +280,22 @@ export default {
         pagination: 1, // 每次滑动项数
         loopedSlides: 1,
         speed: 300
+      },
+      up_f: require("@/assets/images/up_f.png"),
+      up_t: require("@/assets/images/up_t.png"),
+      statisticsData: {
+        hallOrderTotal: "", //展厅业务
+        hallOrderTotalToday: "", //展厅今日
+        sampleOfferTotal: "", //找样报价
+        sampleOfferTotalToday: "", //找样报价今日
+        purchaseTotal: "", //采购订单
+        purchaseTotalToday: "", //采购今日
+        shareTotal: "", //客户订单
+        shareTotalToday: "" //客户订单今日
+      },
+      timeData: {
+        startTime: "",
+        endTime: ""
       },
       tableData: [],
       bigHalls: [],
@@ -452,11 +534,61 @@ export default {
         this.bigHalls = res.data.result.item.bigHallList.splice(0, 3);
         this.minHalls = res.data.result.item.smallHallList;
       }
+    },
+    // 获取统计数据
+    async getGetSalesOrderDataStatistics() {
+      const res = await this.$http.post("/api/GetSalesOrderDataStatistics", {});
+      if (res.data.result.code === 200) {
+        this.statisticsData = res.data.result.item;
+      }
+    },
+    // 热门搜索排行
+    async getGetSalesHotSearch() {
+      const res = await this.$http.post(
+        "/api/GetSalesHotSearch",
+        this.timeData
+      );
+      if (res.data.result.code === 200) {
+        console.log(res);
+        // this.tableData
+      }
+    },
+    // 热门择样排行
+    async getGetSalesHotSample() {
+      console.log(this.timeData);
+      const res = await this.$http.post(
+        "/api/GetSalesHotSample",
+        this.timeData
+      );
+      if (res.data.result.code === 200) {
+        console.log(res);
+      }
+    },
+    // 天数请求
+    changeTime(Value) {
+      this.timeData = Object.assign(calculateDate(Value));
+      if (this.hotValue === "热门择样") {
+        this.getGetSalesHotSample();
+      } else {
+        this.getGetSalesHotSearch();
+      }
+    },
+    // 热门泽洋和热门搜索切换
+    changeHot(Value) {
+      if (Value === "热门择样") {
+        this.getGetSalesHotSample();
+      } else {
+        this.getGetSalesHotSearch();
+      }
     }
   },
-  created() {},
+  created() {
+    this.timeData = Object.assign(calculateDate(this.dayValue));
+  },
   mounted() {
     this.getOrgCompany();
+    this.getGetSalesOrderDataStatistics();
+    this.getGetSalesHotSearch();
   }
 };
 </script>
@@ -520,6 +652,7 @@ export default {
           display: flex;
           align-items: center;
           cursor: pointer;
+
           .text {
             margin-left: 20px;
           }
@@ -540,6 +673,8 @@ export default {
         }
       }
     }
+    .up {
+    }
     .dataInfo {
       .content {
         padding: 0 10px;
@@ -554,6 +689,11 @@ export default {
           margin-bottom: 20px;
           p {
             line-height: 34px;
+            img {
+              width: 10px;
+              height: 15px;
+              margin-right: 10px;
+            }
             &.total {
               font-size: 24px;
               font-weight: 700;
