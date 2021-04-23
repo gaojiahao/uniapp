@@ -177,14 +177,14 @@ myAxios.install = function(Vue) {
         !config.url.includes("CreateProductCollection") &&
         !config.url.includes("ExportSampleOfferToExcel") &&
         !config.url.includes("ExportCustomerOrderDetailToExcel") &&
-        !config.url.includes("GetOfferOrderExcel")
+        !config.url.includes("GetSampleOrderExcel")
       ) {
         $Store.commit("updateAppLoading", true);
       }
       // }, 500);
       // 屏蔽不需要验证code的请求，如下载导出等
       // if (
-      //   config.url.includes("GetOfferOrderExcel") ||
+      //   config.url.includes("GetSampleOrderExcel") ||
       //   config.url.includes("GetProductOfferOrderExcel") ||
       //   config.url.includes("LittleBearInstallDownload") ||
       //   config.url.includes("LittleBearInstallRepeatDownload") ||
@@ -281,7 +281,7 @@ myAxios.install = function(Vue) {
       // 屏蔽不需要验证code的请求，如下载导出等
       if (
         res.config.url.includes("ExportSampleOfferToExcel") ||
-        res.config.url.includes("GetOfferOrderExcel") ||
+        res.config.url.includes("GetSampleOrderExcel") ||
         res.config.url.includes("GetProductOfferOrderExcel") ||
         res.config.url.includes("LittleBearInstallDownload") ||
         res.config.url.includes("LittleBearInstallRepeatDownload") ||

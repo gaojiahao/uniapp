@@ -227,7 +227,7 @@
             orderNumber: item.orderNumber,
             the_nu: item.the_nu,
             name: item.fromCompanyName,
-            api: '/api/GetOfferOrderExcel'
+            api: '/api/GetSampleOrderExcel'
           }"
         />
       </el-dialog>

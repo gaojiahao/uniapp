@@ -60,7 +60,7 @@
             <div id="qrcode"></div>
             <p class="qrInfo">请用小竹熊App扫一扫登录</p>
             <div class="refresh">
-              <div class="refreshIcon" @click="getQrCodeUrl">
+              <div class="refreshIcon">
                 <i class="iconfont icon-refresh"></i>
               </div>
             </div>
@@ -112,6 +112,9 @@
 
 </html>
 <script>
+  var isCallbackComfim = true;
+  var timeID = null;
+  if (timeID) clearInterval(timeID);
   $(function () {
     // var baseUrl = "https://www.toysbear.com";
     var baseWsUrl = "wss://impush.toysbear.com/ws?UserId=";
@@ -199,6 +202,7 @@
     };
     // 监听结果
     function getUserConfirm() {
+      isCallbackComfim = false;
       $.ajax({
         type: "post",
         url: baseUrl + "/api/UserConfirm",
@@ -208,13 +212,12 @@
           Utoken: token
         }
       }).then(function (res) {
+        isCallbackComfim = true;
         if (res.result.isLogin) {
           clearInterval(qrTimer);
           window.localStorage.setItem("token", res.result.accessToken);
           qrTimer = null;
           window.location.href = 'https://www.toysbear.com/erpProduct/erpPage/erpOrder/erpOrder.html';
-        } else {
-          alert(res.result.message);
         }
       })
     };
@@ -244,7 +247,12 @@
     // 初始化 webSocket
     function initWebSocket(data) {
       if (typeof WebSocket === "undefined") {
-        alert("您的浏览器不支持WebSocket");
+        // 轮询监听结果
+        timeID = setInterval(function() {
+          if (isCallbackComfim) {
+            getUserConfirm()
+          };
+        }, 1000)
       } else {
         // 初始化weosocket
         // 测试
@@ -310,6 +318,7 @@
               showQrCode = true;
               qrcodeTitle = "二维码已失效，点击刷新";
               clearInterval(qrTimer);
+              clearInterval(timeID);
               qrTimer = null;
               // 二维码过期
               $(".qrInfo").innerHTML = qrcodeTitle;
@@ -366,6 +375,10 @@
         })
       }
     }
+    // 二维码过期重新获取二维码
+    $(".refreshIcon").click(function () {
+      initWsAndQrcode();
+    })
     $(".refresh").click(function () {
       initWsAndQrcode();
     })
