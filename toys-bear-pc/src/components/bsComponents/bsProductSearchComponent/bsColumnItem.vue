@@ -43,6 +43,13 @@
         class="iconClient clientIcon"
         @click.stop="addCollect(item)"
       ></i>
+      <!-- 找相似，找同款 -->
+      <div class="similaritySame">
+        <div class="simiBox">
+          <div class="similarity">找相似</div>
+          <div class="same">找同款</div>
+        </div>
+      </div>
     </div>
     <div class="content">
       <div class="productName">
@@ -306,6 +313,40 @@ export default {
     .vipProductIcon {
       background: url("~@/assets/images/vipProductIcon.png") center no-repeat;
       background-size: contain;
+    }
+    .similaritySame {
+      position: absolute;
+      box-sizing: border-box;
+      padding: 0 15px;
+      width: 100%;
+      left: 0;
+      bottom: 0;
+      transition: all 1s;
+      opacity: 0;
+      .simiBox {
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        .similarity,
+        .same {
+          width: 110px;
+          height: 34px;
+          background-color: #f9723e;
+          color: #fff;
+          opacity: 0.8;
+          line-height: 34px;
+          text-align: center;
+          &:hover {
+            background-color: #ec644a;
+          }
+        }
+      }
+    }
+  }
+  &:hover {
+    box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+    .itemImg .similaritySame {
+      opacity: 1;
     }
   }
   .content {

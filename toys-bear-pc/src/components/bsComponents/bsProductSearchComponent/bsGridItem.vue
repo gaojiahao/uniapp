@@ -54,8 +54,8 @@
       <!-- 找相似，找同款 -->
       <div class="similaritySame">
         <div class="simiBox">
-          <div class="similarity">找相似</div>
-          <div class="same">找同款</div>
+          <div class="similarity" @click.stop="similarityEvent">找相似</div>
+          <div class="same" @click.stop="sameEvent">找同款</div>
         </div>
       </div>
     </div>
@@ -101,12 +101,7 @@
     </div>
     <!-- 详细版 -->
     <el-collapse-transition>
-      <div
-        class="showDetails"
-        @mouseenter="showDetails(true)"
-        @mouseleave="showDetails(false)"
-        v-show="isShowDetails == item.productNumber"
-      >
+      <div class="showDetails" v-show="isShowDetails == item.productNumber">
         <p class="item">
           <span class="title">包装：</span>
           <span class="conText">{{ item.ch_pa }}</span>
@@ -176,9 +171,38 @@ export default {
     };
   },
   methods: {
+    // 找相似
+    similarityEvent() {
+      console.log("找相似", this.item);
+      const value = JSON.parse(JSON.stringify(this.item));
+      value.type = "similarity";
+      const fd = {
+        name: "similarity" + this.item.productNumber,
+        linkUrl: "/bsIndex/bsProductSearchIndex",
+        component: "bsSimilarProduct",
+        refresh: true,
+        label: "相似产品" + this.item.fa_no,
+        value: value
+      };
+      this.$store.commit("myAddTab", fd);
+    },
+    // 找同款
+    sameEvent() {
+      console.log("找同款", this.item);
+      const value = JSON.parse(JSON.stringify(this.item));
+      value.type = "same";
+      const fd = {
+        name: "same" + this.item.productNumber,
+        linkUrl: "/bsIndex/bsProductSearchIndex",
+        component: "bsSimilarProduct",
+        refresh: true,
+        label: "同款产品" + this.item.fa_no,
+        value: value
+      };
+      this.$store.commit("myAddTab", fd);
+    },
     // 显示明细
     showDetails(flag) {
-      console.log(123456, flag);
       if (flag) this.isShowDetails = this.item.productNumber;
       else this.isShowDetails = null;
     },
@@ -391,7 +415,7 @@ export default {
       padding: 0 15px;
       width: 100%;
       left: 0;
-      top: 148px;
+      bottom: 0;
       transition: all 1s;
       opacity: 0;
       .simiBox {
