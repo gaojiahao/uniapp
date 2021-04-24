@@ -193,7 +193,6 @@
         <div class="contentBox">
           <el-table
             :data="tableData"
-            style="width: 100%"
             height="375"
             :header-row-style="{ height: '40px', padding: '0' }"
             :header-cell-style="{ backgroundColor: '#f9fafc', padding: '0' }"
@@ -673,8 +672,6 @@ export default {
         }
       }
     }
-    .up {
-    }
     .dataInfo {
       .content {
         padding: 0 10px;
@@ -778,7 +775,7 @@ export default {
   }
   .brandBox {
     display: flex;
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
     justify-content: space-between;
     .left {
       width: 987px;
@@ -881,11 +878,12 @@ export default {
       }
     }
     .right {
-      // width: 652px;
+      flex: 1;
       height: 440px;
       background-color: #fff;
       border-radius: 4px;
       padding: 0 20px;
+      margin-left: 20px;
       box-sizing: border-box;
       .titleBox {
         height: 50px;
@@ -960,7 +958,7 @@ export default {
           display: flex;
           .infoBox {
             height: 54px;
-            width: 193px;
+            // width: 193px;
             margin-left: 16px;
 
             div {

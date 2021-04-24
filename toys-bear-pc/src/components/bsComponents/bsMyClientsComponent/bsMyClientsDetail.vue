@@ -10,14 +10,14 @@
             height: 120px;
             border-radius: 50%;;"
               fit="contain"
-              :src="item.companyLogo"
+              :src="companyInfo.companyLogo"
               lazy
             >
               <div slot="placeholder" class="image-slot">
-                <img :src="require('@/assets/images/logo.png')" />
+                <img :src="require('@/assets/images/imgError.png')" />
               </div>
               <div slot="error" class="image-slot">
-                <img :src="require('@/assets/images/logo.png')" />
+                <img :src="require('@/assets/images/imgError.png')" />
               </div>
             </el-image>
           </div>
