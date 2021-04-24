@@ -192,6 +192,7 @@
         </div>
         <div class="contentBox">
           <el-table
+            v-show="hotValue === '热门择样'"
             :data="tableData"
             style="width: 100%"
             height="375"
@@ -201,10 +202,10 @@
             <el-table-column prop="date" label="" width="50">
               <template slot-scope="scope">
                 <div class="tableIndex">
-                  <i class="oneIcon" v-if="scope.row.id == 1"></i>
-                  <i class="twoIcon" v-else-if="scope.row.id == 2"></i>
-                  <i class="threeIcon" v-else-if="scope.row.id == 3"></i>
-                  <span v-else>{{ scope.row.id }}</span>
+                  <i class="oneIcon" v-if="scope.$index == 0"></i>
+                  <i class="twoIcon" v-else-if="scope.$index == 1"></i>
+                  <i class="threeIcon" v-else-if="scope.$index == 2"></i>
+                  <span v-else>{{ scope.$index + 1 }}</span>
                 </div>
               </template>
             </el-table-column>
@@ -220,33 +221,67 @@
                   <div class="infoBox">
                     <div class="name">{{ scope.row.name }}</div>
                     <div class="price">
-                      <span>{{ scope.row.PackName }}</span>
-                      <span>{{ scope.row.price }}</span>
+                      <span>￥{{ scope.row.price }}</span>
                     </div>
                   </div>
                 </div>
               </template>
             </el-table-column>
             <el-table-column
-              prop="cate"
+              prop="categoryName"
               label="玩具分类"
               width="110"
               align="center"
             >
               <template slot-scope="scope">
                 <span style="font-size: 13px">
-                  {{ scope.row.cate }}
+                  {{ scope.row.categoryName }}
                 </span>
               </template>
             </el-table-column>
             <el-table-column
-              prop="number"
+              prop="count"
               label="择样次数"
               width="100"
               align="center"
             >
               <template slot-scope="scope">
-                <span style="font-sizr: 12px"> {{ scope.row.number }} 次 </span>
+                <span style="font-sizr: 12px"> {{ scope.row.count }} 次 </span>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-table
+            v-if="hotValue === '热门搜索'"
+            :data="HotTableData"
+            style="width: 100%"
+            height="375"
+            :header-row-style="{ height: '40px', padding: '0' }"
+            :header-cell-style="{ backgroundColor: '#f9fafc', padding: '0' }"
+          >
+            <el-table-column label="排名" width="70">
+              <template slot-scope="scope">
+                <div class="pnIndex">
+                  <p :class="{ pnIndexRed: scope.$index < 3 }">
+                    {{ scope.$index + 1 }}
+                  </p>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="keyWord" label="关键词" width="420">
+              <template slot-scope="scope">
+                <span style="font-size: 13px">
+                  {{ scope.row.keyWord }}
+                </span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="count"
+              label="搜索次数"
+              width="110"
+              align="center"
+            >
+              <template slot-scope="scope">
+                <span style="font-sizr: 12px"> {{ scope.row.count }} 次 </span>
               </template>
             </el-table-column>
           </el-table>
@@ -297,10 +332,11 @@ export default {
         startTime: "",
         endTime: ""
       },
+      HotTableData: [],
       tableData: [],
       bigHalls: [],
       minHalls: [],
-      hotValue: "热门择样",
+      hotValue: "热门搜索",
       hotList: [
         {
           value: "热门择样"
@@ -549,8 +585,8 @@ export default {
         this.timeData
       );
       if (res.data.result.code === 200) {
-        console.log(res);
-        // this.tableData
+        console.log(res.data.result.item);
+        this.HotTableData = res.data.result.item;
       }
     },
     // 热门择样排行
@@ -562,6 +598,7 @@ export default {
       );
       if (res.data.result.code === 200) {
         console.log(res);
+        this.tableData = res.data.result.item;
       }
     },
     // 天数请求
@@ -672,8 +709,6 @@ export default {
           width: 150px;
         }
       }
-    }
-    .up {
     }
     .dataInfo {
       .content {
@@ -956,6 +991,22 @@ export default {
             background-size: contain;
           }
         }
+        .pnIndex {
+          p {
+            width: 22px;
+            height: 22px;
+            background: #dcdfe6;
+            border-radius: 2px;
+            text-align: center;
+            line-height: 22px;
+            color: #666666;
+            &.pnIndexRed {
+              color: #fff;
+              background-color: #ff4848;
+            }
+          }
+        }
+
         .productInfo {
           display: flex;
           .infoBox {
