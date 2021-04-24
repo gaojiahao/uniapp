@@ -216,6 +216,18 @@
                     :src="scope.row.imgUrl"
                     fit="contain"
                   >
+                    <div slot="placeholder" class="image-slot">
+                      <img
+                        style="width: 70px; height: 54px"
+                        :src="require('@/assets/images/imgError.png')"
+                      />
+                    </div>
+                    <div slot="error" class="image-slot">
+                      <img
+                        style="width: 70px; height: 54px"
+                        :src="require('@/assets/images/imgError.png')"
+                      />
+                    </div>
                   </el-image>
                   <div class="infoBox">
                     <div class="name">{{ scope.row.name }}</div>
