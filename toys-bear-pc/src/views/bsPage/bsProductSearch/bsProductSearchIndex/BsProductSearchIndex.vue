@@ -2,12 +2,16 @@
   <div class="productSearch">
     <template v-if="!imageSearchValue">
       <div class="advancedSearchBox">
-        <bsProductSearch ref="searchRef" @screeningShow="screeningShow" />
+        <bsProductSearch
+          ref="searchRef"
+          @handleSynthesis="handleSynthesis"
+          @screeningShow="screeningShow"
+        />
         <!-- 高级筛选 -->
-        <div class="advancedScreening " v-show="screeningFlag == true">
+        <div class="advancedScreening" v-show="screeningFlag == true">
           <div class="title">高级筛选:</div>
           <div class="queryCondition">
-            <div>
+            <!-- <div>
               <span class="text">综合：</span>
               <el-checkbox
                 v-model="synthesis"
@@ -16,8 +20,8 @@
               >
                 综合查询
               </el-checkbox>
-            </div>
-            <div>
+            </div> -->
+            <div class="item">
               <span class="text">搜索类型：</span>
               <el-checkbox
                 @change="handleCheckedScreensChange"
@@ -37,19 +41,10 @@
               >
                 编号
               </el-checkbox>
-              <!-- <el-checkbox
-                @change="handleCheckedScreensChange"
-                v-model="searchForm.packName"
-              >
-                包装
-              </el-checkbox> -->
             </div>
-            <div>
+            <div class="item">
               <span class="text">是否精准：</span>
-              <el-radio-group
-                v-model="isAccurate"
-                @change="handleCheckedScreensChange"
-              >
+              <el-radio-group v-model="isAccurate" @change="handleIsAccurate">
                 <el-radio label="模糊"></el-radio>
                 <el-radio label="精准"></el-radio>
               </el-radio-group>
@@ -58,19 +53,91 @@
           <div class="parameter">
             <el-form :model="advancedFormdata">
               <div class="left">
-                <!-- <el-form-item label="出厂货号：" placeholder="请输入内容">
+                <el-form-item label="产品规格：">
+                  <el-input
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    size="medium"
+                    placeholder="长"
+                    style="width: 55px"
+                    v-model="advancedFormdata.pr_le"
+                  ></el-input
+                  ><span>-</span>
                   <el-input
                     size="medium"
-                    style="width: 200px; "
-                    clearable
-                    v-model="advancedFormdata.fa_no"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="宽"
+                    style="width: 55px"
+                    v-model="advancedFormdata.pr_wi"
+                  ></el-input
+                  ><span>-</span>
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="高"
+                    style="width: 55px"
+                    v-model="advancedFormdata.pr_hi"
                   ></el-input>
-                </el-form-item> -->
+                  &nbsp;<span>CM</span>
+                </el-form-item>
+                <el-form-item label="外箱规格：">
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="长"
+                    style="width: 55px"
+                    v-model="advancedFormdata.ou_le"
+                  ></el-input
+                  ><span>-</span>
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="宽"
+                    style="width: 55px"
+                    v-model="advancedFormdata.ou_wi"
+                  ></el-input
+                  ><span>-</span>
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="高"
+                    style="width: 55px"
+                    v-model="advancedFormdata.ou_hi"
+                  ></el-input>
+                  &nbsp;<span>CM</span>
+                </el-form-item>
+                <el-form-item label="包装规格：">
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="长"
+                    style="width: 55px"
+                    v-model="advancedFormdata.in_le"
+                  ></el-input
+                  ><span>-</span>
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="宽"
+                    style="width: 55px"
+                    v-model="advancedFormdata.in_wi"
+                  ></el-input
+                  ><span>-</span>
+                  <el-input
+                    size="medium"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    placeholder="高"
+                    style="width: 55px"
+                    v-model="advancedFormdata.in_hi"
+                  ></el-input>
+                  &nbsp;<span>CM</span>
+                </el-form-item>
+              </div>
+              <div class="left">
                 <el-form-item label="包装方式：">
                   <el-select
                     filterable
                     size="medium"
-                    style="width: 200px; heigth:35px"
+                    style="width: 200px; heigth: 35px"
                     clearable
                     v-model="advancedFormdata.ch_pa"
                     placeholder="请选择"
@@ -84,99 +151,24 @@
                     </el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item style="margin:0" label="是否图片：">
+                <el-form-item label="是否图片：">
                   <el-radio-group v-model="advancedFormdata.isUpInsetImg">
                     <el-radio label="是"></el-radio>
                     <el-radio label="否"></el-radio>
                   </el-radio-group>
                 </el-form-item>
-              </div>
-              <div class="right">
-                <el-form-item label="产品规格：">
-                  <el-input
-                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                <el-form-item style="margin: 0; " label="">
+                  <el-button
+                    type="primary"
                     size="medium"
-                    placeholder="长"
-                    style="width: 55px; "
-                    v-model="advancedFormdata.pr_le"
-                  ></el-input
-                  ><span>-</span>
-                  <el-input
-                    size="medium"
-                    onkeyup="value=value.replace(/[^\d.]/g,'')"
-                    placeholder="宽"
-                    style="width: 55px; "
-                    v-model="advancedFormdata.pr_wi"
-                  ></el-input
-                  ><span>-</span>
-                  <el-input
-                    size="medium"
-                    onkeyup="value=value.replace(/[^\d.]/g,'')"
-                    placeholder="高"
-                    style="width: 55px; "
-                    v-model="advancedFormdata.pr_hi"
-                  ></el-input>
-                  &nbsp;<span>CM</span>
-                </el-form-item>
-                <el-form-item label="外箱规格：">
-                  <el-input
-                    size="medium"
-                    onkeyup="value=value.replace(/[^\d.]/g,'')"
-                    placeholder="长"
-                    style="width: 55px; "
-                    v-model="advancedFormdata.ou_le"
-                  ></el-input
-                  ><span>-</span>
-                  <el-input
-                    size="medium"
-                    onkeyup="value=value.replace(/[^\d.]/g,'')"
-                    placeholder="宽"
-                    style="width: 55px; "
-                    v-model="advancedFormdata.ou_wi"
-                  ></el-input
-                  ><span>-</span>
-                  <el-input
-                    size="medium"
-                    onkeyup="value=value.replace(/[^\d.]/g,'')"
-                    placeholder="高"
-                    style="width: 55px; "
-                    v-model="advancedFormdata.ou_hi"
-                  ></el-input>
-                  &nbsp;<span>CM</span>
-                </el-form-item>
-                <el-form-item label="包装规格：">
-                  <el-input
-                    size="medium"
-                    onkeyup="value=value.replace(/[^\d.]/g,'')"
-                    placeholder="长"
-                    style="width: 55px; "
-                    v-model="advancedFormdata.in_le"
-                  ></el-input
-                  ><span>-</span>
-                  <el-input
-                    size="medium"
-                    onkeyup="value=value.replace(/[^\d.]/g,'')"
-                    placeholder="宽"
-                    style="width: 55px; "
-                    v-model="advancedFormdata.in_wi"
-                  ></el-input
-                  ><span>-</span>
-                  <el-input
-                    size="medium"
-                    onkeyup="value=value.replace(/[^\d.]/g,'')"
-                    placeholder="高"
-                    style="width: 55px; "
-                    v-model="advancedFormdata.in_hi"
-                  ></el-input>
-                  &nbsp;<span>CM</span>
+                    style="color: #fff;"
+                    @click="confirmAdvanced"
+                  >
+                    确 定
+                  </el-button>
                 </el-form-item>
               </div>
             </el-form>
-          </div>
-          <div class="confirm">
-            <el-button type="primary" size="medium" @click="confirmAdvanced">
-              确 定
-            </el-button>
           </div>
         </div>
         <!-- 标准筛选 -->
@@ -334,7 +326,7 @@
             <el-button
               @click="getProductList(false)"
               type="primary"
-              style="margin-left: 10px;"
+              style="margin-left: 10px"
               size="mini"
             >
               确定
@@ -393,7 +385,7 @@
           <el-input
             size="medium"
             @keyup.native.enter="textSearchProducts"
-            style="width: 340px; margin: 0 15px;"
+            style="width: 340px; margin: 0 15px"
             placeholder="请输入关键词"
             v-model="searchForm.keyword"
             clearable
@@ -409,7 +401,7 @@
                 :on-change="uploadPic"
               >
                 <i
-                  style="font-size: 20px;"
+                  style="font-size: 20px"
                   class="el-input__icon el-icon-camera-solid"
                 ></i>
               </el-upload>
@@ -423,9 +415,7 @@
             >搜 索</el-button
           >
         </div>
-        <div class="resultTitle">
-          搜索图片
-        </div>
+        <div class="resultTitle">搜索图片</div>
         <div class="resultBox">
           <div class="left">
             <p class="totalCountBox">
@@ -471,7 +461,7 @@
     <el-dialog title="图片剪裁" :visible.sync="isShowCropper" destroy-on-close>
       <div class="cropperWrap">
         <div class="cropper-content">
-          <div class="cropper" style="text-align:center">
+          <div class="cropper" style="text-align: center">
             <vueCropper
               ref="cropper"
               :img="option.img"
@@ -545,7 +535,7 @@ export default {
       isShowCropper: false,
       advancedFormdata: {}, //高级搜索条件
       screeningFlag: false,
-      isAccurate: "",
+      isAccurate: "模糊",
       chpaList: [],
       // 裁剪组件的基础配置option
       option: {
@@ -575,7 +565,7 @@ export default {
       isRedu: null,
       sortOrder: null,
       sortType: null,
-      synthesis: true,
+      synthesis: false,
       productList: [],
       isGrid: "bsGridComponent",
       currentPage: 1,
@@ -587,9 +577,9 @@ export default {
         maxPrice: "",
         categoryNumber: null,
         time: [],
-        fa_no: 0,
+        fa_no: true,
         number: 0,
-        name: 0,
+        name: true,
         packName: 0
       },
       currentTwoTag: null,
@@ -840,19 +830,33 @@ export default {
     },
 
     // 选择综合
-    handleSynthesis(flag) {
-      if (flag) {
-        this.isAccurate = "";
+    async handleSynthesis() {
+      this.synthesis = !this.synthesis;
+      if (!this.synthesis) {
+        this.isAccurate = "模糊";
         this.searchForm.fa_no = 0;
         this.searchForm.number = 0;
         this.searchForm.name = 0;
         this.searchForm.packName = 0;
+      } else {
+        this.isAccurate = "精准";
       }
     },
     // 选择筛选
     handleCheckedScreensChange(flag) {
       if (flag) {
-        this.synthesis = null;
+        this.synthesis = false;
+      }
+    },
+    //是否精准
+    handleIsAccurate(flag) {
+      this.isAccurate = flag;
+      if (flag === "模糊") {
+        this.synthesis = false;
+        this.$refs.searchRef.synthesis = false;
+      } else {
+        this.synthesis = true;
+        this.$refs.searchRef.synthesis = true;
       }
     },
     //高级搜索
@@ -1069,10 +1073,10 @@ export default {
         padding: 20px 0;
         margin: 0 20px;
         box-sizing: border-box;
-        div {
+        .item {
           display: flex;
           align-items: center;
-          padding: 10px 10px;
+          padding: 15px 0;
           .text {
             width: 80px;
             text-align: right;
@@ -1080,20 +1084,20 @@ export default {
         }
       }
       .parameter {
-        width: 626px;
+        width: 660px;
         form {
           display: flex;
           .el-form-item {
             height: 36px;
             display: flex;
             align-items: center;
+            color: #999999;
             text-align: center;
             .el-form-item__content {
               line-height: 36px;
             }
           }
           span {
-            color: #999999;
             text-align: center;
           }
           .left {
@@ -1103,11 +1107,6 @@ export default {
             flex: 1;
           }
         }
-      }
-      .confirm {
-        display: flex;
-        align-self: flex-end;
-        margin-left: 20px;
       }
     }
     .productClass,
