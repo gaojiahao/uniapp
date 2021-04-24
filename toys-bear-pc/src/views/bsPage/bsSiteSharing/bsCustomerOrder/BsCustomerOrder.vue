@@ -36,6 +36,7 @@
         <el-select
           v-model="userId"
           size="medium"
+          filterable
           clearable
           placeholder="请选择"
         >

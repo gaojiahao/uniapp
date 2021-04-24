@@ -144,8 +144,9 @@ router.beforeEach(async (to, from, next) => {
           res.data.result.commparnyList[0].commparnyId
         );
         const localKey = res.data.result.uid;
+        console.log(localKey);
         let localShoppingCart = localStorage.getItem(localKey);
-        if (localShoppingCart && localShoppingCart != "undefined") {
+        if (localShoppingCart && localKey != "undefined") {
           localShoppingCart = JSON.parse(localShoppingCart);
           store.commit("initShoppingCart", localShoppingCart);
         } else {
@@ -196,8 +197,9 @@ router.beforeEach(async (to, from, next) => {
         store.state.userInfo.commparnyList[0].commparnyId
       );
       const localKey = store.state.userInfo.uid;
+      console.log(localKey);
       let localShoppingCart = localStorage.getItem(localKey);
-      if (localShoppingCart && localShoppingCart != "undefined") {
+      if (localShoppingCart && localKey != undefined) {
         localShoppingCart = JSON.parse(localShoppingCart);
         store.commit("initShoppingCart", localShoppingCart);
       } else {
