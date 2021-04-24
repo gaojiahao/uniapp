@@ -194,7 +194,6 @@
           <el-table
             v-show="hotValue === '热门择样'"
             :data="tableData"
-            style="width: 100%"
             height="375"
             :header-row-style="{ height: '40px', padding: '0' }"
             :header-cell-style="{ backgroundColor: '#f9fafc', padding: '0' }"
@@ -522,14 +521,19 @@ export default {
           };
           break;
         case "浏览足迹":
-          fd = {
-            name: "/bsIndex/bsBrowsingFootprints",
-            linkUrl: "/bsIndex/bsBrowsingFootprints",
-            component: "bsBrowsingFootprints",
-            refresh: true,
-            label: title
-          };
-          break;
+          this.$common.handlerMsgState({
+            msg: "敬请期待",
+            type: "warning"
+          });
+          return false;
+        // fd = {
+        //   name: "/bsIndex/bsBrowsingFootprints",
+        //   linkUrl: "/bsIndex/bsBrowsingFootprints",
+        //   component: "bsBrowsingFootprints",
+        //   refresh: true,
+        //   label: title
+        // };
+        // break;
         case "站点分享":
           fd = {
             name: "/bsIndex/bsSiteLlis",
@@ -813,7 +817,7 @@ export default {
   }
   .brandBox {
     display: flex;
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
     justify-content: space-between;
     .left {
       width: 987px;
@@ -916,11 +920,12 @@ export default {
       }
     }
     .right {
-      // width: 652px;
+      flex: 1;
       height: 440px;
       background-color: #fff;
       border-radius: 4px;
       padding: 0 20px;
+      margin-left: 20px;
       box-sizing: border-box;
       .titleBox {
         height: 50px;
@@ -1011,7 +1016,7 @@ export default {
           display: flex;
           .infoBox {
             height: 54px;
-            width: 193px;
+            // width: 193px;
             margin-left: 16px;
 
             div {

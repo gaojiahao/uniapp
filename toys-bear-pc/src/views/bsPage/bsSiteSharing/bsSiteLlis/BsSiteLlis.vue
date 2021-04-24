@@ -36,6 +36,7 @@
           <span class="label">业务员：</span>
           <el-select
             v-model="userId"
+            filterable
             size="medium"
             clearable
             placeholder="请选择"

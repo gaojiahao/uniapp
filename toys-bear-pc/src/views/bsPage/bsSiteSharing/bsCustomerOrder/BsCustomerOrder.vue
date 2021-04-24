@@ -17,7 +17,7 @@
       <div class="item">
         <span class="label">站点：</span>
         <el-select
-          v-model="zhandian"
+          v-model="websiteInfoId"
           size="medium"
           clearable
           placeholder="请选择"
@@ -36,6 +36,7 @@
         <el-select
           v-model="userId"
           size="medium"
+          filterable
           clearable
           placeholder="请选择"
         >
@@ -390,6 +391,7 @@ export default {
   components: { bsExportOrder },
   data() {
     return {
+      websiteInfoId: null,
       userId: null,
       staffList: [],
       imageExportWayList: [
@@ -402,7 +404,6 @@ export default {
       exportTemplateDialog: false,
       exportDialog: false,
       currentOrder: {},
-      zhandian: null,
       keyword: null,
       dateTime: null,
       tableData: [],
@@ -495,7 +496,8 @@ export default {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         keyword: this.keyword,
-        url: this.zhandian,
+        websiteInfoId: this.websiteInfoId,
+        userId: this.userId,
         startTime: this.dateTime && this.dateTime[0],
         endTime: this.dateTime && this.dateTime[1]
       };

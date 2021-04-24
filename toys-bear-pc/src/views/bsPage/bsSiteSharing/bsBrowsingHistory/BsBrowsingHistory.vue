@@ -17,7 +17,7 @@
       <div class="item" style="width: 200px">
         <span class="label">站点：</span>
         <el-select
-          v-model="zhandian"
+          v-model="websiteInfoId"
           size="medium"
           clearable
           placeholder="请选择"
@@ -35,6 +35,7 @@
         <span class="label">业务员：</span>
         <el-select
           v-model="userId"
+          filterable
           size="medium"
           clearable
           placeholder="请选择"
@@ -127,8 +128,9 @@ export default {
   name: "bsBrowsingHistory",
   data() {
     return {
+      staffList: [],
       userId: null,
-      zhandian: null,
+      websiteInfoId: null,
       keyword: null,
       dateTime: null,
       tableData: [],
@@ -139,6 +141,20 @@ export default {
     };
   },
   methods: {
+    // 获取公司下的员工列表
+    async getStaffList() {
+      const res = await this.$http.post("/api/CompanyUserList", {
+        orgCompanyID: this.$store.state.userInfo.commparnyList[0].commparnyId
+      });
+      if (res.data.result.code === 200) {
+        this.staffList = res.data.result.item.personnels;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
     // 获取列表
     async getSearchCompanyShareOrdersPage() {
       const fd = {
@@ -146,7 +162,7 @@ export default {
         maxResultCount: this.pageSize,
         keyword: this.keyword,
         userId: this.userId,
-        websiteInfoId: this.zhandian,
+        websiteInfoId: this.websiteInfoId,
         startTime: this.dateTime && this.dateTime[0],
         endTime: this.dateTime && this.dateTime[1]
       };
@@ -204,7 +220,9 @@ export default {
   created() {
     this.getDefaultSites();
   },
-  mounted() {},
+  mounted() {
+    this.getStaffList();
+  },
   computed: {
     ...mapState(["userInfo"])
   }
