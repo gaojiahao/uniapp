@@ -17,7 +17,7 @@
       <div class="item" style="width: 200px">
         <span class="label">站点：</span>
         <el-select
-          v-model="zhandian"
+          v-model="websiteInfoId"
           size="medium"
           clearable
           placeholder="请选择"
@@ -130,7 +130,7 @@ export default {
     return {
       staffList: [],
       userId: null,
-      zhandian: null,
+      websiteInfoId: null,
       keyword: null,
       dateTime: null,
       tableData: [],
@@ -162,7 +162,7 @@ export default {
         maxResultCount: this.pageSize,
         keyword: this.keyword,
         userId: this.userId,
-        websiteInfoId: this.zhandian,
+        websiteInfoId: this.websiteInfoId,
         startTime: this.dateTime && this.dateTime[0],
         endTime: this.dateTime && this.dateTime[1]
       };
