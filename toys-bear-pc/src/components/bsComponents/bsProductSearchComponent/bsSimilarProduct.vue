@@ -7,44 +7,45 @@
               height: 166px;"
           fit="contain"
           :src="item.img"
+          :preview-src-list="[item.img]"
         >
           <div slot="placeholder" class="image-slot">
             <img
               style=" width: 222px;
-              height: 166px;"
+              height: 166px;object-fit:contain;"
               :src="require('@/assets/images/imgError.png')"
             />
           </div>
           <div slot="error" class="image-slot">
             <img
               style=" width: 222px;
-              height: 166px;"
+              height: 166px;object-fit:contain;"
               :src="require('@/assets/images/imgError.png')"
             />
           </div>
         </el-image>
       </div>
       <div class="middleText">
-        <div class="productName">99式坦克军事系列积木套装....</div>
+        <div class="productName">{{ item.name }}</div>
         <div class="middleItem">
-          出厂货号：<span class="fa_no">123-333</span>
+          出厂货号：<span class="fa_no">{{ item.fa_no }}</span>
         </div>
         <div class="middleItem">
-          参考单价：<span class="price">￥98.00</span>
+          参考单价：<span class="price">￥{{ item.price }}</span>
         </div>
         <div class="contactBox">
           <div class="sourceBox" @click="toFactory(item)">
             <i class="sourceIcon"></i>
-            <template v-if="item.isIntegral">
+            <!-- <template v-if="item.isIntegral">
               <span class="text">
                 {{ item.supplierName }}
               </span>
             </template>
-            <template v-else>
-              <span class="text">
-                {{ item.exhibitionName }}
-              </span>
-            </template>
+            <template v-else> -->
+            <span class="text">
+              {{ item.supplierName }}
+            </span>
+            <!-- </template> -->
           </div>
           <div class="infoBox">
             <p class="infoItem" @click="toNews(item)">
@@ -74,20 +75,28 @@
         <div class="line"></div>
         <div class="infoSource">
           <p class="infoTitle">资料来源</p>
-          <p>新悦翔展厅</p>
-          <p>展厅编号: <span>YX1270275</span></p>
-          <p>摊位号: <span>YX1270275</span></p>
+          <p>{{ item.exhibitionName }}</p>
+          <p>
+            展厅编号: <span>{{ item.exhibitionNumber }}</span>
+          </p>
+          <p>
+            摊位号: <span>{{ item.booth_nu_pro }}</span>
+          </p>
         </div>
       </div>
     </div>
     <div class="contentWrap">
       <div class="contentTitle">
-        <p class="titleItem">
-          相似产品 <span class="productCount">({{ totalCount }})</span>
-        </p>
+        <div class="titleItem">
+          <div>
+            {{ item.type == "same" ? "同款产品" : "相似产品" }}
+            <span class="productCount">({{ totalCount }})</span>
+          </div>
+          <el-button>购物车({{ shoppingList.length }})</el-button>
+        </div>
       </div>
       <!-- 筛选 -->
-      <div class="screenBox">
+      <div class="screenBox" v-if="item.type === 'same'">
         <div class="left">
           <div class="screenItem" @click="sortTypeEvent(null)">
             <span :class="{ screenLabel: true, active: sortOrder === null }"
@@ -148,7 +157,7 @@
             </div>
           </div>
           <el-button
-            @click="getProductList(false)"
+            @click="search"
             type="primary"
             style="margin-left: 10px"
             size="mini"
@@ -181,12 +190,38 @@
           </div>
         </div>
       </div>
+      <div class="productWrap">
+        <!-- 产品列表 -->
+        <component :is="isGrid" :productList="productList"></component>
+        <!-- 分页 -->
+        <center class="myPagination" v-if="item.type === 'same'">
+          <el-pagination
+            background
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[12, 24, 36, 48]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalCount"
+          >
+          </el-pagination>
+        </center>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import bsColumnComponent from "@/components/bsComponents/bsProductSearchComponent/bsColumnComponent";
+import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/bsGridComponent";
+import { mapGetters, mapState } from "vuex";
+import eventBus from "@/assets/js/common/eventBus";
 export default {
+  components: {
+    bsColumnComponent,
+    bsGridComponent
+  },
   props: {
     item: {
       type: Object
@@ -194,22 +229,106 @@ export default {
   },
   data() {
     return {
+      productList: [],
+      isGrid: "bsGridComponent",
       currentPage: 1,
       pageSize: 12,
       totalCount: 0,
       sortOrder: null,
+      sortType: null,
       isRedu: null,
       isPrice: null,
       isTime: null,
-      isGrid: null,
       searchForm: {
+        keyword: "",
+        minPrice: "",
+        maxPrice: "",
+        categoryNumber: null,
         time: null,
-        minPrice: null,
-        maxPrice: null
+        fa_no: true,
+        number: 0,
+        name: true,
+        packName: 0
       }
     };
   },
   methods: {
+    // 图搜
+    async imageSearch() {
+      const fd = new FormData();
+      fd.append("companynumber", this.currentComparnyId);
+      fd.append("file", this.item.img);
+      const res = await this.$http.post("/api/File/SearchPicture", fd);
+      if (res.data.result.code === 200) {
+        console.log(res);
+        // this.productList = res.data.result.object;
+        // this.totalCount = res.data.result.object.length;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.message,
+          type: "danger"
+        });
+      }
+    },
+    // 过滤搜索
+    search() {
+      this.getProductList();
+    },
+    // 过滤类型
+    sortTypeEvent(type) {
+      this.sortOrder = type;
+      switch (type) {
+        case 1:
+          this.sortType = this.isPrice =
+            this.isPrice === null ? 1 : this.isPrice === 1 ? 2 : null;
+          this.sortType = null;
+          this.isTime = null;
+          this.isRedu = null;
+          this.sortType = this.isPrice;
+          this.sortType === null && (this.sortOrder = null);
+          break;
+        case 2:
+          this.isTime = this.isTime === null ? 1 : this.isTime === 1 ? 2 : null;
+          this.sortType = null;
+          this.isPrice = null;
+          this.isRedu = null;
+          this.sortType = this.isTime;
+          this.sortType === null && (this.sortOrder = null);
+          break;
+        case 3:
+          this.isRedu = this.isRedu === null ? 1 : this.isRedu === 1 ? 2 : null;
+          this.sortType = null;
+          this.isPrice = null;
+          this.isTime = null;
+          this.sortType = this.isRedu;
+          this.sortType === null && (this.sortOrder = null);
+          break;
+        default:
+          this.isPrice = null;
+          this.isTime = null;
+          this.isRedu = null;
+          this.sortType = null;
+          this.sortOrder = null;
+          break;
+      }
+      this.getProductList();
+    },
+    // 切換頁容量
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+      if (
+        this.currentPage * pageSize > this.totalCount &&
+        this.currentPage != 1
+      )
+        return false;
+      this.getProductList();
+    },
+    // 修改当前页
+    handleCurrentChange(page) {
+      eventBus.$emit("toTop");
+      this.currentPage = page;
+      this.getProductList();
+    },
     // 上一页
     firstEvent() {
       if (this.currentPage === 1) {
@@ -233,7 +352,56 @@ export default {
         return false;
       }
       this.currentPage++;
-      this.getProductList(false);
+      this.getProductList();
+    },
+    // 获取产品列表请求
+    async getProductList() {
+      this.$store.commit("searchValues", null);
+
+      const fd = {
+        name: this.searchForm.keyword,
+        skipCount: this.currentPage,
+        maxResultCount: this.pageSize,
+        minPrice: this.searchForm.minPrice,
+        maxPrice: this.searchForm.maxPrice,
+        startTime: this.searchForm.time ? this.searchForm.time[0] : null,
+        endTime: this.searchForm.time ? this.searchForm.time[1] : null,
+        // precisionSearch: JSON.stringify({
+        //   fa_no: this.searchForm.fa_no ? 1 : 0,
+        //   number: this.searchForm.number ? 1 : 0,
+        //   name: this.searchForm.name ? 1 : 0,
+        //   packName: this.searchForm.packName ? 1 : 0
+        // }),
+        sortOrder: this.sortOrder,
+        sortType: this.sortType
+      };
+      for (const key in fd) {
+        if (fd[key] === null || fd[key] === undefined || fd[key] === "")
+          delete fd[key];
+      }
+      const res = await this.$http.post("/api/SearchBearProductPage", fd);
+      const { code, item, msg } = res.data.result;
+      if (code === 200) {
+        if (this.shoppingList) {
+          for (let i = 0; i < item.items.length; i++) {
+            for (let j = 0; j < this.shoppingList.length; j++) {
+              if (
+                item.items[i].productNumber ===
+                this.shoppingList[j].productNumber
+              )
+                item.items[i].isShopping = true;
+            }
+          }
+        }
+        this.productList = item.items;
+        this.totalCount = item.totalCount;
+      } else {
+        this.totalCount = 0;
+        this.$common.handlerMsgState({
+          msg: msg,
+          type: "danger"
+        });
+      }
     },
     // 去聊天
     toNews(item) {
@@ -271,7 +439,25 @@ export default {
   },
   created() {},
   mounted() {
-    console.log(this.item);
+    if (this.item.name && this.item.name.length > 3) {
+      this.searchForm.keyword = this.item.name.slice(0, 3);
+    } else {
+      this.searchForm.keyword = this.item.name;
+    }
+    switch (this.item.type) {
+      case "similarity":
+        this.imageSearch();
+        break;
+      case "same":
+        this.getProductList();
+        break;
+    }
+  },
+  computed: {
+    ...mapGetters({
+      shoppingList: "myShoppingList"
+    }),
+    ...mapState(["currentComparnyId"])
   }
 };
 </script>
@@ -437,6 +623,10 @@ export default {
         font-weight: 700;
         padding-left: 15px;
         position: relative;
+        font-size: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         &::before {
           content: "";
           display: block;
@@ -448,6 +638,17 @@ export default {
           background-color: #3368a9;
           margin-top: -6px;
           border-radius: 1px;
+        }
+        .el-button {
+          width: 120px;
+          height: 36px;
+          line-height: 36px;
+          padding: 0;
+          opacity: 1;
+          background: #f9723e;
+          border-radius: 4px;
+          color: #fff;
+          font-size: 14px;
         }
         .productCount {
           font-weight: 400;
@@ -578,6 +779,12 @@ export default {
             }
           }
         }
+      }
+    }
+    .productWrap {
+      background-color: #fff;
+      .myPagination {
+        padding: 30px 0;
       }
     }
   }

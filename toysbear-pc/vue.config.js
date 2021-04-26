@@ -67,8 +67,8 @@ const configureWebpack = {
   }
 };
 if (env === "production") {
-  // configureWebpack.plugins = plugins;
-  configureWebpack.plugins = pluginsProduction;
+  configureWebpack.plugins = plugins;
+  // configureWebpack.plugins = pluginsProduction;
 } else {
   configureWebpack.plugins = plugins;
 }
