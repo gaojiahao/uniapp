@@ -326,6 +326,8 @@ export default {
         autoplay: true,
         speed: 600 //config参数同swiper4,与官网一致
       },
+      up_f: require("@/assets/images/up_f.png"),
+      up_t: require("@/assets/images/up_t.png"),
       statisticsData: {
         hallOrderTotal: "", //展厅业务
         hallOrderTotalToday: "", //展厅今日
