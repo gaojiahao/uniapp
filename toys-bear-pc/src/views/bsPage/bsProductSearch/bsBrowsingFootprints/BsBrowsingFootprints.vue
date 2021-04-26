@@ -42,7 +42,7 @@
 
         <div class="right">
           <div class="track" @click="emptyBrowse">
-            <i></i>
+            <i class="el-icon-delete"></i>
             清空浏览足迹
           </div>
           <div
@@ -57,7 +57,26 @@
       </div>
       <div class="productListBox">
         <!-- 产品列表 -->
-        <component :is="isGrid" :productList="productList"></component>
+        <div v-for="item in browseList" :key="item.index">
+          <div class="dateClassify">
+            <div class="left">
+              <i class="el-icon-date"></i>
+              <h4>{{ item.browseDate }}</h4>
+              <p>{{ item.list.length }}件商品</p>
+            </div>
+            <p class="center"></p>
+            <el-button
+              class="btn"
+              type="danger"
+              size="medium"
+              @click="deleteAllBrowse(item.list)"
+            >
+              删除当天
+            </el-button>
+          </div>
+          <component :is="isGrid" :productList="item.list"></component>
+        </div>
+
         <!-- 分页 -->
         <center class="myPagination">
           <el-pagination
@@ -98,7 +117,8 @@ export default {
       totalCount: 0,
       pageSize: 12,
       currentPage: 1,
-      productList: []
+      productList: [],
+      browseList: []
     };
   },
   computed: {
@@ -135,8 +155,8 @@ export default {
             }
           }
         }
+        this.browseList = this.dataResort(item.items);
         this.totalCount = res.data.result.item.totalCount;
-        this.productList = res.data.result.item.items;
       } else {
         this.totalCount = 0;
         this.$common.handlerMsgState({
@@ -145,24 +165,70 @@ export default {
         });
       }
     },
+    // 按照时间分类
+    dataResort(items) {
+      let newArr = [];
+      items.forEach(function(item) {
+        let index = -1;
+        let alreadyExists = newArr.some(function(newData, j) {
+          if (item.browseDate === newData.browseDate) {
+            index = j;
+            return true;
+          }
+        });
+        if (!alreadyExists) {
+          let list = [];
+          list.push(item);
+          newArr.push({
+            browseDate: item.browseDate,
+            list: list
+          });
+        } else {
+          newArr[index].list.push(item);
+        }
+      });
+      return newArr;
+    },
     // 清空浏览记录
     async emptyBrowse() {
+      console.log("清空");
       const fd = {
         type: 1
         // deleteDate:
       };
-      const res = await this.$http.post("/api/CreateProductCollection", fd);
-      if (res.data.result.code === 200) {
-        this.$common.handlerMsgState({
-          msg: "删除成功",
-          type: "success"
+      this.$confirm("确定要清空吗?", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消"
+      })
+        .then(async () => {
+          const res = await this.$http.post("/api/UpdateProductOfferDetail", {
+            fd
+          });
+          if (res.data.result.code === 200) {
+            this.$common.handlerMsgState({
+              msg: "删除成功",
+              type: "success"
+            });
+            // this.$store.commit("popOfferProductList", row);
+            this.getProductOfferDetailPage();
+            eventBus.$emit("resetSamplelist");
+          } else {
+            this.$common.handlerMsgState({
+              msg: res.data.result.msg,
+              error: "danger"
+            });
+          }
+        })
+        .catch(() => {
+          this.$common.handlerMsgState({
+            msg: "已取消清空",
+            type: "warning"
+          });
         });
-      } else {
-        this.$common.handlerMsgState({
-          msg: "删除失败",
-          type: "danger"
-        });
-      }
+    },
+    // 删除当天
+    deleteAllBrowse(item) {
+      console.log(item);
     },
     // 去购物车
     toShoppingCart() {
@@ -302,6 +368,7 @@ export default {
         margin-right: 55px;
         text-align: center;
         color: #666666;
+        cursor: pointer;
       }
       .grid,
       .column {
@@ -334,6 +401,36 @@ export default {
     background-color: #fff;
     width: 100%;
     box-sizing: border-box;
+    .dateClassify {
+      margin-top: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .left {
+        display: flex;
+        align-items: center;
+        line-height: 30px;
+        h4 {
+          height: 30px;
+          font-size: 24px;
+          font-weight: 700;
+          text-align: center;
+          color: #333333;
+          margin: 0 12px;
+        }
+        p {
+          color: #999999;
+        }
+      }
+      .center {
+        flex: 1;
+        margin: 0 20px;
+        width: 100%;
+        height: 1px;
+        background-color: #dcdfe6;
+      }
+    }
+
     .myPagination {
       padding: 30px 0;
     }
