@@ -42,9 +42,9 @@
                   :is="item.component"
                   :ref="item.name"
                 ></component>
-                <div class="contentFooter">
+                <!-- <div class="contentFooter">
                   <img src="~@/assets/images/contentFooter.png" alt="" />
-                </div>
+                </div> -->
               </div>
               <!-- </el-scrollbar> -->
             </el-tab-pane>

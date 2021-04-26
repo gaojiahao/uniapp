@@ -66,6 +66,7 @@ import LoginFooter from "@components/footer/loginFooter";
 import {
   JoinMeetingRoom
 } from "@service/meetingService";
+import tokenService from "@service/tokenService";
 
 export default {
   name: "addMeeting",
@@ -149,6 +150,7 @@ export default {
         token : this.generateUUID(),
       };
       window.sessionStorage.setItem('SPHY_LOGIN_TOKEN', JSON.stringify(globalToken));
+      tokenService.setAgoraToken();
     },
     generateUUID() {
       var d = new Date().getTime();

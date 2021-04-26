@@ -207,6 +207,9 @@
           >
           </el-pagination>
         </center>
+        <div class="footer">
+          <img src="@/assets/images/footerBg.png" alt="" />
+        </div>
       </div>
     </div>
   </div>
@@ -788,5 +791,12 @@ export default {
       }
     }
   }
+}
+.footer {
+  background-color: #f1f3f6;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

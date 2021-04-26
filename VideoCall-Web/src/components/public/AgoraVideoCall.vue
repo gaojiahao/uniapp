@@ -112,8 +112,11 @@ export default {
         });
         this.$parent.$parent.$parent.$parent.$parent.getQueryMeetingRoomMembers();
       });
+      $.client.on("client-banned",(user)=>{
+        debugger
+      });
       [ $.userId, $.localAudioTrack, $.localVideoTrack ] = await Promise.all([
-        $.client.join($.appId, $.channel, $.token || null,$.uid),
+        $.client.join($.appId, $.channel, $.token || null,parseInt($.uid)),
         AgoraRTC.createMicrophoneAudioTrack(),
         AgoraRTC.createCameraVideoTrack(
           {encoderConfig: $.videoProfile,cameraId:$.nowVideoId}   //只有谷歌支持最低的，别的浏览器最低480p
@@ -418,7 +421,6 @@ export default {
             background: true,
             content: '温馨提示：设备已插入'
           });
-          debugger
           $.localVideoTrack&&$.localVideoTrack.setDevice(changedDevice.device.deviceId);
           location.reload();
         // 拔出设备为当前设备时，切换到一个已有的设备。

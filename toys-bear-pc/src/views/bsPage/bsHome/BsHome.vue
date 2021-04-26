@@ -144,25 +144,8 @@
           </div>
         </div>
         <div class="minHall">
-          <!-- <slider :options="sliderinit" @slide="slide">
-            <slideritem v-for="(item, i) in minHalls" :key="i">
-              <div class="minHallItem">
-                <div class="imgBox">
-                  <el-image
-                    style="width: 221px; height: 108px"
-                    :src="item.bgImg || item.img"
-                    fit="contain"
-                  >
-                  </el-image>
-                </div>
-                <div class="name">
-                  {{ item.companyName || item.adTitle }}
-                </div>
-              </div>
-            </slideritem>
-          </slider> -->
           <swiper ref="mySwiper" :options="swiperOption">
-            <swiper-slide v-for="(item, i) in minHalls" :key="i">
+            <swiper-slide v-for="item in minHalls" :key="item.id">
               <div class="minHallItem">
                 <div class="imgBox">
                   <el-image
@@ -334,7 +317,7 @@ export default {
         pagination: {
           el: ".swiper-pagination"
         },
-        initialSlide: 0,
+        initialSlide: 2,
         slidesPerView: 4,
         slidesPerGroup: 2,
         centeredSlides: true,
@@ -549,19 +532,19 @@ export default {
           };
           break;
         case "浏览足迹":
-          this.$common.handlerMsgState({
-            msg: "敬请期待",
-            type: "warning"
-          });
-          return false;
-        // fd = {
-        //   name: "/bsIndex/bsBrowsingFootprints",
-        //   linkUrl: "/bsIndex/bsBrowsingFootprints",
-        //   component: "bsBrowsingFootprints",
-        //   refresh: true,
-        //   label: title
-        // };
-        // break;
+          // this.$common.handlerMsgState({
+          //   msg: "敬请期待",
+          //   type: "warning"
+          // });
+          // return false;
+          fd = {
+            name: "/bsIndex/bsBrowsingFootprints",
+            linkUrl: "/bsIndex/bsBrowsingFootprints",
+            component: "bsBrowsingFootprints",
+            refresh: true,
+            label: title
+          };
+          break;
         case "站点分享":
           fd = {
             name: "/bsIndex/bsSiteLlis",
@@ -1068,5 +1051,9 @@ export default {
       }
     }
   }
+}
+.swiper-container {
+  width: 100%;
+  height: 100%;
 }
 </style>

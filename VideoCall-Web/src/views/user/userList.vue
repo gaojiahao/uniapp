@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 15:46:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\user\userList.vue
- * @LastEditTime: 2021-04-22 18:04:15
+ * @LastEditTime: 2021-04-26 15:14:32
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -38,9 +38,9 @@
                             <i class="iconfont iconzu1306 text"></i>
                         </a>
                         <DropdownMenu slot="list">
-                            <DropdownItem @click.native="del(index)">禁止麦克风</DropdownItem>
-                            <DropdownItem @click.native="del(index)">禁止摄像头</DropdownItem>
-                            <DropdownItem @click.native="del(index)">删除</DropdownItem>
+                            <DropdownItem @click.native="setKickingRuleAudio(item.id)">禁止麦克风</DropdownItem>
+                            <DropdownItem @click.native="setKickingRuleCamera(item.id)">禁止摄像头</DropdownItem>
+                            <DropdownItem @click.native="setKickingRuleJoin(item.id)">删除</DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 </div>
@@ -50,6 +50,12 @@
 </template>
 <script>
 import * as Cookies from "js-cookie";
+import {
+  getUserList,
+  setKickingRule
+} from "@service/agoraService";
+import {AGORA_APP_ID} from "@root/agora.config"
+
 export default {
     name:"userList",
     props:{
@@ -90,10 +96,150 @@ export default {
         },
         del(index){
             this.userlist.splice(index,1);
-        }
+        },
+        test(){
+            var params = {
+                appid:AGORA_APP_ID,
+                channelName:Cookies.get("channel"),
+            };
+            
+            return new Promise((resolve, reject) => {
+                this.$FromLoading.show();
+                getUserList(params).then(res => {
+                if (res.success) {
+                    this.$FromLoading.hide();         
+                } else {
+                    this.$Message.error({
+                    background: true,
+                    content: res.message
+                    });
+                    this.$FromLoading.hide();
+                }
+                });
+            }).catch(err=>{
+                this.$Message.error({
+                background: true,
+                content: err.message
+                });
+                this.$FromLoading.hide();  
+            });
+        },
+        //控制声网用户摄像头设备状态
+        setKickingRuleCamera(uid){
+            var params = {
+                appid:AGORA_APP_ID,
+                cname:Cookies.get("channel"),
+                uid:parseInt(uid),
+                ip : "",
+                time : 60,
+                privileges : [
+                    "publish_video"
+                ]
+            };
+            
+            return new Promise((resolve, reject) => {
+                this.$FromLoading.show();
+                setKickingRule(params).then(res => {
+                if (res.status=='success') {
+                    this.$Message.info({
+                        background: true,
+                        content: '操作成功！'
+                    });
+                    this.$FromLoading.hide();     
+                } else {
+                    this.$Message.error({
+                        background: true,
+                        content: '操作失败！'
+                    });
+                    this.$FromLoading.hide();
+                }
+                });
+            }).catch(err=>{
+                this.$Message.error({
+                    background: true,
+                    content: '操作失败！'
+                });
+                this.$FromLoading.hide();  
+            });    
+        },
+        setKickingRuleAudio(uid){
+            var params = {
+                appid:AGORA_APP_ID,
+                cname:Cookies.get("channel"),
+                uid:parseInt(uid),
+                ip : "",
+                time : 60,
+                privileges : [
+                    "publish_audio"
+                ]
+            };
+            
+            return new Promise((resolve, reject) => {
+                this.$FromLoading.show();
+                setKickingRule(params).then(res => {
+                if (res.status=='success') {
+                    this.$Message.info({
+                        background: true,
+                        content: '操作成功！'
+                    });
+                    this.$FromLoading.hide();     
+                } else {
+                    this.$Message.error({
+                        background: true,
+                        content: '操作失败！'
+                    });
+                    this.$FromLoading.hide();
+                }
+                });
+            }).catch(err=>{
+                this.$Message.error({
+                    background: true,
+                    content: '操作失败！'
+                });
+                this.$FromLoading.hide();  
+            });    
+        },
+        setKickingRuleJoin(uid){
+            var params = {
+                appid:AGORA_APP_ID,
+                cname:Cookies.get("channel"),
+                uid:parseInt(uid),
+                ip : "",
+                time : 60,
+                privileges : [
+                    "join_channel"
+                ]
+            };
+            
+            return new Promise((resolve, reject) => {
+                this.$FromLoading.show();
+                setKickingRule(params).then(res => {
+                if (res.status=='success') {
+                    this.$Message.info({
+                        background: true,
+                        content: '操作成功！'
+                    });
+                    this.$FromLoading.hide();     
+                } else {
+                    this.$Message.error({
+                        background: true,
+                        content: '操作失败！'
+                    });
+                    this.$FromLoading.hide();
+                }
+                });
+            }).catch(err=>{
+                this.$Message.error({
+                    background: true,
+                    content: '操作失败！'
+                });
+                this.$FromLoading.hide();  
+            });    
+        },
     },
     created(){
         this.isAdmin = Cookies.get("isAdmin")=='true' ? true : false;
+        this.test();
     }
 }
 </script>
