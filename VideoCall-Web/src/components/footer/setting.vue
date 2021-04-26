@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-11-03 16:35:57
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-23 17:10:23
+ * @LastEditTime: 2021-04-23 17:42:24
 -->
 <template>
     <Modal v-model="show" title="设置" @on-ok="ok" @on-cancel="cancel" width="430" draggable class="setting">
@@ -34,7 +34,7 @@
                                 结束时间
                             </div>
                             <div class="text">
-                                <DatePicker type="datetime" v-model="formValidate['endTime']" @on-change="formValidate['endTime']=$event" format="yyyy-MM-dd HH:mm" style="width: 226px;" :transfer='true'></DatePicker> 
+                                <DatePicker type="datetime" v-model="formValidate['endTime']" @on-change="formValidate['endTime']=$event" format="yyyy-MM-dd HH:mm" style="width: 226px;" :transfer='true' :options="options"></DatePicker> 
                             </div>    
                         </div>
                         <div class="item">
@@ -164,7 +164,13 @@ export default {
                     name:'1080p',
                     value:'1080p_5'
                 }
-            ]
+            ],
+            options: {
+                disabledDate (date) {
+                    var endTime = Cookies.get('endTime');
+                    return date && date.valueOf() < Date.now(endTime) - 86400000;
+                }
+            },
         }
     },
     watch:{
@@ -185,6 +191,9 @@ export default {
             },
             deep:true
         }
+    },
+    computed:{
+
     },
     methods: {
         ok(){

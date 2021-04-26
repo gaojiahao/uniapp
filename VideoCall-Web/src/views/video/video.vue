@@ -2,8 +2,8 @@
  * @Description: 
  * @Author: gaojiahao
  * @Date: 2021-04-01 16:54:22
- * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\video\index.vue
- * @LastEditTime: 2021-04-23 15:59:16
+ * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\video\video.vue
+ * @LastEditTime: 2021-04-26 17:56:33
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -65,7 +65,7 @@
                 <img :src="test" style="width:100%;height:807px;">
             </div> -->
         </div>
-        <EndModal :isShow="isShow"></EndModal>
+        <EndModal :isShow="isShow" ref="endModal"></EndModal>
     </div> 
 </template>
 <script>
@@ -74,6 +74,8 @@ import EndModal from "@components/public/endingMettingModal";
 import AgoraVideoCall from "@components/public/AgoraVideoCall";
 import {AGORA_APP_ID} from "@root/agora.config"
 import videoJs from "@mixins/video.js";
+import util from "@utils/util.js";
+
 export default {
     name:'Video',
     components:{
@@ -114,7 +116,9 @@ export default {
             uid: Cookies.get("uid") || null,
             videoId: Cookies.get("videoId") || null,
             isAdmin: Cookies.get("isAdmin") || false,
-            isShow:false
+            isShow:false,
+            endTime:'',
+            count:null
         };
     },
     methods: {
@@ -124,6 +128,26 @@ export default {
                 
             }
         },
+        timeCount(){
+            this.endTime = Cookies.get("endTime");
+            this.timeFunction();
+            this.count = setInterval(this.timeFunction, 1000);
+        },
+         timeFunction(){
+            // 开始执行倒计时
+            //debugger
+            var end = new Date(this.endTime);
+            var now = new Date(util.getNowTimeHms());
+            var a=end.getTime();
+            var b=now.getTime();
+            if(((end.getTime()-now.getTime())/1000)<=120){
+                this.isShow = true;
+                this.$refs.endModal.testTimer();
+            }
+        },
+    },
+    mounted(){
+        this.timeCount();
     },
     created() {
         this.appId = AGORA_APP_ID;
@@ -183,118 +207,6 @@ export default {
                 flex-wrap: wrap;
                 height: 807px;
                 // flex-direction: column;
-                .video_item_2 {
-                    padding: 218px 74.25px;
-                    border: 1px solid #66757e;
-                    img {
-                        width: 544px;
-                        height: 363px;
-                    }    
-                }
-                .video_item_2_x {
-                    padding: 218px 99.25px;
-                    border: 1px solid #66757e;
-                    img {
-                        width: 604px;
-                        height: 363px;
-                    }     
-                }
-                .video_item_3 {
-                    padding: 21px 74.25px;
-                    border: 1px solid #66757e;
-                    img {
-                        width: 544px;
-                        height: 363px;
-                    }    
-                }
-                .video_item_3:nth-child(1) {
-                    padding: 21px 421.375px;
-                    border: 1px solid #66757e;
-                    img {
-                        width: 544px;
-                        height: 363px;
-                    }    
-                }
-                .video_item_3_x {
-                    padding: 21px 99.25px;
-                    border: 1px solid #66757e;
-                    img {
-                        width: 604px;
-                        height: 363px;
-                    }     
-                }
-                .video_item_3_x:nth-child(1) {
-                    padding: 21px 501.5px;
-                    border: 1px solid #66757e;
-                    img {
-                        width: 604px;
-                        height: 363px;
-                    }     
-                }
-                .video_item_4 {
-                    padding: 21px 74.25px;
-                    border: 1px solid #66757e;
-                    img {
-                        width: 544px;
-                        height: 363px;
-                    }    
-                }
-                .video_item_4_x {
-                    padding: 21px 99.25px;
-                    border: 1px solid #66757e;
-                    img {
-                        width: 604px;
-                        height: 363px;
-                    }     
-                }
-                .video_item_5 {
-                    padding: 21px 74.25px;
-                    border: 1px solid #66757e;
-                    img {
-                        width: 544px;
-                        height: 225.66667px;
-                    }    
-                }
-                .video_item_5:nth-child(3) {
-                    padding: 21px 421.375px;
-                    border: 1px solid #66757e;
-                    img {
-                        width: 544px;
-                        height: 225.66667px;
-                    }    
-                }
-                .video_item_5_x {
-                    padding: 21px 99.25px;
-                    border: 1px solid #66757e;
-                    img {
-                        width: 604px;
-                        height: 225.66667px;
-                    }     
-                }
-                .video_item_5_x:nth-child(3) {
-                    padding: 21px 501.5px;
-                    border: 1px solid #66757e;
-                    img {
-                        width: 604px;
-                        height: 225.66667px;
-                    }     
-                }
-                .video_item_6 {
-                    padding: 21px 74.25px;
-                    border: 1px solid #66757e;
-                    img {
-                        width: 544px;
-                        height: 225.66667px;
-                    }    
-                }
-                .video_item_6_x {
-                    padding: 21px 99.25px;
-                    border: 1px solid #66757e;
-                    img {
-                        width: 604px;
-                        height: 225.66667px;
-                    }     
-                }
             }
         }
     }

@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 17:59:28
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\order\index.vue
- * @LastEditTime: 2021-04-21 11:57:39
+ * @LastEditTime: 2021-04-23 17:41:46
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -88,7 +88,6 @@ export default {
         },
         //当前产品消息回调
         getProduct(val){
-            debugger
             this.$refs.product.getProductInfo2(val);
         }
     },

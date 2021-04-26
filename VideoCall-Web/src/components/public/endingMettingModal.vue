@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-08 14:46:21
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\public\endingMettingModal.vue
- * @LastEditTime: 2021-04-22 17:53:29
+ * @LastEditTime: 2021-04-26 17:37:12
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -48,9 +48,10 @@ export default {
     watch:{
         isShow:{
             handler(val){
-                debugger
                 this.show = val;
-            }
+            },
+            deep:true,
+            immediate:true
         }
     },
     data() {

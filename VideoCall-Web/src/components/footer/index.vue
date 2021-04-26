@@ -100,7 +100,6 @@ export default {
         roomStatus:{
             handler(val){
                 if(val==1){
-                    debugger
                     this.isShowReconnection = true;
                 } else {
                     this.isShowReconnection = false;
