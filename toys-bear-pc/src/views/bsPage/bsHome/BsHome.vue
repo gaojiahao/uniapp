@@ -585,19 +585,16 @@ export default {
         this.timeData
       );
       if (res.data.result.code === 200) {
-        console.log(res.data.result.item);
         this.HotTableData = res.data.result.item;
       }
     },
     // 热门择样排行
     async getGetSalesHotSample() {
-      console.log(this.timeData);
       const res = await this.$http.post(
         "/api/GetSalesHotSample",
         this.timeData
       );
       if (res.data.result.code === 200) {
-        console.log(res);
         this.tableData = res.data.result.item;
       }
     },
