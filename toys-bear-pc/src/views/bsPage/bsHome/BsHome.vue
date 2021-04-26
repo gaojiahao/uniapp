@@ -334,7 +334,7 @@ export default {
         pagination: {
           el: ".swiper-pagination"
         },
-        initialSlide: 0,
+        initialSlide: 1,
         slidesPerView: 4,
         slidesPerGroup: 2,
         centeredSlides: true,
