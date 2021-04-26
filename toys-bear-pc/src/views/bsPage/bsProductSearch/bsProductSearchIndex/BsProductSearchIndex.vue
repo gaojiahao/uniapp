@@ -9,7 +9,10 @@
             @screeningShow="screeningShow"
           />
           <!-- 高级筛选 -->
-          <div class="advancedScreening" v-show="screeningFlag == true">
+          <div
+             class="advancedScreening"
+            v-show="screeningFlag == true"
+          >
             <div class="title">高级筛选:</div>
             <div class="queryCondition">
               <!-- <div>
@@ -152,7 +155,7 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="是否图片：">
+                  <el-form-item label="是否有图：">
                     <el-radio-group v-model="advancedFormdata.isUpInsetImg">
                       <el-radio label="是"></el-radio>
                       <el-radio label="否"></el-radio>
@@ -553,7 +556,9 @@ export default {
       baseImg: null,
       fileinfo: null,
       isShowCropper: false,
-      advancedFormdata: {}, //高级搜索条件
+      advancedFormdata: {
+        isUpInsetImg: "是"
+      }, //高级搜索条件
       screeningFlag: false,
       isAccurate: "模糊",
       chpaList: [],
@@ -598,9 +603,9 @@ export default {
         categoryNumber: null,
         time: [],
         fa_no: true,
-        number: 0,
+        number: false,
         name: true,
-        packName: 0
+        packName: false
       },
       currentTwoTag: null,
       isOneDownCate: true,
@@ -748,7 +753,7 @@ export default {
         sortType: this.sortType,
         // 高级搜索条件
         fa_no: this.advancedFormdata.fa_no,
-        isUpInsetImg: this.advancedFormdata.isUpInsetImg == "是" ? true : false,
+        isUpInsetImg: this.advancedFormdata.isUpInsetImg == "否" ? false : true,
         ch_pa: this.advancedFormdata.ch_pa,
         pr_le: this.advancedFormdata.pr_le,
         pr_wi: this.advancedFormdata.pr_wi,
@@ -857,7 +862,7 @@ export default {
       this.synthesis = !this.synthesis;
       if (!this.synthesis) {
         this.isAccurate = "模糊";
-        this.searchForm.number = 0;
+        this.searchForm.number = false;
         this.searchForm.fa_no = true;
         this.searchForm.name = true;
         this.searchForm.packName = 0;
@@ -869,6 +874,14 @@ export default {
     },
     // 选择筛选
     handleCheckedScreensChange(flag) {
+      if (
+        this.searchForm.fa_no === false &&
+        this.searchForm.number === false &&
+        this.searchForm.name === false
+      ) {
+        this.isAccurate = "模糊";
+        this.$refs.searchRef.synthesis = false;
+      }
       if (flag) {
         this.synthesis = false;
       }
@@ -1081,6 +1094,7 @@ export default {
     @{deep} .advancedScreening {
       display: flex;
       height: 114px;
+
       .el-checkbox {
         .el-checkbox__input {
           border-radius: 50%;
@@ -1090,6 +1104,7 @@ export default {
         }
       }
       .title {
+        height: 114px;
         display: flex;
         align-items: center;
       }
@@ -1098,7 +1113,7 @@ export default {
         height: 114px;
         border: 1px solid #dcdfe6;
         border-radius: 5px;
-        padding: 20px 0;
+        padding: 20px 10px;
         margin: 0 20px;
         box-sizing: border-box;
         .item {
@@ -1112,6 +1127,7 @@ export default {
         }
       }
       .parameter {
+        height: 114px;
         width: 700px;
         form {
           display: flex;
