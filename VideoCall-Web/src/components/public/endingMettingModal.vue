@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-08 14:46:21
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\public\endingMettingModal.vue
- * @LastEditTime: 2021-04-26 17:37:12
+ * @LastEditTime: 2021-04-26 20:13:50
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -30,8 +30,8 @@
             </div>
         </div>
         <div class="action">
-            <Button type="primary" shape="circle" style="width:88px;margin:0 14px 0 28px;">重新设置</Button>
-            <Button type="warning" shape="circle" style="width:88px;margin:0 28px 0 14px;background:#E6E6E6;border-color:#E6E6E6;color:#666666">取消</Button>
+            <Button type="primary" shape="circle" style="width:88px;margin:0 14px 0 28px;" @click="showSettings">重新设置</Button>
+            <Button type="warning" shape="circle" style="width:88px;margin:0 28px 0 14px;background:#E6E6E6;border-color:#E6E6E6;color:#666666" @click="cancel">取消</Button>
         </div>
     </div>
 </template>
@@ -56,7 +56,7 @@ export default {
     },
     data() {
         return {
-            currentTime:5,
+            currentTime:300,
             timeObj: null, // 时间对象,下方会用到
             myHours: '00', // 我定义来接收计算出来的 小时 的
             myMinutes: '00', // 我定义来接收计算出来的 分钟 的
@@ -88,6 +88,13 @@ export default {
             this.mySeconds = this.timeObj.seconds<10?'0'+this.timeObj.seconds:this.timeObj.seconds;
             this.currentTime--;
         },
+        showSettings(){
+            this.$emit('show-setting');
+            this.show = false;
+        },
+        cancel(){
+            this.show = false;
+        }
     },
     created() {
         //this.testTimer();

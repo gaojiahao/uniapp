@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 16:54:22
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\video\video.vue
- * @LastEditTime: 2021-04-26 17:56:33
+ * @LastEditTime: 2021-04-26 20:14:27
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -65,7 +65,7 @@
                 <img :src="test" style="width:100%;height:807px;">
             </div> -->
         </div>
-        <EndModal :isShow="isShow" ref="endModal"></EndModal>
+        <EndModal :isShow="isShow" ref="endModal" @show-setting="showSetting"></EndModal>
     </div> 
 </template>
 <script>
@@ -130,21 +130,20 @@ export default {
         },
         timeCount(){
             this.endTime = Cookies.get("endTime");
-            this.timeFunction();
             this.count = setInterval(this.timeFunction, 1000);
         },
-         timeFunction(){
-            // 开始执行倒计时
-            //debugger
+        timeFunction(){
             var end = new Date(this.endTime);
             var now = new Date(util.getNowTimeHms());
-            var a=end.getTime();
-            var b=now.getTime();
-            if(((end.getTime()-now.getTime())/1000)<=120){
+            if(((end.getTime()-now.getTime())/1000)<=300){
                 this.isShow = true;
+                clearInterval(this.count);
                 this.$refs.endModal.testTimer();
             }
         },
+        showSetting(){
+            this.$parent.$parent.$parent.$parent.$refs.footer.showModalDetail(true);
+        }
     },
     mounted(){
         this.timeCount();

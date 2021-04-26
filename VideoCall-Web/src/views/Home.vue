@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\Home.vue
- * @LastEditTime: 2021-04-26 17:58:15
+ * @LastEditTime: 2021-04-26 20:10:50
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -30,7 +30,7 @@
         </Layout>
         <Footer>
           <Footers @leave="leave" @endMeeting="endMeeting" @set-volum="setVolum" @get-devices="getDevices" :videoDevices="videoDevices" :audioDevices="audioDevices" @change-devices="changeDevices" 
-             @change-video-encoder="changeVideoEncoder"
+             @change-video-encoder="changeVideoEncoder" ref='footer'
            ></Footers>
         </Footer>
     </Layout>
@@ -43,7 +43,7 @@ import Heads from "@components/head/index";
 import UserList from "@views/user/userList";
 import Video from "@views/video/video";
 import Order from "@views/order/index";
-import Footers from "@components/footer/index";
+import Footers from "@components/footer/footer";
 import {
   QueryMeetingRoomMembers,
   QueryMeetingRoom
