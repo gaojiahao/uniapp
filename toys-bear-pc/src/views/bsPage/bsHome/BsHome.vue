@@ -32,10 +32,69 @@
           <span>数据统计</span>
         </div>
         <div class="content">
-          <div class="item" v-for="item in 4" :key="item">
-            <p class="total">敬请期待</p>
-            <p :class="{ today: true, active: item > 2 }">今日:敬请期待</p>
-            <p class="text">敬请期待</p>
+          <div class="item">
+            <p class="total">{{ statisticsData.hallOrderTotal }}</p>
+            <p
+              :class="{
+                today: true,
+                active: statisticsData.hallOrderTotalToday > 0
+              }"
+            >
+              <img
+                :src="statisticsData.hallOrderTotalToday > 0 ? up_t : up_f"
+                alt=""
+              />
+              今日:{{ statisticsData.hallOrderTotalToday }}
+            </p>
+            <p class="text">展厅业务总数</p>
+          </div>
+          <div class="item">
+            <p class="total">{{ statisticsData.sampleOfferTotal }}</p>
+            <p
+              :class="{
+                today: true,
+                active: statisticsData.sampleOfferTotalToday > 0
+              }"
+            >
+              <img
+                :src="statisticsData.sampleOfferTotalToday > 0 ? up_t : up_f"
+                alt=""
+              />
+              今日:{{ statisticsData.sampleOfferTotalToday }}
+            </p>
+            <p class="text">找样报价总数</p>
+          </div>
+          <div class="item">
+            <p class="total">{{ statisticsData.purchaseTotal }}</p>
+            <p
+              :class="{
+                today: true,
+                active: statisticsData.purchaseTotalToday > 0
+              }"
+            >
+              <img
+                :src="statisticsData.purchaseTotalToday > 0 ? up_t : up_f"
+                alt=""
+              />
+              今日:{{ statisticsData.purchaseTotalToday }}
+            </p>
+            <p class="text">采购订单总数</p>
+          </div>
+          <div class="item">
+            <p class="total">{{ statisticsData.shareTotal }}</p>
+            <p
+              :class="{
+                today: true,
+                active: statisticsData.shareTotalToday > 0
+              }"
+            >
+              <img
+                :src="statisticsData.shareTotalToday > 0 ? up_t : up_f"
+                alt=""
+              />
+              今日:{{ statisticsData.shareTotalToday }}
+            </p>
+            <p class="text">客户订单总数</p>
           </div>
         </div>
       </div>
@@ -85,7 +144,7 @@
           </div>
         </div>
         <div class="minHall">
-          <slider :options="sliderinit" @slide="slide">
+          <!-- <slider :options="sliderinit" @slide="slide">
             <slideritem v-for="(item, i) in minHalls" :key="i">
               <div class="minHallItem">
                 <div class="imgBox">
@@ -97,17 +156,35 @@
                   </el-image>
                 </div>
                 <div class="name">
-                  {{ item.companyName || item.adTitle || 123456 }}
+                  {{ item.companyName || item.adTitle }}
                 </div>
               </div>
             </slideritem>
-          </slider>
+          </slider> -->
+          <swiper ref="mySwiper" :options="swiperOption">
+            <swiper-slide v-for="(item, i) in minHalls" :key="i">
+              <div class="minHallItem">
+                <div class="imgBox">
+                  <el-image
+                    style="width: 221px; height: 108px"
+                    :src="item.bgImg || item.img"
+                    fit="contain"
+                  >
+                  </el-image>
+                </div>
+                <div class="name">
+                  {{ item.companyName || item.adTitle }}
+                </div>
+              </div>
+            </swiper-slide>
+            <div class="swiper-pagination" slot="pagination"></div>
+          </swiper>
         </div>
       </div>
       <div class="right">
         <div class="titleBox">
           <div class="hotBox">
-            <el-radio-group v-model="hotValue">
+            <el-radio-group v-model="hotValue" @change="changeHot">
               <el-radio-button
                 v-for="(item, i) in hotList"
                 :key="i"
@@ -116,7 +193,7 @@
             </el-radio-group>
           </div>
           <div class="dayBox">
-            <el-radio-group v-model="dayValue" size="mini">
+            <el-radio-group v-model="dayValue" size="mini" @change="changeTime">
               <el-radio-button
                 v-for="(item, i) in dayList"
                 :key="i"
@@ -127,8 +204,8 @@
         </div>
         <div class="contentBox">
           <el-table
+            v-show="hotValue === '热门择样'"
             :data="tableData"
-            style="width: 100%"
             height="375"
             :header-row-style="{ height: '40px', padding: '0' }"
             :header-cell-style="{ backgroundColor: '#f9fafc', padding: '0' }"
@@ -136,10 +213,10 @@
             <el-table-column prop="date" label="" width="50">
               <template slot-scope="scope">
                 <div class="tableIndex">
-                  <i class="oneIcon" v-if="scope.row.id == 1"></i>
-                  <i class="twoIcon" v-else-if="scope.row.id == 2"></i>
-                  <i class="threeIcon" v-else-if="scope.row.id == 3"></i>
-                  <span v-else>{{ scope.row.id }}</span>
+                  <i class="oneIcon" v-if="scope.$index == 0"></i>
+                  <i class="twoIcon" v-else-if="scope.$index == 1"></i>
+                  <i class="threeIcon" v-else-if="scope.$index == 2"></i>
+                  <span v-else>{{ scope.$index + 1 }}</span>
                 </div>
               </template>
             </el-table-column>
@@ -148,40 +225,86 @@
                 <div class="productInfo">
                   <el-image
                     style="width: 70px; height: 54px"
-                    :src="scope.row.img"
+                    :src="scope.row.imgUrl"
                     fit="contain"
                   >
+                    <div slot="placeholder" class="image-slot">
+                      <img
+                        style="width: 70px; height: 54px"
+                        :src="require('@/assets/images/imgError.png')"
+                      />
+                    </div>
+                    <div slot="error" class="image-slot">
+                      <img
+                        style="width: 70px; height: 54px"
+                        :src="require('@/assets/images/imgError.png')"
+                      />
+                    </div>
                   </el-image>
                   <div class="infoBox">
                     <div class="name">{{ scope.row.name }}</div>
                     <div class="price">
-                      <span>{{ scope.row.pr_no }}</span>
-                      <span>{{ scope.row.price }}</span>
+                      <span>￥{{ scope.row.price }}</span>
                     </div>
                   </div>
                 </div>
               </template>
             </el-table-column>
             <el-table-column
-              prop="cate"
+              prop="categoryName"
               label="玩具分类"
               width="110"
               align="center"
             >
               <template slot-scope="scope">
                 <span style="font-size: 13px">
-                  {{ scope.row.cate }}
+                  {{ scope.row.categoryName }}
                 </span>
               </template>
             </el-table-column>
             <el-table-column
-              prop="number"
+              prop="count"
               label="择样次数"
               width="100"
               align="center"
             >
               <template slot-scope="scope">
-                <span style="font-sizr: 12px"> {{ scope.row.number }} 次 </span>
+                <span style="font-sizr: 12px"> {{ scope.row.count }} 次 </span>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-table
+            v-if="hotValue === '热门搜索'"
+            :data="HotTableData"
+            style="width: 100%"
+            height="375"
+            :header-row-style="{ height: '40px', padding: '0' }"
+            :header-cell-style="{ backgroundColor: '#f9fafc', padding: '0' }"
+          >
+            <el-table-column label="排名" width="70">
+              <template slot-scope="scope">
+                <div class="pnIndex">
+                  <p :class="{ pnIndexRed: scope.$index < 3 }">
+                    {{ scope.$index + 1 }}
+                  </p>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="keyWord" label="关键词" width="420">
+              <template slot-scope="scope">
+                <span style="font-size: 13px">
+                  {{ scope.row.keyWord }}
+                </span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="count"
+              label="搜索次数"
+              width="110"
+              align="center"
+            >
+              <template slot-scope="scope">
+                <span style="font-sizr: 12px"> {{ scope.row.count }} 次 </span>
               </template>
             </el-table-column>
           </el-table>
@@ -192,33 +315,55 @@
 </template>
 
 <script>
-import { slider, slideritem } from "vue-concise-slider"; // 引入slider组件
+import { calculateDate } from "@/assets/js/common/common.js";
+import { Swiper, SwiperSlide, directive } from "vue-awesome-swiper";
+import "swiper/css/swiper.min.css";
 export default {
   name: "bsHome",
   components: {
-    slider: slider,
-    slideritem: slideritem
+    Swiper,
+    SwiperSlide
+  },
+  directives: {
+    swiper: directive
   },
   data() {
     return {
-      //滑动配置[obj]
-      sliderinit: {
-        currentPage: 0, //当前页码
-        thresholdDistance: 500, //滑动判定距离
-        thresholdTime: 100, //滑动判定时间
-        autoplay: 4000, //自动滚动[ms]
-        loop: false, //循环滚动
-        direction: "horizontal", //方向设置，垂直滚动
-        infinite: 1, //无限滚动前后遍历数
-        slidesToScroll: 1, // 每次滑动项数
-        pagination: 1, // 每次滑动项数
-        loopedSlides: 1,
-        speed: 300
+      // 展厅轮播图配置
+      swiperOption: {
+        pagination: {
+          el: ".swiper-pagination"
+        },
+        initialSlide: 0,
+        slidesPerView: 4,
+        slidesPerGroup: 2,
+        centeredSlides: true,
+        spaceBetween: 10,
+        loop: true,
+        autoplay: true,
+        speed: 600 //config参数同swiper4,与官网一致
       },
+      up_f: require("@/assets/images/up_f.png"),
+      up_t: require("@/assets/images/up_t.png"),
+      statisticsData: {
+        hallOrderTotal: "", //展厅业务
+        hallOrderTotalToday: "", //展厅今日
+        sampleOfferTotal: "", //找样报价
+        sampleOfferTotalToday: "", //找样报价今日
+        purchaseTotal: "", //采购订单
+        purchaseTotalToday: "", //采购今日
+        shareTotal: "", //客户订单
+        shareTotalToday: "" //客户订单今日
+      },
+      timeData: {
+        startTime: "",
+        endTime: ""
+      },
+      HotTableData: [],
       tableData: [],
       bigHalls: [],
       minHalls: [],
-      hotValue: "热门择样",
+      hotValue: "热门搜索",
       hotList: [
         {
           value: "热门择样"
@@ -404,14 +549,19 @@ export default {
           };
           break;
         case "浏览足迹":
-          fd = {
-            name: "/bsIndex/bsBrowsingFootprints",
-            linkUrl: "/bsIndex/bsBrowsingFootprints",
-            component: "bsBrowsingFootprints",
-            refresh: true,
-            label: title
-          };
-          break;
+          this.$common.handlerMsgState({
+            msg: "敬请期待",
+            type: "warning"
+          });
+          return false;
+        // fd = {
+        //   name: "/bsIndex/bsBrowsingFootprints",
+        //   linkUrl: "/bsIndex/bsBrowsingFootprints",
+        //   component: "bsBrowsingFootprints",
+        //   refresh: true,
+        //   label: title
+        // };
+        // break;
         case "站点分享":
           fd = {
             name: "/bsIndex/bsSiteLlis",
@@ -452,11 +602,64 @@ export default {
         this.bigHalls = res.data.result.item.bigHallList.splice(0, 3);
         this.minHalls = res.data.result.item.smallHallList;
       }
+    },
+    // 获取统计数据
+    async getGetSalesOrderDataStatistics() {
+      const res = await this.$http.post("/api/GetSalesOrderDataStatistics", {});
+      if (res.data.result.code === 200) {
+        this.statisticsData = res.data.result.item;
+      }
+    },
+    // 热门搜索排行
+    async getGetSalesHotSearch() {
+      const res = await this.$http.post(
+        "/api/GetSalesHotSearch",
+        this.timeData
+      );
+      if (res.data.result.code === 200) {
+        this.HotTableData = res.data.result.item;
+      }
+    },
+    // 热门择样排行
+    async getGetSalesHotSample() {
+      const res = await this.$http.post(
+        "/api/GetSalesHotSample",
+        this.timeData
+      );
+      if (res.data.result.code === 200) {
+        this.tableData = res.data.result.item;
+      }
+    },
+    // 天数请求
+    changeTime(Value) {
+      this.timeData = Object.assign(calculateDate(Value));
+      if (this.hotValue === "热门择样") {
+        this.getGetSalesHotSample();
+      } else {
+        this.getGetSalesHotSearch();
+      }
+    },
+    // 热门泽洋和热门搜索切换
+    changeHot(Value) {
+      if (Value === "热门择样") {
+        this.getGetSalesHotSample();
+      } else {
+        this.getGetSalesHotSearch();
+      }
     }
   },
-  created() {},
+  created() {
+    this.timeData = Object.assign(calculateDate(this.dayValue));
+  },
   mounted() {
     this.getOrgCompany();
+    this.getGetSalesOrderDataStatistics();
+    this.getGetSalesHotSearch();
+  },
+  computed: {
+    swiper() {
+      return this.$refs.mySwiper.$swiper;
+    }
   }
 };
 </script>
@@ -520,6 +723,7 @@ export default {
           display: flex;
           align-items: center;
           cursor: pointer;
+
           .text {
             margin-left: 20px;
           }
@@ -554,6 +758,11 @@ export default {
           margin-bottom: 20px;
           p {
             line-height: 34px;
+            img {
+              width: 10px;
+              height: 15px;
+              margin-right: 10px;
+            }
             &.total {
               font-size: 24px;
               font-weight: 700;
@@ -638,7 +847,7 @@ export default {
   }
   .brandBox {
     display: flex;
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
     justify-content: space-between;
     .left {
       width: 987px;
@@ -741,11 +950,12 @@ export default {
       }
     }
     .right {
-      // width: 652px;
+      flex: 1;
       height: 440px;
       background-color: #fff;
       border-radius: 4px;
       padding: 0 20px;
+      margin-left: 20px;
       box-sizing: border-box;
       .titleBox {
         height: 50px;
@@ -816,11 +1026,27 @@ export default {
             background-size: contain;
           }
         }
+        .pnIndex {
+          p {
+            width: 22px;
+            height: 22px;
+            background: #dcdfe6;
+            border-radius: 2px;
+            text-align: center;
+            line-height: 22px;
+            color: #666666;
+            &.pnIndexRed {
+              color: #fff;
+              background-color: #ff4848;
+            }
+          }
+        }
+
         .productInfo {
           display: flex;
           .infoBox {
             height: 54px;
-            width: 193px;
+            // width: 193px;
             margin-left: 16px;
 
             div {

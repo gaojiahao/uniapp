@@ -178,6 +178,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    z-index: 2;
     .cart,
     .toTop {
       width: 50px;

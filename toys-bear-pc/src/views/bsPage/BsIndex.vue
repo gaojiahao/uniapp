@@ -36,11 +36,15 @@
 
               <div class="myScrollbar" ref="myScrollbar">
                 <component
+                  class="componentContent"
                   :item="item.value"
                   v-if="item.refresh"
                   :is="item.component"
                   :ref="item.name"
                 ></component>
+                <div class="contentFooter">
+                  <img src="~@/assets/images/contentFooter.png" alt="" />
+                </div>
               </div>
               <!-- </el-scrollbar> -->
             </el-tab-pane>
@@ -139,6 +143,12 @@ import bsPurchaseOrder from "@/views/bsPage/bsBusinessManage/bsPurchaseOrder/BsP
 // 采购订单详情
 import bsPurchaseOrderDetails from "@/views/bsPage/bsBusinessManage/bsPurchaseOrder/bsPurchaseOrderDetails/BsPurchaseOrderDetails.vue";
 
+// 相似产品 | 同款产品
+import bsSimilarProduct from "@/components/bsComponents/bsProductSearchComponent/bsSimilarProduct.vue";
+
+// 展厅主页
+import bsExhibitionHallHome from "@/components/bsComponents/bsExhibitionHallHomeComponent/BsExhibitionHallHome.vue";
+
 import bsTop from "@/components/bsComponents/bsTopComponent/BsTop";
 import bsMenu from "@/components/bsComponents/bsMenuComponent/BsMenu";
 import eventBus from "@/assets/js/common/eventBus.js";
@@ -178,7 +188,9 @@ export default {
     bsPurchaseOrder,
     bsTop,
     bsMenu,
-    bsPurchaseOrderDetails
+    bsPurchaseOrderDetails,
+    bsSimilarProduct,
+    bsExhibitionHallHome
   },
   data() {
     return {
@@ -325,13 +337,12 @@ export default {
 <style scoped lang="less">
 @deep: ~">>>";
 .bsIndex {
-  width: 100%;
+  // width: 100%;
   height: 100%;
   .content {
-    width: 100%;
+    // width: 100%;
     height: calc(100% - 72px);
     display: flex;
-    min-width: 1350px;
     background-color: #fff;
     box-sizing: border-box;
     .leftMenu {
@@ -347,12 +358,12 @@ export default {
     @{deep} .rightContent {
       flex: 1;
       height: 100%;
-      width: 800px;
+      overflow: hidden;
       .views {
         height: 100%;
         position: relative;
         .positionSearchBox {
-          width: calc(100% - 1px);
+          // width: calc(100% - 1px);
           background-color: #fff;
           position: absolute;
           left: 1px;
@@ -547,20 +558,26 @@ export default {
 .myScrollbar {
   padding: 20px 0;
   height: 100%;
-  height: 100%;
-  overflow-y: auto;
+  overflow: auto;
   box-sizing: border-box;
   padding-right: 20px;
+  .contentFooter {
+    text-align: center;
+    margin-top: 20px;
+  }
+  .componentContent {
+    min-width: 1500px;
+  }
   /*-------滚动条整体样式----*/
   &::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 12px;
   }
   /*滚动条里面小方块样式*/
   &::-webkit-scrollbar-thumb {
     border-radius: 100px;
     // -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-    background: #d3d5d8;
+    background: #c8c8c9;
   }
   /*滚动条里面轨道样式*/
   &::-webkit-scrollbar-track {

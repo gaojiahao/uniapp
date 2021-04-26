@@ -152,7 +152,7 @@
           </p>
           <p class="item myHover" v-if="productDetail.qq">
             <i class="qqIcon"></i>
-            <span>{{}}</span>
+            <span>{{ productDetail.qq }}</span>
           </p>
           <p class="item myHover" @click="toFactory(productDetail)">
             <i class="shopIcon"></i>

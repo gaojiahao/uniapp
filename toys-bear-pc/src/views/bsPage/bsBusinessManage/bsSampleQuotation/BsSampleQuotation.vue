@@ -223,7 +223,7 @@
 </template>
 
 <script>
-import bsExportOrder from "@/components/commonComponent/exportOrderComponent";
+import bsExportOrder from "@/components/commonComponent/exportOrderComponent/gongsizhaoyangbaojia.vue";
 import eventBus from "@/assets/js/common/eventBus.js";
 export default {
   name: "bsSampleQuotation",

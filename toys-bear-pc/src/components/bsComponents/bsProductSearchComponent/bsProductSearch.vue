@@ -7,7 +7,7 @@
         size="medium"
         ref="focusKeyword"
         @keyup.native.enter="searchProducts"
-        style="width: 340px;margin: 0 15px;"
+        style="width: 340px; margin: 0 15px"
         placeholder="输入关键词+空格可模糊搜索"
         v-model="searchForm.keyword"
         clearable
@@ -37,6 +37,14 @@
         icon="el-icon-search"
         >搜 索</el-button
       >
+
+      <el-checkbox-group
+        v-model="synthesis"
+        @change="handleSynthesis"
+        style="margin: 0 30px;"
+      >
+        <el-checkbox label="精准查询" name="type"></el-checkbox>
+      </el-checkbox-group>
       <div class="advancedBox" @click="advancedSearchProducts">
         高级搜索
         <i
@@ -58,6 +66,7 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
+      synthesis: false,
       advanced: true,
       searchForm: {
         keyword: ""
@@ -88,6 +97,10 @@ export default {
       //   label: "产品查询"
       // };
       // this.$store.commit("myAddTab", fd);
+    },
+    // 选择综合
+    handleSynthesis() {
+      this.$emit("handleSynthesis");
     },
     // 去购物车
     toShoppingCart() {
@@ -142,11 +155,12 @@ export default {
       align-items: center;
       line-height: 36px;
       cursor: pointer;
+      color: #3368a9;
       i {
         margin-left: 5px;
         width: 10px;
         height: 10px;
-        color: #666666;
+        color: #3368a9;
         display: inline-block;
       }
     }

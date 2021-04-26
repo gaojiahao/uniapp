@@ -1,8 +1,12 @@
 <template>
-  <div class="bsGridItem">
-    <div class="itemImg" @click="toProductDetails">
+  <div class="bsGridItem" @mouseleave="showDetails(false)">
+    <div
+      class="itemImg"
+      @click="toProductDetails"
+      @mouseenter="showDetails(true)"
+    >
       <el-image
-        style="width:222px;height:166px;"
+        style="width: 222px; height: 166px"
         fit="contain"
         :src="item.img"
         lazy
@@ -14,6 +18,13 @@
           <img :src="require('@/assets/images/imgError.png')" />
         </div>
       </el-image>
+      <div
+        @click.stop="handlerDeleteBrowsing(item)"
+        class="BrowsingFootprintsIcon"
+        v-if="$route.path === '/bsIndex/bsBrowsingFootprints'"
+      >
+        <i class="el-icon-delete"></i>
+      </div>
       <div
         class="spotProductIcon"
         v-if="$route.path === '/bsIndex/bsSpotProducts'"
@@ -40,6 +51,13 @@
         class="iconClient clientIcon"
         @click.stop="addCollect(item)"
       ></i>
+      <!-- 找相似，找同款 -->
+      <div class="similaritySame">
+        <div class="simiBox">
+          <div class="similarity" @click.stop="similarityEvent">找相似</div>
+          <div class="same" @click.stop="sameEvent">找同款</div>
+        </div>
+      </div>
     </div>
     <div class="content">
       <div class="productName">
@@ -81,6 +99,60 @@
         </template>
       </div>
     </div>
+    <!-- 详细版 -->
+    <el-collapse-transition>
+      <div class="showDetails" v-show="isShowDetails == item.productNumber">
+        <p class="item">
+          <span class="title">包装：</span>
+          <span class="conText">{{ item.ch_pa }}</span>
+        </p>
+        <p class="item">
+          <span class="title">产品规格：</span>
+          <span class="conText">
+            {{ item.pr_le }} x {{ item.pr_wi }} x {{ item.pr_hi }} (cm)
+          </span>
+        </p>
+        <p class="item">
+          <span class="title">外箱规格：</span>
+          <span class="conText">
+            {{ item.ou_le }} x {{ item.ou_wi }} x {{ item.ou_hi }}(cm)
+          </span>
+        </p>
+        <p class="item">
+          <span class="title">包装规格：</span>
+          <span class="conText">
+            {{ item.in_le }} x {{ item.in_wi }} x {{ item.in_hi }}(cm)
+          </span>
+        </p>
+        <p class="item">
+          <span class="title">装箱量：</span>
+          <span class="conText">{{ item.in_en }}/{{ item.ou_lo }}(pcs)</span>
+        </p>
+        <p class="item">
+          <span class="title">体积/材积：</span>
+          <span class="conText">
+            {{ item.bulk_stere }}(cbm)/{{ item.bulk_feet }}(cuft)
+          </span>
+        </p>
+        <p class="item">
+          <span class="title">毛重/净重：</span>
+          <span class="conText">{{ item.gr_we }}/{{ item.ne_we }}(kg)</span>
+        </p>
+        <div class="sourceBox" @click="toFactory(item)">
+          <i class="sourceIcon"></i>
+          <template v-if="item.isIntegral">
+            <span class="text">
+              {{ item.supplierName }}
+            </span>
+          </template>
+          <template v-else>
+            <span class="text">
+              {{ item.exhibitionName }}
+            </span>
+          </template>
+        </div>
+      </div>
+    </el-collapse-transition>
   </div>
 </template>
 
@@ -94,9 +166,54 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      isShowDetails: null
+    };
   },
   methods: {
+    // 找相似
+    similarityEvent() {
+      // this.$common.handlerMsgState({
+      //   msg: "敬请期待",
+      //   type: "warning"
+      // });
+      // return false;
+      const value = JSON.parse(JSON.stringify(this.item));
+      value.type = "similarity";
+      const fd = {
+        name: "similarity" + this.item.productNumber,
+        linkUrl: "/bsIndex/bsProductSearchIndex",
+        component: "bsSimilarProduct",
+        refresh: true,
+        label: "相似产品" + this.item.fa_no,
+        value: value
+      };
+      this.$store.commit("myAddTab", fd);
+    },
+    // 找同款
+    sameEvent() {
+      // this.$common.handlerMsgState({
+      //   msg: "敬请期待",
+      //   type: "warning"
+      // });
+      // return false;
+      const value = JSON.parse(JSON.stringify(this.item));
+      value.type = "same";
+      const fd = {
+        name: "same" + this.item.productNumber,
+        linkUrl: "/bsIndex/bsProductSearchIndex",
+        component: "bsSimilarProduct",
+        refresh: true,
+        label: "同款产品" + this.item.fa_no,
+        value: value
+      };
+      this.$store.commit("myAddTab", fd);
+    },
+    // 显示明细
+    showDetails(flag) {
+      if (flag) this.isShowDetails = this.item.productNumber;
+      else this.isShowDetails = null;
+    },
     // 去产品详情页
     async toProductDetails() {
       const fd = {
@@ -194,6 +311,26 @@ export default {
       this.$nextTick(() => {
         this.$forceUpdate();
       });
+    },
+    // 删除单个浏览记录
+    async handlerDeleteBrowsing(item) {
+      console.log(item);
+      const fd = {
+        id: item.id,
+        type: 0
+      };
+      const res = await this.$http.post("/api/CreateProductCollection", fd);
+      if (res.data.result.code === 200) {
+        this.$common.handlerMsgState({
+          msg: "删除成功",
+          type: "success"
+        });
+      } else {
+        this.$common.handlerMsgState({
+          msg: "删除失败",
+          type: "danger"
+        });
+      }
     }
   },
   created() {},
@@ -217,6 +354,8 @@ export default {
   flex-direction: column;
   justify-content: flex-start;
   border-radius: 4px;
+  position: relative;
+  transition: all 0.5s;
   .itemImg {
     position: relative;
     display: flex;
@@ -256,6 +395,7 @@ export default {
         -ms-interpolation-mode: nearest-neighbor;
       }
     }
+    .BrowsingFootprintsIcon,
     .spotProductIcon,
     .newProductIcon,
     .vipProductIcon {
@@ -264,6 +404,20 @@ export default {
       top: 16px;
       width: 45px;
       height: 45px;
+    }
+    .BrowsingFootprintsIcon {
+      width: 40px;
+      height: 40px;
+      opacity: 0.68;
+      background: #333333;
+      border-bottom-right-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .BrowsingFootprintsIcon i {
+      font-size: 20px;
+      color: #ffffff;
     }
     .spotProductIcon {
       width: 40px;
@@ -278,6 +432,44 @@ export default {
     .vipProductIcon {
       background: url("~@/assets/images/vipProductIcon.png") center no-repeat;
       background-size: contain;
+    }
+    .similaritySame {
+      position: absolute;
+      box-sizing: border-box;
+      padding: 0 15px;
+      width: 100%;
+      left: 0;
+      bottom: 0;
+      transition: all 1s;
+      opacity: 0;
+      .simiBox {
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        .similarity,
+        .same {
+          width: 110px;
+          height: 34px;
+          background-color: #f9723e;
+          color: #fff;
+          opacity: 0.8;
+          line-height: 34px;
+          text-align: center;
+          &:hover {
+            background-color: #ec644a;
+          }
+        }
+      }
+    }
+  }
+  &:hover {
+    margin-top: 15px;
+    box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+    .showDetails {
+      box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+    }
+    .itemImg .similaritySame {
+      opacity: 1;
     }
   }
   .content {
@@ -367,6 +559,53 @@ export default {
       align-items: center;
       color: #3368a9;
       cursor: pointer;
+      .sourceIcon {
+        width: 18px;
+        min-width: 18px;
+        height: 18px;
+        margin-right: 16px;
+        background: url("~@/assets/images/sourceIcon.png") no-repeat center;
+        background-size: contain;
+      }
+      .text {
+        overflow: hidden; /*超出部分隐藏*/
+        white-space: nowrap; /*不换行*/
+        text-overflow: ellipsis; /*超出部分文字以...显示*/
+      }
+    }
+  }
+  .showDetails {
+    position: absolute;
+    width: 100%;
+    left: -1px;
+    top: 270px;
+    z-index: 1;
+    opacity: 1;
+    border-left: 1px solid #dcdfe6;
+    border-right: 1px solid #dcdfe6;
+    border-bottom: 1px solid #dcdfe6;
+    background-color: #fff;
+    border-radius: 4px;
+    .item {
+      padding: 4px 16px;
+      box-sizing: border-box;
+      overflow: hidden; /*超出部分隐藏*/
+      white-space: nowrap; /*不换行*/
+      text-overflow: ellipsis; /*超出部分文字以...显示*/
+      .title {
+        color: #999;
+      }
+    }
+    .sourceBox {
+      height: 48px;
+      padding: 0 16px;
+      box-sizing: border-box;
+      border-top: 1px solid #e5e5e5;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      color: #3368a9;
       .sourceIcon {
         width: 18px;
         min-width: 18px;

@@ -574,8 +574,8 @@ export default {
         size: "24",
         decimalPlaces: 3,
         rejectionMethod: "四舍五入",
-        miniPrice: 0,
-        miniPriceDecimalPlaces: 1
+        miniPrice: null,
+        miniPriceDecimalPlaces: null
       },
       addInfoRules: {
         customerId: [
@@ -637,17 +637,17 @@ export default {
           required: true,
           message: "请选择取舍方式",
           trigger: "change"
-        },
-        miniPrice: {
-          required: true,
-          message: "请输入价格",
-          trigger: "blur"
-        },
-        miniPriceDecimalPlaces: {
-          required: true,
-          message: "请选择小数位数",
-          trigger: "change"
         }
+        // miniPrice: {
+        //   required: true,
+        //   message: "请输入价格",
+        //   trigger: "blur"
+        // },
+        // miniPriceDecimalPlaces: {
+        //   required: true,
+        //   message: "请选择小数位数",
+        //   trigger: "change"
+        // }
       },
       subDialogVisible: false,
       itemList: {},
@@ -673,24 +673,24 @@ export default {
   methods: {
     // 打开编辑报价方式
     async openEditOffMethods() {
-      this.clienFormData = {
-        title: null,
-        defaultFormula: null,
-        customerId: null,
-        customerName: null,
-        quotationProductList: [],
-        profit: 0,
-        offerMethod: "汕头",
-        cu_de: "¥",
-        cu_deName: "RMB",
-        totalCost: "0",
-        exchange: 0,
-        size: "24",
-        decimalPlaces: 3,
-        rejectionMethod: "四舍五入",
-        miniPrice: 0,
-        miniPriceDecimalPlaces: 1
-      };
+      //   this.clienFormData = {
+      //     title: null,
+      //     defaultFormula: null,
+      //     customerId: null,
+      //     customerName: null,
+      //     quotationProductList: [],
+      //     profit: 0,
+      //     offerMethod: "汕头",
+      //     cu_de: "¥",
+      //     cu_deName: "RMB",
+      //     totalCost: "0",
+      //     exchange: 0,
+      //     size: "24",
+      //     decimalPlaces: 3,
+      //     rejectionMethod: "四舍五入",
+      //     miniPrice: 0,
+      //     miniPriceDecimalPlaces: 1
+      //   };
       this.subDialogVisible = true;
       await this.getSelectCompanyOffer();
       await this.getSelectProductOfferFormulaList();

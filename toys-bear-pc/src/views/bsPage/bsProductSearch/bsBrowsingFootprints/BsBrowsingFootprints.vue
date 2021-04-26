@@ -1,76 +1,100 @@
 <template>
-  <div class="bsMyCollection">
-    <div class="title">
-      <div class="titleLeft">
-        <span>浏览足迹 ({{ totalCount }})</span>
-      </div>
-      <div class="right">
-        <el-button type="warning" size="medium" @click="toShoppingCart">
-          <i class="whiteCart"></i>
-          <span>购物车</span>
-          <span>({{ shoppingList.length }})</span>
-        </el-button>
-      </div>
-    </div>
-    <div class="searchBox">
-      <div class="left">
-        <div class="item">
-          <span class="label">时间段：</span>
-          <el-date-picker
-            size="medium"
-            value-format="yyyy-MM-ddTHH:mm:ss"
-            v-model="dateTime"
-            type="datetimerange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          >
-          </el-date-picker>
+  <div>
+    <div class="BsBrowsingFootprints">
+      <div class="title">
+        <div class="titleLeft">
+          <span>浏览足迹 ({{ totalCount }})</span>
         </div>
-        <div class="item">
-          <el-button
-            @click="search"
-            type="primary"
-            icon="el-icon-search"
-            size="medium"
-          >
-            搜索
+        <div class="right">
+          <el-button type="warning" size="medium" @click="toShoppingCart">
+            <i class="whiteCart"></i>
+            <span>购物车</span>
+            <span>({{ shoppingList.length }})</span>
           </el-button>
         </div>
       </div>
-
-      <div class="right">
-        <div class="track">
-          <i></i>
-          浏览足迹
+      <div class="searchBox">
+        <div class="left">
+          <div class="item">
+            <span class="label">时间段：</span>
+            <el-date-picker
+              size="medium"
+              value-format="yyyy-MM-ddTHH:mm:ss"
+              v-model="dateTime"
+              type="datetimerange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            >
+            </el-date-picker>
+          </div>
+          <div class="item">
+            <el-button
+              @click="search"
+              type="primary"
+              icon="el-icon-search"
+              size="medium"
+            >
+              搜索
+            </el-button>
+          </div>
         </div>
-        <div
-          :class="{ grid: true, active: isGrid === 'bsGridComponent' }"
-          @click="handerIsGrid('bsGridComponent')"
-        ></div>
-        <div
-          :class="{ column: true, active: isGrid === 'bsColumnComponent' }"
-          @click="handerIsGrid('bsColumnComponent')"
-        ></div>
+
+        <div class="right">
+          <div class="track" @click="emptyBrowse">
+            <i class="el-icon-delete"></i>
+            清空浏览足迹
+          </div>
+          <div
+            :class="{ grid: true, active: isGrid === 'bsGridComponent' }"
+            @click="handerIsGrid('bsGridComponent')"
+          ></div>
+          <div
+            :class="{ column: true, active: isGrid === 'bsColumnComponent' }"
+            @click="handerIsGrid('bsColumnComponent')"
+          ></div>
+        </div>
+      </div>
+      <div class="productListBox">
+        <!-- 产品列表 -->
+        <div v-for="item in browseList" :key="item.index">
+          <div class="dateClassify">
+            <div class="left">
+              <i class="el-icon-date"></i>
+              <h4>{{ item.browseDate }}</h4>
+              <p>{{ item.list.length }}件商品</p>
+            </div>
+            <p class="center"></p>
+            <el-button
+              class="btn"
+              type="danger"
+              size="medium"
+              @click="deleteAllBrowse(item.list)"
+            >
+              删除当天
+            </el-button>
+          </div>
+          <component :is="isGrid" :productList="item.list"></component>
+        </div>
+
+        <!-- 分页 -->
+        <center class="myPagination">
+          <el-pagination
+            background
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[12, 24, 36, 48]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalCount"
+          >
+          </el-pagination>
+        </center>
       </div>
     </div>
-    <div class="productListBox">
-      <!-- 产品列表 -->
-      <component :is="isGrid" :productList="productList"></component>
-      <!-- 分页 -->
-      <center class="myPagination">
-        <el-pagination
-          background
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[12, 24, 36, 48]"
-          :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="totalCount"
-        >
-        </el-pagination>
-      </center>
+    <div class="footer">
+      <img src="@/assets/images/footerBg.png" alt="" />
     </div>
   </div>
 </template>
@@ -81,7 +105,6 @@ import bsColumnComponent from "@/components/bsComponents/bsProductSearchComponen
 import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/bsGridComponent";
 import { mapGetters } from "vuex";
 export default {
-  name: "bsMyCollection",
   components: {
     bsColumnComponent,
     bsGridComponent
@@ -94,7 +117,8 @@ export default {
       totalCount: 0,
       pageSize: 12,
       currentPage: 1,
-      productList: []
+      productList: [],
+      browseList: []
     };
   },
   computed: {
@@ -117,7 +141,7 @@ export default {
           delete fd[key];
         }
       }
-      const res = await this.$http.post("/api/ProductCollectionPage", fd);
+      const res = await this.$http.post("/api/GetBrowseProductRecordPage", fd);
       const { code, item, msg } = res.data.result;
       if (code === 200) {
         if (this.shoppingList) {
@@ -131,8 +155,8 @@ export default {
             }
           }
         }
+        this.browseList = this.dataResort(item.items);
         this.totalCount = res.data.result.item.totalCount;
-        this.productList = res.data.result.item.items;
       } else {
         this.totalCount = 0;
         this.$common.handlerMsgState({
@@ -140,6 +164,71 @@ export default {
           type: "danger"
         });
       }
+    },
+    // 按照时间分类
+    dataResort(items) {
+      let newArr = [];
+      items.forEach(function(item) {
+        let index = -1;
+        let alreadyExists = newArr.some(function(newData, j) {
+          if (item.browseDate === newData.browseDate) {
+            index = j;
+            return true;
+          }
+        });
+        if (!alreadyExists) {
+          let list = [];
+          list.push(item);
+          newArr.push({
+            browseDate: item.browseDate,
+            list: list
+          });
+        } else {
+          newArr[index].list.push(item);
+        }
+      });
+      return newArr;
+    },
+    // 清空浏览记录
+    async emptyBrowse() {
+      console.log("清空");
+      const fd = {
+        type: 1
+        // deleteDate:
+      };
+      this.$confirm("确定要清空吗?", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消"
+      })
+        .then(async () => {
+          const res = await this.$http.post("/api/UpdateProductOfferDetail", {
+            fd
+          });
+          if (res.data.result.code === 200) {
+            this.$common.handlerMsgState({
+              msg: "删除成功",
+              type: "success"
+            });
+            // this.$store.commit("popOfferProductList", row);
+            this.getProductOfferDetailPage();
+            eventBus.$emit("resetSamplelist");
+          } else {
+            this.$common.handlerMsgState({
+              msg: res.data.result.msg,
+              error: "danger"
+            });
+          }
+        })
+        .catch(() => {
+          this.$common.handlerMsgState({
+            msg: "已取消清空",
+            type: "warning"
+          });
+        });
+    },
+    // 删除当天
+    deleteAllBrowse(item) {
+      console.log(item);
     },
     // 去购物车
     toShoppingCart() {
@@ -203,7 +292,7 @@ export default {
         });
       }
     });
-    // this.getCollectList();
+    this.getCollectList();
   },
   beforeDestroy() {
     eventBus.$off("resetProducts");
@@ -213,7 +302,7 @@ export default {
 </script>
 <style scoped lang="less">
 @deep: ~">>>";
-.bsMyCollection {
+.BsBrowsingFootprints {
   min-height: 100%;
   background-color: #fff;
   padding: 0 20px;
@@ -279,6 +368,7 @@ export default {
         margin-right: 55px;
         text-align: center;
         color: #666666;
+        cursor: pointer;
       }
       .grid,
       .column {
@@ -311,9 +401,46 @@ export default {
     background-color: #fff;
     width: 100%;
     box-sizing: border-box;
+    .dateClassify {
+      margin-top: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .left {
+        display: flex;
+        align-items: center;
+        line-height: 30px;
+        h4 {
+          height: 30px;
+          font-size: 24px;
+          font-weight: 700;
+          text-align: center;
+          color: #333333;
+          margin: 0 12px;
+        }
+        p {
+          color: #999999;
+        }
+      }
+      .center {
+        flex: 1;
+        margin: 0 20px;
+        width: 100%;
+        height: 1px;
+        background-color: #dcdfe6;
+      }
+    }
+
     .myPagination {
       padding: 30px 0;
     }
   }
+}
+.footer {
+  background-color: #f1f3f6;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

@@ -14,19 +14,37 @@
           @keyup.native.enter="search"
         ></el-input>
       </div>
-      <div class="item" style="width: 200px">
+      <div class="item">
         <span class="label">站点：</span>
         <el-select
-          v-model="zhandian"
+          v-model="websiteInfoId"
           size="medium"
           clearable
           placeholder="请选择"
         >
           <el-option
             v-for="item in sitesList"
-            :key="item.value"
-            :label="item.key"
-            :value="item.value"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
+      </div>
+      <div class="item" v-if="userInfo.userInfo.isMain">
+        <span class="label">业务员：</span>
+        <el-select
+          v-model="userId"
+          size="medium"
+          filterable
+          clearable
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="item in staffList"
+            :key="item.id"
+            :label="item.linkman"
+            :value="item.id"
           >
           </el-option>
         </el-select>
@@ -37,10 +55,10 @@
           size="medium"
           value-format="yyyy-MM-ddTHH:mm:ss"
           v-model="dateTime"
-          type="daterange"
+          type="datetimerange"
           range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          start-placeholder="开始时间"
+          end-placeholder="结束时间"
         >
         </el-date-picker>
       </div>
@@ -80,13 +98,13 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="shareUrl"
-          width="350"
-          label="网址"
-        ></el-table-column>
-        <el-table-column
           prop="customerName"
           label="客户"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="createdBy"
+          label="业务员"
           align="center"
         ></el-table-column>
         <el-table-column
@@ -164,7 +182,7 @@
             <span class="headerTitle">报出价(带工厂信息)</span>
             <div>
               <div class="isFac">
-                <span class="facTitle">是否按厂商导出</span>
+                <span class="facTitle">单独导出图片</span>
                 <el-select
                   v-model="imageExportWay"
                   clearable
@@ -212,7 +230,7 @@
             <span class="headerTitle">报出价(不带工厂信息)</span>
             <div>
               <div class="isFac">
-                <span class="facTitle">是否按厂商导出</span>
+                <span class="facTitle">单独导出图片</span>
                 <el-select
                   v-model="imageExportWay"
                   clearable
@@ -260,7 +278,7 @@
             <span class="headerTitle">出厂价(带工厂信息)</span>
             <div>
               <div class="isFac">
-                <span class="facTitle">是否按厂商导出</span>
+                <span class="facTitle">单独导出图片</span>
                 <el-select
                   v-model="imageExportWay"
                   clearable
@@ -308,7 +326,7 @@
             <span class="headerTitle">出厂价+报出价+工厂信息</span>
             <div>
               <div class="isFac">
-                <span class="facTitle">是否按厂商导出</span>
+                <span class="facTitle">单独导出图片</span>
                 <el-select
                   v-model="imageExportWay"
                   clearable
@@ -344,6 +362,54 @@
             ></el-image>
           </div>
         </el-card>
+        <el-card class="box-card">
+          <div
+            slot="header"
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            "
+          >
+            <span class="headerTitle">出厂价+报出价+工厂信息</span>
+            <div>
+              <div class="isFac">
+                <span class="facTitle">单独导出图片</span>
+                <el-select
+                  v-model="imageExportWay"
+                  clearable
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in imageExportWayList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </div>
+              <el-radio-group class="myExportWay" v-model="exportWay">
+                <el-radio :label="1">带图片导出</el-radio>
+                <el-radio :label="2">不带图片导出</el-radio>
+              </el-radio-group>
+              <el-button
+                type="primary"
+                class="btnMargin"
+                @click="openViewer(require('@/assets/images/mode5.png'))"
+                >预览</el-button
+              >
+              <el-button type="success" @click="exportOrder(5)">导出</el-button>
+            </div>
+          </div>
+          <div class="modeImgBox">
+            <el-image
+              fit="contain"
+              class="myImg"
+              :src="require('@/assets/images/mode5.png')"
+            ></el-image>
+          </div>
+        </el-card>
       </el-dialog>
     </transition>
     <!-- 导出订单模板dialog -->
@@ -367,11 +433,15 @@
 <script>
 import bsExportOrder from "@/components/bsComponents/bsSiteSharingComponent/bsExportOrder";
 import { getCurrentTime } from "@/assets/js/common/common.js";
+import { mapState } from "vuex";
 export default {
   name: "bsCustomerOrder",
   components: { bsExportOrder },
   data() {
     return {
+      websiteInfoId: null,
+      userId: null,
+      staffList: [],
       imageExportWayList: [
         { value: 0, label: "请选择" },
         { value: 2, label: "按厂商单独导图片" },
@@ -382,7 +452,6 @@ export default {
       exportTemplateDialog: false,
       exportDialog: false,
       currentOrder: {},
-      zhandian: null,
       keyword: null,
       dateTime: null,
       tableData: [],
@@ -455,13 +524,28 @@ export default {
         }
       });
     },
+    // 获取公司下的员工列表
+    async getStaffList() {
+      const res = await this.$http.post("/api/CompanyUserList", {
+        orgCompanyID: this.$store.state.userInfo.commparnyList[0].commparnyId
+      });
+      if (res.data.result.code === 200) {
+        this.staffList = res.data.result.item.personnels;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
     // 获取列表
     async getSearchCompanyShareOrdersPage() {
       const fd = {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         keyword: this.keyword,
-        url: this.zhandian,
+        websiteInfoId: this.websiteInfoId,
+        userId: this.userId,
         startTime: this.dateTime && this.dateTime[0],
         endTime: this.dateTime && this.dateTime[1]
       };
@@ -481,12 +565,10 @@ export default {
     },
     // 获取站点列表
     async getDefaultSites() {
-      const res = await this.$http.post("/api/GetDefaultSites", {});
+      const res = await this.$http.post("/api/SearchDropdownWebsiteInfos", {});
+      console.log(res);
       if (res.data.result.code === 200) {
-        this.sitesList = [
-          { key: "全部", value: null },
-          ...res.data.result.item
-        ];
+        this.sitesList = [{ name: "全部", id: null }, ...res.data.result.item];
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -535,9 +617,13 @@ export default {
   },
   created() {
     this.getDefaultSites();
+    this.getStaffList();
   },
   mounted() {
     this.getSearchCompanyShareOrdersPage();
+  },
+  computed: {
+    ...mapState(["userInfo"])
   }
 };
 </script>

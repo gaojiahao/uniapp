@@ -2,7 +2,7 @@
   <div class="bsGridItem" @click="toProductDetails">
     <div class="itemImg">
       <el-image
-        style="width:222px;height:166px;"
+        style="width: 222px; height: 166px"
         fit="contain"
         :src="item.img"
         lazy
@@ -14,6 +14,13 @@
           <img :src="require('@/assets/images/imgError.png')" />
         </div>
       </el-image>
+      <div
+        @click.stop="handlerDeleteBrowsing(item)"
+        class="BrowsingFootprintsIcon"
+        v-if="$route.path === '/bsIndex/bsBrowsingFootprints'"
+      >
+        <i class="el-icon-delete"></i>
+      </div>
       <div
         class="spotProductIcon"
         v-if="$route.path === '/bsIndex/bsSpotProducts'"
@@ -36,6 +43,13 @@
         class="iconClient clientIcon"
         @click.stop="addCollect(item)"
       ></i>
+      <!-- 找相似，找同款 -->
+      <div class="similaritySame">
+        <div class="simiBox">
+          <div class="similarity" @click.stop="similarityEvent">找相似</div>
+          <div class="same" @click.stop="sameEvent">找同款</div>
+        </div>
+      </div>
     </div>
     <div class="content">
       <div class="productName">
@@ -131,6 +145,45 @@ export default {
     };
   },
   methods: {
+    // 找相似
+    similarityEvent() {
+      this.$common.handlerMsgState({
+        msg: "敬请期待",
+        type: "warning"
+      });
+      return false;
+      // const value = JSON.parse(JSON.stringify(this.item));
+      // value.type = "similarity";
+      // const fd = {
+      //   name: "similarity" + this.item.productNumber,
+      //   linkUrl: "/bsIndex/bsProductSearchIndex",
+      //   component: "bsSimilarProduct",
+      //   refresh: true,
+      //   label: "相似产品" + this.item.fa_no,
+      //   value: value
+      // };
+      // this.$store.commit("myAddTab", fd);
+    },
+    // 找同款
+    sameEvent() {
+      this.$common.handlerMsgState({
+        msg: "敬请期待",
+        type: "warning"
+      });
+      return false;
+      // const value = JSON.parse(JSON.stringify(this.item));
+      // value.type = "same";
+      // const fd = {
+      //   name: "same" + this.item.productNumber,
+      //   linkUrl: "/bsIndex/bsProductSearchIndex",
+      //   component: "bsSimilarProduct",
+      //   refresh: true,
+      //   label: "同款产品" + this.item.fa_no,
+      //   value: value
+      // };
+      // this.$store.commit("myAddTab", fd);
+    },
+    // 去产品详情
     async toProductDetails() {
       const fd = {
         name: this.item.productNumber,
@@ -196,6 +249,10 @@ export default {
       this.$forceUpdate();
       eventBus.$emit("resetMyShoppingCart");
       eventBus.$emit("resetProducts", this.item);
+    },
+    // 删除浏览记录
+    handlerDeleteBrowsing(item) {
+      console.log(item);
     }
   },
   computed: {
@@ -258,6 +315,7 @@ export default {
         -ms-interpolation-mode: nearest-neighbor;
       }
     }
+    .BrowsingFootprintsIcon,
     .spotProductIcon,
     .newProductIcon,
     .vipProductIcon {
@@ -266,6 +324,20 @@ export default {
       top: 16px;
       width: 45px;
       height: 45px;
+    }
+    .BrowsingFootprintsIcon {
+      width: 40px;
+      height: 40px;
+      opacity: 0.68;
+      background: #333333;
+      border-bottom-right-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .BrowsingFootprintsIcon i {
+      font-size: 20px;
+      color: #ffffff;
     }
     .spotProductIcon {
       width: 40px;
@@ -280,6 +352,40 @@ export default {
     .vipProductIcon {
       background: url("~@/assets/images/vipProductIcon.png") center no-repeat;
       background-size: contain;
+    }
+    .similaritySame {
+      position: absolute;
+      box-sizing: border-box;
+      padding: 0 15px;
+      width: 100%;
+      left: 0;
+      bottom: 0;
+      transition: all 1s;
+      opacity: 0;
+      .simiBox {
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        .similarity,
+        .same {
+          width: 110px;
+          height: 34px;
+          background-color: #f9723e;
+          color: #fff;
+          opacity: 0.8;
+          line-height: 34px;
+          text-align: center;
+          &:hover {
+            background-color: #ec644a;
+          }
+        }
+      }
+    }
+  }
+  &:hover {
+    box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+    .itemImg .similaritySame {
+      opacity: 1;
     }
   }
   .content {
