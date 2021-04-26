@@ -61,7 +61,7 @@
                     style="width: 55px"
                     v-model="advancedFormdata.pr_le"
                   ></el-input
-                  ><span>-</span>
+                  ><span class="hx">-</span>
                   <el-input
                     size="medium"
                     onkeyup="value=value.replace(/[^\d.]/g,'')"
@@ -69,7 +69,7 @@
                     style="width: 55px"
                     v-model="advancedFormdata.pr_wi"
                   ></el-input
-                  ><span>-</span>
+                  ><span class="hx">-</span>
                   <el-input
                     size="medium"
                     onkeyup="value=value.replace(/[^\d.]/g,'')"
@@ -87,7 +87,7 @@
                     style="width: 55px"
                     v-model="advancedFormdata.ou_le"
                   ></el-input
-                  ><span>-</span>
+                  ><span class="hx">-</span>
                   <el-input
                     size="medium"
                     onkeyup="value=value.replace(/[^\d.]/g,'')"
@@ -95,7 +95,7 @@
                     style="width: 55px"
                     v-model="advancedFormdata.ou_wi"
                   ></el-input
-                  ><span>-</span>
+                  ><span class="hx">-</span>
                   <el-input
                     size="medium"
                     onkeyup="value=value.replace(/[^\d.]/g,'')"
@@ -105,7 +105,7 @@
                   ></el-input>
                   &nbsp;<span>CM</span>
                 </el-form-item>
-                <el-form-item label="包装规格：">
+                <el-form-item label="包装规格：" style="margin: 0">
                   <el-input
                     size="medium"
                     onkeyup="value=value.replace(/[^\d.]/g,'')"
@@ -113,7 +113,7 @@
                     style="width: 55px"
                     v-model="advancedFormdata.in_le"
                   ></el-input
-                  ><span>-</span>
+                  ><span class="hx">-</span>
                   <el-input
                     size="medium"
                     onkeyup="value=value.replace(/[^\d.]/g,'')"
@@ -121,7 +121,7 @@
                     style="width: 55px"
                     v-model="advancedFormdata.in_wi"
                   ></el-input
-                  ><span>-</span>
+                  ><span class="hx">-</span>
                   <el-input
                     size="medium"
                     onkeyup="value=value.replace(/[^\d.]/g,'')"
@@ -157,11 +157,11 @@
                     <el-radio label="否"></el-radio>
                   </el-radio-group>
                 </el-form-item>
-                <el-form-item style="margin: 0; " label="">
+                <el-form-item style="margin: 0" label="">
                   <el-button
                     type="primary"
-                    size="medium"
-                    style="color: #fff;"
+                    size="mini"
+                    style="color: #fff"
                     @click="confirmAdvanced"
                   >
                     确 定
@@ -834,12 +834,14 @@ export default {
       this.synthesis = !this.synthesis;
       if (!this.synthesis) {
         this.isAccurate = "模糊";
-        this.searchForm.fa_no = 0;
         this.searchForm.number = 0;
-        this.searchForm.name = 0;
+        this.searchForm.fa_no = true;
+        this.searchForm.name = true;
         this.searchForm.packName = 0;
       } else {
         this.isAccurate = "精准";
+        this.searchForm.fa_no = true;
+        this.searchForm.name = true;
       }
     },
     // 选择筛选
@@ -852,10 +854,14 @@ export default {
     handleIsAccurate(flag) {
       this.isAccurate = flag;
       if (flag === "模糊") {
+        this.searchForm.fa_no = true;
+        this.searchForm.name = true;
         this.synthesis = false;
         this.$refs.searchRef.synthesis = false;
       } else {
         this.synthesis = true;
+        this.searchForm.fa_no = true;
+        this.searchForm.name = true;
         this.$refs.searchRef.synthesis = true;
       }
     },
@@ -1051,7 +1057,7 @@ export default {
     }
     @{deep} .advancedScreening {
       display: flex;
-      height: 147px;
+      height: 114px;
       .el-checkbox {
         .el-checkbox__input {
           border-radius: 50%;
@@ -1065,9 +1071,8 @@ export default {
         align-items: center;
       }
       .queryCondition {
-        width: 468px;
-        height: 147px;
-        opacity: 1;
+        width: 383px;
+        height: 114px;
         border: 1px solid #dcdfe6;
         border-radius: 5px;
         padding: 20px 0;
@@ -1076,7 +1081,7 @@ export default {
         .item {
           display: flex;
           align-items: center;
-          padding: 15px 0;
+          padding: 10px 0;
           .text {
             width: 80px;
             text-align: right;
@@ -1084,27 +1089,37 @@ export default {
         }
       }
       .parameter {
-        width: 660px;
+        width: 700px;
         form {
           display: flex;
+
           .el-form-item {
-            height: 36px;
+            height: 30px;
             display: flex;
             align-items: center;
             color: #999999;
             text-align: center;
+            margin-bottom: 12px;
+            line-height: 30px;
+            .el-form-item__label {
+              height: 30px;
+              line-height: 30px;
+            }
             .el-form-item__content {
-              line-height: 36px;
+              line-height: 30px;
+              .el-input--medium .el-input__inner {
+                height: 30px;
+                line-height: 30px;
+              }
             }
           }
-          span {
+          .hx {
             text-align: center;
+            padding: 0 6px;
           }
           .left {
             flex: 1;
-          }
-          .right {
-            flex: 1;
+            padding: 0 15px;
           }
         }
       }

@@ -155,11 +155,12 @@ export default {
       align-items: center;
       line-height: 36px;
       cursor: pointer;
+      color: #3368a9;
       i {
         margin-left: 5px;
         width: 10px;
         height: 10px;
-        color: #666666;
+        color: #3368a9;
         display: inline-block;
       }
     }

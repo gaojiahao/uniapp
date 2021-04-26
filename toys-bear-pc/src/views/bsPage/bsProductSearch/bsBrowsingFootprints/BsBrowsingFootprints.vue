@@ -83,7 +83,7 @@ import { mapGetters } from "vuex";
 export default {
   components: {
     bsColumnComponent,
-    bsGridComponent,
+    bsGridComponent
   },
   data() {
     return {
@@ -93,13 +93,13 @@ export default {
       totalCount: 0,
       pageSize: 12,
       currentPage: 1,
-      productList: [],
+      productList: []
     };
   },
   computed: {
     ...mapGetters({
-      shoppingList: "myShoppingList",
-    }),
+      shoppingList: "myShoppingList"
+    })
   },
   methods: {
     // 获取列表
@@ -109,7 +109,7 @@ export default {
         maxResultCount: this.pageSize,
         keyword: this.keyword,
         startTime: this.dateTime && this.dateTime[0],
-        endTime: this.dateTime && this.dateTime[1],
+        endTime: this.dateTime && this.dateTime[1]
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -136,26 +136,26 @@ export default {
         this.totalCount = 0;
         this.$common.handlerMsgState({
           msg: msg,
-          type: "danger",
+          type: "danger"
         });
       }
     },
     // 清空浏览记录
     async emptyBrowse() {
       const fd = {
-        type: 1,
+        type: 1
         // deleteDate:
       };
       const res = await this.$http.post("/api/CreateProductCollection", fd);
       if (res.data.result.code === 200) {
         this.$common.handlerMsgState({
           msg: "删除成功",
-          type: "success",
+          type: "success"
         });
       } else {
         this.$common.handlerMsgState({
           msg: "删除失败",
-          type: "danger",
+          type: "danger"
         });
       }
     },
@@ -167,7 +167,7 @@ export default {
         linkUrl: "/bsIndex/bsShoppingCart",
         component: "bsShoppingCart",
         refresh: true,
-        label: "购物车",
+        label: "购物车"
       };
       this.$store.commit("myAddTab", fd);
     },
@@ -194,7 +194,7 @@ export default {
     // 切换产品列表样式
     handerIsGrid(type) {
       this.isGrid = type;
-    },
+    }
   },
   created() {},
   mounted() {
@@ -203,7 +203,7 @@ export default {
       this.getCollectList();
     });
     // 删除购物车
-    eventBus.$on("resetMyCart", (list) => {
+    eventBus.$on("resetMyCart", list => {
       if (list.length) {
         for (let i = 0; i < this.productList.length; i++) {
           for (let j = 0; j < list.length; j++) {
@@ -216,7 +216,7 @@ export default {
           }
         }
       } else {
-        this.productList.forEach((val) => {
+        this.productList.forEach(val => {
           val.isShopping = false;
         });
       }
@@ -226,7 +226,7 @@ export default {
   beforeDestroy() {
     eventBus.$off("resetProducts");
     eventBus.$off("resetMyCart");
-  },
+  }
 };
 </script>
 <style scoped lang="less">
