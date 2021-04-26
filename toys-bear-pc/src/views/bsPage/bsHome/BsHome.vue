@@ -32,12 +32,6 @@
           <span>数据统计</span>
         </div>
         <div class="content">
-          <!-- <div class="item" v-for="item in 4" :key="item">
-            <p class="total">敬请期待</p>
-            <p :class="{ today: true, active: item > 2 }">今日:敬请期待</p>
-            <p class="text">敬请期待</p>
-          </div> -->
-
           <div class="item">
             <p class="total">{{ statisticsData.hallOrderTotal }}</p>
             <p
@@ -150,7 +144,7 @@
           </div>
         </div>
         <div class="minHall">
-          <slider :options="sliderinit" @slide="slide">
+          <!-- <slider :options="sliderinit" @slide="slide">
             <slideritem v-for="(item, i) in minHalls" :key="i">
               <div class="minHallItem">
                 <div class="imgBox">
@@ -162,11 +156,29 @@
                   </el-image>
                 </div>
                 <div class="name">
-                  {{ item.companyName || item.adTitle || 123456 }}
+                  {{ item.companyName || item.adTitle }}
                 </div>
               </div>
             </slideritem>
-          </slider>
+          </slider> -->
+          <swiper ref="mySwiper" :options="swiperOption">
+            <swiper-slide v-for="(item, i) in minHalls" :key="i">
+              <div class="minHallItem">
+                <div class="imgBox">
+                  <el-image
+                    style="width: 221px; height: 108px"
+                    :src="item.bgImg || item.img"
+                    fit="contain"
+                  >
+                  </el-image>
+                </div>
+                <div class="name">
+                  {{ item.companyName || item.adTitle }}
+                </div>
+              </div>
+            </swiper-slide>
+            <div class="swiper-pagination" slot="pagination"></div>
+          </swiper>
         </div>
       </div>
       <div class="right">
@@ -304,28 +316,32 @@
 
 <script>
 import { calculateDate } from "@/assets/js/common/common.js";
-import { slider, slideritem } from "vue-concise-slider"; // 引入slider组件
+import { Swiper, SwiperSlide, directive } from "vue-awesome-swiper";
+import "swiper/css/swiper.min.css";
 export default {
   name: "bsHome",
   components: {
-    slider: slider,
-    slideritem: slideritem
+    Swiper,
+    SwiperSlide
+  },
+  directives: {
+    swiper: directive
   },
   data() {
     return {
-      //滑动配置[obj]
-      sliderinit: {
-        currentPage: 0, //当前页码
-        thresholdDistance: 500, //滑动判定距离
-        thresholdTime: 100, //滑动判定时间
-        autoplay: 4000, //自动滚动[ms]
-        loop: false, //循环滚动
-        direction: "horizontal", //方向设置，垂直滚动
-        infinite: 1, //无限滚动前后遍历数
-        slidesToScroll: 1, // 每次滑动项数
-        pagination: 1, // 每次滑动项数
-        loopedSlides: 1,
-        speed: 300
+      // 展厅轮播图配置
+      swiperOption: {
+        pagination: {
+          el: ".swiper-pagination"
+        },
+        initialSlide: 0,
+        slidesPerView: 4,
+        slidesPerGroup: 2,
+        centeredSlides: true,
+        spaceBetween: 10,
+        loop: true,
+        autoplay: true,
+        speed: 600 //config参数同swiper4,与官网一致
       },
       up_f: require("@/assets/images/up_f.png"),
       up_t: require("@/assets/images/up_t.png"),
@@ -639,6 +655,11 @@ export default {
     this.getOrgCompany();
     this.getGetSalesOrderDataStatistics();
     this.getGetSalesHotSearch();
+  },
+  computed: {
+    swiper() {
+      return this.$refs.mySwiper.$swiper;
+    }
   }
 };
 </script>

@@ -205,7 +205,7 @@
 </template>
 
 <script>
-import bsExportOrder from "@/components/commonComponent/exportOrderComponent";
+import bsExportOrder from "@/components/commonComponent/exportOrderComponent/zhantingyewu.vue";
 export default {
   name: "bsHallBusiness",
   components: {

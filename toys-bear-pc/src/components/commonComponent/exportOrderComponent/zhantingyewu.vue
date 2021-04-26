@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="exportBox">
     <el-card class="box-card">
       <div
         slot="header"
@@ -9,7 +9,12 @@
         <div>
           <div class="isFac">
             <span class="facTitle">单独导出图片</span>
-            <el-select v-model="imageExportWay" clearable placeholder="请选择">
+            <el-select
+              size="medium"
+              v-model="imageExportWay"
+              clearable
+              placeholder="请选择"
+            >
               <el-option
                 v-for="item in imageExportWayList"
                 :key="item.value"
@@ -24,9 +29,9 @@
             <el-radio :label="2">不带图片导出</el-radio>
           </el-radio-group>
           <el-button
-            class="btnMargin"
             type="primary"
-            @click="openViewer(require('@/assets/images/mode1.png'))"
+            class="previewBtn"
+            @click="openViewer(require('@/assets/images/zhantingyewuTp1.png'))"
             >预览</el-button
           >
           <el-button type="success" @click="exportOrder(1)">导出</el-button>
@@ -36,7 +41,7 @@
         <el-image
           fit="contain"
           class="myImg"
-          :src="require('@/assets/images/mode1.png')"
+          :src="require('@/assets/images/zhantingyewuTp1.png')"
         ></el-image>
       </div>
     </el-card>
@@ -49,7 +54,12 @@
         <div>
           <div class="isFac">
             <span class="facTitle">单独导出图片</span>
-            <el-select v-model="imageExportWay" clearable placeholder="请选择">
+            <el-select
+              size="medium"
+              v-model="imageExportWay"
+              clearable
+              placeholder="请选择"
+            >
               <el-option
                 v-for="item in imageExportWayList"
                 :key="item.value"
@@ -65,8 +75,8 @@
           </el-radio-group>
           <el-button
             type="primary"
-            class="btnMargin"
-            @click="openViewer(require('@/assets/images/mode2.png'))"
+            class="previewBtn"
+            @click="openViewer(require('@/assets/images/zhantingyewuTp2.png'))"
             >预览</el-button
           >
           <el-button type="success" @click="exportOrder(2)">导出</el-button>
@@ -76,7 +86,7 @@
         <el-image
           fit="contain"
           class="myImg"
-          :src="require('@/assets/images/mode2.png')"
+          :src="require('@/assets/images/zhantingyewuTp2.png')"
         ></el-image>
       </div>
     </el-card>
@@ -89,7 +99,12 @@
         <div>
           <div class="isFac">
             <span class="facTitle">单独导出图片</span>
-            <el-select v-model="imageExportWay" clearable placeholder="请选择">
+            <el-select
+              size="medium"
+              v-model="imageExportWay"
+              clearable
+              placeholder="请选择"
+            >
               <el-option
                 v-for="item in imageExportWayList"
                 :key="item.value"
@@ -105,8 +120,8 @@
           </el-radio-group>
           <el-button
             type="primary"
-            class="btnMargin"
-            @click="openViewer(require('@/assets/images/mode3.png'))"
+            class="previewBtn"
+            @click="openViewer(require('@/assets/images/zhantingyewuTp3.png'))"
             >预览</el-button
           >
           <el-button type="success" @click="exportOrder(3)">导出</el-button>
@@ -116,7 +131,7 @@
         <el-image
           fit="contain"
           class="myImg"
-          :src="require('@/assets/images/mode3.png')"
+          :src="require('@/assets/images/zhantingyewuTp3.png')"
         ></el-image>
       </div>
     </el-card>
@@ -129,7 +144,12 @@
         <div>
           <div class="isFac">
             <span class="facTitle">单独导出图片</span>
-            <el-select v-model="imageExportWay" clearable placeholder="请选择">
+            <el-select
+              size="medium"
+              v-model="imageExportWay"
+              clearable
+              placeholder="请选择"
+            >
               <el-option
                 v-for="item in imageExportWayList"
                 :key="item.value"
@@ -145,8 +165,8 @@
           </el-radio-group>
           <el-button
             type="primary"
-            class="btnMargin"
-            @click="openViewer(require('@/assets/images/mode4.png'))"
+            class="previewBtn"
+            @click="openViewer(require('@/assets/images/zhantingyewuTp4.png'))"
             >预览</el-button
           >
           <el-button type="success" @click="exportOrder(4)">导出</el-button>
@@ -156,7 +176,7 @@
         <el-image
           fit="contain"
           class="myImg"
-          :src="require('@/assets/images/mode4.png')"
+          :src="require('@/assets/images/zhantingyewuTp4.png')"
         ></el-image>
       </div>
     </el-card>
@@ -169,7 +189,12 @@
         <div>
           <div class="isFac">
             <span class="facTitle">单独导出图片</span>
-            <el-select v-model="imageExportWay" clearable placeholder="请选择">
+            <el-select
+              size="medium"
+              v-model="imageExportWay"
+              clearable
+              placeholder="请选择"
+            >
               <el-option
                 v-for="item in imageExportWayList"
                 :key="item.value"
@@ -185,8 +210,8 @@
           </el-radio-group>
           <el-button
             type="primary"
-            class="btnMargin"
-            @click="openViewer(require('@/assets/images/mode5.png'))"
+            class="previewBtn"
+            @click="openViewer(require('@/assets/images/zhantingyewuTp5.png'))"
             >预览</el-button
           >
           <el-button type="success" @click="exportOrder(5)">导出</el-button>
@@ -196,7 +221,7 @@
         <el-image
           fit="contain"
           class="myImg"
-          :src="require('@/assets/images/mode5.png')"
+          :src="require('@/assets/images/zhantingyewuTp5.png')"
         ></el-image>
       </div>
     </el-card>
@@ -206,7 +231,11 @@
 <script>
 import { getCurrentTime } from "@/assets/js/common/common.js";
 export default {
-  props: ["orderNumber", "customerName", "api"],
+  props: {
+    options: {
+      type: Object
+    }
+  },
   data() {
     return {
       imageExportWayList: [
@@ -238,24 +267,23 @@ export default {
     // 导出模板
     exportOrder(type) {
       this.$store.commit("handlerIsJindu", true);
+      // this.options.templateType = type;
       const fd = {
         excelExportWay: this.exportWay,
         imageExportWay: this.imageExportWay ? this.imageExportWay : 0,
         templateType: type,
-        shareOrderNumber: this.orderNumber
+        ...this.options
       };
       this.$http
-        .post(this.api, fd, {
+        .post(this.options.api, fd, {
           responseType: "blob",
-          timeout: 100000000
+          timeout: 1000000000
         })
         .then(res => {
           const time = getCurrentTime();
-
-          const exeName = this.customerName + "_" + time + ".xlsx";
-          const zipName = this.customerName + "_" + time + ".zip";
+          const exeName = this.options.name + "_" + time + ".xlsx";
+          const zipName = this.options.name + "_" + time + ".zip";
           const fileName = this.imageExportWay > 0 ? zipName : exeName;
-
           const blob = res.data;
           if (window.navigator && window.navigator.msSaveOrOpenBlob) {
             // 兼容IE
@@ -290,7 +318,7 @@ export default {
     margin-right: 10px;
   }
 }
-.btnMargin {
+.previewBtn {
   margin-left: 20px;
 }
 </style>

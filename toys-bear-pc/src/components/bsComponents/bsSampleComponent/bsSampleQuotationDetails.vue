@@ -276,7 +276,7 @@
 </template>
 
 <script>
-import bsExportOrder from "@/components/commonComponent/exportOrderComponent";
+import bsExportOrder from "@/components/commonComponent/exportOrderComponent/gongsizhaoyangbaojia.vue";
 import bsSampleQuotationTopComponent from "@/components/bsComponents/bsSampleComponent/bsSampleQuotationTopComponent";
 export default {
   name: "bsSampleQuotationDetails",

@@ -42,6 +42,9 @@
                   :is="item.component"
                   :ref="item.name"
                 ></component>
+                <div class="contentFooter">
+                  <img src="~@/assets/images/contentFooter.png" alt="" />
+                </div>
               </div>
               <!-- </el-scrollbar> -->
             </el-tab-pane>
@@ -140,8 +143,11 @@ import bsPurchaseOrder from "@/views/bsPage/bsBusinessManage/bsPurchaseOrder/BsP
 // 采购订单详情
 import bsPurchaseOrderDetails from "@/views/bsPage/bsBusinessManage/bsPurchaseOrder/bsPurchaseOrderDetails/BsPurchaseOrderDetails.vue";
 
-// 相似产品
+// 相似产品 | 同款产品
 import bsSimilarProduct from "@/components/bsComponents/bsProductSearchComponent/bsSimilarProduct.vue";
+
+// 展厅主页
+import bsExhibitionHallHome from "@/components/bsComponents/bsExhibitionHallHomeComponent/BsExhibitionHallHome.vue";
 
 import bsTop from "@/components/bsComponents/bsTopComponent/BsTop";
 import bsMenu from "@/components/bsComponents/bsMenuComponent/BsMenu";
@@ -183,7 +189,8 @@ export default {
     bsTop,
     bsMenu,
     bsPurchaseOrderDetails,
-    bsSimilarProduct
+    bsSimilarProduct,
+    bsExhibitionHallHome
   },
   data() {
     return {
@@ -554,6 +561,10 @@ export default {
   overflow: auto;
   box-sizing: border-box;
   padding-right: 20px;
+  .contentFooter {
+    text-align: center;
+    margin-top: 20px;
+  }
   .componentContent {
     min-width: 1500px;
   }

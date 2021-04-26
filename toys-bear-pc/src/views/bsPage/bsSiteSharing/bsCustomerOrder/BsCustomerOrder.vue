@@ -182,7 +182,7 @@
             <span class="headerTitle">报出价(带工厂信息)</span>
             <div>
               <div class="isFac">
-                <span class="facTitle">是否按厂商导出</span>
+                <span class="facTitle">单独导出图片</span>
                 <el-select
                   v-model="imageExportWay"
                   clearable
@@ -230,7 +230,7 @@
             <span class="headerTitle">报出价(不带工厂信息)</span>
             <div>
               <div class="isFac">
-                <span class="facTitle">是否按厂商导出</span>
+                <span class="facTitle">单独导出图片</span>
                 <el-select
                   v-model="imageExportWay"
                   clearable
@@ -278,7 +278,7 @@
             <span class="headerTitle">出厂价(带工厂信息)</span>
             <div>
               <div class="isFac">
-                <span class="facTitle">是否按厂商导出</span>
+                <span class="facTitle">单独导出图片</span>
                 <el-select
                   v-model="imageExportWay"
                   clearable
@@ -326,7 +326,7 @@
             <span class="headerTitle">出厂价+报出价+工厂信息</span>
             <div>
               <div class="isFac">
-                <span class="facTitle">是否按厂商导出</span>
+                <span class="facTitle">单独导出图片</span>
                 <el-select
                   v-model="imageExportWay"
                   clearable
@@ -359,6 +359,54 @@
               fit="contain"
               class="myImg"
               :src="require('@/assets/images/mode4.png')"
+            ></el-image>
+          </div>
+        </el-card>
+        <el-card class="box-card">
+          <div
+            slot="header"
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            "
+          >
+            <span class="headerTitle">出厂价+报出价+工厂信息</span>
+            <div>
+              <div class="isFac">
+                <span class="facTitle">单独导出图片</span>
+                <el-select
+                  v-model="imageExportWay"
+                  clearable
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in imageExportWayList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </div>
+              <el-radio-group class="myExportWay" v-model="exportWay">
+                <el-radio :label="1">带图片导出</el-radio>
+                <el-radio :label="2">不带图片导出</el-radio>
+              </el-radio-group>
+              <el-button
+                type="primary"
+                class="btnMargin"
+                @click="openViewer(require('@/assets/images/mode5.png'))"
+                >预览</el-button
+              >
+              <el-button type="success" @click="exportOrder(5)">导出</el-button>
+            </div>
+          </div>
+          <div class="modeImgBox">
+            <el-image
+              fit="contain"
+              class="myImg"
+              :src="require('@/assets/images/mode5.png')"
             ></el-image>
           </div>
         </el-card>
