@@ -9,10 +9,7 @@
             @screeningShow="screeningShow"
           />
           <!-- 高级筛选 -->
-          <div
-             class="advancedScreening"
-            v-show="screeningFlag == true"
-          >
+          <div class="advancedScreening" v-show="screeningFlag == true">
             <div class="title">高级筛选:</div>
             <div class="queryCondition">
               <!-- <div>
