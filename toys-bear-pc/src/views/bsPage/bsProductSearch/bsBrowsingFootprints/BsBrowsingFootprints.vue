@@ -1,76 +1,81 @@
 <template>
-  <div class="bsMyCollection">
-    <div class="title">
-      <div class="titleLeft">
-        <span>浏览足迹 ({{ totalCount }})</span>
-      </div>
-      <div class="right">
-        <el-button type="warning" size="medium" @click="toShoppingCart">
-          <i class="whiteCart"></i>
-          <span>购物车</span>
-          <span>({{ shoppingList.length }})</span>
-        </el-button>
-      </div>
-    </div>
-    <div class="searchBox">
-      <div class="left">
-        <div class="item">
-          <span class="label">时间段：</span>
-          <el-date-picker
-            size="medium"
-            value-format="yyyy-MM-ddTHH:mm:ss"
-            v-model="dateTime"
-            type="datetimerange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          >
-          </el-date-picker>
+  <div>
+    <div class="BsBrowsingFootprints">
+      <div class="title">
+        <div class="titleLeft">
+          <span>浏览足迹 ({{ totalCount }})</span>
         </div>
-        <div class="item">
-          <el-button
-            @click="search"
-            type="primary"
-            icon="el-icon-search"
-            size="medium"
-          >
-            搜索
+        <div class="right">
+          <el-button type="warning" size="medium" @click="toShoppingCart">
+            <i class="whiteCart"></i>
+            <span>购物车</span>
+            <span>({{ shoppingList.length }})</span>
           </el-button>
         </div>
       </div>
-
-      <div class="right">
-        <div class="track" @click="emptyBrowse">
-          <i></i>
-          清空浏览足迹
+      <div class="searchBox">
+        <div class="left">
+          <div class="item">
+            <span class="label">时间段：</span>
+            <el-date-picker
+              size="medium"
+              value-format="yyyy-MM-ddTHH:mm:ss"
+              v-model="dateTime"
+              type="datetimerange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            >
+            </el-date-picker>
+          </div>
+          <div class="item">
+            <el-button
+              @click="search"
+              type="primary"
+              icon="el-icon-search"
+              size="medium"
+            >
+              搜索
+            </el-button>
+          </div>
         </div>
-        <div
-          :class="{ grid: true, active: isGrid === 'bsGridComponent' }"
-          @click="handerIsGrid('bsGridComponent')"
-        ></div>
-        <div
-          :class="{ column: true, active: isGrid === 'bsColumnComponent' }"
-          @click="handerIsGrid('bsColumnComponent')"
-        ></div>
+
+        <div class="right">
+          <div class="track" @click="emptyBrowse">
+            <i></i>
+            清空浏览足迹
+          </div>
+          <div
+            :class="{ grid: true, active: isGrid === 'bsGridComponent' }"
+            @click="handerIsGrid('bsGridComponent')"
+          ></div>
+          <div
+            :class="{ column: true, active: isGrid === 'bsColumnComponent' }"
+            @click="handerIsGrid('bsColumnComponent')"
+          ></div>
+        </div>
+      </div>
+      <div class="productListBox">
+        <!-- 产品列表 -->
+        <component :is="isGrid" :productList="productList"></component>
+        <!-- 分页 -->
+        <center class="myPagination">
+          <el-pagination
+            background
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[12, 24, 36, 48]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalCount"
+          >
+          </el-pagination>
+        </center>
       </div>
     </div>
-    <div class="productListBox">
-      <!-- 产品列表 -->
-      <component :is="isGrid" :productList="productList"></component>
-      <!-- 分页 -->
-      <center class="myPagination">
-        <el-pagination
-          background
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[12, 24, 36, 48]"
-          :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="totalCount"
-        >
-        </el-pagination>
-      </center>
+    <div class="footer">
+      <img src="@/assets/images/footerBg.png" alt="" />
     </div>
   </div>
 </template>
@@ -231,7 +236,7 @@ export default {
 </script>
 <style scoped lang="less">
 @deep: ~">>>";
-.bsMyCollection {
+.BsBrowsingFootprints {
   min-height: 100%;
   background-color: #fff;
   padding: 0 20px;
@@ -333,5 +338,12 @@ export default {
       padding: 30px 0;
     }
   }
+}
+.footer {
+  background-color: #f1f3f6;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

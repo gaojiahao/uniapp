@@ -1,17 +1,18 @@
 <template>
-  <div class="productSearch">
-    <template v-if="!imageSearchValue">
-      <div class="advancedSearchBox">
-        <bsProductSearch
-          ref="searchRef"
-          @handleSynthesis="handleSynthesis"
-          @screeningShow="screeningShow"
-        />
-        <!-- 高级筛选 -->
-        <div class="advancedScreening" v-show="screeningFlag == true">
-          <div class="title">高级筛选:</div>
-          <div class="queryCondition">
-            <!-- <div>
+  <div>
+    <div class="productSearch">
+      <template v-if="!imageSearchValue">
+        <div class="advancedSearchBox">
+          <bsProductSearch
+            ref="searchRef"
+            @handleSynthesis="handleSynthesis"
+            @screeningShow="screeningShow"
+          />
+          <!-- 高级筛选 -->
+          <div class="advancedScreening" v-show="screeningFlag == true">
+            <div class="title">高级筛选:</div>
+            <div class="queryCondition">
+              <!-- <div>
               <span class="text">综合：</span>
               <el-checkbox
                 v-model="synthesis"
@@ -21,158 +22,158 @@
                 综合查询
               </el-checkbox>
             </div> -->
-            <div class="item">
-              <span class="text">搜索类型：</span>
-              <el-checkbox
-                @change="handleCheckedScreensChange"
-                v-model="searchForm.fa_no"
-              >
-                货号
-              </el-checkbox>
-              <el-checkbox
-                @change="handleCheckedScreensChange"
-                v-model="searchForm.name"
-              >
-                名称
-              </el-checkbox>
-              <el-checkbox
-                @change="handleCheckedScreensChange"
-                v-model="searchForm.number"
-              >
-                编号
-              </el-checkbox>
-            </div>
-            <div class="item">
-              <span class="text">是否精准：</span>
-              <el-radio-group v-model="isAccurate" @change="handleIsAccurate">
-                <el-radio label="模糊"></el-radio>
-                <el-radio label="精准"></el-radio>
-              </el-radio-group>
-            </div>
-          </div>
-          <div class="parameter">
-            <el-form :model="advancedFormdata">
-              <div class="left">
-                <el-form-item label="产品规格：">
-                  <el-input
-                    onkeyup="value=value.replace(/[^\d.]/g,'')"
-                    size="medium"
-                    placeholder="长"
-                    style="width: 55px"
-                    v-model="advancedFormdata.pr_le"
-                  ></el-input
-                  ><span class="hx">-</span>
-                  <el-input
-                    size="medium"
-                    onkeyup="value=value.replace(/[^\d.]/g,'')"
-                    placeholder="宽"
-                    style="width: 55px"
-                    v-model="advancedFormdata.pr_wi"
-                  ></el-input
-                  ><span class="hx">-</span>
-                  <el-input
-                    size="medium"
-                    onkeyup="value=value.replace(/[^\d.]/g,'')"
-                    placeholder="高"
-                    style="width: 55px"
-                    v-model="advancedFormdata.pr_hi"
-                  ></el-input>
-                  &nbsp;<span>CM</span>
-                </el-form-item>
-                <el-form-item label="外箱规格：">
-                  <el-input
-                    size="medium"
-                    onkeyup="value=value.replace(/[^\d.]/g,'')"
-                    placeholder="长"
-                    style="width: 55px"
-                    v-model="advancedFormdata.ou_le"
-                  ></el-input
-                  ><span class="hx">-</span>
-                  <el-input
-                    size="medium"
-                    onkeyup="value=value.replace(/[^\d.]/g,'')"
-                    placeholder="宽"
-                    style="width: 55px"
-                    v-model="advancedFormdata.ou_wi"
-                  ></el-input
-                  ><span class="hx">-</span>
-                  <el-input
-                    size="medium"
-                    onkeyup="value=value.replace(/[^\d.]/g,'')"
-                    placeholder="高"
-                    style="width: 55px"
-                    v-model="advancedFormdata.ou_hi"
-                  ></el-input>
-                  &nbsp;<span>CM</span>
-                </el-form-item>
-                <el-form-item label="包装规格：" style="margin: 0">
-                  <el-input
-                    size="medium"
-                    onkeyup="value=value.replace(/[^\d.]/g,'')"
-                    placeholder="长"
-                    style="width: 55px"
-                    v-model="advancedFormdata.in_le"
-                  ></el-input
-                  ><span class="hx">-</span>
-                  <el-input
-                    size="medium"
-                    onkeyup="value=value.replace(/[^\d.]/g,'')"
-                    placeholder="宽"
-                    style="width: 55px"
-                    v-model="advancedFormdata.in_wi"
-                  ></el-input
-                  ><span class="hx">-</span>
-                  <el-input
-                    size="medium"
-                    onkeyup="value=value.replace(/[^\d.]/g,'')"
-                    placeholder="高"
-                    style="width: 55px"
-                    v-model="advancedFormdata.in_hi"
-                  ></el-input>
-                  &nbsp;<span>CM</span>
-                </el-form-item>
+              <div class="item">
+                <span class="text">搜索类型：</span>
+                <el-checkbox
+                  @change="handleCheckedScreensChange"
+                  v-model="searchForm.fa_no"
+                >
+                  货号
+                </el-checkbox>
+                <el-checkbox
+                  @change="handleCheckedScreensChange"
+                  v-model="searchForm.name"
+                >
+                  名称
+                </el-checkbox>
+                <el-checkbox
+                  @change="handleCheckedScreensChange"
+                  v-model="searchForm.number"
+                >
+                  编号
+                </el-checkbox>
               </div>
-              <div class="left">
-                <el-form-item label="包装方式：">
-                  <el-select
-                    filterable
-                    size="medium"
-                    style="width: 200px; heigth: 35px"
-                    clearable
-                    v-model="advancedFormdata.ch_pa"
-                    placeholder="请选择"
-                  >
-                    <el-option
-                      v-for="item in chpaList"
-                      :key="item.pa_nu"
-                      :label="item.ch_pa"
-                      :value="item.ch_pa"
+              <div class="item">
+                <span class="text">是否精准：</span>
+                <el-radio-group v-model="isAccurate" @change="handleIsAccurate">
+                  <el-radio label="模糊"></el-radio>
+                  <el-radio label="精准"></el-radio>
+                </el-radio-group>
+              </div>
+            </div>
+            <div class="parameter">
+              <el-form :model="advancedFormdata">
+                <div class="left">
+                  <el-form-item label="产品规格：">
+                    <el-input
+                      onkeyup="value=value.replace(/[^\d.]/g,'')"
+                      size="medium"
+                      placeholder="长"
+                      style="width: 55px"
+                      v-model="advancedFormdata.pr_le"
+                    ></el-input
+                    ><span class="hx">-</span>
+                    <el-input
+                      size="medium"
+                      onkeyup="value=value.replace(/[^\d.]/g,'')"
+                      placeholder="宽"
+                      style="width: 55px"
+                      v-model="advancedFormdata.pr_wi"
+                    ></el-input
+                    ><span class="hx">-</span>
+                    <el-input
+                      size="medium"
+                      onkeyup="value=value.replace(/[^\d.]/g,'')"
+                      placeholder="高"
+                      style="width: 55px"
+                      v-model="advancedFormdata.pr_hi"
+                    ></el-input>
+                    &nbsp;<span>CM</span>
+                  </el-form-item>
+                  <el-form-item label="外箱规格：">
+                    <el-input
+                      size="medium"
+                      onkeyup="value=value.replace(/[^\d.]/g,'')"
+                      placeholder="长"
+                      style="width: 55px"
+                      v-model="advancedFormdata.ou_le"
+                    ></el-input
+                    ><span class="hx">-</span>
+                    <el-input
+                      size="medium"
+                      onkeyup="value=value.replace(/[^\d.]/g,'')"
+                      placeholder="宽"
+                      style="width: 55px"
+                      v-model="advancedFormdata.ou_wi"
+                    ></el-input
+                    ><span class="hx">-</span>
+                    <el-input
+                      size="medium"
+                      onkeyup="value=value.replace(/[^\d.]/g,'')"
+                      placeholder="高"
+                      style="width: 55px"
+                      v-model="advancedFormdata.ou_hi"
+                    ></el-input>
+                    &nbsp;<span>CM</span>
+                  </el-form-item>
+                  <el-form-item label="包装规格：" style="margin: 0">
+                    <el-input
+                      size="medium"
+                      onkeyup="value=value.replace(/[^\d.]/g,'')"
+                      placeholder="长"
+                      style="width: 55px"
+                      v-model="advancedFormdata.in_le"
+                    ></el-input
+                    ><span class="hx">-</span>
+                    <el-input
+                      size="medium"
+                      onkeyup="value=value.replace(/[^\d.]/g,'')"
+                      placeholder="宽"
+                      style="width: 55px"
+                      v-model="advancedFormdata.in_wi"
+                    ></el-input
+                    ><span class="hx">-</span>
+                    <el-input
+                      size="medium"
+                      onkeyup="value=value.replace(/[^\d.]/g,'')"
+                      placeholder="高"
+                      style="width: 55px"
+                      v-model="advancedFormdata.in_hi"
+                    ></el-input>
+                    &nbsp;<span>CM</span>
+                  </el-form-item>
+                </div>
+                <div class="left">
+                  <el-form-item label="包装方式：">
+                    <el-select
+                      filterable
+                      size="medium"
+                      style="width: 200px; heigth: 35px"
+                      clearable
+                      v-model="advancedFormdata.ch_pa"
+                      placeholder="请选择"
                     >
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="是否图片：">
-                  <el-radio-group v-model="advancedFormdata.isUpInsetImg">
-                    <el-radio label="是"></el-radio>
-                    <el-radio label="否"></el-radio>
-                  </el-radio-group>
-                </el-form-item>
-                <el-form-item style="margin: 0" label="">
-                  <el-button
-                    type="primary"
-                    size="mini"
-                    style="color: #fff"
-                    @click="confirmAdvanced"
-                  >
-                    确 定
-                  </el-button>
-                </el-form-item>
-              </div>
-            </el-form>
+                      <el-option
+                        v-for="item in chpaList"
+                        :key="item.pa_nu"
+                        :label="item.ch_pa"
+                        :value="item.ch_pa"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="是否图片：">
+                    <el-radio-group v-model="advancedFormdata.isUpInsetImg">
+                      <el-radio label="是"></el-radio>
+                      <el-radio label="否"></el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                  <el-form-item style="margin: 0" label="">
+                    <el-button
+                      type="primary"
+                      size="mini"
+                      style="color: #fff"
+                      @click="confirmAdvanced"
+                    >
+                      确 定
+                    </el-button>
+                  </el-form-item>
+                </div>
+              </el-form>
+            </div>
           </div>
-        </div>
-        <!-- 标准筛选 -->
-        <!-- <div class="standardScreening" v-show="screeningFlag == false">
+          <!-- 标准筛选 -->
+          <!-- <div class="standardScreening" v-show="screeningFlag == false">
           <span class="myLabel">标准筛选:</span>
           <el-checkbox
             v-model="synthesis"
@@ -206,287 +207,302 @@
             包装
           </el-checkbox>
         </div> -->
-        <div class="productClass">
-          <span class="myLabel">产品分类:</span>
-          <div :class="{ tags: true, showOneCate: isOneDownCate }">
-            <div
-              @click="oneTagEvent(null)"
-              :class="{ itemTag: true, isActive: oneCurrentTag === null }"
-            >
-              全部
+          <div class="productClass">
+            <span class="myLabel">产品分类:</span>
+            <div :class="{ tags: true, showOneCate: isOneDownCate }">
+              <div
+                @click="oneTagEvent(null)"
+                :class="{ itemTag: true, isActive: oneCurrentTag === null }"
+              >
+                全部
+              </div>
+              <div
+                @click="oneTagEvent(item)"
+                :class="{
+                  itemTag: true,
+                  isActive: oneCurrentTag && oneCurrentTag.id === item.id
+                }"
+                v-for="item in categoryList"
+                :key="item.id"
+              >
+                {{ item.name }}
+              </div>
             </div>
-            <div
-              @click="oneTagEvent(item)"
-              :class="{
-                itemTag: true,
-                isActive: oneCurrentTag && oneCurrentTag.id === item.id
-              }"
-              v-for="item in categoryList"
-              :key="item.id"
-            >
-              {{ item.name }}
+            <div class="topLine">
+              <div class="develop" @click="handlerOneCateLabel">
+                <span class="zhankai">{{
+                  isOneDownCate ? "展开" : "隐藏"
+                }}</span>
+                <i v-show="isOneDownCate" class="el-icon-arrow-down"></i>
+                <i v-show="!isOneDownCate" class="el-icon-arrow-up"></i>
+              </div>
             </div>
           </div>
-          <div class="topLine">
-            <div class="develop" @click="handlerOneCateLabel">
-              <span class="zhankai">{{ isOneDownCate ? "展开" : "隐藏" }}</span>
-              <i v-show="isOneDownCate" class="el-icon-arrow-down"></i>
-              <i v-show="!isOneDownCate" class="el-icon-arrow-up"></i>
+          <div class="twoLevelClass" v-if="oneCurrentTag">
+            <span class="myLabel">二级分类:</span>
+            <div :class="{ tags: true, showTwoCate: isTwoDownCate }">
+              <div
+                @click="twoTagEvent(null)"
+                :class="{ itemTag: true, isActive: currentTwoTag === null }"
+              >
+                全部
+              </div>
+              <div
+                @click="twoTagEvent(item.id)"
+                :class="{ itemTag: true, isActive: currentTwoTag === item.id }"
+                v-for="item in oneCurrentTag.children"
+                :key="item.id"
+              >
+                {{ item.name }}
+              </div>
+            </div>
+            <div class="topLine">
+              <div class="develop" @click="handlerTwoCateLabel">
+                <span class="zhankai">{{
+                  isTwoDownCate ? "展开" : "隐藏"
+                }}</span>
+                <i v-show="isTwoDownCate" class="el-icon-arrow-down"></i>
+                <i v-show="!isTwoDownCate" class="el-icon-arrow-up"></i>
+              </div>
             </div>
           </div>
         </div>
-        <div class="twoLevelClass" v-if="oneCurrentTag">
-          <span class="myLabel">二级分类:</span>
-          <div :class="{ tags: true, showTwoCate: isTwoDownCate }">
-            <div
-              @click="twoTagEvent(null)"
-              :class="{ itemTag: true, isActive: currentTwoTag === null }"
-            >
-              全部
-            </div>
-            <div
-              @click="twoTagEvent(item.id)"
-              :class="{ itemTag: true, isActive: currentTwoTag === item.id }"
-              v-for="item in oneCurrentTag.children"
-              :key="item.id"
-            >
-              {{ item.name }}
-            </div>
-          </div>
-          <div class="topLine">
-            <div class="develop" @click="handlerTwoCateLabel">
-              <span class="zhankai">{{ isTwoDownCate ? "展开" : "隐藏" }}</span>
-              <i v-show="isTwoDownCate" class="el-icon-arrow-down"></i>
-              <i v-show="!isTwoDownCate" class="el-icon-arrow-up"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="productsWrap">
-        <div class="screenBox">
-          <div class="left">
-            <div class="screenItem" @click="sortTypeEvent(null)">
-              <span :class="{ screenLabel: true, active: sortOrder === null }"
-                >综合</span
-              >
-            </div>
-            <div class="screenItem" @click="sortTypeEvent(3)">
-              <span :class="{ screenLabel: true, active: sortOrder === 3 }"
-                >热度</span
-              >
-              <i v-show="isRedu === null" class="jiantou xiajiantouIcon"></i>
-              <i v-show="isRedu === 1" class="jiantou xiaActiveIcon"></i>
-              <i v-show="isRedu === 2" class="jiantou shangActiveIcon"></i>
-            </div>
-            <div class="screenItem" @click="sortTypeEvent(1)">
-              <span :class="{ screenLabel: true, active: sortOrder === 1 }"
-                >单价</span
-              >
-              <i v-show="isPrice === null" class="jiantou xiajiantouIcon"></i>
-              <i v-show="isPrice === 1" class="jiantou xiaActiveIcon"></i>
-              <i v-show="isPrice === 2" class="jiantou shangActiveIcon"></i>
-            </div>
-            <div class="screenItem" @click="sortTypeEvent(2)">
-              <span :class="{ screenLabel: true, active: sortOrder === 2 }">
-                时间
-              </span>
-              <i v-show="isTime === null" class="jiantou xiajiantouIcon"></i>
-              <i v-show="isTime === 1" class="jiantou xiaActiveIcon"></i>
-              <i v-show="isTime === 2" class="jiantou shangActiveIcon"></i>
-            </div>
-            <div class="screenItem dateTime">
-              <span class="screenLabel">上架时间</span>
-              <el-date-picker
+        <div class="productsWrap">
+          <div class="screenBox">
+            <div class="left">
+              <div class="screenItem" @click="sortTypeEvent(null)">
+                <span :class="{ screenLabel: true, active: sortOrder === null }"
+                  >综合</span
+                >
+              </div>
+              <div class="screenItem" @click="sortTypeEvent(3)">
+                <span :class="{ screenLabel: true, active: sortOrder === 3 }"
+                  >热度</span
+                >
+                <i v-show="isRedu === null" class="jiantou xiajiantouIcon"></i>
+                <i v-show="isRedu === 1" class="jiantou xiaActiveIcon"></i>
+                <i v-show="isRedu === 2" class="jiantou shangActiveIcon"></i>
+              </div>
+              <div class="screenItem" @click="sortTypeEvent(1)">
+                <span :class="{ screenLabel: true, active: sortOrder === 1 }"
+                  >单价</span
+                >
+                <i v-show="isPrice === null" class="jiantou xiajiantouIcon"></i>
+                <i v-show="isPrice === 1" class="jiantou xiaActiveIcon"></i>
+                <i v-show="isPrice === 2" class="jiantou shangActiveIcon"></i>
+              </div>
+              <div class="screenItem" @click="sortTypeEvent(2)">
+                <span :class="{ screenLabel: true, active: sortOrder === 2 }">
+                  时间
+                </span>
+                <i v-show="isTime === null" class="jiantou xiajiantouIcon"></i>
+                <i v-show="isTime === 1" class="jiantou xiaActiveIcon"></i>
+                <i v-show="isTime === 2" class="jiantou shangActiveIcon"></i>
+              </div>
+              <div class="screenItem dateTime">
+                <span class="screenLabel">上架时间</span>
+                <el-date-picker
+                  size="mini"
+                  value-format="yyyy-MM-ddTHH:mm:ss"
+                  v-model="searchForm.time"
+                  type="daterange"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                >
+                </el-date-picker>
+              </div>
+              <div class="screenItem priceUnit">
+                <span class="screenLabel">价格区间</span>
+                <div class="intervalPrice">
+                  <el-input
+                    size="mini"
+                    v-model="searchForm.minPrice"
+                    placeholder="最低"
+                  ></el-input>
+                  <span class="line">-</span>
+                  <el-input
+                    size="mini"
+                    v-model="searchForm.maxPrice"
+                    placeholder="最高"
+                  ></el-input>
+                </div>
+              </div>
+              <el-button
+                @click="getProductList(false)"
+                type="primary"
+                style="margin-left: 10px"
                 size="mini"
-                value-format="yyyy-MM-ddTHH:mm:ss"
-                v-model="searchForm.time"
-                type="daterange"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
               >
-              </el-date-picker>
+                确定
+              </el-button>
             </div>
-            <div class="screenItem priceUnit">
-              <span class="screenLabel">价格区间</span>
-              <div class="intervalPrice">
-                <el-input
-                  size="mini"
-                  v-model="searchForm.minPrice"
-                  placeholder="最低"
-                ></el-input>
-                <span class="line">-</span>
-                <el-input
-                  size="mini"
-                  v-model="searchForm.maxPrice"
-                  placeholder="最高"
-                ></el-input>
+            <div class="right">
+              <div class="searchTime">
+                查询用时：<span>{{ searchHttpTime }}</span
+                >秒
+              </div>
+              <div
+                :class="{ grid: true, active: isGrid === 'bsGridComponent' }"
+                @click="handerIsGrid('bsGridComponent')"
+              ></div>
+              <div
+                :class="{
+                  column: true,
+                  active: isGrid === 'bsColumnComponent'
+                }"
+                @click="handerIsGrid('bsColumnComponent')"
+              ></div>
+              <div class="line"></div>
+              <div class="totalCount">
+                <span class="totalCountText">{{ totalCount }}</span>
+                <span>条数据</span>
+              </div>
+              <div class="myMinPagination">
+                <div @click="firstEvent" class="first el-icon-arrow-left"></div>
+                <div class="count">
+                  <span class="pageIndex">{{ currentPage }}</span>
+                  <span>/</span>
+                  <span>{{ Math.ceil(totalCount / pageSize) }}</span>
+                </div>
+                <div @click="nextEvent" class="next el-icon-arrow-right"></div>
               </div>
             </div>
+          </div>
+          <div class="productListBox">
+            <!-- 产品列表 -->
+            <component :is="isGrid" :productList="productList"></component>
+            <!-- 分页 -->
+            <center class="myPagination">
+              <el-pagination
+                background
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage"
+                :page-sizes="[12, 24, 36, 48]"
+                :page-size="pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="totalCount"
+              >
+              </el-pagination>
+            </center>
+          </div>
+        </div>
+      </template>
+      <!-- 图搜结果 -->
+      <template v-if="imageSearchValue">
+        <div class="picSearchBox">
+          <div class="searchInput">
+            <span class="label">产品搜索:</span>
+            <el-input
+              size="medium"
+              @keyup.native.enter="textSearchProducts"
+              style="width: 340px; margin: 0 15px"
+              placeholder="请输入关键词"
+              v-model="searchForm.keyword"
+              clearable
+            >
+              <template slot="prefix">
+                <el-upload
+                  :auto-upload="false"
+                  ref="uploadRef"
+                  accept=".jpg,.jpeg,.png,.ico,.bmp,.JPG,.JPEG,.PNG,.ICO,.BMP"
+                  class="upload-demo"
+                  action="/api/WebsiteShare/SearchProductsByPicture"
+                  :show-file-list="false"
+                  :on-change="uploadPic"
+                >
+                  <i
+                    style="font-size: 20px"
+                    class="el-input__icon el-icon-camera-solid"
+                  ></i>
+                </el-upload>
+              </template>
+            </el-input>
             <el-button
-              @click="getProductList(false)"
+              size="medium"
+              @click="textSearchProducts"
               type="primary"
-              style="margin-left: 10px"
-              size="mini"
+              icon="el-icon-search"
+              >搜 索</el-button
             >
-              确定
-            </el-button>
           </div>
-          <div class="right">
-            <div
-              :class="{ grid: true, active: isGrid === 'bsGridComponent' }"
-              @click="handerIsGrid('bsGridComponent')"
-            ></div>
-            <div
-              :class="{ column: true, active: isGrid === 'bsColumnComponent' }"
-              @click="handerIsGrid('bsColumnComponent')"
-            ></div>
-            <div class="line"></div>
-            <div class="totalCount">
-              <span class="totalCountText">{{ totalCount }}</span>
-              <span>条数据</span>
+          <div class="resultTitle">搜索图片</div>
+          <div class="resultBox">
+            <div class="left">
+              <p class="totalCountBox">
+                <span class="title">搜索产品</span>
+                <span class="total">
+                  <span class="title">总记录：</span>
+                  <span class="text"> {{ totalCount }} </span>条
+                </span>
+              </p>
             </div>
-            <div class="myMinPagination">
-              <div @click="firstEvent" class="first el-icon-arrow-left"></div>
-              <div class="count">
-                <span class="pageIndex">{{ currentPage }}</span>
-                <span>/</span>
-                <span>{{ Math.ceil(totalCount / pageSize) }}</span>
-              </div>
-              <div @click="nextEvent" class="next el-icon-arrow-right"></div>
-            </div>
-          </div>
-        </div>
-        <div class="productListBox">
-          <!-- 产品列表 -->
-          <component :is="isGrid" :productList="productList"></component>
-          <!-- 分页 -->
-          <center class="myPagination">
-            <el-pagination
-              background
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="currentPage"
-              :page-sizes="[12, 24, 36, 48]"
-              :page-size="pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="totalCount"
-            >
-            </el-pagination>
-          </center>
-        </div>
-      </div>
-    </template>
-    <!-- 图搜结果 -->
-    <template v-if="imageSearchValue">
-      <div class="picSearchBox">
-        <div class="searchInput">
-          <span class="label">产品搜索:</span>
-          <el-input
-            size="medium"
-            @keyup.native.enter="textSearchProducts"
-            style="width: 340px; margin: 0 15px"
-            placeholder="请输入关键词"
-            v-model="searchForm.keyword"
-            clearable
-          >
-            <template slot="prefix">
-              <el-upload
-                :auto-upload="false"
-                ref="uploadRef"
-                accept=".jpg,.jpeg,.png,.ico,.bmp,.JPG,.JPEG,.PNG,.ICO,.BMP"
-                class="upload-demo"
-                action="/api/WebsiteShare/SearchProductsByPicture"
-                :show-file-list="false"
-                :on-change="uploadPic"
-              >
-                <i
-                  style="font-size: 20px"
-                  class="el-input__icon el-icon-camera-solid"
-                ></i>
-              </el-upload>
-            </template>
-          </el-input>
-          <el-button
-            size="medium"
-            @click="textSearchProducts"
-            type="primary"
-            icon="el-icon-search"
-            >搜 索</el-button
-          >
-        </div>
-        <div class="resultTitle">搜索图片</div>
-        <div class="resultBox">
-          <div class="left">
-            <p class="totalCountBox">
-              <span class="title">搜索产品</span>
-              <span class="total">
-                <span class="title">总记录：</span>
-                <span class="text"> {{ totalCount }} </span>条
-              </span>
-            </p>
-          </div>
-          <div class="middle">
-            <!-- {{ searchImgPreview }} -->
-            <div class="preview" v-if="searchImgPreview">
-              <div class="imgBox">
-                <div class="miniImg">
+            <div class="middle">
+              <!-- {{ searchImgPreview }} -->
+              <div class="preview" v-if="searchImgPreview">
+                <div class="imgBox">
+                  <div class="miniImg">
+                    <el-image
+                      @click.native.stop.prevent="
+                        openCubeImg(searchImgPreview.img)
+                      "
+                      :src="searchImgPreview.img"
+                      fit="contain"
+                    ></el-image>
+                  </div>
                   <el-image
+                    :src="searchImgPreview.baseImg"
                     @click.native.stop.prevent="
-                      openCubeImg(searchImgPreview.img)
+                      openCubeImg(searchImgPreview.baseImg)
                     "
-                    :src="searchImgPreview.img"
                     fit="contain"
                   ></el-image>
                 </div>
-                <el-image
-                  :src="searchImgPreview.baseImg"
-                  @click.native.stop.prevent="
-                    openCubeImg(searchImgPreview.baseImg)
-                  "
-                  fit="contain"
-                ></el-image>
               </div>
             </div>
+            <div class="right"></div>
           </div>
-          <div class="right"></div>
-        </div>
-        <div class="picProductListBox">
-          <!-- 产品列表 -->
-          <component :is="isGrid" :productList="productList"></component>
-        </div>
-      </div>
-    </template>
-    <!-- vueCropper 剪裁图片实现-->
-    <el-dialog title="图片剪裁" :visible.sync="isShowCropper" destroy-on-close>
-      <div class="cropperWrap">
-        <div class="cropper-content">
-          <div class="cropper" style="text-align: center">
-            <vueCropper
-              ref="cropper"
-              :img="option.img"
-              :outputSize="option.outputSize"
-              :outputType="option.outputType"
-              :autoCropWidth="option.autoCropWidth"
-              :autoCropHeight="option.autoCropHeight"
-              :canScale="option.canScale"
-              :info="option.info"
-              :full="option.full"
-              :canMove="option.canMove"
-              :canMoveBox="option.canMoveBox"
-              :original="option.original"
-              :autoCrop="option.autoCrop"
-              :fixed="option.fixed"
-              :fixedNumber="option.fixedNumber"
-              :centerBox="option.centerBox"
-              :infoTrue="option.infoTrue"
-              :fixedBox="option.fixedBox"
-              :mode="option.mode"
-            ></vueCropper>
+          <div class="picProductListBox">
+            <!-- 产品列表 -->
+            <component :is="isGrid" :productList="productList"></component>
           </div>
         </div>
-        <center slot="footer" class="dialog-footer">
-          <!-- <el-button type="info" @click="cropperCancel">取 消</el-button>
+      </template>
+      <!-- vueCropper 剪裁图片实现-->
+      <el-dialog
+        title="图片剪裁"
+        :visible.sync="isShowCropper"
+        destroy-on-close
+      >
+        <div class="cropperWrap">
+          <div class="cropper-content">
+            <div class="cropper" style="text-align: center">
+              <vueCropper
+                ref="cropper"
+                :img="option.img"
+                :outputSize="option.outputSize"
+                :outputType="option.outputType"
+                :autoCropWidth="option.autoCropWidth"
+                :autoCropHeight="option.autoCropHeight"
+                :canScale="option.canScale"
+                :info="option.info"
+                :full="option.full"
+                :canMove="option.canMove"
+                :canMoveBox="option.canMoveBox"
+                :original="option.original"
+                :autoCrop="option.autoCrop"
+                :fixed="option.fixed"
+                :fixedNumber="option.fixedNumber"
+                :centerBox="option.centerBox"
+                :infoTrue="option.infoTrue"
+                :fixedBox="option.fixedBox"
+                :mode="option.mode"
+              ></vueCropper>
+            </div>
+          </div>
+          <center slot="footer" class="dialog-footer">
+            <!-- <el-button type="info" @click="cropperCancel">取 消</el-button>
         <el-button
           type="primary"
           class="el-icon-refresh-left"
@@ -499,16 +515,20 @@
           @click="$refs.cropper.rotateRight()"
           >右 旋 转</el-button
         > -->
-          <el-button
-            class="submitBtn"
-            type="primary"
-            @click="onCubeImg"
-            :loading="loading"
-            >确认</el-button
-          >
-        </center>
-      </div>
-    </el-dialog>
+            <el-button
+              class="submitBtn"
+              type="primary"
+              @click="onCubeImg"
+              :loading="loading"
+              >确认</el-button
+            >
+          </center>
+        </div>
+      </el-dialog>
+    </div>
+    <div class="footer">
+      <img src="@/assets/images/footerBg.png" alt="" />
+    </div>
   </div>
 </template>
 
@@ -584,7 +604,8 @@ export default {
       },
       currentTwoTag: null,
       isOneDownCate: true,
-      isTwoDownCate: true
+      isTwoDownCate: true,
+      searchHttpTime: null
     };
   },
   methods: {
@@ -707,7 +728,7 @@ export default {
     // 获取产品列表请求
     async getProductList(flag) {
       this.$store.commit("searchValues", null);
-
+      let startDate = Date.now();
       const fd = {
         name: this.searchForm.keyword,
         skipCount: this.currentPage,
@@ -778,6 +799,8 @@ export default {
         }
         this.productList = item.items;
         this.totalCount = item.totalCount;
+        let endDate = Date.now();
+        this.searchHttpTime = (endDate - startDate) / 1000;
       } else {
         this.totalCount = 0;
         this.$common.handlerMsgState({
@@ -1244,11 +1267,17 @@ export default {
         }
       }
       .right {
-        width: 340px;
+        width: 500px;
         height: 100%;
         display: flex;
         align-items: center;
         justify-content: flex-end;
+        .searchTime {
+          margin-right: 40px;
+          span {
+            color: #3368a9;
+          }
+        }
         .grid,
         .column {
           width: 17px;
@@ -1401,5 +1430,12 @@ export default {
       }
     }
   }
+}
+.footer {
+  background-color: #f1f3f6;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
