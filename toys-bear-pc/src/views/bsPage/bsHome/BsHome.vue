@@ -144,25 +144,8 @@
           </div>
         </div>
         <div class="minHall">
-          <!-- <slider :options="sliderinit" @slide="slide">
-            <slideritem v-for="(item, i) in minHalls" :key="i">
-              <div class="minHallItem">
-                <div class="imgBox">
-                  <el-image
-                    style="width: 221px; height: 108px"
-                    :src="item.bgImg || item.img"
-                    fit="contain"
-                  >
-                  </el-image>
-                </div>
-                <div class="name">
-                  {{ item.companyName || item.adTitle }}
-                </div>
-              </div>
-            </slideritem>
-          </slider> -->
           <swiper ref="mySwiper" :options="swiperOption">
-            <swiper-slide v-for="(item, i) in minHalls" :key="i">
+            <swiper-slide v-for="item in minHalls" :key="item.id">
               <div class="minHallItem">
                 <div class="imgBox">
                   <el-image
@@ -334,7 +317,7 @@ export default {
         pagination: {
           el: ".swiper-pagination"
         },
-        initialSlide: 1,
+        initialSlide: 2,
         slidesPerView: 4,
         slidesPerGroup: 2,
         centeredSlides: true,
@@ -343,8 +326,6 @@ export default {
         autoplay: true,
         speed: 600 //config参数同swiper4,与官网一致
       },
-      up_f: require("@/assets/images/up_f.png"),
-      up_t: require("@/assets/images/up_t.png"),
       statisticsData: {
         hallOrderTotal: "", //展厅业务
         hallOrderTotalToday: "", //展厅今日
@@ -1068,5 +1049,9 @@ export default {
       }
     }
   }
+}
+.swiper-container {
+  width: 100%;
+  height: 100%;
 }
 </style>
