@@ -312,9 +312,25 @@ export default {
         this.$forceUpdate();
       });
     },
-    // 删除浏览记录
-    handlerDeleteBrowsing(item) {
+    // 删除单个浏览记录
+   async handlerDeleteBrowsing(item) {
       console.log(item);
+      const fd ={
+          id:item.id,
+            type:0
+      }
+      const res = await this.$http.post("/api/CreateProductCollection", fd);
+      if (res.data.result.code === 200) {
+      this.$common.handlerMsgState({
+          msg: "删除成功",
+          type: "success"
+        });
+      } else {
+        this.$common.handlerMsgState({
+          msg: "删除失败",
+          type: "danger"
+        });
+      }
     }
   },
   created() {},
