@@ -180,7 +180,7 @@
 </template>
 
 <script>
-import bsExportOrder from "@/components/commonComponent/exportOrderComponent";
+import bsExportOrder from "@/components/commonComponent/exportOrderComponent/caigoudingdan.vue";
 export default {
   name: "bsPurchaseOrder",
   components: {

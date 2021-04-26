@@ -182,7 +182,7 @@
             <span class="headerTitle">报出价(带工厂信息)</span>
             <div>
               <div class="isFac">
-                <span class="facTitle">是否按厂商导出</span>
+                <span class="facTitle">单独导出图片</span>
                 <el-select
                   v-model="imageExportWay"
                   clearable
@@ -230,7 +230,7 @@
             <span class="headerTitle">报出价(不带工厂信息)</span>
             <div>
               <div class="isFac">
-                <span class="facTitle">是否按厂商导出</span>
+                <span class="facTitle">单独导出图片</span>
                 <el-select
                   v-model="imageExportWay"
                   clearable
@@ -278,7 +278,7 @@
             <span class="headerTitle">出厂价(带工厂信息)</span>
             <div>
               <div class="isFac">
-                <span class="facTitle">是否按厂商导出</span>
+                <span class="facTitle">单独导出图片</span>
                 <el-select
                   v-model="imageExportWay"
                   clearable
@@ -326,7 +326,7 @@
             <span class="headerTitle">出厂价+报出价+工厂信息</span>
             <div>
               <div class="isFac">
-                <span class="facTitle">是否按厂商导出</span>
+                <span class="facTitle">单独导出图片</span>
                 <el-select
                   v-model="imageExportWay"
                   clearable
