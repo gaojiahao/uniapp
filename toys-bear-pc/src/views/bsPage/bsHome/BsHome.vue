@@ -832,6 +832,7 @@ export default {
     display: flex;
     // flex-wrap: wrap;
     justify-content: space-between;
+    box-sizing: border-box;
     .left {
       width: 987px;
       height: 440px;
@@ -839,6 +840,7 @@ export default {
       border-radius: 4px;
       box-sizing: border-box;
       padding: 0 20px;
+      box-sizing: border-box;
       .title {
         height: 50px;
         display: flex;
