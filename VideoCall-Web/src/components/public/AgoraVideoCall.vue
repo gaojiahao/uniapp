@@ -96,24 +96,42 @@ export default {
       $.client.on("user-published", this.handleUserPublished);
       $.client.on("user-unpublished", this.handleUserUnpublished);
       $.client.on("connection-state-change",(cur,rev,reason)=>{
+        if(reason=='UID_BANNED'){
+          this.leaveMeetingRoom();  
+        }
         console.log('链接状态',cur);
       });
       $.client.on("user-joined",(user)=>{
+        var name = '';
+        if(this.userlist.length){
+            for(var i=0;i<this.userlist.length;i++){
+                if(user.uid==this.userlist[i]['id']){
+                    name = this.userlist[i]['nickname'];
+                    break;
+                }
+            }
+        }
         this.$Message.info({
           background: true,
-          content: user.uid+'用户加入了会议室!'
+          content: '用户'+name+'加入了会议室!'
         });
         this.$parent.$parent.$parent.$parent.$parent.getQueryMeetingRoomMembers();
       });
       $.client.on("user-left",(user)=>{
+        var name = '';
+        if(this.userlist.length){
+            for(var i=0;i<this.userlist.length;i++){
+                if(user.uid==this.userlist[i]['id']){
+                    name = this.userlist[i]['nickname'];
+                    break;
+                }
+            }
+        }
         this.$Message.info({
           background: true,
-          content: user.uid+'用户离开了会议室!'
+          content: '用户'+name+'离开了会议室!'
         });
         this.$parent.$parent.$parent.$parent.$parent.getQueryMeetingRoomMembers();
-      });
-      $.client.on("client-banned",(user)=>{
-        debugger
       });
       [ $.userId, $.localAudioTrack, $.localVideoTrack ] = await Promise.all([
         $.client.join($.appId, $.channel, $.token || null,parseInt($.uid)),
@@ -181,7 +199,6 @@ export default {
         // 动态插入一个 DIV 节点作为播放远端视频轨道的容器。
         for(var i=0;i<$.userlist.length;i++){
           if(uid==$.userlist[i]['id']){
-            console.log($.userlist);
             // if($.userlist[i]['isMaster']){
             const playerContainer = document.createElement("div");
             playerContainer.id = user.uid.toString();

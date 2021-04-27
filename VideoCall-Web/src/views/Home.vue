@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\Home.vue
- * @LastEditTime: 2021-04-27 14:31:27
+ * @LastEditTime: 2021-04-27 15:51:49
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -16,7 +16,7 @@
         </Header>
         <Layout>
             <Sider hide-trigger breakpoint="md" class="container-sider" v-model="isCollapsed" collapsible :collapsed-width="0" ref="side1" hide-trigger :width="220">
-              <UserList @collapsed-sider="collapsedSider" :userlist="userlist"></UserList>
+              <UserList @collapsed-sider="collapsedSider" :userlists="userlist"></UserList>
               <div class="nextPage" v-if="isCollapsed" @click="collapsedSider">
                 <Icon type="ios-arrow-forward" />
               </div>

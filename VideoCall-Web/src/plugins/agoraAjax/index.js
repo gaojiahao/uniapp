@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 15:30:49
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-27 10:48:39
+ * @LastEditTime: 2021-04-27 15:43:38
  */
 import ajax from "./ajax";
 
@@ -16,4 +16,5 @@ export default {
   request: ajax.request,
   postJSON: ajax.postJSON,
   agoraAjax: ajax.agoraAjax,
+  delete:ajax.delete
 };

@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 15:46:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\user\userList.vue
- * @LastEditTime: 2021-04-27 10:50:31
+ * @LastEditTime: 2021-04-27 18:13:44
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -31,16 +31,17 @@
                 </div>
                 <div class="action">
                     {{item.isMaster?'主持人':''}}
-                    <i class="iconfont icon21maikefeng text" :class="[item.isMic ? 'outline':'eye']" @click="setMic(index)"  v-if="isAdmin"></i>
-                    <i class="iconfont iconshexiangtou text" :class="[item.isCar ? 'outline':'eye']" @click="setCar(index)"  v-if="isAdmin"></i>
+                    <i class="iconfont icon21maikefeng text" :class="[item.isMic ? 'outline':'eye']" @click="setKickingRuleAudio(item.id)"  v-if="isAdmin"></i>
+                    <i class="iconfont iconshexiangtou text" :class="[item.isCar ? 'outline':'eye']" @click="setKickingRuleCamera(item.id)"  v-if="isAdmin"></i>
                     <Dropdown  v-if="isAdmin">
                         <a href="javascript:void(0)">
                             <i class="iconfont iconzu1306 text"></i>
                         </a>
                         <DropdownMenu slot="list">
-                            <DropdownItem @click.native="setKickingRuleAudio(item.id)">禁止麦克风</DropdownItem>
-                            <DropdownItem @click.native="setKickingRuleCamera(item.id)">禁止摄像头</DropdownItem>
-                            <DropdownItem @click.native="setKickingRuleJoin(item.id)">删除</DropdownItem>
+                            <!-- <DropdownItem @click.native="setKickingRuleAudio(item.id)">禁止麦克风</DropdownItem>
+                            <DropdownItem @click.native="setKickingRuleCamera(item.id)">禁止摄像头</DropdownItem> -->
+                            <DropdownItem @click.native="setKickingRuleJoin(item.id)" v-if="!item.isDel">移除</DropdownItem>
+                            <DropdownItem @click.native="delKickingRule(item.id,item.isDel)" v-else>取消移除</DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 </div>
@@ -52,14 +53,15 @@
 import * as Cookies from "js-cookie";
 import {
   getUserList,
-  setKickingRule
+  setKickingRule,
+  delKickingRule
 } from "@service/agoraService";
 import {AGORA_APP_ID} from "@root/agora.config"
 
 export default {
     name:"userList",
     props:{
-        userlist: {
+        userlists: {
             type: Array,
             default () {
                 return []
@@ -74,11 +76,12 @@ export default {
         };
     },
     watch:{
-        userlist:{
+        userlists:{
             handler(val){
                 this.userList = val.map((e,index)=>{
                     e.isMic = true;
                     e.isCar = true;
+                    e.isDel = '';
                     return e;
                 });
                 this.test();
@@ -211,7 +214,7 @@ export default {
                     "join_channel"
                 ]
             };
-            
+            var me = this;
             return new Promise((resolve, reject) => {
                 this.$FromLoading.show();
                 setKickingRule(params).then(res => {
@@ -220,6 +223,16 @@ export default {
                         background: true,
                         content: '操作成功！'
                     });
+                    for(var i=0;i<me.userList.length;i++){
+                        if(uid==me.userList[i]['id']){
+                            var obj = {
+                                ...me.userList[i],
+                                isDel:res.id
+                            }
+                            me.$set(me.userList,i,obj);
+                            break;
+                        }
+                    }
                     this.$FromLoading.hide();     
                 } else {
                     this.$Message.error({
@@ -236,6 +249,43 @@ export default {
                 });
                 this.$FromLoading.hide();  
             });    
+        },
+        delKickingRule(uid,id){
+            var params = {
+                appid:AGORA_APP_ID,
+                id:id
+            };
+            var me = this;
+            return new Promise((resolve, reject) => {
+                this.$FromLoading.show();
+                delKickingRule(params).then(res => {
+                if (res.status=='success') {
+                    this.$Message.info({
+                        background: true,
+                        content: '操作成功！'
+                    });
+                    for(var i=0;i<me.userList.length;i++){
+                        if(uid==me.userList[i]['id']){
+                            me.userList[i]['isDel']='';
+                            break;
+                        }
+                    }
+                    this.$FromLoading.hide();     
+                } else {
+                    this.$Message.error({
+                        background: true,
+                        content: '操作失败！'
+                    });
+                    this.$FromLoading.hide();
+                }
+                });
+            }).catch(err=>{
+                this.$Message.error({
+                    background: true,
+                    content: '操作失败！'
+                });
+                this.$FromLoading.hide();  
+            });
         },
     },
     created(){

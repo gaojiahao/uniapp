@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-26 10:22:53
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\service\agoraService.js
- * @LastEditTime: 2021-04-27 10:47:11
+ * @LastEditTime: 2021-04-27 18:06:13
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -27,10 +27,9 @@ export let setKickingRule = (data = {}) => {
 };
 //删除封禁用户权限规则
 export let delKickingRule = (data = {}) => {
-    return $flyio.agoraAjax({
+    return $flyio.delete({
         url: '/dev/v1/kicking-rule',
         data:data,
-        type:'DELETE',
         contentType:'application/json'
     })
 };

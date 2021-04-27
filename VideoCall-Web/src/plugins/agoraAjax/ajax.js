@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 15:30:49
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-27 10:45:46
+ * @LastEditTime: 2021-04-27 18:13:22
  */
 import Fly from "flyio/dist/npm/fly";
 // 请求地址引入
@@ -207,6 +207,30 @@ let Rxports = {
           // reject(err);
           // console.log("err:", err);
         });
+    });
+  },
+  delete(opts = {}) {
+    return new Promise(function(resove,reject){
+      var xmlHttp = null;
+      if (XMLHttpRequest) {
+        xmlHttp = new XMLHttpRequest();
+      } else {
+        xmlHttp = new ActiveXObject('Microsoft.XMLHTTP');
+      };
+      var postData = JSON.stringify(opts.data);
+      xmlHttp.open('DELETE', process.env.VUE_APP_AGORA_API+opts.url, true);
+      xmlHttp.setRequestHeader("Authorization", window.sessionStorage.getItem('AGORA_TOKEN'));
+      xmlHttp.setRequestHeader(
+        "Content-Type",
+        "application/json;charset=utf-8"
+      );
+      xmlHttp.send(postData);
+      
+      xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+          resove(JSON.parse(xmlHttp.responseText));
+        }
+      };
     });
   },
   postJSON(opts = {}) {
