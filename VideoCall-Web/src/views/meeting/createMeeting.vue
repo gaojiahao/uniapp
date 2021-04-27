@@ -67,7 +67,8 @@ d<!--
 import * as Cookies from "js-cookie";
 import LoginFooter from "@components/footer/loginFooter";
 import {
-  CreateMeetingRoom
+  CreateMeetingRoom,
+  Update
 } from "@service/meetingService"
 
 export default {
@@ -178,11 +179,11 @@ export default {
               background: true,
               content: err.message
             });
-            this.$FromLoading.hide();  
+            this.$FromLoading.hide();
           });
         }
       })
-    }  
+    },
   },
   created(){
     this.$loading.hide();

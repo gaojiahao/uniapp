@@ -3,12 +3,12 @@
  * @Author: gaojiahao
  * @Date: 2021-04-26 10:22:53
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\service\agoraService.js
- * @LastEditTime: 2021-04-26 15:43:24
+ * @LastEditTime: 2021-04-27 10:47:11
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
  */
-import $flyio from '@plugins/ajax';
+import $flyio from '@plugins/agoraAjax';
 //------------------------------------------Meeting-----------------------------------------//
 //获取声网会议室用户列表
 export let getUserList = (data = {}) => {

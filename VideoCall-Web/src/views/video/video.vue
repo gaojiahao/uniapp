@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 16:54:22
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\video\video.vue
- * @LastEditTime: 2021-04-26 20:14:27
+ * @LastEditTime: 2021-04-27 10:34:07
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -129,6 +129,7 @@ export default {
             }
         },
         timeCount(){
+            this.isShow = false;
             this.endTime = Cookies.get("endTime");
             this.count = setInterval(this.timeFunction, 1000);
         },
@@ -143,7 +144,12 @@ export default {
         },
         showSetting(){
             this.$parent.$parent.$parent.$parent.$refs.footer.showModalDetail(true);
-        }
+        },
+        againCount(){
+            clearInterval(this.count);
+            this.timeCount();
+            this.$refs.endModal.againCount();
+        },
     },
     mounted(){
         this.timeCount();

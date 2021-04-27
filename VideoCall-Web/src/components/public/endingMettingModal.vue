@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-08 14:46:21
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\public\endingMettingModal.vue
- * @LastEditTime: 2021-04-26 20:13:50
+ * @LastEditTime: 2021-04-27 10:41:39
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -50,8 +50,8 @@ export default {
             handler(val){
                 this.show = val;
             },
-            deep:true,
-            immediate:true
+            // deep:true,
+            // immediate:true
         }
     },
     data() {
@@ -63,7 +63,8 @@ export default {
             mySeconds: '00',// 我定义来接收计算出来的 秒钟 的
             count:null,
             show:false,
-            endTime:null
+            endTime:null,
+            isAdmin:false,
         };
     },
     methods:{
@@ -81,6 +82,11 @@ export default {
             if(this.timeObj.seconds=='0'&&this.timeObj.minutes=='0'&this.timeObj.hours=='0'){
                 clearInterval(this.count);   
                 this.show = false;
+                if(this.isAdmin) {
+                    this.$parent.$parent.$parent.$parent.$parent.$refs.video.$refs.video.endMeeting();  //到点结束会议
+                } else {
+                    this.$parent.$parent.$parent.$parent.$parent.$refs.video.$refs.video.leave();    //普通用户离开
+                }
             }
             // 计算出时分秒
             this.myHours = this.timeObj.hours<10?'0'+this.timeObj.hours:this.timeObj.hours;
@@ -94,6 +100,12 @@ export default {
         },
         cancel(){
             this.show = false;
+        },
+        againCount(){
+            clearInterval(this.count);
+            this.currentTime = 300;
+            this.show = false;
+            this.isAdmin =  Cookies.get("isAdmin")=='true' ? true : false;
         }
     },
     created() {

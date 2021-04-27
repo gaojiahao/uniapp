@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 15:46:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\user\userList.vue
- * @LastEditTime: 2021-04-26 15:14:32
+ * @LastEditTime: 2021-04-27 10:50:31
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -81,6 +81,7 @@ export default {
                     e.isCar = true;
                     return e;
                 });
+                this.test();
             }
         }    
     },
@@ -239,7 +240,6 @@ export default {
     },
     created(){
         this.isAdmin = Cookies.get("isAdmin")=='true' ? true : false;
-        this.test();
     }
 }
 </script>

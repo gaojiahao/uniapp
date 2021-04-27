@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 15:30:49
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-27 09:30:19
+ * @LastEditTime: 2021-04-27 10:45:46
  */
 import Fly from "flyio/dist/npm/fly";
 // 请求地址引入
@@ -49,9 +49,7 @@ fly.interceptors.request.use(request => {
   }
   // token 存在则赋值在header当中
   if (token) {
-    //request.headers.Utoken = token;
-    //request.headers.Authorization =  request.headers.Authorization||'Bearer '+token;
-    request.headers.Authorization =  'Bearer '+token;
+    request.headers.Authorization =  request.headers.Authorization;
   } else {
     // token 不存在，锁住请求，优先请求token，后序请求进入队列
     fly.lock();
@@ -94,15 +92,15 @@ fly.interceptors.response.use(
   function(error) {
     // 响应拦截 报错标识
     if (error.status === 401) {
-      let token = tokenService.getToken();
-      fly.lock();
-      return tokenService.refreshToken({token:token}).then(token => {
-        console.log("token已更新");
-      }).finally(() => fly.unlock()) //解锁后，会继续发起请求队列中的任务 
-        .then(() => {
-          // console.log(`重新请求：path:${error.request.url}，baseURL:${error.request.baseURL}`)
-          return fly.request(error.request);
-      }); 
+      // let token = tokenService.getToken();
+      // fly.lock();
+      // return tokenService.refreshToken({token:token}).then(token => {
+      //   console.log("token已更新");
+      // }).finally(() => fly.unlock()) //解锁后，会继续发起请求队列中的任务 
+      //   .then(() => {
+      //     // console.log(`重新请求：path:${error.request.url}，baseURL:${error.request.baseURL}`)
+      //     return fly.request(error.request);
+      // }); 
     } else if (error.status === 400) {
       return Promise.resolve("网络请求：ERROR！")
     }

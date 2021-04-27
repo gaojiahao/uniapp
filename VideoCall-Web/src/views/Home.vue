@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\Home.vue
- * @LastEditTime: 2021-04-26 20:10:50
+ * @LastEditTime: 2021-04-27 14:31:27
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -65,7 +65,8 @@ export default {
       audioDevices:null,
       userlist:[],
       roomNumber:'',
-      meetingRoomInfo:{}
+      meetingRoomInfo:{},
+      isAdmin:false
     };
   },
   methods: {
@@ -112,6 +113,7 @@ export default {
       });  
     },
     QueryMeetingRoom(){
+
       return new Promise((resolve, reject) => {
         QueryMeetingRoom({roomNumber:this.roomNumber}).then(res => {
           if (res.success) {
@@ -135,7 +137,10 @@ export default {
     this.config = JSON.parse(window.sessionStorage.getItem("SPHY_LOGIN_TOKEN"));
     this.roomNumber = Cookies.get("channel");
     this.getQueryMeetingRoomMembers();
-    this.QueryMeetingRoom();
+    this.isAdmin = Cookies.get("isAdmin")=='true' ? true : false;
+    if(this.isAdmin){
+      this.QueryMeetingRoom();
+    }
   }
 };
 </script>

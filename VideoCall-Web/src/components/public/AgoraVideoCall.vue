@@ -87,11 +87,11 @@ export default {
         }
       }
       AgoraRTC.setLogLevel(0);  //日志级别0,1,2,3,4
-      $.client.enableDualStream().then(() => {
-        console.log("Enable Dual stream success!");
-      }).catch(err => {
-        console.log(err);
-      });
+      // $.client.enableDualStream().then(() => {
+      //   console.log("Enable Dual stream success!");
+      // }).catch(err => {
+      //   console.log(err);
+      // });
       // this.client.setRemoteVideoStreamType();
       $.client.on("user-published", this.handleUserPublished);
       $.client.on("user-unpublished", this.handleUserUnpublished);
@@ -135,6 +135,7 @@ export default {
       await $.client.publish([this.localAudioTrack, this.localVideoTrack]);
       console.log("publish success");
       this.testNetWork();
+      this.initDevices();
     },
     async leave(){
       this.$FromLoading.show();
@@ -391,6 +392,16 @@ export default {
     setVolum(value){
       this.localAudioTrack.setVolume(value);
     },
+    initDevices(){
+      var isMic = window.sessionStorage.getItem("isMic")=='true' ?true:false;
+      var isCar = window.sessionStorage.getItem("isCar")=='true' ?true:false;
+      if(!isMic){
+        this.$parent.$parent.$parent.$parent.$parent.$refs.footer.setMic();
+      }
+      if(!isCar){
+        this.$parent.$parent.$parent.$parent.$parent.$refs.footer.setCar();
+      }
+    },
     //开启/关闭摄像头
     async setEnabledCamera(value){
       await this.localVideoTrack.setEnabled(value);
@@ -446,6 +457,9 @@ export default {
       // await this.testDevices();
       // await this.join();
     }
+  },
+  mounted(){
+    
   },
   created() {
     this.init();

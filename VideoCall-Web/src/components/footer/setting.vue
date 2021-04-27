@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-11-03 16:35:57
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-23 17:42:24
+ * @LastEditTime: 2021-04-27 14:30:07
 -->
 <template>
     <Modal v-model="show" title="设置" @on-ok="ok" @on-cancel="cancel" width="430" draggable class="setting">
@@ -51,10 +51,8 @@
                         <Divider />
                         <div class="settings_wrap">
                             <div>设置新进入房间的会议人状态</div>
-                            <CheckboxGroup v-model="formValidate.settings" class="settings">
-                                <Checkbox label="isM">容许参会者进入房间时打开摄像头</Checkbox>
-                                <Checkbox label="isC">容许参会者进入房间时打开麦克风</Checkbox>
-                            </CheckboxGroup>
+                            <Checkbox v-model="formValidate.settings.isMic">容许参会者进入房间时打开麦克风</Checkbox>
+                            <Checkbox v-model="formValidate.settings.isCar">容许参会者进入房间时打开摄像头</Checkbox>
                         </div>
                         <div style="width:100%;"> 
                             <Button type="primary" @click="save" style="float: right;">确认</Button>
@@ -115,7 +113,8 @@
 <script>
 import * as Cookies from "js-cookie";
 import {
-  Update
+  Update,
+  QueryMeetingRoom
 } from "@service/meetingService";
 
 export default {
@@ -144,7 +143,10 @@ export default {
             formValidate:{
                 id:100007,
                 endTime:'',
-                settings:['isM','isC']
+                settings:{
+                    isMic:true,
+                    isCar:true
+                }
             },
             videoDevice:'',
             audioDevice:'',
@@ -177,6 +179,9 @@ export default {
         showModal: {
             handler(val) {
                 this.show = val;
+                if(val) {
+                    this.QueryMeetingRoom();
+                }
             }
         },
         videoDevices:{
@@ -211,11 +216,32 @@ export default {
         onChangeVideoEncoder(val){
             this.$emit('change-video-encoder',val.value);           
         },
+        QueryMeetingRoom(){
+            if(this.flag){
+                return new Promise((resolve, reject) => {
+                    QueryMeetingRoom({roomNumber:this.formValidate.id}).then(res => {
+                        if (res.success) {
+                            this.formValidate.endTime = res.data.endTime;
+                            this.formValidate.settings.isMic = res.data.isAllowOpenMicrophone;
+                            this.formValidate.settings.isCar = res.data.isAllowOpenCameras;
+                        } else {
+                            this.$Message.error({
+                                background: true,
+                                content: res.result.msg
+                            });
+                        }
+                    });
+                });
+            }
+        },
         save(){
             var params = {
                 roomNumber:this.formValidate.id,
-                endTime:this.formValidate.endTime
+                endTime:this.formValidate.endTime,
+                isAllowOpenCameras:this.formValidate.settings.isCar,
+                isAllowOpenMicrophone:this.formValidate.settings.isMic,
             };
+            var me = this;
             return new Promise((resolve, reject) => {
                 this.$FromLoading.show();
                 Update(params).then(res => {
@@ -224,7 +250,10 @@ export default {
                             background: true,
                             content: res.message
                         });
+                        me.$parent.$parent.$parent.$parent.$refs.video.againCount() //保存结束时间后，重新计算计时器
                         Cookies.set('endTime',res.data.endTime);
+                        window.sessionStorage.setItem("isMic",this.formValidate.settings.isMic);
+                        window.sessionStorage.setItem("isCar",this.formValidate.settings.isCar); 
                         this.$emit('show-modal-detail', false);
                         this.$FromLoading.hide(); 
                     }
@@ -234,7 +263,7 @@ export default {
                     background: true,
                     content: err.message
                 });
-                this.$FromLoading.hide(); 
+                this.$FromLoading.hide();
             });   
         }
     },

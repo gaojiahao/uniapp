@@ -117,6 +117,8 @@ export default {
                 Cookies.set("uid", res.data.meetingRoomMemberId);
                 Cookies.set("videoId", this.formValidate.videoId);
                 Cookies.set("companyName", res.data.companyName);
+                window.sessionStorage.setItem("isMic",res.data.isAllowOpenMicrophone);
+                window.sessionStorage.setItem("isCar",res.data.isAllowOpenCameras);
                 this.$router.push('/');  
               } else {
                 this.$Message.error({
