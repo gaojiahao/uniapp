@@ -22,27 +22,24 @@
                 </div>
               </el-image>
             </div>
-            <div class="clientsData">
-              <div class="name">{{ companyInfo.companyName }}</div>
-              <div class="tel">
-                <p v-if="companyInfo.contactsMan">
-                  联系人：{{ companyInfo.contactsMan }}
-                </p>
-                <p v-if="companyInfo.telePhoneNumber">
-                  电话：{{ companyInfo.telePhoneNumber }}
-                </p>
-                <p v-if="companyInfo.phoneNumber">
-                  手机：{{ companyInfo.phoneNumber }}
-                </p>
-                <p v-if="companyInfo.qq">QQ：{{ companyInfo.qq }}</p>
-                <p v-if="companyInfo.address">
-                  地址：{{ companyInfo.address }}
-                </p>
-                <p class="onlineConsultation" @click="toNews">
-                  <img src="~@/assets/images/consult.png" alt />
-                  在线咨询
-                </p>
-              </div>
+          <div class="clientsData">
+            <div class="name">{{ companyInfo.companyName }}</div>
+            <div class="tel">
+              <p v-if="companyInfo.contactsMan">
+                联系人：{{ companyInfo.contactsMan }}
+              </p>
+              <p v-if="companyInfo.telephoneNumber">
+                电话：{{ companyInfo.telephoneNumber }}
+              </p>
+              <p v-if="companyInfo.phoneNumber">
+                手机：{{ companyInfo.phoneNumber }}
+              </p>
+              <p v-if="companyInfo.qq">QQ：{{ companyInfo.qq }}</p>
+              <p v-if="companyInfo.address">地址：{{ companyInfo.address }}</p>
+              <p class="onlineConsultation" @click="toNews">
+                <img src="~@/assets/images/consult.png" alt />
+                在线咨询
+              </p>
             </div>
           </div>
           <div class="headTop">
