@@ -17,6 +17,7 @@ function myForEach(oList, yList) {
 }
 const store = new Vuex.Store({
   state: {
+    textSearch: "",
     myColles: [],
     isJindu: false,
     activeTab: "/bsIndex/bsHome",
@@ -280,27 +281,11 @@ const store = new Vuex.Store({
     // 测试
     //关闭全部tab页
     closeTabAll(state, router) {
-      console.log(state.activeTab, state.tabList);
-      // let activeTab;
-      // for (let i = 0; i < state.tabList.length; i++) {
-      //   if (state.tabList[i].name === state.activeTab) {
-      //     activeTab = state.tabList[i];
-      //     break;
-      //   }
-      // }
       const activeTab = state.tabList.find(val => val.name === state.activeTab);
       console.log(activeTab, router);
       v.$set(state, "tabList", []);
       state.tabList.push(activeTab);
       router.push(activeTab.linkUrl);
-      // const fd = {
-      //   component: "bsHome",
-      //   label: "后台首页",
-      //   linkUrl: "/bsIndex/bsHome",
-      //   name: "/bsIndex/bsHome",
-      //   refresh: true
-      // };
-      // state.activeTab = "/bsIndex/bsHome";
     },
 
     //关闭tab页

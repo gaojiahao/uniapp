@@ -691,13 +691,20 @@ export default {
       //     miniPrice: 0,
       //     miniPriceDecimalPlaces: 1
       //   };
-      this.subDialogVisible = true;
+
       await this.getSelectCompanyOffer();
       await this.getSelectProductOfferFormulaList();
       await this.getClientList();
       for (const key in this.itemList) {
         this.clienFormData[key] = this.itemList[key];
       }
+      const clientItem = this.clientList.find(
+        val => val.id == this.clienFormData.customerId
+      );
+      if (!clientItem) {
+        this.clienFormData.customerId = null;
+      };
+      this.subDialogVisible = true;
     },
     // 提交新增客户
     subMyClient() {
@@ -811,6 +818,9 @@ export default {
         if (res.data.result.code === 200) {
           this.$set(this.handerTabData, 0, res.data.result.item);
           this.itemList = res.data.result.item;
+          for (const key in this.itemList) {
+            this.clienFormData[key] = this.itemList[key];
+          }
         } else {
           this.$message.error(res.data.result.msg);
         }

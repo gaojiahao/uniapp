@@ -125,6 +125,10 @@ export default {
     eventBus.$on("imgSearch", () => {
       this.$refs.uploadRef.$children[0].$refs.input.click();
     });
+    eventBus.$on("txtSearch", val => {
+      console.log(val);
+      this.searchForm.keyword = val;
+    });
   },
   computed: {
     ...mapGetters({
@@ -133,6 +137,7 @@ export default {
   },
   beforeDestroy() {
     eventBus.$off("imgSearch");
+    eventBus.$off("txtSearch");
   }
 };
 </script>
