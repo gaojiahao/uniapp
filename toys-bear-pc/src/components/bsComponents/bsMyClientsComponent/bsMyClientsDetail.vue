@@ -27,8 +27,8 @@
               <p v-if="companyInfo.contactsMan">
                 联系人：{{ companyInfo.contactsMan }}
               </p>
-              <p v-if="companyInfo.telePhoneNumber">
-                电话：{{ companyInfo.telePhoneNumber }}
+              <p v-if="companyInfo.telephoneNumber">
+                电话：{{ companyInfo.telephoneNumber }}
               </p>
               <p v-if="companyInfo.phoneNumber">
                 手机：{{ companyInfo.phoneNumber }}
