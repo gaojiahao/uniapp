@@ -1,27 +1,26 @@
 <template>
-  <div>
-    <div class="bsMyClientsDetail">
-      <div class="hander">
-        <div class="handerBg"></div>
-        <div class="handerTitle">
-          <div class="top">
-            <div class="clientsImg">
-              <el-image
-                style=" width: 120px;
+  <div class="bsMyClientsDetail">
+    <div class="hander">
+      <div class="handerBg"></div>
+      <div class="handerTitle">
+        <div class="top">
+          <div class="clientsImg">
+            <el-image
+              style=" width: 120px;
             height: 120px;
             border-radius: 50%;;"
-                fit="contain"
-                :src="companyInfo.companyLogo"
-                lazy
-              >
-                <div slot="placeholder" class="image-slot">
-                  <img :src="require('@/assets/images/imgError.png')" />
-                </div>
-                <div slot="error" class="image-slot">
-                  <img :src="require('@/assets/images/imgError.png')" />
-                </div>
-              </el-image>
-            </div>
+              fit="contain"
+              :src="companyInfo.companyLogo"
+              lazy
+            >
+              <div slot="placeholder" class="image-slot">
+                <img :src="require('@/assets/images/imgError.png')" />
+              </div>
+              <div slot="error" class="image-slot">
+                <img :src="require('@/assets/images/imgError.png')" />
+              </div>
+            </el-image>
+          </div>
           <div class="clientsData">
             <div class="name">{{ companyInfo.companyName }}</div>
             <div class="tel">
