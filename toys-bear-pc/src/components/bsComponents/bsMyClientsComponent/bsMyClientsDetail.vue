@@ -22,178 +22,184 @@
                 </div>
               </el-image>
             </div>
-          <div class="clientsData">
-            <div class="name">{{ companyInfo.companyName }}</div>
-            <div class="tel">
-              <p v-if="companyInfo.contactsMan">
-                联系人：{{ companyInfo.contactsMan }}
-              </p>
-              <p v-if="companyInfo.telephoneNumber">
-                电话：{{ companyInfo.telephoneNumber }}
-              </p>
-              <p v-if="companyInfo.phoneNumber">
-                手机：{{ companyInfo.phoneNumber }}
-              </p>
-              <p v-if="companyInfo.qq">QQ：{{ companyInfo.qq }}</p>
-              <p v-if="companyInfo.address">地址：{{ companyInfo.address }}</p>
-              <p class="onlineConsultation" @click="toNews">
-                <img src="~@/assets/images/consult.png" alt />
-                在线咨询
-              </p>
+            <div class="clientsData">
+              <div class="name">{{ companyInfo.companyName }}</div>
+              <div class="tel">
+                <p v-if="companyInfo.contactsMan">
+                  联系人：{{ companyInfo.contactsMan }}
+                </p>
+                <p v-if="companyInfo.telephoneNumber">
+                  电话：{{ companyInfo.telephoneNumber }}
+                </p>
+                <p v-if="companyInfo.phoneNumber">
+                  手机：{{ companyInfo.phoneNumber }}
+                </p>
+                <p v-if="companyInfo.qq">QQ：{{ companyInfo.qq }}</p>
+                <p v-if="companyInfo.address">
+                  地址：{{ companyInfo.address }}
+                </p>
+                <p class="onlineConsultation" @click="toNews">
+                  <img src="~@/assets/images/consult.png" alt />
+                  在线咨询
+                </p>
+              </div>
             </div>
-          </div>
-          <div class="headTop">
-            <div
-              :class="{ tabs: true, active: isDiyu === 0 }"
-              @click="checkTabsAll(0)"
-            >
-              所有产品
-            </div>
-            <div
-              :class="{ tabs: true, active: isDiyu === 1 }"
-              @click="checkTabsAll(1)"
-            >
-              推荐产品
+            <div class="headTop">
+              <div
+                :class="{ tabs: true, active: isDiyu === 0 }"
+                @click="checkTabsAll(0)"
+              >
+                所有产品
+              </div>
+              <div
+                :class="{ tabs: true, active: isDiyu === 1 }"
+                @click="checkTabsAll(1)"
+              >
+                推荐产品
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="tableBox">
-        <div class="screenBox">
-          <div class="left" v-if="isDiyu === 0">
-            <div class="screenItem" @click="sortTypeEvent(null)">
-              <span :class="{ screenLabel: true, active: sortOrder === null }"
-                >综合</span
-              >
-            </div>
-            <div class="screenItem" @click="sortTypeEvent(1)">
-              <span :class="{ screenLabel: true, active: sortOrder === 1 }"
-                >单价</span
-              >
-              <i v-show="isPrice === null" class="jiantou xiajiantouIcon"></i>
-              <i v-show="isPrice === 1" class="jiantou xiaActiveIcon"></i>
-              <i v-show="isPrice === 2" class="jiantou shangActiveIcon"></i>
-            </div>
-            <div class="screenItem" @click="sortTypeEvent(2)">
-              <span :class="{ screenLabel: true, active: sortOrder === 2 }">
-                时间
-              </span>
-              <i v-show="isTime === null" class="jiantou xiajiantouIcon"></i>
-              <i v-show="isTime === 1" class="jiantou xiaActiveIcon"></i>
-              <i v-show="isTime === 2" class="jiantou shangActiveIcon"></i>
-            </div>
-            <div class="item">
-              <span class="label">关键词搜索:</span>
-              <el-input
-                type="text"
-                size="medium"
-                v-model="KeyWord"
-                placeholder="请输入关键词"
-                clearable
-                @keyup.native.enter="search"
-              ></el-input>
-            </div>
+        <div class="tableBox">
+          <div class="screenBox">
+            <div class="left" v-if="isDiyu === 0">
+              <div class="screenItem" @click="sortTypeEvent(null)">
+                <span :class="{ screenLabel: true, active: sortOrder === null }"
+                  >综合</span
+                >
+              </div>
+              <div class="screenItem" @click="sortTypeEvent(1)">
+                <span :class="{ screenLabel: true, active: sortOrder === 1 }"
+                  >单价</span
+                >
+                <i v-show="isPrice === null" class="jiantou xiajiantouIcon"></i>
+                <i v-show="isPrice === 1" class="jiantou xiaActiveIcon"></i>
+                <i v-show="isPrice === 2" class="jiantou shangActiveIcon"></i>
+              </div>
+              <div class="screenItem" @click="sortTypeEvent(2)">
+                <span :class="{ screenLabel: true, active: sortOrder === 2 }">
+                  时间
+                </span>
+                <i v-show="isTime === null" class="jiantou xiajiantouIcon"></i>
+                <i v-show="isTime === 1" class="jiantou xiaActiveIcon"></i>
+                <i v-show="isTime === 2" class="jiantou shangActiveIcon"></i>
+              </div>
+              <div class="item">
+                <span class="label">关键词搜索:</span>
+                <el-input
+                  type="text"
+                  size="medium"
+                  v-model="KeyWord"
+                  placeholder="请输入关键词"
+                  clearable
+                  @keyup.native.enter="search"
+                ></el-input>
+              </div>
 
-            <div class="item">
-              <el-button
-                @click="search"
-                type="primary"
-                icon="el-icon-search"
-                size="medium"
-              >
-                搜索
-              </el-button>
+              <div class="item">
+                <el-button
+                  @click="search"
+                  type="primary"
+                  icon="el-icon-search"
+                  size="medium"
+                >
+                  搜索
+                </el-button>
+              </div>
             </div>
-          </div>
-          <div class="left" v-if="isDiyu === 1">
-            <div class="screenItem" @click="sortTypeEvent(null)">
-              <span :class="{ screenLabel: true, active: sortOrder === null }"
-                >综合</span
-              >
+            <div class="left" v-if="isDiyu === 1">
+              <div class="screenItem" @click="sortTypeEvent(null)">
+                <span :class="{ screenLabel: true, active: sortOrder === null }"
+                  >综合</span
+                >
+              </div>
+              <div class="screenItem" @click="sortTypeEvent(1)">
+                <span :class="{ screenLabel: true, active: sortOrder === 1 }"
+                  >单价</span
+                >
+                <i v-show="isPrice === null" class="jiantou xiajiantouIcon"></i>
+                <i v-show="isPrice === 1" class="jiantou xiaActiveIcon"></i>
+                <i v-show="isPrice === 2" class="jiantou shangActiveIcon"></i>
+              </div>
+              <div class="screenItem" @click="sortTypeEvent(2)">
+                <span :class="{ screenLabel: true, active: sortOrder === 2 }">
+                  时间
+                </span>
+                <i v-show="isTime === null" class="jiantou xiajiantouIcon"></i>
+                <i v-show="isTime === 1" class="jiantou xiaActiveIcon"></i>
+                <i v-show="isTime === 2" class="jiantou shangActiveIcon"></i>
+              </div>
+              <div class="item">
+                <span class="label">关键词搜索:</span>
+                <el-input
+                  type="text"
+                  size="medium"
+                  v-model="searchForm.keyword"
+                  placeholder="请输入关键词"
+                  @keyup.native.enter="searchEcommend"
+                ></el-input>
+              </div>
+              <div class="item">
+                <el-button
+                  @click="searchEcommend"
+                  type="primary"
+                  size="medium"
+                  icon="el-icon-search"
+                >
+                  搜索
+                </el-button>
+              </div>
             </div>
-            <div class="screenItem" @click="sortTypeEvent(1)">
-              <span :class="{ screenLabel: true, active: sortOrder === 1 }"
-                >单价</span
-              >
-              <i v-show="isPrice === null" class="jiantou xiajiantouIcon"></i>
-              <i v-show="isPrice === 1" class="jiantou xiaActiveIcon"></i>
-              <i v-show="isPrice === 2" class="jiantou shangActiveIcon"></i>
-            </div>
-            <div class="screenItem" @click="sortTypeEvent(2)">
-              <span :class="{ screenLabel: true, active: sortOrder === 2 }">
-                时间
-              </span>
-              <i v-show="isTime === null" class="jiantou xiajiantouIcon"></i>
-              <i v-show="isTime === 1" class="jiantou xiaActiveIcon"></i>
-              <i v-show="isTime === 2" class="jiantou shangActiveIcon"></i>
-            </div>
-            <div class="item">
-              <span class="label">关键词搜索:</span>
-              <el-input
-                type="text"
-                size="medium"
-                v-model="searchForm.keyword"
-                placeholder="请输入关键词"
-                @keyup.native.enter="searchEcommend"
-              ></el-input>
-            </div>
-            <div class="item">
-              <el-button
-                @click="searchEcommend"
-                type="primary"
-                size="medium"
-                icon="el-icon-search"
-              >
-                搜索
-              </el-button>
-            </div>
-          </div>
-          <div class="right">
-            <div
-              :class="{ grid: true, active: isGrid === 'bsGridComponent' }"
-              @click="handerIsGrid('bsGridComponent')"
-            ></div>
-            <div
-              :class="{ column: true, active: isGrid === 'bsColumnComponent' }"
-              @click="handerIsGrid('bsColumnComponent')"
-            ></div>
-            <div class="line"></div>
-            <!-- <div class="totalCount">
+            <div class="right">
+              <div
+                :class="{ grid: true, active: isGrid === 'bsGridComponent' }"
+                @click="handerIsGrid('bsGridComponent')"
+              ></div>
+              <div
+                :class="{
+                  column: true,
+                  active: isGrid === 'bsColumnComponent'
+                }"
+                @click="handerIsGrid('bsColumnComponent')"
+              ></div>
+              <div class="line"></div>
+              <!-- <div class="totalCount">
             <span class="totalCountText">{{ totalCount }}</span>
             <span>条数据</span>
           </div> -->
-            <div class="myMinPagination">
-              <div @click="firstEvent" class="first el-icon-arrow-left"></div>
-              <div class="count">
-                <span class="pageIndex">{{ currentPage }}</span>
-                <span>/</span>
-                <span>{{ Math.ceil(totalCount / pageSize) }}</span>
+              <div class="myMinPagination">
+                <div @click="firstEvent" class="first el-icon-arrow-left"></div>
+                <div class="count">
+                  <span class="pageIndex">{{ currentPage }}</span>
+                  <span>/</span>
+                  <span>{{ Math.ceil(totalCount / pageSize) }}</span>
+                </div>
+                <div @click="nextEvent" class="next el-icon-arrow-right"></div>
               </div>
-              <div @click="nextEvent" class="next el-icon-arrow-right"></div>
             </div>
           </div>
-        </div>
-        <div class="productListBox">
-          <!-- 产品列表 -->
-          <component :is="isGrid" :productList="productList"></component>
-          <!-- 分页 -->
-          <center style="padding:20px 0;">
-            <el-pagination
-              layout="total, sizes, prev, pager, next, jumper"
-              :page-sizes="[12, 24, 36, 48]"
-              background
-              :total="totalCount"
-              :page-size="pageSize"
-              :current-page.sync="currentPage"
-              @current-change="handleCurrentChange"
-              @size-change="handleSizeChange"
-            ></el-pagination>
-          </center>
+          <div class="productListBox">
+            <!-- 产品列表 -->
+            <component :is="isGrid" :productList="productList"></component>
+            <!-- 分页 -->
+            <center style="padding:20px 0;">
+              <el-pagination
+                layout="total, sizes, prev, pager, next, jumper"
+                :page-sizes="[12, 24, 36, 48]"
+                background
+                :total="totalCount"
+                :page-size="pageSize"
+                :current-page.sync="currentPage"
+                @current-change="handleCurrentChange"
+                @size-change="handleSizeChange"
+              ></el-pagination>
+            </center>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="footer" v-if="totalCount >= 7">
-      <img src="@/assets/images/footerBg.png" alt="" />
+      <div class="footer" v-if="totalCount >= 7">
+        <img src="@/assets/images/footerBg.png" alt="" />
+      </div>
     </div>
   </div>
 </template>
