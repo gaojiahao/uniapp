@@ -962,6 +962,10 @@ export default {
     }
   },
   created() {
+    if (this.$route.query.searchTxt) {
+      this.searchForm.keyword = this.$route.query.searchTxt;
+      eventBus.$emit("txtSearch", this.searchForm.keyword);
+    }
     this.getProductList(true);
   },
   mounted() {
@@ -1017,6 +1021,9 @@ export default {
     this.$nextTick(() => {
       if (this.$route.query.id === "imgSearch") {
         eventBus.$emit("imgSearch");
+      }
+      if (this.$route.query.searchTxt) {
+        eventBus.$emit("txtSearch", this.searchForm.keyword);
       }
     });
   },

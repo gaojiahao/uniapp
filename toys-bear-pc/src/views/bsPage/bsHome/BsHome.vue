@@ -147,6 +147,7 @@
           <el-carousel
             indicator-position="outside"
             arrow="never"
+            :interval="4000"
             direction="horizontal"
           >
             <el-carousel-item v-for="(children, i) in minHalls" :key="i">
@@ -311,6 +312,8 @@
             :data="HotTableData"
             style="width: 100%"
             height="375"
+            @row-click="rowClick"
+            :row-style="rowStyle"
             :header-row-style="{ height: '40px', padding: '0' }"
             :header-cell-style="{ backgroundColor: '#f9fafc', padding: '0' }"
           >
@@ -325,7 +328,7 @@
             </el-table-column>
             <el-table-column prop="keyWord" label="关键词" width="420">
               <template slot-scope="scope">
-                <span style="font-size: 13px">
+                <span style="font-size: 13px;">
                   {{ scope.row.keyWord }}
                 </span>
               </template>
@@ -354,18 +357,6 @@ export default {
   name: "bsHome",
   data() {
     return {
-      sliderinit: {
-        currentPage: 0, //当前页码
-        thresholdDistance: 500, //滑动判定距离
-        thresholdTime: 100, //滑动判定时间
-        autoplay: 1000, //自动滚动[ms]
-        loop: true, //循环滚动
-        direction: "horizontal", //方向设置，垂直滚动
-        infinite: 1, // 无限滚动前后遍历数
-        slidesToScroll: 1, // 每次滑动项数
-        timingFunction: "ease",
-        duration: 300
-      },
       up_f: require("@/assets/images/up_f.png"),
       up_t: require("@/assets/images/up_t.png"),
       statisticsData: {
@@ -475,13 +466,25 @@ export default {
     };
   },
   methods: {
-    slideTo(data) {
-      console.log(data, 2123);
+    // 点击了行
+    rowClick(row) {
+      console.log(row);
+      const fd = {
+        name: "/bsIndex/bsProductSearchIndex",
+        linkUrl: "/bsIndex/bsProductSearchIndex?searchTxt=" + row.keyWord,
+        component: "bsProductSearchIndex",
+        refresh: true,
+        label: "产品查询"
+      };
+
+      this.$store.commit("myAddTab", fd);
+      this.$router.push(fd.linkUrl);
     },
-    slide(data) {
-      if (this.minHalls.length - data.currentPage == this.minHalls.length % 4) {
-        data.currentPage = 0;
-      }
+    // 行样式
+    rowStyle() {
+      return {
+        cursor: "pointer"
+      };
     },
     // 点击label
     openLabel(title) {
