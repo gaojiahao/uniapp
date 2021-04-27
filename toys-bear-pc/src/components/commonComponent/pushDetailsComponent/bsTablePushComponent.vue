@@ -73,24 +73,36 @@
       </div>
       <div class="right">
         <p>已选择推送厂家：{{ multipleSelection.length }}</p>
-        <el-button size="medium" type="primary" class="el-icon-position">
+        <el-button
+          size="medium"
+          type="primary"
+          class="el-icon-position"
+          @click="openDialog"
+        >
           推送</el-button
         >
       </div>
     </div>
+    <bsPushDialogComponent
+      @handleClose="handleClose"
+      :dialogVisible="dialogVisible"
+    ></bsPushDialogComponent>
   </div>
 </template>
 
 <script>
+import bsPushDialogComponent from "@/components/commonComponent/pushDetailsComponent/bsPushDialogComponent.vue";
 export default {
   props: {
     productList: {
       type: Array
     }
   },
+  components: { bsPushDialogComponent },
   data() {
     return {
       checkAll: false,
+      dialogVisible: false,
       multipleSelection: [],
       tabel: [
         {
@@ -122,6 +134,14 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
       console.log(this.multipleSelection);
+    },
+
+    // 推送弹框
+    openDialog() {
+      this.dialogVisible = true;
+    },
+    handleClose() {
+      this.dialogVisible = false;
     }
   },
   created() {},

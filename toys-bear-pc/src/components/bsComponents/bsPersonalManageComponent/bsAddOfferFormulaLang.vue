@@ -27,6 +27,9 @@
           :rows="2"
           placeholder="请输入内容"
           v-model="formData.content"
+          maxlength="100"
+          size="medium"
+          show-word-limit
         >
         </el-input>
       </el-form-item>

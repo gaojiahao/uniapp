@@ -1,48 +1,50 @@
 <template>
-  <div class="bsGridPushComponent">
-    <div class="gridBox">
-      <div class="title">
-        <div class="left">
-          <el-image
-            fit="contain"
-            style="width: 100px; height: 100px"
-            :src="productList.imgUrl"
-          >
-            <div slot="placeholder" class="errorImg">
-              <img
-                style="width: 100px; height: 100px"
-                src="~@/assets/images/imgError.png"
-                alt
-              />
-            </div>
-            <div slot="error" class="errorImg">
-              <img
-                style="width: 100px; height: 100px"
-                src="~@/assets/images/imgError.png"
-                alt
-              />
-            </div>
-          </el-image>
+  <div>
+    <div class="bsGridPushComponent">
+      <div class="gridBox">
+        <div class="title">
+          <div class="left">
+            <el-image
+              fit="contain"
+              style="width: 100px; height: 100px"
+              :src="productList.imgUrl"
+            >
+              <div slot="placeholder" class="errorImg">
+                <img
+                  style="width: 100px; height: 100px"
+                  src="~@/assets/images/imgError.png"
+                  alt
+                />
+              </div>
+              <div slot="error" class="errorImg">
+                <img
+                  style="width: 100px; height: 100px"
+                  src="~@/assets/images/imgError.png"
+                  alt
+                />
+              </div>
+            </el-image>
+          </div>
+          <div class="right">
+            <h4>腾彩玩具有限公司</h4>
+            <p>联系电话：15683860616</p>
+            <p class="onlineConsultation" @click="toNews">
+              <img src="~@/assets/images/consult.png" alt />
+              在线咨询
+            </p>
+          </div>
         </div>
-        <div class="right">
-          <h4>腾彩玩具有限公司</h4>
-          <p>联系电话：15683860616</p>
-          <p class="onlineConsultation" @click="toNews">
-            <img src="~@/assets/images/consult.png" alt />
-            在线咨询
-          </p>
+        <div class="cheDetail">
+          <p><el-checkbox label=""></el-checkbox></p>
+          <p><i class="el-icon-document"></i> 择样明细(4)</p>
+          <p><i class="el-icon-time"></i>推送记录(0)</p>
         </div>
       </div>
-      <div class="cheDetail">
-        <p><el-checkbox label=""></el-checkbox></p>
-        <p><i class="el-icon-document"></i> 择样明细(4)</p>
-        <p><i class="el-icon-time"></i>推送记录(0)</p>
-      </div>
+      <div class="kong"></div>
+      <div class="kong"></div>
+      <div class="kong"></div>
+      <div class="kong"></div>
     </div>
-    <div class="kong"></div>
-    <div class="kong"></div>
-    <div class="kong"></div>
-    <div class="kong"></div>
     <div class="PushFooter">
       <div class="left">
         <el-checkbox v-model="checkAll" @change="handleCheckAllChange"
@@ -51,24 +53,36 @@
       </div>
       <div class="right">
         <p>已选择推送厂家：{{ multipleSelection.length }}</p>
-        <el-button size="medium" type="primary" class="el-icon-position">
+        <el-button
+          size="medium"
+          type="primary"
+          class="el-icon-position"
+          @click="openDialog"
+        >
           推送</el-button
         >
       </div>
     </div>
+    <bsPushDialogComponent
+      @handleClose="handleClose"
+      :dialogVisible="dialogVisible"
+    ></bsPushDialogComponent>
   </div>
 </template>
 
 <script>
+import bsPushDialogComponent from "@/components/commonComponent/pushDetailsComponent/bsPushDialogComponent.vue";
 export default {
   props: {
     productList: {
       type: Array
     }
   },
+  components: { bsPushDialogComponent },
   data() {
     return {
       checkAll: false,
+      dialogVisible: false,
       multipleSelection: []
     };
   },
@@ -85,6 +99,13 @@ export default {
       };
       this.$router.push("/bsIndex/bsNews");
       this.$store.commit("myAddTab", fd);
+    },
+    // 推送弹框
+    openDialog() {
+      this.dialogVisible = true;
+    },
+    handleClose() {
+      this.dialogVisible = false;
     },
     //全选按钮
     handleCheckAllChange(val) {
@@ -171,17 +192,17 @@ export default {
     width: 390px;
     min-width: 390px;
   }
-  .PushFooter {
+}
+.PushFooter {
+  display: flex;
+  justify-content: space-between;
+  padding: 30px;
+  .right {
     display: flex;
-    justify-content: space-between;
-    padding: 30px;
-    .right {
-      display: flex;
-      align-items: center;
-      p {
-        margin: 0 20px;
-        color: #333333;
-      }
+    align-items: center;
+    p {
+      margin: 0 20px;
+      color: #333333;
     }
   }
 }
