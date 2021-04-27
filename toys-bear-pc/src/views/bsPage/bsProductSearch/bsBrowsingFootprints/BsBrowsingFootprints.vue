@@ -69,7 +69,7 @@
               class="btn"
               type="danger"
               size="medium"
-              @click="deleteAllBrowse(item.list)"
+              @click="deleteAllBrowse(item.browseDate)"
             >
               删除当天
             </el-button>
@@ -93,7 +93,7 @@
         </center>
       </div>
     </div>
-    <div class="footer">
+    <div class="footer" v-if="totalCount >= 7">
       <img src="@/assets/images/footerBg.png" alt="" />
     </div>
   </div>
@@ -132,7 +132,6 @@ export default {
       const fd = {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
-        keyword: this.keyword,
         startTime: this.dateTime && this.dateTime[0],
         endTime: this.dateTime && this.dateTime[1]
       };
@@ -156,6 +155,7 @@ export default {
           }
         }
         this.browseList = this.dataResort(item.items);
+        console.log(this.browseList);
         this.totalCount = res.data.result.item.totalCount;
       } else {
         this.totalCount = 0;
@@ -191,27 +191,23 @@ export default {
     },
     // 清空浏览记录
     async emptyBrowse() {
-      console.log("清空");
       const fd = {
-        type: 1
-        // deleteDate:
+        type: 3
       };
       this.$confirm("确定要清空吗?", {
         confirmButtonText: "确定",
         cancelButtonText: "取消"
       })
         .then(async () => {
-          const res = await this.$http.post("/api/UpdateProductOfferDetail", {
+          const res = await this.$http.post("/api/DeleteProductRecord", {
             fd
           });
           if (res.data.result.code === 200) {
+            this.getCollectList();
             this.$common.handlerMsgState({
-              msg: "删除成功",
+              msg: "清空成功",
               type: "success"
             });
-            // this.$store.commit("popOfferProductList", row);
-            this.getProductOfferDetailPage();
-            eventBus.$emit("resetSamplelist");
           } else {
             this.$common.handlerMsgState({
               msg: res.data.result.msg,
@@ -226,9 +222,26 @@ export default {
           });
         });
     },
-    // 删除当天
-    deleteAllBrowse(item) {
-      console.log(item);
+    // 删除当天浏览记录
+    async deleteAllBrowse(DeleteDate) {
+      console.log(DeleteDate);
+      const fd = {
+        deleteDate: DeleteDate,
+        type: 1
+      };
+      const res = await this.$http.post("/api/DeleteProductRecord", fd);
+      if (res.data.result.code === 200) {
+        this.getCollectList();
+        this.$common.handlerMsgState({
+          msg: "删除成功",
+          type: "success"
+        });
+      } else {
+        this.$common.handlerMsgState({
+          msg: "删除失败",
+          type: "danger"
+        });
+      }
     },
     // 去购物车
     toShoppingCart() {
@@ -438,7 +451,7 @@ export default {
 }
 .footer {
   background-color: #f1f3f6;
-  height: 100px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;

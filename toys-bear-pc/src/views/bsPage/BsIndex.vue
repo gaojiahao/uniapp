@@ -123,6 +123,9 @@ import bsVendorQuery from "@/views/bsPage/bsMyClients/bsVendorQuery/BsVendorQuer
 // 厂商查询-详情页
 import bsMyClientsDetail from "@/components/bsComponents/bsMyClientsComponent/bsMyClientsDetail.vue";
 
+// 货场查询
+import bsGoodsYardSearch from "@/views/bsPage/bsMyClients/bsGoodsYardSearch/BsGoodsYardSearch.vue";
+
 // 展厅择样
 import bsHallSample from "@/views/bsPage/bsBusinessManage/bsHallSample/BsHallSample.vue";
 // 展厅业务
@@ -178,6 +181,7 @@ export default {
     bsMyClients,
     bsVendorQuery,
     bsMyClientsDetail,
+    bsGoodsYardSearch,
     bsHallSample,
     bsHallBusiness,
     bsShoppingCart,

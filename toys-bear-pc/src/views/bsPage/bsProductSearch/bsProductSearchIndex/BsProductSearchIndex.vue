@@ -9,10 +9,7 @@
             @screeningShow="screeningShow"
           />
           <!-- 高级筛选 -->
-          <div
-             class="advancedScreening"
-            v-show="screeningFlag == true"
-          >
+          <div class="advancedScreening" v-show="screeningFlag == true">
             <div class="title">高级筛选:</div>
             <div class="queryCondition">
               <!-- <div>
@@ -529,7 +526,7 @@
         </div>
       </el-dialog>
     </div>
-    <div class="footer">
+    <div class="footer" v-if="totalCount >= 7">
       <img src="@/assets/images/footerBg.png" alt="" />
     </div>
   </div>
@@ -1449,7 +1446,7 @@ export default {
 }
 .footer {
   background-color: #f1f3f6;
-  height: 100px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
