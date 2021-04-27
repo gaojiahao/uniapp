@@ -811,6 +811,10 @@ export default {
         if (res.data.result.code === 200) {
           this.$set(this.handerTabData, 0, res.data.result.item);
           this.itemList = res.data.result.item;
+          for (const key in this.itemList) {
+            this.clienFormData[key] = this.itemList[key];
+          }
+          console.log();
         } else {
           this.$message.error(res.data.result.msg);
         }
