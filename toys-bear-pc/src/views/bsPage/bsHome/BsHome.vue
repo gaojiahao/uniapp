@@ -241,6 +241,8 @@
             v-show="hotValue === '热门择样'"
             :data="tableData"
             height="375"
+            @row-click="toProductDetails"
+            :row-style="rowStyle"
             :header-row-style="{ height: '40px', padding: '0' }"
             :header-cell-style="{ backgroundColor: '#f9fafc', padding: '0' }"
           >
@@ -466,6 +468,18 @@ export default {
     };
   },
   methods: {
+    // 去产品详情
+    toProductDetails(row) {
+      const fd = {
+        name: row.productNumber,
+        linkUrl: "/bsIndex/bsProductSearchIndex",
+        component: "bsProductDetails",
+        refresh: true,
+        label: row.fa_no || "产品详情",
+        value: row
+      };
+      this.$store.commit("myAddTab", fd);
+    },
     // 点击了行
     rowClick(row) {
       console.log(row);
