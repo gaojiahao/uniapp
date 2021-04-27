@@ -703,7 +703,7 @@ export default {
       );
       if (!clientItem) {
         this.clienFormData.customerId = null;
-      };
+      }
       this.subDialogVisible = true;
     },
     // 提交新增客户
