@@ -173,6 +173,7 @@
                 v-show="scope.row.offerNumber.indexOf('S') < 0"
                 size="mini"
                 type="info"
+                @click="toPushDetails(scope.$index, scope.row)"
                 >推送</el-button
               >
               <el-button
@@ -345,6 +346,20 @@ export default {
         label: "详情" + row.offerNumber,
         value: row
       };
+      this.$store.commit("myAddTab", fd);
+    },
+    // 推送跳转
+    toPushDetails(index, row) {
+      const fd = {
+        name: row.offerNumber + "报价推送",
+        linkUrl: "/bsIndex/bsSampleQuotation",
+        component: "bsPushIndex",
+        refresh: true,
+        noPush: true,
+        label: "报价推送" + row.offerNumber,
+        value: row
+      };
+      console.log(fd);
       this.$store.commit("myAddTab", fd);
     },
     //编辑报价跳转
