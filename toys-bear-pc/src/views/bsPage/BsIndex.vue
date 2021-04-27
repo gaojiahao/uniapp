@@ -105,6 +105,9 @@ import bsAccountManage from "@/views/bsPage/bsPersonalManage/bsAccountManage/BsA
 // 报价设置
 import bsQuotationSettings from "@/views/bsPage/bsPersonalManage/bsQuotationSettings/BsQuotationSettings.vue";
 
+// 推送详情
+import bsPushIndex from "@/components/commonComponent/pushDetailsComponent/bsPushIndex.vue";
+
 // 推送设置
 import bsPushSettings from "@/views/bsPage/bsPersonalManage/bsPushSettings/BsPushSettings.vue";
 
@@ -174,6 +177,7 @@ export default {
     bsBrowsingFootprints,
     bsAccountManage,
     bsQuotationSettings,
+    bsPushIndex,
     bsPushSettings,
     bsNews,
     bsMyGoodFriend,
