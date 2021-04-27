@@ -791,7 +791,6 @@ export default {
           type: "danger"
         });
       }
-      this.noticeType = null;
     }
   },
   created() {},
