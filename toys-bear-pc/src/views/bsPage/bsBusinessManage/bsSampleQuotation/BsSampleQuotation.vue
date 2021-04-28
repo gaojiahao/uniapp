@@ -349,18 +349,21 @@ export default {
       this.$store.commit("myAddTab", fd);
     },
     // 推送跳转
-    toPushDetails(index, row) {
-      const fd = {
-        name: row.offerNumber + "报价推送",
-        linkUrl: "/bsIndex/bsSampleQuotation",
-        component: "bsPushIndex",
-        refresh: true,
-        noPush: true,
-        label: "报价推送" + row.offerNumber,
-        value: row
-      };
-      console.log(fd);
-      this.$store.commit("myAddTab", fd);
+    // toPushDetails(index, row) {
+    //   const fd = {
+    //     name: row.offerNumber + "报价推送",
+    //     linkUrl: "/bsIndex/bsSampleQuotation",
+    //     component: "bsPushIndex",
+    //     refresh: true,
+    //     noPush: true,
+    //     label: "报价推送" + row.offerNumber,
+    //     value: row
+    //   };
+    //   console.log(fd);
+    //   this.$store.commit("myAddTab", fd);
+    // },
+    toPushDetails() {
+      return false;
     },
     //编辑报价跳转
     async handleEdit(index, row) {
