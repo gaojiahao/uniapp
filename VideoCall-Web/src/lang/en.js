@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 20:28:08
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\lang\en.js
- * @LastEditTime: 2021-04-28 19:04:56
+ * @LastEditTime: 2021-04-28 19:23:10
  * @LastEditors: sueRimn
  * @Descripttion:
  * @version: 1.0.0
@@ -79,7 +79,8 @@ export default {
     button:'confirm',
     camera:'Camera',
     audio:'Mic',
-    resolutionRatio:'Resolution ratio'
+    resolutionRatio:'Resolution ratio',
+    volume:'Volume'
   },
   addSampling:{
     orderTitle:'Order No.',

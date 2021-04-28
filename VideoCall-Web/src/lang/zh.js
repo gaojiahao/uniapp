@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 20:28:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\lang\zh.js
- * @LastEditTime: 2021-04-28 19:06:36
+ * @LastEditTime: 2021-04-28 19:23:35
  * @LastEditors: sueRimn
  * @Descripttion:
  * @version: 1.0.0
@@ -78,7 +78,8 @@ export default {
     button:'确认',
     camera:'摄像头',
     audio:'麦克风',
-    resolutionRatio:'分辨率'
+    resolutionRatio:'分辨率',
+    volume:'音量'
   },
   addSampling:{
     orderTitle:'择样单号',

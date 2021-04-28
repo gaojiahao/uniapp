@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 19:15:58
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\footer.vue
- * @LastEditTime: 2021-04-28 11:49:11
+ * @LastEditTime: 2021-04-28 19:30:36
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -31,12 +31,12 @@
                     </div>
                     <Divider type="vertical" />
                     <div class="timer item">
-                        <Poptip trigger="hover" title="" content="content">
+                        <!-- <Poptip trigger="hover" title="" content="content">
                             <div class="api" slot="content">
                                 <Slider v-model="volum" style="width:100px;" @on-input="onInput"></Slider>    
-                            </div>
+                            </div> -->
                             <i class="iconfont icon21maikefeng icon" :class="[isMic ? 'outline':'eye']" @click="setMic()"></i>
-                        </Poptip>
+                        <!-- </Poptip> -->
                         <span class="time-card-count text">{{$t("footer.isMic")}}</span>
                     </div>
                     <Divider type="vertical" />
@@ -65,7 +65,7 @@
                 </div>
             </Col>
         </Row>
-        <Setting @show-modal-detail="showModalDetail" :showModal="showModal" :videoDevices="videoDevices" :audioDevices="audioDevices" @change-devices="changeDevices" @change-video-encoder="changeVideoEncoder"></Setting>
+        <Setting @show-modal-detail="showModalDetail" :showModal="showModal" :videoDevices="videoDevices" :audioDevices="audioDevices" @change-devices="changeDevices" @change-video-encoder="changeVideoEncoder" @set-volum="onInput"></Setting>
         <EscModal @sure-close="sureClose" @cancel-close="cancelClose" :isShowEsc="isShowEsc"></EscModal>
         <ReconnectionModal @reconnection-close="reconnectionClose" @cancel-reconnection="cancelReconnection" :isShowReconnection="isShowReconnection"></ReconnectionModal>
     </div>

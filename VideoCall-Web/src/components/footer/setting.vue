@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-11-03 16:35:57
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-28 12:28:28
+ * @LastEditTime: 2021-04-28 19:28:29
 -->
 <template>
     <Modal v-model="show" :title="$t('settings.settings')" @on-ok="ok" @on-cancel="cancel" width="430" draggable class="setting">
@@ -100,6 +100,17 @@
                                 </Select>
                             </div>    
                         </div>
+                        <div class="item">
+                            <div class="icon">
+                                <Icon type="ios-volume-up" />    
+                            </div>
+                            <div class="title">
+                                {{$t("settings.volume")}}
+                            </div>
+                            <div class="text">
+                                <div style="width: 200px;"><Slider v-model="volume" @on-input="onInput"></Slider></div>
+                            </div>    
+                        </div>
                     </div>
                 </TabPane>
             </Tabs>
@@ -173,6 +184,7 @@ export default {
                     return date && date.valueOf() < Date.now(endTime) - 86400000;
                 }
             },
+            volume:100,
         }
     },
     watch:{
@@ -265,7 +277,11 @@ export default {
                 });
                 this.$FromLoading.hide();
             });   
-        }
+        },
+        //调整通话音量
+        onInput(value){
+            this.$emit('set-volum',value);
+        },
     },
     mounted() {
 
