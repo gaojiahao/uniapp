@@ -549,6 +549,7 @@ export default {
   },
   data() {
     return {
+      hallCateSearch: null,
       loading: false,
       baseImg: null,
       fileinfo: null,
@@ -594,6 +595,7 @@ export default {
       pageSize: 12,
       totalCount: 0,
       searchForm: {
+        companyNumber: null,
         keyword: "",
         minPrice: "",
         maxPrice: "",
@@ -1017,10 +1019,19 @@ export default {
         eventBus.$emit("imgSearch");
       }
       if (this.searchTxt != "") {
+        // 首页文字搜索跳转
         this.searchForm.keyword = this.searchTxt;
         this.getProductList(true);
         this.$store.commit("handlerSearchTxt", "");
+      } else if (this.searchHallCate) {
+        // 展厅主页带分类搜索
+        this.hallCateSearch = this.searchHallCate;
+        this.searchForm.keyword = this.searchHallCate.keyword;
+        console.log(this.hallCateSearch, this.searchForm.keyword);
+        // this.getProductList(true);
+        this.$store.commit("handlerHallSearchCate", null);
       } else {
+        // 默认搜索
         this.getProductList(true);
       }
     });
@@ -1031,7 +1042,7 @@ export default {
     }),
     ...mapState(["searchImgPreview"]),
     ...mapState(["imageSearchValue"]),
-    ...mapState(["myColles", "searchTxt"])
+    ...mapState(["myColles", "searchTxt", "searchHallCate"])
   },
   watch: {
     shoppingList(list) {
@@ -1452,6 +1463,7 @@ export default {
 .footer {
   background-color: #f1f3f6;
   height: 80px;
+  padding-top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;

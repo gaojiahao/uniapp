@@ -267,7 +267,7 @@
               <template slot-scope="scope">
                 <div class="productInfo">
                   <el-image
-                    style="width: 70px; height: 54px"
+                    style="width: 70px; height: 54px; min-width: 70px;"
                     :src="scope.row.imgUrl"
                     fit="contain"
                   >
@@ -503,12 +503,11 @@ export default {
     rowClick(row) {
       const fd = {
         name: "/bsIndex/bsProductSearchIndex",
-        linkUrl: "/bsIndex/bsProductSearchIndex?=" + row.keyWord,
+        linkUrl: "/bsIndex/bsProductSearchIndex",
         component: "bsProductSearchIndex",
         refresh: true,
         label: "产品查询"
       };
-
       this.$store.commit("myAddTab", fd);
       this.$router.push(fd.linkUrl);
       this.$store.commit("handlerSearchTxt", row.keyWord);
@@ -613,19 +612,19 @@ export default {
           };
           break;
         case "浏览足迹":
-          // this.$common.handlerMsgState({
-          //   msg: "敬请期待",
-          //   type: "warning"
-          // });
-          // return false;
-          fd = {
-            name: "/bsIndex/bsBrowsingFootprints",
-            linkUrl: "/bsIndex/bsBrowsingFootprints",
-            component: "bsBrowsingFootprints",
-            refresh: true,
-            label: title
-          };
-          break;
+          this.$common.handlerMsgState({
+            msg: "敬请期待",
+            type: "warning"
+          });
+          return false;
+        // fd = {
+        //   name: "/bsIndex/bsBrowsingFootprints",
+        //   linkUrl: "/bsIndex/bsBrowsingFootprints",
+        //   component: "bsBrowsingFootprints",
+        //   refresh: true,
+        //   label: title
+        // };
+        // break;
         case "站点分享":
           fd = {
             name: "/bsIndex/bsSiteLlis",
@@ -1150,6 +1149,11 @@ export default {
               white-space: nowrap; /*不换行*/
               text-overflow: ellipsis; /*超出部分文字以...显示*/
             }
+          }
+          .el-image {
+            width: 70px;
+            height: 54px;
+            min-width: 70px;
           }
         }
       }

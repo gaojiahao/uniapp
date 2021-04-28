@@ -21,11 +21,11 @@
         </li>
         <li class="clientItem">
           <span>联系人：</span>
-          <span class="content">{{ item.email }}</span>
+          <span class="content">{{ item.contactName }}</span>
         </li>
         <li class="clientItem">
           <span>邮箱：</span>
-          <span class="content">{{ item.remark }}</span>
+          <span class="content">{{ item.email }}</span>
         </li>
       </div>
       <div class="clientContentBox">
@@ -40,40 +40,6 @@
           <span class="content">{{ item.remark }}</span>
         </li>
       </div>
-      <!-- <div class="left">
-          <li class="clientItem">
-            <span>客户：</span>
-            <span class="content">{{ item.customerName }}</span>
-          </li>
-          <li class="clientItem">
-            <span>择样时间：</span>
-            <span class="content">
-              {{ item.createdOn && item.createdOn.replace(/T/, " ") }}
-            </span>
-          </li>
-        </div>
-        <div class="middle">
-          <li class="clientItem">
-            <span>业务员：</span>
-            <span class="content">{{ item.createdBy }}</span>
-          </li>
-          <li class="clientItem">
-            <span>备注：</span>
-            <span class="content">{{ item.remark }}</span>
-          </li>
-        </div>
-        <div class="right">
-          <li class="clientItem">
-            <span>公司名称：</span>
-            <span class="content">{{ item.companyName }}</span>
-          </li>
-        </div>
-        <div class="right">
-          <li class="clientItem">
-            <span>联系人：</span>
-            <span class="content">{{ item.email }}</span>
-          </li>
-        </div> -->
     </ul>
     <div class="tableBox">
       <div class="tableTitle">

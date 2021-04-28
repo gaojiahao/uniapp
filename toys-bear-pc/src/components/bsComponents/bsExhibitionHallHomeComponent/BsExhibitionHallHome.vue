@@ -148,15 +148,25 @@
             placeholder="请输入关键词"
             size="medium"
             v-model="productKeyword"
+            @keyup.native.enter="toSearch"
             clearable
           >
           </el-input>
-          <el-button size="medium" type="primary" icon="el-icon-search"
+          <el-button
+            size="medium"
+            @click="toSearch"
+            type="primary"
+            icon="el-icon-search"
             >搜索</el-button
           >
         </div>
         <div class="productList">
-          <div class="itemProduct" v-for="(item, i) in cateList" :key="i">
+          <div
+            class="itemProduct"
+            v-for="(item, i) in cateList"
+            :key="i"
+            @click="toSearchProduct(item)"
+          >
             <span class="text">{{ item.categoryName }}</span>
           </div>
         </div>
@@ -187,6 +197,44 @@ export default {
     // 切换
     changActiveName(number) {
       this.activeName = number;
+    },
+    // 不带分类去查产品
+    toSearch() {
+      const fd = {
+        name: "/bsIndex/bsProductSearchIndex",
+        linkUrl: "/bsIndex/bsProductSearchIndex",
+        component: "bsProductSearchIndex",
+        refresh: true,
+        label: "产品查询"
+      };
+      // this.$store.commit("myAddTab", fd);
+      // this.$router.push(fd.linkUrl);
+      const option = {
+        companyInfo: this.companyInfo,
+        cate: null,
+        keyword: this.productKeyword
+      };
+      console.log(option, fd);
+      // this.$store.commit("handlerSearchCate", fd);
+    },
+    // 带分类去查产品
+    toSearchProduct(item) {
+      const fd = {
+        name: "/bsIndex/bsProductSearchIndex",
+        linkUrl: "/bsIndex/bsProductSearchIndex",
+        component: "bsProductSearchIndex",
+        refresh: true,
+        label: "产品查询"
+      };
+      this.$store.commit("myAddTab", fd);
+      this.$router.push(fd.linkUrl);
+      const option = {
+        companyInfo: this.companyInfo,
+        cate: item,
+        keyword: this.productKeyword
+      };
+      console.log(option);
+      this.$store.commit("handlerHallSearchCate", option);
     },
     // 去厂商
     toFactory(item) {
