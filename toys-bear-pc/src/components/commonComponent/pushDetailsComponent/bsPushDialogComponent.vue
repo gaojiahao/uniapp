@@ -2,9 +2,9 @@
   <div class="bsPushDialogComponent">
     <el-dialog
       title="推送"
-      :visible.sync="dialogVisible"
+      :visible.sync="pushDialog"
       width="40%"
-      :before-close="handleClose"
+      :before-close="closeDialog"
     >
       <div class="pushBox">
         <div class="titleDar">
@@ -36,7 +36,7 @@
       <center style="margin-top: 10px">
         <template>
           <el-button type="primary">确定推送</el-button>
-          <el-button style="margin-left: 30px" plain @click="handleClose"
+          <el-button style="margin-left: 30px" plain @click="closeDialog"
             >取消</el-button
           >
         </template>
@@ -67,7 +67,7 @@ export default {
     productList: {
       type: Array
     },
-    dialogVisible: {
+    pushDialog: {
       type: Boolean
     }
   },
@@ -109,8 +109,8 @@ export default {
   },
   methods: {
     //关闭弹框
-    handleClose() {
-      this.$emit("handleClose");
+    closeDialog() {
+      this.$emit("handlePushDialog", false);
     },
     //新增消息模板
     addMsgTemplate() {
