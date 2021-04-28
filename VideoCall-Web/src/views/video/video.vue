@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 16:54:22
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\video\video.vue
- * @LastEditTime: 2021-04-27 10:34:07
+ * @LastEditTime: 2021-04-28 18:40:41
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -12,7 +12,7 @@
     <div class="video">
         <div class="error">
             <img :src="cameraPic">
-            <p class="text">您的设备未检测到摄像头</p> 
+            <p class="text">{{$t("other.noCamera")}}</p> 
         </div>
         <div class="box">
             <AgoraVideoCall 

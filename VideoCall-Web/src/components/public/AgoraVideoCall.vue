@@ -74,7 +74,7 @@ export default {
       if(!$.videoDevices.length){
         this.$Message.error({
           background: true,
-          content: '温馨提示：未检测到摄像头'
+          content: this.$t("video.tipCamera")
         });
         return false;
       } else {
@@ -113,7 +113,7 @@ export default {
         }
         this.$Message.info({
           background: true,
-          content: '用户'+name+'加入了会议室!'
+          content: this.$t("video.user")+name+this.$t("video.join")
         });
         this.$parent.$parent.$parent.$parent.$parent.getQueryMeetingRoomMembers();
       });
@@ -129,7 +129,7 @@ export default {
         }
         this.$Message.info({
           background: true,
-          content: '用户'+name+'离开了会议室!'
+          content: this.$t("video.user")+name+this.$t("video.leave")
         });
         this.$parent.$parent.$parent.$parent.$parent.getQueryMeetingRoomMembers();
       });
@@ -435,7 +435,7 @@ export default {
       this.localVideoTrack.setEncoderConfiguration(value).then(res => {
         this.$Message.info({
           background: true,
-          content: '温馨提示：切换清晰度成功'
+          content: this.$t("video.definition")
         });   
       }).catch(e=>{
         console.log(e);
@@ -466,7 +466,7 @@ export default {
         if (changedDevice.state === "ACTIVE") {
           this.$Message.info({
             background: true,
-            content: '温馨提示：设备已插入'
+            content: this.$t("video.deviceIn")
           });
           $.localVideoTrack&&$.localVideoTrack.setDevice(changedDevice.device.deviceId);
           location.reload();
@@ -474,14 +474,14 @@ export default {
         } else if (changedDevice.device.label === $.localVideoTrack&&$.localVideoTrack.getTrackLabel()) {
           this.$Message.info({
             background: true,
-            content: '温馨提示：设备已切换'
+            content: this.$t("video.deviceChange")
           });
           const oldCameras = await AgoraRTC.getCameras();
           oldCameras[0] &&  $.localVideoTrack.setDevice(oldCameras[0].deviceId);
         } else if(changedDevice.state === "INACTIVE") {
           this.$Message.error({
             background: true,
-            content: '温馨提示：设备已拔出'
+            content: this.$t("video.deviceOut")
           });  
         }
       };

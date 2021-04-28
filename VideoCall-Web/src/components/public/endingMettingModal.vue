@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-08 14:46:21
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\public\endingMettingModal.vue
- * @LastEditTime: 2021-04-27 10:41:39
+ * @LastEditTime: 2021-04-28 18:58:46
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -12,7 +12,7 @@
     <div class="timeModal" v-if="show">
         <div class="title">
             <Icon type="ios-alert" class="icon" />
-            <div>会议即将结束！</div>
+            <div>{{$t("modal.endMeeting")}}</div>
         </div>
         <div class="time">
             <div class="timer item">
@@ -30,8 +30,8 @@
             </div>
         </div>
         <div class="action">
-            <Button type="primary" shape="circle" style="width:88px;margin:0 14px 0 28px;" @click="showSettings">重新设置</Button>
-            <Button type="warning" shape="circle" style="width:88px;margin:0 28px 0 14px;background:#E6E6E6;border-color:#E6E6E6;color:#666666" @click="cancel">取消</Button>
+            <Button type="primary" shape="circle" style="width:88px;margin:0 14px 0 28px;" @click="showSettings">{{$t("modal.endReset")}}</Button>
+            <Button type="warning" shape="circle" style="width:88px;margin:0 28px 0 14px;background:#E6E6E6;border-color:#E6E6E6;color:#666666" @click="cancel">{{$t("modal.endCancel")}}</Button>
         </div>
     </div>
 </template>

@@ -4,34 +4,34 @@
  * @Author: gaojiahao
  * @Date: 2020-11-03 16:35:57
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-27 14:30:07
+ * @LastEditTime: 2021-04-28 12:28:28
 -->
 <template>
-    <Modal v-model="show" title="设置" @on-ok="ok" @on-cancel="cancel" width="430" draggable class="setting">
+    <Modal v-model="show" :title="$t('settings.settings')" @on-ok="ok" @on-cancel="cancel" width="430" draggable class="setting">
         <div class="setting_panel">
             <Tabs :value="modal" :animated="false">
-                <TabPane label="房间设置" name="name1" v-if="flag">
+                <TabPane :label="$t('settings.roomSettingTitle')" name="name1" v-if="flag">
                     <div class="setting_room_wrap">
                         <div class="item">
                             <div class="icon">
                                 <Icon type="ios-albums" />            
                             </div>
                             <div class="title">
-                                房间ID
+                                {{$t("settings.meetingsId")}}
                             </div>
                             <div class="text">
                                 <Input v-model="formValidate['id']" :style="{width:'113px'}" :maxlength="7" disabled></Input>
                             </div>
-                            <div class="action">
+                            <!-- <div class="action">
                                 <Icon type="md-sync" />刷新
-                            </div>
+                            </div> -->
                         </div>
                         <div class="item">
                             <div class="icon">
                                 <Icon type="ios-calendar-outline" />       
                             </div>
                             <div class="title">
-                                结束时间
+                                {{$t("settings.endTime")}}
                             </div>
                             <div class="text">
                                 <DatePicker type="datetime" v-model="formValidate['endTime']" @on-change="formValidate['endTime']=$event" format="yyyy-MM-dd HH:mm" style="width: 226px;" :transfer='true' :options="options"></DatePicker> 
@@ -39,34 +39,34 @@
                         </div>
                         <div class="item">
                             <div class="icon">
-                                <Icon type="md-bicycle" />       
+                                <Icon type="md-person" /> 
                             </div>
                             <div class="title">
-                                主持人
+                                {{$t("settings.host")}}
                             </div>
                             <div class="text">
-                                我
+                                {{$t("settings.me")}}
                             </div>
                         </div>
                         <Divider />
                         <div class="settings_wrap">
-                            <div>设置新进入房间的会议人状态</div>
-                            <Checkbox v-model="formValidate.settings.isMic">容许参会者进入房间时打开麦克风</Checkbox>
-                            <Checkbox v-model="formValidate.settings.isCar">容许参会者进入房间时打开摄像头</Checkbox>
+                            <div>{{$t("settings.settingsStatus")}}</div>
+                            <Checkbox v-model="formValidate.settings.isMic">{{$t("settings.isMic")}}</Checkbox>
+                            <Checkbox v-model="formValidate.settings.isCar">{{$t("settings.isCar")}}</Checkbox>
                         </div>
                         <div style="width:100%;"> 
-                            <Button type="primary" @click="save" style="float: right;">确认</Button>
+                            <Button type="primary" @click="save" style="float: right;">{{$t("settings.button")}}</Button>
                         </div>
                     </div>
                 </TabPane>
-                <TabPane label="个人设置" name="name2">
+                <TabPane :label="$t('settings.personalSettingTitle')" name="name2">
                     <div class="setting_room_wrap">
                         <div class="item">
                             <div class="icon">
-                                <Icon type="ios-calendar-outline" />       
+                                <Icon type="ios-videocam" />
                             </div>
                             <div class="title">
-                                摄像头
+                                {{$t("settings.camera")}}
                             </div>
                             <div class="text">
                                 <Select v-model="videoDevice" :style="{width:'200px',float: 'left'}" clearable @on-select="onChangeVideoDevice" :transfer='true'>
@@ -76,10 +76,10 @@
                         </div>
                         <div class="item">
                             <div class="icon">
-                                <Icon type="ios-calendar-outline" />       
+                                <Icon type="ios-mic" />
                             </div>
                             <div class="title">
-                                麦克风
+                                {{$t("settings.audio")}}
                             </div>
                             <div class="text">
                                 <Select v-model="audioDevice" :style="{width:'200px',float: 'left'}" clearable  @on-select="onChangeAudioDevice" :transfer='true'>
@@ -89,10 +89,10 @@
                         </div>
                         <div class="item">
                             <div class="icon">
-                                <Icon type="ios-calendar-outline" />       
+                                <Icon type="ios-cog-outline" />    
                             </div>
                             <div class="title">
-                                视频清晰度
+                                {{$t("settings.resolutionRatio")}}
                             </div>
                             <div class="text">
                                 <Select v-model="videoEncoder" :style="{width:'200px',float: 'left'}" clearable  @on-select="onChangeVideoEncoder" :transfer='true'>
@@ -302,7 +302,7 @@ export default {
 }
 .setting .setting_panel{
     display: flex;
-    height: 387px;
+    // height: 387px;
     .setting_room_wrap {
         padding: 15px;
         .item {

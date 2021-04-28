@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 19:15:58
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\footer.vue
- * @LastEditTime: 2021-04-28 10:13:43
+ * @LastEditTime: 2021-04-28 11:49:11
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -37,12 +37,12 @@
                             </div>
                             <i class="iconfont icon21maikefeng icon" :class="[isMic ? 'outline':'eye']" @click="setMic()"></i>
                         </Poptip>
-                        <span class="time-card-count text">音频</span>
+                        <span class="time-card-count text">{{$t("footer.isMic")}}</span>
                     </div>
                     <Divider type="vertical" />
                     <div class="timer item">
                         <i class="iconfont iconshexiangtou icon" :class="[isCar ? 'outline':'eye']" @click="setCar()"></i>
-                        <span class="time-card-count text">视频</span>
+                        <span class="time-card-count text">{{$t("footer.isCar")}}</span>
                     </div>
                     <Divider type="vertical" />
                     <div class="timer item">

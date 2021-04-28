@@ -21,7 +21,7 @@ d<!--
               <Col span="8">
               </Col>
               <Col span="8">
-                <div class="item active">进入会议</div>
+                <div class="item active">{{$t("addMeeting.title")}}</div>
               </Col>
               <Col span="8">
               </Col>
@@ -31,21 +31,21 @@ d<!--
             <!-- <FormItem label="会议ID" prop="id">
               <Input v-model="formValidate['id']" :style="{width:'300px',marginLeft: '-50px'}" :maxlength="11" disabled></Input>
             </FormItem> -->
-            <FormItem label="公司名称" prop="company">
-              <Input v-model="formValidate['company']" :style="{width:'300px',marginLeft: '-47px'}" placeholder="请输入公司名称"></Input>
+            <FormItem :label="$t('addMeeting.company')" prop="company">
+              <Input v-model="formValidate['company']" :style="{width:'300px',marginLeft: '-47px'}" :placeholder="$t('addMeeting.companyText')"></Input>
             </FormItem>
-            <FormItem label="昵称" prop="nickName">
-              <Input v-model="formValidate['nickName']" :style="{width:'300px',marginLeft: '-47px'}" placeholder="请输入您的昵称"></Input>
+            <FormItem :label="$t('addMeeting.nickName')" prop="nickName">
+              <Input v-model="formValidate['nickName']" :style="{width:'300px',marginLeft: '-47px'}" :placeholder="$t('addMeeting.nickNameText')"></Input>
             </FormItem>
-            <FormItem label="摄像头" prop="videoId">
+            <FormItem :label="$t('addMeeting.videoId')" prop="videoId">
               <Select v-model="formValidate['videoId']" :style="{width:'300px',marginLeft: '-47px'}" clearable @on-select="onChangeVideoDevice">
                 <Option v-for="(item,index) in videoDevices" :value="item.deviceId" :key="index">{{ item.label }}</Option>
              </Select>
             </FormItem>
-            <FormItem prop="settings">
-              <CheckboxGroup v-model="formValidate.settings" :style="{marginLeft: '-150px'}">
-                <Checkbox label="isM">打开麦克风</Checkbox>
-                <Checkbox label="isC">打开摄像头</Checkbox>
+            <FormItem prop="settings" :style="{float: 'left'}">
+              <CheckboxGroup v-model="formValidate.settings">
+                <Checkbox label="isM">{{$t("addMeeting.audio")}}</Checkbox>
+                <Checkbox label="isC">{{$t("addMeeting.camera")}}</Checkbox>
               </CheckboxGroup>    
             </FormItem>
             <FormItem>
@@ -88,7 +88,12 @@ export default {
       attendeeMode: "video",
       videoProfile: "720p_6",  //省流量测试
       ruleValidate:{
-
+        company: [
+          { required: true, message: this.$t('addMeeting.companyText'), trigger: 'blur' }
+        ],
+        nickName: [
+          { required: true, message: this.$t('addMeeting.nickNameText'), trigger: 'blur' }
+        ],
       },
       videoDevices:[],
       roomNumber:'',

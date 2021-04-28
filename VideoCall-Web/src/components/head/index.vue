@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 14:55:25
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\head\index.vue
- * @LastEditTime: 2021-04-22 17:46:11
+ * @LastEditTime: 2021-04-28 18:11:16
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -41,7 +41,7 @@
                             <div class="qq"></div><div class="qq_text">客服001</div>
                         </div>
                         <div class="text">
-                            <i class="iconfont icondianhua1"></i><div class="tel_text">技术支持：0754-89671122</div>
+                            <i class="iconfont icondianhua1"></i><div class="tel_text">{{$t("other.technicalSupport")}}：0754-89671122</div>
                         </div>
                     </div>    
                 </div>
@@ -74,7 +74,7 @@ export default {
             }
         });
         clipboard.on('success', e => {
-            this.$Message.success({top:250,content:'复制分享链接成功！'});
+            this.$Message.success({top:250,content:this.$t("other.copyShareUrl")});
             // 释放内存
             clipboard.destroy()
         })
@@ -85,8 +85,8 @@ export default {
         top: 50,
         duration: 3
     });
-    this.companyName = Cookies.get("companyName") || "未获取到公司信息";
-    this.channel = Cookies.get("channel") || "未获取到房间号";
+    this.companyName = Cookies.get("companyName") || this.$t("other.noCompanyInformation");
+    this.channel = Cookies.get("channel") || this.$t("other.roomNumberNotObtained");
   }
 };
 </script>

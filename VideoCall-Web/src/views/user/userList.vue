@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 15:46:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\user\userList.vue
- * @LastEditTime: 2021-04-27 18:13:44
+ * @LastEditTime: 2021-04-28 11:44:59
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -16,7 +16,7 @@
                     <i class="iconfont iconrenqun1 act_text"></i>
                 </div>
                 <div class="act_name">
-                    与会人
+                    {{$t("userList.players")}}
                 </div>
                 <div class="act_action">
                     <i class="iconfont iconcebianlanshousuo" @click="collapsedSider"></i>
@@ -30,7 +30,7 @@
                     {{item.nickname}}
                 </div>
                 <div class="action">
-                    {{item.isMaster?'主持人':''}}
+                    {{item.isMaster?$t('userList.host'):''}}
                     <i class="iconfont icon21maikefeng text" :class="[item.isMic ? 'outline':'eye']" @click="setKickingRuleAudio(item.id)"  v-if="isAdmin"></i>
                     <i class="iconfont iconshexiangtou text" :class="[item.isCar ? 'outline':'eye']" @click="setKickingRuleCamera(item.id)"  v-if="isAdmin"></i>
                     <Dropdown  v-if="isAdmin">
@@ -40,8 +40,8 @@
                         <DropdownMenu slot="list">
                             <!-- <DropdownItem @click.native="setKickingRuleAudio(item.id)">禁止麦克风</DropdownItem>
                             <DropdownItem @click.native="setKickingRuleCamera(item.id)">禁止摄像头</DropdownItem> -->
-                            <DropdownItem @click.native="setKickingRuleJoin(item.id)" v-if="!item.isDel">移除</DropdownItem>
-                            <DropdownItem @click.native="delKickingRule(item.id,item.isDel)" v-else>取消移除</DropdownItem>
+                            <DropdownItem @click.native="setKickingRuleJoin(item.id)" v-if="!item.isDel">{{$t("userList.delete")}}</DropdownItem>
+                            <DropdownItem @click.native="delKickingRule(item.id,item.isDel)" v-else>{{$t("userList.cancelDelete")}}</DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 </div>
