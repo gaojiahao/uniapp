@@ -126,7 +126,6 @@ export default {
       this.$refs.uploadRef.$children[0].$refs.input.click();
     });
     eventBus.$on("txtSearch", val => {
-      console.log(val);
       this.searchForm.keyword = val;
     });
   },

@@ -992,7 +992,7 @@ export default {
       }
     });
     // 增加滚动事件
-    eventBus.$emit("startScroll");
+    // eventBus.$emit("startScroll");
     // 删除购物车
     eventBus.$on("resetMyCart", list => {
       if (list.length) {
@@ -1015,8 +1015,7 @@ export default {
     this.$nextTick(() => {
       if (this.$route.query.id === "imgSearch") {
         eventBus.$emit("imgSearch");
-      }
-      if (this.$route.query.searchTxt) {
+      } else if (this.$route.query.searchTxt) {
         this.searchForm.keyword = this.$route.query.searchTxt;
         eventBus.$emit("txtSearch", this.searchForm.keyword);
         this.getProductList(true);

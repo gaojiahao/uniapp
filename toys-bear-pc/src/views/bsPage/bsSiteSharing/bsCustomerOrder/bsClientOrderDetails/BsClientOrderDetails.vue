@@ -78,7 +78,7 @@
     <div class="tableBox">
       <div class="tableTitle">
         <div class="titleText">
-          <span class="title">商品列表</span>
+          <span class="title">产品列表</span>
           ({{ totalCount }})
         </div>
         <el-button size="medium" @click="openSelectTemplate" type="warning">

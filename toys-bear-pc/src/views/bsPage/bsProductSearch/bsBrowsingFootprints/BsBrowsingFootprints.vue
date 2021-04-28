@@ -62,7 +62,7 @@
             <div class="left">
               <i class="el-icon-date"></i>
               <h4>{{ item.browseDate }}</h4>
-              <p>{{ item.list.length }}件商品</p>
+              <p>{{ item.list.length }}件产品</p>
             </div>
             <p class="center"></p>
             <el-button

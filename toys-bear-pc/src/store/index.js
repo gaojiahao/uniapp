@@ -126,16 +126,16 @@ const store = new Vuex.Store({
     initOfferProductList(state) {
       Vue.prototype.$set(state, "offerProductList", []);
     },
-    // 请求修改报价商品接口赋值
+    // 请求修改报价产品接口赋值
     updataOfferProductList(state, payLoad) {
       Vue.prototype.$set(state, "offerProductList", payLoad);
     },
-    //添加报价商品
+    //添加报价产品
     pushOfferProductList(state, payLoad) {
       console.log(payLoad);
       state.offerProductList.push(payLoad);
     },
-    // 删除报价商品
+    // 删除报价产品
     popOfferProductList(state, payLoad) {
       for (let i = 0; i < state.offerProductList.length; i++) {
         if (state.offerProductList[i].productNumber == payLoad.productNumber) {
@@ -184,7 +184,7 @@ const store = new Vuex.Store({
       localStorage.setItem(key, JSON.stringify(state[key]));
     },
 
-    // 删除购物车某指定一个商品
+    // 删除购物车某指定一个产品
     popShopping(state, payLoad) {
       const key = state.userInfo.uid;
       for (let i = 0; i < state[key].length; i++) {

@@ -52,7 +52,7 @@
         >
       </div>
       <div class="right">
-        <p>已选择推送厂家：{{ multipleSelection.length }}</p>
+        <p>已选择推送厂商：{{ multipleSelection.length }}</p>
         <el-button
           size="medium"
           type="primary"

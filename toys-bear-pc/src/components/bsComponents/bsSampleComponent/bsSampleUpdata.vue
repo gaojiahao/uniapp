@@ -17,10 +17,10 @@
     ></bsSampleQuotationTopComponent>
     <div class="bsSampleTable">
       <div class="top">
-        <div class="left">报价商品列表({{ offerProductList.length }})</div>
+        <div class="left">报价产品列表({{ offerProductList.length }})</div>
         <div class="right">
           <el-button @click="handleSelect" class="el-icon-plus" type="primary">
-            选择报价商品</el-button
+            选择报价产品</el-button
           >
         </div>
       </div>
@@ -953,7 +953,7 @@ export default {
           });
         });
     },
-    //选择报价商品
+    //选择报价产品
     handleSelect() {
       // const myValue = {
       //   offerNumber: .offerNumber,

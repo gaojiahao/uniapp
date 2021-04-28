@@ -43,7 +43,7 @@
     <div class="tableBox">
       <div class="tableTitle">
         <div class="titleText">
-          <span class="title">采购商品</span>
+          <span class="title">采购产品</span>
           ({{ totalCount }})
         </div>
         <el-button size="medium" @click="openSelectTemplate" type="warning">

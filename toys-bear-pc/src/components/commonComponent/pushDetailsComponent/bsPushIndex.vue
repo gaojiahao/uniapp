@@ -45,7 +45,7 @@
     </div>
     <div class="bsPushTable">
       <div class="title">
-        <div class="left">厂家列表({{ tableData.length }})</div>
+        <div class="left">厂商列表({{ tableData.length }})</div>
         <div class="right">
           <div
             :class="{ grid: true, active: isGrid === 'bsGridPushComponent' }"

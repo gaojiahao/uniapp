@@ -109,7 +109,7 @@
         ></el-table-column>
         <el-table-column
           prop="totalKuanshu"
-          label="商品总款数"
+          label="产品总款数"
           align="center"
         ></el-table-column>
         <el-table-column
