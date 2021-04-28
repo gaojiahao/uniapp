@@ -192,14 +192,14 @@ export default {
         // this.$store.commit("pushOfferProductList", item);
         this.$emit("pushOfferProductList", item);
         this.$common.handlerMsgState({
-          msg: "添加报价商品成功",
+          msg: "添加报价产品成功",
           type: "success"
         });
       } else {
         // this.$store.commit("popOfferProductList", item);
         this.$emit("popOfferProductList", item);
         this.$common.handlerMsgState({
-          msg: "删除报价商品成功",
+          msg: "删除报价产品成功",
           type: "warning"
         });
       }

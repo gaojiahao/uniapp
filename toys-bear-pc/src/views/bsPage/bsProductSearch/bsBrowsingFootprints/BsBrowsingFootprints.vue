@@ -57,12 +57,12 @@
       </div>
       <div class="productListBox">
         <!-- 产品列表 -->
-        <div v-for="item in browseList" :key="item.index">
+        <div v-for="item in productList" :key="item.index">
           <div class="dateClassify">
             <div class="left">
               <i class="el-icon-date"></i>
               <h4>{{ item.browseDate }}</h4>
-              <p>{{ item.list.length }}件商品</p>
+              <p>{{ item.list.length }}件产品</p>
             </div>
             <p class="center"></p>
             <el-button
@@ -117,14 +117,36 @@ export default {
       totalCount: 0,
       pageSize: 12,
       currentPage: 1,
-      productList: [],
-      browseList: []
+      productList: []
     };
   },
   computed: {
     ...mapGetters({
       shoppingList: "myShoppingList"
     })
+  },
+  watch: {
+    shoppingList(list) {
+      console.log(list);
+      if (list) {
+        if (list.length) {
+          for (let i = 0; i < this.productList.length; i++) {
+            for (let j = 0; j < list.length; j++) {
+              if (this.productList[i].productNumber == list[j].productNumber) {
+                this.productList[i].isShopping = true;
+                break;
+              } else {
+                this.productList[i].isShopping = false;
+              }
+            }
+          }
+        } else {
+          this.productList.forEach(val => {
+            val.isShopping = false;
+          });
+        }
+      }
+    }
   },
   methods: {
     // 获取列表
@@ -154,8 +176,7 @@ export default {
             }
           }
         }
-        this.browseList = this.dataResort(item.items);
-        console.log(this.browseList);
+        this.productList = this.dataResort(item.items);
         this.totalCount = res.data.result.item.totalCount;
       } else {
         this.totalCount = 0;
@@ -286,6 +307,11 @@ export default {
     eventBus.$on("resetProducts", () => {
       this.getCollectList();
     });
+    // 刷新页面
+    eventBus.$on("refreshHtml", () => {
+      this.getCollectList();
+    });
+
     // 删除购物车
     eventBus.$on("resetMyCart", list => {
       if (list.length) {
@@ -308,6 +334,7 @@ export default {
     this.getCollectList();
   },
   beforeDestroy() {
+    eventBus.$off("refreshHtml");
     eventBus.$off("resetProducts");
     eventBus.$off("resetMyCart");
   }

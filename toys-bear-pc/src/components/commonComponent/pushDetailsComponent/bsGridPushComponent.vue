@@ -1,12 +1,12 @@
 <template>
   <div class="bsGridPushComponent">
-    <div class="gridBox">
+    <div class="gridBox" v-for="item in plantList" :key="item.index">
       <div class="title">
         <div class="left">
           <el-image
             fit="contain"
             style="width: 100px; height: 100px"
-            :src="productList.imgUrl"
+            :src="item.imgUrl"
           >
             <div slot="placeholder" class="errorImg">
               <img
@@ -25,8 +25,8 @@
           </el-image>
         </div>
         <div class="right">
-          <h4>腾彩玩具有限公司</h4>
-          <p>联系电话：15683860616</p>
+          <h4>{{ item.name }}</h4>
+          <p>联系电话：{{ item.phoneNumber }}</p>
           <p class="onlineConsultation" @click="toNews">
             <img src="~@/assets/images/consult.png" alt />
             在线咨询
@@ -34,7 +34,12 @@
         </div>
       </div>
       <div class="cheDetail">
-        <p><el-checkbox label=""></el-checkbox></p>
+        <p>
+          <el-checkbox
+            @change="handleChecked"
+            v-model="item.checked"
+          ></el-checkbox>
+        </p>
         <p><i class="el-icon-document"></i> 择样明细(4)</p>
         <p><i class="el-icon-time"></i>推送记录(0)</p>
       </div>
@@ -43,34 +48,20 @@
     <div class="kong"></div>
     <div class="kong"></div>
     <div class="kong"></div>
-    <div class="PushFooter">
-      <div class="left">
-        <el-checkbox v-model="checkAll" @change="handleCheckAllChange"
-          >全选</el-checkbox
-        >
-      </div>
-      <div class="right">
-        <p>已选择推送厂家：{{ multipleSelection.length }}</p>
-        <el-button size="medium" type="primary" class="el-icon-position">
-          推送</el-button
-        >
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    productList: {
+    plantList: {
       type: Array
     }
   },
+  components: {},
+  watch: {},
   data() {
-    return {
-      checkAll: false,
-      multipleSelection: []
-    };
+    return {};
   },
   methods: {
     // 去聊天
@@ -86,21 +77,14 @@ export default {
       this.$router.push("/bsIndex/bsNews");
       this.$store.commit("myAddTab", fd);
     },
-    //全选按钮
-    handleCheckAllChange(val) {
-      if (val) {
-        this.multipleSelection = this.tabel;
-        //点击全选后数据所有选择的数据存到这个数组里边
-        this.tabel.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row, true);
-        });
-      } else {
-        this.$refs.multipleTable.clearSelection();
+    handleChecked(value) {
+      let arr = this.plantList.filter(item => {
+        return item.checked === true;
+      });
+      this.$emit("update:multipleSelection", arr);
+      if (!value) {
+        this.$emit("update:checkAll", false);
       }
-    },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-      console.log(this.multipleSelection);
     }
   },
   created() {},
@@ -170,19 +154,6 @@ export default {
   .kong {
     width: 390px;
     min-width: 390px;
-  }
-  .PushFooter {
-    display: flex;
-    justify-content: space-between;
-    padding: 30px;
-    .right {
-      display: flex;
-      align-items: center;
-      p {
-        margin: 0 20px;
-        color: #333333;
-      }
-    }
   }
 }
 </style>

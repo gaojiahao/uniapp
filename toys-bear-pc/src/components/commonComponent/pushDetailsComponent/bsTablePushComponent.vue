@@ -2,7 +2,7 @@
   <div class="bsTablePushComponent">
     <!-- 表格数据 -->
     <el-table
-      :data="tabel"
+      :data="plantList"
       ref="multipleTable"
       :header-cell-style="{ backgroundColor: '#f9fafc', color: '#666' }"
       style="width: 100%"
@@ -57,71 +57,75 @@
 
       <el-table-column label="操作" min-width="250" align="center">
         <template slot-scope="scope">
-          <el-button size="medium" type="success"> 泽洋明细 </el-button>
-          <el-button size="medium" type="warning"
+          <el-button size="medium" type="success" @click="openBsSampleDetail">
+            泽洋明细
+          </el-button>
+
+          <el-button size="medium" type="warning" @click="openBsPushRecord"
             >推送记录（{{ scope.$index }}）</el-button
           >
           <el-button size="medium" type="primary"> 在线咨询 </el-button>
         </template>
       </el-table-column>
     </el-table>
-    <div class="PushFooter">
-      <div class="left">
-        <el-checkbox v-model="checkAll" @change="handleCheckAllChange"
-          >全选</el-checkbox
-        >
-      </div>
-      <div class="right">
-        <p>已选择推送厂家：{{ multipleSelection.length }}</p>
-        <el-button size="medium" type="primary" class="el-icon-position">
-          推送</el-button
-        >
-      </div>
-    </div>
+    <el-dialog
+      title="择样明细"
+      :visible.sync="sampleDetailDialog"
+      width="1620px"
+      :before-close="closeSampleDetailDialog"
+    >
+      <bsSampleDetailComponent></bsSampleDetailComponent>
+    </el-dialog>
+
+    <el-dialog
+      title="推送记录"
+      :visible.sync="pushRecordDialog"
+      width="45%"
+      :before-close="closePushRecordDialog"
+    >
+      <bsPushRecordComponent></bsPushRecordComponent>
+    </el-dialog>
   </div>
 </template>
-
 <script>
+import bsSampleDetailComponent from "@/components/commonComponent/pushDetailsComponent/bsSampleDetailComponent.vue";
+import bsPushRecordComponent from "@/components/commonComponent/pushDetailsComponent/bsPushRecordComponent.vue";
 export default {
   props: {
-    productList: {
+    plantList: {
+      type: Array
+    },
+    multipleSelection: {
       type: Array
     }
   },
+  components: { bsSampleDetailComponent, bsPushRecordComponent },
   data() {
     return {
-      checkAll: false,
-      multipleSelection: [],
-      tabel: [
-        {
-          phone: 222,
-          phoneNumber: 1232132
-        },
-        {
-          phoneNumber: 1232132
-        },
-        {
-          phoneNumber: 1232132
-        }
-      ]
+      sampleDetailDialog: false,
+      pushRecordDialog: false
     };
   },
   methods: {
-    //全选按钮
-    handleCheckAllChange(val) {
-      if (val) {
-        this.multipleSelection = this.tabel;
-        //点击全选后数据所有选择的数据存到这个数组里边
-        this.tabel.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row, true);
-        });
-      } else {
-        this.$refs.multipleTable.clearSelection();
-      }
-    },
+    //单选
     handleSelectionChange(val) {
-      this.multipleSelection = val;
-      console.log(this.multipleSelection);
+      this.$emit("update:multipleSelection", val);
+    },
+    //打开择样明细弹框
+    openBsSampleDetail() {
+      this.sampleDetailDialog = true;
+    },
+    //关闭择样明细弹框
+    closeSampleDetailDialog() {
+      this.sampleDetailDialog = false;
+    },
+    //打开推送记录弹框
+    openBsPushRecord() {
+      this.pushRecordDialog = true;
+    },
+    //关闭推送记录弹框
+    closePushRecordDialog() {
+      this.pushRecordDialog = false;
     }
   },
   created() {},
@@ -133,19 +137,6 @@ export default {
 .bsTablePushComponent {
   @{deep} .el-table__header-wrapper .el-checkbox {
     display: none;
-  }
-  .PushFooter {
-    display: flex;
-    justify-content: space-between;
-    padding: 30px;
-    .right {
-      display: flex;
-      align-items: center;
-      p {
-        margin: 0 20px;
-        color: #333333;
-      }
-    }
   }
 }
 </style>

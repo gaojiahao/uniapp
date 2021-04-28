@@ -258,6 +258,7 @@ export default {
       };
       const res = await this.$http.post("/api/DeleteProductRecord", fd);
       if (res.data.result.code === 200) {
+        eventBus.$emit("refreshHtml");
         this.$common.handlerMsgState({
           msg: "删除成功",
           type: "success"

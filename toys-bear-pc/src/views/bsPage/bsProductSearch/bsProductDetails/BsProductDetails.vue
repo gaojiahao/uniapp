@@ -244,31 +244,35 @@ export default {
       this.$router.push("/bsIndex/bsVendorQuery");
     },
     // 加购
-    handlerShopping(item) {
-      if (this.shoppingList.length >= 500) {
+    handlerShopping() {
+      if (this.shoppingList.length >= 500 && !this.item.isShopping) {
         this.$common.handlerMsgState({
           msg: "购物车已满500条",
           type: "warning"
         });
         return;
       }
-      item.isShopping = !item.isShopping;
-      if (item.isShopping) {
-        item.shoppingCount = 1;
-        this.$store.commit("pushShopping", item);
+      this.item.isShopping = !this.item.isShopping;
+      if (this.item.isShopping) {
+        this.item.shoppingCount = 1;
+        this.$store.commit("pushShopping", this.item);
         this.$common.handlerMsgState({
           msg: "加购成功",
           type: "success"
         });
       } else {
-        item.shoppingCount = 0;
-        this.$store.commit("popShopping", item);
+        this.item.shoppingCount = 0;
+        this.$store.commit("popShopping", this.item);
         this.$common.handlerMsgState({
           msg: "取消加购成功",
           type: "warning"
         });
       }
-      eventBus.$emit("resetMyCart", this.shoppingList);
+      eventBus.$emit("resetMyShoppingCart");
+      eventBus.$emit("resetProducts", this.item);
+      this.$nextTick(() => {
+        this.$forceUpdate();
+      });
     },
     // 收藏
     async addCollect(item) {
@@ -300,6 +304,7 @@ export default {
         this.productDetail = res.data.result.item;
         this.productDetail.isShopping = this.item.isShopping;
         console.log(this.productDetail, "产品详情");
+        eventBus.$emit("refreshHtml");
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,

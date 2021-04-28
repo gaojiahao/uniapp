@@ -139,7 +139,7 @@ import bsShoppingCart from "@/views/bsPage/bsBusinessManage/bsShoppingCart/BsSho
 import bsSampleQuotation from "@/views/bsPage/bsBusinessManage/bsSampleQuotation/BsSampleQuotation.vue";
 // 找样报价-报价详情
 import bsSampleQuotationDetails from "@/components/bsComponents/bsSampleComponent/bsSampleQuotationDetails";
-// 找样报价-选择报价商品
+// 找样报价-选择报价产品
 import bsSampleOfferCommodity from "@/components/bsComponents/bsSampleComponent/bsSampleOfferCommodity";
 
 // 找样报价-编辑详情
@@ -215,7 +215,8 @@ export default {
         newN == "/bsIndex/bsLatestProducts" ||
         newN == "/bsIndex/bsSpotProducts" ||
         newN == "/bsIndex/bsVIPProducts" ||
-        newN == "/bsIndex/bsMyCollection"
+        newN == "/bsIndex/bsMyCollection" ||
+        newN == "/bsIndex/bsBrowsingFootprints"
       ) {
         eventBus.$emit("showCart", true);
       }
@@ -322,7 +323,8 @@ export default {
         newN == "/bsIndex/bsLatestProducts" ||
         newN == "/bsIndex/bsSpotProducts" ||
         newN == "/bsIndex/bsVIPProducts" ||
-        newN == "/bsIndex/bsMyCollection"
+        newN == "/bsIndex/bsMyCollection" ||
+        newN == "/bsIndex/bsBrowsingFootprints"
       ) {
         eventBus.$emit("showCart", true);
       } else {

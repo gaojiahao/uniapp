@@ -961,9 +961,7 @@ export default {
       eventBus.$off("openUpload");
     }
   },
-  created() {
-    this.getProductList(true);
-  },
+  created() {},
   mounted() {
     // 点击搜索-文字搜索
     eventBus.$on("searchProducts", form => {
@@ -994,7 +992,7 @@ export default {
       }
     });
     // 增加滚动事件
-    eventBus.$emit("startScroll");
+    // eventBus.$emit("startScroll");
     // 删除购物车
     eventBus.$on("resetMyCart", list => {
       if (list.length) {
@@ -1018,6 +1016,13 @@ export default {
       if (this.$route.query.id === "imgSearch") {
         eventBus.$emit("imgSearch");
       }
+      if (this.searchTxt != "") {
+        this.searchForm.keyword = this.searchTxt;
+        this.getProductList(true);
+        this.$store.commit("handlerSearchTxt", "");
+      } else {
+        this.getProductList(true);
+      }
     });
   },
   computed: {
@@ -1026,7 +1031,7 @@ export default {
     }),
     ...mapState(["searchImgPreview"]),
     ...mapState(["imageSearchValue"]),
-    ...mapState(["myColles"])
+    ...mapState(["myColles", "searchTxt"])
   },
   watch: {
     shoppingList(list) {

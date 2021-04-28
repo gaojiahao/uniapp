@@ -45,7 +45,7 @@
     </div>
     <div class="bsPushTable">
       <div class="title">
-        <div class="left">厂家列表({{ tableData.length }})</div>
+        <div class="left">厂商列表({{ tableData.length }})</div>
         <div class="right">
           <div
             :class="{ grid: true, active: isGrid === 'bsGridPushComponent' }"
@@ -59,33 +59,131 @@
       </div>
       <div class="tableBox">
         <!-- 产品列表 -->
-        <component :is="isGrid" :productList="tableData"></component>
+        <component
+          ref="listComponent"
+          :is="isGrid"
+          :plantList="tableData"
+          :multipleSelection.sync="multipleSelection"
+          :checkAll.sync="checkAll"
+        ></component>
       </div>
     </div>
+    <div class="PushFooter">
+      <div class="left">
+        <el-checkbox v-model="checkAll" @change="handleCheckAllChange"
+          >全选</el-checkbox
+        >
+      </div>
+      <div class="right">
+        <p>已选择推送厂家：{{ multipleSelection.length }}</p>
+        <el-button
+          size="medium"
+          type="primary"
+          class="el-icon-position"
+          @click="handlePushDialog(true)"
+        >
+          推送</el-button
+        >
+      </div>
+    </div>
+    <bsPushDialogComponent
+      @handlePushDialog="handlePushDialog"
+      :pushDialog="pushDialog"
+    ></bsPushDialogComponent>
   </div>
 </template>
 <script>
 import bsGridPushComponent from "@/components/commonComponent/pushDetailsComponent/bsGridPushComponent.vue";
 import bsTablePushComponent from "@/components/commonComponent/pushDetailsComponent/bsTablePushComponent.vue";
+import bsPushDialogComponent from "@/components/commonComponent/pushDetailsComponent/bsPushDialogComponent.vue";
 export default {
   name: "bsPushIndex",
-  components: { bsGridPushComponent, bsTablePushComponent },
+  components: {
+    bsGridPushComponent,
+    bsTablePushComponent,
+    bsPushDialogComponent
+  },
   props: {
     item: {
       type: Object
     }
   },
+
+  watch: {
+    // multipleSelection: {
+    //   handler(newName, oldName) {
+    //     console.log(newName, oldName);
+    //   },
+    // },
+  },
   data() {
     return {
+      isGrid: "bsGridPushComponent",
+      checkAll: false,
+      pushDialog: false,
       itemList: {},
-      tableData: [],
-      isGrid: "bsGridPushComponent"
+      multipleSelection: [],
+      tableData: [
+        {
+          id: 1,
+          checked: false,
+          name: "腾彩玩具有限公司",
+          phone: 222,
+          phoneNumber: 1232132
+        },
+        {
+          id: 2,
+          name: "玩具",
+          checked: false,
+          phone: 222,
+          phoneNumber: 1232132
+        },
+        {
+          id: 3,
+          name: "有限公司",
+          checked: false,
+          phone: 222,
+          phoneNumber: 1232132
+        }
+      ]
     };
   },
   methods: {
     // 切换产品列表样式
     handerIsGrid(type) {
       this.isGrid = type;
+    },
+    //全选按钮
+    handleCheckAllChange(val) {
+      if (val) {
+        //点击全选后数据所有选择的数据存到这个数组里边
+        this.multipleSelection = this.tableData;
+        if (this.isGrid === "bsGridPushComponent") {
+          this.$refs.listComponent.plantList.forEach(row => {
+            row.checked = true;
+          });
+        } else {
+          this.$refs.listComponent.plantList.forEach(row => {
+            this.$refs.listComponent.$refs.multipleTable.toggleRowSelection(
+              row,
+              true
+            );
+          });
+        }
+      } else {
+        this.multipleSelection = [];
+        if (this.isGrid === "bsGridPushComponent") {
+          this.$refs.listComponent.plantList.forEach(row => {
+            row.checked = false;
+          });
+        } else {
+          this.$refs.listComponent.$refs.multipleTable.clearSelection();
+        }
+      }
+    },
+    // 打开/关闭推送弹框
+    handlePushDialog(flag) {
+      this.pushDialog = flag;
     }
   }
 };
@@ -188,6 +286,19 @@ export default {
             center;
           background-size: contain;
         }
+      }
+    }
+  }
+  .PushFooter {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px;
+    .right {
+      display: flex;
+      align-items: center;
+      p {
+        margin: 0 20px;
+        color: #333333;
       }
     }
   }
