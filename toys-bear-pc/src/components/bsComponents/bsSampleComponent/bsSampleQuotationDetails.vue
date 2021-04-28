@@ -7,7 +7,7 @@
     ></bsSampleQuotationTopComponent>
     <div class="bsSampleTable">
       <div class="top">
-        <div class="left">报价商品列表({{ tableData.length }})</div>
+        <div class="left">报价产品列表({{ tableData.length }})</div>
         <div class="right" v-if="tableData.length > 0">
           <el-button @click="exportOrder()" type="warning"> 导出列表</el-button>
         </div>

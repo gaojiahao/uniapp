@@ -131,7 +131,12 @@
           <span>品牌展厅</span>
         </div>
         <div class="bigHall">
-          <div class="item" v-for="(item, i) in bigHalls" :key="i">
+          <div
+            class="item"
+            v-for="(item, i) in bigHalls"
+            :key="i"
+            @click="topHallHome(item)"
+          >
             <div class="imgBox">
               <el-image
                 style="width: 302px; height: 133px"
@@ -154,6 +159,7 @@
               <div class="minHall">
                 <div
                   class="minHallItem"
+                  @click="topHallHome(item)"
                   v-for="item in children"
                   :key="item.id"
                 >
@@ -240,7 +246,8 @@
           <el-table
             v-show="hotValue === '热门择样'"
             :data="tableData"
-            height="375"
+            height="365"
+            style="width:100%;"
             @row-click="toProductDetails"
             :row-style="rowStyle"
             :header-row-style="{ height: '40px', padding: '0' }"
@@ -256,7 +263,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="name" label="商品信息" width="350">
+            <el-table-column prop="name" label="产品信息" width="280">
               <template slot-scope="scope">
                 <div class="productInfo">
                   <el-image
@@ -312,8 +319,8 @@
           <el-table
             v-if="hotValue === '热门搜索'"
             :data="HotTableData"
-            style="width: 100%"
-            height="375"
+            style="width: 100%;"
+            height="365"
             @row-click="rowClick"
             :row-style="rowStyle"
             :header-row-style="{ height: '40px', padding: '0' }"
@@ -328,7 +335,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="keyWord" label="关键词" width="420">
+            <el-table-column prop="keyWord" label="关键词" width="350">
               <template slot-scope="scope">
                 <span style="font-size: 13px;">
                   {{ scope.row.keyWord }}
@@ -426,7 +433,7 @@ export default {
         },
         {
           title: "VIP区",
-          content: "品牌厂家不容错过",
+          content: "品牌厂商不容错过",
           icon: require("@/assets/images/vipqu.png")
         },
         {
@@ -468,6 +475,18 @@ export default {
     };
   },
   methods: {
+    // 去展厅主页
+    topHallHome(item) {
+      const fd = {
+        name: item.companyNumber || item.content || item.id,
+        linkUrl: "/bsIndex/bsHome",
+        component: "bsExhibitionHallHome",
+        refresh: true,
+        label: item.companyName || item.adTitle,
+        value: item
+      };
+      this.$store.commit("myAddTab", fd);
+    },
     // 去产品详情
     toProductDetails(row) {
       const fd = {
@@ -482,7 +501,6 @@ export default {
     },
     // 点击了行
     rowClick(row) {
-      console.log(row);
       const fd = {
         name: "/bsIndex/bsProductSearchIndex",
         linkUrl: "/bsIndex/bsProductSearchIndex?=" + row.keyWord,
@@ -807,7 +825,7 @@ export default {
         display: flex;
         flex-wrap: wrap;
         .item {
-          width: 185px;
+          width: 180px;
           text-align: center;
           cursor: pointer;
           margin-bottom: 20px;
@@ -906,8 +924,9 @@ export default {
     justify-content: space-between;
     box-sizing: border-box;
     .left {
-      width: 987px;
-      height: 440px;
+      width: 980px;
+      min-width: 980px;
+      height: 430px;
       background-color: #fff;
       border-radius: 4px;
       box-sizing: border-box;
@@ -933,6 +952,7 @@ export default {
         justify-content: space-between;
         .item {
           width: 302px;
+          cursor: pointer;
           .imgBox {
             width: 302px;
             height: 133px;
@@ -958,15 +978,14 @@ export default {
         }
       }
       @{deep} .minHall {
+        height: 198px;
         display: flex;
-        justify-content: space-between;
-        height: 208px;
         .el-carousel {
-          height: 208px;
+          height: 198px;
           width: 100%;
           box-sizing: border-box;
           .el-carousel__container {
-            height: 208px;
+            height: 198px;
           }
           .el-carousel__indicators {
             position: absolute;
@@ -982,22 +1001,11 @@ export default {
             }
           }
         }
-        .swiper-container-horizontal .slider-wrapper,
-        .swiper-container-vertical .slider-wrapper {
-          align-items: flex-start !important;
-        }
-        .slider-item {
-          width: 221px;
-          height: 158px;
-          margin-right: 20px;
-          cursor: pointer;
-          &:last-of-type {
-            margin-right: 0;
-          }
-        }
         .minHallItem {
           width: 221px;
           height: 158px;
+          cursor: pointer;
+          margin-right: 20px;
           .imgBox {
             width: 221px;
             height: 108px;
@@ -1029,7 +1037,7 @@ export default {
     }
     .right {
       flex: 1;
-      height: 440px;
+      height: 430px;
       background-color: #fff;
       border-radius: 4px;
       padding: 0 20px;
@@ -1079,8 +1087,9 @@ export default {
       }
       .contentBox {
         margin-top: 15px;
-        height: 375px;
+        height: 365px;
         background-color: #ccc;
+        box-sizing: border-box;
         .tableIndex {
           display: flex;
           align-items: center;
@@ -1146,9 +1155,5 @@ export default {
       }
     }
   }
-}
-.swiper-container {
-  width: 100%;
-  height: 100%;
 }
 </style>
