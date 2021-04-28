@@ -140,7 +140,7 @@
             <div class="imgBox">
               <el-image
                 style="width: 302px; height: 133px"
-                :src="item.bgImg || item.img"
+                :src="item.img || item.bgImg"
                 fit="contain"
               >
               </el-image>
@@ -166,7 +166,7 @@
                   <div class="imgBox">
                     <el-image
                       style="width: 221px; height: 108px"
-                      :src="item.bgImg || item.img"
+                      :src="item.img || item.bgImg"
                       fit="contain"
                     >
                     </el-image>
@@ -476,16 +476,18 @@ export default {
   },
   methods: {
     // 去展厅主页
-    topHallHome(item) {
-      const fd = {
-        name: item.companyNumber || item.content || item.id,
-        linkUrl: "/bsIndex/bsHome",
-        component: "bsExhibitionHallHome",
-        refresh: true,
-        label: item.companyName || item.adTitle,
-        value: item
-      };
-      this.$store.commit("myAddTab", fd);
+    topHallHome() {
+      // topHallHome(item) {
+      return false;
+      // const fd = {
+      //   name: item.companyNumber || item.content || item.id,
+      //   linkUrl: "/bsIndex/bsHome",
+      //   component: "bsExhibitionHallHome",
+      //   refresh: true,
+      //   label: item.companyName || item.adTitle,
+      //   value: item
+      // };
+      // this.$store.commit("myAddTab", fd);
     },
     // 去产品详情
     toProductDetails(row) {

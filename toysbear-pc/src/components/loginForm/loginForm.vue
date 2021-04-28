@@ -89,8 +89,8 @@ export default {
     return {
       value: null,
       ws: null,
-      loginUrl: "http://1.14.158.14:8081/new/#/bsIndex",
-      // loginUrl: "https://www.toysbear.com/new/#/bsIndex",
+      // loginUrl: "http://1.14.158.14:8081/new/#/bsIndex",
+      loginUrl: "https://www.toysbear.com/new/#/bsIndex",
       wsBaseUrl: "wss://impush.toysbear.com/ws?UserId=",
       // loginUrl: "http://139.9.71.135:8080/new/#/bsIndex",
       // wsBaseUrl: "ws://139.9.71.135:8090/ws?UserId=",
