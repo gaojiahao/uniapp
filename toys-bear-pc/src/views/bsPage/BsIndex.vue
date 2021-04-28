@@ -215,7 +215,8 @@ export default {
         newN == "/bsIndex/bsLatestProducts" ||
         newN == "/bsIndex/bsSpotProducts" ||
         newN == "/bsIndex/bsVIPProducts" ||
-        newN == "/bsIndex/bsMyCollection"
+        newN == "/bsIndex/bsMyCollection" ||
+        newN == "/bsIndex/bsBrowsingFootprints"
       ) {
         eventBus.$emit("showCart", true);
       }
@@ -322,7 +323,8 @@ export default {
         newN == "/bsIndex/bsLatestProducts" ||
         newN == "/bsIndex/bsSpotProducts" ||
         newN == "/bsIndex/bsVIPProducts" ||
-        newN == "/bsIndex/bsMyCollection"
+        newN == "/bsIndex/bsMyCollection" ||
+        newN == "/bsIndex/bsBrowsingFootprints"
       ) {
         eventBus.$emit("showCart", true);
       } else {

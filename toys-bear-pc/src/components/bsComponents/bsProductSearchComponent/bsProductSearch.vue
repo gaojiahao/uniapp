@@ -41,7 +41,7 @@
       <el-checkbox-group
         v-model="synthesis"
         @change="handleSynthesis"
-        style="margin: 0 30px;"
+        style="margin: 0 30px"
       >
         <el-checkbox label="精准查询" name="type"></el-checkbox>
       </el-checkbox-group>
@@ -125,9 +125,8 @@ export default {
     eventBus.$on("imgSearch", () => {
       this.$refs.uploadRef.$children[0].$refs.input.click();
     });
-    eventBus.$on("txtSearch", val => {
-      console.log(val);
-      this.searchForm.keyword = val;
+    this.$nextTick(() => {
+      this.searchForm.keyword = this.$store.state.searchTxt;
     });
   },
   computed: {

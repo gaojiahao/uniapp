@@ -1016,10 +1016,10 @@ export default {
       if (this.$route.query.id === "imgSearch") {
         eventBus.$emit("imgSearch");
       }
-      if (this.$route.query.searchTxt) {
-        this.searchForm.keyword = this.$route.query.searchTxt;
-        eventBus.$emit("txtSearch", this.searchForm.keyword);
+      if (this.searchTxt != "") {
+        this.searchForm.keyword = this.searchTxt;
         this.getProductList(true);
+        this.$store.commit("handlerSearchTxt", "");
       } else {
         this.getProductList(true);
       }
@@ -1031,7 +1031,7 @@ export default {
     }),
     ...mapState(["searchImgPreview"]),
     ...mapState(["imageSearchValue"]),
-    ...mapState(["myColles"])
+    ...mapState(["myColles", "searchTxt"])
   },
   watch: {
     shoppingList(list) {

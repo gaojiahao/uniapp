@@ -36,6 +36,7 @@ const store = new Vuex.Store({
     ],
     offerProductList: [], //报价数据
     historyNames: [],
+    searchTxt: "",
     httpTime: 0, // 请求时长
     httpContent: "", // 请求内容
     screenWidth: document.documentElement.clientWidth, // 屏幕宽度
@@ -73,6 +74,10 @@ const store = new Vuex.Store({
   mutations: {
     handlerOldTabName(state, payLoad) {
       state.oldTabName = payLoad;
+    },
+    //修改查询值
+    handlerSearchTxt(state, payLoad) {
+      state.searchTxt = payLoad;
     },
     // 修改进度条状态
     handlerIsJindu(state, payLoad) {

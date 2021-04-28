@@ -379,7 +379,7 @@ export default {
       tableData: [],
       bigHalls: [],
       minHalls: [],
-      hotValue: "热门搜索",
+      hotValue: "热门择样",
       hotList: [
         {
           value: "热门择样"
@@ -485,7 +485,7 @@ export default {
       console.log(row);
       const fd = {
         name: "/bsIndex/bsProductSearchIndex",
-        linkUrl: "/bsIndex/bsProductSearchIndex?searchTxt=" + row.keyWord,
+        linkUrl: "/bsIndex/bsProductSearchIndex?=" + row.keyWord,
         component: "bsProductSearchIndex",
         refresh: true,
         label: "产品查询"
@@ -493,6 +493,7 @@ export default {
 
       this.$store.commit("myAddTab", fd);
       this.$router.push(fd.linkUrl);
+      this.$store.commit("handlerSearchTxt", row.keyWord);
     },
     // 行样式
     rowStyle() {
@@ -708,7 +709,7 @@ export default {
   mounted() {
     this.getOrgCompany();
     this.getGetSalesOrderDataStatistics();
-    this.getGetSalesHotSearch();
+    this.getGetSalesHotSample();
   },
   computed: {
     swiper() {
