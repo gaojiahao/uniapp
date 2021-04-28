@@ -2,8 +2,8 @@
  * @Description: 
  * @Author: gaojiahao
  * @Date: 2021-04-01 19:15:58
- * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\index.vue
- * @LastEditTime: 2021-04-23 14:55:28
+ * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\footer.vue
+ * @LastEditTime: 2021-04-28 10:13:43
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -60,7 +60,7 @@
                         <i class="iconfont icontianxiexiangqing icon"></i>
                     </div>
                     <div class="timer item">
-                        <div class="netWork"></div>
+                        <div class="" :class="[network.up>=5 ? 'netWork0' : network.up==1 ? 'netWork4' : network.up==2 ? 'netWork3' : network.up==3 ? 'netWork2' : 'netWork1']"></div>
                     </div>
                 </div>
             </Col>
@@ -75,6 +75,7 @@ import * as Cookies from "js-cookie";
 import Setting from "@components/footer/setting";
 import EscModal from "@components/public/escModal";
 import ReconnectionModal from "@components/public/reconnectionModal";
+import { mapState } from "vuex";
 export default {
     name:'Footer',
     components:{
@@ -106,7 +107,10 @@ export default {
                     this.$parent.$parent.$parent.$refs.video.$refs.video.join();
                 }
             },
-        }    
+        }
+    },
+    computed:{
+        ...mapState(["network"])         
     },
     data() {
         return {
@@ -287,8 +291,32 @@ export default {
         .item{
             height:59px;
             width: 51px;
-            .netWork {
+            .netWork4 {
                 background: url('~@assets/images/netWork4.png');
+                background-repeat: no-repeat;
+                width: 18px;
+                height: 19px;
+            }
+            .netWork3 {
+                background: url('~@assets/images/netWork3.png');
+                background-repeat: no-repeat;
+                width: 18px;
+                height: 19px;
+            }
+            .netWork2 {
+                background: url('~@assets/images/netWork2.png');
+                background-repeat: no-repeat;
+                width: 18px;
+                height: 19px;
+            }
+            .netWork1 {
+                background: url('~@assets/images/netWork1.png');
+                background-repeat: no-repeat;
+                width: 18px;
+                height: 19px;
+            }
+            .netWork0 {
+                background: url('~@assets/images/netWork0.png');
                 background-repeat: no-repeat;
                 width: 18px;
                 height: 19px;

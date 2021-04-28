@@ -300,6 +300,7 @@ export default {
     },
     //用户取消发布订阅
     handleUserUnpublished(user,mediaType) {
+      debugger
       if (mediaType === "video") {
         // 获取刚刚动态创建的 DIV 节点。
         const playerContainer = document.getElementById(user.uid.toString());
@@ -336,20 +337,22 @@ export default {
       var $=this;
       $.client.on("network-quality", (quality) => {
         //console.log("上行网络质量：", quality.uplinkNetworkQuality);
+        $.$store.commit('setNetworkUp', quality.uplinkNetworkQuality);
       });
 
       // 获取下行网络质量
       $.client.on("network-quality", (quality) => {
         //console.log("下行网络质量：", quality.downlinkNetworkQuality);
+        $.$store.commit('setNetworkDown', quality.downlinkNetworkQuality);
       });
 
       // 获取上行统计数据
-      var uplinkVideoStats = $.client.getLocalVideoStats();
+      //var uplinkVideoStats = $.client.getLocalVideoStats();
       // 获取下行统计数据
-      var downlinkVideoStats =  $.client.getRemoteVideoStats();
+      //var downlinkVideoStats =  $.client.getRemoteVideoStats();
 
-      // console.log("uplink video stats", uplinkVideoStats);
-      // console.log("downlink video stats", downlinkVideoStats);
+      //console.log("uplink video stats", uplinkVideoStats);
+      //console.log("downlink video stats", downlinkVideoStats);
     },
     //通话前设备检测
     async testDevices(){
@@ -437,6 +440,22 @@ export default {
       }).catch(e=>{
         console.log(e);
       })
+    },
+    //关闭发布视频
+    async closeVideo(flag){
+      if(flag){
+        await client.unpublish(this.localVideoTrack);
+      } else {
+        await client.publish(this.localVideoTrack);  
+      }
+    },
+    //关闭发布音频
+    async closeAudio(flag){
+      if(flag){
+        await client.unpublish(this.localAudioTrack);
+      } else {
+        await client.publish(this.localAudioTrack);  
+      }  
     },
     //初始化
     async init(){
