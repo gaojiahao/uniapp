@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:15:36
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\productList.vue
- * @LastEditTime: 2021-04-28 17:32:34
+ * @LastEditTime: 2021-04-29 15:29:06
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -33,15 +33,16 @@
             </Table>
             <div class="total">
                 <div class="item">
-                    <Button type="primary" shape="circle" style="width:88px;margin: 6px 6px 0 0;" @click="save" v-if="flag">{{$t("product.order.submit")}}</Button>
+                    <div class="label">{{$t("product.order.totalRecords")}}：</div>
+                    <div class="text">{{totalKuanshu}}</div>
                 </div>
                 <div class="item">
-                    <div class="label">{{$t("product.order.totalPrice")}}：</div>
-                    <div class="text active">$ {{totalAmount}}</div>
+                    <div class="label">{{$t("product.order.totalCTNS")}}：</div>
+                    <div class="text">{{totalBoxCount}}</div>
                 </div>
                 <div class="item">
-                    <div class="label">{{$t("product.order.totalWeight")}}：</div>
-                    <div class="text">{{totalGrossWeight}}/{{totalNetWeight}}(KG)</div>
+                    <div class="label">{{$t("product.order.totalQuantity")}}：</div>
+                    <div class="text">{{totalCount}}</div>
                 </div>
                 <div class="item">
                     <div class="label">{{$t("product.order.totalVolume")}}：</div>
@@ -49,16 +50,15 @@
                     <div class="text">{{totalBulkStere}} cuft</div>
                 </div>
                 <div class="item">
-                    <div class="label">{{$t("product.order.totalQuantity")}}：</div>
-                    <div class="text">{{totalCount}}</div>
+                    <div class="label">{{$t("product.order.totalWeight")}}：</div>
+                    <div class="text">{{totalGrossWeight}}/{{totalNetWeight}}(KG)</div>
                 </div>
                 <div class="item">
-                    <div class="label">{{$t("product.order.totalCTNS")}}：</div>
-                    <div class="text">{{totalBoxCount}}</div>
+                    <div class="label">{{$t("product.order.totalPrice")}}：</div>
+                    <div class="text active">$ {{totalAmount}}</div>
                 </div>
                 <div class="item">
-                    <div class="label">{{$t("product.order.totalRecords")}}：</div>
-                    <div class="text">{{totalKuanshu}}</div>
+                    <Button type="primary" shape="circle" style="width:88px;margin: 6px 6px 0 0;" @click="save" v-if="flag">{{$t("product.order.submit")}}</Button>
                 </div>
             </div>
         </Drawer>

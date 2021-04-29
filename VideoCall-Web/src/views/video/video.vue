@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 16:54:22
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\video\video.vue
- * @LastEditTime: 2021-04-28 18:40:41
+ * @LastEditTime: 2021-04-29 16:30:18
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -26,44 +26,6 @@
                 :userlist="userlist"
                 :isAdmin="isAdmin"
                 :uid="uid" ref="video"></AgoraVideoCall>
-            <!-- <template v-if="isSelect&&videoList.length==2">
-                <div class="video_wrap">
-                    <div :class="[isCollapsed ? 'video_item_2_x':'video_item_2']" v-for="(item,index) in videoList" :key="index">
-                        <img :src="item.url">
-                    </div>
-                </div>
-            </template>
-            <template v-if="isSelect&&videoList.length==3">
-                <div class="video_wrap">
-                    <div :class="[isCollapsed ? 'video_item_3_x':'video_item_3']" v-for="(item,index) in videoList" :key="index">
-                        <img :src="item.url">
-                    </div>
-                </div>
-            </template>
-            <template v-if="isSelect&&videoList.length==4">
-                <div class="video_wrap">
-                    <div :class="[isCollapsed ? 'video_item_4_x':'video_item_4']" v-for="(item,index) in videoList" :key="index">
-                        <img :src="item.url">
-                    </div>
-                </div>
-            </template>
-            <template v-if="isSelect&&videoList.length==5">
-                <div class="video_wrap">
-                    <div :class="[isCollapsed ? 'video_item_5_x':'video_item_5']" v-for="(item,index) in videoList" :key="index">
-                        <img :src="item.url">
-                    </div>
-                </div>
-            </template>
-            <template v-if="isSelect&&videoList.length==6">
-                <div class="video_wrap">
-                    <div :class="[isCollapsed ? 'video_item_6_x':'video_item_6']" v-for="(item,index) in videoList" :key="index">
-                        <img :src="item.url">
-                    </div>
-                </div>
-            </template>
-            <div class="bg" v-else>
-                <img :src="test" style="width:100%;height:807px;">
-            </div> -->
         </div>
         <EndModal :isShow="isShow" ref="endModal" @show-setting="showSetting"></EndModal>
     </div> 
@@ -100,14 +62,6 @@ export default {
             cameraPic: require("@assets/images/camera-lg.png"),
             test: require("@assets/bg/test.jpg"),
             isSelect: false,
-            videoList:[
-                {id:1,url:require("@assets/bg/test.jpg")},
-                {id:2,url:require("@assets/bg/test.jpg")},
-                {id:3,url:require("@assets/bg/test.jpg")},
-                {id:4,url:require("@assets/bg/test.jpg")},
-                // {id:5,url:require("@assets/bg/test.jpg")},
-                // {id:6,url:require("@assets/bg/test.jpg")},
-            ],
             videoProfile: Cookies.get("videoProfile").split(",")[0] || "480p_4",
             channel: Cookies.get("channel") || "test",
             transcode: Cookies.get("transcode") || "interop",
@@ -211,7 +165,6 @@ export default {
                 display: flex;
                 flex-wrap: wrap;
                 height: 807px;
-                // flex-direction: column;
             }
         }
     }

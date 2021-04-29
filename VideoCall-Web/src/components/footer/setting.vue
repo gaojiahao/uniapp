@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-11-03 16:35:57
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-28 19:28:29
+ * @LastEditTime: 2021-04-29 16:21:01
 -->
 <template>
     <Modal v-model="show" :title="$t('settings.settings')" @on-ok="ok" @on-cancel="cancel" width="430" draggable class="setting">
@@ -262,10 +262,10 @@ export default {
                             background: true,
                             content: res.message
                         });
-                        me.$parent.$parent.$parent.$parent.$refs.video.againCount() //保存结束时间后，重新计算计时器
                         Cookies.set('endTime',res.data.endTime);
                         window.sessionStorage.setItem("isMic",this.formValidate.settings.isMic);
                         window.sessionStorage.setItem("isCar",this.formValidate.settings.isCar); 
+                        me.$parent.$parent.$parent.$parent.$refs.video.againCount() //保存结束时间后，重新计算计时器
                         this.$emit('show-modal-detail', false);
                         this.$FromLoading.hide(); 
                     }
