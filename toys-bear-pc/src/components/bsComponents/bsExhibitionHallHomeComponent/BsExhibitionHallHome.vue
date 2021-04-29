@@ -176,6 +176,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   props: ["item"],
   data() {
@@ -200,6 +201,10 @@ export default {
     },
     // 不带分类去查产品
     toSearch() {
+      const flag = this.tabList.find(
+        val => val.name === "/bsIndex/bsProductSearchIndex"
+      );
+      console.log(flag);
       const fd = {
         name: "/bsIndex/bsProductSearchIndex",
         linkUrl: "/bsIndex/bsProductSearchIndex",
@@ -207,18 +212,23 @@ export default {
         refresh: true,
         label: "产品查询"
       };
-      this.$store.commit("myAddTab", fd);
-      this.$router.push(fd.linkUrl);
+      // flag || this.$router.push(fd.linkUrl);
+      this.$store.commit("updateActiveTab", fd);
       const option = {
         companyInfo: this.companyInfo,
+        keyword: this.productKeyword,
         cate: null,
-        keyword: this.productKeyword
+        cateList: this.cateList
       };
       this.$store.commit("handlerimgSearch", false);
       this.$store.commit("handlerHallSearchCate", option);
     },
     // 带分类去查产品
     toSearchProduct(row) {
+      const flag = this.tabList.find(
+        val => val.name === "/bsIndex/bsProductSearchIndex"
+      );
+      console.log(flag);
       const fd = {
         name: "/bsIndex/bsProductSearchIndex",
         linkUrl: "/bsIndex/bsProductSearchIndex",
@@ -226,12 +236,13 @@ export default {
         refresh: true,
         label: "产品查询"
       };
-      this.$store.commit("myAddTab", fd);
-      this.$router.push(fd.linkUrl);
+      // flag || this.$router.push(fd.linkUrl);
+      this.$store.commit("updateActiveTab", fd);
       const option = {
         companyInfo: this.companyInfo,
+        keyword: this.productKeyword,
         cate: row,
-        keyword: this.productKeyword
+        cateList: this.cateList
       };
       this.$store.commit("handlerHallSearchCate", option);
     },
@@ -340,6 +351,9 @@ export default {
       }
       this.getHallStatisticsCount();
     }
+  },
+  computed: {
+    ...mapState(["tabList"])
   },
   created() {},
   mounted() {

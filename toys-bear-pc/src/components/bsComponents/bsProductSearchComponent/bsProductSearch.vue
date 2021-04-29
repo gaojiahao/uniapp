@@ -2,34 +2,40 @@
   <div class="box">
     <div class="searchInput">
       <span class="label">产品搜索:</span>
-      <el-input
-        v-focus
-        size="medium"
-        ref="focusKeyword"
-        @keyup.native.enter="searchProducts"
-        style="width: 340px; margin: 0 15px"
-        placeholder="输入关键词+空格可模糊搜索"
-        v-model="myKeyword"
-        clearable
-      >
-        <template slot="prefix">
-          <el-upload
-            :auto-upload="false"
-            ref="uploadRef"
-            accept=".jpg,.jpeg,.png,.ico,.bmp,.JPG,.JPEG,.PNG,.ICO,.BMP"
-            class="upload-demo"
-            action="/api/WebsiteShare/SearchProductsByPicture"
-            :show-file-list="false"
-            :on-change="openUpload"
-          >
-            <i class="iconXj"></i>
-            <!-- <i
+      <div class="inputBox">
+        <el-tag effect="plain" @close="closeTag" closable v-if="searchHallCate">
+          {{ searchHallCate.companyInfo.companyName }}
+        </el-tag>
+        <el-input
+          v-focus
+          size="medium"
+          ref="focusKeyword"
+          @keyup.native.enter="searchProducts"
+          style="width: 340px; margin: 0 15px"
+          placeholder="输入关键词+空格可模糊搜索"
+          v-model="myKeyword"
+          clearable
+        >
+          <template slot="prefix">
+            <el-upload
+              :auto-upload="false"
+              ref="uploadRef"
+              accept=".jpg,.jpeg,.png,.ico,.bmp,.JPG,.JPEG,.PNG,.ICO,.BMP"
+              class="upload-demo"
+              action="/api/WebsiteShare/SearchProductsByPicture"
+              :show-file-list="false"
+              :on-change="openUpload"
+            >
+              <i class="iconXj"></i>
+              <!-- <i
               style="font-size: 20px;"
               class="el-input__icon el-icon-camera-solid"
             ></i> -->
-          </el-upload>
-        </template>
-      </el-input>
+            </el-upload>
+          </template>
+        </el-input>
+      </div>
+
       <el-button
         size="medium"
         @click="searchProducts"
@@ -50,17 +56,6 @@
         <i
           :class="advanced == true ? 'el-icon-arrow-down' : ' el-icon-arrow-up'"
         ></i>
-      </div>
-      <div class="companyInfo">
-        <el-tag
-          effect="dark"
-          type="warning"
-          @close="closeTag"
-          closable
-          v-if="searchHallCate"
-        >
-          来源：{{ searchHallCate.companyInfo.companyName }}
-        </el-tag>
       </div>
     </div>
     <el-button type="warning" size="medium" @click="toShoppingCart">
@@ -154,6 +149,7 @@ export default {
 };
 </script>
 <style scoped lang="less">
+@deep: ~">>>";
 .box {
   width: 100%;
   display: flex;
@@ -164,6 +160,16 @@ export default {
     flex: 1;
     display: flex;
     align-items: center;
+    .inputBox {
+      margin-left: 5px;
+      .el-tag {
+        margin-left: 10px;
+        height: 36px;
+        line-height: 36px;
+        vertical-align: top;
+        box-sizing: border-box;
+      }
+    }
     .advancedBox {
       width: 90px;
       height: 36px;
@@ -180,9 +186,6 @@ export default {
         color: #3368a9;
         display: inline-block;
       }
-    }
-    .companyInfo {
-      margin-left: 20px;
     }
   }
   .upload-demo {

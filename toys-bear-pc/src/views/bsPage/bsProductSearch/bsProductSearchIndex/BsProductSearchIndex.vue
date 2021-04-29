@@ -175,97 +175,107 @@
               </el-form>
             </div>
           </div>
-          <!-- 标准筛选 -->
-          <!-- <div class="standardScreening" v-show="screeningFlag == false">
-          <span class="myLabel">标准筛选:</span>
-          <el-checkbox
-            v-model="synthesis"
-            @change="handleSynthesis"
-            style="margin-right: 30px;"
-          >
-            综合
-          </el-checkbox>
-          <el-checkbox
-            @change="handleCheckedScreensChange"
-            v-model="searchForm.fa_no"
-          >
-            货号
-          </el-checkbox>
-          <el-checkbox
-            @change="handleCheckedScreensChange"
-            v-model="searchForm.name"
-          >
-            名称
-          </el-checkbox>
-          <el-checkbox
-            @change="handleCheckedScreensChange"
-            v-model="searchForm.number"
-          >
-            编号
-          </el-checkbox>
-          <el-checkbox
-            @change="handleCheckedScreensChange"
-            v-model="searchForm.packName"
-          >
-            包装
-          </el-checkbox>
-        </div> -->
-          <div class="productClass">
-            <span class="myLabel">产品分类:</span>
-            <div :class="{ tags: true, showOneCate: isOneDownCate }">
-              <div
-                @click="oneTagEvent(null)"
-                :class="{ itemTag: true, isActive: oneCurrentTag === null }"
-              >
-                全部
+          <!-- 展厅分类 -->
+          <div class="hallCate" v-if="searchHallCate">
+            <div class="productClass">
+              <span class="myLabel">产品分类:</span>
+              <div :class="{ tags: true, showOneCate: isOneDownCate }">
+                <div
+                  @click="hallTagEvent(null)"
+                  :class="{
+                    itemTag: true,
+                    isActive: searchForm.categoryNumber === null
+                  }"
+                >
+                  全部
+                </div>
+                <div
+                  @click="hallTagEvent(item)"
+                  :class="{
+                    itemTag: true,
+                    isActive: searchForm.categoryNumber === item.categoryNumber
+                  }"
+                  v-for="item in searchHallCate.cateList"
+                  :key="item.categoryNumber"
+                >
+                  {{ item.categoryName }}
+                </div>
               </div>
-              <div
-                @click="oneTagEvent(item)"
-                :class="{
-                  itemTag: true,
-                  isActive: oneCurrentTag && oneCurrentTag.id === item.id
-                }"
-                v-for="item in categoryList"
-                :key="item.id"
-              >
-                {{ item.name }}
-              </div>
-            </div>
-            <div class="topLine">
-              <div class="develop" @click="handlerOneCateLabel">
-                <span class="zhankai">{{
-                  isOneDownCate ? "展开" : "隐藏"
-                }}</span>
-                <i v-show="isOneDownCate" class="el-icon-arrow-down"></i>
-                <i v-show="!isOneDownCate" class="el-icon-arrow-up"></i>
+              <div class="topLine">
+                <div class="develop" @click="handlerOneCateLabel">
+                  <span class="zhankai">{{
+                    isOneDownCate ? "展开" : "隐藏"
+                  }}</span>
+                  <i v-show="isOneDownCate" class="el-icon-arrow-down"></i>
+                  <i v-show="!isOneDownCate" class="el-icon-arrow-up"></i>
+                </div>
               </div>
             </div>
           </div>
-          <div class="twoLevelClass" v-if="oneCurrentTag">
-            <span class="myLabel">二级分类:</span>
-            <div :class="{ tags: true, showTwoCate: isTwoDownCate }">
-              <div
-                @click="twoTagEvent(null)"
-                :class="{ itemTag: true, isActive: currentTwoTag === null }"
-              >
-                全部
+          <!-- 所有分类 -->
+          <div class="allCate" v-else>
+            <!--一级分类 -->
+            <div class="productClass">
+              <span class="myLabel">产品分类:</span>
+              <div :class="{ tags: true, showOneCate: isOneDownCate }">
+                <div
+                  @click="oneTagEvent(null)"
+                  :class="{ itemTag: true, isActive: oneCurrentTag === null }"
+                >
+                  全部
+                </div>
+                <div
+                  @click="oneTagEvent(item)"
+                  :class="{
+                    itemTag: true,
+                    isActive: oneCurrentTag && oneCurrentTag.id === item.id
+                  }"
+                  v-for="item in categoryList"
+                  :key="item.id"
+                >
+                  {{ item.name }}
+                </div>
               </div>
-              <div
-                @click="twoTagEvent(item.id)"
-                :class="{ itemTag: true, isActive: currentTwoTag === item.id }"
-                v-for="item in oneCurrentTag.children"
-                :key="item.id"
-              >
-                {{ item.name }}
+              <div class="topLine">
+                <div class="develop" @click="handlerOneCateLabel">
+                  <span class="zhankai">{{
+                    isOneDownCate ? "展开" : "隐藏"
+                  }}</span>
+                  <i v-show="isOneDownCate" class="el-icon-arrow-down"></i>
+                  <i v-show="!isOneDownCate" class="el-icon-arrow-up"></i>
+                </div>
               </div>
             </div>
-            <div class="topLine">
-              <div class="develop" @click="handlerTwoCateLabel">
-                <span class="zhankai">{{
-                  isTwoDownCate ? "展开" : "隐藏"
-                }}</span>
-                <i v-show="isTwoDownCate" class="el-icon-arrow-down"></i>
-                <i v-show="!isTwoDownCate" class="el-icon-arrow-up"></i>
+            <!-- 二级分类 -->
+            <div class="twoLevelClass" v-if="oneCurrentTag">
+              <span class="myLabel">二级分类:</span>
+              <div :class="{ tags: true, showTwoCate: isTwoDownCate }">
+                <div
+                  @click="twoTagEvent(null)"
+                  :class="{ itemTag: true, isActive: currentTwoTag === null }"
+                >
+                  全部
+                </div>
+                <div
+                  @click="twoTagEvent(item.id)"
+                  :class="{
+                    itemTag: true,
+                    isActive: currentTwoTag === item.id
+                  }"
+                  v-for="item in oneCurrentTag.children"
+                  :key="item.id"
+                >
+                  {{ item.name }}
+                </div>
+              </div>
+              <div class="topLine">
+                <div class="develop" @click="handlerTwoCateLabel">
+                  <span class="zhankai">{{
+                    isTwoDownCate ? "展开" : "隐藏"
+                  }}</span>
+                  <i v-show="isTwoDownCate" class="el-icon-arrow-down"></i>
+                  <i v-show="!isTwoDownCate" class="el-icon-arrow-up"></i>
+                </div>
               </div>
             </div>
           </div>
@@ -1049,9 +1059,9 @@ export default {
         });
       }
       if (flag) {
-        await this.GetProductChpaList();
         await this.getProductCategoryList();
       }
+      await this.GetProductChpaList();
     },
     // 切換頁容量
     handleSizeChange(pageSize) {
@@ -1176,6 +1186,10 @@ export default {
       this.currentPage++;
       this.getProductList(false);
     },
+    // 展厅分类点击事件
+    hallTagEvent(item) {
+      this.searchForm.categoryNumber = item ? item.categoryNumber : item;
+    },
     // 一级分类点击事件
     oneTagEvent(item) {
       this.currentTwoTag = null;
@@ -1275,7 +1289,8 @@ export default {
         this.searchForm.companyNumber =
           this.searchHallCate.companyInfo &&
           this.searchHallCate.companyInfo.companyNumber;
-        this.getProductList(true);
+        this.isOneDownCate = false;
+        this.getProductList(false);
       } else if (this.imgSearch) {
         eventBus.$emit("imgSearchChange");
         this.GetProductChpaList();
@@ -1295,6 +1310,22 @@ export default {
     ...mapState(["myColles", "searchTxt", "searchHallCate", "imgSearch"])
   },
   watch: {
+    searchHallCate: {
+      deep: true,
+      handler(val) {
+        if (val) {
+          this.isOneDownCate = false;
+          // 展厅主页带分类搜索
+          this.searchForm.keyword = this.searchHallCate.keyword;
+          this.searchForm.categoryNumber =
+            this.searchHallCate.cate && this.searchHallCate.cate.categoryNumber;
+          this.searchForm.companyNumber =
+            this.searchHallCate.companyInfo &&
+            this.searchHallCate.companyInfo.companyNumber;
+          this.getProductList(true);
+        }
+      }
+    },
     shoppingList(list) {
       if (list) {
         if (list.length) {
