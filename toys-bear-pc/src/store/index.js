@@ -299,7 +299,7 @@ const store = new Vuex.Store({
       console.log(activeTab, router);
       v.$set(state, "tabList", []);
       state.tabList.push(activeTab);
-      router.push(activeTab.linkUrl);
+      router && router.push(activeTab.linkUrl);
     },
 
     //关闭tab页
