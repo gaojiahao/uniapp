@@ -135,7 +135,8 @@
             class="item"
             v-for="(item, i) in bigHalls"
             :key="i"
-            @click="topHallHome(item)"
+            @mouseenter.stop="getHallTotalCount(item)"
+            @click.stop="topHallHome(item)"
           >
             <div class="imgBox">
               <el-image
@@ -144,6 +145,24 @@
                 fit="contain"
               >
               </el-image>
+              <div class="hoverBox">
+                <div class="box">
+                  <div class="boxLeft">
+                    <p class="changshang changshangCount">
+                      {{ factoryCount }}
+                    </p>
+                    <p class="changshang">
+                      <i class="changshangIcon"></i> 厂商数
+                    </p>
+                  </div>
+                  <div class="boxRight">
+                    <p class="changshang changshangCount">
+                      {{ productCount }}
+                    </p>
+                    <p class="changshang"><i class="chanpinIcon"></i> 产品数</p>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="name">{{ item.companyName || item.adTitle }}</div>
           </div>
@@ -160,6 +179,7 @@
                 <div
                   class="minHallItem"
                   @click="topHallHome(item)"
+                  @mouseenter.stop="getHallTotalCount(item)"
                   v-for="item in children"
                   :key="item.id"
                 >
@@ -170,6 +190,26 @@
                       fit="contain"
                     >
                     </el-image>
+                    <div class="hoverBox">
+                      <div class="box">
+                        <div class="boxLeft">
+                          <p class="changshang changshangCount">
+                            {{ factoryCount }}
+                          </p>
+                          <p class="changshang">
+                            <i class="changshangIcon"></i> 厂商数
+                          </p>
+                        </div>
+                        <div class="boxRight">
+                          <p class="changshang changshangCount">
+                            {{ productCount }}
+                          </p>
+                          <p class="changshang">
+                            <i class="chanpinIcon"></i> 产品数
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <div class="name">
                     {{ item.companyName || item.adTitle }}
@@ -178,47 +218,6 @@
               </div>
             </el-carousel-item>
           </el-carousel>
-          <!-- <slider
-            @slide="slide"
-            @slideTo="slideTo"
-            :options="sliderinit"
-            ref="slider"
-          >
-            <slideritem v-for="item in minHalls" :key="item.id">
-              <div class="minHallItem">
-                <div class="imgBox">
-                  <el-image
-                    style="width: 221px; height: 108px"
-                    :src="item.bgImg || item.img"
-                    fit="contain"
-                  >
-                  </el-image>
-                </div>
-                <div class="name">
-                  {{ item.companyName || item.adTitle }}
-                </div>
-              </div>
-            </slideritem>
-            <div slot="loading">loading...</div>
-          </slider> -->
-          <!-- <swiper ref="mySwiper" :options="swiperOption">
-            <swiper-slide v-for="item in minHalls" :key="item.id">
-              <div class="minHallItem">
-                <div class="imgBox">
-                  <el-image
-                    style="width: 221px; height: 108px"
-                    :src="item.bgImg || item.img"
-                    fit="contain"
-                  >
-                  </el-image>
-                </div>
-                <div class="name">
-                  {{ item.companyName || item.adTitle }}
-                </div>
-              </div>
-            </swiper-slide>
-            <div class="swiper-pagination" slot="pagination"></div>
-          </swiper> -->
         </div>
       </div>
       <div class="right">
@@ -366,6 +365,8 @@ export default {
   name: "bsHome",
   data() {
     return {
+      factoryCount: 0,
+      productCount: 0,
       up_f: require("@/assets/images/up_f.png"),
       up_t: require("@/assets/images/up_t.png"),
       statisticsData: {
@@ -475,19 +476,49 @@ export default {
     };
   },
   methods: {
+    // 获取产品数和厂商数
+    async getHallTotalCount(item) {
+      const key = item.companyNumber || item.content;
+      let companyOptions = sessionStorage.getItem(key);
+      if (companyOptions) {
+        companyOptions = JSON.parse(companyOptions);
+        this.factoryCount = companyOptions.firmTotalCount;
+        this.productCount = companyOptions.productTotalCount;
+      } else {
+        const res = await this.$http.post("/api/GetHallStatisticsCount", {
+          hallNumber: item.companyNumber || item.content
+        });
+        if (res.data.result.code === 200) {
+          this.factoryCount = res.data.result.item.firmTotalCount;
+          this.productCount = res.data.result.item.productTotalCount;
+          sessionStorage.setItem(key, JSON.stringify(res.data.result.item));
+        }
+      }
+    },
     // 去展厅主页
-    topHallHome() {
-      // topHallHome(item) {
-      return false;
-      // const fd = {
-      //   name: item.companyNumber || item.content || item.id,
-      //   linkUrl: "/bsIndex/bsHome",
-      //   component: "bsExhibitionHallHome",
-      //   refresh: true,
-      //   label: item.companyName || item.adTitle,
-      //   value: item
-      // };
-      // this.$store.commit("myAddTab", fd);
+    // topHallHome() {
+    // this.$common.handlerMsgState({
+    //   msg: "敬请期待",
+    //   type: "warning"
+    // });
+    // return false;
+    topHallHome(item) {
+      if (!item.companyNumber && !item.content) {
+        this.$common.handlerMsgState({
+          msg: "展厅信息有误,请联系管理员",
+          type: "warning"
+        });
+        return false;
+      }
+      const fd = {
+        name: item.companyNumber || item.content,
+        linkUrl: "/bsIndex/bsHome",
+        component: "bsExhibitionHallHome",
+        refresh: true,
+        label: item.companyName || item.adTitle,
+        value: item
+      };
+      this.$store.commit("myAddTab", fd);
     },
     // 去产品详情
     toProductDetails(row) {
@@ -536,11 +567,13 @@ export default {
         case "按图找样":
           fd = {
             name: "/bsIndex/bsProductSearchIndex",
-            linkUrl: "/bsIndex/bsProductSearchIndex?id=imgSearch",
+            linkUrl: "/bsIndex/bsProductSearchIndex",
             component: "bsProductSearchIndex",
             refresh: true,
             label: "产品查询"
           };
+          this.$store.commit("handlerHallSearchCate", null);
+          this.$store.commit("handlerimgSearch", true);
           break;
         case "新品区":
           fd = {
@@ -958,8 +991,60 @@ export default {
             width: 302px;
             height: 133px;
             overflow: hidden;
+            position: relative;
             .el-image {
               transition: all 1s;
+            }
+            .hoverBox {
+              color: #fff;
+              opacity: 0;
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: 100%;
+              height: 100%;
+              background-color: rgba(0, 0, 0, 0.5);
+              transition: all 1s;
+              .box {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: space-evenly;
+                .boxLeft,
+                .boxRight {
+                  // width: 50%;
+                  .changshangIcon {
+                    display: block;
+                    width: 14px;
+                    height: 14px;
+                    margin-right: 10px;
+                    background: url("~@/assets/images/changshangIcon.png")
+                      no-repeat center;
+                    background-size: contain;
+                  }
+                  .chanpinIcon {
+                    display: block;
+                    width: 14px;
+                    height: 14px;
+                    margin-right: 10px;
+                    background: url("~@/assets/images/chanpinIcon.png")
+                      no-repeat center;
+                    background-size: contain;
+                  }
+                  .changshang {
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    margin-top: 10px;
+                    &.changshangCount {
+                      margin-top: 40px;
+                    }
+                  }
+                }
+              }
+            }
+            &:hover .hoverBox {
+              opacity: 1;
             }
           }
           &:hover {
@@ -1015,6 +1100,58 @@ export default {
               width: 221px;
               height: 108px;
               transition: all 1s;
+            }
+            position: relative;
+            .hoverBox {
+              color: #fff;
+              opacity: 0;
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: 100%;
+              height: 100%;
+              background-color: rgba(0, 0, 0, 0.5);
+              transition: all 1s;
+              .box {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: space-evenly;
+                .boxLeft,
+                .boxRight {
+                  // width: 50%;
+                  .changshangIcon {
+                    display: block;
+                    width: 14px;
+                    height: 14px;
+                    margin-right: 10px;
+                    background: url("~@/assets/images/changshangIcon.png")
+                      no-repeat center;
+                    background-size: contain;
+                  }
+                  .chanpinIcon {
+                    display: block;
+                    width: 14px;
+                    height: 14px;
+                    margin-right: 10px;
+                    background: url("~@/assets/images/chanpinIcon.png")
+                      no-repeat center;
+                    background-size: contain;
+                  }
+                  .changshang {
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    margin-top: 10px;
+                    &.changshangCount {
+                      margin-top: 30px;
+                    }
+                  }
+                }
+              }
+            }
+            &:hover .hoverBox {
+              opacity: 1;
             }
           }
           &:hover {

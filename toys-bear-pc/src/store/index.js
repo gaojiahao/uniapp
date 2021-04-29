@@ -17,7 +17,6 @@ function myForEach(oList, yList) {
 }
 const store = new Vuex.Store({
   state: {
-    textSearch: "",
     myColles: [],
     isJindu: false,
     activeTab: "/bsIndex/bsHome",
@@ -37,6 +36,7 @@ const store = new Vuex.Store({
     offerProductList: [], //报价数据
     historyNames: [],
     searchTxt: "",
+    imgSearch: false,
     searchHallCate: null,
     httpTime: 0, // 请求时长
     httpContent: "", // 请求内容
@@ -75,6 +75,10 @@ const store = new Vuex.Store({
   mutations: {
     handlerOldTabName(state, payLoad) {
       state.oldTabName = payLoad;
+    },
+    // 首页图搜
+    handlerimgSearch(state, payLoad) {
+      state.imgSearch = payLoad;
     },
     //修改查询值
     handlerSearchTxt(state, payLoad) {
@@ -292,7 +296,7 @@ const store = new Vuex.Store({
       const activeTab = state.tabList.find(val => val.name === state.activeTab);
       v.$set(state, "tabList", []);
       state.tabList.push(activeTab);
-      router.push(activeTab.linkUrl);
+      router && router.push(activeTab.linkUrl);
     },
 
     //关闭tab页

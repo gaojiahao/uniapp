@@ -176,6 +176,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   props: ["item"],
   data() {
@@ -200,6 +201,10 @@ export default {
     },
     // 不带分类去查产品
     toSearch() {
+      const flag = this.tabList.find(
+        val => val.name === "/bsIndex/bsProductSearchIndex"
+      );
+      console.log(flag);
       const fd = {
         name: "/bsIndex/bsProductSearchIndex",
         linkUrl: "/bsIndex/bsProductSearchIndex",
@@ -207,18 +212,23 @@ export default {
         refresh: true,
         label: "产品查询"
       };
-      // this.$store.commit("myAddTab", fd);
-      // this.$router.push(fd.linkUrl);
+      // flag || this.$router.push(fd.linkUrl);
+      this.$store.commit("updateActiveTab", fd);
       const option = {
         companyInfo: this.companyInfo,
+        keyword: this.productKeyword,
         cate: null,
-        keyword: this.productKeyword
+        cateList: this.cateList
       };
-      console.log(option, fd);
-      // this.$store.commit("handlerSearchCate", fd);
+      this.$store.commit("handlerimgSearch", false);
+      this.$store.commit("handlerHallSearchCate", option);
     },
     // 带分类去查产品
-    toSearchProduct(item) {
+    toSearchProduct(row) {
+      const flag = this.tabList.find(
+        val => val.name === "/bsIndex/bsProductSearchIndex"
+      );
+      console.log(flag);
       const fd = {
         name: "/bsIndex/bsProductSearchIndex",
         linkUrl: "/bsIndex/bsProductSearchIndex",
@@ -226,14 +236,14 @@ export default {
         refresh: true,
         label: "产品查询"
       };
-      this.$store.commit("myAddTab", fd);
-      this.$router.push(fd.linkUrl);
+      // flag || this.$router.push(fd.linkUrl);
+      this.$store.commit("updateActiveTab", fd);
       const option = {
         companyInfo: this.companyInfo,
-        cate: item,
-        keyword: this.productKeyword
+        keyword: this.productKeyword,
+        cate: row,
+        cateList: this.cateList
       };
-      console.log(option);
       this.$store.commit("handlerHallSearchCate", option);
     },
     // 去厂商
@@ -262,7 +272,7 @@ export default {
       const res = await this.$http.post("/api/GetProductClassPage", {
         skipCount: 1,
         maxResultCount: 9999,
-        companyNumber: this.item.companyNumber || this.item.content
+        hallNumber: this.item.companyNumber || this.item.content
       });
       if (res.data.result.code === 200) {
         this.cateList = res.data.result.item.items;
@@ -311,7 +321,7 @@ export default {
     // 获取统计数据
     async getHallStatisticsCount() {
       const res = await this.$http.post("/api/GetHallStatisticsCount", {
-        companyNumber: this.item.companyNumber || this.item.content
+        hallNumber: this.item.companyNumber || this.item.content
       });
       if (res.data.result.code === 200) {
         this.statisticsCount = res.data.result.item;
@@ -341,6 +351,9 @@ export default {
       }
       this.getHallStatisticsCount();
     }
+  },
+  computed: {
+    ...mapState(["tabList"])
   },
   created() {},
   mounted() {
