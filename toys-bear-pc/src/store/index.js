@@ -90,7 +90,6 @@ const store = new Vuex.Store({
     },
     // 添加收藏
     addMyCollec(state, payLoad) {
-      console.log(payLoad);
       state.myColles.push(payLoad);
     },
     // 删除收藏
@@ -142,7 +141,6 @@ const store = new Vuex.Store({
     },
     //添加报价产品
     pushOfferProductList(state, payLoad) {
-      console.log(payLoad);
       state.offerProductList.push(payLoad);
     },
     // 删除报价产品
@@ -292,7 +290,6 @@ const store = new Vuex.Store({
     //关闭全部tab页
     closeTabAll(state, router) {
       const activeTab = state.tabList.find(val => val.name === state.activeTab);
-      console.log(activeTab, router);
       v.$set(state, "tabList", []);
       state.tabList.push(activeTab);
       router.push(activeTab.linkUrl);
@@ -301,7 +298,6 @@ const store = new Vuex.Store({
     //关闭tab页
     closeTab(state, n) {
       let tab = state.tabList;
-      console.log(n, state.oldTabName);
       tab.forEach((val, i) => {
         if (val.name == n) {
           tab.splice(i, 1);

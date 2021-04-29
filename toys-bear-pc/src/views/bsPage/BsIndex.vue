@@ -28,7 +28,7 @@
                   :content="item.label"
                   placement="top"
                 >
-                  <span style="width:90px;padding:0;">
+                  <span style="width: 90px; padding: 0">
                     {{ item.label }}
                   </span>
                 </el-tooltip>
@@ -220,37 +220,6 @@ export default {
       ) {
         eventBus.$emit("showCart", true);
       }
-      // const myScrollbarList = this.$refs.myScrollbar;
-      // myScrollbarList.forEach(val => {
-      //   const fun = () => {
-      //     if (this.activeTab == "/bsIndex/bsProductSearchIndex") {
-      //       if (val.scrollTop >= 200) {
-      //         eventBus.$emit("showCart", true);
-      //       } else {
-      //         eventBus.$emit("showCart", false);
-      //       }
-      //     } else if (
-      //       this.tabList.find(val => val.name == this.activeTab).linkUrl ==
-      //       "/bsIndex/bsProductSearchIndex"
-      //     ) {
-      //       eventBus.$emit("showCart", true);
-      //     } else if (
-      //       this.activeTab == "/bsIndex/bsLatestProducts" ||
-      //       this.activeTab == "/bsIndex/bsSpotProducts" ||
-      //       this.activeTab == "/bsIndex/bsVIPProducts" ||
-      //       this.activeTab == "/bsIndex/bsMyCollection"
-      //     ) {
-      //       eventBus.$emit("showCart", true);
-      //     } else {
-      //       eventBus.$emit("showCart", false);
-      //     }
-      //   };
-      //   if (this.activeTab == "/bsIndex/bsProductSearchIndex") {
-      //     val.onscroll = fun;
-      //   } else {
-      //     val.removeEventListener("scroll", fun, false);
-      //   }
-      // });
     },
     // 刷新tab标签
     triggerTab() {
@@ -258,11 +227,6 @@ export default {
         if (this.activeTab == this.tabList[i].name) {
           this.$store.commit("updataUrl", this.activeTab);
           this.$router.push(this.tabList[i].linkUrl);
-          // if (this.tabList[i].linkUrl == "/bsIndex/bsProductDetails") {
-          //   eventBus.$emit("showCart", true);
-          // } else {
-          //   eventBus.$emit("showCart", false);
-          // }
           break;
         }
       }
@@ -306,7 +270,6 @@ export default {
         return this.$store.state.activeTab;
       },
       set(val) {
-        // this.showSearch = false;
         this.$store.commit("setActiveTab", val);
       }
     },
@@ -314,10 +277,8 @@ export default {
   },
   watch: {
     activeTab(newN, oldN) {
+      //   console.log(newN,"现在", oldN,"上一次");
       this.$store.commit("handlerOldTabName", oldN);
-      // if (newN == "/bsIndex/bsProductSearchIndex") {
-      //   // this.handleScroll();
-      // } else {
       if (
         newN == "/bsIndex/bsProductSearchIndex" ||
         newN == "/bsIndex/bsLatestProducts" ||

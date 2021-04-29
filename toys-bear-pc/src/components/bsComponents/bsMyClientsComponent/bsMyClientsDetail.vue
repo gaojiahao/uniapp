@@ -6,9 +6,7 @@
         <div class="top">
           <div class="clientsImg">
             <el-image
-              style=" width: 120px;
-            height: 120px;
-            border-radius: 50%;;"
+              style="width: 120px; height: 120px; border-radius: 50%"
               fit="contain"
               :src="companyInfo.companyLogo"
               lazy
@@ -41,19 +39,19 @@
               </p>
             </div>
           </div>
-          <div class="headTop">
-            <div
-              :class="{ tabs: true, active: isDiyu === 0 }"
-              @click="checkTabsAll(0)"
-            >
-              所有产品
-            </div>
-            <div
-              :class="{ tabs: true, active: isDiyu === 1 }"
-              @click="checkTabsAll(1)"
-            >
-              推荐产品
-            </div>
+        </div>
+        <div class="headTop">
+          <div
+            :class="{ tabs: true, active: isDiyu === 0 }"
+            @click="checkTabsAll(0)"
+          >
+            所有产品
+          </div>
+          <div
+            :class="{ tabs: true, active: isDiyu === 1 }"
+            @click="checkTabsAll(1)"
+          >
+            推荐产品
           </div>
         </div>
       </div>
@@ -179,7 +177,7 @@
           <!-- 产品列表 -->
           <component :is="isGrid" :productList="productList"></component>
           <!-- 分页 -->
-          <center style="padding:20px 0;">
+          <center style="padding: 20px 0">
             <el-pagination
               layout="total, sizes, prev, pager, next, jumper"
               :page-sizes="[12, 24, 36, 48]"
@@ -284,6 +282,8 @@ export default {
         PageIndex: this.currentPage,
         PageSize: this.pageSize,
         KeyWord: this.KeyWord,
+        sortOrder: this.sortOrder,
+        sortType: this.sortType,
         typeId: 1,
         companyNumber: this.item.companyNumber
       };
@@ -309,7 +309,8 @@ export default {
         maxPrice: this.searchForm.maxPrice,
         startTime: this.searchForm.time.length ? this.searchForm.time[0] : null,
         endTime: this.searchForm.time.length ? this.searchForm.time[1] : null,
-        sortOrder: this.sortOrder
+        sortOrder: this.sortOrder,
+        sortType: this.sortType
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -453,7 +454,6 @@ export default {
 <style scoped lang="less">
 .bsMyClientsDetail {
   min-height: 100%;
-  background-color: #fff;
   .hander {
     .handerBg {
       height: 160px;
