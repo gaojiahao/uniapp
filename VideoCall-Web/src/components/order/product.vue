@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:37:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\product.vue
- * @LastEditTime: 2021-04-28 17:57:10
+ * @LastEditTime: 2021-04-29 14:43:41
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -135,11 +135,11 @@
             </Row>
             <div class="action" v-if="this.productInfo.id&&isAdmin">
                 <Button type="primary" shape="circle" style="width:88px;margin:0 9px 0 58.5px;" @click="sureFlag = true">{{$t("product.other.add")}}</Button>
-                <Modal v-model="sureFlag" :title="$t("product.other.reminder")" @on-ok="addSelection" @on-cancel="cancelSelection">
+                <Modal v-model="sureFlag" :title="$t('product.other.reminder')" @on-ok="addSelection" @on-cancel="cancelSelection">
                     <Icon type="ios-alert-outline" style="color:#ff9900;font-size:18px"/><span>{{$t("product.other.sureAdd")}}</span>
                 </Modal>
                 <Button type="warning" shape="circle" style="width:88px;margin:0 58.5px 0 9px;"  @click="delFlag = true">{{$t("product.other.delete")}}</Button>
-                <Modal v-model="delFlag" :title="$t("product.other.reminder")" @on-ok="delSelection" @on-cancel="cancelDel">
+                <Modal v-model="delFlag" :title="$t('product.other.reminder')" @on-ok="delSelection" @on-cancel="cancelDel">
                     <Icon type="ios-alert-outline" style="color:#ed4014;font-size:18px"/><span>{{$t("product.other.sureDelete")}}</span>
                 </Modal>
             </div>

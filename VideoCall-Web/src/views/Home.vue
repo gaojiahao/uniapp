@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\Home.vue
- * @LastEditTime: 2021-04-27 15:51:49
+ * @LastEditTime: 2021-04-29 14:35:06
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -39,10 +39,10 @@
 
 <script>
 import * as Cookies from "js-cookie";
-import Heads from "@components/head/index";
+import Heads from "@components/head/head";
 import UserList from "@views/user/userList";
 import Video from "@views/video/video";
-import Order from "@views/order/index";
+import Order from "@views/order/order";
 import Footers from "@components/footer/footer";
 import {
   QueryMeetingRoomMembers,

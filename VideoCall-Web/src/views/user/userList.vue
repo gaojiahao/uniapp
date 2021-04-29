@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 15:46:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\user\userList.vue
- * @LastEditTime: 2021-04-29 12:23:57
+ * @LastEditTime: 2021-04-29 14:31:25
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -39,7 +39,7 @@
                         <a href="javascript:void(0)">
                             <i class="iconfont iconzu1306 text"></i>
                         </a>
-                        <DropdownMenu slot="list">
+                        <DropdownMenu slot="list" v-if="nowUid!=item.id">
                             <!-- <DropdownItem @click.native="setKickingRuleAudio(item.id)">禁止麦克风</DropdownItem>
                             <DropdownItem @click.native="setKickingRuleCamera(item.id)">禁止摄像头</DropdownItem> -->
                             <DropdownItem @click.native="setKickingRuleJoin(item.id)" v-if="!item.isDel">{{$t("userList.delete")}}</DropdownItem>

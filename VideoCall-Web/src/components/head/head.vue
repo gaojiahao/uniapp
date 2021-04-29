@@ -2,8 +2,8 @@
  * @Description: 
  * @Author: gaojiahao
  * @Date: 2021-04-01 14:55:25
- * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\head\index.vue
- * @LastEditTime: 2021-04-28 18:11:16
+ * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\head\head.vue
+ * @LastEditTime: 2021-04-29 15:02:55
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -21,9 +21,9 @@
             <Col span="8">
                 <div class="center_title">
                     <div class="title">
-                        <div class="title_cn">
+                        <div class="title_cn" @click="copyUrl">
                             {{companyName}}
-                            <i class="iconfont iconzhifeiji" @click="copyUrl"></i>
+                            <i class="iconfont iconzhifeiji"></i>
                         </div>
                         <div class="text">
                             ID:{{channel}}
@@ -68,7 +68,7 @@ export default {
   methods: {
     copyUrl(){
         var Url = process.env.VUE_APP_PATH+`/videoMeeting/addMeeting?roomNumber=${this.channel}` // 点击文字复制的地址
-        var clipboard = new Clipboard('.iconzhifeiji', {
+        var clipboard = new Clipboard('.title_cn', {
             text: function () {
                 return Url
             }
@@ -121,6 +121,10 @@ export default {
                 font-size: 22px;
                 text-align: center;
                 font-weight: 600;
+
+            }
+            .title_cn:hover{
+                cursor:pointer    
             }
             .text{
                 text-align: center;    

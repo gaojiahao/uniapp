@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 20:28:08
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\lang\en.js
- * @LastEditTime: 2021-04-29 09:45:17
+ * @LastEditTime: 2021-04-29 14:36:58
  * @LastEditors: sueRimn
  * @Descripttion:
  * @version: 1.0.0
@@ -79,7 +79,7 @@ export default {
     button:'confirm',
     camera:'Camera',
     audio:'Mic',
-    resolutionRatio:'Resolution ratio',
+    resolutionRatio:'Resolution',
     volume:'Volume'
   },
   addSampling:{
@@ -149,7 +149,7 @@ export default {
     leaveRoom:'Are you sure to leave the meeting?',
     leaveSure:'sure',
     leaveCancel:'cancel',
-    endMeeting:'The meeting is coming to an end!',
+    endMeeting:'End of the meeting!',
     endReset:'reset',
     endCancel:'cancel'
   },
