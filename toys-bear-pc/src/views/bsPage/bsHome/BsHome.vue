@@ -536,11 +536,13 @@ export default {
         case "按图找样":
           fd = {
             name: "/bsIndex/bsProductSearchIndex",
-            linkUrl: "/bsIndex/bsProductSearchIndex?id=imgSearch",
+            linkUrl: "/bsIndex/bsProductSearchIndex",
             component: "bsProductSearchIndex",
             refresh: true,
             label: "产品查询"
           };
+          this.$store.commit("handlerHallSearchCate", null);
+          this.$store.commit("handlerimgSearch", true);
           break;
         case "新品区":
           fd = {

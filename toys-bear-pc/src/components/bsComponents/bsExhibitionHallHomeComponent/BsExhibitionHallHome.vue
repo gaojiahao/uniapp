@@ -214,6 +214,7 @@ export default {
         cate: null,
         keyword: this.productKeyword
       };
+      this.$store.commit("handlerimgSearch", false);
       this.$store.commit("handlerHallSearchCate", option);
     },
     // 带分类去查产品

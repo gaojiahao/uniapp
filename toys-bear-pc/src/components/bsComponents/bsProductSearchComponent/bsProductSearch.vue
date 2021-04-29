@@ -136,8 +136,9 @@ export default {
   },
   created() {},
   mounted() {
-    eventBus.$on("imgSearch", () => {
+    eventBus.$on("imgSearchChange", () => {
       this.$refs.uploadRef.$children[0].$refs.input.click();
+      this.$store.commit("handlerimgSearch", false);
     });
   },
   computed: {
@@ -147,7 +148,7 @@ export default {
     ...mapState(["searchHallCate"])
   },
   beforeDestroy() {
-    eventBus.$off("imgSearch");
+    eventBus.$off("imgSearchChange");
     eventBus.$off("txtSearch");
   }
 };
