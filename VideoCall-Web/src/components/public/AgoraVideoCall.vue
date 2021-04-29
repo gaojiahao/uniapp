@@ -299,13 +299,17 @@ export default {
       }
     },
     //用户取消发布订阅
-    handleUserUnpublished(user,mediaType) {
-      debugger
+    async handleUserUnpublished(user,mediaType) {
       if (mediaType === "video") {
         // 获取刚刚动态创建的 DIV 节点。
         const playerContainer = document.getElementById(user.uid.toString());
         // 销毁这个节点。
+        // await this.client.unsubscribe(user,'video');
         playerContainer.remove();
+      } else if(mediaType === "audio"){
+        // await this.client.unsubscribe(user,'audio');
+      } else {
+        // await this.client.unsubscribe(user); 
       }
     },
     //结束会议
@@ -456,6 +460,36 @@ export default {
       } else {
         await client.publish(this.localAudioTrack);  
       }  
+    },
+    //用户取消发布订阅
+    async closeUserVideo(user,mediaType) {
+      if (mediaType === "video") {
+        // 获取刚刚动态创建的 DIV 节点。
+        const playerContainer = document.getElementById(user.uid.toString());
+        // 销毁这个节点。
+        await this.client.unsubscribe(user,'video');
+        playerContainer.remove();
+      } else if(mediaType === "audio"){
+        await this.client.unsubscribe(user,'audio');
+      } else {
+        await this.client.unsubscribe(user); 
+      }
+    },
+    //关闭订阅用户视频
+    setUserVideo(uid,type,status){
+      var me = this,
+      obj={};
+      for(var i=0;i<me.client.remoteUsers.length;i++){
+        if(uid==me.client.remoteUsers[i]['uid']){
+          obj = me.client.remoteUsers[i];
+          break;
+        }
+      }
+      if(status){
+        this.closeUserVideo(obj,type);
+      } else {
+        this.subscribe(obj,type);
+      }
     },
     //初始化
     async init(){

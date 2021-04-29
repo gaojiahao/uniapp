@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 15:46:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\user\userList.vue
- * @LastEditTime: 2021-04-28 11:44:59
+ * @LastEditTime: 2021-04-29 12:23:57
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -31,8 +31,10 @@
                 </div>
                 <div class="action">
                     {{item.isMaster?$t('userList.host'):''}}
-                    <i class="iconfont icon21maikefeng text" :class="[item.isMic ? 'outline':'eye']" @click="setKickingRuleAudio(item.id)"  v-if="isAdmin"></i>
-                    <i class="iconfont iconshexiangtou text" :class="[item.isCar ? 'outline':'eye']" @click="setKickingRuleCamera(item.id)"  v-if="isAdmin"></i>
+                    <!-- <i class="iconfont icon21maikefeng text" :class="[item.isMic ? 'outline':'eye']" @click="setUserDevices(index,item,'audio')"  v-if="isAdmin"></i>
+                    <i class="iconfont iconshexiangtou text" :class="[item.isCar ? 'outline':'eye']" @click="setUserDevices(index,item,'video')"  v-if="isAdmin"></i> -->
+                    <i class="iconfont icon21maikefeng text" :class="[item.isMic ? 'outline':'eye']" @click="setUserDevices(index,item,'audio')" v-if="nowUid!=item.id"></i>
+                    <i class="iconfont iconshexiangtou text" :class="[item.isCar ? 'outline':'eye']" @click="setUserDevices(index,item,'video')" v-if="nowUid!=item.id"></i>
                     <Dropdown  v-if="isAdmin">
                         <a href="javascript:void(0)">
                             <i class="iconfont iconzu1306 text"></i>
@@ -72,7 +74,8 @@ export default {
         return {
             loading: false,
             userList:[],
-            isAdmin:null
+            isAdmin:null,
+            nowUid:''
         };
     },
     watch:{
@@ -287,9 +290,24 @@ export default {
                 this.$FromLoading.hide();  
             });
         },
+        //
+        setUserDevices(index,item,type){
+            if(type=='video'){
+                this.$parent.$parent.$parent.$parent.$refs.video.$refs.video.setUserVideo(item.id,type,item['isCar']);
+                var obj = item;
+                obj['isCar'] = obj['isCar']?false:true;
+                this.$set(this.userList,index,obj);
+            } else if(type=='audio'){
+                this.$parent.$parent.$parent.$parent.$refs.video.$refs.video.setUserVideo(item.id,type,item['isMic']);
+                var obj = item;
+                obj['isMic'] = obj['isMic']?false:true;
+                this.$set(this.userList,index,obj);
+            }
+        },
     },
     created(){
         this.isAdmin = Cookies.get("isAdmin")=='true' ? true : false;
+        this.nowUid = Cookies.get("uid");
     }
 }
 </script>

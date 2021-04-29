@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 20:28:08
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\lang\en.js
- * @LastEditTime: 2021-04-28 19:23:10
+ * @LastEditTime: 2021-04-29 09:45:17
  * @LastEditors: sueRimn
  * @Descripttion:
  * @version: 1.0.0
@@ -155,9 +155,9 @@ export default {
   },
   video:{
     tipCamera:'Warm tip: no camera detected',
-    user:'User',
-    join:'join in',
-    leave:'leave',
+    user:'User ',
+    join:' join in',
+    leave:' leave',
     definition:'Warm tips: switch definition successfully',
     deviceIn:'Warm tip: the device has been inserted',
     deviceChange:'Warm prompt: the device has been switched',
