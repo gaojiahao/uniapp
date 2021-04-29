@@ -190,7 +190,7 @@
     </el-dialog>
     <!-- 编辑公司 -->
     <el-dialog
-      top="0"
+      top="60"
       width="70%"
       title="编辑公司"
       v-if="editCompanyDialog"
