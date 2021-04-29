@@ -243,6 +243,14 @@ export default {
 
   created() {},
   mounted() {
+    // 取消收藏
+    eventBus.$on("resetProducts", item => {
+      for (let i = 0; i < this.productList.length; i++) {
+        if (this.productList[i].productNumber == item.productNumber) {
+          this.productList[i].isFavorite = item.isFavorite;
+        }
+      }
+    });
     eventBus.$emit("showCart", true);
     this.getProductListPageAll();
     this.getCompanyByID();
