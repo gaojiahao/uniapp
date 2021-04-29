@@ -257,11 +257,11 @@ export default {
         size: [{ required: true, message: "请选择尺码", trigger: "change" }],
         rejectionMethod: [
           { required: true, message: "请选择取舍方式", trigger: "change" }
-        ],
-        miniPrice: [{ required: true, message: "请输入价格", trigger: "blur" }],
-        miniPriceDecimalPlaces: [
-          { required: true, message: "请选择小数位数", trigger: "change" }
         ]
+        // miniPrice: [{ required: true, message: "请输入价格", trigger: "blur" }],
+        // miniPriceDecimalPlaces: [
+        //   { required: true, message: "请选择小数位数", trigger: "change" }
+        // ]
       }
     };
   },
@@ -271,9 +271,9 @@ export default {
       this.$refs.addDefaultFormRef.validate(async valid => {
         if (valid) {
           console.log(this.addDefaultForm);
-          //       this.addDefaultForm.miniPrice = this.addDefaultForm.miniPrice || 0;
-          //   this.addDefaultForm.miniPriceDecimalPlaces =
-          //     this.addDefaultForm.miniPriceDecimalPlaces || 0;
+          this.addDefaultForm.miniPrice = this.addDefaultForm.miniPrice || 0;
+          this.addDefaultForm.miniPriceDecimalPlaces =
+            this.addDefaultForm.miniPriceDecimalPlaces || 0;
           this.$emit("submit", this.addDefaultForm);
         }
       });
