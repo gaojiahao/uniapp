@@ -284,11 +284,11 @@ export default {
         const msg = this.isEdit ? "编辑成功" : "新增成功";
         this.isEdit = false;
         this.addEmployDialog = false;
+        this.getCompanyUserList();
         this.$common.handlerMsgState({
           msg: msg,
           type: "success"
         });
-        this.getCompanyUserList();
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,

@@ -259,7 +259,7 @@
       <el-pagination
         layout="total, sizes, prev, pager, next, jumper"
         background
-        :page-sizes="[10, 20, 30, 50]"
+        :page-sizes="[10, 20, 30, 40]"
         :page-size="pageSize"
         :total="totalCount"
         :current-page.sync="currentPage"
