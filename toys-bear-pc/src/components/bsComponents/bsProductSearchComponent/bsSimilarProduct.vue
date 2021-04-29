@@ -207,9 +207,9 @@
           >
           </el-pagination>
         </center>
-        <div class="footer">
-          <img src="@/assets/images/footerBg.png" alt="" />
-        </div>
+      </div>
+      <div class="footer">
+        <img src="@/assets/images/footerBg.png" alt="" />
       </div>
     </div>
   </div>
