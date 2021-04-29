@@ -1,11 +1,12 @@
 <template>
-  <div class="bsGridItem" @click="toProductDetails">
+  <div class="bsGridItem">
     <div class="itemImg">
       <el-image
         style="width: 222px; height: 166px"
         fit="contain"
         :src="item.img"
         lazy
+        @click="toProductDetails"
       >
         <div slot="placeholder" class="image-slot">
           <img :src="require('@/assets/images/imgError.png')" />
