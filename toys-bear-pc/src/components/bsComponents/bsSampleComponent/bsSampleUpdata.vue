@@ -988,6 +988,15 @@ export default {
       this.currentPage = page;
       this.getProductOfferDetailPage();
     },
+    // 新增客户
+    openAddMyClient() {
+      this.addClientFormData = {
+        name: null,
+        phoneNumber: null,
+        remark: null
+      };
+      this.addMyClientDialog = true;
+    },
     /*
      * 将一个浮点数转成整数，返回整数和倍数。如 3.14 >> 314，倍数是 100
      * @param floatNum {number} 小数
