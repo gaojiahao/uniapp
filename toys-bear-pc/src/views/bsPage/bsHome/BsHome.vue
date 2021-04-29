@@ -496,22 +496,29 @@ export default {
       }
     },
     // 去展厅主页
-    topHallHome() {
-      this.$common.handlerMsgState({
-        msg: "敬请期待",
-        type: "warning"
-      });
-      return false;
-      // topHallHome(item) {
-      // const fd = {
-      //   name: item.companyNumber || item.content || item.id,
-      //   linkUrl: "/bsIndex/bsHome",
-      //   component: "bsExhibitionHallHome",
-      //   refresh: true,
-      //   label: item.companyName || item.adTitle,
-      //   value: item
-      // };
-      // this.$store.commit("myAddTab", fd);
+    // topHallHome() {
+    // this.$common.handlerMsgState({
+    //   msg: "敬请期待",
+    //   type: "warning"
+    // });
+    // return false;
+    topHallHome(item) {
+      if (!item.companyNumber && !item.content) {
+        this.$common.handlerMsgState({
+          msg: "展厅信息有误,请联系管理员",
+          type: "warning"
+        });
+        return false;
+      }
+      const fd = {
+        name: item.companyNumber || item.content,
+        linkUrl: "/bsIndex/bsHome",
+        component: "bsExhibitionHallHome",
+        refresh: true,
+        label: item.companyName || item.adTitle,
+        value: item
+      };
+      this.$store.commit("myAddTab", fd);
     },
     // 去产品详情
     toProductDetails(row) {
