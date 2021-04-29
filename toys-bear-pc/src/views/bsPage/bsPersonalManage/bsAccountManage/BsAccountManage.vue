@@ -541,10 +541,10 @@ export default {
           display: block;
           position: relative;
           top: -3px;
-          -webkit-transform: scale(0.7);
-          -moz-transform: scale(0.7);
-          -ms-transform: scale(0.7);
-          transform: scale(0.7);
+          -webkit-transform: scale(0.8);
+          -moz-transform: scale(0.8);
+          -ms-transform: scale(0.8);
+          transform: scale(0.8);
         }
       }
     }

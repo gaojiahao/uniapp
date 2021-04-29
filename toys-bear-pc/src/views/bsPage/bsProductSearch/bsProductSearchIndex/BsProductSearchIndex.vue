@@ -5,6 +5,9 @@
         <div class="advancedSearchBox">
           <bsProductSearch
             ref="searchRef"
+            :keyword="searchForm.keyword"
+            v-model="searchForm.keyword"
+            @closeTag="closeTag"
             @handleSynthesis="handleSynthesis"
             @screeningShow="screeningShow"
           />
@@ -549,7 +552,6 @@ export default {
   },
   data() {
     return {
-      hallCateSearch: null,
       loading: false,
       baseImg: null,
       fileinfo: null,
@@ -735,6 +737,7 @@ export default {
       let startDate = Date.now();
       const fd = {
         name: this.searchForm.keyword,
+        companyNumber: this.searchForm.companyNumber,
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         categoryNumber: this.searchForm.categoryNumber,
@@ -812,8 +815,10 @@ export default {
           type: "danger"
         });
       }
-      if (flag) this.getProductCategoryList();
-      this.GetProductChpaList();
+      if (flag) {
+        await this.GetProductChpaList();
+        await this.getProductCategoryList();
+      }
     },
     // 切換頁容量
     handleSizeChange(pageSize) {
@@ -906,7 +911,7 @@ export default {
     },
     // 确认高级搜索
     confirmAdvanced() {
-      this.searchForm.keyword = this.$refs.searchRef.searchForm.keyword;
+      // this.searchForm.keyword = this.$refs.searchRef.searchForm.keyword;
       this.getProductList(false);
     },
     // 切换产品列表样式
@@ -961,13 +966,22 @@ export default {
     clearRootEvent() {
       eventBus.$off("searchProducts");
       eventBus.$off("openUpload");
+    },
+    // 关闭关联搜索
+    closeTag() {
+      this.$store.commit("handlerHallSearchCate", null);
+      this.searchForm.categoryNumber = null;
+      this.searchForm.companyNumber = null;
+      this.$common.handlerMsgState({
+        msg: "关闭关联搜索",
+        type: "warning"
+      });
     }
   },
   created() {},
   mounted() {
     // 点击搜索-文字搜索
-    eventBus.$on("searchProducts", form => {
-      this.searchForm.keyword = form.keyword;
+    eventBus.$on("searchProducts", () => {
       this.currentPage = 1;
       this.getProductList(false);
     });
@@ -1025,11 +1039,14 @@ export default {
         this.$store.commit("handlerSearchTxt", "");
       } else if (this.searchHallCate) {
         // 展厅主页带分类搜索
-        this.hallCateSearch = this.searchHallCate;
         this.searchForm.keyword = this.searchHallCate.keyword;
-        console.log(this.hallCateSearch, this.searchForm.keyword);
-        // this.getProductList(true);
-        this.$store.commit("handlerHallSearchCate", null);
+        this.searchForm.categoryNumber =
+          this.searchHallCate.cate && this.searchHallCate.cate.categoryNumber;
+        this.searchForm.companyNumber =
+          this.searchHallCate.companyInfo &&
+          this.searchHallCate.companyInfo.companyNumber;
+        this.getProductList(true);
+        console.log(this.searchHallCate);
       } else {
         // 默认搜索
         this.getProductList(true);

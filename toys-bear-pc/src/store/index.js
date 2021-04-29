@@ -17,7 +17,6 @@ function myForEach(oList, yList) {
 }
 const store = new Vuex.Store({
   state: {
-    textSearch: "",
     myColles: [],
     isJindu: false,
     activeTab: "/bsIndex/bsHome",

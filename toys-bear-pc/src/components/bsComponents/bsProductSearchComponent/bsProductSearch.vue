@@ -9,7 +9,7 @@
         @keyup.native.enter="searchProducts"
         style="width: 340px; margin: 0 15px"
         placeholder="输入关键词+空格可模糊搜索"
-        v-model="searchForm.keyword"
+        v-model="myKeyword"
         clearable
       >
         <template slot="prefix">
@@ -51,6 +51,17 @@
           :class="advanced == true ? 'el-icon-arrow-down' : ' el-icon-arrow-up'"
         ></i>
       </div>
+      <div class="companyInfo">
+        <el-tag
+          effect="dark"
+          type="warning"
+          @close="closeTag"
+          closable
+          v-if="searchHallCate"
+        >
+          来源：{{ searchHallCate.companyInfo.companyName }}
+        </el-tag>
+      </div>
     </div>
     <el-button type="warning" size="medium" @click="toShoppingCart">
       <i class="whiteCart"></i>
@@ -62,33 +73,36 @@
 
 <script>
 import eventBus from "@/assets/js/common/eventBus";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 export default {
+  props: ["keyword"],
   data() {
     return {
       synthesis: false,
       advanced: true,
-      searchForm: {
-        keyword: ""
-      }
+      myKeyword: ""
     };
   },
+  watch: {
+    myKeyword(val) {
+      this.$emit("input", val);
+    },
+    keyword(val) {
+      this.myKeyword = val;
+    }
+  },
   methods: {
+    // 关闭关联搜索
+    closeTag() {
+      this.$emit("closeTag");
+    },
     // 选择图片-图搜
     openUpload(file) {
-      // const fd = {
-      //   name: "/bsIndex/bsProductSearchIndex",
-      //   linkUrl: "/bsIndex/bsProductSearchIndex",
-      //   component: "bsProductSearchIndex",
-      //   refresh: true,
-      //   label: "产品查询"
-      // };
-      // this.$store.commit("myAddTab", fd);
       eventBus.$emit("openUpload", file);
     },
     // 文本搜索产品
     searchProducts() {
-      eventBus.$emit("searchProducts", this.searchForm);
+      eventBus.$emit("searchProducts");
       // const fd = {
       //   name: "/bsIndex/bsProductSearchIndex",
       //   linkUrl: "/bsIndex/bsProductSearchIndex",
@@ -125,14 +139,12 @@ export default {
     eventBus.$on("imgSearch", () => {
       this.$refs.uploadRef.$children[0].$refs.input.click();
     });
-    this.$nextTick(() => {
-      this.searchForm.keyword = this.$store.state.searchTxt;
-    });
   },
   computed: {
     ...mapGetters({
       shoppingList: "myShoppingList"
-    })
+    }),
+    ...mapState(["searchHallCate"])
   },
   beforeDestroy() {
     eventBus.$off("imgSearch");
@@ -167,6 +179,9 @@ export default {
         color: #3368a9;
         display: inline-block;
       }
+    }
+    .companyInfo {
+      margin-left: 20px;
     }
   }
   .upload-demo {
