@@ -443,12 +443,10 @@ export default {
   },
   created() {},
   mounted() {
-    if (this.item.name && this.item.name.length > 3) {
-      this.searchForm.keyword = this.item.name.slice(0, 3);
-    } else {
-      this.searchForm.keyword = this.item.name;
-    }
-    // this.searchForm.fa_no = this.item.fa_no;
+    this.searchForm.fa_no = this.item.fa_no;
+    this.searchForm.maxPrice = this.item.price * 1.05;
+    this.searchForm.minPrice = this.item.price * 0.95;
+    // 小0.95  大1.05
     console.log(this.item);
     switch (this.item.type) {
       case "similarity":
