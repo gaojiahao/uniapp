@@ -1,5 +1,5 @@
 <template>
-  <div class="bsGridItem" @click="toProductDetails">
+  <div class="bsGridItem" @click.stop="toProductDetails">
     <div class="itemImg">
       <el-image
         style="width: 222px; height: 166px"
@@ -113,7 +113,7 @@
         <span class="title">毛重/净重：</span>
         <span class="conText">{{ item.gr_we }}/{{ item.ne_we }}(kg)</span>
       </p>
-      <div class="sourceBox">
+      <div class="sourceBox" @click.stop="toFactory(item)">
         <i class="sourceIcon"></i>
         <template v-if="item.isIntegral">
           <span class="text">
@@ -145,43 +145,82 @@ export default {
     };
   },
   methods: {
+    // 去厂商详情页 || 去展厅详情页
+    async toFactory(item) {
+      if (item.isIntegral) {
+        const fd = {
+          name: item.supplierNumber,
+          linkUrl: "/bsIndex/bsVendorQuery",
+          component: "bsMyClientsDetail",
+          refresh: true,
+          noPush: true,
+          label: item.supplierName,
+          value: {
+            companyNumber: item.supplierNumber,
+            companyLogo: item.supplierPersonnelLogo,
+            companyName: item.supplierName,
+            contactsMan: item.supplierPersonnelName,
+            phoneNumber: item.supplierPhone,
+            address: item.supplierAddres || item.supplierAddress
+          }
+        };
+        this.$router.push("/bsIndex/bsVendorQuery");
+        this.$store.commit("myAddTab", fd);
+      } else {
+        // 去展厅
+        // this.$common.handlerMsgState({
+        //   msg: "展厅首页敬请期待",
+        //   type: "warning"
+        // });
+        // return false;
+        const fd = {
+          name: item.exhibitionNumber || item.companyNumber,
+          linkUrl: "/bsIndex/bsProductSearchIndex",
+          component: "bsExhibitionHallHome",
+          refresh: true,
+          label: item.exhibitionName,
+          value: item
+        };
+        this.$store.commit("myAddTab", fd);
+      }
+    },
     // 找相似
     similarityEvent() {
-      this.$common.handlerMsgState({
-        msg: "敬请期待",
-        type: "warning"
-      });
-      return false;
-      // const value = JSON.parse(JSON.stringify(this.item));
-      // value.type = "similarity";
-      // const fd = {
-      //   name: "similarity" + this.item.productNumber,
-      //   linkUrl: "/bsIndex/bsProductSearchIndex",
-      //   component: "bsSimilarProduct",
-      //   refresh: true,
-      //   label: "相似产品" + this.item.fa_no,
-      //   value: value
-      // };
-      // this.$store.commit("myAddTab", fd);
+      // this.$common.handlerMsgState({
+      //   msg: "敬请期待",
+      //   type: "warning"
+      // });
+      // return false;
+      const value = JSON.parse(JSON.stringify(this.item));
+      value.type = "similarity";
+      const fd = {
+        name: "similarity" + this.item.productNumber,
+        linkUrl: "/bsIndex/bsProductSearchIndex",
+        component: "bsSimilarProduct",
+        refresh: true,
+        label: "相似产品" + this.item.fa_no,
+        value: value
+      };
+      this.$store.commit("myAddTab", fd);
     },
     // 找同款
     sameEvent() {
-      this.$common.handlerMsgState({
-        msg: "敬请期待",
-        type: "warning"
-      });
-      return false;
-      // const value = JSON.parse(JSON.stringify(this.item));
-      // value.type = "same";
-      // const fd = {
-      //   name: "same" + this.item.productNumber,
-      //   linkUrl: "/bsIndex/bsProductSearchIndex",
-      //   component: "bsSimilarProduct",
-      //   refresh: true,
-      //   label: "同款产品" + this.item.fa_no,
-      //   value: value
-      // };
-      // this.$store.commit("myAddTab", fd);
+      // this.$common.handlerMsgState({
+      //   msg: "敬请期待",
+      //   type: "warning"
+      // });
+      // return false;
+      const value = JSON.parse(JSON.stringify(this.item));
+      value.type = "same";
+      const fd = {
+        name: "same" + this.item.productNumber,
+        linkUrl: "/bsIndex/bsProductSearchIndex",
+        component: "bsSimilarProduct",
+        refresh: true,
+        label: "同款产品" + this.item.fa_no,
+        value: value
+      };
+      this.$store.commit("myAddTab", fd);
     },
     // 去产品详情
     async toProductDetails() {

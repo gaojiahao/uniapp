@@ -1059,9 +1059,8 @@ export default {
         });
       }
       if (flag) {
-        await this.getProductCategoryList();
+        this.getProductCategoryList();
       }
-      await this.GetProductChpaList();
     },
     // 切換頁容量
     handleSizeChange(pageSize) {
@@ -1189,6 +1188,7 @@ export default {
     // 展厅分类点击事件
     hallTagEvent(item) {
       this.searchForm.categoryNumber = item ? item.categoryNumber : item;
+      this.getProductList(false);
     },
     // 一级分类点击事件
     oneTagEvent(item) {
@@ -1196,11 +1196,13 @@ export default {
       this.oneCurrentTag = item;
       this.cateChildren = item ? item.children : [];
       this.searchForm.categoryNumber = item ? item.id : item;
+      this.getProductList(false);
     },
     // 二级分类点击事件
     twoTagEvent(id) {
       this.currentTwoTag = id;
       this.searchForm.categoryNumber = id || this.oneCurrentTag.id;
+      this.getProductList(false);
     },
     // 展开一级分类
     handlerOneCateLabel() {
@@ -1275,14 +1277,17 @@ export default {
         });
       }
     });
-    this.$nextTick(() => {
+    this.$nextTick(async () => {
       if (this.searchTxt != "") {
         // 首页文字搜索跳转
         this.searchForm.keyword = this.searchTxt;
-        this.getProductList(true);
+        this.currentPage = 1;
+        await this.getProductList(true);
+        await this.GetProductChpaList();
         this.$store.commit("handlerSearchTxt", "");
       } else if (this.searchHallCate) {
         // 展厅主页带分类搜索
+        this.currentPage = 1;
         this.searchForm.keyword = this.searchHallCate.keyword;
         this.searchForm.categoryNumber =
           this.searchHallCate.cate && this.searchHallCate.cate.categoryNumber;
@@ -1297,7 +1302,9 @@ export default {
         this.getProductCategoryList();
       } else {
         // 默认搜索
-        this.getProductList(true);
+        this.currentPage = 1;
+        await this.getProductList(true);
+        await this.GetProductChpaList();
       }
     });
   },
@@ -1314,6 +1321,7 @@ export default {
       deep: true,
       handler(val) {
         if (val) {
+          this.currentPage = 1;
           this.isOneDownCate = false;
           // 展厅主页带分类搜索
           this.searchForm.keyword = this.searchHallCate.keyword;

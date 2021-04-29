@@ -33,7 +33,7 @@
             <p class="infoItem">
               手机：<span>{{ companyInfo.phoneNumber }}</span>
             </p>
-            <p class="infoItem newIconBox">
+            <p class="infoItem newIconBox" @click="toNews">
               <i class="newIcon"></i><span>在线咨询</span>
             </p>
           </div>
@@ -195,16 +195,28 @@ export default {
     };
   },
   methods: {
+    // 去聊天
+    toNews() {
+      const fd = {
+        name: this.companyInfo.companyNumber + "bsNews",
+        linkUrl: "/bsIndex/bsNews",
+        component: "bsNews",
+        refresh: true,
+        label: this.companyInfo.companyName,
+        value: this.companyInfo
+      };
+      this.$store.commit("myAddTab", fd);
+    },
     // 切换
     changActiveName(number) {
       this.activeName = number;
     },
     // 不带分类去查产品
     toSearch() {
-      const flag = this.tabList.find(
-        val => val.name === "/bsIndex/bsProductSearchIndex"
-      );
-      console.log(flag);
+      // const flag = this.tabList.find(
+      //   val => val.name === "/bsIndex/bsProductSearchIndex"
+      // );
+      // console.log(flag);
       const fd = {
         name: "/bsIndex/bsProductSearchIndex",
         linkUrl: "/bsIndex/bsProductSearchIndex",
@@ -225,10 +237,10 @@ export default {
     },
     // 带分类去查产品
     toSearchProduct(row) {
-      const flag = this.tabList.find(
-        val => val.name === "/bsIndex/bsProductSearchIndex"
-      );
-      console.log(flag);
+      // const flag = this.tabList.find(
+      //   val => val.name === "/bsIndex/bsProductSearchIndex"
+      // );
+      // console.log(flag);
       const fd = {
         name: "/bsIndex/bsProductSearchIndex",
         linkUrl: "/bsIndex/bsProductSearchIndex",
