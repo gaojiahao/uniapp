@@ -13,7 +13,7 @@
       </div>
       <div class="searchBox">
         <div class="left">
-          <div class="item" style="min-width:350px">
+          <div class="item" style="min-width: 350px">
             <span class="label">关键字：</span>
             <el-input
               v-focus
@@ -68,7 +68,7 @@
         <!-- 产品列表 -->
         <component :is="isGrid" :productList="tableData"></component>
         <!-- 分页 -->
-        <center style="padding:20px 0;">
+        <center style="padding: 20px 0">
           <el-pagination
             layout="total, sizes, prev, pager, next, jumper"
             :page-sizes="[12, 24, 36, 48]"
@@ -82,7 +82,7 @@
         </center>
       </div>
     </div>
-    <div class="footer">
+    <div class="footer" v-if="totalCount >= 7">
       <img src="@/assets/images/footerBg.png" alt="" />
     </div>
   </div>
@@ -363,9 +363,9 @@ export default {
   }
 }
 .footer {
+  margin-top: 20px;
   background-color: #f1f3f6;
-  height: 100px;
-  padding-top: 20px;
+  height: 62px;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -544,7 +544,7 @@ export default {
       defaultShareDomain: [],
       clienFormData: {
         miniPrice: 0,
-        miniPriceDecimalPlaces: 1,
+        miniPriceDecimalPlaces: 0,
         url: null,
         isExportExcel: false,
         profit: 0,
@@ -739,7 +739,7 @@ export default {
     openAddClien() {
       this.clienFormData = {
         miniPrice: 0,
-        miniPriceDecimalPlaces: 1,
+        miniPriceDecimalPlaces: 0,
         url: null,
         isExportExcel: false,
         profit: 0,
@@ -782,25 +782,25 @@ export default {
     },
     // 打开编辑分享
     openEdit(row) {
-      this.clienFormData = {
-        miniPrice: 0,
-        miniPriceDecimalPlaces: 1,
-        url: null,
-        isExportExcel: false,
-        profit: 0,
-        expireTime: null,
-        customerInfoId: null,
-        offerMethod: "汕头",
-        currencyType: "¥",
-        currencyTypeName: "RMB",
-        totalCost: "0",
-        exchange: 0,
-        size: "24",
-        decimalPlaces: 3,
-        rejectionMethod: "四舍五入",
-        websiteInfoId: null,
-        isCustomerInfo: true
-      };
+      //   this.clienFormData = {
+      //     miniPrice: 0,
+      //     miniPriceDecimalPlaces: 1,
+      //     url: null,
+      //     isExportExcel: false,
+      //     profit: 0,
+      //     expireTime: null,
+      //     customerInfoId: null,
+      //     offerMethod: "汕头",
+      //     currencyType: "¥",
+      //     currencyTypeName: "RMB",
+      //     totalCost: "0",
+      //     exchange: 0,
+      //     size: "24",
+      //     decimalPlaces: 3,
+      //     rejectionMethod: "四舍五入",
+      //     websiteInfoId: null,
+      //     isCustomerInfo: true
+      //   };
       this.defaultFormula = null;
       this.dialogTitle = "编辑站点";
       for (const key in row) {
