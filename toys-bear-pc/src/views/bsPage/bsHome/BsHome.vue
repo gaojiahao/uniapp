@@ -738,8 +738,8 @@ export default {
       }
     },
     // 天数请求
-    changeTime(Value) {
-      this.timeData = Object.assign(calculateDate(Value));
+    changeTime(value) {
+      this.timeData = Object.assign(calculateDate(value));
       if (this.hotValue === "热门择样") {
         this.getGetSalesHotSample();
       } else {
@@ -747,8 +747,9 @@ export default {
       }
     },
     // 热门泽洋和热门搜索切换
-    changeHot(Value) {
-      if (Value === "热门择样") {
+    changeHot(value) {
+      console.log(value);
+      if (value === "热门择样") {
         this.getGetSalesHotSample();
       } else {
         this.getGetSalesHotSearch();

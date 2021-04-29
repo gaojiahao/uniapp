@@ -248,7 +248,7 @@ export default {
         maxPrice: "",
         categoryNumber: null,
         time: null,
-        fa_no: true,
+        fa_no: null,
         number: 0,
         name: true,
         packName: 0
@@ -363,6 +363,7 @@ export default {
 
       const fd = {
         name: this.searchForm.keyword,
+        fa_no: this.searchForm.fa_no,
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         minPrice: this.searchForm.minPrice,
@@ -447,6 +448,8 @@ export default {
     } else {
       this.searchForm.keyword = this.item.name;
     }
+    // this.searchForm.fa_no = this.item.fa_no;
+    console.log(this.item);
     switch (this.item.type) {
       case "similarity":
         this.imageSearch();
@@ -786,6 +789,8 @@ export default {
     }
     .productWrap {
       background-color: #fff;
+      box-sizing: border-box;
+      padding: 0 20px;
       .myPagination {
         padding: 30px 0;
       }
