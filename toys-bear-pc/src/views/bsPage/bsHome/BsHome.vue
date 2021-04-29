@@ -479,6 +479,9 @@ export default {
     // 获取产品数和厂商数
     async getHallTotalCount(item) {
       const key = item.companyNumber || item.content;
+      if (!key) {
+        return false;
+      }
       let companyOptions = sessionStorage.getItem(key);
       if (companyOptions) {
         companyOptions = JSON.parse(companyOptions);
