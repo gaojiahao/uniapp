@@ -477,8 +477,9 @@ export default {
   }
 }
 .footer {
+  margin-top: 20px;
   background-color: #f1f3f6;
-  height: 80px;
+  height: 62px;
   display: flex;
   align-items: center;
   justify-content: center;
