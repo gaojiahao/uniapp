@@ -81,18 +81,38 @@
         </div>
         <div class="right">
           <el-form-item label="利润率：" prop="profit">
-            <el-input
+            <!-- <el-input
               v-model.number="addDefaultForm.profit"
               clearable
               maxlength="6"
               ><i slot="append">%</i></el-input
-            >
+            > -->
+            <div style="display: flex; justify-content:space-between;">
+              <el-input
+                maxlength="30"
+                style="flex:1;"
+                v-model="addDefaultForm.profit"
+              >
+                <span slot="suffix">%</span>
+              </el-input>
+              <el-radio-group
+                style="flex:1;display:flex; align-items:center;margin-left: 20px;"
+                v-model="addDefaultForm.profitCalcMethod"
+              >
+                <el-radio :label="2">除法</el-radio>
+                <el-radio :label="1">乘法</el-radio>
+              </el-radio-group>
+            </div>
           </el-form-item>
           <el-form-item label="每车尺码：" prop="size">
             <el-select
               v-model="addDefaultForm.size"
-              clearable
-              placeholder="请选择"
+              @change="selectBlur"
+              v-model.number="addDefaultForm.size"
+              filterable
+              allow-create
+              default-first-option
+              placeholder="请输入/选择尺码"
             >
               <template v-for="item in configList">
                 <el-option
@@ -216,6 +236,7 @@ export default {
     return {
       configList: [],
       addDefaultForm: {
+        profitCalcMethod: 2,
         name: null,
         remark: null,
         offerMethod: null,
@@ -266,6 +287,12 @@ export default {
     };
   },
   methods: {
+    // 下拉框输入事件
+    selectBlur(val) {
+      if (isNaN(Number(val))) {
+        this.addDefaultForm.size = null;
+      }
+    },
     // 提交
     subDefaultForm() {
       this.$refs.addDefaultFormRef.validate(async valid => {

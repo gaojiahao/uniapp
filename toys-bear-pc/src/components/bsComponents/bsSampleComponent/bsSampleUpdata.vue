@@ -327,10 +327,19 @@
             <div class="wrapBox">
               <div class="left">
                 <el-form-item label="报价方式：" prop="offerMethod">
-                  <el-input
-                    maxlength="30"
+                  <el-select
+                    style="width: 100%"
                     v-model="clienFormData.offerMethod"
-                  ></el-input>
+                    placeholder="请选择报价方式"
+                  >
+                    <el-option
+                      v-for="(item, i) in options.offerMethod"
+                      :key="i"
+                      :label="item.itemCode"
+                      :value="item.parameter"
+                    >
+                    </el-option>
+                  </el-select>
                 </el-form-item>
                 <el-form-item label="币种：" prop="cu_de">
                   <el-select
@@ -371,9 +380,25 @@
               </div>
               <div class="right">
                 <el-form-item label="利润率：" prop="profit">
-                  <el-input maxlength="30" v-model="clienFormData.profit">
+                  <!-- <el-input maxlength="30" v-model="clienFormData.profit">
                     <span slot="suffix">%</span>
-                  </el-input>
+                  </el-input> -->
+                  <div style="display: flex; justify-content:space-between;">
+                    <el-input
+                      maxlength="30"
+                      style="flex:1;"
+                      v-model="clienFormData.profit"
+                    >
+                      <span slot="suffix">%</span>
+                    </el-input>
+                    <el-radio-group
+                      style="flex:1;display:flex; align-items:center;margin-left: 20px;"
+                      v-model="clienFormData.profitCalcMethod"
+                    >
+                      <el-radio :label="2">除法</el-radio>
+                      <el-radio :label="1">乘法</el-radio>
+                    </el-radio-group>
+                  </div>
                 </el-form-item>
                 <el-form-item label="总费用：" prop="totalCost">
                   <el-input
@@ -385,9 +410,13 @@
                 </el-form-item>
                 <el-form-item label="每车尺码：" prop="size">
                   <el-select
-                    v-model="clienFormData.size"
+                    @change="selectBlur"
+                    v-model.number="clienFormData.size"
+                    filterable
+                    default-first-option
+                    allow-create
                     style="width: 100%"
-                    placeholder="请选择尺码"
+                    placeholder="请输入/选择尺码"
                   >
                     <el-option
                       v-for="(item, i) in options.size"
@@ -565,6 +594,7 @@ export default {
         customerId: null,
         customerName: null,
         quotationProductList: [],
+        profitCalcMethod: 2,
         profit: 0,
         offerMethod: "汕头",
         cu_de: "¥",
@@ -705,6 +735,12 @@ export default {
         this.clienFormData.customerId = null;
       }
       this.subDialogVisible = true;
+    },
+    // 下拉框输入事件
+    selectBlur(val) {
+      if (isNaN(Number(val))) {
+        this.clienFormData.size = null;
+      }
     },
     // 提交新增客户
     subMyClient() {
@@ -1230,6 +1266,7 @@ export default {
           this.clienFormData.size = obj.size;
           this.clienFormData.decimalPlaces = obj.decimalPlaces;
           this.clienFormData.rejectionMethod = obj.rejectionMethod;
+          this.clienFormData.profitCalcMethod = obj.profitCalcMethod;
         }
       }
     },
