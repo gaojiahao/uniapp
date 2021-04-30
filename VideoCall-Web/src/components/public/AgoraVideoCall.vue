@@ -79,7 +79,8 @@ export default {
         return false;
       } else {
         // debugger
-        this.havecCamera = true;
+        //this.havecCamera = true;
+        this.$emit('set-img',false);
         if(!$.videoId){
           $.nowVideoId = $.videoDevices[0]['deviceId'];
         } else {
@@ -153,7 +154,7 @@ export default {
       await $.client.publish([this.localAudioTrack, this.localVideoTrack]);
       console.log("publish success");
       this.testNetWork();
-      this.initDevices();
+      //this.initDevices();
     },
     async leave(){
       this.$FromLoading.show();
@@ -192,7 +193,7 @@ export default {
           items.push(itemList[i]);
         }
       };
-      var userLength = items.length;
+      var userLength = ((items.length-1 <=0) ?1:(items.length-1))+1;
       console.log("subscribe success");
       if (mediaType === 'video') {
         const remoteVideoTrack = user.videoTrack;
@@ -289,7 +290,6 @@ export default {
     },
     //用户发布订阅
     handleUserPublished(user, mediaType) {
-      // debugger
       const id = user.uid;
       // remoteUsers[id] = user;
       this.subscribe(user, mediaType);
@@ -305,7 +305,10 @@ export default {
         const playerContainer = document.getElementById(user.uid.toString());
         // 销毁这个节点。
         // await this.client.unsubscribe(user,'video');
-        playerContainer.remove();
+        var my = document.getElementById("ag-canvas");
+        if(my != null)
+          my.removeChild(playerContainer);
+        // playerContainer.remove();
       } else if(mediaType === "audio"){
         // await this.client.unsubscribe(user,'audio');
       } else {

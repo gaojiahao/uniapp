@@ -135,7 +135,7 @@ export default {
       baseMode: "avc",
       transcode: "interop",
       attendeeMode: "video",
-      videoProfile: "720p_6",  //省流量测试
+      videoProfile: "1080p_2",  //省流量测试
       companys:[]
     };
   },

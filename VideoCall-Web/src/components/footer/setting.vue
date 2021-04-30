@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-11-03 16:35:57
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-29 16:21:01
+ * @LastEditTime: 2021-04-29 17:52:54
 -->
 <template>
     <Modal v-model="show" :title="$t('settings.settings')" @on-ok="ok" @on-cancel="cancel" width="430" draggable class="setting">
@@ -163,7 +163,7 @@ export default {
             audioDevice:'',
             flag:false,
             modal:'name1',
-            videoEncoder:'720p_6',
+            videoEncoder:'1080p_2',
             videoEncoderList:[
                 {
                     name:'480p',
@@ -176,6 +176,10 @@ export default {
                 {
                     name:'1080p',
                     value:'1080p_5'
+                },
+                {
+                    name:'1080p_30',
+                    value:'1080p_2'
                 }
             ],
             options: {

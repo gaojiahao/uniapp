@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:37:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\product.vue
- * @LastEditTime: 2021-04-29 14:43:41
+ * @LastEditTime: 2021-04-30 11:17:41
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -76,16 +76,16 @@
         </div>
         <!-- 当前产品 -->
         <div class="now_product" v-else>
-            <Row class="ipput_wrap" v-if="isAdmin">
-                <Col span="6"><div :class="[lang=='zh'?'text':'en_text']">{{$t("product.order.companyNumber")}}</div></Col>
-                <Col span="12"><Input v-model="companyNumber" class="iipput_wrap_box" :style="{width:'130px'}" clearable @on-change="getProductInfo" @on-enter="getProductInfo" @keyup.enter.native="getProductInfo" /></Col>
-                <Col span="6"><Button type="primary" @click="getProductInfo">{{$t("product.order.button")}}</Button></Col>
+            <Row class="ipput_wrap">
+                <Col span="6" v-if="isAdmin"><div :class="[lang=='zh'?'text':'en_text']">{{$t("product.order.companyNumber")}}</div></Col>
+                <Col span="12" v-if="isAdmin"><Input v-model.trim="companyNumber" class="iipput_wrap_box" :style="{width:'130px'}" clearable @on-enter="getProductInfo" @keyup.enter.native="getProductInfo" /></Col>
+                <Col span="6" v-if="isAdmin"><Button type="primary" @click="getProductInfo">{{$t("product.order.button")}}</Button></Col>
             </Row>
             <Row class="product_wrap" v-if="this.productInfo.id">
                 <Col span="8">
                     <Poptip trigger='hover' content="content" placement="right" :transfer="true">
                         <img :src="productInfo.productImages.length&&productInfo.productImages[0]||test" style="width:87px;height:65px;margin-left:19px"/>
-                        <img slot="content" :src="productInfo.productImages.length&&productInfo.productImages[0]||test" style="width:300px;height:300px" />
+                        <img slot="content" :src="productInfo.productImages.length&&productInfo.productImages[0]||test" style="width:100%;height:100%" />
                     </Poptip>
                 </Col>
                 <Col span="16">

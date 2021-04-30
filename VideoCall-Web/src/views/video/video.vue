@@ -3,14 +3,14 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 16:54:22
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\video\video.vue
- * @LastEditTime: 2021-04-29 16:30:18
+ * @LastEditTime: 2021-04-30 11:49:12
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
 -->
 <template>
     <div class="video">
-        <div class="error">
+        <div class="error" v-if="haveCamera">
             <img :src="cameraPic">
             <p class="text">{{$t("other.noCamera")}}</p> 
         </div>
@@ -25,6 +25,7 @@
                 :videoId="videoId"
                 :userlist="userlist"
                 :isAdmin="isAdmin"
+                @set-img="setImg"
                 :uid="uid" ref="video"></AgoraVideoCall>
         </div>
         <EndModal :isShow="isShow" ref="endModal" @show-setting="showSetting"></EndModal>
@@ -72,7 +73,8 @@ export default {
             isAdmin: Cookies.get("isAdmin") || false,
             isShow:false,
             endTime:'',
-            count:null
+            count:null,
+            haveCamera:true,
         };
     },
     methods: {
@@ -104,6 +106,9 @@ export default {
             this.timeCount();
             this.$refs.endModal.againCount();
         },
+        setImg(value){
+            this.haveCamera = value;
+        }
     },
     mounted(){
         this.timeCount();

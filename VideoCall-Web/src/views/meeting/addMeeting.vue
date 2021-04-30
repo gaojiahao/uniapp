@@ -9,6 +9,18 @@ d<!--
 <template>
   <div class="createMeeting" ref="createMeeting">
     <div class="wrapper">
+      <div class="wrapper_dropdown">
+        <Dropdown trigger="click" style="margin-left: 20px" @on-click="onClickDropdown">
+          <a href="javascript:void(0)">
+            language:{{language}}
+            <Icon type="ios-arrow-down"></Icon>
+          </a>
+          <DropdownMenu slot="list">
+            <DropdownItem name="zh">中文</DropdownItem>
+            <DropdownItem name="en">English</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+      </div>
       <div class="login_wrapper">
         <div class="head">
           <div class="title">
@@ -86,7 +98,7 @@ export default {
       baseMode: "avc",
       transcode: "interop",
       attendeeMode: "video",
-      videoProfile: "720p_6",  //省流量测试
+      videoProfile: "1080p_2",  //省流量测试
       ruleValidate:{
         company: [
           { required: true, message: this.$t('addMeeting.companyText'), trigger: 'blur' }
@@ -97,7 +109,23 @@ export default {
       },
       videoDevices:[],
       roomNumber:'',
-      mac:''
+      mac:'',
+      language:'简体中文',
+      locale: [],
+      changeLang: [
+        {
+          value: "zh",
+          label: "简体中文"
+        },
+        {
+          value: "en",
+          label: "English"
+        },
+        {
+          value: "tc",
+          label: "繁體中文"
+        }
+      ],
     };
   },
   methods: {
@@ -168,6 +196,24 @@ export default {
       });
       return uuid;
     },
+    onClickDropdown(val){
+      this.changeLangFn(val);
+    },
+    //切换多语言
+    changeLangFn(val) {
+      let chan = this.changeLang;
+      for (let i in chan) {
+        if (chan[i].value === val) {
+          this.locale = this.$i18n.locale = chan[i].value;
+          this.language = chan[i].label;
+          localStorage.setItem("language", chan[i].value);
+        }
+      }
+    },
+  },
+  mounted() {
+    this.locale = this.$i18n.locale;
+    this.changeLangFn(this.locale);
   },
   created(){
     this.initRMT();
