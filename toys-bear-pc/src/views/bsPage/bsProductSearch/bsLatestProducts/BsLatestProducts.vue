@@ -70,7 +70,7 @@
         <!-- 产品列表 -->
         <component :is="isGrid" :productList="tableData"></component>
         <!-- 分页 -->
-        <center style="padding:20px 0;">
+        <center style="padding:30px 0;">
           <el-pagination
             layout="total, sizes, prev, pager, next, jumper"
             :page-sizes="[12, 24, 36, 48]"
