@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:26:36
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\public\chart.vue
- * @LastEditTime: 2021-04-28 15:39:54
+ * @LastEditTime: 2021-04-30 15:29:43
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -205,7 +205,7 @@ export default {
 <style lang="less" scoped>
     .chart {
         height: 341px;
-        border-bottom: 1px solid #e0e0e0;
+        // border-bottom: 1px solid #e0e0e0;
         .head{
             width: 311px;
             height: 45px;
