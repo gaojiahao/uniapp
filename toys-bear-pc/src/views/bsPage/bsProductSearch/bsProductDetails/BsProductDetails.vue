@@ -325,7 +325,10 @@ export default {
       shoppingList: "myShoppingList"
     })
   },
-  beforeDestroy() {}
+  beforeDestroy() {
+    eventBus.$off("resetProductCollection");
+    eventBus.$off("resetMyCart");
+  }
 };
 </script>
 <style scoped lang="less">

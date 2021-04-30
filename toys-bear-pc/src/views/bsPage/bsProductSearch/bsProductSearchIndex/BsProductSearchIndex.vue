@@ -1216,6 +1216,7 @@ export default {
       eventBus.$off("resetProductCollection");
       eventBus.$off("searchProducts");
       eventBus.$off("openUpload");
+      eventBus.$off("resetMyCart");
     },
     // 关闭关联搜索
     closeTag() {
@@ -1331,6 +1332,7 @@ export default {
     },
 
     shoppingList: {
+      deep: true,
       handler(list) {
         if (list) {
           if (list.length) {
@@ -1352,9 +1354,7 @@ export default {
             });
           }
         }
-      },
-      deep: true,
-      immediate: true
+      }
     },
     "searchForm.time"(newVal) {
       if (newVal == null) {
