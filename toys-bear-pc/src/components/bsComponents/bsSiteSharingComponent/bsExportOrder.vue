@@ -39,8 +39,8 @@
               @change="changeCheckBox"
               v-model="imageExportWay"
             >
-              <el-checkbox label="1">是</el-checkbox>
-              <el-checkbox label="2">否</el-checkbox>
+              <el-checkbox :label="2">是</el-checkbox>
+              <el-checkbox :label="1">否</el-checkbox>
             </el-checkbox-group>
           </div>
           <div class="label">
@@ -54,8 +54,8 @@
               @change="changemyExportWay"
               v-model="exportWay"
             >
-              <el-checkbox label="1">是</el-checkbox>
-              <el-checkbox label="2">否</el-checkbox>
+              <el-checkbox :label="2">是</el-checkbox>
+                    <el-checkbox :label="1">否</el-checkbox>
             </el-checkbox-group> -->
           </div>
           <div class="label">
@@ -104,8 +104,8 @@
               @change="changeCheckBox"
               v-model="imageExportWay"
             >
-              <el-checkbox label="1">是</el-checkbox>
-              <el-checkbox label="2">否</el-checkbox>
+              <el-checkbox :label="2">是</el-checkbox>
+              <el-checkbox :label="1">否</el-checkbox>
             </el-checkbox-group>
           </div>
           <div class="label">
@@ -161,8 +161,8 @@
               @change="changeCheckBox"
               v-model="imageExportWay"
             >
-              <el-checkbox label="1">是</el-checkbox>
-              <el-checkbox label="2">否</el-checkbox>
+              <el-checkbox :label="2">是</el-checkbox>
+              <el-checkbox :label="1">否</el-checkbox>
             </el-checkbox-group>
           </div>
           <div class="label">
@@ -218,8 +218,8 @@
               @change="changeCheckBox"
               v-model="imageExportWay"
             >
-              <el-checkbox label="1">是</el-checkbox>
-              <el-checkbox label="2">否</el-checkbox>
+              <el-checkbox :label="2">是</el-checkbox>
+              <el-checkbox :label="1">否</el-checkbox>
             </el-checkbox-group>
           </div>
           <div class="label">
@@ -275,8 +275,8 @@
               @change="changeCheckBox"
               v-model="imageExportWay"
             >
-              <el-checkbox label="1">是</el-checkbox>
-              <el-checkbox label="2">否</el-checkbox>
+              <el-checkbox :label="2">是</el-checkbox>
+              <el-checkbox :label="1">否</el-checkbox>
             </el-checkbox-group>
           </div>
           <div class="label">
