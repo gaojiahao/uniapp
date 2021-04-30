@@ -401,6 +401,12 @@
             </el-select>
           </el-form-item>
         </div>
+        <div class="chengchuTishi" v-show="clienFormData.profitCalcMethod == 2">
+          {{ chufa }}
+        </div>
+        <div class="chengchuTishi" v-show="clienFormData.profitCalcMethod == 1">
+          {{ chengfa }}
+        </div>
         <div class="lessThanPrice">
           <div class="left">
             <el-form-item label="价格小于：">
@@ -411,6 +417,7 @@
               >
               </el-input>
             </el-form-item>
+            <div class="tishi">当价格小于指定值，则调整小数位数</div>
           </div>
           <div class="right">
             <!-- xiaoshuweishu -->
@@ -533,6 +540,8 @@ export default {
   },
   data() {
     return {
+      chufa: "(出厂价+总费用/(每车尺码/外箱材积*外箱装量)/(1-报价利润%)/汇率",
+      chengfa: "(出厂价+总费用/(每车尺码/外箱材积*外箱装量)*(1+报价利润%)/汇率",
       dateTime: null,
       handSitesList: [],
       websiteInfoId: null,
@@ -770,6 +779,7 @@ export default {
       this.clienFormData = {
         miniPrice: 0,
         miniPriceDecimalPlaces: 0,
+        profitCalcMethod: 2,
         url: null,
         isExportExcel: false,
         profit: 0,
@@ -1107,14 +1117,27 @@ export default {
       flex: 1;
     }
   }
+  .chengchuTishi {
+    color: #ff4848;
+    box-sizing: border-box;
+    padding-left: 120px;
+    margin-bottom: 20px;
+  }
   .lessThanPrice {
     display: flex;
     justify-content: space-between;
-    padding-top: 20px;
+    padding: 20px 0;
     border-top: 1px solid #dcdfe6;
     .left,
     .right {
       flex: 1;
+      position: relative;
+      .tishi {
+        position: absolute;
+        bottom: -5px;
+        left: 120px;
+        color: #ff4848;
+      }
     }
   }
 }
