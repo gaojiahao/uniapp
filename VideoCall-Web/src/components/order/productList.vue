@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:15:36
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\productList.vue
- * @LastEditTime: 2021-04-29 15:29:06
+ * @LastEditTime: 2021-04-30 15:14:50
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -11,7 +11,7 @@
 <template>
     <div class="productList_wrap">
     <!-- 择样购物车 -->
-        <Drawer title="择样订单详情" :closable="true" v-model="isShow" @on-close="changeProductList" width='1255' class="productList">
+        <Drawer title="择样订单详情" :closable="true" v-model="isShow" @on-close="changeProductList" width='1272' class="productList">
             <div slot="close" style="cursor: pointer;color: black;display: inline-block;width: 100%;height: 24px;line-height: 24px;font-size: 24px;color: #999999;margin-top: 4px;
                 margin-right: 8px;">
                 <Icon type="md-arrow-round-forward" />

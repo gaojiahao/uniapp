@@ -99,6 +99,13 @@ export default {
         callback();
       }
     };
+    const meetingNumberVail = (rule, value, callback) => {
+      if (value > 8||value<1) {
+        callback(new Error(this.$t('createMeeting.mettingNumberText')));
+      } else {
+        callback();
+      }
+    };
     return {
       logUrl: require("@assets/default/logo.png"),
       titleUrl: require("@assets/images/title_s.png"),
@@ -128,7 +135,7 @@ export default {
           { required: true, message: this.$t('createMeeting.endTimeText'), trigger: 'blur', validator: endTimeVail }
         ],
         mettingNumber: [
-          { required: true, message: this.$t('createMeeting.mettingNumberText'), trigger: 'blur' }
+          { required: true, message: this.$t('createMeeting.mettingNumberText'), trigger: 'blur', validator: meetingNumberVail }
         ],
       },
       channel: "10001",
