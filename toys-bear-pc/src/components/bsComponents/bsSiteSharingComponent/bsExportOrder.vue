@@ -14,7 +14,7 @@
         出厂价+报出价+工厂信息
       </li>
       <li :class="{ item: true, active: tp == 5 }" @click="checkTp(5)">
-        出厂价+报出价+工厂信息
+        宏升导入EXCEL模板
       </li>
     </div>
     <div class="right">
@@ -255,7 +255,7 @@
         </div>
       </div>
       <div class="tp1" v-show="tp === 5">
-        <div class="orderTitle">出厂价+报出价+工厂信息</div>
+        <div class="orderTitle">宏升导入EXCEL模板</div>
         <div class="imgBox">
           <el-image
             fit="contain"
