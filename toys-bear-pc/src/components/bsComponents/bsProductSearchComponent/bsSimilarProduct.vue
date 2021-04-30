@@ -443,7 +443,7 @@ export default {
   },
   created() {},
   mounted() {
-    this.searchForm.fa_no = this.item.fa_no;
+    this.searchForm.keyword = this.item.fa_no;
     this.searchForm.maxPrice = this.item.price * 1.05;
     this.searchForm.minPrice = this.item.price * 0.95;
     // 小0.95  大1.05
