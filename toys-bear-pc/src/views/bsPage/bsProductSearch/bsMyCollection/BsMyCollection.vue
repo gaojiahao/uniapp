@@ -15,7 +15,7 @@
       </div>
       <div class="searchBox">
         <div class="left">
-          <div class="item" style="min-width:350px">
+          <div class="item" style="min-width: 350px">
             <span class="label">关键字：</span>
             <el-input
               v-focus
@@ -119,6 +119,28 @@ export default {
       shoppingList: "myShoppingList"
     })
   },
+  watch: {
+    shoppingList(list) {
+      if (list) {
+        if (list.length) {
+          for (let i = 0; i < this.productList.length; i++) {
+            for (let j = 0; j < list.length; j++) {
+              if (this.productList[i].productNumber == list[j].productNumber) {
+                this.productList[i].isShopping = true;
+                break;
+              } else {
+                this.productList[i].isShopping = false;
+              }
+            }
+          }
+        } else {
+          this.productList.forEach(val => {
+            val.isShopping = false;
+          });
+        }
+      }
+    }
+  },
   methods: {
     // 获取列表
     async getCollectList() {
@@ -200,8 +222,9 @@ export default {
   },
   created() {},
   mounted() {
-    // 收藏
-    eventBus.$on("resetProducts", () => {
+    this.getCollectList();
+    // 取消收藏/刷新页面
+    eventBus.$on("resetProductCollection", () => {
       this.getCollectList();
     });
     // 删除购物车
@@ -223,11 +246,9 @@ export default {
         });
       }
     });
-    this.getCollectList();
   },
   beforeDestroy() {
-    eventBus.$off("resetProducts");
-    eventBus.$off("resetMyCart");
+    eventBus.$off("resetProductCollection");
   }
 };
 </script>

@@ -252,7 +252,7 @@ export default {
         productNumber: item.productNumber
       });
       if (res.data.result.code === 200) {
-        eventBus.$emit("resetProducts", item);
+        eventBus.$emit("resetProductCollection");
       } else {
         this.$common.handlerMsgState({
           msg: "收藏失败",
@@ -285,9 +285,10 @@ export default {
           type: "warning"
         });
       }
-      this.$forceUpdate();
-      eventBus.$emit("resetMyShoppingCart");
-      eventBus.$emit("resetProducts", this.item);
+      eventBus.$emit("resetMyCart", this.item);
+      this.$nextTick(() => {
+        this.$forceUpdate();
+      });
     },
     // 删除单个浏览记录
     async handlerDeleteBrowsing(item) {

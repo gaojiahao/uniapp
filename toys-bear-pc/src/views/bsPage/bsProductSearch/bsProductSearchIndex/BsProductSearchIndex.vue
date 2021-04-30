@@ -1213,6 +1213,7 @@ export default {
       this.isTwoDownCate = !this.isTwoDownCate;
     },
     clearRootEvent() {
+      eventBus.$off("resetProductCollection");
       eventBus.$off("searchProducts");
       eventBus.$off("openUpload");
     },
@@ -1238,27 +1239,21 @@ export default {
     eventBus.$on("openUpload", file => {
       this.uploadPic(file);
     });
-    eventBus.$on("resetMyCollection", () => {
-      this.getCollectList();
+    // 取消收藏/刷新页面
+    eventBus.$on("resetProductCollection", () => {
+      this.getProductList();
     });
     // 取消收藏
-    eventBus.$on("resetProducts", item => {
-      for (let i = 0; i < this.productList.length; i++) {
-        if (this.productList[i].productNumber == item.productNumber) {
-          this.productList[i].isFavorite = item.isFavorite;
-        }
-      }
-    });
-    eventBus.$on("resetProductCollection", item => {
-      for (let i = 0; i < this.productList.length; i++) {
-        if (this.productList[i].productNumber == item.productNumber) {
-          this.productList[i].isFavorite = item.isFavorite;
-        }
-      }
-    });
+    // eventBus.$on("resetProductCollection", (item) => {
+    //   for (let i = 0; i < this.productList.length; i++) {
+    //     if (this.productList[i].productNumber == item.productNumber) {
+    //       this.productList[i].isFavorite = item.isFavorite;
+    //     }
+    //   }
+    // });
     // 增加滚动事件
     // eventBus.$emit("startScroll");
-    // 删除购物车
+    // 删除购物车样式
     eventBus.$on("resetMyCart", list => {
       if (list.length) {
         for (let i = 0; i < this.productList.length; i++) {
@@ -1334,25 +1329,32 @@ export default {
         }
       }
     },
-    shoppingList(list) {
-      if (list) {
-        if (list.length) {
-          for (let i = 0; i < this.productList.length; i++) {
-            for (let j = 0; j < list.length; j++) {
-              if (this.productList[i].productNumber == list[j].productNumber) {
-                this.productList[i].isShopping = true;
-                break;
-              } else {
-                this.productList[i].isShopping = false;
+
+    shoppingList: {
+      handler(list) {
+        if (list) {
+          if (list.length) {
+            for (let i = 0; i < this.productList.length; i++) {
+              for (let j = 0; j < list.length; j++) {
+                if (
+                  this.productList[i].productNumber == list[j].productNumber
+                ) {
+                  this.productList[i].isShopping = true;
+                  break;
+                } else {
+                  this.productList[i].isShopping = false;
+                }
               }
             }
+          } else {
+            this.productList.forEach(val => {
+              val.isShopping = false;
+            });
           }
-        } else {
-          this.productList.forEach(val => {
-            val.isShopping = false;
-          });
         }
-      }
+      },
+      deep: true,
+      immediate: true
     },
     "searchForm.time"(newVal) {
       if (newVal == null) {
@@ -1362,7 +1364,6 @@ export default {
   },
   beforeDestroy() {
     this.clearRootEvent();
-    eventBus.$off("resetProducts");
     this.$store.commit("handlerHallSearchCate", null);
   }
 };

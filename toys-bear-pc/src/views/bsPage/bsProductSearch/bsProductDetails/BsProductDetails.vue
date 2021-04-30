@@ -265,31 +265,36 @@ export default {
           type: "warning"
         });
       }
-      eventBus.$emit("resetMyShoppingCart");
-      eventBus.$emit("resetProducts", this.item);
+      // 删除购物车样式
+      eventBus.$emit("resetMyCart", this.item);
       this.$nextTick(() => {
         this.$forceUpdate();
       });
     },
     // 收藏
     async addCollect(item) {
+      if (item.isFavorite) {
+        this.$common.handlerMsgState({
+          msg: "取消收藏",
+          type: "warning"
+        });
+      } else {
+        this.$common.handlerMsgState({
+          msg: "收藏成功",
+          type: "success"
+        });
+      }
+      item.isFavorite = !item.isFavorite;
       const res = await this.$http.post("/api/CreateProductCollection", {
         productNumber: item.productNumber
       });
       if (res.data.result.code === 200) {
-        if (item.isFavorite) {
-          this.$common.handlerMsgState({
-            msg: "取消收藏",
-            type: "warning"
-          });
-        } else {
-          this.$common.handlerMsgState({
-            msg: "收藏成功",
-            type: "success"
-          });
-        }
-        item.isFavorite = !item.isFavorite;
-        eventBus.$emit("resetProducts", item);
+        eventBus.$emit("resetProductCollection");
+      } else {
+        this.$common.handlerMsgState({
+          msg: "收藏失败",
+          type: "danger"
+        });
       }
     },
     // 获取产品详情
@@ -314,18 +319,13 @@ export default {
   mounted() {
     eventBus.$emit("showCart", true);
     this.getProductDetails();
-    eventBus.$on("resetMyCollection", () => {
-      this.getProductDetails();
-    });
   },
   computed: {
     ...mapGetters({
       shoppingList: "myShoppingList"
     })
   },
-  beforeDestroy() {
-    eventBus.$off("resetMyCollection");
-  }
+  beforeDestroy() {}
 };
 </script>
 <style scoped lang="less">
