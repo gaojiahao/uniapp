@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\public\index.html
- * @LastEditTime: 2021-04-30 16:32:55
+ * @LastEditTime: 2021-04-30 16:40:00
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -71,7 +71,7 @@
         var name = browserVersionStr[0];
         var version = browserVersionStr[1];
         console.log(66,browserVersionStr, name, version)
-        if (!limitObj[name] || limitObj[name] && version < limitObj[name]) {
+        if (!limitObj[name] || limitObj[name] && version < limitObj[name]||name=='IE') {
           var str = "你的浏览器版本太低了,已经和时代脱轨了 :(";
           var str3 = "1、建议您升级浏览器版本";
           var str2 = "2、推荐使用:<a href='https://www.baidu.com/s?ie=UTF-8&wd=%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8' target='_blank' style='color:blue;'>谷歌</a>," +
