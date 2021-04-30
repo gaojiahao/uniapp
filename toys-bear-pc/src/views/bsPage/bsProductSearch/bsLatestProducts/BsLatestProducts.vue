@@ -68,7 +68,7 @@
       </div>
       <div class="tableBox">
         <!-- 产品列表 -->
-        <component :is="isGrid" :productList="tableData"></component>
+        <component :is="isGrid" :productList="productList"></component>
         <!-- 分页 -->
         <center style="padding:30px 0;">
           <el-pagination
@@ -106,12 +106,44 @@ export default {
       isGrid: "bsGridComponent",
       keyword: null,
       dateTime: null,
-      tableData: [],
+      productList: [],
       totalCount: 0,
       pageSize: 12,
       currentPage: 1,
       searchHttpTime: null
     };
+  },
+  computed: {
+    ...mapGetters({
+      shoppingList: "myShoppingList"
+    })
+  },
+  watch: {
+    shoppingList: {
+      deep: true,
+      handler(list) {
+        if (list) {
+          if (list.length) {
+            for (let i = 0; i < this.productList.length; i++) {
+              for (let j = 0; j < list.length; j++) {
+                if (
+                  this.productList[i].productNumber == list[j].productNumber
+                ) {
+                  this.productList[i].isShopping = true;
+                  break;
+                } else {
+                  this.productList[i].isShopping = false;
+                }
+              }
+            }
+          } else {
+            this.productList.forEach(val => {
+              val.isShopping = false;
+            });
+          }
+        }
+      }
+    }
   },
   methods: {
     // 获取列表
@@ -146,7 +178,7 @@ export default {
           }
         }
         this.totalCount = res.data.result.item.totalCount;
-        this.tableData = res.data.result.item.items;
+        this.productList = res.data.result.item.items;
         let endDate = Date.now();
         this.searchHttpTime = (endDate - startDate) / 1000;
       }
@@ -188,45 +220,35 @@ export default {
       this.getProductsList();
     }
   },
-  created() {
-    this.getProductsList();
-  },
+  created() {},
   mounted() {
-    // 取消收藏
-    eventBus.$on("resetProducts", item => {
-      for (let i = 0; i < this.tableData.length; i++) {
-        if (this.tableData[i].productNumber == item.productNumber) {
-          this.tableData[i].isFavorite = item.isFavorite;
-        }
-      }
+    this.getProductsList();
+    // 取消收藏/刷新页面
+    eventBus.$on("resetProductCollection", () => {
+      this.getProductsList();
     });
     // 删除购物车
     eventBus.$on("resetMyCart", list => {
       if (list.length) {
-        for (let i = 0; i < this.tableData.length; i++) {
+        for (let i = 0; i < this.productList.length; i++) {
           for (let j = 0; j < list.length; j++) {
-            if (this.tableData[i].productNumber == list[j].productNumber) {
-              this.tableData[i].isShopping = true;
+            if (this.productList[i].productNumber == list[j].productNumber) {
+              this.productList[i].isShopping = true;
               break;
             } else {
-              this.tableData[i].isShopping = false;
+              this.productList[i].isShopping = false;
             }
           }
         }
       } else {
-        this.tableData.forEach(val => {
+        this.productList.forEach(val => {
           val.isShopping = false;
         });
       }
     });
   },
   beforeDestroy() {
-    eventBus.$off("resetProducts");
-  },
-  computed: {
-    ...mapGetters({
-      shoppingList: "myShoppingList"
-    })
+    eventBus.$off("resetProductCollection");
   }
 };
 </script>
