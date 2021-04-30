@@ -238,7 +238,12 @@
       </div>
     </div>
     <!-- 提交信息 -->
-    <el-dialog title="生成报价" :visible.sync="subDialogVisible" width="40%">
+    <el-dialog
+      title="生成报价"
+      :visible.sync="subDialogVisible"
+      v-if="subDialogVisible"
+      width="40%"
+    >
       <div class="contactInfoBox">
         <div class="userInfoBox">
           <el-form
@@ -1063,6 +1068,25 @@ export default {
     },
     // 打开提交订单
     openSubOrder() {
+      this.clienFormData = {
+        title: null,
+        defaultFormula: null,
+        customerId: null,
+        customerName: null,
+        quotationProductList: [],
+        profitCalcMethod: 2,
+        profit: 0,
+        offerMethod: "汕头",
+        cu_de: "¥",
+        cu_deName: "RMB",
+        totalCost: "0",
+        exchange: 0,
+        size: "24",
+        decimalPlaces: 3,
+        rejectionMethod: "四舍五入",
+        miniPrice: 0,
+        miniPriceDecimalPlaces: 1
+      };
       const selectProducts = this.$refs.myTableRef.selection;
       if (selectProducts.length < 1) {
         this.$common.handlerMsgState({

@@ -280,10 +280,7 @@ export default {
         decimalPlaces: [
           { required: true, message: "请选择小数位数", trigger: "change" }
         ],
-        profit: [
-          { required: true, message: "请输入利润", trigger: "blur" },
-          { type: "number", message: "利润必须为数字值", trigger: "blur" }
-        ],
+        profit: [{ required: true, message: "请输入利润", trigger: "blur" }],
         size: [{ required: true, message: "请选择尺码", trigger: "change" }],
         rejectionMethod: [
           { required: true, message: "请选择取舍方式", trigger: "change" }
