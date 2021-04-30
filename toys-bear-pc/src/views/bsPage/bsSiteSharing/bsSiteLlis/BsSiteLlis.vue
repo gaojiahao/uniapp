@@ -299,9 +299,25 @@
             </el-select>
           </el-form-item>
           <el-form-item label="利润率：" prop="profit">
-            <el-input v-model="clienFormData.profit" placeholder="请输入利润率">
+            <!-- <el-input v-model="clienFormData.profit" placeholder="请输入利润率">
               <span slot="suffix">%</span>
-            </el-input>
+            </el-input> -->
+            <div style="display: flex; justify-content:space-between;">
+              <el-input
+                maxlength="30"
+                style="flex:1;"
+                v-model="clienFormData.profit"
+              >
+                <span slot="suffix">%</span>
+              </el-input>
+              <el-radio-group
+                style="flex:1;display:flex; align-items:center;margin-left: 20px;"
+                v-model="clienFormData.profitCalcMethod"
+              >
+                <el-radio :label="2">除法</el-radio>
+                <el-radio :label="1">乘法</el-radio>
+              </el-radio-group>
+            </div>
           </el-form-item>
         </div>
         <div class="formItemBox">
@@ -337,7 +353,14 @@
             ></el-input>
           </el-form-item>
           <el-form-item label="每车尺码：" prop="size">
-            <el-select v-model="clienFormData.size" placeholder="请选择尺码">
+            <el-select
+              v-model.number="clienFormData.size"
+              @change="selectBlur"
+              filterable
+              allow-create
+              default-first-option
+              placeholder="请输入/选择尺码"
+            >
               <el-option
                 v-for="(item, i) in options.size"
                 :key="i"
@@ -548,6 +571,7 @@ export default {
         url: null,
         isExportExcel: false,
         profit: 0,
+        profitCalcMethod: 2,
         expireTime: null,
         customerInfoId: null,
         offerMethod: "汕头",
@@ -648,6 +672,12 @@ export default {
           msg: res.data.result.msg,
           type: "danger"
         });
+      }
+    },
+    // 下拉框输入事件
+    selectBlur(val) {
+      if (isNaN(Number(val))) {
+        this.clienFormData.size = null;
       }
     },
     // 获取列表
@@ -1073,12 +1103,19 @@ export default {
   .formItemBox {
     display: flex;
     justify-content: space-between;
+    .el-form-item {
+      flex: 1;
+    }
   }
   .lessThanPrice {
     display: flex;
     justify-content: space-between;
     padding-top: 20px;
     border-top: 1px solid #dcdfe6;
+    .left,
+    .right {
+      flex: 1;
+    }
   }
 }
 .isData {

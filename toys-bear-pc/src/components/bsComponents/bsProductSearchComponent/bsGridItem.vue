@@ -1,12 +1,15 @@
 <template>
   <div class="bsGridItem" @mouseleave="showDetails(false)">
-    <div class="itemImg" @mouseenter="showDetails(true)">
+    <div
+      class="itemImg"
+      @click="toProductDetails"
+      @mouseenter="showDetails(true)"
+    >
       <el-image
         style="width: 222px; height: 166px"
         fit="contain"
         :src="item.img"
         lazy
-        @click="toProductDetails"
       >
         <div slot="placeholder" class="image-slot">
           <img :src="require('@/assets/images/imgError.png')" />

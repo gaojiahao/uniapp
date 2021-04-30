@@ -177,61 +177,63 @@
         </el-table-column>
       </el-table>
       <div class="totalBox">
-        <div class="left">
-          <el-checkbox
-            :indeterminate="isIndeterminate"
-            v-model="checkAll"
-            @change="handleCheckAllChange"
-          >
-            全选
-          </el-checkbox>
-          <!-- <el-popconfirm
+        <div class="total_wrap">
+          <div class="left">
+            <el-checkbox
+              :indeterminate="isIndeterminate"
+              v-model="checkAll"
+              @change="handleCheckAllChange"
+            >
+              全选
+            </el-checkbox>
+            <!-- <el-popconfirm
             class="deleteBtn"
             title="确定要删除选中的产品吗？"
             @confirm="removeMyShoppingCart"
           > -->
-          <el-button
-            slot="reference"
-            type="primary"
-            :disabled="
-              $refs.myTableRef && $refs.myTableRef.selection.length < 1
-            "
-            style="margin-left: 20px"
-            size="small"
-            @click.stop="removeMyShoppingCart"
-            plain
-            >删除</el-button
-          >
-          <!-- </el-popconfirm> -->
-        </div>
-        <div class="right">
-          <p class="item">
-            <span class="itemTitle">总款数：</span>
-            <span>{{ selectTableData.length }}</span>
-          </p>
-          <p class="item">
-            <span class="itemTitle">总箱数：</span>
-            <span>{{ myTotalQuantity }}</span>
-          </p>
-          <p class="item">
-            <span class="itemTitle">总体积/总材积：</span>
-            <span>{{ myTotalOuterBoxStere }}/{{ myTotalOuterBoxFeet }}</span>
-          </p>
-          <p class="item">
-            <span class="itemTitle">总毛重/总净重：</span>
-            <span>{{ myTotalMaozhong }}/{{ myTotalJingzhong }}(KG)</span>
-          </p>
-          <p class="item">
-            <span class="itemTitle">总金额：</span>
-            <span class="price">￥{{ myTotalPrice }}</span>
-          </p>
-          <el-button
-            type="warning"
-            @click="openSubOrder"
-            style="margin-left: 10px"
-            size="small"
-            >生成报价</el-button
-          >
+            <el-button
+              slot="reference"
+              type="primary"
+              :disabled="
+                $refs.myTableRef && $refs.myTableRef.selection.length < 1
+              "
+              style="margin-left: 20px"
+              size="small"
+              @click.stop="removeMyShoppingCart"
+              plain
+              >删除</el-button
+            >
+            <!-- </el-popconfirm> -->
+          </div>
+          <div class="right">
+            <p class="item">
+              <span class="itemTitle">总款数：</span>
+              <span>{{ selectTableData.length }}</span>
+            </p>
+            <p class="item">
+              <span class="itemTitle">总箱数：</span>
+              <span>{{ myTotalQuantity }}</span>
+            </p>
+            <p class="item">
+              <span class="itemTitle">总体积/总材积：</span>
+              <span>{{ myTotalOuterBoxStere }}/{{ myTotalOuterBoxFeet }}</span>
+            </p>
+            <p class="item">
+              <span class="itemTitle">总毛重/总净重：</span>
+              <span>{{ myTotalMaozhong }}/{{ myTotalJingzhong }}(KG)</span>
+            </p>
+            <p class="item">
+              <span class="itemTitle">总金额：</span>
+              <span class="price">￥{{ myTotalPrice }}</span>
+            </p>
+            <el-button
+              type="warning"
+              @click="openSubOrder"
+              style="margin-left: 10px"
+              size="small"
+              >生成报价</el-button
+            >
+          </div>
         </div>
       </div>
     </div>
@@ -290,10 +292,22 @@
             <div class="wrapBox">
               <div class="left">
                 <el-form-item label="报价方式：" prop="offerMethod">
-                  <el-input
+                  <!-- <el-input
                     maxlength="30"
                     v-model="clienFormData.offerMethod"
-                  ></el-input>
+                  ></el-input> -->
+                  <el-select
+                    v-model="clienFormData.offerMethod"
+                    placeholder="请选择报价方式"
+                  >
+                    <el-option
+                      v-for="(item, i) in options.offerMethod"
+                      :key="i"
+                      :label="item.itemCode"
+                      :value="item.parameter"
+                    >
+                    </el-option>
+                  </el-select>
                 </el-form-item>
                 <el-form-item label="币种：" prop="cu_de">
                   <el-select
@@ -334,9 +348,22 @@
               </div>
               <div class="right">
                 <el-form-item label="利润率：" prop="profit">
-                  <el-input maxlength="30" v-model="clienFormData.profit">
-                    <span slot="suffix">%</span>
-                  </el-input>
+                  <div style="display: flex; justify-content:space-between;">
+                    <el-input
+                      maxlength="30"
+                      style="flex:1;"
+                      v-model="clienFormData.profit"
+                    >
+                      <span slot="suffix">%</span>
+                    </el-input>
+                    <el-radio-group
+                      style="flex:1;display:flex; align-items:center;margin-left: 20px;"
+                      v-model="clienFormData.profitCalcMethod"
+                    >
+                      <el-radio :label="2">除法</el-radio>
+                      <el-radio :label="1">乘法</el-radio>
+                    </el-radio-group>
+                  </div>
                 </el-form-item>
                 <el-form-item label="总费用：" prop="totalCost">
                   <el-input
@@ -347,10 +374,16 @@
                   </el-input>
                 </el-form-item>
                 <el-form-item label="每车尺码：" prop="size">
+                  <!-- <div style="display: flex; justify-content:space-between;"> -->
                   <el-select
-                    v-model="clienFormData.size"
                     style="width: 100%"
-                    placeholder="请选择尺码"
+                    @change="selectBlur"
+                    max-length="2"
+                    v-model.number="clienFormData.size"
+                    filterable
+                    allow-create
+                    default-first-option
+                    placeholder="请输入/选择尺码"
                   >
                     <el-option
                       v-for="(item, i) in options.size"
@@ -360,6 +393,14 @@
                     >
                     </el-option>
                   </el-select>
+                  <!-- <el-radio-group
+                      style="flex:1;display:flex; align-items:center;margin-left: 20px;"
+                      v-model="clienFormData.profitCalcMethod"
+                    >
+                      <el-radio :label="2">除法</el-radio>
+                      <el-radio :label="1">乘法</el-radio>
+                    </el-radio-group>
+                  </div> -->
                 </el-form-item>
                 <el-form-item label="取舍方式：" prop="rejectionMethod">
                   <el-select
@@ -527,6 +568,7 @@ export default {
         customerId: null,
         customerName: null,
         quotationProductList: [],
+        profitCalcMethod: 2,
         profit: 0,
         offerMethod: "汕头",
         cu_de: "¥",
@@ -592,7 +634,7 @@ export default {
         },
         size: {
           required: true,
-          message: "请选择尺码",
+          message: "请输入/选择尺码",
           trigger: "change"
         },
         rejectionMethod: {
@@ -776,6 +818,12 @@ export default {
       this.myTotalOuterBoxStere = outerBoxStere;
       this.myTotalOuterBoxFeet = outerBoxFeet;
     },
+    // 下拉框输入事件
+    selectBlur(val) {
+      if (isNaN(Number(val))) {
+        this.clienFormData.size = null;
+      }
+    },
     // 去聊天
     toNews(item) {
       const fd = {
@@ -839,7 +887,6 @@ export default {
       this.$router.push("/bsIndex/bsVendorQuery");
       this.$store.commit("myAddTab", fd);
     },
-
     // 提交新增客户
     subMyClient() {
       this.$refs.addMyClientRef.validate(async valid => {
@@ -1072,6 +1119,7 @@ export default {
         customerId: null,
         customerName: null,
         quotationProductList: [],
+        profitCalcMethod: 2,
         profit: 0,
         offerMethod: "汕头",
         cu_de: "¥",
@@ -1169,6 +1217,7 @@ export default {
           this.clienFormData.size = obj.size;
           this.clienFormData.decimalPlaces = obj.decimalPlaces;
           this.clienFormData.rejectionMethod = obj.rejectionMethod;
+          this.clienFormData.profitCalcMethod = obj.profitCalcMethod;
         }
       }
     },
@@ -1306,10 +1355,14 @@ export default {
       }
     }
     .totalBox {
-      display: flex;
-      align-items: center;
-      height: 80px;
-      box-sizing: border-box;
+      background-color: #fff;
+      .total_wrap {
+        display: flex;
+        height: 80px;
+        padding: 0 20px;
+        box-sizing: border-box;
+        align-items: center;
+      }
       .left {
         min-width: 130px;
       }

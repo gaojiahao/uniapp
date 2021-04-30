@@ -79,6 +79,14 @@
               <i v-show="isTime === 1" class="jiantou xiaActiveIcon"></i>
               <i v-show="isTime === 2" class="jiantou shangActiveIcon"></i>
             </div>
+            <div class="screenItem" @click="sortTypeEvent(4)">
+              <span :class="{ screenLabel: true, active: sortOrder === 4 }">
+                货号
+              </span>
+              <i v-show="isFa_no === null" class="jiantou xiajiantouIcon"></i>
+              <i v-show="isFa_no === 1" class="jiantou xiaActiveIcon"></i>
+              <i v-show="isFa_no === 2" class="jiantou shangActiveIcon"></i>
+            </div>
             <div class="item">
               <span class="label">关键词搜索:</span>
               <el-input
@@ -123,6 +131,14 @@
               <i v-show="isTime === null" class="jiantou xiajiantouIcon"></i>
               <i v-show="isTime === 1" class="jiantou xiaActiveIcon"></i>
               <i v-show="isTime === 2" class="jiantou shangActiveIcon"></i>
+            </div>
+            <div class="screenItem" @click="sortTypeEvent(4)">
+              <span :class="{ screenLabel: true, active: sortOrder === 4 }">
+                货号
+              </span>
+              <i v-show="isFa_no === null" class="jiantou xiajiantouIcon"></i>
+              <i v-show="isFa_no === 1" class="jiantou xiaActiveIcon"></i>
+              <i v-show="isFa_no === 2" class="jiantou shangActiveIcon"></i>
             </div>
             <div class="item">
               <span class="label">关键词搜索:</span>
@@ -216,6 +232,7 @@ export default {
   data() {
     return {
       companyInfo: {},
+      isFa_no: null,
       isDiyu: 0,
       isPrice: null,
       isTime: null,
@@ -421,6 +438,7 @@ export default {
           this.sortType = this.isPrice =
             this.isPrice === null ? 1 : this.isPrice === 1 ? 2 : null;
           this.sortType = null;
+          this.isFa_no = null;
           this.isTime = null;
           this.isRedu = null;
           this.sortType = this.isPrice;
@@ -429,6 +447,7 @@ export default {
         case 2:
           this.isTime = this.isTime === null ? 1 : this.isTime === 1 ? 2 : null;
           this.sortType = null;
+          this.isFa_no = null;
           this.isPrice = null;
           this.isRedu = null;
           this.sortType = this.isTime;
@@ -438,8 +457,18 @@ export default {
           this.isRedu = this.isRedu === null ? 1 : this.isRedu === 1 ? 2 : null;
           this.sortType = null;
           this.isPrice = null;
+          this.isFa_no = null;
           this.isTime = null;
           this.sortType = this.isRedu;
+          this.sortType === null && (this.sortOrder = null);
+          break;
+        case 4:
+          this.isFa_no =
+            this.isFa_no === null ? 1 : this.isFa_no === 1 ? 2 : null;
+          this.sortType = null;
+          this.isPrice = null;
+          this.isTime = null;
+          this.sortType = this.isFa_no;
           this.sortType === null && (this.sortOrder = null);
           break;
         default:
