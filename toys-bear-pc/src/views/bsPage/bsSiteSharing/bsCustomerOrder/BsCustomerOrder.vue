@@ -201,10 +201,18 @@
               <div class="selectTions">
                 <div class="label">
                   是否按厂商单独导出图片：
-                  <el-radio-group class="myExportWay" v-model="imageExportWay">
+                  <!-- <el-radio-group class="myExportWay" v-model="imageExportWay">
                     <el-radio :label="1">是</el-radio>
                     <el-radio :label="2">否</el-radio>
-                  </el-radio-group>
+                  </el-radio-group> -->
+                  <el-checkbox-group
+                    class="myExportWay"
+                    @change="changeCheckBox"
+                    v-model="imageExportWay"
+                  >
+                    <el-checkbox label="1">是</el-checkbox>
+                    <el-checkbox label="2">否</el-checkbox>
+                  </el-checkbox-group>
                 </div>
                 <div class="label">
                   是否带图：
@@ -254,10 +262,18 @@
               <div class="selectTions">
                 <div class="label">
                   是否按厂商单独导出图片：
-                  <el-radio-group class="myExportWay" v-model="imageExportWay">
+                  <!-- <el-radio-group class="myExportWay" v-model="imageExportWay">
                     <el-radio :label="1">是</el-radio>
                     <el-radio :label="2">否</el-radio>
-                  </el-radio-group>
+                  </el-radio-group> -->
+                  <el-checkbox-group
+                    class="myExportWay"
+                    @change="changeCheckBox"
+                    v-model="imageExportWay"
+                  >
+                    <el-checkbox label="1">是</el-checkbox>
+                    <el-checkbox label="2">否</el-checkbox>
+                  </el-checkbox-group>
                 </div>
                 <div class="label">
                   是否带图：
@@ -307,10 +323,18 @@
               <div class="selectTions">
                 <div class="label">
                   是否按厂商单独导出图片：
-                  <el-radio-group class="myExportWay" v-model="imageExportWay">
+                  <!-- <el-radio-group class="myExportWay" v-model="imageExportWay">
                     <el-radio :label="1">是</el-radio>
                     <el-radio :label="2">否</el-radio>
-                  </el-radio-group>
+                  </el-radio-group> -->
+                  <el-checkbox-group
+                    class="myExportWay"
+                    @change="changeCheckBox"
+                    v-model="imageExportWay"
+                  >
+                    <el-checkbox label="1">是</el-checkbox>
+                    <el-checkbox label="2">否</el-checkbox>
+                  </el-checkbox-group>
                 </div>
                 <div class="label">
                   是否带图：
@@ -360,10 +384,18 @@
               <div class="selectTions">
                 <div class="label">
                   是否按厂商单独导出图片：
-                  <el-radio-group class="myExportWay" v-model="imageExportWay">
+                  <!-- <el-radio-group class="myExportWay" v-model="imageExportWay">
                     <el-radio :label="1">是</el-radio>
                     <el-radio :label="2">否</el-radio>
-                  </el-radio-group>
+                  </el-radio-group> -->
+                  <el-checkbox-group
+                    class="myExportWay"
+                    @change="changeCheckBox"
+                    v-model="imageExportWay"
+                  >
+                    <el-checkbox label="1">是</el-checkbox>
+                    <el-checkbox label="2">否</el-checkbox>
+                  </el-checkbox-group>
                 </div>
                 <div class="label">
                   是否带图：
@@ -413,10 +445,18 @@
               <div class="selectTions">
                 <div class="label">
                   是否按厂商单独导出图片：
-                  <el-radio-group class="myExportWay" v-model="imageExportWay">
+                  <!-- <el-radio-group class="myExportWay" v-model="imageExportWay">
                     <el-radio :label="1">是</el-radio>
                     <el-radio :label="2">否</el-radio>
-                  </el-radio-group>
+                  </el-radio-group> -->
+                  <el-checkbox-group
+                    class="myExportWay"
+                    @change="changeCheckBox"
+                    v-model="imageExportWay"
+                  >
+                    <el-checkbox label="1">是</el-checkbox>
+                    <el-checkbox label="2">否</el-checkbox>
+                  </el-checkbox-group>
                 </div>
                 <div class="label">
                   <el-button
@@ -467,7 +507,7 @@ export default {
       tp: 1,
       imgSize: "200*150",
       imageSizeList: ["200*150", "400*300", "640*480"],
-      imageExportWay: 0,
+      imageExportWay: [],
       exportWay: 1,
       exportTemplateDialog: false,
       exportDialog: false,
@@ -487,7 +527,7 @@ export default {
       this.$store.commit("handlerIsJindu", true);
       const fd = {
         excelExportWay: this.exportWay,
-        imageExportWay: this.imageExportWay,
+        imageExportWay: this.imageExportWay.length ? this.imageExportWay[0] : 0,
         imageWidth: this.imgSize.split("*")[0],
         imageHeight: this.imgSize.split("*")[1],
         templateType: type,
@@ -507,7 +547,7 @@ export default {
           const zipName = this.currentOrder.customerName
             ? this.currentOrder.customerName + "_" + time + ".zip"
             : time + ".zip";
-          const fileName = this.imageExportWay > 0 ? zipName : exeName;
+          const fileName = this.imageExportWay.length > 0 ? zipName : exeName;
 
           const blob = res.data;
           if (window.navigator && window.navigator.msSaveOrOpenBlob) {
@@ -529,6 +569,12 @@ export default {
         .catch(() => {
           this.$store.commit("handlerIsJindu", false);
         });
+    },
+    // 修改了压缩包
+    changeCheckBox(list) {
+      if (list.length > 1) {
+        this.imageExportWay.splice(0, 1);
+      }
     },
     // 预览导出模板
     openViewer(url) {
@@ -788,6 +834,10 @@ export default {
         justify-content: space-between;
         box-sizing: border-box;
         padding: 0 20px;
+        .label {
+          display: flex;
+          align-items: center;
+        }
       }
     }
   }
