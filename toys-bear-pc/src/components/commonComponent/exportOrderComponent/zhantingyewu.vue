@@ -301,6 +301,16 @@ export default {
     };
   },
   methods: {
+    // 查看模板
+    checkTp(t) {
+      this.tp = t;
+    },
+    // 修改了压缩包
+    changeCheckBox(list) {
+      if (list.length > 1) {
+        this.imageExportWay.splice(0, 1);
+      }
+    },
     // 打开预览模板
     openViewer(url) {
       this.$PreviewPic({
