@@ -303,7 +303,7 @@
                   <el-button
                     type="warning"
                     size="medium"
-                    @click="exportOrder(1)"
+                    @click="exportOrder(2)"
                   >
                     <i class="iconfont icon-daochujinruchukou"></i>
                     确定导出
@@ -364,7 +364,7 @@
                   <el-button
                     type="warning"
                     size="medium"
-                    @click="exportOrder(1)"
+                    @click="exportOrder(3)"
                   >
                     <i class="iconfont icon-daochujinruchukou"></i>
                     确定导出
@@ -425,7 +425,7 @@
                   <el-button
                     type="warning"
                     size="medium"
-                    @click="exportOrder(1)"
+                    @click="exportOrder(4)"
                   >
                     <i class="iconfont icon-daochujinruchukou"></i>
                     确定导出
@@ -462,7 +462,7 @@
                   <el-button
                     type="warning"
                     size="medium"
-                    @click="exportOrder(1)"
+                    @click="exportOrder(5)"
                   >
                     <i class="iconfont icon-daochujinruchukou"></i>
                     确定导出

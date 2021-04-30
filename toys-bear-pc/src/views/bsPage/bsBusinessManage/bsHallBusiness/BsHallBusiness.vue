@@ -186,10 +186,10 @@
     <transition name="el-zoom-in-center">
       <el-dialog
         title="订单模板"
+        class="exportOrder"
         v-if="exportTemplateDialog"
         :visible.sync="exportTemplateDialog"
-        top="60px"
-        width="80%"
+        width="1200px"
       >
         <bsExportOrder
           :options="{
@@ -442,6 +442,11 @@ export default {
         height: 60px;
       }
     }
+  }
+}
+@{deep} .exportOrder {
+  .el-dialog__body {
+    padding: 0;
   }
 }
 </style>

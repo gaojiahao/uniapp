@@ -125,7 +125,7 @@
             </el-select>
           </div>
           <div class="label">
-            <el-button type="warning" size="medium" @click="exportOrder(1)">
+            <el-button type="warning" size="medium" @click="exportOrder(2)">
               <i class="iconfont icon-daochujinruchukou"></i>
               确定导出
             </el-button>
@@ -182,7 +182,7 @@
             </el-select>
           </div>
           <div class="label">
-            <el-button type="warning" size="medium" @click="exportOrder(1)">
+            <el-button type="warning" size="medium" @click="exportOrder(3)">
               <i class="iconfont icon-daochujinruchukou"></i>
               确定导出
             </el-button>
@@ -239,7 +239,7 @@
             </el-select>
           </div>
           <div class="label">
-            <el-button type="warning" size="medium" @click="exportOrder(1)">
+            <el-button type="warning" size="medium" @click="exportOrder(4)">
               <i class="iconfont icon-daochujinruchukou"></i>
               确定导出
             </el-button>
@@ -272,7 +272,7 @@
             </el-checkbox-group>
           </div>
           <div class="label">
-            <el-button type="warning" size="medium" @click="exportOrder(1)">
+            <el-button type="warning" size="medium" @click="exportOrder(5)">
               <i class="iconfont icon-daochujinruchukou"></i>
               确定导出
             </el-button>

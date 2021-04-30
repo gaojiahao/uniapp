@@ -990,7 +990,7 @@ export default {
       let startDate = Date.now();
       const fd = {
         name: this.searchForm.keyword,
-        companyNumber: this.searchForm.companyNumber,
+        hallNumber: this.searchForm.companyNumber,
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         categoryNumber: this.searchForm.categoryNumber,
