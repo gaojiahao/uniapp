@@ -40,8 +40,8 @@
       <!-- v-show="myInfo.isMain" -->
       <div class="editOperation" v-show="myInfo.isMain">
         <span class="editItem" @click="openEditCompany">修改公司资料</span>
-        <span class="line">|</span>
-        <span class="editItem" @click="openBindCompany">绑定公司</span>
+        <!-- <span class="line">|</span>
+        <span class="editItem" @click="openBindCompany">绑定公司</span> -->
       </div>
     </div>
     <div class="tableTitle">

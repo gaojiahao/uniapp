@@ -292,6 +292,7 @@ export default {
       .left {
         flex: 1;
         .item {
+          width: 175px;
           padding: 4px 0;
           overflow: hidden; /*超出部分隐藏*/
           white-space: nowrap; /*不换行*/
