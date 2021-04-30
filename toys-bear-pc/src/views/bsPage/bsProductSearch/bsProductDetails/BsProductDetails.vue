@@ -131,28 +131,25 @@
             <i class="infoIcon"></i>
             <span>在线咨询</span>
           </p>
-          <!-- <el-tooltip
-            class="item"
-            effect="dark"
-            :content="
-              productDetail.supplierPhone || productDetail.exhibitionPhone
-            "
-            placement="top"
+          <p
+            class="item myHover"
+            v-if="productDetail.exhibitionTelephoneNumber"
           >
-            <p class="item myHover">
-              <i class="phoneIcon"></i>
-              <span>联系电话</span>
-            </p>
-          </el-tooltip> -->
-          <p class="item myHover">
             <i class="phoneIcon"></i>
+            <span>{{ productDetail.exhibitionTelephoneNumber }}</span>
+          </p>
+          <p
+            class="item myHover"
+            v-if="productDetail.supplierPhone || productDetail.exhibitionPhone"
+          >
+            <i class="sjIcon"></i>
             <span>{{
               productDetail.supplierPhone || productDetail.exhibitionPhone
             }}</span>
           </p>
-          <p class="item myHover" v-if="productDetail.qq">
+          <p class="item myHover" v-if="productDetail.supplierQQ">
             <i class="qqIcon"></i>
-            <span>{{ productDetail.qq }}</span>
+            <span>{{ productDetail.supplierQQ }}</span>
           </p>
           <p class="item myHover" @click="toFactory(productDetail)">
             <i class="shopIcon"></i>
@@ -184,7 +181,7 @@
           v-for="imgItem in productDetail.imgUrlList"
           :key="imgItem"
         >
-          <img style="margin: 0 auto;" :src="imgItem" alt="" />
+          <img style="margin: 0 auto" :src="imgItem" alt="" />
         </div>
       </div>
     </div>
@@ -535,6 +532,14 @@ export default {
             margin-right: 15px;
             background: url("~@/assets/images/onlinePhoneIcon.png") no-repeat
               center;
+            background-size: contain;
+          }
+          .sjIcon {
+            min-width: 28px;
+            width: 28px;
+            height: 28px;
+            margin-right: 15px;
+            background: url("~@/assets/images/sjIcon.png") no-repeat center;
             background-size: contain;
           }
           .qqIcon {

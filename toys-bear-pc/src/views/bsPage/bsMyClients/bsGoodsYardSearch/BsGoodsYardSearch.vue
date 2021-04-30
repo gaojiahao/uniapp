@@ -129,7 +129,7 @@
       <center style="padding: 20px 0">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
-          :page-sizes="[12, 24, 36, 48]"
+          :page-sizes="[10, 20, 30, 40]"
           background
           :total="totalCount"
           :page-size="pageSize"
@@ -148,7 +148,7 @@ export default {
   data() {
     return {
       totalCount: 0,
-      pageSize: 12,
+      pageSize: 10,
       currentPage: 1,
       keyword: null,
       dateTime: null,

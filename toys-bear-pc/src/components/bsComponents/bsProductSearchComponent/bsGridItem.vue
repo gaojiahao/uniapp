@@ -173,41 +173,41 @@ export default {
   methods: {
     // 找相似
     similarityEvent() {
-      this.$common.handlerMsgState({
-        msg: "敬请期待",
-        type: "warning"
-      });
-      return false;
-      // const value = JSON.parse(JSON.stringify(this.item));
-      // value.type = "similarity";
-      // const fd = {
-      //   name: "similarity" + this.item.productNumber,
-      //   linkUrl: "/bsIndex/bsProductSearchIndex",
-      //   component: "bsSimilarProduct",
-      //   refresh: true,
-      //   label: "相似产品" + this.item.fa_no,
-      //   value: value
-      // };
-      // this.$store.commit("myAddTab", fd);
+      // this.$common.handlerMsgState({
+      //   msg: "敬请期待",
+      //   type: "warning"
+      // });
+      // return false;
+      const value = JSON.parse(JSON.stringify(this.item));
+      value.type = "similarity";
+      const fd = {
+        name: "similarity" + this.item.productNumber,
+        linkUrl: "/bsIndex/bsProductSearchIndex",
+        component: "bsSimilarProduct",
+        refresh: true,
+        label: "相似产品" + this.item.fa_no,
+        value: value
+      };
+      this.$store.commit("myAddTab", fd);
     },
     // 找同款
     sameEvent() {
-      this.$common.handlerMsgState({
-        msg: "敬请期待",
-        type: "warning"
-      });
-      return false;
-      // const value = JSON.parse(JSON.stringify(this.item));
-      // value.type = "same";
-      // const fd = {
-      //   name: "same" + this.item.productNumber,
-      //   linkUrl: "/bsIndex/bsProductSearchIndex",
-      //   component: "bsSimilarProduct",
-      //   refresh: true,
-      //   label: "同款产品" + this.item.fa_no,
-      //   value: value
-      // };
-      // this.$store.commit("myAddTab", fd);
+      // this.$common.handlerMsgState({
+      //   msg: "敬请期待",
+      //   type: "warning"
+      // });
+      // return false;
+      const value = JSON.parse(JSON.stringify(this.item));
+      value.type = "same";
+      const fd = {
+        name: "same" + this.item.productNumber,
+        linkUrl: "/bsIndex/bsProductSearchIndex",
+        component: "bsSimilarProduct",
+        refresh: true,
+        label: "同款产品" + this.item.fa_no,
+        value: value
+      };
+      this.$store.commit("myAddTab", fd);
     },
     // 显示明细
     showDetails(flag) {
@@ -249,10 +249,20 @@ export default {
         this.$store.commit("myAddTab", fd);
       } else {
         // 去展厅
-        this.$common.handlerMsgState({
-          msg: "展厅首页敬请期待",
-          type: "warning"
-        });
+        // this.$common.handlerMsgState({
+        //   msg: "展厅首页敬请期待",
+        //   type: "warning"
+        // });
+        // return false;
+        const fd = {
+          name: item.exhibitionNumber || item.companyNumber,
+          linkUrl: "/bsIndex/bsProductSearchIndex",
+          component: "bsExhibitionHallHome",
+          refresh: true,
+          label: item.exhibitionName,
+          value: item
+        };
+        this.$store.commit("myAddTab", fd);
       }
     },
     // 收藏
@@ -491,6 +501,7 @@ export default {
       .left {
         flex: 1;
         .item {
+          width: 175px;
           padding: 4px 0;
           overflow: hidden; /*超出部分隐藏*/
           white-space: nowrap; /*不换行*/

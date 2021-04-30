@@ -17,7 +17,6 @@ function myForEach(oList, yList) {
 }
 const store = new Vuex.Store({
   state: {
-    textSearch: "",
     myColles: [],
     isJindu: false,
     activeTab: "/bsIndex/bsHome",
@@ -37,6 +36,7 @@ const store = new Vuex.Store({
     offerProductList: [], //报价数据
     historyNames: [],
     searchTxt: "",
+    imgSearch: false,
     searchHallCate: null,
     httpTime: 0, // 请求时长
     httpContent: "", // 请求内容
@@ -76,6 +76,10 @@ const store = new Vuex.Store({
     handlerOldTabName(state, payLoad) {
       state.oldTabName = payLoad;
     },
+    // 首页图搜
+    handlerimgSearch(state, payLoad) {
+      state.imgSearch = payLoad;
+    },
     //修改查询值
     handlerSearchTxt(state, payLoad) {
       state.searchTxt = payLoad;
@@ -90,7 +94,6 @@ const store = new Vuex.Store({
     },
     // 添加收藏
     addMyCollec(state, payLoad) {
-      console.log(payLoad);
       state.myColles.push(payLoad);
     },
     // 删除收藏
@@ -142,7 +145,6 @@ const store = new Vuex.Store({
     },
     //添加报价产品
     pushOfferProductList(state, payLoad) {
-      console.log(payLoad);
       state.offerProductList.push(payLoad);
     },
     // 删除报价产品
@@ -292,16 +294,14 @@ const store = new Vuex.Store({
     //关闭全部tab页
     closeTabAll(state, router) {
       const activeTab = state.tabList.find(val => val.name === state.activeTab);
-      console.log(activeTab, router);
       v.$set(state, "tabList", []);
       state.tabList.push(activeTab);
-      router.push(activeTab.linkUrl);
+      router && router.push(activeTab.linkUrl);
     },
 
     //关闭tab页
     closeTab(state, n) {
       let tab = state.tabList;
-      console.log(n, state.oldTabName);
       tab.forEach((val, i) => {
         if (val.name == n) {
           tab.splice(i, 1);

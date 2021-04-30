@@ -6,9 +6,7 @@
         <div class="top">
           <div class="clientsImg">
             <el-image
-              style=" width: 120px;
-            height: 120px;
-            border-radius: 50%;;"
+              style="width: 120px; height: 120px; border-radius: 50%"
               fit="contain"
               :src="companyInfo.companyLogo"
               lazy
@@ -41,19 +39,19 @@
               </p>
             </div>
           </div>
-          <div class="headTop">
-            <div
-              :class="{ tabs: true, active: isDiyu === 0 }"
-              @click="checkTabsAll(0)"
-            >
-              所有产品
-            </div>
-            <div
-              :class="{ tabs: true, active: isDiyu === 1 }"
-              @click="checkTabsAll(1)"
-            >
-              推荐产品
-            </div>
+        </div>
+        <div class="headTop">
+          <div
+            :class="{ tabs: true, active: isDiyu === 0 }"
+            @click="checkTabsAll(0)"
+          >
+            所有产品
+          </div>
+          <div
+            :class="{ tabs: true, active: isDiyu === 1 }"
+            @click="checkTabsAll(1)"
+          >
+            推荐产品
           </div>
         </div>
       </div>
@@ -80,6 +78,14 @@
               <i v-show="isTime === null" class="jiantou xiajiantouIcon"></i>
               <i v-show="isTime === 1" class="jiantou xiaActiveIcon"></i>
               <i v-show="isTime === 2" class="jiantou shangActiveIcon"></i>
+            </div>
+            <div class="screenItem" @click="sortTypeEvent(4)">
+              <span :class="{ screenLabel: true, active: sortOrder === 4 }">
+                货号
+              </span>
+              <i v-show="isFa_no === null" class="jiantou xiajiantouIcon"></i>
+              <i v-show="isFa_no === 1" class="jiantou xiaActiveIcon"></i>
+              <i v-show="isFa_no === 2" class="jiantou shangActiveIcon"></i>
             </div>
             <div class="item">
               <span class="label">关键词搜索:</span>
@@ -125,6 +131,14 @@
               <i v-show="isTime === null" class="jiantou xiajiantouIcon"></i>
               <i v-show="isTime === 1" class="jiantou xiaActiveIcon"></i>
               <i v-show="isTime === 2" class="jiantou shangActiveIcon"></i>
+            </div>
+            <div class="screenItem" @click="sortTypeEvent(4)">
+              <span :class="{ screenLabel: true, active: sortOrder === 4 }">
+                货号
+              </span>
+              <i v-show="isFa_no === null" class="jiantou xiajiantouIcon"></i>
+              <i v-show="isFa_no === 1" class="jiantou xiaActiveIcon"></i>
+              <i v-show="isFa_no === 2" class="jiantou shangActiveIcon"></i>
             </div>
             <div class="item">
               <span class="label">关键词搜索:</span>
@@ -179,7 +193,7 @@
           <!-- 产品列表 -->
           <component :is="isGrid" :productList="productList"></component>
           <!-- 分页 -->
-          <center style="padding:20px 0;">
+          <center class="myPagination">
             <el-pagination
               layout="total, sizes, prev, pager, next, jumper"
               :page-sizes="[12, 24, 36, 48]"
@@ -218,6 +232,7 @@ export default {
   data() {
     return {
       companyInfo: {},
+      isFa_no: null,
       isDiyu: 0,
       isPrice: null,
       isTime: null,
@@ -245,6 +260,14 @@ export default {
 
   created() {},
   mounted() {
+    // 取消收藏
+    eventBus.$on("resetProducts", item => {
+      for (let i = 0; i < this.productList.length; i++) {
+        if (this.productList[i].productNumber == item.productNumber) {
+          this.productList[i].isFavorite = item.isFavorite;
+        }
+      }
+    });
     eventBus.$emit("showCart", true);
     this.getProductListPageAll();
     this.getCompanyByID();
@@ -284,6 +307,8 @@ export default {
         PageIndex: this.currentPage,
         PageSize: this.pageSize,
         KeyWord: this.KeyWord,
+        sortOrder: this.sortOrder,
+        sortType: this.sortType,
         typeId: 1,
         companyNumber: this.item.companyNumber
       };
@@ -309,7 +334,8 @@ export default {
         maxPrice: this.searchForm.maxPrice,
         startTime: this.searchForm.time.length ? this.searchForm.time[0] : null,
         endTime: this.searchForm.time.length ? this.searchForm.time[1] : null,
-        sortOrder: this.sortOrder
+        sortOrder: this.sortOrder,
+        sortType: this.sortType
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -412,6 +438,7 @@ export default {
           this.sortType = this.isPrice =
             this.isPrice === null ? 1 : this.isPrice === 1 ? 2 : null;
           this.sortType = null;
+          this.isFa_no = null;
           this.isTime = null;
           this.isRedu = null;
           this.sortType = this.isPrice;
@@ -420,6 +447,7 @@ export default {
         case 2:
           this.isTime = this.isTime === null ? 1 : this.isTime === 1 ? 2 : null;
           this.sortType = null;
+          this.isFa_no = null;
           this.isPrice = null;
           this.isRedu = null;
           this.sortType = this.isTime;
@@ -429,8 +457,18 @@ export default {
           this.isRedu = this.isRedu === null ? 1 : this.isRedu === 1 ? 2 : null;
           this.sortType = null;
           this.isPrice = null;
+          this.isFa_no = null;
           this.isTime = null;
           this.sortType = this.isRedu;
+          this.sortType === null && (this.sortOrder = null);
+          break;
+        case 4:
+          this.isFa_no =
+            this.isFa_no === null ? 1 : this.isFa_no === 1 ? 2 : null;
+          this.sortType = null;
+          this.isPrice = null;
+          this.isTime = null;
+          this.sortType = this.isFa_no;
           this.sortType === null && (this.sortOrder = null);
           break;
         default:
@@ -453,7 +491,6 @@ export default {
 <style scoped lang="less">
 .bsMyClientsDetail {
   min-height: 100%;
-  background-color: #fff;
   .hander {
     .handerBg {
       height: 160px;
@@ -687,6 +724,9 @@ export default {
   .productListBox {
     width: 100%;
     box-sizing: border-box;
+    .myPagination {
+      padding: 30px 0;
+    }
   }
 }
 .footer {

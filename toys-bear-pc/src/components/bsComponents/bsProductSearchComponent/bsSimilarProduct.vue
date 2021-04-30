@@ -207,9 +207,9 @@
           >
           </el-pagination>
         </center>
-        <div class="footer">
-          <img src="@/assets/images/footerBg.png" alt="" />
-        </div>
+      </div>
+      <div class="footer">
+        <img src="@/assets/images/footerBg.png" alt="" />
       </div>
     </div>
   </div>
@@ -248,7 +248,7 @@ export default {
         maxPrice: "",
         categoryNumber: null,
         time: null,
-        fa_no: true,
+        fa_no: null,
         number: 0,
         name: true,
         packName: 0
@@ -363,6 +363,7 @@ export default {
 
       const fd = {
         name: this.searchForm.keyword,
+        fa_no: this.searchForm.fa_no,
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         minPrice: this.searchForm.minPrice,
@@ -442,11 +443,11 @@ export default {
   },
   created() {},
   mounted() {
-    if (this.item.name && this.item.name.length > 3) {
-      this.searchForm.keyword = this.item.name.slice(0, 3);
-    } else {
-      this.searchForm.keyword = this.item.name;
-    }
+    this.searchForm.keyword = this.item.fa_no;
+    this.searchForm.maxPrice = this.item.price * 1.05;
+    this.searchForm.minPrice = this.item.price * 0.95;
+    // 小0.95  大1.05
+    console.log(this.item);
     switch (this.item.type) {
       case "similarity":
         this.imageSearch();
@@ -786,6 +787,8 @@ export default {
     }
     .productWrap {
       background-color: #fff;
+      box-sizing: border-box;
+      padding: 0 20px;
       .myPagination {
         padding: 30px 0;
       }
