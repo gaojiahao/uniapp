@@ -907,6 +907,16 @@ export default {
             this.$store.state.userInfo.commparnyList[0] &&
             this.$store.state.userInfo.commparnyList[0].companyNumber;
           const fd = new FormData();
+          if (
+            this.searchHallCate &&
+            this.searchHallCate.companyInfo &&
+            this.searchHallCate.companyInfo.companyNumber
+          ) {
+            fd.append(
+              "hallNumber",
+              this.searchHallCate.companyInfo.companyNumber
+            );
+          }
           fd.append("companynumber", companynumber);
           fd.append("file", file);
           const res = await this.$http.post("/api/File/SearchPicture", fd);
