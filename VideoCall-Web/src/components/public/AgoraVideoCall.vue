@@ -154,7 +154,7 @@ export default {
       await $.client.publish([this.localAudioTrack, this.localVideoTrack]);
       console.log("publish success");
       this.testNetWork();
-      //this.initDevices();
+      this.initDevices();
     },
     async leave(){
       this.$FromLoading.show();
@@ -420,8 +420,8 @@ export default {
       this.localAudioTrack.setVolume(value);
     },
     initDevices(){
-      var isMic = window.sessionStorage.getItem("isMic")=='true' ?true:false;
-      var isCar = window.sessionStorage.getItem("isCar")=='true' ?true:false;
+      var isMic = window.sessionStorage.getItem("isMic")=='false' ?true:false;
+      var isCar = window.sessionStorage.getItem("isCar")=='false' ?true:false;
       if(!isMic){
         this.$parent.$parent.$parent.$parent.$parent.$refs.footer.setMic();
       }

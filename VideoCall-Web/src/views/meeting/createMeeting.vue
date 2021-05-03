@@ -171,8 +171,8 @@ export default {
                 Cookies.set("uid", res.data.meetingRoomMemberId);
                 Cookies.set("companyName", res.data.companyName);
                 Cookies.set("endTime", this.formValidate.endTime);
-                window.sessionStorage.setItem("isMic",this.formValidate.settings.isMic);
-                window.sessionStorage.setItem("isCar",this.formValidate.settings.isCar); 
+                window.sessionStorage.setItem("isMic",!this.formValidate.settings.isMic);
+                window.sessionStorage.setItem("isCar",!this.formValidate.settings.isCar); 
                 this.$router.push('/');
               } else {
                 this.$Message.error({

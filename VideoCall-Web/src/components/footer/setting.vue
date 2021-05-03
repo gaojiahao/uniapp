@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-11-03 16:35:57
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-29 17:52:54
+ * @LastEditTime: 2021-04-30 18:25:12
 -->
 <template>
     <Modal v-model="show" :title="$t('settings.settings')" @on-ok="ok" @on-cancel="cancel" width="430" draggable class="setting">
