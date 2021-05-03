@@ -49,12 +49,12 @@ function getClientTypeList(type, token) {
       .post(
         "/api/ServiceConfigurationList",
         {
-          basisParameters: type,
-          token: token
+          basisParameters: type
         },
         {
           headers: {
-            "content-type": "application/json"
+            "content-type": "application/json",
+            Utoken: token
           }
         }
       )
@@ -99,9 +99,7 @@ function getUserRoleMenu(token) {
     axios
       .post(
         "/api/GetUserRoleMenu",
-        {
-          Uoken: token
-        },
+        {},
         {
           headers: {
             "content-type": "application/json",
@@ -117,33 +115,6 @@ function getUserRoleMenu(token) {
       });
   });
 }
-
-// 获取系统参数
-// function getClientTypeList(type) {
-//   return new Promise((result, reject) => {
-//     axios
-//       .post(
-//         "/api/ServiceConfigurationList",
-//         {
-//           basisParameters: type
-//         },
-//         {
-//           headers: {
-//             "content-type": "application/json",
-//             Utoken: store.state.userInfo.accessToken
-//           }
-//         }
-//       )
-//       .then(res => {
-//         if (res.data.result.code === 200) {
-//           result(res.data.result.item);
-//         }
-//       })
-//       .catch(err => {
-//         reject(err);
-//       });
-//   });
-// }
 const routes = [...staticRouters];
 
 const router = new VueRouter({
