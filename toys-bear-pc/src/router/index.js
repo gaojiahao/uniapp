@@ -206,19 +206,12 @@ router.beforeEach(async (to, from, next) => {
     }
   } else {
     if (store.state.isLogin) {
-      // store.commit(
-      //   "setComparnyId",
-      //   store.state.userInfo.commparnyList[0].commparnyId
-      // );
-      // const localKey = store.state.userInfo.uid;
-      // console.log(localKey);
-      // let localShoppingCart = localStorage.getItem(localKey);
-      // if (localShoppingCart && localKey != undefined) {
-      //   localShoppingCart = JSON.parse(localShoppingCart);
-      //   store.commit("initShoppingCart", localShoppingCart);
-      // } else {
-      //   store.commit("initShoppingCart", []);
-      // }
+      const localKey = store.state.userInfo.uid;
+      let localShoppingCart = localStorage.getItem(localKey);
+      if (localShoppingCart && localKey != undefined) {
+        localShoppingCart = JSON.parse(localShoppingCart);
+        store.commit("initShoppingCart", localShoppingCart);
+      }
       next();
     } else {
       if (to.path == "/login" || to.path == "/loginConfirm") {
