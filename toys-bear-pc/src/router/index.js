@@ -129,6 +129,7 @@ router.beforeEach(async (to, from, next) => {
   // 如果没有登录token
   if (!store.state.userInfo) {
     const token = Vue.prototype.$cookies.get("userInfo");
+    sessionStorage.clear();
     if (token) {
       const res = await resetPersonInfo(token);
       console.log("有cookit_token", res, token);
@@ -191,12 +192,13 @@ router.beforeEach(async (to, from, next) => {
       next();
     } else {
       console.log("没有cookit_token", store.state);
+      sessionStorage.clear();
       const res = await getToken();
       console.log(res, "没有cookit_Token获取到的临时token");
       if (res.data.result.code === 200) {
         const obj = { accessToken: res.data.result.item };
         store.commit("setToken", obj);
-        store.commit("initShoppingCart", []);
+        // store.commit("initShoppingCart", []);
       }
       if (to.path == "/login") {
         next();
