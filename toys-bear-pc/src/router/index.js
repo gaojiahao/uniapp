@@ -43,12 +43,21 @@ function getToken() {
   });
 }
 // 获取系统参数
-function getClientTypeList(type) {
+function getClientTypeList(type, token) {
   return new Promise((result, reject) => {
     axios
-      .post("/api/ServiceConfigurationList", {
-        basisParameters: type
-      })
+      .post(
+        "/api/ServiceConfigurationList",
+        {
+          basisParameters: type,
+          token: token
+        },
+        {
+          headers: {
+            "content-type": "application/json"
+          }
+        }
+      )
       .then(res => {
         if (res.data.result.code === 200) {
           result(res.data.result.item);
@@ -108,6 +117,7 @@ function getUserRoleMenu(token) {
       });
   });
 }
+
 // 获取系统参数
 // function getClientTypeList(type) {
 //   return new Promise((result, reject) => {
@@ -181,12 +191,24 @@ router.beforeEach(async (to, from, next) => {
       store.commit("closeTabAll");
       // 登录成功获取系统参数
       const Json = {};
-      Json.MessageRestriction = await getClientTypeList("MessageRestriction");
-      Json.UserRestrictions = await getClientTypeList("UserRestrictions");
-      Json.NoticeRestrictions = await getClientTypeList("NoticeRestrictions");
-      Json.CompanyRestrictions = await getClientTypeList("CompanyRestrictions");
-      Json.PlatForm = await getClientTypeList("PlatForm");
-      Json.packageManage = await getClientTypeList("packageManage");
+      Json.MessageRestriction = await getClientTypeList(
+        "MessageRestriction",
+        token
+      );
+      Json.UserRestrictions = await getClientTypeList(
+        "UserRestrictions",
+        token
+      );
+      Json.NoticeRestrictions = await getClientTypeList(
+        "NoticeRestrictions",
+        token
+      );
+      Json.CompanyRestrictions = await getClientTypeList(
+        "CompanyRestrictions",
+        token
+      );
+      Json.PlatForm = await getClientTypeList("PlatForm", token);
+      Json.packageManage = await getClientTypeList("packageManage", token);
       console.log(Json);
       store.commit("globalJson/setGlobalJson", Json);
       // 登录成功获取菜单
