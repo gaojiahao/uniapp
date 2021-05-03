@@ -676,14 +676,23 @@ export default {
           this.currentIten = item;
         }
       }
-
+      for (let i = 0; i < this.findList.length; i++) {
+        this.$set(this.findList[i], "isPinglun", false);
+      }
       this.currentIten = item;
       this.huifuUser = child;
     },
     // 打开评论
     openPinglun(item) {
-      if (!item.isPinglun) this.$set(item, "isPinglun", true);
-      else item.isPinglun = false;
+      for (let i = 0; i < this.findList.length; i++) {
+        this.$set(this.findList[i], "isPinglun", false);
+        this.$set(this.findList[i], "isHuiPinglun", false);
+      }
+      if (!item.isPinglun) {
+        this.$set(item, "isPinglun", true);
+      } else item.isPinglun = false;
+      this.$set(item, "isHuiPinglun", false);
+      console.log(this.findList);
     },
     // 提交评论
     async subPinglun(item) {
