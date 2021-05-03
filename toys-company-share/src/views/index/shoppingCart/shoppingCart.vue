@@ -813,7 +813,6 @@ export default {
           this.$message.error(this.publicLang.deleteSuccessful);
         }
       });
-      console.log(123);
       this.$root.eventHub.$emit("resetProductsForeach", this.dataList);
     },
     // 计算总价
