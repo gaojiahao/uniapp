@@ -202,6 +202,11 @@ export default {
     async getSearchCompanyShareProductPage() {
       this.$store.commit("imageSearch", null);
       this.$store.commit("handlerSearchImgPreview", null);
+      const dateFd = {
+        startTime: this.datetime && this.datetime[0],
+        endTime: this.datetime && this.datetime[1]
+      };
+      this.$store.commit("handlerSearchDate", dateFd);
       const fd = {
         ...this.searchForm,
         sortOrder: this.sortOrder,
