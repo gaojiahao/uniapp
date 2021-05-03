@@ -238,7 +238,12 @@
       </div>
     </div>
     <!-- 提交信息 -->
-    <el-dialog title="生成报价" :visible.sync="subDialogVisible" width="40%">
+    <el-dialog
+      title="生成报价"
+      :visible.sync="subDialogVisible"
+      v-if="subDialogVisible"
+      width="40%"
+    >
       <div class="contactInfoBox">
         <div class="userInfoBox">
           <el-form
@@ -273,6 +278,13 @@
                   >新增客户</el-button
                 >
               </div>
+            </el-form-item>
+            <el-form-item label="报价备注：">
+              <el-input
+                maxlength="50"
+                show-word-limit
+                v-model="clienFormData.title"
+              ></el-input>
             </el-form-item>
             <el-form-item label="默认公式：" prop="defaultFormula">
               <el-select
@@ -327,7 +339,8 @@
                 <el-form-item label="汇率：" prop="exchange">
                   <el-input
                     maxlength="30"
-                    v-model="clienFormData.exchange"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
+                    v-model.number="clienFormData.exchange"
                   ></el-input>
                 </el-form-item>
                 <el-form-item label="小数位数：" prop="decimalPlaces">
@@ -351,8 +364,9 @@
                   <div style="display: flex; justify-content:space-between;">
                     <el-input
                       maxlength="30"
+                      onkeyup="value=value.replace(/[^\d.]/g,'')"
                       style="flex:1;"
-                      v-model="clienFormData.profit"
+                      v-model.number="clienFormData.profit"
                     >
                       <span slot="suffix">%</span>
                     </el-input>
@@ -367,7 +381,8 @@
                 </el-form-item>
                 <el-form-item label="总费用：" prop="totalCost">
                   <el-input
-                    v-model="clienFormData.totalCost"
+                    v-model.number="clienFormData.totalCost"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
                     clearable
                     placeholder="请输入总费用"
                   >
@@ -419,16 +434,30 @@
                 </el-form-item>
               </div>
             </div>
+            <div
+              class="chengchuTishi"
+              v-show="clienFormData.profitCalcMethod == 2"
+            >
+              {{ chufa }}
+            </div>
+            <div
+              class="chengchuTishi"
+              v-show="clienFormData.profitCalcMethod == 1"
+            >
+              {{ chengfa }}
+            </div>
             <div class="lessThanPrice">
               <div class="left">
                 <el-form-item label="价格小于：" prop="miniPrice">
                   <el-input
-                    v-model="clienFormData.miniPrice"
+                    v-model.number="clienFormData.miniPrice"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
                     clearable
                     placeholder="请输入"
                   >
                   </el-input>
                 </el-form-item>
+                <div class="tishi">当价格小于指定值，则调整小数位数</div>
               </div>
               <div class="right">
                 <!-- xiaoshuweishu -->
@@ -449,15 +478,8 @@
                 </el-form-item>
               </div>
             </div>
-            <el-form-item label="报价备注：">
-              <el-input
-                maxlength="50"
-                show-word-limit
-                v-model="clienFormData.title"
-              ></el-input>
-            </el-form-item>
           </el-form>
-          <center>
+          <center style="margin-top: 40px;">
             <el-button
               size="medium"
               @click="submitOrder"
@@ -534,6 +556,8 @@ export default {
   name: "bsShoppingCart",
   data() {
     return {
+      chufa: "(出厂价+总费用/(每车尺码/外箱材积*外箱装量)/(1-报价利润%)/汇率",
+      chengfa: "(出厂价+总费用/(每车尺码/外箱材积*外箱装量)*(1+报价利润%)/汇率",
       myTotalPrice: 0,
       myTotalOuterBoxStere: 0,
       myTotalOuterBoxFeet: 0,
@@ -1044,6 +1068,25 @@ export default {
     },
     // 打开提交订单
     openSubOrder() {
+      this.clienFormData = {
+        title: null,
+        defaultFormula: null,
+        customerId: null,
+        customerName: null,
+        quotationProductList: [],
+        profitCalcMethod: 2,
+        profit: 0,
+        offerMethod: "汕头",
+        cu_de: "¥",
+        cu_deName: "RMB",
+        totalCost: "0",
+        exchange: 0,
+        size: "24",
+        decimalPlaces: 3,
+        rejectionMethod: "四舍五入",
+        miniPrice: 0,
+        miniPriceDecimalPlaces: 1
+      };
       const selectProducts = this.$refs.myTableRef.selection;
       if (selectProducts.length < 1) {
         this.$common.handlerMsgState({
@@ -1405,7 +1448,20 @@ export default {
         .left,
         .right {
           flex: 1;
+          position: relative;
+          .tishi {
+            position: absolute;
+            bottom: -5px;
+            left: 100px;
+            color: #ff4848;
+          }
         }
+      }
+      .chengchuTishi {
+        color: #ff4848;
+        box-sizing: border-box;
+        padding-left: 100px;
+        margin-bottom: 20px;
       }
     }
   }

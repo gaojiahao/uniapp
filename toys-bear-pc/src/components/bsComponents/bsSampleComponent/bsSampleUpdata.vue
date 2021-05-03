@@ -309,6 +309,13 @@
                 >
               </div>
             </el-form-item>
+            <el-form-item label="报价备注：" prop="title">
+              <el-input
+                maxlength="50"
+                show-word-limit
+                v-model="clienFormData.title"
+              ></el-input>
+            </el-form-item>
             <el-form-item label="默认公式：">
               <el-select
                 v-model="clienFormData.defaultFormula"
@@ -444,6 +451,18 @@
                 </el-form-item>
               </div>
             </div>
+            <div
+              class="chengchuTishi"
+              v-show="clienFormData.profitCalcMethod == 2"
+            >
+              {{ chufa }}
+            </div>
+            <div
+              class="chengchuTishi"
+              v-show="clienFormData.profitCalcMethod == 1"
+            >
+              {{ chengfa }}
+            </div>
             <div class="lessThanPrice">
               <div class="left">
                 <el-form-item label="价格小于：" prop="miniPrice">
@@ -454,6 +473,7 @@
                   >
                   </el-input>
                 </el-form-item>
+                <div class="tishi">当价格小于指定值，则调整小数位数</div>
               </div>
               <div class="right">
                 <!-- xiaoshuweishu -->
@@ -474,15 +494,8 @@
                 </el-form-item>
               </div>
             </div>
-            <el-form-item label="报价备注：" prop="title">
-              <el-input
-                maxlength="50"
-                show-word-limit
-                v-model="clienFormData.title"
-              ></el-input>
-            </el-form-item>
           </el-form>
-          <center>
+          <center style="margin-top: 40px;">
             <el-button
               size="medium"
               @click="submitOrder"
@@ -568,6 +581,8 @@ export default {
   },
   data() {
     return {
+      chufa: "(出厂价+总费用/(每车尺码/外箱材积*外箱装量)/(1-报价利润%)/汇率",
+      chengfa: "(出厂价+总费用/(每车尺码/外箱材积*外箱装量)*(1+报价利润%)/汇率",
       showEditMethod: true,
       addClientFormData: {
         name: null,
@@ -1442,7 +1457,20 @@ export default {
       .left,
       .right {
         flex: 1;
+        position: relative;
+        .tishi {
+          position: absolute;
+          bottom: -5px;
+          left: 100px;
+          color: #ff4848;
+        }
       }
+    }
+    .chengchuTishi {
+      color: #ff4848;
+      box-sizing: border-box;
+      padding-left: 100px;
+      margin-bottom: 20px;
     }
   }
   .formItemBox {

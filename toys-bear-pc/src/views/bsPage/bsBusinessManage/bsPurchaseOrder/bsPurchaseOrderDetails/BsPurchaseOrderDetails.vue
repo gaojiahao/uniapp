@@ -232,8 +232,7 @@
         title="订单模板"
         v-if="exportTemplateDialog"
         :visible.sync="exportTemplateDialog"
-        top="60px"
-        width="80%"
+        width="1200px"
       >
         <bsExportOrder
           :options="{

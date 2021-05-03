@@ -14,6 +14,15 @@
           clearable
         ></el-input>
       </el-form-item>
+      <el-form-item label="备注：" prop="remark">
+        <el-input
+          type="textarea"
+          :rows="2"
+          placeholder="请输入内容"
+          v-model="addDefaultForm.remark"
+        >
+        </el-input>
+      </el-form-item>
       <el-form-item
         class="offerMethodClass"
         label="报价方式："
@@ -144,6 +153,12 @@
           </el-form-item>
         </div>
       </div>
+      <div class="chengchuTishi" v-show="addDefaultForm.profitCalcMethod == 2">
+        {{ chufa }}
+      </div>
+      <div class="chengchuTishi" v-show="addDefaultForm.profitCalcMethod == 1">
+        {{ chengfa }}
+      </div>
       <div class="lessThanPrice">
         <div class="left">
           <el-form-item label="价格小于：" prop="miniPrice">
@@ -155,6 +170,7 @@
             >
             </el-input>
           </el-form-item>
+          <div class="tishi">当价格小于指定值，则调整小数位数</div>
         </div>
         <div class="right">
           <!-- xiaoshuweishu -->
@@ -177,16 +193,7 @@
           </el-form-item>
         </div>
       </div>
-      <el-form-item label="备注：" prop="remark">
-        <el-input
-          type="textarea"
-          :rows="2"
-          placeholder="请输入内容"
-          v-model="addDefaultForm.remark"
-        >
-        </el-input>
-      </el-form-item>
-      <center>
+      <center style="margin-top: 40px;">
         <template>
           <el-button type="primary" @click="subDefaultForm">提 交</el-button>
           <el-button type="danger" @click="close">取 消</el-button>
@@ -234,6 +241,8 @@ export default {
   },
   data() {
     return {
+      chufa: "(出厂价+总费用/(每车尺码/外箱材积*外箱装量)/(1-报价利润%)/汇率",
+      chengfa: "(出厂价+总费用/(每车尺码/外箱材积*外箱装量)*(1+报价利润%)/汇率",
       configList: [],
       addDefaultForm: {
         profitCalcMethod: 2,
@@ -271,10 +280,7 @@ export default {
         decimalPlaces: [
           { required: true, message: "请选择小数位数", trigger: "change" }
         ],
-        profit: [
-          { required: true, message: "请输入利润", trigger: "blur" },
-          { type: "number", message: "利润必须为数字值", trigger: "blur" }
-        ],
+        profit: [{ required: true, message: "请输入利润", trigger: "blur" }],
         size: [{ required: true, message: "请选择尺码", trigger: "change" }],
         rejectionMethod: [
           { required: true, message: "请选择取舍方式", trigger: "change" }
@@ -370,6 +376,12 @@ export default {
         padding-left: 10px;
       }
     }
+    .chengchuTishi {
+      color: #ff4848;
+      box-sizing: border-box;
+      padding-left: 100px;
+      margin-bottom: 20px;
+    }
     .lessThanPrice {
       display: flex;
       justify-content: space-between;
@@ -382,6 +394,13 @@ export default {
       }
       .left {
         padding-right: 10px;
+        position: relative;
+        .tishi {
+          position: absolute;
+          bottom: -5px;
+          left: 100px;
+          color: #ff4848;
+        }
       }
       .right {
         padding-left: 10px;

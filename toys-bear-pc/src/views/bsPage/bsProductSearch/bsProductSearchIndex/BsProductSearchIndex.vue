@@ -907,6 +907,16 @@ export default {
             this.$store.state.userInfo.commparnyList[0] &&
             this.$store.state.userInfo.commparnyList[0].companyNumber;
           const fd = new FormData();
+          if (
+            this.searchHallCate &&
+            this.searchHallCate.companyInfo &&
+            this.searchHallCate.companyInfo.companyNumber
+          ) {
+            fd.append(
+              "hallNumber",
+              this.searchHallCate.companyInfo.companyNumber
+            );
+          }
           fd.append("companynumber", companynumber);
           fd.append("file", file);
           const res = await this.$http.post("/api/File/SearchPicture", fd);
@@ -980,7 +990,7 @@ export default {
       let startDate = Date.now();
       const fd = {
         name: this.searchForm.keyword,
-        companyNumber: this.searchForm.companyNumber,
+        hallNumber: this.searchForm.companyNumber,
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         categoryNumber: this.searchForm.categoryNumber,
@@ -1216,6 +1226,7 @@ export default {
       eventBus.$off("resetProductCollection");
       eventBus.$off("searchProducts");
       eventBus.$off("openUpload");
+      eventBus.$off("resetMyCart");
     },
     // 关闭关联搜索
     closeTag() {
@@ -1331,6 +1342,7 @@ export default {
     },
 
     shoppingList: {
+      deep: true,
       handler(list) {
         if (list) {
           if (list.length) {
@@ -1352,9 +1364,7 @@ export default {
             });
           }
         }
-      },
-      deep: true,
-      immediate: true
+      }
     },
     "searchForm.time"(newVal) {
       if (newVal == null) {

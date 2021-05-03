@@ -650,19 +650,19 @@ export default {
           };
           break;
         case "浏览足迹":
-          this.$common.handlerMsgState({
-            msg: "敬请期待",
-            type: "warning"
-          });
-          return false;
-        // fd = {
-        //   name: "/bsIndex/bsBrowsingFootprints",
-        //   linkUrl: "/bsIndex/bsBrowsingFootprints",
-        //   component: "bsBrowsingFootprints",
-        //   refresh: true,
-        //   label: title
-        // };
-        // break;
+          // this.$common.handlerMsgState({
+          //   msg: "敬请期待",
+          //   type: "warning"
+          // });
+          // return false;
+          fd = {
+            name: "/bsIndex/bsBrowsingFootprints",
+            linkUrl: "/bsIndex/bsBrowsingFootprints",
+            component: "bsBrowsingFootprints",
+            refresh: true,
+            label: title
+          };
+          break;
         case "站点分享":
           fd = {
             name: "/bsIndex/bsSiteLlis",

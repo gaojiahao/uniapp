@@ -127,7 +127,6 @@ export default {
   },
   watch: {
     shoppingList(list) {
-      console.log(list);
       if (list) {
         if (list.length) {
           for (let i = 0; i < this.productList.length; i++) {
@@ -304,7 +303,7 @@ export default {
   created() {},
   mounted() {
     // 收藏
-    eventBus.$on("resetProducts", () => {
+    eventBus.$on("resetProductCollection", () => {
       this.getCollectList();
     });
     // 刷新页面
@@ -335,7 +334,7 @@ export default {
   },
   beforeDestroy() {
     eventBus.$off("refreshHtml");
-    eventBus.$off("resetProducts");
+    eventBus.$off("resetProductCollection");
     eventBus.$off("resetMyCart");
   }
 };
