@@ -205,7 +205,7 @@
       :visible.sync="addClienDialog"
       :close-on-click-modal="false"
       top="50px"
-      width="40%"
+      width="800px"
     >
       <el-form
         ref="addClientFormRef"
@@ -478,7 +478,7 @@
       :close-on-click-modal="false"
       :visible.sync="addMyClientDialog"
       destroy-on-close
-      width="50%"
+      width="1200px"
     >
       <el-form
         ref="addMyClientRef"
@@ -518,7 +518,7 @@
       </el-form>
     </el-dialog>
     <!-- 生成二维码 -->
-    <el-dialog :visible.sync="QRCodeDialog" v-if="QRCodeDialog" width="20%">
+    <el-dialog :visible.sync="QRCodeDialog" v-if="QRCodeDialog" width="385px">
       <vue-qr
         style="width: 100%"
         :text="QRCodeUrl"

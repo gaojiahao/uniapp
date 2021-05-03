@@ -317,7 +317,7 @@
       title="举报"
       :visible.sync="dialogjubao"
       destroy-on-close
-      width="30%"
+      width="800px"
     >
       <ul class="selectJubaoInfo">
         <li
@@ -342,7 +342,7 @@
       title="发布公告"
       :visible.sync="sendNoticeDialog"
       v-if="sendNoticeDialog"
-      width="40%"
+      width="1200px"
     >
       <bsSendNotice @close="closeSendNotice" />
     </el-dialog>

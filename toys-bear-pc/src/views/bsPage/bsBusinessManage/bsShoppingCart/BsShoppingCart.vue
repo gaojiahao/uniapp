@@ -242,7 +242,7 @@
       title="生成报价"
       :visible.sync="subDialogVisible"
       v-if="subDialogVisible"
-      width="40%"
+      width="800px"
     >
       <div class="contactInfoBox">
         <div class="userInfoBox">
@@ -506,7 +506,7 @@
         :visible.sync="addMyClientDialog"
         destroy-on-close
         append-to-body
-        width="50%"
+        width="1200px"
       >
         <el-form
           ref="addMyClientRef"
@@ -1398,8 +1398,16 @@ export default {
       }
     }
     .totalBox {
-      background-color: #fff;
+      position: absolute;
+      width: 100%;
+      margin-right: 20px;
+      z-index: 1;
+      left: 0;
+      bottom: 0;
+      box-sizing: border-box;
+      padding-right: 20px;
       .total_wrap {
+        background-color: #fff;
         display: flex;
         height: 80px;
         padding: 0 20px;
@@ -1471,6 +1479,12 @@ export default {
   justify-content: space-between;
   .el-select {
     flex: 1;
+  }
+}
+@media screen and (max-width: 1919px) {
+  .totalBox {
+    padding-right: 10px !important;
+    bottom: 10px !important;
   }
 }
 </style>

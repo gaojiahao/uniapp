@@ -74,7 +74,7 @@
       :title="dialogTitle"
       :visible.sync="addLangDialog"
       v-if="addLangDialog"
-      width="50%"
+      width="800px"
     >
       <bsAddOfferFormulaLang
         :editRow="editRow"

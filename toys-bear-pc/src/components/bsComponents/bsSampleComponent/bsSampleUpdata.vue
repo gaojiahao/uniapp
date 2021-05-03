@@ -272,7 +272,7 @@
     <el-dialog
       title="修改报价信息"
       :visible.sync="subDialogVisible"
-      width="40%"
+      width="800px"
     >
       <div class="contactInfoBox">
         <div class="userInfoBox">
@@ -522,7 +522,7 @@
         :visible.sync="addMyClientDialog"
         destroy-on-close
         append-to-body
-        width="50%"
+        width="1200px"
       >
         <el-form
           ref="addMyClientRef"
