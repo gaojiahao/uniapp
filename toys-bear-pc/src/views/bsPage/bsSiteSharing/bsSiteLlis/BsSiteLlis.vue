@@ -937,6 +937,17 @@ export default {
           if (this.dialogTitle === "编辑站点")
             url = "/api/UpdateWebsiteShareInfo";
           console.log(this.clienFormData);
+          for (const key in this.clienFormData) {
+            if (
+              this.clienFormData[key] == "undefined" ||
+              this.clienFormData[key] == null ||
+              this.clienFormData[key] == "" ||
+              this.clienFormData[key] == undefined ||
+              this.clienFormData[key] == "null"
+            ) {
+              delete this.clienFormData[key];
+            }
+          }
           const res = await this.$http.post(url, this.clienFormData);
           if (res.data.result.code === 200) {
             this.addClienDialog = false;
