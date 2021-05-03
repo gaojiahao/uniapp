@@ -429,6 +429,7 @@ export default {
     },
     // 查看我的公告
     searchMyNotice() {
+      this.findList = [];
       this.noticeType = null;
       this.publisher = this.userInfo.userInfo.id;
       this.issuedCompanyID = this.currentComparnyId;
@@ -509,6 +510,7 @@ export default {
     },
     // 根据类型搜索公告
     searchNotice(type) {
+      this.findList = [];
       this.currentPage = 1;
       this.noticeType = type;
       this.publisher = null;
