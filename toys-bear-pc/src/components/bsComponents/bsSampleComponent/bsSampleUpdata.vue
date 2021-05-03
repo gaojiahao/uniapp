@@ -366,6 +366,7 @@
                 <el-form-item label="汇率：" prop="exchange">
                   <el-input
                     maxlength="30"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
                     v-model="clienFormData.exchange"
                   ></el-input>
                 </el-form-item>
@@ -393,6 +394,7 @@
                   <div style="display: flex; justify-content:space-between;">
                     <el-input
                       maxlength="30"
+                      onkeyup="value=value.replace(/[^\d.]/g,'')"
                       style="flex:1;"
                       v-model="clienFormData.profit"
                     >
@@ -410,6 +412,7 @@
                 <el-form-item label="总费用：" prop="totalCost">
                   <el-input
                     v-model="clienFormData.totalCost"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
                     clearable
                     placeholder="请输入总费用"
                   >
@@ -468,6 +471,7 @@
                 <el-form-item label="价格小于：" prop="miniPrice">
                   <el-input
                     v-model="clienFormData.miniPrice"
+                    onkeyup="value=value.replace(/[^\d.]/g,'')"
                     clearable
                     placeholder="请输入"
                   >
