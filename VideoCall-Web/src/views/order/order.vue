@@ -2,8 +2,8 @@
  * @Description: 
  * @Author: gaojiahao
  * @Date: 2021-04-01 17:59:28
- * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\order\index.vue
- * @LastEditTime: 2021-04-23 17:41:46
+ * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\order\order.vue
+ * @LastEditTime: 2021-05-03 16:15:21
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -13,7 +13,7 @@
         <!-- 新增择样 -->
         <AddSampling @save="save" v-if="samplingStatus&&isAdmin"></AddSampling>
         <Product :tab_select="tab_select" @chang-tab-type="changTabType" @chang-type="changType" @change-product-list="changeProductList" @saveProductInfo="saveProductInfo" :sampleSelection="sampleSelection" v-if="sampleSelection.number" ref="product"></Product>
-        <Chart v-show="sampleSelection.number||!isAdmin" ref="chart" @getSampleOrderDetails="getSampleOrderDetails" @getProduct="getProduct" :userlist="userlist"></Chart>
+        <Chart v-show="sampleSelection.number||!isAdmin" ref="chart" @getSampleOrderDetails="getSampleOrderDetails" @getProduct="getProduct" :userlist="userlist" @joinInitProduct="joinInitProduct"></Chart>
         <ProductList @change-product-list="changeProductList" :isProductList="isProductList" :sampleSelection="sampleSelection" v-if="sampleSelection.number"></ProductList>
     </div>
 </template>
@@ -89,6 +89,14 @@ export default {
         //当前产品消息回调
         getProduct(val){
             this.$refs.product.getProductInfo2(val);
+        },
+        joinInitProduct(val){
+            var me = this;
+            this.$set(this.sampleSelection,'number',val.number);
+            this.$set(this.sampleSelection,'code',val.code);
+            if(this.$refs.product){
+                this.$refs.product.changTabType('order');
+            }
         }
     },
     created(){

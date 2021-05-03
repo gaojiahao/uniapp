@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:37:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\product.vue
- * @LastEditTime: 2021-04-30 15:09:17
+ * @LastEditTime: 2021-05-03 15:59:54
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -200,7 +200,8 @@ export default {
                                 textOverflow: 'ellipsis',
                                 whiteSpace: 'nowrap',
                                 color:'#2684D1',
-                                marginTop: '4px'
+                                marginTop: '4px',
+                                cursor: 'pointer'
                             },
                             domProps: {
                                 title: params.row.productName
@@ -283,6 +284,8 @@ export default {
             this.$emit('chang-tab-type',value);
             if(value=='order'){
                 this.getQuerySampleOrderDetails();
+            } else {
+                
             }
         },
         changType(){
@@ -452,6 +455,7 @@ export default {
             color: #fff;
             .title{
                 margin-left: 10px;
+                cursor: pointer;
             }
         }
         .addSampling_tab {
@@ -495,6 +499,7 @@ export default {
                     width: 32px;
                     margin-top: -10px;
                     margin-left: 20px;
+                    cursor: pointer;
                 }
             }
             .select_order_list{

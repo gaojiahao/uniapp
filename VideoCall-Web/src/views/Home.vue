@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\Home.vue
- * @LastEditTime: 2021-04-29 14:35:06
+ * @LastEditTime: 2021-05-03 11:28:09
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -198,6 +198,7 @@ export default {
     background: #fff;
     z-index: 1;
     transition: all 0.2s ease-in-out;
+    cursor: pointer;
   }
 }
 </style>

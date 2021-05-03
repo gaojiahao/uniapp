@@ -209,6 +209,7 @@ export default {
             playerContainer.style.gridArea = `12 / ${1 * userLength} / 13 / ${4 * userLength}`;  //
             playerContainer.style.zIndex = 1;
             playerContainer.style.border = "1px solid #FFFFFF";
+            playerContainer.style.cursor = "pointer";
             playerContainer.onclick = function () { $.setMainVideo(playerContainer.id) };
             document.getElementById("ag-canvas").appendChild(playerContainer);
             remoteVideoTrack.play(playerContainer);
@@ -571,6 +572,7 @@ export default {
     margin-left: 5px;
     margin-right: 5px;
     border: 1px solid #FFFFFF;
+    cursor: pointer;
     .active {
       background: url('~@assets/images/suo.png');
       background-repeat: no-repeat;

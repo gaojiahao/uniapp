@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 16:28:17
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-23 15:05:38
+ * @LastEditTime: 2021-05-03 16:26:00
 -->
 <template>
   <div class="login" ref="login">
@@ -239,6 +239,8 @@ export default {
                   Cookies.set("videoProfile", this.videoProfile);
                   Cookies.set("uid", data.data.meetingRoomMemberId);
                   Cookies.set("companyName", data.data.companyName||'');
+                  window.sessionStorage.setItem("isMic",false);
+                  window.sessionStorage.setItem("isCar",false); 
                   this.$router.push({name:'Home',params:{status:data.data.status}}); 
                   break;
                 default:

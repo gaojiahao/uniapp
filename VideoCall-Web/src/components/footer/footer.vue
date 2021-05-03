@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 19:15:58
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\footer\footer.vue
- * @LastEditTime: 2021-04-28 19:30:36
+ * @LastEditTime: 2021-05-03 11:06:54
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -30,30 +30,30 @@
                         </div>
                     </div>
                     <Divider type="vertical" />
-                    <div class="timer item">
+                    <div class="timer item shouzhi" @click="setMic()">
                         <!-- <Poptip trigger="hover" title="" content="content">
                             <div class="api" slot="content">
                                 <Slider v-model="volum" style="width:100px;" @on-input="onInput"></Slider>    
                             </div> -->
-                            <i class="iconfont icon21maikefeng icon" :class="[isMic ? 'outline':'eye']" @click="setMic()"></i>
+                            <i class="iconfont icon21maikefeng icon" :class="[isMic ? 'outline':'eye']"></i>
                         <!-- </Poptip> -->
                         <span class="time-card-count text">{{$t("footer.isMic")}}</span>
                     </div>
                     <Divider type="vertical" />
-                    <div class="timer item">
-                        <i class="iconfont iconshexiangtou icon" :class="[isCar ? 'outline':'eye']" @click="setCar()"></i>
+                    <div class="timer item shouzhi"  @click="setCar()">
+                        <i class="iconfont iconshexiangtou icon" :class="[isCar ? 'outline':'eye']"></i>
                         <span class="time-card-count text">{{$t("footer.isCar")}}</span>
                     </div>
                     <Divider type="vertical" />
-                    <div class="timer item">
-                        <div class="closeOff" @click="closeOff"></div>
+                    <div class="timer item shouzhi" @click="closeOff">
+                        <div class="closeOff"></div>
                     </div>
                     <Divider type="vertical" />
                 </div>
             </Col>
             <Col span="8">
                 <div class="settings">
-                    <div class="timer item">
+                    <div class="timer item shouzhi">
                         <i class="iconfont iconshezhi icon" @click="showModalDetail(true)"></i>
                     </div>
                     <div class="timer item">
@@ -247,6 +247,9 @@ export default {
             height: 33px;
         }
     }
+    .shouzhi :hover{
+        cursor:pointer    
+    }
     .time-card {
         text-align: center;
     }
@@ -321,6 +324,9 @@ export default {
                 width: 18px;
                 height: 19px;
             }
+        }
+        .shouzhi :hover{
+            cursor:pointer    
         }
         .icon{
             font-size: 16px;

@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:26:36
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\public\chart.vue
- * @LastEditTime: 2021-04-30 15:29:43
+ * @LastEditTime: 2021-05-03 16:01:45
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -88,11 +88,13 @@ export default {
             appId:null,
             client:null,
             channel:null,
-            lang:'zh'
+            lang:'zh',
+            isAdmin:null,
+            uid:''
         }
     },
     methods: {
-        send(type,val){
+        send(type,val,memberId=''){
             /* 频道消息发送成功的处理逻辑 */
             if(type=='saveSelection'||type=='saveProductInfo'){
                 var obj = {
@@ -104,7 +106,19 @@ export default {
                         
                 }).catch(error => {
                 /* 频道消息发送失败的处理逻辑 */
-                })
+                });
+            } else if(type=='initProduct'){
+                var obj = {
+                    type:type,
+                    ...val,
+                    id:memberId
+                };
+                obj = JSON.stringify(obj);
+                this.channel.sendMessage({ text: obj }).then(() => {
+                        
+                }).catch(error => {
+
+                });    
             } else{ 
                 this.channel.sendMessage({ text: this.chartValue }).then(() => {
                     this.chartHistory.push({
@@ -146,11 +160,15 @@ export default {
             this.channel = await this.client.createChannel(roomNumber); // 此处传入频道 ID
             await this.channel.join().then(() => {
                 console.log('加入聊天频道成功！');
-            /* 加入频道成功的处理逻辑 */
             }).catch(error => {
                 console.log('加入聊天频道失败！');
-            /* 加入频道失败的处理逻辑 */
             });
+            if(this.isAdmin){
+                this.channel.on('MemberJoined', function (memberId) {
+                    console.log('加入聊天频道成功！');
+                    me.initProduct(memberId);
+                });
+            }
             this.channel.on('ChannelMessage', ({ text }, senderId) => { // text 为收到的频道消息文本，senderId 为发送方的 User ID
                 var name = '';
                 if(me.userlist.length){
@@ -166,7 +184,13 @@ export default {
                     this.$emit('getSampleOrderDetails',obj);
                 } else if(text.indexOf("saveProductInfo")!=-1){
                     var obj = JSON.parse(text);
-                    this.$emit('getProduct',obj);    
+                    debugger
+                    this.$emit('getProduct',obj);
+                } else if(text.indexOf("initProduct")!=-1){
+                    var obj = JSON.parse(text);
+                    if(obj.id==me.uid){
+                        me.$emit('joinInitProduct',obj);   
+                    }    
                 } else {
                     this.chartHistory.push({
                         id:senderId,
@@ -185,20 +209,26 @@ export default {
             this.channel.leave();
             this.client.logout();
         },
+        initProduct(memberId){
+            var val = this.$parent.sampleSelection;
+            this.send('initProduct',val,memberId);    
+        },
         //初始化群聊
         async init(){
-            this.appId = AGORA_APP_ID;
-            this.uid = Cookies.get("uid") || null;
-            this.client = AgoraRTM.createInstance(this.appId);
-            this.client.on('ConnectionStateChanged', (newState, reason) => {
+            var me = this;
+            me.appId = AGORA_APP_ID;
+            me.uid = Cookies.get("uid") || null;
+            me.client = AgoraRTM.createInstance(me.appId);
+            me.client.on('ConnectionStateChanged', (newState, reason) => {
                 console.log('on connection state changed to ' + newState + ' reason: ' + reason);
             });
-            await this.login();
+            await me.login();
         }
     },
     created(){
         this.init();    
         this.lang = window.localStorage.getItem('language');
+        this.isAdmin = Cookies.get("isAdmin")=='true' ? true : false;
     }
 }
 </script>
@@ -306,5 +336,6 @@ export default {
     }
     .blue{
         color: #2684D1;
+        cursor: pointer;
     }
 </style>

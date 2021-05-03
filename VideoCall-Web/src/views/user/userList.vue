@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 15:46:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\user\userList.vue
- * @LastEditTime: 2021-04-29 14:31:25
+ * @LastEditTime: 2021-05-03 14:21:54
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -24,7 +24,7 @@
             </ListItem>
             <ListItem v-for="(item,index) in userList" :key="index">
                 <div class="avatar">
-                    <i class="iconfont iconren1 person text"></i>
+                    <i class="iconfont iconren1 text" :class="[item.isDel?'unperson':'person']"></i>
                 </div>
                 <div class="name">
                     {{item.nickname}}
@@ -319,6 +319,7 @@ export default {
         .text{
             font-size: 16px;
             color: #999999;
+            cursor: pointer;
         }
         .act{
             flex: 0 0 20px;
@@ -335,12 +336,16 @@ export default {
             margin-left: 100px;
             margin-right: 10px;
             color:#fff;   
+            cursor: pointer;
         }
         .avatar{
             flex: 0 0 20px;
             margin-left: 10px;
             .person{
                 color: #2684D1;
+            }
+            .unperson{
+                color: #ed4014;
             }
         }
         .name{
