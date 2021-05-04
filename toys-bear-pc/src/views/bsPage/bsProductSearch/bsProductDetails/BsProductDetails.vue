@@ -292,6 +292,7 @@ export default {
       if (res.data.result.code === 200) {
         eventBus.$emit("resetProductCollection");
       } else {
+        item.isFavorite = !item.isFavorite;
         this.$common.handlerMsgState({
           msg: "收藏失败",
           type: "danger"

@@ -35,6 +35,7 @@ import {
   CarouselItem,
   Tag,
   Tooltip,
+  Link,
   Badge
 } from "element-ui";
 const element = {
@@ -69,6 +70,7 @@ const element = {
     Vue.use(Tooltip);
     Vue.use(Col);
     Vue.use(Tag);
+    Vue.use(Link);
     Vue.use(Card);
     Vue.use(Carousel);
     Vue.use(CarouselItem);

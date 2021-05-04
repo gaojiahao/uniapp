@@ -106,7 +106,9 @@
         <el-table-column prop="shareUrl" min-width="200" label="网址">
           <template slot-scope="scope">
             <div :id="scope.row.id">
-              {{ scope.row.shareUrl }}
+              <el-link type="info" :href="scope.row.shareUrl" target="_blank">
+                {{ scope.row.shareUrl }}
+              </el-link>
             </div>
           </template>
         </el-table-column>
@@ -135,7 +137,7 @@
         ></el-table-column>
         <el-table-column label="登录码" align="center">
           <template slot-scope="scope">
-            <div>
+            <div class="loginCodeBox">
               <span>
                 {{ scope.row.verifyCode }}
               </span>
@@ -144,6 +146,13 @@
                 class="el-icon-refresh"
                 style="font-size: 14px; cursor: pointer"
               ></i>
+              <div class="code">
+                <el-button
+                  type="danger"
+                  icon="el-icon-delete"
+                  circle
+                ></el-button>
+              </div>
             </div>
           </template>
         </el-table-column>
@@ -1109,6 +1118,11 @@ export default {
           .name {
             margin-top: 8px;
           }
+        }
+      }
+      .loginCodeBox {
+        position: relative;
+        .copy {
         }
       }
     }

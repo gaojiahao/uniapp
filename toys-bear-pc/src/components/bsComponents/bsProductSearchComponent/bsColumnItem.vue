@@ -239,7 +239,7 @@ export default {
     async toProductDetails() {
       const fd = {
         name: this.item.productNumber,
-        linkUrl: "/bsIndex/bsProductSearchIndex",
+        linkUrl: this.$route.path,
         component: "bsProductDetails",
         refresh: true,
         label: this.item.fa_no || "产品详情",
@@ -354,7 +354,11 @@ export default {
   },
   created() {},
   mounted() {
-    console.log(this.typeId, "组件");
+    eventBus.$on("upDateProductView", () => {
+      this.$nextTick(() => {
+        this.$forceUpdate();
+      });
+    });
   }
 };
 </script>

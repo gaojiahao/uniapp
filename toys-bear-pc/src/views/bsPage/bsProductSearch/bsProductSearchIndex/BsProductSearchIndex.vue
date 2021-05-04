@@ -750,11 +750,12 @@
                 @click="handerIsGrid('bsColumnComponent')"
               ></div>
               <div class="line"></div>
-              <div class="totalCount">
+              <div class="totalCount" style="margin-right: 20px;">
+                <span>共</span>
                 <span class="totalCountText">{{ totalCount }}</span>
                 <span>条数据</span>
               </div>
-              <div class="myMinPagination">
+              <!-- <div class="myMinPagination">
                 <div @click="firstEvent" class="first el-icon-arrow-left"></div>
                 <div class="count">
                   <span class="pageIndex">{{ currentPage }}</span>
@@ -762,7 +763,7 @@
                   <span>{{ Math.ceil(totalCount / pageSize) }}</span>
                 </div>
                 <div @click="nextEvent" class="next el-icon-arrow-right"></div>
-              </div>
+              </div> -->
             </div>
           </div>
           <div class="picProductListBox">
@@ -989,7 +990,7 @@ export default {
             this.totalCount = res.data.result.object.length;
             this.cropperCancel();
           } else {
-            this.$store.commit("searchValues", []);
+            // this.$store.commit("searchValues", []);
             this.cropperCancel();
             this.$common.handlerMsgState({
               msg: res.data.result.message,
@@ -1019,7 +1020,7 @@ export default {
         sortOrder: this.sortOrder,
         sortType: this.sortType
       };
-      fd.productNumberList = this.productList.map(val => ({
+      fd.productNumberList = this.imageSearchValue.map(val => ({
         productNumber: val.productNumber,
         orderBy: val.orderBy
       }));
@@ -1469,15 +1470,15 @@ export default {
     ...mapGetters({
       shoppingList: "myShoppingList"
     }),
-    ...mapState(["searchImgPreview"]),
-    ...mapState(["imageSearchValue"]),
-    ...mapState(["offerProductList"]),
     ...mapState([
       "myColles",
       "searchTxt",
       "searchHallCate",
       "imgSearch",
-      "typeId"
+      "typeId",
+      "imageSearchValue",
+      "offerProductList",
+      "searchImgPreview"
     ])
   },
   watch: {
@@ -1521,6 +1522,7 @@ export default {
               val.isShopping = false;
             });
           }
+          eventBus.$emit("upDateProductView");
         }
       }
     },
