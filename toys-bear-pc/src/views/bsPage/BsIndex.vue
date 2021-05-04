@@ -276,6 +276,9 @@ export default {
       } else {
         eventBus.$emit("showCart", false);
       }
+      if (!path.includes("bsSampleQuotation")) {
+        this.$store.commit("resetCheckTabstypeId", 0);
+      }
     },
     activeTab(newN, oldN) {
       // console.log(newN, "现在", oldN, "上一次"); // tabName
