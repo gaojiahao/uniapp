@@ -72,9 +72,21 @@
             <span>{{ item.fa_no }}</span>
           </p>
         </div>
-        <div class="right" @click.stop="handlerShopping(item)">
+        <div
+          v-if="typeId != 1"
+          class="right"
+          @click.stop="handlerShopping(item)"
+        >
           <i v-if="item.isShopping" class="shoppingCartActive"></i>
           <i v-else class="shoppingCart"></i>
+        </div>
+        <div
+          v-if="typeId === 1"
+          class="right"
+          @click.stop="handlerUpadate(item)"
+        >
+          <i v-if="item.isShoppingUpdate" class="updateIcon"></i>
+          <i v-else class="UpadateCart"></i>
         </div>
       </div>
       <p class="item">
@@ -132,7 +144,7 @@
 
 <script>
 import eventBus from "@/assets/js/common/eventBus";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 export default {
   props: {
     item: {
@@ -141,7 +153,8 @@ export default {
   },
   data() {
     return {
-      isShopping: false
+      isShopping: false,
+      isShoppingUpdate: false
     };
   },
   methods: {
@@ -290,6 +303,28 @@ export default {
         this.$forceUpdate();
       });
     },
+    // 添加报价
+    handlerUpadate(item) {
+      item.isShoppingUpdate = !item.isShoppingUpdate;
+      if (item.isShoppingUpdate) {
+        this.$set(item, "boxNumber", 1); //默认传一箱过去，不然总金额计算错误
+        // item.boxNumber = 1;
+        this.$store.commit("pushOfferProductList", item);
+        // this.$emit("pushOfferProductList", item);
+        this.$common.handlerMsgState({
+          msg: "添加报价产品成功",
+          type: "success"
+        });
+      } else {
+        this.$store.commit("popOfferProductList", item);
+        // this.$emit("popOfferProductList", item);
+        this.$common.handlerMsgState({
+          msg: "删除报价产品成功",
+          type: "warning"
+        });
+      }
+      this.$forceUpdate();
+    },
     // 删除单个浏览记录
     async handlerDeleteBrowsing(item) {
       const fd = {
@@ -314,10 +349,13 @@ export default {
   computed: {
     ...mapGetters({
       shoppingList: "myShoppingList"
-    })
+    }),
+    ...mapState(["typeId"])
   },
   created() {},
-  mounted() {}
+  mounted() {
+    console.log(this.typeId, "组件");
+  }
 };
 </script>
 <style scoped lang="less">
@@ -514,6 +552,36 @@ export default {
             margin-bottom: 5px;
           }
           .shoppingCartActive {
+            -webkit-transform: scale(1.2) rotate(360deg);
+            -moz-transform: scale(1.2) rotate(360deg);
+            -ms-transform: scale(1.2) rotate(360deg);
+            transform: scale(1.2) rotate(360deg);
+            margin-bottom: 5px;
+          }
+        }
+        .UpadateCart {
+          width: 36px;
+          height: 36px;
+          transition: all 0.3s;
+          background: url("~@/assets/images/UpadateCart.png") no-repeat center;
+          background-size: contain;
+        }
+        .updateIcon {
+          width: 36px;
+          height: 36px;
+          transition: all 0.3s;
+          background: url("~@/assets/images/updateIcon.png") no-repeat center;
+          background-size: contain;
+        }
+        &:hover {
+          .UpadateCart {
+            -webkit-transform: scale(1.2) rotate(360deg);
+            -moz-transform: scale(1.2) rotate(360deg);
+            -ms-transform: scale(1.2) rotate(360deg);
+            transform: scale(1.2) rotate(360deg);
+            margin-bottom: 5px;
+          }
+          .updateIcon {
             -webkit-transform: scale(1.2) rotate(360deg);
             -moz-transform: scale(1.2) rotate(360deg);
             -ms-transform: scale(1.2) rotate(360deg);

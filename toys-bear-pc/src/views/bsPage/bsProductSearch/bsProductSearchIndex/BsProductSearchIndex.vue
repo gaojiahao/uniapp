@@ -767,7 +767,11 @@
           </div>
           <div class="picProductListBox">
             <!-- 产品列表 -->
-            <component :is="isGrid" :productList="productList"></component>
+            <component
+              :is="isGrid"
+              :productList="productList"
+              :typeId="typeId"
+            ></component>
           </div>
         </div>
       </template>
@@ -1176,17 +1180,34 @@ export default {
       const res = await this.$http.post("/api/SearchBearProductPage", fd);
       const { code, item, msg } = res.data.result;
       if (code === 200) {
-        if (this.shoppingList) {
-          for (let i = 0; i < item.items.length; i++) {
-            for (let j = 0; j < this.shoppingList.length; j++) {
-              if (
-                item.items[i].productNumber ===
-                this.shoppingList[j].productNumber
-              )
-                item.items[i].isShopping = true;
+        console.log(this.shoppingList);
+        if (this.typeId === 1) {
+          if (this.offerProductList) {
+            for (let i = 0; i < item.items.length; i++) {
+              for (let j = 0; j < this.offerProductList.length; j++) {
+                if (
+                  item.items[i].productNumber ===
+                  this.offerProductList[j].productNumber
+                ) {
+                  item.items[i].isShoppingUpdate = true;
+                }
+              }
+            }
+          }
+        } else {
+          if (this.shoppingList) {
+            for (let i = 0; i < item.items.length; i++) {
+              for (let j = 0; j < this.shoppingList.length; j++) {
+                if (
+                  item.items[i].productNumber ===
+                  this.shoppingList[j].productNumber
+                )
+                  item.items[i].isShopping = true;
+              }
             }
           }
         }
+
         this.productList = item.items;
         this.totalCount = item.totalCount;
         let endDate = Date.now();
@@ -1450,7 +1471,14 @@ export default {
     }),
     ...mapState(["searchImgPreview"]),
     ...mapState(["imageSearchValue"]),
-    ...mapState(["myColles", "searchTxt", "searchHallCate", "imgSearch"])
+    ...mapState(["offerProductList"]),
+    ...mapState([
+      "myColles",
+      "searchTxt",
+      "searchHallCate",
+      "imgSearch",
+      "typeId"
+    ])
   },
   watch: {
     searchHallCate: {

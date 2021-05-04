@@ -34,6 +34,7 @@ const store = new Vuex.Store({
       }
     ],
     offerProductList: [], //报价数据
+    typeId: null, //报价详情我的产品组件切换
     historyNames: [],
     searchTxt: "",
     imgSearch: false,
@@ -135,10 +136,14 @@ const store = new Vuex.Store({
       const key = state.userInfo.uid;
       Vue.prototype.$set(state, key, payLoad);
     },
-    // 提交报价
-    initOfferProductList(state) {
-      Vue.prototype.$set(state, "offerProductList", []);
+    //报价详情我的产品组件切换
+    resetCheckTabstypeId(state, value) {
+      state.typeId = value;
     },
+    // // 提交报价
+    // initOfferProductList(state) {
+    //   Vue.prototype.$set(state, "offerProductList", []);
+    // },
     // 请求修改报价产品接口赋值
     updataOfferProductList(state, payLoad) {
       Vue.prototype.$set(state, "offerProductList", payLoad);
