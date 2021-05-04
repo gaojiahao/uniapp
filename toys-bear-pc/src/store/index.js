@@ -141,9 +141,9 @@ const store = new Vuex.Store({
       state.typeId = value;
     },
     // // 提交报价
-    // initOfferProductList(state) {
-    //   Vue.prototype.$set(state, "offerProductList", []);
-    // },
+    initOfferProductList(state) {
+      Vue.prototype.$set(state, "offerProductList", []);
+    },
     // 请求修改报价产品接口赋值
     updataOfferProductList(state, payLoad) {
       Vue.prototype.$set(state, "offerProductList", payLoad);

@@ -176,11 +176,12 @@ export default {
             }
           }
         }
-        console.log(item.items, "请求回来数组");
+        // console.log(item.items, "请求回来数组");
         item.items.forEach(val => {
           this.footprintArr.push(val);
         });
         this.dataResort(this.footprintArr);
+        this.footprintArr = [];
         this.totalCount = res.data.result.item.totalCount;
       } else {
         this.totalCount = 0;
@@ -466,7 +467,7 @@ export default {
     background-color: #fff;
     width: 100%;
     box-sizing: border-box;
-    padding-bottom: 30px;
+    padding-bottom: 90px;
     .dateClassify {
       margin-top: 25px;
       display: flex;
