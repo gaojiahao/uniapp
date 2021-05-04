@@ -1232,6 +1232,9 @@ export default {
     ...mapState(["userInfo"])
   },
   watch: {
+    shoppingList(val) {
+      this.tableData = val;
+    },
     selectTableData: {
       deep: true,
       handler(list) {

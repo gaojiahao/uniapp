@@ -249,8 +249,8 @@ export default {
       };
       this.$store.commit("myAddTab", fd);
     },
-    // 收藏
-    async addCollect(item) {
+    // 收藏事件
+    async collectEvent(item) {
       if (item.isFavorite) {
         this.$common.handlerMsgState({
           msg: "取消收藏",
@@ -273,6 +273,21 @@ export default {
         item.isFavorite = !item.isFavorite;
         this.$common.handlerMsgState({
           msg: "收藏失败",
+          type: "danger"
+        });
+      }
+      this.$nextTick(() => {
+        this.canClick = true;
+      });
+    },
+    // 收藏
+    async addCollect(item) {
+      if (this.canClick) {
+        this.canClick = false;
+        this.collectEvent(item);
+      } else {
+        this.$common.handlerMsgState({
+          msg: "操作过于频繁",
           type: "danger"
         });
       }
