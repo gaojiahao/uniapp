@@ -276,23 +276,23 @@ export default {
       } else {
         eventBus.$emit("showCart", false);
       }
+    },
+    activeTab(newN, oldN) {
+      // console.log(newN, "现在", oldN, "上一次"); // tabName
+      this.$store.commit("handlerOldTabName", oldN);
+      // if (
+      //   newN == "/bsIndex/bsProductSearchIndex" ||
+      //   newN == "/bsIndex/bsLatestProducts" ||
+      //   newN == "/bsIndex/bsSpotProducts" ||
+      //   newN == "/bsIndex/bsVIPProducts" ||
+      //   newN == "/bsIndex/bsMyCollection" ||
+      //   newN == "/bsIndex/bsBrowsingFootprints"
+      // ) {
+      //   eventBus.$emit("showCart", true);
+      // } else {
+      //   eventBus.$emit("showCart", false);
+      // }
     }
-    // activeTab(newN, oldN) {
-    // console.log(newN, "现在", oldN, "上一次"); // tabName
-    // this.$store.commit("handlerOldTabName", oldN);
-    // if (
-    //   newN == "/bsIndex/bsProductSearchIndex" ||
-    //   newN == "/bsIndex/bsLatestProducts" ||
-    //   newN == "/bsIndex/bsSpotProducts" ||
-    //   newN == "/bsIndex/bsVIPProducts" ||
-    //   newN == "/bsIndex/bsMyCollection" ||
-    //   newN == "/bsIndex/bsBrowsingFootprints"
-    // ) {
-    //   eventBus.$emit("showCart", true);
-    // } else {
-    //   eventBus.$emit("showCart", false);
-    // }
-    // }
   },
   created() {},
   mounted() {},
