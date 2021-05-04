@@ -76,12 +76,22 @@ export default {
     },
     // 查看详情
     toDetails(item) {
-      this.$router.push({
-        path: "/productDetails",
-        query: {
-          id: item.productNumber
-        }
-      });
+      if (this.$route.path.includes("productDetails")) {
+        this.$router.push({
+          path: "/productDetails",
+          query: {
+            id: item.productNumber
+          }
+        });
+        this.$root.eventHub.$emit("resetRelatedProducts");
+      } else {
+        this.$router.push({
+          path: "/productDetails",
+          query: {
+            id: item.productNumber
+          }
+        });
+      }
     }
   },
   created() {},
