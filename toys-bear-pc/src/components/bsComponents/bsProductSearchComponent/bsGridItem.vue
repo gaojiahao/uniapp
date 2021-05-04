@@ -295,6 +295,8 @@ export default {
       if (res.data.result.code === 200) {
         eventBus.$emit("resetProductCollection", item);
         eventBus.$emit("resetProductDetailsCollection", item);
+        // 收藏菜单事件
+        eventBus.$emit("resetMyCollectionMenu");
       } else {
         item.isFavorite = !item.isFavorite;
         this.$common.handlerMsgState({

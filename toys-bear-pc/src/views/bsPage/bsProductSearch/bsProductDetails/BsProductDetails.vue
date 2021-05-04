@@ -291,6 +291,8 @@ export default {
       });
       if (res.data.result.code === 200) {
         eventBus.$emit("resetProductCollection", item);
+        // 收藏菜单事件
+        eventBus.$emit("resetMyCollectionMenu");
       } else {
         item.isFavorite = !item.isFavorite;
         this.$common.handlerMsgState({
