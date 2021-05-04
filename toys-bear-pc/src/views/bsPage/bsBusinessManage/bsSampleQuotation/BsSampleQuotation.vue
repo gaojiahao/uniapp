@@ -367,6 +367,7 @@ export default {
     },
     //编辑报价跳转
     async handleEdit(index, row) {
+      console.log(row, "row");
       const fd = {
         name: "编辑" + row.offerNumber,
         linkUrl: "/bsIndex/bsSampleQuotation",

@@ -39,27 +39,27 @@
                 <el-image
                   @click.native="goDetails(scope.row)"
                   fit="contain"
-                  style="width:60px;height:60px;"
+                  style="width: 60px; height: 60px"
                   :src="scope.row.imgUrlList && scope.row.imgUrlList[0]"
                 >
                   <div
                     slot="placeholder"
-                    style="width:60px;height:60px;"
+                    style="width: 60px; height: 60px"
                     class="errorImg"
                   >
                     <img
-                      style="width:60px;height:60px;"
+                      style="width: 60px; height: 60px"
                       src="~@/assets/images/imgError.png"
                       alt
                     />
                   </div>
                   <div
                     slot="error"
-                    style="width:60px;height:60px;"
+                    style="width: 60px; height: 60px"
                     class="errorImg"
                   >
                     <img
-                      style="width:60px;height:60px;"
+                      style="width: 60px; height: 60px"
                       src="~@/assets/images/imgError.png"
                       alt
                     />
@@ -198,12 +198,12 @@
           </el-table-column>
           <el-table-column prop="price" label="厂价" align="center">
             <template slot-scope="scope">
-              <span style="color:#f56c6c"> ￥{{ scope.row.price }} </span>
+              <span style="color: #f56c6c"> ￥{{ scope.row.price }} </span>
             </template>
           </el-table-column>
           <el-table-column prop="offerAmount" label="报出价" align="center">
             <template slot-scope="scope">
-              <span style="color:#f56c6c">
+              <span style="color: #f56c6c">
                 {{ scope.row.cu_de + scope.row.offerAmount }}
               </span>
             </template>
@@ -211,8 +211,8 @@
           <el-table-column label="报出总价">
             <template slot-scope="scope">
               <p class="item price">
-                <span style="color:#f56c6c">{{ scope.row.cu_de }}</span>
-                <span style="color:#f56c6c">
+                <span style="color: #f56c6c">{{ scope.row.cu_de }}</span>
+                <span style="color: #f56c6c">
                   {{
                     priceCount(
                       scope.row.offerAmount,
@@ -262,13 +262,13 @@
               <p class="item">
                 <span class="itemTitle">总金额：</span>
                 <span class="price"
-                  >{{ item.cu_de + myTotalPrice(offerProductList) }}
+                  >{{ clienFormData.cu_de + myTotalPrice(offerProductList) }}
                 </span>
               </p>
               <el-button
                 type="primary"
                 @click="openSub(false)"
-                style="margin-left: 10px;"
+                style="margin-left: 10px"
                 size="small"
                 >确定提交</el-button
               >
@@ -413,17 +413,22 @@
                   <!-- <el-input maxlength="30" v-model="clienFormData.profit">
                     <span slot="suffix">%</span>
                   </el-input> -->
-                  <div style="display: flex; justify-content:space-between;">
+                  <div style="display: flex; justify-content: space-between">
                     <el-input
                       maxlength="30"
                       onkeyup="value=value.replace(/[^\d.]/g,'')"
-                      style="flex:1;"
+                      style="flex: 1"
                       v-model="clienFormData.profit"
                     >
                       <span slot="suffix">%</span>
                     </el-input>
                     <el-radio-group
-                      style="flex:1;display:flex; align-items:center;margin-left: 20px;"
+                      style="
+                        flex: 1;
+                        display: flex;
+                        align-items: center;
+                        margin-left: 20px;
+                      "
                       v-model="clienFormData.profitCalcMethod"
                     >
                       <el-radio :label="2">除法</el-radio>
@@ -521,7 +526,7 @@
               </div>
             </div>
           </el-form>
-          <center style="margin-top: 40px;">
+          <center style="margin-top: 40px">
             <el-button
               size="medium"
               @click="submitOrder"
@@ -971,6 +976,7 @@ export default {
         this.clienFormData
       );
       if (res.data.result.code === 200) {
+        eventBus.$emit("resetSamplelist");
         this.$common.handlerMsgState({
           msg: "提交成功",
           type: "success"
