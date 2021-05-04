@@ -103,7 +103,11 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="shareUrl" min-width="200" label="网址">
+        <el-table-column
+          prop="shareUrl"
+          min-width="200"
+          label="网址 (可单击打开)"
+        >
           <template slot-scope="scope">
             <div :id="scope.row.id">
               <el-link type="info" :href="scope.row.shareUrl" target="_blank">
@@ -138,20 +142,18 @@
         <el-table-column label="登录码" align="center">
           <template slot-scope="scope">
             <div class="loginCodeBox">
-              <span>
+              <span :id="scope.row.verifyCode">
                 {{ scope.row.verifyCode }}
               </span>
-              <i
-                @click="resetLoginCode(scope.row)"
-                class="el-icon-refresh"
-                style="font-size: 14px; cursor: pointer"
-              ></i>
-              <div class="code">
-                <el-button
-                  type="danger"
-                  icon="el-icon-delete"
-                  circle
-                ></el-button>
+              <div class="copy">
+                <i
+                  class="el-icon-document-copy"
+                  @click="copyUrl(scope.row.verifyCode)"
+                ></i>
+                <i
+                  @click="resetLoginCode(scope.row)"
+                  class="el-icon-refresh"
+                ></i>
               </div>
             </div>
           </template>
@@ -874,6 +876,7 @@ export default {
       this.QRCodeUrl = url;
       this.QRCodeDialog = true;
     },
+    // 复制登录码
     // 复制链接
     copyUrl(id) {
       var link = document.getElementById(id);
@@ -1123,6 +1126,24 @@ export default {
       .loginCodeBox {
         position: relative;
         .copy {
+          position: absolute;
+          cursor: pointer;
+          right: 0;
+          top: 0;
+          opacity: 0;
+          i {
+            &:first-of-type {
+              margin: 0 5px;
+            }
+            &:hover {
+              color: #5cb6ff;
+            }
+          }
+        }
+        &:hover {
+          .copy {
+            opacity: 1;
+          }
         }
       }
     }
