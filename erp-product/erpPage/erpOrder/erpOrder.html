@@ -285,10 +285,15 @@
   }
   // 渲染列表数据
   function getTable(list) {
+
     var tbodyData = document.getElementById('tbodyData');
     $("#tbodyData").empty();
     for (var i = 0; i < list.length; i++) {
       var html = ""
+    
+      if($("#orderFrom").val() === "Hall" && list[i].orderType === "Sample"){
+        list[i].remark = ""
+      }
       switch (list[i].orderType) {
         case "Sample":
           list[i].orderTypeValue = "择样"
@@ -321,7 +326,7 @@
         case undefined:
         case "null":
         case "undefined":
-          list[i].the_nuValue = "  "
+          list[i].the_nuValue = ""
           break;
         default:
           list[i].the_nuValue = list[i].the_nu
@@ -332,7 +337,7 @@
         case undefined:
         case "null":
         case "undefined":
-          list[i].remarkValue = "  "
+          list[i].remarkValue = ""
           break;
         default:
           list[i].remarkValue = list[i].remark
