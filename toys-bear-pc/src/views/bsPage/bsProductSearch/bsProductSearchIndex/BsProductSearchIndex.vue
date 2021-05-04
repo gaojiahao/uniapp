@@ -1375,10 +1375,9 @@ export default {
       this.isTwoDownCate = !this.isTwoDownCate;
     },
     clearRootEvent() {
-      eventBus.$off("resetProductCollection");
+      // eventBus.$off("resetProductCollection");
       eventBus.$off("searchProducts");
       eventBus.$off("openUpload");
-      eventBus.$off("resetMyCart");
     },
     // 关闭关联搜索
     closeTag() {
@@ -1403,36 +1402,41 @@ export default {
       this.uploadPic(file);
     });
     // 取消收藏/刷新页面
-    eventBus.$on("resetProductCollection", () => {
-      this.getProductList();
+    eventBus.$on("resetProductCollection", item => {
+      // this.getProductList();
+      for (let i = 0; i < this.productList.length; i++) {
+        if (this.productList[i].productNumber == item.productNumber) {
+          this.productList[i].isFavorite = item.isFavorite;
+        }
+      }
     });
-    // 取消收藏
-    // eventBus.$on("resetProductCollection", (item) => {
-    //   for (let i = 0; i < this.productList.length; i++) {
-    //     if (this.productList[i].productNumber == item.productNumber) {
-    //       this.productList[i].isFavorite = item.isFavorite;
-    //     }
-    //   }
-    // });
-    // 增加滚动事件
-    // eventBus.$emit("startScroll");
-    // 删除购物车样式
-    eventBus.$on("resetMyCart", list => {
-      if (list.length) {
-        for (let i = 0; i < this.productList.length; i++) {
-          for (let j = 0; j < list.length; j++) {
-            if (this.productList[i].productNumber == list[j].productNumber) {
-              this.productList[i].isShopping = true;
-              break;
-            } else {
-              this.productList[i].isShopping = false;
+    // 加购删除购物车
+    eventBus.$on("resetMyCart", item => {
+      if (Object.prototype.toString.call(item) === "[object Array]") {
+        // 数组
+        if (item.length) {
+          for (let i = 0; i < this.productList.length; i++) {
+            for (let j = 0; j < item.length; j++) {
+              if (this.productList[i].productNumber == item[j].productNumber) {
+                this.productList[i].isShopping = true;
+                break;
+              } else {
+                this.productList[i].isShopping = false;
+              }
             }
           }
+        } else {
+          this.productList.forEach(val => {
+            val.isShopping = false;
+          });
         }
-      } else {
-        this.productList.forEach(val => {
-          val.isShopping = false;
-        });
+      } else if (Object.prototype.toString.call(item) === "[object Object]") {
+        // 对象;
+        for (let i = 0; i < this.productList.length; i++) {
+          if (item.productNumber == this.productList[i].productNumber) {
+            this.productList[i].isShopping = item.isShopping;
+          }
+        }
       }
     });
     this.$nextTick(async () => {

@@ -290,7 +290,7 @@ export default {
         productNumber: item.productNumber
       });
       if (res.data.result.code === 200) {
-        eventBus.$emit("resetProductCollection");
+        eventBus.$emit("resetProductCollection", item);
       } else {
         item.isFavorite = !item.isFavorite;
         this.$common.handlerMsgState({
@@ -320,6 +320,11 @@ export default {
   created() {},
   mounted() {
     eventBus.$emit("showCart", true);
+    eventBus.$on("resetProductDetailsCollection", item => {
+      if (item.productNumber == this.productDetail.productNumber) {
+        this.productDetail.isFavorite = item.isFavorite;
+      }
+    });
     this.getProductDetails();
   },
   computed: {
@@ -327,10 +332,7 @@ export default {
       shoppingList: "myShoppingList"
     })
   },
-  beforeDestroy() {
-    eventBus.$off("resetProductCollection");
-    eventBus.$off("resetMyCart");
-  }
+  beforeDestroy() {}
 };
 </script>
 <style scoped lang="less">

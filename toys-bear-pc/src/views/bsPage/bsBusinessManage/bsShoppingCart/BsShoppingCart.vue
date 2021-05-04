@@ -1305,6 +1305,7 @@ export default {
     }
   }
   .tableBox {
+    padding-bottom: 60px;
     @{deep} .el-table {
       .el-table__header-wrapper .el-checkbox {
         display: none;
@@ -1400,7 +1401,7 @@ export default {
     .totalBox {
       position: absolute;
       width: 100%;
-      margin-right: 20px;
+      margin-right: 30px;
       z-index: 1;
       left: 0;
       bottom: 0;

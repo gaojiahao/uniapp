@@ -698,6 +698,7 @@ export default {
   @{deep} .tableBox {
     .el-table {
       font-size: 13px;
+      padding-bottom: 60px;
       .inputNumber {
         width: 50px;
         outline: none;

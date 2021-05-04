@@ -175,7 +175,8 @@ export default {
   },
   data() {
     return {
-      isShowDetails: null
+      isShowDetails: null,
+      canClick: true
     };
   },
   methods: {
@@ -264,12 +265,13 @@ export default {
         // return false;
         const fd = {
           name: item.exhibitionNumber || item.companyNumber,
-          linkUrl: "/bsIndex/bsProductSearchIndex",
+          linkUrl: "/bsIndex/bsHome",
           component: "bsExhibitionHallHome",
           refresh: true,
           label: item.exhibitionName,
           value: item
         };
+        this.$router.push("/bsIndex/bsHome");
         this.$store.commit("myAddTab", fd);
       }
     },
@@ -291,24 +293,18 @@ export default {
         productNumber: item.productNumber
       });
       if (res.data.result.code === 200) {
-        eventBus.$emit("resetProductCollection");
+        eventBus.$emit("resetProductCollection", item);
+        eventBus.$emit("resetProductDetailsCollection", item);
       } else {
+        item.isFavorite = !item.isFavorite;
         this.$common.handlerMsgState({
           msg: "收藏失败",
           type: "danger"
         });
       }
     },
-
-    // 加购
-    handlerShopping() {
-      if (this.shoppingList.length >= 500 && !this.item.isShopping) {
-        this.$common.handlerMsgState({
-          msg: "购物车已满500条",
-          type: "warning"
-        });
-        return;
-      }
+    // 加购事件
+    callbackShopping() {
       this.item.isShopping = !this.item.isShopping;
       if (this.item.isShopping) {
         this.item.shoppingCount = 1;
@@ -329,6 +325,28 @@ export default {
       this.$nextTick(() => {
         this.$forceUpdate();
       });
+    },
+    // 加购
+    handlerShopping() {
+      if (this.shoppingList.length >= 500 && !this.item.isShopping) {
+        this.$common.handlerMsgState({
+          msg: "购物车已满500条",
+          type: "warning"
+        });
+        return;
+      }
+      if (this.canClick) {
+        this.canClick = false;
+        this.callbackShopping();
+        setTimeout(() => {
+          this.canClick = true;
+        }, 1000);
+      } else {
+        this.$common.handlerMsgState({
+          msg: "操作过于频繁",
+          type: "danger"
+        });
+      }
     },
     // 添加报价
     handlerUpadate(item) {
