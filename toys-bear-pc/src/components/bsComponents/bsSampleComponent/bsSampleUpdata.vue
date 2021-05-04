@@ -939,6 +939,7 @@ export default {
         label: row.fa_no || "产品详情",
         value: row
       };
+      this.$router.push("/bsIndex/bsProductSearchIndex");
       this.$store.commit("myAddTab", fd);
     },
     // 获取列表

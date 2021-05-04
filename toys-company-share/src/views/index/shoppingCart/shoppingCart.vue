@@ -694,14 +694,12 @@ export default {
     },
     // 打开产品详情
     openProductDetail(item) {
-      window.sessionStorage.setItem(
-        "currentProductDetails",
-        JSON.stringify(item)
-      );
-      let { href } = this.$router.resolve({
-        path: "/productDetails"
+      this.$router.push({
+        path: "/productDetails",
+        query: {
+          id: item.productNumber
+        }
       });
-      window.open(href, "_blank");
     },
     // 提交订单
     async submitOrder() {

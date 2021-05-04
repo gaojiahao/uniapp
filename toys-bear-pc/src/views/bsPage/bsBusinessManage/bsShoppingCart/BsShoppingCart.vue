@@ -889,6 +889,7 @@ export default {
         label: row.fa_no || "产品详情",
         value: row
       };
+      this.$router.push("/bsIndex/bsProductSearchIndex");
       this.$store.commit("myAddTab", fd);
     },
     //厂商跳转
@@ -1232,6 +1233,9 @@ export default {
     ...mapState(["userInfo"])
   },
   watch: {
+    shoppingList(val) {
+      this.tableData = val;
+    },
     selectTableData: {
       deep: true,
       handler(list) {

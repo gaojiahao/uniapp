@@ -291,12 +291,13 @@ export default {
       }
       const fd = {
         name: row.productNumber + row.fa_no,
-        linkUrl: this.$route.path,
+        linkUrl: "/bsIndex/bsProductSearchIndex",
         component: "bsProductDetails",
         refresh: true,
         label: row.fa_no || "产品详情",
         value: row
       };
+      this.$router.push("/bsIndex/bsProductSearchIndex");
       this.$store.commit("myAddTab", fd);
     },
     // 打开选择导出模板

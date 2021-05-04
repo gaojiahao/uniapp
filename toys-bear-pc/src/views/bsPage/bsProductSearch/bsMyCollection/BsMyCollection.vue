@@ -229,7 +229,7 @@ export default {
   mounted() {
     this.getCollectList();
     // 取消收藏/刷新页面
-    eventBus.$on("resetProductCollection", () => {
+    eventBus.$on("resetMyCollectionMenu", () => {
       this.getCollectList();
     });
     // 加购删除购物车
@@ -262,7 +262,9 @@ export default {
       }
     });
   },
-  beforeDestroy() {}
+  beforeDestroy() {
+    eventBus.$off("resetMyCollectionMenu");
+  }
 };
 </script>
 <style scoped lang="less">
