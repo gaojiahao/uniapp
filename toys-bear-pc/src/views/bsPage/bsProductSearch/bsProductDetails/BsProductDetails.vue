@@ -218,6 +218,7 @@ export default {
         value: {}
       };
       this.$store.commit("myAddTab", fd);
+      this.$router.push("/bsIndex/bsNews");
     },
     // 去厂商
     toFactory(item) {

@@ -206,21 +206,6 @@ export default {
     };
   },
   methods: {
-    // 滚动事件
-    handleScroll() {
-      eventBus.$emit("showCart", false);
-      const newN = this.$route.path;
-      if (
-        newN == "/bsIndex/bsProductSearchIndex" ||
-        newN == "/bsIndex/bsLatestProducts" ||
-        newN == "/bsIndex/bsSpotProducts" ||
-        newN == "/bsIndex/bsVIPProducts" ||
-        newN == "/bsIndex/bsMyCollection" ||
-        newN == "/bsIndex/bsBrowsingFootprints"
-      ) {
-        eventBus.$emit("showCart", true);
-      }
-    },
     // 刷新tab标签
     triggerTab() {
       for (let i = 0; i < this.tabList.length; i++) {
@@ -235,6 +220,7 @@ export default {
     closeTab(e) {
       let len = this.tabList.length;
       len > 1 && this.$store.commit("closeTab", e);
+      this.$nextTick(() => {});
     },
     refresh() {
       this.$common.refreshTab();
@@ -276,30 +262,40 @@ export default {
     ...mapState(["tabList"])
   },
   watch: {
-    activeTab(newN, oldN) {
-      //   console.log(newN,"现在", oldN,"上一次");
-      this.$store.commit("handlerOldTabName", oldN);
+    "$route.path"(path) {
+      console.log(path);
       if (
-        newN == "/bsIndex/bsProductSearchIndex" ||
-        newN == "/bsIndex/bsLatestProducts" ||
-        newN == "/bsIndex/bsSpotProducts" ||
-        newN == "/bsIndex/bsVIPProducts" ||
-        newN == "/bsIndex/bsMyCollection" ||
-        newN == "/bsIndex/bsBrowsingFootprints"
+        path.includes("bsProductSearchIndex") ||
+        path.includes("bsLatestProducts") ||
+        path.includes("bsSpotProducts") ||
+        path.includes("bsVIPProducts") ||
+        path.includes("bsMyCollection") ||
+        path.includes("bsBrowsingFootprints")
       ) {
         eventBus.$emit("showCart", true);
       } else {
         eventBus.$emit("showCart", false);
       }
     }
+    // activeTab(newN, oldN) {
+    // console.log(newN, "现在", oldN, "上一次"); // tabName
+    // this.$store.commit("handlerOldTabName", oldN);
+    // if (
+    //   newN == "/bsIndex/bsProductSearchIndex" ||
+    //   newN == "/bsIndex/bsLatestProducts" ||
+    //   newN == "/bsIndex/bsSpotProducts" ||
+    //   newN == "/bsIndex/bsVIPProducts" ||
+    //   newN == "/bsIndex/bsMyCollection" ||
+    //   newN == "/bsIndex/bsBrowsingFootprints"
+    // ) {
+    //   eventBus.$emit("showCart", true);
+    // } else {
+    //   eventBus.$emit("showCart", false);
+    // }
+    // }
   },
   created() {},
-  mounted() {
-    this.handleScroll();
-    // eventBus.$on("startScroll", () => {
-    //   this.handleScroll();
-    // });
-  },
+  mounted() {},
   beforeDestroy() {
     eventBus.$emit("showCart", false);
   }

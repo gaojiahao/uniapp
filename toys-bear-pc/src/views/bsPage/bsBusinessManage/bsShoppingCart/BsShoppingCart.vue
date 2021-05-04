@@ -18,7 +18,7 @@
         ></el-table-column>
         <el-table-column label="序号" type="index" align="center" width="60">
         </el-table-column>
-        <el-table-column :autoFit="true" label="产品" width="300">
+        <el-table-column label="产品" width="300">
           <template slot-scope="scope">
             <div class="imgBox">
               <el-image
