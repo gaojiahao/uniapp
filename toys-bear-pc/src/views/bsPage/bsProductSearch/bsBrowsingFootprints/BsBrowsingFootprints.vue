@@ -181,7 +181,6 @@ export default {
           this.footprintArr.push(val);
         });
         this.dataResort(this.footprintArr);
-        this.footprintArr = [];
         this.totalCount = res.data.result.item.totalCount;
       } else {
         this.totalCount = 0;
@@ -233,6 +232,7 @@ export default {
             fd
           });
           if (res.data.result.code === 200) {
+            this.footprintArr = [];
             this.getCollectList();
             this.$common.handlerMsgState({
               msg: "清空成功",
@@ -262,6 +262,7 @@ export default {
       const res = await this.$http.post("/api/DeleteProductRecord", fd);
       if (res.data.result.code === 200) {
         this.getCollectList();
+        this.footprintArr = [];
         this.$common.handlerMsgState({
           msg: "删除成功",
           type: "success"
