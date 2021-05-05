@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-10-19 16:28:17
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-05-03 16:26:00
+ * @LastEditTime: 2021-05-05 15:12:45
 -->
 <template>
   <div class="login" ref="login">
@@ -66,7 +66,7 @@
                 <Input v-model="formValidate['userCode']" :style="{width:'300px',marginLeft: '-50px'}" :placeholder="$t('login.account_placeholder')" :maxlength="11"></Input>
               </FormItem>
               <FormItem :label="$t('login.verification_code')" prop="passWord">
-                <Input v-model="formValidate['passWord']" :style="{width:'180px',marginLeft: '-170px'}" :placeholder="$t('login.verification_code_text')" :maxlength="6"></Input><div style="position:absolute;right: 50px;top: 0;"><Button :style="{height: '40px',width:'102px'}" @click="sendSMS" :disabled='!sendBottonStatus' >{{!sendBottonStatus ? count+'s':$t("login.get_verification_code")}}</Button></div>
+                <Input v-model="formValidate['passWord']" :style="{width:'180px',marginLeft: '-170px'}" :placeholder="$t('login.verification_code_text')" :maxlength="6" @on-enter="login"></Input><div style="position:absolute;right: 50px;top: 0;"><Button :style="{height: '40px',width:'102px'}" @click="sendSMS" :disabled='!sendBottonStatus' >{{!sendBottonStatus ? count+'s':$t("login.get_verification_code")}}</Button></div>
               </FormItem>
               <FormItem>
                 <Button type="primary" @click="login" :style="{width:'300px',marginLeft: '-50px'}" >{{$t("login.button")}}</Button>  

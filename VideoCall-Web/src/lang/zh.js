@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 20:28:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\lang\zh.js
- * @LastEditTime: 2021-04-28 19:23:35
+ * @LastEditTime: 2021-05-05 16:50:29
  * @LastEditors: sueRimn
  * @Descripttion:
  * @version: 1.0.0
@@ -52,7 +52,7 @@ export default {
     videoId:'摄像头',
     camera:'打开摄像头',
     audio:'打开麦克风',
-    button:'confirm'
+    button:'确定'
   },
   userList:{
     host:'主持人',
@@ -104,8 +104,9 @@ export default {
       button:'确认',
       noData:'暂无数据',
       submit:'提交',
-      orderTitle:'悦翔展厅：择样单',
-      nowCode:'本次代号'
+      orderTitle:'择样单',
+      nowCode:'本次代号',
+      orderDetail:'择样订单详情',
     },
     info:{
       price:'单价',

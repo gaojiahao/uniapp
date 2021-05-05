@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-11-03 16:35:57
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-04-28 16:47:00
+ * @LastEditTime: 2021-05-05 16:28:12
 -->
 <template>
     <Modal v-model="show" title="  " @on-ok="ok" @on-cancel="cancel" width="1048" class="modalDetail">
@@ -51,13 +51,13 @@
             <div class="product_info_list item">
                 <Row class="product_info_list_item">
                     <Col span="24">
-                        <div class="active">{{modalProductInfo.productName}}</div>
+                        <div class="active">{{lang == 'zh' ? modalProductInfo.productName:modalProductInfo.productEnName}}</div>
                     </Col>
                     <Col span="12">
                         <div class="product_info_list_items">{{$t("product.info.price")}}：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items red"><span>$</span><span class="font_size_20">{{modalProductInfo.quoteThePrice||0}}</span></div>
+                        <div class="product_info_list_items red"><span>￥</span><span class="font_size_20">{{modalProductInfo.quoteThePrice||0}}</span></div>
                     </Col>
                     <Col span="12">
                         <div class="product_info_list_items">{{$t("product.info.companyNumber")}}：</div>
@@ -75,7 +75,7 @@
                         <div class="product_info_list_items">{{$t("product.info.chinesePack")}}：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items"><span></span>{{modalProductInfo.chinesePack}}</div>
+                        <div class="product_info_list_items"><span></span>{{lang == 'zh' ? modalProductInfo.chinesePack:modalProductInfo.englishPack}}</div>
                     </Col>
                     <Col span="12">
                         <div class="product_info_list_items">{{$t("product.info.productSize")}}：</div>
@@ -153,7 +153,8 @@ export default {
                 {id:3,url:require("@assets/bg/test.jpg")},
                 {id:4,url:require("@assets/bg/test.jpg")},
                 {id:5,url:require("@assets/bg/test.jpg")},
-            ]
+            ],
+            lang:'zh'
         }
     },
     watch:{
@@ -175,7 +176,7 @@ export default {
 
     },
     created(){
-       
+        this.lang = window.localStorage.getItem('language');
     }
 }
 </script>

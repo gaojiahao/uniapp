@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:37:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\product.vue
- * @LastEditTime: 2021-05-03 15:59:54
+ * @LastEditTime: 2021-05-05 15:44:59
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -204,7 +204,7 @@ export default {
                                 cursor: 'pointer'
                             },
                             domProps: {
-                                title: params.row.productName
+                                title: this.lang == 'zh' ? params.row.productName:params.row.productEnName
                             },
                             on:{
                                 click:()=>{
@@ -212,7 +212,7 @@ export default {
                                     this.showModalDetail(true,params.row.productName);  
                                 }
                             }
-                        }, params.row.productName)
+                        },this.lang == 'zh' ? params.row.productName:params.row.productEnName)
                         ])
                     },
                     width: 107

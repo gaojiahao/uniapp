@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:15:36
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\productList.vue
- * @LastEditTime: 2021-04-30 15:14:50
+ * @LastEditTime: 2021-05-05 16:53:34
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -11,7 +11,7 @@
 <template>
     <div class="productList_wrap">
     <!-- 择样购物车 -->
-        <Drawer title="择样订单详情" :closable="true" v-model="isShow" @on-close="changeProductList" width='1272' class="productList">
+        <Drawer :title="$t('product.order.orderDetail')" :closable="true" v-model="isShow" @on-close="changeProductList" width='1272' class="productList">
             <div slot="close" style="cursor: pointer;color: black;display: inline-block;width: 100%;height: 24px;line-height: 24px;font-size: 24px;color: #999999;margin-top: 4px;
                 margin-right: 8px;">
                 <Icon type="md-arrow-round-forward" />
@@ -55,7 +55,7 @@
                 </div>
                 <div class="item">
                     <div class="label">{{$t("product.order.totalPrice")}}：</div>
-                    <div class="text active">$ {{totalAmount}}</div>
+                    <div class="text active">￥{{totalAmount}}</div>
                 </div>
                 <div class="item">
                     <Button type="primary" shape="circle" style="width:88px;margin: 6px 6px 0 0;" @click="save" v-if="flag">{{$t("product.order.submit")}}</Button>
@@ -167,9 +167,9 @@ export default {
                                     fontWeight:400,
                                 },
                                 domProps: {
-                                    title: params.row.productName
+                                    title: this.lang == 'zh' ? params.row.productName:params.row.productEnName
                                 }
-                            }, params.row.productName),
+                            }, this.lang == 'zh' ? params.row.productName:params.row.productEnName),
                             h('div', { 
                                 style: {
                                     marginTop: '4px',
@@ -182,7 +182,7 @@ export default {
 
                                         color:'#FF3E3E',
                                     }, 
-                                },'USD'),
+                                },'￥'),
                                 h('span', {
                                     style: {
                                         color:'#FF3E3E',
@@ -219,7 +219,7 @@ export default {
                                     fontSize: '12px',
                                     color: '#333333'
                                 },  
-                            },me.$t("product.info.chinesePack")+'：' + params.row.chinesePack),
+                            },me.$t("product.info.chinesePack")+'：' + (me.lang == 'zh' ? params.row.chinesePack:params.row.englishPack)),
                             h('div', { 
                                 style: {
                                     marginTop: '4px',
@@ -379,7 +379,7 @@ export default {
                                     marginTop: '4px',
                                     color:'#FF3E3E',
                                 },
-                            },'$'+(params.row.factoryPrice*params.row.tempAmount*params.row.outerBoxLoadCapa||0).toFixed(2)),
+                            },'￥'+(params.row.factoryPrice*params.row.tempAmount*params.row.outerBoxLoadCapa||0).toFixed(2)),
                         ])
                     },
                     width: 140    
@@ -412,7 +412,8 @@ export default {
             roomNumber:null,
             loading:true,
             flag:false,
-            companyName:''
+            companyName:'',
+            lang:'zh'
         }
     },
     methods: {
@@ -525,6 +526,7 @@ export default {
         this.roomNumber=Cookies.get('channel');
         this.flag =  Cookies.get("isAdmin")=='true' ? true : false;
         this.companyName = Cookies.get("companyName") || "未获取到公司信息";
+        this.lang = window.localStorage.getItem('language');
     }
 }
 </script>

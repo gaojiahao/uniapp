@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-03-31 20:28:08
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\lang\en.js
- * @LastEditTime: 2021-04-29 14:36:58
+ * @LastEditTime: 2021-05-05 16:50:16
  * @LastEditors: sueRimn
  * @Descripttion:
  * @version: 1.0.0
@@ -94,7 +94,7 @@ export default {
       productTitle:'Product',
       productNameList:'Name',
       prodcutNumberList:'No.',
-      productPriceList:'Quote',
+      productPriceList:'Price',
       totalRecords:'Total Records',
       totalCTNS:'Total CTNS',
       totalQuantity:'Total Quantity',
@@ -106,7 +106,8 @@ export default {
       noData:'No data',
       submit:'submit',
       orderTitle:'Sample selection list',
-      nowCode:'Now code'
+      nowCode:'Now code',
+      orderDetail:'Sample order details',
     },
     info:{
       price:'Price',
