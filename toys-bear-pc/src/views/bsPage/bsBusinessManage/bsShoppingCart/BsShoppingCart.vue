@@ -256,11 +256,8 @@
             <el-form-item label="报价客户：" prop="customerId">
               <div class="formItemBox">
                 <el-select
-                  @change="changeCustomer"
                   v-model="clienFormData.customerId"
-                  :filter-method="filterMethod"
                   filterable
-                  clearable
                   placeholder="请 输入/选择 客户"
                 >
                   <el-option
@@ -860,25 +857,6 @@ export default {
       };
       this.$store.commit("myAddTab", fd);
     },
-    // 搜索客户
-    filterMethod(val) {
-      this.clientKeyword = val;
-      if (this.timer) {
-        // 如果存在延时器就清除
-        clearTimeout(this.timer);
-      }
-      this.timer = setTimeout(() => {
-        this.getClientList();
-      }, 1000);
-    },
-    // 选择客户
-    changeCustomer(val) {
-      for (let i = 0; i < this.clientList.length; i++) {
-        if (this.clientList[i].id == val) {
-          this.clienFormData.customerName = this.clientList[i].name;
-        }
-      }
-    },
     // 点击产品名字跳转
     goDetails(row) {
       const fd = {
@@ -948,7 +926,6 @@ export default {
     // 获取客户列表
     async getClientList() {
       const fd = {
-        keyword: this.clientKeyword,
         skipCount: this.clientCurrentPage,
         maxResultCount: this.clientPageSize
       };
