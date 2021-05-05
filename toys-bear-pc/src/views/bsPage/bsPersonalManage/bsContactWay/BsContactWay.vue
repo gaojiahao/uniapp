@@ -61,26 +61,31 @@
       >
         <el-table-column label="序号" type="index" align="center" width="70">
         </el-table-column>
-        <el-table-column label="站点" prop="name" width="300">
+        <el-table-column label="语种" prop="yuyan">
+          <template slot-scope="scope">
+            {{ scope.row.yuyan }}
+          </template>
+        </el-table-column>
+        <el-table-column label="公司名称" prop="name">
           <template slot-scope="scope">
             {{ scope.row.name }}
           </template>
         </el-table-column>
-        <el-table-column label="域名地址" prop="url" width="300">
+        <el-table-column label="地址" prop="dizhi" width="300">
           <template slot-scope="scope">
             {{ scope.row.url }}
           </template>
         </el-table-column>
-        <el-table-column label="新增时间" prop="createdOn" width="300">
-          <template slot-scope="scope">
-            <span> {{ scope.row.createdOn.replace(/T.*/, "") }}</span>
-          </template>
-        </el-table-column>
+        <el-table-column prop="title" label="联系人"></el-table-column>
+        <el-table-column prop="title" label="联系电话"></el-table-column>
+        <el-table-column prop="title" label="联系手机"></el-table-column>
+        <el-table-column prop="title" label="邮箱"></el-table-column>
+        <el-table-column prop="title" label="业务员"></el-table-column>
         <el-table-column
           label="操作"
           header-align="center"
           align="center"
-          min-width="200"
+          min-width="140"
         >
           <template slot-scope="scope">
             <el-button
@@ -113,6 +118,95 @@
         ></el-pagination>
       </center>
     </div>
+
+    <!-- 新增弹框 -->
+    <el-dialog title="新增" :visible.sync="addContactWay" width="40%">
+      <el-form
+        ref="addMyClientRef"
+        label-width="100px"
+        :rules="addContactWayRules"
+        :model="ContactWayRulesFormData"
+      >
+        <el-form-item label="语种选择:" prop="yuyan">
+          <el-select
+            v-model="ContactWayRulesFormData.yuyan"
+            size="medium"
+            clearable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in List"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="公司名称:" prop="name">
+          <el-input
+            v-model="ContactWayRulesFormData.studio"
+            placeholder="请输入公司名称"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="联系地址:" prop="dizhi">
+          <el-input
+            v-model="ContactWayRulesFormData.dizhi"
+            placeholder="请输入联系地址"
+          ></el-input>
+        </el-form-item>
+
+        <div class="dialogContact">
+          <div class="left">
+            <el-form-item label="联系人:">
+              <el-input
+                v-model="ContactWayRulesFormData.phoneNumber"
+                placeholder="请输入联系人"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="联系电话:">
+              <el-input
+                v-model="ContactWayRulesFormData.phoneNumber"
+                placeholder="请输入联系电话"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="传真号码:">
+              <el-input
+                v-model="ContactWayRulesFormData.phoneNumber"
+                placeholder="请输入传真号码:"
+              ></el-input>
+            </el-form-item>
+          </div>
+          <div class="right">
+            <el-form-item label="手机:" prop="tel">
+              <el-input
+                v-model="ContactWayRulesFormData.phoneNumber"
+                placeholder="请输入手机"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="邮箱:">
+              <el-input
+                v-model="ContactWayRulesFormData.phoneNumber"
+                placeholder="请输入邮箱"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="QQ:">
+              <el-input
+                v-model="ContactWayRulesFormData.phoneNumber"
+                placeholder="请输入QQ"
+              ></el-input>
+            </el-form-item>
+          </div>
+        </div>
+
+        <center>
+          <template>
+            <el-button type="primary">提 交</el-button>
+            <el-button plain @click="addContactWay = false">取 消</el-button>
+          </template>
+        </center>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -126,10 +220,20 @@ export default {
         keyword: null,
         user: null
       },
+      addContactWay: false,
+      ContactWayRulesFormData: {},
       tableData: [],
       pageSize: 10,
       currentPage: 1,
-      totalCount: 0
+      totalCount: 0,
+      addContactWayRules: {
+        yuyan: [{ required: true, message: "请选择语种", trigger: "blur" }],
+        name: [{ required: true, message: "请输入公司名称", trigger: "blur" }],
+        dizhi: [
+          { required: true, message: "请输入联系地址", trigger: "change" }
+        ],
+        tel: [{ required: true, message: "请输入手机号码", trigger: "blur" }]
+      }
     };
   },
   methods: {
@@ -144,7 +248,9 @@ export default {
       console.log(row);
     },
     // 打开新增弹框
-    openAddContact() {},
+    openAddContact() {
+      this.addContactWay = true;
+    },
     // 切換頁容量
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
@@ -164,7 +270,7 @@ export default {
 </script>
 <style scoped lang="less">
 @deep: ~">>>";
-.bsSiteSettings {
+.BsContactWay {
   min-height: 100%;
   background-color: #fff;
   padding: 0 20px;
@@ -206,6 +312,13 @@ export default {
           min-width: 58px;
         }
       }
+    }
+  }
+  .dialogContact {
+    display: flex;
+    .left,
+    .right {
+      flex: 1;
     }
   }
 }
