@@ -725,7 +725,7 @@
                 </div>
               </div>
               <el-button
-                @click="picSortTypeEvent"
+                @click="picGetProducts"
                 type="primary"
                 style="margin-left: 10px"
                 size="mini"
@@ -982,6 +982,9 @@ export default {
           fd.append("companynumber", companynumber);
           fd.append("file", file);
           const res = await this.$http.post("/api/File/SearchPicture", fd);
+          for (let i = 0; i < res.data.result.object.length; i++) {
+            console.log(res.data.result.object[i].productNumber);
+          }
           if (res.data.result.code === 200) {
             let endDate = Date.now();
             this.searchHttpTime = (endDate - startDate) / 1000;
@@ -1029,9 +1032,9 @@ export default {
           delete fd[key];
       }
       const res = await this.$http.post("/api/SearchPictureSortScreen", fd);
-      console.log(res);
       if (res.data.result.code === 200) {
         this.productList = res.data.result.item;
+        this.totalCount = this.productList.length;
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
