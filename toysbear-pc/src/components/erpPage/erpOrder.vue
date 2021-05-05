@@ -162,7 +162,7 @@
                 ></el-date-picker>
               </el-form-item>
             </div>
-            <div class="itemBox">
+            <div class="itemBox" v-if="userInfo.userInfo.isMain">
               <el-form-item label="业务员：">
                 <el-select
                   style="width: 100%"
@@ -418,7 +418,7 @@ export default {
     currentValue() {
       return JSON.stringify(this.currentSelectItem);
     },
-    ...mapState(["currentComparnyId"])
+    ...mapState(["currentComparnyId", "userInfo"])
   },
   methods: {
     // 返回事件

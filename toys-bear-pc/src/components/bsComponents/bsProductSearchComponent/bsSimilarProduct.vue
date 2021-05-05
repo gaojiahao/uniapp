@@ -92,7 +92,9 @@
             {{ item.type == "same" ? "同款产品" : "相似产品" }}
             <span class="productCount">({{ totalCount }})</span>
           </div>
-          <el-button>购物车({{ shoppingList.length }})</el-button>
+          <el-button @click="toMyShoppingCart"
+            >购物车({{ shoppingList.length }})</el-button
+          >
         </div>
       </div>
       <!-- 筛选 -->
@@ -256,6 +258,22 @@ export default {
     };
   },
   methods: {
+    // 去购物车
+    toMyShoppingCart() {
+      const fd = {
+        name: "/bsIndex/bsShoppingCart",
+        linkUrl: "/bsIndex/bsShoppingCart",
+        component: "bsShoppingCart",
+        refresh: true,
+        label: "购物车"
+      };
+      this.$router.push("/bsIndex/bsShoppingCart");
+      this.$store.commit("myAddTab", fd);
+    },
+    // 切换产品列表样式
+    handerIsGrid(type) {
+      this.isGrid = type;
+    },
     // 图搜
     async imageSearch() {
       const fd = new FormData();
@@ -370,12 +388,12 @@ export default {
         maxPrice: this.searchForm.maxPrice,
         startTime: this.searchForm.time ? this.searchForm.time[0] : null,
         endTime: this.searchForm.time ? this.searchForm.time[1] : null,
-        // precisionSearch: JSON.stringify({
-        //   fa_no: this.searchForm.fa_no ? 1 : 0,
-        //   number: this.searchForm.number ? 1 : 0,
-        //   name: this.searchForm.name ? 1 : 0,
-        //   packName: this.searchForm.packName ? 1 : 0
-        // }),
+        precisionSearch: JSON.stringify({
+          fa_no: 1,
+          number: 0,
+          name: 0,
+          packName: 0
+        }),
         sortOrder: this.sortOrder,
         sortType: this.sortType
       };
