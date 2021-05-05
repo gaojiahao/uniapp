@@ -130,20 +130,27 @@ export default {
     shoppingList(list) {
       if (list) {
         if (list.length) {
-          for (let i = 0; i < this.productList.length; i++) {
-            for (let j = 0; j < list.length; j++) {
-              if (this.productList[i].productNumber == list[j].productNumber) {
-                this.productList[i].isShopping = true;
-                break;
-              } else {
-                this.productList[i].isShopping = false;
+          for (let index = 0; index < this.productList.length; index++) {
+            for (let i = 0; i < this.productList[index].list.length; i++) {
+              for (let j = 0; j < list.length; j++) {
+                if (
+                  this.productList[index].list[i].productNumber ==
+                  list[j].productNumber
+                ) {
+                  this.productList[index].list.isShopping = true;
+                  break;
+                } else {
+                  this.productList[index].list.isShopping = false;
+                }
               }
             }
           }
         } else {
-          this.productList.forEach(val => {
-            val.isShopping = false;
-          });
+          for (let index = 0; index < this.productList.length; index++) {
+            this.productList[index].list.forEach(val => {
+              val.isShopping = false;
+            });
+          }
         }
       }
     }
@@ -176,7 +183,6 @@ export default {
             }
           }
         }
-        // console.log(item.items, "请求回来数组");
         item.items.forEach(val => {
           this.footprintArr.push(val);
         });
@@ -215,7 +221,6 @@ export default {
       });
 
       this.productList = newArr;
-      console.log(this.productList);
       // return newArr;
     },
     // 清空浏览记录
@@ -254,15 +259,14 @@ export default {
     },
     // 删除当天浏览记录
     async deleteAllBrowse(DeleteDate) {
-      console.log(DeleteDate);
       const fd = {
         deleteDate: DeleteDate,
         type: 1
       };
       const res = await this.$http.post("/api/DeleteProductRecord", fd);
       if (res.data.result.code === 200) {
-        this.getCollectList();
         this.footprintArr = [];
+        this.getCollectList();
         this.$common.handlerMsgState({
           msg: "删除成功",
           type: "success"
@@ -334,14 +338,19 @@ export default {
     // 收藏
     eventBus.$on("resetProductCollection", item => {
       // this.getCollectList();
-      for (let i = 0; i < this.productList.length; i++) {
-        if (this.productList[i].productNumber == item.productNumber) {
-          this.productList[i].isFavorite = item.isFavorite;
+      for (let index = 0; index < this.productList.length; index++) {
+        for (let i = 0; i < this.productList[index].list.length; i++) {
+          if (
+            this.productList[index].list[i].productNumber == item.productNumber
+          ) {
+            this.productList[index].list[i].isFavorite = item.isFavorite;
+          }
         }
       }
     });
     // 刷新页面
     eventBus.$on("refreshHtml", () => {
+      this.footprintArr = [];
       this.getCollectList();
     });
 
@@ -350,26 +359,38 @@ export default {
       if (Object.prototype.toString.call(item) === "[object Array]") {
         // 数组
         if (item.length) {
-          for (let i = 0; i < this.productList.length; i++) {
-            for (let j = 0; j < item.length; j++) {
-              if (this.productList[i].productNumber == item[j].productNumber) {
-                this.productList[i].isShopping = true;
-                break;
-              } else {
-                this.productList[i].isShopping = false;
+          for (let index = 0; index < this.productList.length; index++) {
+            for (let i = 0; i < this.productList[index].list.length; i++) {
+              for (let j = 0; j < item.length; j++) {
+                if (
+                  this.productList[index].list[i].productNumber ==
+                  item[j].productNumber
+                ) {
+                  this.productList[index].list[i].isShopping = true;
+                  break;
+                } else {
+                  this.productList[index].list[i].isShopping = false;
+                }
               }
             }
           }
         } else {
-          this.productList.forEach(val => {
-            val.isShopping = false;
-          });
+          for (let index = 0; index < this.productList.length; index++) {
+            this.productList[index].list.forEach(val => {
+              val.isShopping = false;
+            });
+          }
         }
       } else if (Object.prototype.toString.call(item) === "[object Object]") {
         // 对象;
-        for (let i = 0; i < this.productList.length; i++) {
-          if (item.productNumber == this.productList[i].productNumber) {
-            this.productList[i].isShopping = item.isShopping;
+        for (let index = 0; index < this.productList.length; index++) {
+          for (let i = 0; i < this.productList[index].list.length; i++) {
+            if (
+              item.productNumber ==
+              this.productList[index].list[i].productNumber
+            ) {
+              this.productList[index].list[i].isShopping = item.isShopping;
+            }
           }
         }
       }

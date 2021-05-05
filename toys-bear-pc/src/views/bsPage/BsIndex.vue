@@ -111,6 +111,9 @@ import bsPushIndex from "@/components/commonComponent/pushDetailsComponent/bsPus
 // 推送设置
 import bsPushSettings from "@/views/bsPage/bsPersonalManage/bsPushSettings/BsPushSettings.vue";
 
+// 联系方式
+import bsContactWay from "@/views/bsPage/bsPersonalManage/bsContactWay/BsContactWay.vue";
+
 // 我的消息
 import bsNews from "@/views/bsPage/bsMyNews/bsNews/BsNews.vue";
 // 我的好友
@@ -179,6 +182,7 @@ export default {
     bsQuotationSettings,
     bsPushIndex,
     bsPushSettings,
+    bsContactWay,
     bsNews,
     bsMyGoodFriend,
     bsToyCircle,
