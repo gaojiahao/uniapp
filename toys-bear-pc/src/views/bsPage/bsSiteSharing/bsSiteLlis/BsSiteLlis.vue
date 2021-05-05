@@ -674,7 +674,7 @@ export default {
     // 获取公司下的员工列表
     async getStaffList() {
       const res = await this.$http.post("/api/CompanyUserList", {
-        orgCompanyID: this.$store.state.userInfo.commparnyList[0].commparnyId
+        orgCompanyID: this.currentComparnyId
       });
       if (res.data.result.code === 200) {
         this.staffList = res.data.result.item.personnels;
@@ -1007,7 +1007,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(["userInfo", "currentComparnyId"])
   },
   created() {
     this.getDataList();
