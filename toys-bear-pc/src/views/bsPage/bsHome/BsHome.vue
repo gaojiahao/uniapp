@@ -19,7 +19,9 @@
               fit="contain"
             >
             </el-image>
-            <span class="text">{{ item.title }}</span>
+            <el-badge :value="5" class="homeBadge">
+              <span class="text">{{ item.title }}</span>
+            </el-badge>
           </li>
           <li class="block"></li>
           <li class="block"></li>
@@ -834,7 +836,11 @@ export default {
           display: flex;
           align-items: center;
           cursor: pointer;
-
+          @{deep} .homeBadge {
+            .el-badge__content {
+              right: 6px;
+            }
+          }
           .text {
             margin-left: 20px;
           }
