@@ -176,7 +176,6 @@ export default {
             }
           }
         }
-        // console.log(item.items, "请求回来数组");
         item.items.forEach(val => {
           this.footprintArr.push(val);
         });
@@ -215,7 +214,6 @@ export default {
       });
 
       this.productList = newArr;
-      console.log(this.productList);
       // return newArr;
     },
     // 清空浏览记录
@@ -254,15 +252,14 @@ export default {
     },
     // 删除当天浏览记录
     async deleteAllBrowse(DeleteDate) {
-      console.log(DeleteDate);
       const fd = {
         deleteDate: DeleteDate,
         type: 1
       };
       const res = await this.$http.post("/api/DeleteProductRecord", fd);
       if (res.data.result.code === 200) {
-        this.getCollectList();
         this.footprintArr = [];
+        this.getCollectList();
         this.$common.handlerMsgState({
           msg: "删除成功",
           type: "success"
@@ -342,6 +339,7 @@ export default {
     });
     // 刷新页面
     eventBus.$on("refreshHtml", () => {
+      this.footprintArr = [];
       this.getCollectList();
     });
 
