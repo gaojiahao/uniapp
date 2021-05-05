@@ -255,6 +255,12 @@
               </template>
             </el-table-column>
             <el-table-column
+              prop="orgPersonnelName"
+              label="业务员"
+              align="center"
+            >
+            </el-table-column>
+            <el-table-column
               prop="number"
               width="200"
               label="订单备注"

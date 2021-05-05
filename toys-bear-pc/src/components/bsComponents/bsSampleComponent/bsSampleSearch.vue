@@ -468,7 +468,6 @@ export default {
     // 获取客户列表
     async getClientList() {
       const fd = {
-        keyword: this.clientKeyword,
         skipCount: this.clientCurrentPage,
         maxResultCount: this.clientPageSize
       };

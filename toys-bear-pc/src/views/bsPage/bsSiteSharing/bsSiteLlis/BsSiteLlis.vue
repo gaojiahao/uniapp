@@ -248,7 +248,6 @@
           <div class="formItemBox">
             <el-select
               v-model="clienFormData.customerInfoId"
-              :filter-method="filterMethod"
               filterable
               clearable
               placeholder="请 输入/选择 客户"
@@ -984,7 +983,6 @@ export default {
     // 获取客户列表
     async getClientList() {
       const fd = {
-        keyword: this.clientKeyword,
         skipCount: this.clientCurrentPage,
         maxResultCount: this.clientPageSize
       };

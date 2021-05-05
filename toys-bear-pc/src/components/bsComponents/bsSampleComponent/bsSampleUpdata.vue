@@ -308,11 +308,8 @@
             <el-form-item label="报价客户：" prop="customerId">
               <div class="formItemBox">
                 <el-select
-                  @change="changeCustomer"
                   v-model="clienFormData.customerId"
-                  :filter-method="filterMethod"
                   filterable
-                  clearable
                   placeholder="请 输入/选择 客户"
                 >
                   <el-option
