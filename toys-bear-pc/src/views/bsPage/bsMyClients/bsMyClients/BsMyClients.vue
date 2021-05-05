@@ -112,7 +112,7 @@
     <el-dialog
       :title="dialogTitle"
       :visible.sync="dialogVisible"
-      width="30%"
+      width="800px"
       :before-close="closeDialog"
     >
       <el-form

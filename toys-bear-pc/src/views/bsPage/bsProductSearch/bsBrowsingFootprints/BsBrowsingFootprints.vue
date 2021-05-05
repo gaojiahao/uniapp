@@ -55,14 +55,14 @@
           ></div>
         </div>
       </div>
-      <div class="productListBox">
+      <div class="productListBox" v-infinite-scroll="scrollBrowsing">
         <!-- 产品列表 -->
         <div v-for="item in productList" :key="item.index">
           <div class="dateClassify">
             <div class="left">
               <i class="el-icon-date"></i>
               <h4>{{ item.browseDate }}</h4>
-              <p>{{ item.list.length }}件产品</p>
+              <p>{{ item.dayCount }}件产品</p>
             </div>
             <p class="center"></p>
             <el-button
@@ -78,7 +78,7 @@
         </div>
 
         <!-- 分页 -->
-        <center class="myPagination">
+        <!-- <center class="myPagination">
           <el-pagination
             background
             @size-change="handleSizeChange"
@@ -90,7 +90,7 @@
             :total="totalCount"
           >
           </el-pagination>
-        </center>
+        </center> -->
       </div>
     </div>
     <div class="footer" v-if="totalCount >= 7">
@@ -115,9 +115,10 @@ export default {
       keyword: null,
       dateTime: null,
       totalCount: 0,
-      pageSize: 12,
+      pageSize: 48,
       currentPage: 1,
-      productList: []
+      productList: [],
+      footprintArr: []
     };
   },
   computed: {
@@ -175,7 +176,11 @@ export default {
             }
           }
         }
-        this.productList = this.dataResort(item.items);
+        // console.log(item.items, "请求回来数组");
+        item.items.forEach(val => {
+          this.footprintArr.push(val);
+        });
+        this.dataResort(this.footprintArr);
         this.totalCount = res.data.result.item.totalCount;
       } else {
         this.totalCount = 0;
@@ -200,6 +205,7 @@ export default {
           let list = [];
           list.push(item);
           newArr.push({
+            dayCount: item.dayCount,
             browseDate: item.browseDate,
             list: list
           });
@@ -207,7 +213,10 @@ export default {
           newArr[index].list.push(item);
         }
       });
-      return newArr;
+
+      this.productList = newArr;
+      console.log(this.productList);
+      // return newArr;
     },
     // 清空浏览记录
     async emptyBrowse() {
@@ -223,6 +232,7 @@ export default {
             fd
           });
           if (res.data.result.code === 200) {
+            this.footprintArr = [];
             this.getCollectList();
             this.$common.handlerMsgState({
               msg: "清空成功",
@@ -252,6 +262,7 @@ export default {
       const res = await this.$http.post("/api/DeleteProductRecord", fd);
       if (res.data.result.code === 200) {
         this.getCollectList();
+        this.footprintArr = [];
         this.$common.handlerMsgState({
           msg: "删除成功",
           type: "success"
@@ -274,6 +285,23 @@ export default {
         label: "购物车"
       };
       this.$store.commit("myAddTab", fd);
+    },
+    // 下拉加载
+    scrollBrowsing() {
+      if (this.productList.length < this.currentPage) {
+        return false;
+      } else {
+        this.currentPage++;
+        if (this.currentPage * this.pageSize > this.totalCount) {
+          if (
+            this.currentPage >=
+            Math.ceil(this.totalCount / this.pageSize) + 1
+          ) {
+            return false;
+          }
+        }
+      }
+      this.getCollectList();
     },
     // 切換頁容量
     handleSizeChange(pageSize) {
@@ -302,40 +330,54 @@ export default {
   },
   created() {},
   mounted() {
+    this.getCollectList();
     // 收藏
-    eventBus.$on("resetProductCollection", () => {
-      this.getCollectList();
+    eventBus.$on("resetProductCollection", item => {
+      // this.getCollectList();
+      for (let i = 0; i < this.productList.length; i++) {
+        if (this.productList[i].productNumber == item.productNumber) {
+          this.productList[i].isFavorite = item.isFavorite;
+        }
+      }
     });
     // 刷新页面
     eventBus.$on("refreshHtml", () => {
       this.getCollectList();
     });
 
-    // 删除购物车
-    eventBus.$on("resetMyCart", list => {
-      if (list.length) {
-        for (let i = 0; i < this.productList.length; i++) {
-          for (let j = 0; j < list.length; j++) {
-            if (this.productList[i].productNumber == list[j].productNumber) {
-              this.productList[i].isShopping = true;
-              break;
-            } else {
-              this.productList[i].isShopping = false;
+    // 加购删除购物车
+    eventBus.$on("resetMyCart", item => {
+      if (Object.prototype.toString.call(item) === "[object Array]") {
+        // 数组
+        if (item.length) {
+          for (let i = 0; i < this.productList.length; i++) {
+            for (let j = 0; j < item.length; j++) {
+              if (this.productList[i].productNumber == item[j].productNumber) {
+                this.productList[i].isShopping = true;
+                break;
+              } else {
+                this.productList[i].isShopping = false;
+              }
             }
           }
+        } else {
+          this.productList.forEach(val => {
+            val.isShopping = false;
+          });
         }
-      } else {
-        this.productList.forEach(val => {
-          val.isShopping = false;
-        });
+      } else if (Object.prototype.toString.call(item) === "[object Object]") {
+        // 对象;
+        for (let i = 0; i < this.productList.length; i++) {
+          if (item.productNumber == this.productList[i].productNumber) {
+            this.productList[i].isShopping = item.isShopping;
+          }
+        }
       }
     });
-    this.getCollectList();
   },
+
   beforeDestroy() {
     eventBus.$off("refreshHtml");
-    eventBus.$off("resetProductCollection");
-    eventBus.$off("resetMyCart");
   }
 };
 </script>
@@ -440,6 +482,7 @@ export default {
     background-color: #fff;
     width: 100%;
     box-sizing: border-box;
+    padding-bottom: 90px;
     .dateClassify {
       margin-top: 25px;
       display: flex;

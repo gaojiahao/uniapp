@@ -43,12 +43,21 @@ function getToken() {
   });
 }
 // 获取系统参数
-function getClientTypeList(type) {
+function getClientTypeList(type, token) {
   return new Promise((result, reject) => {
     axios
-      .post("/api/ServiceConfigurationList", {
-        basisParameters: type
-      })
+      .post(
+        "/api/ServiceConfigurationList",
+        {
+          basisParameters: type
+        },
+        {
+          headers: {
+            "content-type": "application/json",
+            Utoken: token
+          }
+        }
+      )
       .then(res => {
         if (res.data.result.code === 200) {
           result(res.data.result.item);
@@ -90,9 +99,7 @@ function getUserRoleMenu(token) {
     axios
       .post(
         "/api/GetUserRoleMenu",
-        {
-          Uoken: token
-        },
+        {},
         {
           headers: {
             "content-type": "application/json",
@@ -108,32 +115,6 @@ function getUserRoleMenu(token) {
       });
   });
 }
-// 获取系统参数
-// function getClientTypeList(type) {
-//   return new Promise((result, reject) => {
-//     axios
-//       .post(
-//         "/api/ServiceConfigurationList",
-//         {
-//           basisParameters: type
-//         },
-//         {
-//           headers: {
-//             "content-type": "application/json",
-//             Utoken: store.state.userInfo.accessToken
-//           }
-//         }
-//       )
-//       .then(res => {
-//         if (res.data.result.code === 200) {
-//           result(res.data.result.item);
-//         }
-//       })
-//       .catch(err => {
-//         reject(err);
-//       });
-//   });
-// }
 const routes = [...staticRouters];
 
 const router = new VueRouter({
@@ -148,6 +129,7 @@ router.beforeEach(async (to, from, next) => {
   // 如果没有登录token
   if (!store.state.userInfo) {
     const token = Vue.prototype.$cookies.get("userInfo");
+    sessionStorage.clear();
     if (token) {
       const res = await resetPersonInfo(token);
       console.log("有cookit_token", res, token);
@@ -181,12 +163,24 @@ router.beforeEach(async (to, from, next) => {
       store.commit("closeTabAll");
       // 登录成功获取系统参数
       const Json = {};
-      Json.MessageRestriction = await getClientTypeList("MessageRestriction");
-      Json.UserRestrictions = await getClientTypeList("UserRestrictions");
-      Json.NoticeRestrictions = await getClientTypeList("NoticeRestrictions");
-      Json.CompanyRestrictions = await getClientTypeList("CompanyRestrictions");
-      Json.PlatForm = await getClientTypeList("PlatForm");
-      Json.packageManage = await getClientTypeList("packageManage");
+      Json.MessageRestriction = await getClientTypeList(
+        "MessageRestriction",
+        token
+      );
+      Json.UserRestrictions = await getClientTypeList(
+        "UserRestrictions",
+        token
+      );
+      Json.NoticeRestrictions = await getClientTypeList(
+        "NoticeRestrictions",
+        token
+      );
+      Json.CompanyRestrictions = await getClientTypeList(
+        "CompanyRestrictions",
+        token
+      );
+      Json.PlatForm = await getClientTypeList("PlatForm", token);
+      Json.packageManage = await getClientTypeList("packageManage", token);
       console.log(Json);
       store.commit("globalJson/setGlobalJson", Json);
       // 登录成功获取菜单
@@ -198,12 +192,13 @@ router.beforeEach(async (to, from, next) => {
       next();
     } else {
       console.log("没有cookit_token", store.state);
+      sessionStorage.clear();
       const res = await getToken();
       console.log(res, "没有cookit_Token获取到的临时token");
       if (res.data.result.code === 200) {
         const obj = { accessToken: res.data.result.item };
         store.commit("setToken", obj);
-        store.commit("initShoppingCart", []);
+        // store.commit("initShoppingCart", []);
       }
       if (to.path == "/login") {
         next();
@@ -213,18 +208,11 @@ router.beforeEach(async (to, from, next) => {
     }
   } else {
     if (store.state.isLogin) {
-      store.commit(
-        "setComparnyId",
-        store.state.userInfo.commparnyList[0].commparnyId
-      );
       const localKey = store.state.userInfo.uid;
-      console.log(localKey);
       let localShoppingCart = localStorage.getItem(localKey);
       if (localShoppingCart && localKey != undefined) {
         localShoppingCart = JSON.parse(localShoppingCart);
         store.commit("initShoppingCart", localShoppingCart);
-      } else {
-        store.commit("initShoppingCart", []);
       }
       next();
     } else {

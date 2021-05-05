@@ -148,7 +148,7 @@
       :title="dialogTitle"
       :visible.sync="showDialog"
       v-if="showDialog"
-      width="50%"
+      width="800px"
     >
       <bsAddOfferFormula
         :editRow="editRow"

@@ -218,6 +218,7 @@ export default {
         value: {}
       };
       this.$store.commit("myAddTab", fd);
+      this.$router.push("/bsIndex/bsNews");
     },
     // 去厂商
     toFactory(item) {
@@ -289,8 +290,11 @@ export default {
         productNumber: item.productNumber
       });
       if (res.data.result.code === 200) {
-        eventBus.$emit("resetProductCollection");
+        eventBus.$emit("resetProductCollection", item);
+        // 收藏菜单事件
+        eventBus.$emit("resetMyCollectionMenu");
       } else {
+        item.isFavorite = !item.isFavorite;
         this.$common.handlerMsgState({
           msg: "收藏失败",
           type: "danger"
@@ -318,6 +322,11 @@ export default {
   created() {},
   mounted() {
     eventBus.$emit("showCart", true);
+    eventBus.$on("resetProductDetailsCollection", item => {
+      if (item.productNumber == this.productDetail.productNumber) {
+        this.productDetail.isFavorite = item.isFavorite;
+      }
+    });
     this.getProductDetails();
   },
   computed: {
@@ -325,10 +334,7 @@ export default {
       shoppingList: "myShoppingList"
     })
   },
-  beforeDestroy() {
-    eventBus.$off("resetProductCollection");
-    eventBus.$off("resetMyCart");
-  }
+  beforeDestroy() {}
 };
 </script>
 <style scoped lang="less">

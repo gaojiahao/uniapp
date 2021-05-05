@@ -18,7 +18,7 @@
         ></el-table-column>
         <el-table-column label="序号" type="index" align="center" width="60">
         </el-table-column>
-        <el-table-column :autoFit="true" label="产品" width="300">
+        <el-table-column label="产品" width="300">
           <template slot-scope="scope">
             <div class="imgBox">
               <el-image
@@ -242,7 +242,7 @@
       title="生成报价"
       :visible.sync="subDialogVisible"
       v-if="subDialogVisible"
-      width="40%"
+      width="800px"
     >
       <div class="contactInfoBox">
         <div class="userInfoBox">
@@ -506,7 +506,7 @@
         :visible.sync="addMyClientDialog"
         destroy-on-close
         append-to-body
-        width="50%"
+        width="1200px"
       >
         <el-form
           ref="addMyClientRef"
@@ -889,6 +889,7 @@ export default {
         label: row.fa_no || "产品详情",
         value: row
       };
+      this.$router.push("/bsIndex/bsProductSearchIndex");
       this.$store.commit("myAddTab", fd);
     },
     //厂商跳转
@@ -1232,6 +1233,9 @@ export default {
     ...mapState(["userInfo"])
   },
   watch: {
+    shoppingList(val) {
+      this.tableData = val;
+    },
     selectTableData: {
       deep: true,
       handler(list) {
@@ -1305,6 +1309,7 @@ export default {
     }
   }
   .tableBox {
+    padding-bottom: 60px;
     @{deep} .el-table {
       .el-table__header-wrapper .el-checkbox {
         display: none;
@@ -1398,8 +1403,16 @@ export default {
       }
     }
     .totalBox {
-      background-color: #fff;
+      position: absolute;
+      width: 100%;
+      margin-right: 30px;
+      z-index: 1;
+      left: 0;
+      bottom: 0;
+      box-sizing: border-box;
+      padding-right: 20px;
       .total_wrap {
+        background-color: #fff;
         display: flex;
         height: 80px;
         padding: 0 20px;
@@ -1471,6 +1484,12 @@ export default {
   justify-content: space-between;
   .el-select {
     flex: 1;
+  }
+}
+@media screen and (max-width: 1919px) {
+  .totalBox {
+    padding-right: 10px !important;
+    bottom: 10px !important;
   }
 }
 </style>

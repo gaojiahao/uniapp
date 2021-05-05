@@ -68,9 +68,9 @@
           ref="collecTable"
           :header-cell-style="{ backgroundColor: '#f9fafc' }"
         >
-          <el-table-column label="序号" type="index" align="center" width="70">
+          <el-table-column label="序号" type="index" align="center" width="50">
           </el-table-column>
-          <el-table-column label="报价单号" min-width="150">
+          <el-table-column label="报价单号" min-width="100">
             <template slot-scope="scope">
               <span
                 @click="goDetails(scope.row)"
@@ -83,34 +83,28 @@
           <el-table-column
             prop="customerName"
             label="客户名称"
-            width="100"
             align="center"
           ></el-table-column>
           <el-table-column
             prop="createdOn"
-            width="150"
             label="报价时间"
+            min-width="100"
             align="center"
           >
             <template slot-scope="scope">
               {{ scope.row.createdOn.replace(/T/, " ") }}
             </template>
           </el-table-column>
-          <el-table-column width="200" align="center" label="操作人员">
+          <el-table-column align="center" label="操作人员">
             <template slot-scope="scope">
               <span>
                 {{ scope.row.linkman }}
               </span>
             </template>
           </el-table-column>
-          <el-table-column
-            label="报价总数"
-            prop="total"
-            width="100"
-            align="center"
-          >
+          <el-table-column label="报价总数" prop="total" align="center">
           </el-table-column>
-          <el-table-column label="总金额" align="center" width="100">
+          <el-table-column label="总金额" align="center">
             <template slot-scope="scope">
               <span style="color: #eb1515">
                 {{ scope.row.cu_de }}
@@ -127,24 +121,14 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column label="汇率" align="center" width="100">
+          <el-table-column label="汇率" align="center">
             <template slot-scope="scope">
               <span>{{ scope.row.exchange }}</span>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="profit"
-            label="利润"
-            align="center"
-            width="100"
-          >
+          <el-table-column prop="profit" label="利润" align="center">
           </el-table-column>
-          <el-table-column
-            prop="status"
-            label="状态"
-            align="center"
-            width="100"
-          >
+          <el-table-column prop="status" label="状态" align="center">
             <template slot-scope="scope">
               {{
                 scope.row.status === 0
@@ -367,6 +351,7 @@ export default {
     },
     //编辑报价跳转
     async handleEdit(index, row) {
+      console.log(row, "row");
       const fd = {
         name: "编辑" + row.offerNumber,
         linkUrl: "/bsIndex/bsSampleQuotation",
@@ -440,6 +425,9 @@ export default {
   @{deep} .tableBox {
     .el-table {
       font-size: 13px;
+      .cell {
+        padding: 0 2px;
+      }
       .imgBox {
         text-align: left;
         display: flex;

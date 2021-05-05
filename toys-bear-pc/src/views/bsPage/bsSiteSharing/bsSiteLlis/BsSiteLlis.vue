@@ -103,10 +103,16 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="shareUrl" min-width="200" label="网址">
+        <el-table-column
+          prop="shareUrl"
+          min-width="200"
+          label="网址 (可单击打开)"
+        >
           <template slot-scope="scope">
             <div :id="scope.row.id">
-              {{ scope.row.shareUrl }}
+              <el-link type="info" :href="scope.row.shareUrl" target="_blank">
+                {{ scope.row.shareUrl }}
+              </el-link>
             </div>
           </template>
         </el-table-column>
@@ -135,15 +141,20 @@
         ></el-table-column>
         <el-table-column label="登录码" align="center">
           <template slot-scope="scope">
-            <div>
-              <span>
+            <div class="loginCodeBox">
+              <span :id="scope.row.verifyCode">
                 {{ scope.row.verifyCode }}
               </span>
-              <i
-                @click="resetLoginCode(scope.row)"
-                class="el-icon-refresh"
-                style="font-size: 14px; cursor: pointer"
-              ></i>
+              <div class="copy">
+                <i
+                  class="el-icon-document-copy"
+                  @click="copyUrl(scope.row.verifyCode)"
+                ></i>
+                <i
+                  @click="resetLoginCode(scope.row)"
+                  class="el-icon-refresh"
+                ></i>
+              </div>
             </div>
           </template>
         </el-table-column>
@@ -205,7 +216,7 @@
       :visible.sync="addClienDialog"
       :close-on-click-modal="false"
       top="50px"
-      width="40%"
+      width="800px"
     >
       <el-form
         ref="addClientFormRef"
@@ -305,6 +316,7 @@
             <div style="display: flex; justify-content:space-between;">
               <el-input
                 maxlength="30"
+                onkeyup="value=value.replace(/[^\d.]/g,'')"
                 style="flex:1;"
                 v-model="clienFormData.profit"
               >
@@ -338,6 +350,7 @@
           <el-form-item label="总费用：" prop="totalCost">
             <el-input
               v-model="clienFormData.totalCost"
+              onkeyup="value=value.replace(/[^\d.]/g,'')"
               clearable
               placeholder="请输入总费用"
             >
@@ -348,6 +361,7 @@
           <el-form-item label="汇率：" prop="exchange">
             <el-input
               v-model="clienFormData.exchange"
+              onkeyup="value=value.replace(/[^\d.]/g,'')"
               clearable
               placeholder="请输入汇率"
             ></el-input>
@@ -412,6 +426,7 @@
             <el-form-item label="价格小于：">
               <el-input
                 v-model="clienFormData.miniPrice"
+                onkeyup="value=value.replace(/[^\d.]/g,'')"
                 clearable
                 placeholder="请输入"
               >
@@ -478,7 +493,7 @@
       :close-on-click-modal="false"
       :visible.sync="addMyClientDialog"
       destroy-on-close
-      width="50%"
+      width="1200px"
     >
       <el-form
         ref="addMyClientRef"
@@ -518,7 +533,7 @@
       </el-form>
     </el-dialog>
     <!-- 生成二维码 -->
-    <el-dialog :visible.sync="QRCodeDialog" v-if="QRCodeDialog" width="20%">
+    <el-dialog :visible.sync="QRCodeDialog" v-if="QRCodeDialog" width="385px">
       <vue-qr
         style="width: 100%"
         :text="QRCodeUrl"
@@ -861,6 +876,7 @@ export default {
       this.QRCodeUrl = url;
       this.QRCodeDialog = true;
     },
+    // 复制登录码
     // 复制链接
     copyUrl(id) {
       var link = document.getElementById(id);
@@ -937,6 +953,17 @@ export default {
           if (this.dialogTitle === "编辑站点")
             url = "/api/UpdateWebsiteShareInfo";
           console.log(this.clienFormData);
+          for (const key in this.clienFormData) {
+            if (
+              this.clienFormData[key] == "undefined" ||
+              this.clienFormData[key] == null ||
+              this.clienFormData[key] == "" ||
+              this.clienFormData[key] == undefined ||
+              this.clienFormData[key] == "null"
+            ) {
+              delete this.clienFormData[key];
+            }
+          }
           const res = await this.$http.post(url, this.clienFormData);
           if (res.data.result.code === 200) {
             this.addClienDialog = false;
@@ -1093,6 +1120,29 @@ export default {
           }
           .name {
             margin-top: 8px;
+          }
+        }
+      }
+      .loginCodeBox {
+        position: relative;
+        .copy {
+          position: absolute;
+          cursor: pointer;
+          right: 0;
+          top: 0;
+          opacity: 0;
+          i {
+            &:first-of-type {
+              margin: 0 5px;
+            }
+            &:hover {
+              color: #5cb6ff;
+            }
+          }
+        }
+        &:hover {
+          .copy {
+            opacity: 1;
           }
         }
       }
