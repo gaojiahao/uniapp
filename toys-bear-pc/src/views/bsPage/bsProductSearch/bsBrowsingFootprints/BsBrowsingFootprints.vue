@@ -183,9 +183,12 @@ export default {
             }
           }
         }
-        item.items.forEach(val => {
-          this.footprintArr.push(val);
-        });
+        // item.items.forEach(val => {
+        //   this.footprintArr.push(val);
+        // });
+        for (let i = 0; i < item.items.length; i++) {
+          this.footprintArr.push(item.items[i]);
+        }
         this.dataResort(this.footprintArr);
         this.totalCount = res.data.result.item.totalCount;
       } else {
