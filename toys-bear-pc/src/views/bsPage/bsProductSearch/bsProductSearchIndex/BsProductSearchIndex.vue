@@ -725,7 +725,7 @@
                 </div>
               </div>
               <el-button
-                @click="picSortTypeEvent"
+                @click="picGetProducts"
                 type="primary"
                 style="margin-left: 10px"
                 size="mini"
@@ -1002,6 +1002,20 @@ export default {
         }
       });
     },
+    // 获取公司下的员工列表
+    async getStaffList() {
+      const res = await this.$http.post("/api/CompanyUserList", {
+        orgCompanyID: this.currentComparnyId
+      });
+      if (res.data.result.code === 200) {
+        this.staffList = res.data.result.item.personnels;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
     // 取消裁剪
     cropperCancel() {
       this.$refs.cropper.clearCrop();
@@ -1029,9 +1043,9 @@ export default {
           delete fd[key];
       }
       const res = await this.$http.post("/api/SearchPictureSortScreen", fd);
-      console.log(res);
       if (res.data.result.code === 200) {
         this.productList = res.data.result.item;
+        this.totalCount = this.productList.length;
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -1375,7 +1389,6 @@ export default {
       this.isTwoDownCate = !this.isTwoDownCate;
     },
     clearRootEvent() {
-      // eventBus.$off("resetProductCollection");
       eventBus.$off("searchProducts");
       eventBus.$off("openUpload");
     },
@@ -1482,7 +1495,8 @@ export default {
       "typeId",
       "imageSearchValue",
       "offerProductList",
-      "searchImgPreview"
+      "searchImgPreview",
+      "currentComparnyId"
     ])
   },
   watch: {
@@ -1503,31 +1517,29 @@ export default {
         }
       }
     },
-
     shoppingList: {
       deep: true,
-      handler(list) {
-        if (list) {
-          if (list.length) {
-            for (let i = 0; i < this.productList.length; i++) {
-              for (let j = 0; j < list.length; j++) {
-                if (
-                  this.productList[i].productNumber == list[j].productNumber
-                ) {
-                  this.productList[i].isShopping = true;
-                  break;
-                } else {
-                  this.productList[i].isShopping = false;
-                }
-              }
-            }
-          } else {
-            this.productList.forEach(val => {
-              val.isShopping = false;
-            });
-          }
-          eventBus.$emit("upDateProductView");
-        }
+      handler() {
+        // if (list) {
+        //   if (list.length) {
+        //     for (let i = 0; i < this.productList.length; i++) {
+        //       for (let j = 0; j < list.length; j++) {
+        //         if (
+        //           this.productList[i].productNumber == list[j].productNumber
+        //         ) {
+        //           this.productList[i].isShopping = true;
+        //           break;
+        //         } else {
+        //           this.productList[i].isShopping = false;
+        //         }
+        //       }
+        //     }
+        //   } else {
+        //     this.productList.forEach(val => {
+        //       val.isShopping = false;
+        //     });
+        //   }
+        eventBus.$emit("upDateProductView");
       }
     },
     "searchForm.time"(newVal) {

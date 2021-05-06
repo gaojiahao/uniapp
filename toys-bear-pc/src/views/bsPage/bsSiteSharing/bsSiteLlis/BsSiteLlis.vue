@@ -248,7 +248,6 @@
           <div class="formItemBox">
             <el-select
               v-model="clienFormData.customerInfoId"
-              :filter-method="filterMethod"
               filterable
               clearable
               placeholder="请 输入/选择 客户"
@@ -674,7 +673,7 @@ export default {
     // 获取公司下的员工列表
     async getStaffList() {
       const res = await this.$http.post("/api/CompanyUserList", {
-        orgCompanyID: this.$store.state.userInfo.commparnyList[0].commparnyId
+        orgCompanyID: this.currentComparnyId
       });
       if (res.data.result.code === 200) {
         this.staffList = res.data.result.item.personnels;
@@ -984,7 +983,6 @@ export default {
     // 获取客户列表
     async getClientList() {
       const fd = {
-        keyword: this.clientKeyword,
         skipCount: this.clientCurrentPage,
         maxResultCount: this.clientPageSize
       };
@@ -1007,7 +1005,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(["userInfo", "currentComparnyId"])
   },
   created() {
     this.getDataList();

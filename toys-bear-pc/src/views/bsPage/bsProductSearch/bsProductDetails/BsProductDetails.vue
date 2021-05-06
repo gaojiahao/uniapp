@@ -133,10 +133,16 @@
           </p>
           <p
             class="item myHover"
-            v-if="productDetail.exhibitionTelephoneNumber"
+            v-if="
+              productDetail.supplierTelephoneNumber ||
+                productDetail.exhibitionTelephoneNumber
+            "
           >
             <i class="phoneIcon"></i>
-            <span>{{ productDetail.exhibitionTelephoneNumber }}</span>
+            <span>{{
+              productDetail.supplierTelephoneNumber ||
+                productDetail.exhibitionTelephoneNumber
+            }}</span>
           </p>
           <p
             class="item myHover"

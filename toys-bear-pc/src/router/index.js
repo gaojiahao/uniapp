@@ -142,15 +142,6 @@ router.beforeEach(async (to, from, next) => {
         "setComparnyId",
         res.data.result.commparnyList[0].commparnyId
       );
-      const localKey = res.data.result.uid;
-      console.log(localKey);
-      let localShoppingCart = localStorage.getItem(localKey);
-      if (localShoppingCart && localKey != "undefined") {
-        localShoppingCart = JSON.parse(localShoppingCart);
-        store.commit("initShoppingCart", localShoppingCart);
-      } else {
-        store.commit("initShoppingCart", []);
-      }
       // 清空菜单状态
       const fd = {
         component: "bsHome",
@@ -183,6 +174,15 @@ router.beforeEach(async (to, from, next) => {
       Json.packageManage = await getClientTypeList("packageManage", token);
       console.log(Json);
       store.commit("globalJson/setGlobalJson", Json);
+      const localKey = res.data.result.uid;
+      console.log(localKey);
+      let localShoppingCart = localStorage.getItem(localKey);
+      if (localShoppingCart && localKey != "undefined") {
+        localShoppingCart = JSON.parse(localShoppingCart);
+        store.commit("initShoppingCart", localShoppingCart);
+      } else {
+        store.commit("initShoppingCart", []);
+      }
       // 登录成功获取菜单
       const menus = await getUserRoleMenu(token);
       if (menus.data.result.code === 200) {
@@ -198,7 +198,7 @@ router.beforeEach(async (to, from, next) => {
       if (res.data.result.code === 200) {
         const obj = { accessToken: res.data.result.item };
         store.commit("setToken", obj);
-        // store.commit("initShoppingCart", []);
+        store.commit("initShoppingCart", []);
       }
       if (to.path == "/login") {
         next();
