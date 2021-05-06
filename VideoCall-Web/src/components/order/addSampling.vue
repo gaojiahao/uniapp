@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:58:11
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\addSampling.vue
- * @LastEditTime: 2021-04-30 11:15:09
+ * @LastEditTime: 2021-05-06 09:18:11
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -22,7 +22,7 @@
                     <Input v-model.trim="formValidate.number" :placeholder="$t('addSampling.orderText')"></Input>
                 </FormItem>
                 <FormItem prop="code">
-                    <Input v-model.trim="formValidate.code" :placeholder="$t('addSampling.codeText')"></Input>
+                    <Input v-model.trim="formValidate.code" :placeholder="$t('addSampling.codeText')" @on-enter="save"></Input>
                 </FormItem>
                 <FormItem>
                     <div style="width:100%;"> 

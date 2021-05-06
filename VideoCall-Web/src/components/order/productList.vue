@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:15:36
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\productList.vue
- * @LastEditTime: 2021-05-05 16:53:34
+ * @LastEditTime: 2021-05-06 09:34:22
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -182,7 +182,7 @@ export default {
 
                                         color:'#FF3E3E',
                                     }, 
-                                },'￥'),
+                                },params.row.cu_de),
                                 h('span', {
                                     style: {
                                         color:'#FF3E3E',
@@ -379,7 +379,7 @@ export default {
                                     marginTop: '4px',
                                     color:'#FF3E3E',
                                 },
-                            },'￥'+(params.row.factoryPrice*params.row.tempAmount*params.row.outerBoxLoadCapa||0).toFixed(2)),
+                            },params.row.cu_de+(params.row.factoryPrice*params.row.tempAmount*params.row.outerBoxLoadCapa||0).toFixed(2)),
                         ])
                     },
                     width: 140    

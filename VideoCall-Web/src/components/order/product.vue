@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:37:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\product.vue
- * @LastEditTime: 2021-05-05 15:44:59
+ * @LastEditTime: 2021-05-06 09:25:00
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -30,6 +30,42 @@
         </div>
         <!-- 择样单号 -->
         <div class="select_order" v-if="flag=='order'">
+            <!-- <div style="height:330px;width:100%">
+                <Row>
+                    <Col span="8">
+                        {{$t("product.order.productNameList")}}
+                    </Col>
+                    <Col span="8">
+                        {{$t("product.order.prodcutNumberList")}}
+                    </Col>
+                    <Col span="8">
+                        {{$t("product.order.productPriceList")}}
+                    </Col>
+                </Row>
+                <Scroll :on-reach-bottom="handleReachBottom" height="300">
+                    <Row v-for="(item,index) in orderList" :key="index">
+                        <Col span="8">
+                            <div><span style="display: inline-block;width: 100%;overflow: hidden;textOverflow: ellipsis;whiteSpace: nowrap;
+                                color:#2684D1;marginTop: 4px;cursor: pointer">{{lang == 'zh' ? item.productName:item.productEnName}}</span></div>
+                        </Col>
+                        <Col span="8">
+                            <div><span style="display: inline-block;width: 100%;overflow: hidden;textOverflow: ellipsis;whiteSpace: nowrap;
+                                color:#2684D1;marginTop: 4px;cursor: pointer">{{item.productEnName}}</span></div>
+                        </Col>
+                        <Col span="8">
+                            <div><span style="display: inline-block;width: 100%;overflow: hidden;textOverflow: ellipsis;whiteSpace: nowrap;
+                                color:#2684D1;marginTop: 4px;cursor: pointer">{{litem.productEnName}}</span></div>
+                        </Col>
+                    </Row>
+                </Scroll>
+            </div> -->
+            <!-- <Scroll :on-reach-bottom="handleReachBottom" height="330">
+                <List :border="false" :split="false" v-for="(item,index) in messageList" :key="index">
+                    <ListItem v-if="item.type=='wait'">
+                        
+                    </ListItem>
+                </List>
+            </Scroll> -->
             <Table :columns="orderColumns" :data="orderList" height="330" class="select_order_list"></Table>
             <div class="select_order_info">
                 <Row v-if="lang=='zh'">
@@ -235,7 +271,7 @@ export default {
                             domProps: {
                                 title: params.row.quoteThePrice?params.row.quoteThePrice:0
                             }
-                        }, '￥'+(params.row.quoteThePrice?params.row.quoteThePrice:0))
+                        }, params.row.cu_de+(params.row.quoteThePrice?params.row.quoteThePrice:0))
                         ])
                     },
                 }
@@ -435,6 +471,20 @@ export default {
                     }
                 });
             });     
+        },
+        handleReachBottom() {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    const last = this.messageList[this.messageList.length - 1];
+                    for (let i = 1; i < 11; i++) {
+                        this.messageList.push({
+                            type: 'expect',
+                            text: '今日待办' + i,
+                        });
+                    }
+                    resolve();
+                }, 1000);
+            });
         }
     },
     created(){

@@ -4,7 +4,7 @@
  * @Author: gaojiahao
  * @Date: 2020-11-03 16:35:57
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-05-05 16:28:12
+ * @LastEditTime: 2021-05-06 09:29:36
 -->
 <template>
     <Modal v-model="show" title="  " @on-ok="ok" @on-cancel="cancel" width="1048" class="modalDetail">
@@ -57,7 +57,7 @@
                         <div class="product_info_list_items">{{$t("product.info.price")}}：</div>
                     </Col>
                     <Col span="12">
-                        <div class="product_info_list_items red"><span>￥</span><span class="font_size_20">{{modalProductInfo.quoteThePrice||0}}</span></div>
+                        <div class="product_info_list_items red"><span>{{modalProductInfo.cu_de}}</span><span class="font_size_20">{{modalProductInfo.quoteThePrice||0}}</span></div>
                     </Col>
                     <Col span="12">
                         <div class="product_info_list_items">{{$t("product.info.companyNumber")}}：</div>
