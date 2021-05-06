@@ -26,18 +26,20 @@
                 联系人：{{ companyInfo.contactsMan }}
               </p>
               <p v-if="companyInfo.telephoneNumber">
-                电话：{{ companyInfo.telephoneNumber }}
+                <i class="phoneIcon"></i>{{ companyInfo.telephoneNumber }}
               </p>
               <p v-if="companyInfo.phoneNumber">
-                手机：{{ companyInfo.phoneNumber }}
+                <i class="sjIcon"></i>{{ companyInfo.phoneNumber }}
               </p>
-              <p v-if="companyInfo.qq">QQ：{{ companyInfo.qq }}</p>
-              <p v-if="companyInfo.address">地址：{{ companyInfo.address }}</p>
+              <p v-if="companyInfo.qq">
+                <i class="qqIcon"></i>{{ companyInfo.qq }}
+              </p>
               <p class="onlineConsultation" @click="toNews">
                 <img src="~@/assets/images/consult.png" alt />
                 在线咨询
               </p>
             </div>
+            <p v-if="companyInfo.address">地址：{{ companyInfo.address }}</p>
           </div>
         </div>
         <div class="headTop">
@@ -541,7 +543,7 @@ export default {
     }
     .handerTitle {
       padding-left: 57px;
-      height: 140px;
+      height: 180px;
       background: #ffffff;
       .top {
         height: 90px;
@@ -587,6 +589,7 @@ export default {
             text-align: left;
             color: #666666;
             line-height: 34px;
+            margin: 10px 0;
             p {
               display: flex;
               align-content: center;
@@ -595,6 +598,31 @@ export default {
                 margin-right: 10px;
                 width: 28px;
                 height: 28px;
+              }
+              .phoneIcon {
+                min-width: 28px;
+                width: 28px;
+                height: 28px;
+                margin-right: 15px;
+                background: url("~@/assets/images/onlinePhoneIcon.png")
+                  no-repeat center;
+                background-size: contain;
+              }
+              .qqIcon {
+                min-width: 28px;
+                width: 28px;
+                height: 28px;
+                margin-right: 15px;
+                background: url("~@/assets/images/QQ.png") no-repeat center;
+                background-size: contain;
+              }
+              .sjIcon {
+                min-width: 28px;
+                width: 28px;
+                height: 28px;
+                margin-right: 15px;
+                background: url("~@/assets/images/sjIcon.png") no-repeat center;
+                background-size: contain;
               }
             }
             .onlineConsultation {
@@ -610,6 +638,7 @@ export default {
         background-color: #fff;
         padding-left: 20px;
         display: flex;
+        margin-top: 40px;
         border-radius: 4px;
         .tabs {
           width: 100px;
