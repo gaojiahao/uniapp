@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-01 15:46:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\views\user\userList.vue
- * @LastEditTime: 2021-05-03 14:21:54
+ * @LastEditTime: 2021-05-06 11:47:29
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -26,7 +26,7 @@
                 <div class="avatar">
                     <i class="iconfont iconren1 text" :class="[item.isDel?'unperson':'person']"></i>
                 </div>
-                <div class="name">
+                <div class="name" :title="item.nickname">
                     {{item.nickname}}
                 </div>
                 <div class="action">
@@ -350,7 +350,11 @@ export default {
         }
         .name{
             margin-left: 10px;
-            line-height: 24px; 
+            line-height: 24px;
+            width: 70px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         .action{
             margin-left: auto;
