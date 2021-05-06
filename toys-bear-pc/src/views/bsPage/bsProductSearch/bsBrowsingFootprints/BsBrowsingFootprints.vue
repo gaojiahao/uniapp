@@ -128,32 +128,32 @@ export default {
   },
   watch: {
     shoppingList() {
-        eventBus.$emit("upDateProductView");
-    //   if (list) {
-    //     if (list.length) {
-    //       for (let index = 0; index < this.productList.length; index++) {
-    //         for (let i = 0; i < this.productList[index].list.length; i++) {
-    //           for (let j = 0; j < list.length; j++) {
-    //             if (
-    //               this.productList[index].list[i].productNumber ==
-    //               list[j].productNumber
-    //             ) {
-    //               this.productList[index].list.isShopping = true;
-    //               break;
-    //             } else {
-    //               this.productList[index].list.isShopping = false;
-    //             }
-    //           }
-    //         }
-    //       }
-    //     } else {
-    //       for (let index = 0; index < this.productList.length; index++) {
-    //         this.productList[index].list.forEach(val => {
-    //           val.isShopping = false;
-    //         });
-    //       }
-    //     }
-    //   }
+      eventBus.$emit("upDateProductView");
+      //   if (list) {
+      //     if (list.length) {
+      //       for (let index = 0; index < this.productList.length; index++) {
+      //         for (let i = 0; i < this.productList[index].list.length; i++) {
+      //           for (let j = 0; j < list.length; j++) {
+      //             if (
+      //               this.productList[index].list[i].productNumber ==
+      //               list[j].productNumber
+      //             ) {
+      //               this.productList[index].list.isShopping = true;
+      //               break;
+      //             } else {
+      //               this.productList[index].list.isShopping = false;
+      //             }
+      //           }
+      //         }
+      //       }
+      //     } else {
+      //       for (let index = 0; index < this.productList.length; index++) {
+      //         this.productList[index].list.forEach(val => {
+      //           val.isShopping = false;
+      //         });
+      //       }
+      //     }
+      //   }
     }
   },
   methods: {
