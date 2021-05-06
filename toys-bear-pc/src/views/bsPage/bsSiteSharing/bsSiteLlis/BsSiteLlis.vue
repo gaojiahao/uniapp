@@ -163,7 +163,12 @@
             <span> {{ scope.row.createdOn.replace(/T.*/, "") }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="业务员" align="center" prop="createdBy">
+        <el-table-column
+          label="业务员"
+          align="center"
+          prop="createdBy"
+          show-overflow-tooltip
+        >
         </el-table-column>
         <el-table-column label="有效期" align="center" width="100">
           <template slot-scope="scope">

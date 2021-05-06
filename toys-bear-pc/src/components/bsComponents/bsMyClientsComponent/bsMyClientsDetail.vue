@@ -39,7 +39,9 @@
                 在线咨询
               </p>
             </div>
-            <p v-if="companyInfo.address">地址：{{ companyInfo.address }}</p>
+            <p v-if="companyInfo.address" style="color: #666;">
+              地址：{{ companyInfo.address }}
+            </p>
           </div>
         </div>
         <div class="headTop">
