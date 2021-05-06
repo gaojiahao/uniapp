@@ -501,15 +501,17 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    &::before {
-      width: 4px;
-      height: 14px;
-      background-color: #3368a9;
-      position: absolute;
-      left: 0;
-      top: 50%;
-      content: "";
-      transform: translate(0, -50%);
+    .left {
+      &::before {
+        width: 4px;
+        height: 14px;
+        background-color: #3368a9;
+        position: absolute;
+        left: 0;
+        top: 50%;
+        content: "";
+        transform: translate(0, -50%);
+      }
     }
   }
   @{deep} .el-table {

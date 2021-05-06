@@ -59,7 +59,7 @@
         </el-select>
       </div>
       <div class="item">
-        <span class="label">操作人员：</span>
+        <span class="label">业务员：</span>
         <el-input
           type="text"
           size="medium"

@@ -218,6 +218,7 @@
 import bsColumnComponent from "@/components/bsComponents/bsProductSearchComponent/bsColumnComponent";
 import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/bsGridComponent";
 import eventBus from "@/assets/js/common/eventBus.js";
+import { mapGetters } from "vuex";
 export default {
   name: "bsMyClientsDetail",
   components: {
@@ -257,7 +258,14 @@ export default {
       typesList: []
     };
   },
-
+  watch: {
+    shoppingList: {
+      deep: true,
+      handler() {
+        eventBus.$emit("upDateProductView");
+      }
+    }
+  },
   created() {},
   mounted() {
     // 取消收藏/刷新页面
@@ -301,6 +309,11 @@ export default {
     eventBus.$emit("showCart", true);
     this.getProductListPageAll();
     this.getCompanyByID();
+  },
+  computed: {
+    ...mapGetters({
+      shoppingList: "myShoppingList"
+    })
   },
   methods: {
     // 去聊天
