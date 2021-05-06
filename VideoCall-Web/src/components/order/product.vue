@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:37:17
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\order\product.vue
- * @LastEditTime: 2021-05-06 09:25:00
+ * @LastEditTime: 2021-05-06 11:18:41
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -43,30 +43,22 @@
                     </Col>
                 </Row>
                 <Scroll :on-reach-bottom="handleReachBottom" height="300">
-                    <Row v-for="(item,index) in orderList" :key="index">
+                    <Row v-for="(item,index) in orderList">
                         <Col span="8">
-                            <div><span style="display: inline-block;width: 100%;overflow: hidden;textOverflow: ellipsis;whiteSpace: nowrap;
-                                color:#2684D1;marginTop: 4px;cursor: pointer">{{lang == 'zh' ? item.productName:item.productEnName}}</span></div>
+                            <div><span style="display: inline-block;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;
+                                color:#2684D1;margin-top: 4px;cursor: pointer" title="广东佛山个11111111">{{lang == 'zh' ? item.productName:item.productEnName}}</span></div>
                         </Col>
                         <Col span="8">
-                            <div><span style="display: inline-block;width: 100%;overflow: hidden;textOverflow: ellipsis;whiteSpace: nowrap;
-                                color:#2684D1;marginTop: 4px;cursor: pointer">{{item.productEnName}}</span></div>
+                            <div><span style="display: inline-block;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;
+                                margin-top: 4px;cursor: pointer">{{item.factoryNo}}</span></div>
                         </Col>
                         <Col span="8">
-                            <div><span style="display: inline-block;width: 100%;overflow: hidden;textOverflow: ellipsis;whiteSpace: nowrap;
-                                color:#2684D1;marginTop: 4px;cursor: pointer">{{litem.productEnName}}</span></div>
+                            <div><span style="display: inline-block;color:#EC1B1B;margin-top: 4px;">{{item.cu_de+(item.quoteThePrice?item.quoteThePrice:0)}}</span></div>
                         </Col>
                     </Row>
                 </Scroll>
             </div> -->
-            <!-- <Scroll :on-reach-bottom="handleReachBottom" height="330">
-                <List :border="false" :split="false" v-for="(item,index) in messageList" :key="index">
-                    <ListItem v-if="item.type=='wait'">
-                        
-                    </ListItem>
-                </List>
-            </Scroll> -->
-            <Table :columns="orderColumns" :data="orderList" height="330" class="select_order_list"></Table>
+            <Table :columns="orderColumns" :data="orderList" height="330" class="select_order_list" :loading="loading"></Table>
             <div class="select_order_info">
                 <Row v-if="lang=='zh'">
                     <Col span="8">
@@ -183,7 +175,15 @@
                 <Col span="8">
                 </Col>
                 <Col span="8" style="text-align: center">
-                    {{$t("product.order.noData")}}
+                    <div v-if="!infoLoading">
+                        {{$t("product.order.noData")}}
+                    </div>
+                    <div v-else>
+                        <Spin fix>
+                            <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+                            <div>Loading</div>
+                        </Spin>        
+                    </div>
                 </Col>
                 <Col span="8">
                 </Col>
@@ -295,7 +295,10 @@ export default {
             isAdmin:false,
             sureFlag:false,
             delFlag:false,
-            lang:'zh'
+            lang:'zh',
+            pageSize:0,
+            loading:true,
+            infoLoading:false
         }
     },
     watch:{
@@ -346,32 +349,40 @@ export default {
                 code:this.sampleSelection.number,
                 verifyCode:this.sampleSelection.code
             };
+            this.productInfo= {};
             return new Promise((resolve, reject) => {
+                this.infoLoading = true;
                 QueryProductByCompanyNumber(params).then(res => {
                     if (res.success) {
                         this.productInfo = res.data;
                         this.$emit('saveProductInfo','saveProductInfo',params);
+                        this.infoLoading = false;
                     } else {
                         this.$Message.error({
                         background: true,
                         content: res.result.msg
                         });
                         this.$FromLoading.hide();
+                        this.infoLoading = false;
                     }
                 });
             });
         },
         getProductInfo2(params){
             return new Promise((resolve, reject) => {
+                this.productInfo= {};
+                this.infoLoading = true;
                 QueryProductByCompanyNumber(params).then(res => {
                     if (res.success) {
                         this.productInfo = res.data;
+                        this.infoLoading = false;
                     } else {
                         this.$Message.error({
                         background: true,
                         content: res.result.msg
                         });
                         this.$FromLoading.hide();
+                        this.infoLoading = false;
                     }
                 });
             });
@@ -441,11 +452,12 @@ export default {
                 });
             });        
         },
-        //根据择样代号和验证码查询择样单详情列表
-        getQuerySampleOrderDetails(){
+        //分页
+        getQuerySampleOrderDetailsFenye(){
+            this.pageSize=this.pageSize+1;
             var params = {
-                pageIndex:1,
-                pageSize:99999,
+                pageIndex:this.pageSize,
+                pageSize:15,
                 code:this.sampleSelection.number,
                 verifyCode:this.sampleSelection.code,
                 companyApiHost:window.localStorage.getItem('mac'),
@@ -470,22 +482,42 @@ export default {
                         this.$FromLoading.hide();
                     }
                 });
+            });
+        },
+        //根据择样代号和验证码查询择样单详情列表
+        getQuerySampleOrderDetails(){
+            var params = {
+                pageIndex:1,
+                pageSize:99999,
+                code:this.sampleSelection.number,
+                verifyCode:this.sampleSelection.code,
+                companyApiHost:window.localStorage.getItem('mac'),
+                roomNumber: this.roomNumber
+            };
+            return new Promise((resolve, reject) => {
+                this.loading=true;
+                QuerySampleOrderDetails(params).then(res => {
+                    if (res.success) {
+                        this.orderList = res.data.sampleOrderDetails.items;
+                        this.totalAmount=res.data.totalAmount;
+                        this.totalBoxCount=res.data.totalBoxCount;
+                        this.totalBulkFeet=res.data.totalBulkFeet;
+                        this.totalBulkStere=res.data.totalBulkStere;
+                        this.totalCount=res.data.totalCount;
+                        this.totalKuanshu=res.data.totalKuanshu;
+                        this.$FromLoading.hide();
+                        this.loading=false;
+                    } else {
+                        this.$Message.error({
+                            background: true,
+                            content: res.result.msg
+                        });
+                        this.$FromLoading.hide();
+                        this.loading=false;
+                    }
+                });
             });     
         },
-        handleReachBottom() {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    const last = this.messageList[this.messageList.length - 1];
-                    for (let i = 1; i < 11; i++) {
-                        this.messageList.push({
-                            type: 'expect',
-                            text: '今日待办' + i,
-                        });
-                    }
-                    resolve();
-                }, 1000);
-            });
-        }
     },
     created(){
         this.roomNumber=Cookies.get('channel');
