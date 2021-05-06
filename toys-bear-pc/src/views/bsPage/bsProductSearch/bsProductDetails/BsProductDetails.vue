@@ -131,27 +131,13 @@
             <i class="infoIcon"></i>
             <span>在线咨询</span>
           </p>
-          <p
-            class="item myHover"
-            v-if="
-              productDetail.supplierTelephoneNumber ||
-                productDetail.exhibitionTelephoneNumber
-            "
-          >
+          <p class="item myHover" v-if="productDetail.supplierTelephoneNumber">
             <i class="phoneIcon"></i>
-            <span>{{
-              productDetail.supplierTelephoneNumber ||
-                productDetail.exhibitionTelephoneNumber
-            }}</span>
+            <span>{{ productDetail.supplierTelephoneNumber }}</span>
           </p>
-          <p
-            class="item myHover"
-            v-if="productDetail.supplierPhone || productDetail.exhibitionPhone"
-          >
+          <p class="item myHover" v-if="productDetail.supplierPhone">
             <i class="sjIcon"></i>
-            <span>{{
-              productDetail.supplierPhone || productDetail.exhibitionPhone
-            }}</span>
+            <span>{{ productDetail.supplierPhone }}</span>
           </p>
           <p class="item myHover" v-if="productDetail.supplierQQ">
             <i class="qqIcon"></i>
