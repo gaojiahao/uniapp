@@ -372,7 +372,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    &::before {
+    .left::before {
       width: 4px;
       height: 14px;
       background-color: #3368a9;

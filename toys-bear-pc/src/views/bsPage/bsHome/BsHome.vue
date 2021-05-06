@@ -19,9 +19,9 @@
               fit="contain"
             >
             </el-image>
-            <el-badge :value="5" class="homeBadge">
-              <span class="text">{{ item.title }}</span>
-            </el-badge>
+            <!-- <el-badge :value="5" class="homeBadge"> -->
+            <span class="text">{{ item.title }}</span>
+            <!-- </el-badge> -->
           </li>
           <li class="block"></li>
           <li class="block"></li>

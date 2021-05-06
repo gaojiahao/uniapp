@@ -27,7 +27,7 @@
           ></el-input>
         </div>
         <div class="item">
-          <span class="label">操作人员：</span>
+          <span class="label">业务员：</span>
           <el-input
             type="text"
             size="medium"
@@ -95,7 +95,7 @@
               {{ scope.row.createdOn.replace(/T/, " ") }}
             </template>
           </el-table-column>
-          <el-table-column align="center" label="操作人员">
+          <el-table-column align="center" label="业务员">
             <template slot-scope="scope">
               <span>
                 {{ scope.row.linkman }}
