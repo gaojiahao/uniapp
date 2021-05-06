@@ -123,9 +123,15 @@
         <div class="contactMode">
           <p class="item">
             <i class="factoryIcon"></i>
-            <span @click="toFactory(productDetail)">{{
-              productDetail.supplierName
-            }}</span>
+            <el-tooltip
+              effect="dark"
+              :content="productDetail.supplierName"
+              placement="top"
+            >
+              <span class="context" @click="toFactory(productDetail)">{{
+                productDetail.supplierName
+              }}</span>
+            </el-tooltip>
           </p>
           <p class="item myHover" @click="toNews(productDetail)">
             <i class="infoIcon"></i>
@@ -133,15 +139,35 @@
           </p>
           <p class="item myHover" v-if="productDetail.supplierTelephoneNumber">
             <i class="phoneIcon"></i>
-            <span>{{ productDetail.supplierTelephoneNumber }}</span>
+            <el-tooltip
+              effect="dark"
+              :content="productDetail.supplierTelephoneNumber"
+              placement="top"
+            >
+              <span class="context">{{
+                productDetail.supplierTelephoneNumber
+              }}</span>
+            </el-tooltip>
           </p>
           <p class="item myHover" v-if="productDetail.supplierPhone">
             <i class="sjIcon"></i>
-            <span>{{ productDetail.supplierPhone }}</span>
+            <el-tooltip
+              effect="dark"
+              :content="productDetail.supplierPhone"
+              placement="top"
+            >
+              <span class="context">{{ productDetail.supplierPhone }}</span>
+            </el-tooltip>
           </p>
           <p class="item myHover" v-if="productDetail.supplierQQ">
             <i class="qqIcon"></i>
-            <span>{{ productDetail.supplierQQ }}</span>
+            <el-tooltip
+              effect="dark"
+              :content="productDetail.supplierQQ"
+              placement="top"
+            >
+              <span class="context">{{ productDetail.supplierQQ }}</span>
+            </el-tooltip>
           </p>
           <p class="item myHover" @click="toFactory(productDetail)">
             <i class="shopIcon"></i>
@@ -506,6 +532,13 @@ export default {
           align-items: center;
           color: #666;
           cursor: pointer;
+          max-width: 150px;
+          .context {
+            max-width: 110px;
+            overflow: hidden; /*超出部分隐藏*/
+            white-space: nowrap; /*不换行*/
+            text-overflow: ellipsis; /*超出部分文字以...显示*/
+          }
           &.myHover {
             cursor: pointer;
           }

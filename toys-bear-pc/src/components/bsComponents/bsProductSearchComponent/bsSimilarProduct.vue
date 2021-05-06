@@ -36,16 +36,15 @@
         <div class="contactBox">
           <div class="sourceBox" @click="toFactory(item)">
             <i class="sourceIcon"></i>
-            <!-- <template v-if="item.isIntegral">
+            <el-tooltip
+              effect="dark"
+              :content="item.supplierName"
+              placement="top"
+            >
               <span class="text">
                 {{ item.supplierName }}
               </span>
-            </template>
-            <template v-else> -->
-            <span class="text">
-              {{ item.supplierName }}
-            </span>
-            <!-- </template> -->
+            </el-tooltip>
           </div>
           <div class="infoBox">
             <p class="infoItem" @click="toNews(item)">
@@ -54,15 +53,33 @@
             </p>
             <p class="infoItem" v-if="item.supplierTelePhoneNumber">
               <i class="telePhoneIcon"></i>
-              <span>{{ item.supplierTelePhoneNumber }}</span>
+              <el-tooltip
+                effect="dark"
+                :content="item.supplierTelePhoneNumber"
+                placement="top"
+              >
+                <span>{{ item.supplierTelePhoneNumber }}</span>
+              </el-tooltip>
             </p>
             <p class="infoItem" v-if="item.supplierPhone">
               <i class="phoneIcon"></i>
-              <span>{{ item.supplierPhone }}</span>
+              <el-tooltip
+                effect="dark"
+                :content="item.supplierPhone"
+                placement="top"
+              >
+                <span>{{ item.supplierPhone }}</span>
+              </el-tooltip>
             </p>
             <p class="infoItem" v-if="item.supplierQQ">
               <i class="qqIcon"></i>
-              <span>{{ item.supplierQQ }}</span>
+              <el-tooltip
+                effect="dark"
+                :content="item.supplierQQ"
+                placement="top"
+              >
+                <span>{{ item.supplierQQ }}</span>
+              </el-tooltip>
             </p>
             <p class="infoItem" @click="toFactory(item)">
               <i class="shopIcon"></i>
@@ -558,6 +575,7 @@ export default {
         display: flex;
         .sourceBox {
           // height: 48px;
+          max-width: 150px;
           box-sizing: border-box;
           // margin-top: 10px;
           display: flex;
@@ -583,6 +601,10 @@ export default {
           display: flex;
           .infoItem {
             margin-right: 27px;
+            max-width: 150px;
+            overflow: hidden; /*超出部分隐藏*/
+            white-space: nowrap; /*不换行*/
+            text-overflow: ellipsis; /*超出部分文字以...显示*/
             display: flex;
             align-items: center;
             color: #666;
