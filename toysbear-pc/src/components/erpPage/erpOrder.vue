@@ -162,10 +162,10 @@
                 ></el-date-picker>
               </el-form-item>
             </div>
-            <div class="itemBox" v-if="userInfo.userInfo.isMain">
-              <el-form-item label="业务员：">
+            <div class="itemBox">
+              <el-form-item label="业务员：" v-if="userInfo.userInfo.isMain">
                 <el-select
-                  style="width: 100%"
+                  style="width: 215px;"
                   v-model="searchFD.staffId"
                   filterable
                   size="medium"
@@ -182,7 +182,7 @@
                 </el-select>
               </el-form-item>
             </div>
-            <div class="itemBox">
+            <div class="itemBox btn">
               <el-button
                 type="primary"
                 class="searchBtn"
