@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-04-06 11:26:36
  * @FilePath: \projectd:\LittleBearPC\VideoCall-Web\src\components\public\chart.vue
- * @LastEditTime: 2021-05-03 16:01:45
+ * @LastEditTime: 2021-05-06 12:14:21
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -152,20 +152,20 @@ export default {
         async login(){
             var me = this;
             await this.client.login({ token:  this.appId, uid: this.uid }).then(() => {
-                console.log('聊天登录成功');
+                //console.log('聊天登录成功');
             }).catch(err => {
                 console.log('聊天登录失败', err);
             });
             var roomNumber = Cookies.get("channel");
             this.channel = await this.client.createChannel(roomNumber); // 此处传入频道 ID
             await this.channel.join().then(() => {
-                console.log('加入聊天频道成功！');
+                //console.log('加入聊天频道成功！');
             }).catch(error => {
                 console.log('加入聊天频道失败！');
             });
             if(this.isAdmin){
                 this.channel.on('MemberJoined', function (memberId) {
-                    console.log('加入聊天频道成功！');
+                    //console.log('加入聊天频道成功！');
                     me.initProduct(memberId);
                 });
             }
@@ -184,7 +184,6 @@ export default {
                     this.$emit('getSampleOrderDetails',obj);
                 } else if(text.indexOf("saveProductInfo")!=-1){
                     var obj = JSON.parse(text);
-                    debugger
                     this.$emit('getProduct',obj);
                 } else if(text.indexOf("initProduct")!=-1){
                     var obj = JSON.parse(text);
@@ -220,7 +219,7 @@ export default {
             me.uid = Cookies.get("uid") || null;
             me.client = AgoraRTM.createInstance(me.appId);
             me.client.on('ConnectionStateChanged', (newState, reason) => {
-                console.log('on connection state changed to ' + newState + ' reason: ' + reason);
+                //console.log('on connection state changed to ' + newState + ' reason: ' + reason);
             });
             await me.login();
         }

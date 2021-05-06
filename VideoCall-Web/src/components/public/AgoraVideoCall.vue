@@ -100,7 +100,7 @@ export default {
         if(reason=='UID_BANNED'){
           this.leaveMeetingRoom();  
         }
-        console.log('链接状态',cur);
+        //console.log('链接状态',cur);
       });
       $.client.on("user-joined",(user)=>{
         var name = '';
@@ -152,7 +152,7 @@ export default {
       document.getElementById("ag-canvas").appendChild(playerContainer);
       $.localVideoTrack.play(playerContainer);
       await $.client.publish([this.localAudioTrack, this.localVideoTrack]);
-      console.log("publish success");
+      //console.log("publish success");
       this.testNetWork();
       this.initDevices();
     },
@@ -194,7 +194,7 @@ export default {
         }
       };
       var userLength = ((items.length-1 <=0) ?1:(items.length-1))+1;
-      console.log("subscribe success");
+      //console.log("subscribe success");
       if (mediaType === 'video') {
         const remoteVideoTrack = user.videoTrack;
         // 动态插入一个 DIV 节点作为播放远端视频轨道的容器。
@@ -269,7 +269,6 @@ export default {
       } else {
         this.isMultMode = false;
         for(var i=0;i<items.length;i++){
-          console.log(items[i]);
           if(items[i]['id']==val){
             items[i].style.width = "100%";
             items[i].style.height = "100%";
