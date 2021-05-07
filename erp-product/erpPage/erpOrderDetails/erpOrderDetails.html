@@ -222,7 +222,8 @@
 
 </html>
 <script>
-  var url = "https://www.toysbear.com"
+//   var url = "https://www.toysbear.com"
+  var baseUrl = "http://139.9.71.135:8081";
   var orderNumber = window.localStorage.getItem("orderNumber")
   var userToken = window.localStorage.getItem("token")
   var orderType = window.localStorage.getItem("orderType")
@@ -442,14 +443,20 @@
   //退出
   function signOut() {
     window.localStorage.clear()
-    window.location.href = "https://www.toysbear.com/erpProduct/erpPage/erpLogin/erpLogin.html"
+    // window.location.href = "https://www.toysbear.com/erpProduct/erpPage/erpLogin/erpLogin.html"
+
+    window.location.href = "http://139.9.71.135:8080/erpProduct/erpPage/erpLogin/erpLogin.html"
   }
   // 返回
   function fanhui() {
-    window.location.href = "https://www.toysbear.com/erpProduct/erpPage/erpOrder/erpOrder.html"
+    // window.location.href = "https://www.toysbear.com/erpProduct/erpPage/erpOrder/erpOrder.html"
+
+    window.location.href = "http://139.9.71.135:8080/erpProduct/erpPage/erpOrder/erpOrder.html"
   }
   function toHome() {
-    window.location.href = "https://www.toysbear.com/erpProduct/erpPage/erpHome/erpHome.html"
+    // window.location.href = "https://www.toysbear.com/erpProduct/erpPage/erpHome/erpHome.html"
+
+    window.location.href = "http://139.9.71.135:8080/erpProduct/erpPage/erpHome/erpHome.html"
   }
   // 选中是否导出事件
   function changeCheckBox(e) {
