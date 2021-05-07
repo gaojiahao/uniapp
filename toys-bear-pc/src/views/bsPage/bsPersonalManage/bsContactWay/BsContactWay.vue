@@ -68,20 +68,11 @@
       >
         <el-table-column label="序号" type="index" align="center" width="70">
         </el-table-column>
-        <el-table-column align="center" label="语种" prop="language">
-          <template slot-scope="scope">
-            {{ scope.row.language }}
-          </template>
+        <el-table-column align="center" label="语种" prop="languageName">
         </el-table-column>
         <el-table-column align="center" label="公司名称" prop="companyName">
-          <template slot-scope="scope">
-            {{ scope.row.companyName }}
-          </template>
         </el-table-column>
         <el-table-column label="地址" prop="contactAddress" width="300">
-          <template slot-scope="scope">
-            {{ scope.row.contactAddress }}
-          </template>
         </el-table-column>
         <el-table-column
           align="center"
@@ -154,9 +145,10 @@
         :rules="addContactWayRules"
         :model="ContactWayRulesFormData"
       >
-        <el-form-item label="语种选择:" prop="language">
+        <el-form-item label="语种选择:" prop="languageName">
           <el-select
-            v-model="ContactWayRulesFormData.language"
+            @change="islanguage"
+            v-model="ContactWayRulesFormData.languageName"
             size="medium"
             clearable
             placeholder="请选择"
@@ -256,13 +248,22 @@ export default {
       keyWord: null,
       staffName: null,
       addContactWay: false,
-      ContactWayRulesFormData: {},
+      ContactWayRulesFormData: {
+        language: "",
+        contactName: "",
+        telephone: "",
+        fax: "",
+        email: "",
+        qq: ""
+      },
       tableData: [],
       pageSize: 10,
       currentPage: 1,
       totalCount: 0,
       addContactWayRules: {
-        language: [{ required: true, message: "请选择语种", trigger: "blur" }],
+        languageName: [
+          { required: true, message: "请选择语种", trigger: "blur" }
+        ],
         companyName: [
           { required: true, message: "请输入公司名称", trigger: "blur" },
           { min: 1, max: 99, message: "请输入 1-99 个字符", trigger: "blur" }
@@ -307,6 +308,17 @@ export default {
         this.totalCount = res.data.result.item.totalCount;
       }
     },
+    islanguage(val) {
+      if (val) {
+        for (let index = 0; index < this.languageList.length; index++) {
+          if (val === this.languageList[index].itemText) {
+            this.ContactWayRulesFormData.language = this.languageList[
+              index
+            ].parameter;
+          }
+        }
+      }
+    },
     // 查询
     search() {
       this.currentPage = 1;
@@ -314,7 +326,7 @@ export default {
     },
     // 编辑
     openEdit(row) {
-      this.ContactWayRulesFormData = row;
+      this.ContactWayRulesFormData = JSON.parse(JSON.stringify(row));
       this.dialogTitle = "编辑";
       this.addContactWay = true;
     },
@@ -375,7 +387,13 @@ export default {
     },
     // 打开新增弹框
     openAddContact() {
-      this.ContactWayRulesFormData = {};
+      this.ContactWayRulesFormData = {
+        contactName: "",
+        telephone: "",
+        fax: "",
+        email: "",
+        qq: ""
+      };
       this.dialogTitle = "新增";
       this.addContactWay = true;
     },
