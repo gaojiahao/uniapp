@@ -1,7 +1,21 @@
 <template>
   <div class="BsContactWay">
-    <div class="title">联系方式 ({{ totalCount }})</div>
-    <div class="searchBox">
+    <div class="title">
+      <div class="titleLeft">
+        <span>联系方式 ({{ totalCount }})</span>
+      </div>
+      <div class="right">
+        <el-button
+          @click="openAddContact"
+          type="primary"
+          icon="el-icon-plus"
+          size="medium"
+        >
+          新增
+        </el-button>
+      </div>
+    </div>
+    <div class="searchBox" v-if="userInfo.userInfo.isMain">
       <div class="left">
         <div class="item">
           <span class="label">关键字：</span>
@@ -44,14 +58,6 @@
           </el-button>
         </div>
       </div>
-      <el-button
-        @click="openAddContact"
-        type="primary"
-        icon="el-icon-plus"
-        size="medium"
-      >
-        新增
-      </el-button>
     </div>
     <div class="tableBox">
       <el-table
@@ -240,7 +246,7 @@ import { mapState } from "vuex";
 export default {
   name: "BsContactWay",
   computed: {
-    ...mapState(["currentComparnyId"])
+    ...mapState(["currentComparnyId", "userInfo"])
   },
   data() {
     return {
@@ -464,6 +470,9 @@ export default {
     box-sizing: border-box;
     position: relative;
     border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     &::before {
       width: 4px;
       height: 14px;
@@ -473,6 +482,9 @@ export default {
       top: 50%;
       content: "";
       transform: translate(0, -50%);
+    }
+    .titleLeft {
+      flex: 1;
     }
   }
   .searchBox {

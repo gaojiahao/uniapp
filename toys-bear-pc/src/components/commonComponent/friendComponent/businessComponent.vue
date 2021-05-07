@@ -38,7 +38,9 @@
 export default {
   name: "businessComponent",
   props: {
-    item: Object
+    item: {
+      type: Object
+    }
   },
   data() {
     return {

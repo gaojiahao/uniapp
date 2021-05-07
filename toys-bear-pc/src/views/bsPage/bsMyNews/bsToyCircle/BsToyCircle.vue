@@ -44,9 +44,9 @@
             <div class="cell-item">
               <div class="item-top">
                 <div class="itemTopLeft">
-                  <div class="left">
+                  <div class="left" @click="examineBusiness(item.userInfo)">
                     <el-avatar
-                      style="background-color:#E4EFFF;"
+                      style="background-color: #e4efff"
                       :size="50"
                       :src="item.userInfo.image"
                     >
@@ -117,7 +117,7 @@
                         class="video-js vjs-default-skin vjs-big-play-centered"
                         controls
                         :lazy-src="item.video"
-                        style="object-fit:contain"
+                        style="object-fit: contain"
                       >
                         <source :src="item.video" type="video/mp4" />
                       </video>
@@ -214,7 +214,7 @@
                       <template v-if="val.interactionType == 'Comment'">
                         <div class="left">
                           <el-avatar
-                            style="background-color:#E4EFFF;"
+                            style="background-color: #e4efff"
                             :size="40"
                             :src="val.userImage"
                           >
@@ -270,8 +270,8 @@
                       v-model="pinglunValue"
                     >
                       <template slot="prepend">
-                        <span style="color: #3368A9;">@</span>
-                        <span style="color: #3368A9;">{{
+                        <span style="color: #3368a9">@</span>
+                        <span style="color: #3368a9">{{
                           huifuUser.userName
                         }}</span>
                       </template>
@@ -279,7 +279,7 @@
                         slot="append"
                         type="primary"
                         @click="subHuiPinglun(item)"
-                        style="backgroundColor: #3368a9;color: #fff;"
+                        style="backgroundcolor: #3368a9; color: #fff"
                       >
                         评论
                       </el-button>
@@ -296,7 +296,7 @@
                         slot="append"
                         type="primary"
                         @click="subPinglun(item)"
-                        style="backgroundColor: #3368a9;color: #fff;"
+                        style="backgroundcolor: #3368a9; color: #fff"
                       >
                         评论
                       </el-button>
@@ -331,7 +331,7 @@
         <el-button
           type="primary"
           round
-          style="width:100%;height:50px;"
+          style="width: 100%; height: 50px"
           @click="jubaoEvent"
           >确 定</el-button
         >
@@ -346,21 +346,26 @@
     >
       <bsSendNotice @close="closeSendNotice" />
     </el-dialog>
+    <div class="dialogBusiness" v-show="dialogBusiness === true">
+      <businessComponent></businessComponent>
+    </div>
   </div>
 </template>
 
 <script>
 import { dateDiff } from "@/assets/js/common/common";
 import { mapState } from "vuex";
+import businessComponent from "@/components/commonComponent/friendComponent/businessComponent.vue";
 import bsSendNotice from "@/components/bsComponents/bsNewsComponent/bsSendNotice/bsSendNotice";
 const cubic = value => Math.pow(value, 3);
 const easeInOutCubic = value =>
   value < 0.5 ? cubic(value * 2) / 2 : 1 - cubic((1 - value) * 2) / 2;
 export default {
   name: "bsToyCircle",
-  components: { bsSendNotice },
+  components: { bsSendNotice, businessComponent },
   data() {
     return {
+      dialogBusiness: false,
       flagReturnTop: false,
       sendNoticeDialog: false,
       publisher: null,
@@ -747,6 +752,23 @@ export default {
       }
       this.pinglunValue = "";
       item.isHuiPinglun = false;
+    },
+    // 点击头像
+    async examineBusiness(userInfo) {
+      console.log(userInfo, "好友信息");
+      const res = await this.$http.post("/api/OrgPersonnelByID", {
+        companyId: userInfo.companyId,
+        id: userInfo.userId
+      });
+      if (res.data.result.code === 200) {
+        console.log(res.data.result);
+        this.dialogBusiness = true;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
     },
     // 过滤公告类型
     switchNoticeType(type) {
@@ -1324,5 +1346,7 @@ export default {
       color: red;
     }
   }
+}
+.dialogBusiness {
 }
 </style>
