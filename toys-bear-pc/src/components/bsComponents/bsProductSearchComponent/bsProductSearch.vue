@@ -37,7 +37,10 @@
               </el-upload>
             </template>
           </el-input>
-          <div class="history" v-if="isShowHistoryPanel&&searchHistoryList.length">
+          <div
+            class="history"
+            v-if="isShowHistoryPanel && searchHistoryList.length"
+          >
             <ul class="history_list">
               <li class="history_item del">
                 最近搜索

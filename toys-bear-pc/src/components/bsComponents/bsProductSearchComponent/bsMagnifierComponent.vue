@@ -149,12 +149,26 @@
       </el-carousel>
     </el-dialog>
     <!-- 3d弹窗 -->
-    <el-dialog :visible.sync="dialogVisibleThreeD" v-if="dialogVisibleThreeD" width="1264px" top="10vh" @close="open3D(false)" :fullscreen="threeDFullscreen" class="three_d">
+    <el-dialog
+      :visible.sync="dialogVisibleThreeD"
+      v-if="dialogVisibleThreeD"
+      width="1264px"
+      top="10vh"
+      @close="open3D(false)"
+      :fullscreen="threeDFullscreen"
+      class="three_d"
+    >
       <div slot="title" class="el-dialog__header_right">
         <i class="el-icon-full-screen" @click="isThreeDFullscreen"></i>
       </div>
-      <div :class="[threeDFullscreen?'lg_panel':'sm_panel']">
-        <iframe src="http://139.9.71.135:8087/Product3D/YS0080152/" id="map" scrolling="no" frameborder="0" :class="[threeDFullscreen?'lg_iframe':'sm_iframe']"></iframe>
+      <div :class="[threeDFullscreen ? 'lg_panel' : 'sm_panel']">
+        <iframe
+          src="http://139.9.71.135:8087/Product3D/YS0080152/"
+          id="map"
+          scrolling="no"
+          frameborder="0"
+          :class="[threeDFullscreen ? 'lg_iframe' : 'sm_iframe']"
+        ></iframe>
       </div>
     </el-dialog>
   </div>
@@ -221,8 +235,8 @@ export default {
       topY: 0, // 初始定位top
       middleLeft: 0, // 当前放置小图盒子的定位left值,
       itemWidth: 98.19, // 缩略图每张的宽度
-      dialogVisibleThreeD:false, //是否显示3d弹窗
-      threeDFullscreen:false //3d是否全屏
+      dialogVisibleThreeD: false, //是否显示3d弹窗
+      threeDFullscreen: false //3d是否全屏
     };
   },
   created() {},
@@ -253,17 +267,17 @@ export default {
       else return require("@/assets/images/imgError.png");
     },
     // 打开3D效果
-    open3D(value) {
+    open3D() {
+      // open3D(value) {
       this.$common.handlerMsgState({
         msg: "敬请期待",
         type: "warning"
       });
-      console.log("3d");
-      return ;
-      this.dialogVisibleThreeD = value;
-      if(!value){
-        this.threeDFullscreen = false;
-      }
+      return;
+      // this.dialogVisibleThreeD = value;
+      // if (!value) {
+      //   this.threeDFullscreen = false;
+      // }
     },
     touchEnd(e) {
       e = e || window.event;
@@ -381,8 +395,8 @@ export default {
       }
     },
     //3d是否全屏
-    isThreeDFullscreen(){
-      this.threeDFullscreen = this.threeDFullscreen ? false:true;
+    isThreeDFullscreen() {
+      this.threeDFullscreen = this.threeDFullscreen ? false : true;
     }
   }
 };
@@ -393,8 +407,8 @@ export default {
 .magnify {
   position: relative;
   .el-dialog {
-    .el-dialog__header{
-      .el-dialog__header_right{
+    .el-dialog__header {
+      .el-dialog__header_right {
         height: 50px;
         line-height: 50px;
         padding: 0;
@@ -404,32 +418,32 @@ export default {
       }
     }
   }
-  .three_d{
-    .sm_panel{
-      width:100%;
-      height:671px;  
+  .three_d {
+    .sm_panel {
+      width: 100%;
+      height: 671px;
     }
-    .sm_iframe{
-      position:absolute;
-      top:50px;
+    .sm_iframe {
+      position: absolute;
+      top: 50px;
       left: 0px;
-      right:0px;
-      bottom:10px;
-      width:100%;
-      height:711px;
+      right: 0px;
+      bottom: 10px;
+      width: 100%;
+      height: 711px;
     }
-    .lg_panel{
-      width:100%;
-      height:845px;  
+    .lg_panel {
+      width: 100%;
+      height: 845px;
     }
-    .lg_iframe{
-      position:absolute;
-      top:50px;
+    .lg_iframe {
+      position: absolute;
+      top: 50px;
       left: 0px;
-      right:0px;
-      bottom:10px;
-      width:100%;
-      height:885px;
+      right: 0px;
+      bottom: 10px;
+      width: 100%;
+      height: 885px;
     }
   }
 }
