@@ -44,16 +44,27 @@
             <div class="cell-item">
               <div class="item-top">
                 <div class="itemTopLeft">
-                  <div class="left" @click="examineBusiness(item.userInfo)">
-                    <el-avatar
-                      style="background-color: #e4efff"
-                      :size="50"
-                      :src="item.userInfo.image"
+                  <div style=" cursor: pointer;" class="left">
+                    <div @click.stop="examineBusiness(item)">
+                      <el-avatar
+                        style="background-color: #e4efff"
+                        :size="50"
+                        :src="item.userInfo.image"
+                      >
+                        <p class="errText">
+                          {{ item.userInfo.niceName }}
+                        </p>
+                      </el-avatar>
+                    </div>
+
+                    <div
+                      class="dialogBusiness"
+                      v-show="dialogBusiness === item.bearNotice.id"
                     >
-                      <p class="errText">
-                        {{ item.userInfo.niceName }}
-                      </p>
-                    </el-avatar>
+                      <businessComponent
+                        :userData="userData"
+                      ></businessComponent>
+                    </div>
                   </div>
                   <div class="right">
                     <p class="name">
@@ -346,15 +357,13 @@
     >
       <bsSendNotice @close="closeSendNotice" />
     </el-dialog>
-    <div class="dialogBusiness" v-show="dialogBusiness === true">
-      <businessComponent></businessComponent>
-    </div>
   </div>
 </template>
 
 <script>
 import { dateDiff } from "@/assets/js/common/common";
 import { mapState } from "vuex";
+import eventBus from "@/assets/js/common/eventBus";
 import businessComponent from "@/components/commonComponent/friendComponent/businessComponent.vue";
 import bsSendNotice from "@/components/bsComponents/bsNewsComponent/bsSendNotice/bsSendNotice";
 const cubic = value => Math.pow(value, 3);
@@ -365,6 +374,8 @@ export default {
   components: { bsSendNotice, businessComponent },
   data() {
     return {
+      userData: {},
+      canClick: true,
       dialogBusiness: false,
       flagReturnTop: false,
       sendNoticeDialog: false,
@@ -754,18 +765,28 @@ export default {
       item.isHuiPinglun = false;
     },
     // 点击头像
-    async examineBusiness(userInfo) {
-      console.log(userInfo, "好友信息");
-      const res = await this.$http.post("/api/OrgPersonnelByID", {
-        companyId: userInfo.companyId,
-        id: userInfo.userId
-      });
-      if (res.data.result.code === 200) {
-        console.log(res.data.result);
-        this.dialogBusiness = true;
+    async examineBusiness(item) {
+      if (this.canClick) {
+        this.canClick = false;
+        const res = await this.$http.post("/api/OrgPersonnelByID", {
+          companyId: item.userInfo.companyId,
+          id: item.userInfo.userId
+        });
+        if (res.data.result.code === 200) {
+          this.userData = res.data.result.item;
+          this.dialogBusiness = item.bearNotice.id;
+        } else {
+          this.$common.handlerMsgState({
+            msg: res.data.result.msg,
+            type: "danger"
+          });
+        }
+        setTimeout(() => {
+          this.canClick = true;
+        }, 1000);
       } else {
         this.$common.handlerMsgState({
-          msg: res.data.result.msg,
+          msg: "操作过于频繁",
           type: "danger"
         });
       }
@@ -829,6 +850,10 @@ export default {
   },
   created() {},
   mounted() {
+    // 名片弹框关闭
+    eventBus.$on("handleDialogBusiness", val => {
+      this.dialogBusiness = val;
+    });
     this.$refs.findListRef.$el.addEventListener("scroll", () => {
       console.log(" scroll " + this.$refs.findListRef.$el.scrollTop);
       if (this.$refs.findListRef.$el.scrollTop > 300) {
@@ -859,6 +884,9 @@ export default {
     //   if (val < 1920) this.col = 2;
     //   this.fullWidth = val;
     // }
+  },
+  beforeDestroy() {
+    eventBus.$off("handleDialogBusiness");
   }
 };
 </script>
@@ -1189,7 +1217,7 @@ export default {
       min-width: 540px;
       margin-bottom: 20px;
       border-radius: 6px;
-      overflow: hidden;
+      //   overflow: hidden;
       box-sizing: border-box;
     }
     .cell-item {
@@ -1211,9 +1239,18 @@ export default {
         .itemTopLeft {
           display: flex;
           .left {
+            position: relative;
             height: 100%;
             width: 65px;
             min-width: 65px;
+            .dialogBusiness {
+              position: absolute;
+              top: 60px;
+              left: 80px;
+              //     display: none;
+              //   background: #fff;
+              z-index: 99;
+            }
             .errText {
               color: #333;
             }
@@ -1346,7 +1383,5 @@ export default {
       color: red;
     }
   }
-}
-.dialogBusiness {
 }
 </style>
