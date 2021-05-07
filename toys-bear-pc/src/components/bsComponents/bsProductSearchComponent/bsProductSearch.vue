@@ -8,7 +8,6 @@
         </el-tag>
         <div class="history_box">
           <el-input
-            v-focus
             size="medium"
             ref="focusKeyword"
             @keyup.native.enter="searchProducts"
