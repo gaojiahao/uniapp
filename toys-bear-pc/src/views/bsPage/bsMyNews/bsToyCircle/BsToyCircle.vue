@@ -288,9 +288,8 @@
                       </template>
                       <el-button
                         slot="append"
-                        type="primary"
                         @click="subHuiPinglun(item)"
-                        style="backgroundcolor: #3368a9; color: #fff"
+                        style="backgroundcolor: #3368a9;color: #fff;"
                       >
                         评论
                       </el-button>
@@ -305,9 +304,8 @@
                     >
                       <el-button
                         slot="append"
-                        type="primary"
                         @click="subPinglun(item)"
-                        style="backgroundcolor: #3368a9; color: #fff"
+                        style="backgroundcolor: #3368a9; color: #fff;"
                       >
                         评论
                       </el-button>
@@ -1387,5 +1385,10 @@ export default {
       color: red;
     }
   }
+}
+@{deep} .el-input-group__append,
+@{deep} .el-input-group__prepend {
+  background-color: #3368a9;
+  color: #fff;
 }
 </style>

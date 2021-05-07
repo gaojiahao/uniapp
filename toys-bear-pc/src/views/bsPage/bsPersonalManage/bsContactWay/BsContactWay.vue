@@ -94,6 +94,7 @@
           prop="email"
           label="邮箱"
         ></el-table-column>
+        <el-table-column align="center" prop="qq" label="QQ"></el-table-column>
         <el-table-column
           align="center"
           prop="staffName"
