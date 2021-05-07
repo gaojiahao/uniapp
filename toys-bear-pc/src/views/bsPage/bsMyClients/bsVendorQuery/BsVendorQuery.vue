@@ -30,11 +30,8 @@
           </el-button>
         </div>
       </div>
-      <div class="history" v-if="isShowHistoryPanel">
-        <ul class="history_list" v-if="!searchHistoryList.length">
-          <li class="history_item">暂无历史搜索</li>
-        </ul>
-        <ul class="history_list" v-else>
+      <div class="history" v-if="isShowHistoryPanel&&searchHistoryList.length">
+        <ul class="history_list">
           <li class="history_item del">
             最近搜索
             <div class="del_all" @click="historyDel">清空</div>
