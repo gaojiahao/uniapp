@@ -44,7 +44,7 @@
             <div class="cell-item">
               <div class="item-top">
                 <div class="itemTopLeft">
-                  <div style=" cursor: pointer;" class="left">
+                  <div style="cursor: pointer" class="left">
                     <div @click.stop="examineBusiness(item)">
                       <el-avatar
                         style="background-color: #e4efff"
@@ -1135,6 +1135,7 @@ export default {
                 margin-right: 8px;
                 color: #333;
                 img {
+                  opacity: 1;
                   width: 40px;
                   height: 40px;
                 }
@@ -1363,6 +1364,9 @@ export default {
       }
     }
   }
+  //   @{deep} .vue-waterfall.is-transition img {
+  //     opacity: 1;
+  //   }
 }
 .selectJubaoInfo {
   li {
