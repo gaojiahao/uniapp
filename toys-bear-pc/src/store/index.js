@@ -375,10 +375,11 @@ const store = new Vuex.Store({
   },
   getters: {
     myShoppingList(state) {
-      if (!state.userInfo || !state.userInfo.uid) {
+      if (state && state.userInfo && state.userInfo.uid) {
+        return state[state.userInfo.uid];
+      } else {
         return [];
       }
-      return state[state.userInfo.uid];
     },
     tabList(state) {
       return state.tabList.map(val => {

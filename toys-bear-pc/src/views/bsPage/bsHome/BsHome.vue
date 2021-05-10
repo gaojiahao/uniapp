@@ -26,10 +26,21 @@ export default {
       case "Exhibition": // 展厅首页
         this.isHome = "bsHallHome";
         break;
-      case "Sales": //公司首页
+      case "Sales": // 公司首页
         this.isHome = "bsCompanyHome";
         break;
       default:
+        this.getOrgCompany();
+        this.getGetSalesOrderDataStatistics();
+        this.getGetSalesHotSample();
+    }
+    const localKey = this.userInfo.uid;
+    let localShoppingCart = localStorage.getItem(localKey);
+    if (localShoppingCart) {
+      localShoppingCart = JSON.parse(localShoppingCart);
+      this.$store.commit("initShoppingCart", localShoppingCart);
+    } else {
+      this.$store.commit("initShoppingCart", []);
     }
   },
   computed: {

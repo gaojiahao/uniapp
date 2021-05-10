@@ -219,6 +219,7 @@
     <el-dialog
       :title="dialogTitle"
       :visible.sync="addClienDialog"
+      v-if="addClienDialog"
       :close-on-click-modal="false"
       top="50px"
       width="800px"
@@ -622,13 +623,13 @@ export default {
         size: []
       },
       addRules: {
-        url: [{ required: true, message: "请输入站点域名", trigger: "blur" }],
+        url: [{ required: true, message: "请选择站点域名", trigger: "change" }],
         isExportExcel: [
-          { required: true, message: "请输入站点域名", trigger: "change" }
+          { required: true, message: "请选择允许导出", trigger: "change" }
         ],
         profit: [{ required: true, message: "请输入利润率", trigger: "blur" }],
         customerInfoId: [
-          { required: true, message: "请选择客户", trigger: "blur" }
+          { required: true, message: "请选择客户", trigger: "change" }
         ],
         offerMethod: [
           { required: true, message: "请选择报价方式", trigger: "change" }
@@ -642,10 +643,10 @@ export default {
         exchange: [{ required: true, message: "请输入汇率", trigger: "blur" }],
         size: [{ required: true, message: "请选择尺寸", trigger: "change" }],
         decimalPlaces: [
-          { required: true, message: "请选择小数位数", trigger: "blur" }
+          { required: true, message: "请选择小数位数", trigger: "change" }
         ],
         rejectionMethod: [
-          { required: true, message: "请选择取舍方式", trigger: "blur" }
+          { required: true, message: "请选择取舍方式", trigger: "change" }
         ],
         miniPrice: [{ required: true, message: "请输入价格", trigger: "blur" }],
         miniPriceDecimalPlaces: [
