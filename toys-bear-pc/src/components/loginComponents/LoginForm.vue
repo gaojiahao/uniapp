@@ -337,14 +337,6 @@ export default {
                 "setComparnyId",
                 res.data.result.commparnyList[0].commparnyId
               );
-              const localKey = res.data.result.uid;
-              let localShoppingCart = localStorage.getItem(localKey);
-              if (localShoppingCart) {
-                localShoppingCart = JSON.parse(localShoppingCart);
-                this.$store.commit("initShoppingCart", localShoppingCart);
-              } else {
-                this.$store.commit("initShoppingCart", []);
-              }
               // 获取系统参数
               const Json = {};
               Json.MessageRestriction = await this.getClientTypeList(

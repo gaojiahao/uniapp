@@ -91,7 +91,6 @@ export default {
       const res = await this.$http.post("/api/GetUserCompanyList", {
         phoneNumber: this.userInfo.userInfo.phoneNumber
       });
-      console.log(res);
       if (res.data.result.code === 200) {
         for (let i = 0; i < res.data.result.item.length; i++) {
           if (
@@ -147,14 +146,6 @@ export default {
           res.data.result.commparnyList[0].commparnyId
         );
         this.$store.commit("updateAppLoading", true);
-        const localKey = res.data.result.uid;
-        let localShoppingCart = localStorage.getItem(localKey);
-        if (localShoppingCart) {
-          localShoppingCart = JSON.parse(localShoppingCart);
-          this.$store.commit("initShoppingCart", localShoppingCart);
-        } else {
-          this.$store.commit("initShoppingCart", []);
-        }
         await this.waitTime(1);
         // 登录成功获取系统参数
         const Json = {};
