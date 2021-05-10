@@ -12,6 +12,7 @@
           :thumbnailCount="5"
           :imageUrls="productDetail.imgUrlList"
           :videoAddress="productDetail.videoAddress"
+          :threeDimensional="productDetail.threeDimensional"
         />
       </div>
       <div class="right">
