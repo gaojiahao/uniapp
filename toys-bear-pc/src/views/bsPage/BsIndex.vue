@@ -129,6 +129,8 @@ import bsVendorQuery from "@/views/bsPage/bsMyClients/bsVendorQuery/BsVendorQuer
 // 厂商查询-详情页
 import bsMyClientsDetail from "@/components/bsComponents/bsMyClientsComponent/bsMyClientsDetail.vue";
 
+// 公司查询
+import bsCompanyQuery from "@/views/bsPage/bsMyClients/bsCompanyQuery/BsCompanyQuery.vue";
 // 货场查询
 import bsGoodsYardSearch from "@/views/bsPage/bsMyClients/bsGoodsYardSearch/BsGoodsYardSearch.vue";
 
@@ -136,6 +138,10 @@ import bsGoodsYardSearch from "@/views/bsPage/bsMyClients/bsGoodsYardSearch/BsGo
 import bsHallSample from "@/views/bsPage/bsBusinessManage/bsHallSample/BsHallSample.vue";
 // 展厅业务
 import bsHallBusiness from "@/views/bsPage/bsBusinessManage/bsHallBusiness/BsHallBusiness.vue";
+// 公司业务
+import bsCompanyBusiness from "@/views/bsPage/bsBusinessManage/bsCompanyBusiness/BsCompanyBusiness.vue";
+// 厂商业务
+import bsVendorBusiness from "@/views/bsPage/bsBusinessManage/bsVendorBusiness/BsVendorBusiness.vue";
 // 购物车
 import bsShoppingCart from "@/views/bsPage/bsBusinessManage/bsShoppingCart/BsShoppingCart.vue";
 // 找样报价
@@ -189,9 +195,12 @@ export default {
     bsMyClients,
     bsVendorQuery,
     bsMyClientsDetail,
+    bsCompanyQuery,
     bsGoodsYardSearch,
     bsHallSample,
     bsHallBusiness,
+    bsCompanyBusiness,
+    bsVendorBusiness,
     bsShoppingCart,
     bsSampleQuotation,
     bsSampleQuotationDetails,
