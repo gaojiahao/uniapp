@@ -112,7 +112,6 @@
         :visible.sync="exportTemplateDialog"
         width="1200px"
       >
-        
       </el-dialog>
     </transition>
   </div>
@@ -122,9 +121,7 @@
 import { mapState } from "vuex";
 export default {
   name: "bsShieldSettings",
-  components: {
-    
-  },
+  components: {},
   data() {
     return {
       staffList: [],
