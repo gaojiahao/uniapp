@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div class="businessComponent">
+  <div class="businessComponent" @click.stop>
     <div class="header">
       <!-- <img  style="width: 50px; height: 50px; border-radius: 50%; z-index:99" :src="userData.userImage" alt=""> -->
       <el-image
@@ -95,6 +95,7 @@ export default {
 <style scoped lang="less">
 @deep: ~">>>";
 .businessComponent {
+  cursor: default;
   width: 300px;
   height: 410px;
   background: #ffffff;
