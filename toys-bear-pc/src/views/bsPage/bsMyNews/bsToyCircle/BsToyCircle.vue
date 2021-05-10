@@ -243,14 +243,37 @@
                             {{ myDateDiff(val.createdOn) }}
                           </div>
                         </div>
+                        <div
+                          class="right"
+                          v-if="val.createdBy === userInfo.userInfo.id"
+                          @click="
+                            handlerDeleteNotice(val.id, item.noticeInteraction)
+                          "
+                        >
+                          删除
+                        </div>
                       </template>
                       <template v-else>
                         <div class="huifuWrapBox">
-                          <span class="myName">{{ val.userName }}:</span>
-                          <span class="toName">
-                            @{{ val.replyToUserName }}
-                          </span>
-                          <span class="content">{{ val.comment }}</span>
+                          <div class="left">
+                            <span class="myName">{{ val.userName }}:</span>
+                            <span class="toName">
+                              @{{ val.replyToUserName }}
+                            </span>
+                            <span class="content">{{ val.comment }}</span>
+                          </div>
+                          <div
+                            class="right"
+                            v-if="val.createdBy === userInfo.userInfo.id"
+                            @click="
+                              handlerDeleteNotice(
+                                val.id,
+                                item.noticeInteraction
+                              )
+                            "
+                          >
+                            删除
+                          </div>
                         </div>
                       </template>
                       <div
@@ -258,12 +281,11 @@
                         v-show="val.createdBy != userInfo.userInfo.id"
                         @click="openHuiPinglun(item, val)"
                       >
-                        <div
-                          class="huifu"
-                          v-if="val.interactionType == 'Comment'"
-                        >
-                          回复
-                        </div>
+                        <template v-if="val.interactionType == 'Comment'">
+                          <div class="huifu">
+                            回复
+                          </div>
+                        </template>
                       </div>
                     </div>
                     <div class="userItem"></div>
@@ -403,6 +425,43 @@ export default {
     };
   },
   methods: {
+    // 删除评论 | 删除回复
+    handlerDeleteNotice(id, list) {
+      console.log(id);
+      // /api/DeleteNoticeInteractive
+      this.$confirm("确定要删除吗?", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消"
+      })
+        .then(async () => {
+          const res = await this.$http.post("/api/DeleteNoticeInteractive", {
+            id: id
+          });
+          if (res.data.result.code === 200) {
+            this.$common.handlerMsgState({
+              msg: "删除成功",
+              type: "success"
+            });
+            for (let i = 0; i < list.length; i++) {
+              if (id == list[i].id) {
+                list.splice(i, 1);
+              }
+            }
+          } else {
+            this.$common.handlerMsgState({
+              msg: res.data.result.msg,
+              type: "danger"
+            });
+          }
+        })
+        .catch(() => {
+          this.$common.handlerMsgState({
+            msg: "取消删除",
+            type: "warning"
+          });
+        });
+    },
+    // 回到顶部
     scrollEvent(val) {
       val.scrollTop = 0;
     },
@@ -482,7 +541,7 @@ export default {
         })
         .catch(() => {
           this.$common.handlerMsgState({
-            msg: "已取消删除",
+            msg: "取消删除",
             type: "warning"
           });
         });
@@ -729,6 +788,7 @@ export default {
         });
         item.noticeInteraction.push({
           userImage: this.userInfo.userInfo.userImage,
+          id: res.data.result.item.id,
           userName: this.userInfo.userInfo.linkman,
           interactionType: "Comment",
           comment: this.pinglunValue,
@@ -745,14 +805,16 @@ export default {
         noticeNumber: item.bearNotice.noticeNumber,
         userName: this.userInfo.userInfo.linkman,
         interactionType: "Reply",
-        replyCompanyID: this.huifuUser.companyID,
+        replyCompanyID: this.currentComparnyId,
         replyToUser: this.huifuUser.createdBy,
         replyToUserName: this.huifuUser.userName,
+        createdBy: this.userInfo.userInfo.id,
         commentId: this.huifuUser.id,
         comment: this.pinglunValue
       };
       const res = await this.$http.post("/api/CreateNoticeInteraction", fd);
       if (res.data.result.code === 200) {
+        fd.id = res.data.result.item.id;
         item.noticeInteraction.push(fd);
         this.$common.handlerMsgState({
           msg: "回复成功",
@@ -894,7 +956,6 @@ export default {
   width: 100%;
   min-height: 100%;
   height: 100%;
-  padding: 10px;
   position: relative;
   box-sizing: border-box;
   .returnTop {
@@ -973,16 +1034,15 @@ export default {
     }
   }
   .noticeContent {
-    height: calc(100% - 85px);
-    width: 1660px;
-    min-width: 1660;
+    // height: calc(100% - 65px);
+    height: 100%;
+    width: 100%;
+    min-width: 1600;
     position: relative;
     overflow: hidden;
-    padding-right: 20px;
-    padding-bottom: 20px;
     border-radius: 4px;
     .vue-waterfall {
-      width: 1640px;
+      width: 100%;
       &::-webkit-scrollbar {
         // 谷歌隐藏滚动条
         display: none;
@@ -1182,11 +1242,23 @@ export default {
             padding-top: 10px;
             padding-bottom: 10px;
             line-height: 10px;
-            .myName {
-              color: #3368a9;
+            display: flex;
+            .left {
+              flex: 1;
+              line-height: 18px;
+              .myName {
+                color: #3368a9;
+              }
+              .toName {
+                margin: 0 10px;
+              }
             }
-            .toName {
-              margin: 0 10px;
+            .right {
+              width: 30px;
+              font-size: 12px;
+              text-align: center;
+              color: #3368a9;
+              cursor: pointer;
             }
           }
         }
@@ -1212,10 +1284,14 @@ export default {
       }
     }
     .cell-item-box {
-      width: 540px;
+      // width: 540px;
+      width: 100%;
       min-width: 540px;
       margin-bottom: 20px;
       border-radius: 6px;
+      width: 100% !important;
+      padding-right: 20px;
+      box-sizing: border-box;
       //   overflow: hidden;
       box-sizing: border-box;
     }
@@ -1224,8 +1300,9 @@ export default {
       border-radius: 4px;
       box-sizing: border-box;
       padding: 20px;
-      width: 520px;
+      // width: 520px;
       min-width: 520px;
+      width: 100%;
       .item-top {
         height: 60px;
         display: flex;
