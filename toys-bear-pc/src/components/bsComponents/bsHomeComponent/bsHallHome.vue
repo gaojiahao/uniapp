@@ -1,11 +1,11 @@
 <!--  -->
 <template>
-  <div></div>
+  <div>我是展厅首页</div>
 </template>
 
 <script>
 export default {
-  name: "",
+  name: "bsHallHome",
   data() {
     return {};
   },

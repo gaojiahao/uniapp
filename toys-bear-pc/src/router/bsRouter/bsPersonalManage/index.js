@@ -19,10 +19,12 @@ const BsPushIndex = () =>
 // 联系方式
 const BsContactWay = () =>
   import("@/views/bsPage/bsPersonalManage/bsContactWay/BsContactWay.vue");
-  
-  // 屏蔽设置
-  const BsShieldSettings = () =>
-  import("@/views/bsPage/bsPersonalManage/bsShieldSettings/BsShieldSettings.vue");
+
+// 屏蔽设置
+const BsShieldSettings = () =>
+  import(
+    "@/views/bsPage/bsPersonalManage/bsShieldSettings/BsShieldSettings.vue"
+  );
 
 export default [
   {
