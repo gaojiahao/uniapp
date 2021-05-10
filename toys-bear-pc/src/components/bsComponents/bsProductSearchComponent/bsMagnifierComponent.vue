@@ -161,14 +161,8 @@
       <div slot="title" class="el-dialog__header_right">
         <i class="el-icon-full-screen" @click="isThreeDFullscreen"></i>
       </div>
-      <div :class="[threeDFullscreen ? 'lg_panel' : 'sm_panel']">
-        <iframe
-          src="http://139.9.71.135:8087/Product3D/YS0080152/"
-          id="map"
-          scrolling="no"
-          frameborder="0"
-          :class="[threeDFullscreen ? 'lg_iframe' : 'sm_iframe']"
-        ></iframe>
+      <div :class="[threeDFullscreen?'lg_panel':'sm_panel']">
+        <iframe :src="threeDimensional" id="map" scrolling="no" frameborder="0" :class="[threeDFullscreen?'lg_iframe':'sm_iframe']"></iframe>
       </div>
     </el-dialog>
   </div>
@@ -214,6 +208,10 @@ export default {
     zoom: {
       default: 2, // 缩略比例,放大比例
       type: Number
+    },
+    threeDimensional:{
+      default: '',
+      type: String  
     }
   },
   data() {
@@ -267,17 +265,24 @@ export default {
       else return require("@/assets/images/imgError.png");
     },
     // 打开3D效果
-    open3D() {
-      // open3D(value) {
-      this.$common.handlerMsgState({
-        msg: "敬请期待",
-        type: "warning"
-      });
-      return;
-      // this.dialogVisibleThreeD = value;
-      // if (!value) {
-      //   this.threeDFullscreen = false;
-      // }
+    open3D(value) {
+      if(!this.threeDimensional){
+        this.$common.handlerMsgState({
+          msg: "暂无产品3D数据！",
+          type: "warning"
+        });
+        return ;
+      }
+      // this.$common.handlerMsgState({
+      //   msg: "敬请期待",
+      //   type: "warning"
+      // });
+      // console.log("3d");
+      // return ;
+      this.dialogVisibleThreeD = value;
+      if(!value){
+        this.threeDFullscreen = false;
+      }
     },
     touchEnd(e) {
       e = e || window.event;
