@@ -216,7 +216,7 @@ export default {
           value: "zh-CN"
         },
         {
-          label: "英文",
+          label: "English",
           value: "en"
         }
       ],
