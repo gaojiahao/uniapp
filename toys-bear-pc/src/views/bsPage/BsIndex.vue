@@ -146,7 +146,7 @@ import bsCompanyBusiness from "@/views/bsPage/bsBusinessManage/bsCompanyBusiness
 // 厂商业务
 import bsVendorBusiness from "@/views/bsPage/bsBusinessManage/bsVendorBusiness/BsVendorBusiness.vue";
 // 展厅明细
-import bsHallDetail from "@/views/bsPage/bsBusinessManage/bsHallDetail/BsHallDetail.vue";
+import bsSampleDetail from "@/views/bsPage/bsBusinessManage/bsSampleDetail/BsSampleDetail.vue";
 // 购物车
 import bsShoppingCart from "@/views/bsPage/bsBusinessManage/bsShoppingCart/BsShoppingCart.vue";
 // 找样报价
@@ -207,7 +207,7 @@ export default {
     bsHallBusiness,
     bsCompanyBusiness,
     bsVendorBusiness,
-    bsHallDetail,
+    bsSampleDetail,
     bsShoppingCart,
     bsSampleQuotation,
     bsSampleQuotationDetails,

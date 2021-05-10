@@ -5,7 +5,7 @@
 
 <script>
 export default {
-  name: "",
+  name: "BsSampleDetail",
   data() {
     return {};
   },
