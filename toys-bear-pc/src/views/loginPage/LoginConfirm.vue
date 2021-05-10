@@ -15,33 +15,46 @@
             >
               <el-image
                 class="img"
-                style="width: 60px; height: 60px;"
+                style="width: 60px; height: 60px"
                 :src="item.companyLogo"
                 fit="cover"
               >
                 <div
                   slot="error"
                   class="image-slot"
-                  style="width:100%;height:100%;display:flex;align-items:center;text-align:center;"
+                  style="
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    text-align: center;
+                  "
                 >
                   <img :src="require('@/assets/images/imgError.png')" alt="" />
                 </div>
                 <div
                   slot="placeholder"
                   class="image-slot"
-                  style="width:100%;height:100%;display:flex;align-items:center;white-space: nowrap;text-align:center;"
+                  style="
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    white-space: nowrap;
+                    text-align: center;
+                  "
                 >
                   <img :src="require('@/assets/images/imgError.png')" alt="" />
                 </div>
               </el-image>
-              <p style="box-sizing:border-box;padding-right:10px;">
+              <p style="box-sizing: border-box; padding-right: 10px">
                 {{ item.companyName }}
               </p>
               <el-radio
                 v-if="$route.query.id === 'checkted'"
                 v-model="item.checked"
                 :label="true"
-                ><span style="display:none;">1</span></el-radio
+                ><span style="display: none">1</span></el-radio
               >
             </li>
           </template>
@@ -185,6 +198,7 @@ export default {
             refresh: true
           };
           switch (item.companyType) {
+            case "Exhibition":
             case "Sales":
               this.$store.commit("updateActiveTab", fd);
               this.$store.commit("closeTabAll", this.$router);

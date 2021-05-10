@@ -104,6 +104,14 @@ export default {
       timer: null,
       activeName: "mobile",
       search: "",
+      bsHome: {
+        //跳转首页
+        component: "bsHome",
+        label: "后台首页",
+        linkUrl: "/bsIndex/bsHome",
+        name: "/bsIndex/bsHome",
+        refresh: true
+      },
       options: {
         // 二维码配置
         url: " ",
@@ -230,9 +238,12 @@ export default {
             );
             Json.PlatForm = await this.getClientTypeList("PlatForm");
             this.$store.commit("globalJson/setGlobalJson", Json);
+
             switch (res.data.result.commparnyList[0].companyType) {
+              case "Exhibition":
               case "Sales":
-                this.$router.push("/bsIndex");
+                this.$store.commit("updateActiveTab", this.bsHome);
+                this.$store.commit("closeTabAll", this.$router);
                 break;
               default:
                 location.href =
@@ -369,22 +380,14 @@ export default {
                 this.$store.commit("removeLoginItems");
               }
               console.log(res.data.result.commparnyList);
-              const fd = {
-                component: "bsHome",
-                label: "后台首页",
-                linkUrl: "/bsIndex/bsHome",
-                name: "/bsIndex/bsHome",
-                refresh: true
-              };
               switch (res.data.result.commparnyList[0].companyType) {
                 // case "Admin":
                 //   break;
                 // case "Supplier":
                 //   break;
-                // case "Exhibition":
-                //   break;
+                case "Exhibition":
                 case "Sales":
-                  this.$store.commit("updateActiveTab", fd);
+                  this.$store.commit("updateActiveTab", this.bsHome);
                   this.$store.commit("closeTabAll", this.$router);
                   break;
                 default:

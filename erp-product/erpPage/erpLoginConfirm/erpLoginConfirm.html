@@ -103,6 +103,9 @@
         }
       }).then(function (res) {
         if (res.result.isLogin) {
+            
+            window.localStorage.setItem("userInfoIsMain", res.result.userInfo.isMain);
+            window.localStorage.setItem("orgCompanyID", currentUser.commparnyId);
           window.localStorage.setItem("token", res.result.accessToken);
         //   window.location.href = 'https://www.toysbear.com/erpProduct/erpPage/erpOrder/erpOrder.html';
 

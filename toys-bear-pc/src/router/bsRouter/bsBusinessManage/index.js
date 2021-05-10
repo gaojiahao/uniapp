@@ -4,6 +4,16 @@ const BsHallSample = () =>
 // 展厅业务
 const BsHallBusiness = () =>
   import("@/views/bsPage/bsBusinessManage/bsHallBusiness/BsHallBusiness.vue");
+// 公司业务
+const BsCompanyBusiness = () =>
+  import(
+    "@/views/bsPage/bsBusinessManage/bsCompanyBusiness/BsCompanyBusiness.vue"
+  );
+// 厂商业务
+const BsVendorBusiness = () =>
+  import(
+    "@/views/bsPage/bsBusinessManage/bsVendorBusiness/BsVendorBusiness.vue"
+  );
 // 购物车
 const BsShoppingCart = () =>
   import("@/views/bsPage/bsBusinessManage/bsShoppingCart/BsShoppingCart.vue");
@@ -29,6 +39,22 @@ export default [
     path: "/bsIndex/bsHallBusiness",
     name: "bsHallBusiness",
     component: BsHallBusiness,
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/bsIndex/bsCompanyBusiness",
+    name: "bsCompanyBusiness",
+    component: BsCompanyBusiness,
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/bsIndex/bsVendorBusiness",
+    name: "bsVendorBusiness",
+    component: BsVendorBusiness,
     meta: {
       keepAlive: true
     }

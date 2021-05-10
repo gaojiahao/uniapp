@@ -370,13 +370,10 @@
                     success: function (res) {
                         if (res.result.isLogin) {
                             window.localStorage.setItem("token", res.result.accessToken)
-                            for (var index = 0; index < res.result.commparnyList.length; index++) {
-                                if (res.result.commparnyList[index].companyName === "超级管理员") {
-                                    window.localStorage.setItem("orgCompanyID", res
-                                        .result.commparnyList[index].commparnyId);
-                                }
-                            }
                             if (res.result.commparnyList.length === 1) {
+                                window.localStorage.setItem("userInfoIsMain", res.result.userInfo.isMain);
+                                window.localStorage.setItem("orgCompanyID", res
+                                        .result.commparnyList[0].commparnyId);
                                 // 一个角色
                                 window.location.href =
                                     'http://139.9.71.135:8080/erpProduct/erpPage/erpOrder/erpOrder.html';

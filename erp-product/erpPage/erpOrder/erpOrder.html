@@ -119,6 +119,7 @@
                             <th class="text-center">本次代号</th>
                             <th class="text-center">订单数量</th>
                             <th class="text-center">订单编号</th>
+                            <th class="text-center">业务员</th>
                             <th class="text-center">订单备注</th>
                             <th class="text-center thDete">
                                 <div class="thTxt"> 日期</div>
@@ -193,8 +194,8 @@
         orderType: "全部",
         skipCount: 1,
         maxResultCount: 10,
-        sortOrder: 1,
-        sortType: 2
+        // sortOrder: 1,
+        // sortType: 2
     };
     var currentSelectTableValue = {
         number: "",
@@ -207,13 +208,13 @@
         if (token) {
             userToken = token
             currentSelectTableValue.token = token;
-            var commparnyId = window.localStorage.getItem("orgCompanyID")
-            if (commparnyId) {
-                document.getElementById('isStaffList').style.display = "block"
-                orgCompanyIDdata = commparnyId
+            var IsMain = window.localStorage.getItem("userInfoIsMain")
+            if (IsMain === true) {
+                orgCompanyIDdata = window.localStorage.getItem("orgCompanyID")
                 getStaffList()
+            } else {
+                document.getElementById('isStaffList').style.display = "none"
             }
-
             getSampleOrderERPPage()
         } else {
             //   window.location.href = "https://www.toysbear.com/erpProduct/erpPage/erpHome/erpHome.html"
@@ -288,7 +289,12 @@
             contentType: "application/json; charset=utf-8",
             success: function (res) {
                 if (res.result.code === 200) {
-                    if (res.result.item.personnels === Array) {
+                    if (res.result.item.personnels.length > 0) {
+
+                        res.result.item.personnels.unshift({
+                            id: null,
+                            linkman: "全部"
+                        })
                         getCompanyIDList(res.result.item.personnels)
                     }
                 }
@@ -298,12 +304,13 @@
     }
     // 渲染操作员
     function getCompanyIDList(list) {
-        var staffList = document.getElementById('staffList');
+        // var staffList = document.getElementById('staffList');
         $("#staffList").empty();
         for (var j = 0; j < list.length; j++) {
             var staffListHtml = ""
-            html += "<option value='" + list[j].id + "'>" + list[j].linkman + "</option>"
+            staffListHtml += "<option value='" + list[j].id + "'>" + list[j].linkman + "</option>"
             $("#staffList").append(staffListHtml);
+
         }
     }
     // 请求列表
@@ -418,8 +425,9 @@
                 ")' name='radio' value=''></td>" + "<td>" + list[i].hall_naValue + "</td>" + " <td > " + list[i]
                 .orderTypeValue + "</td > " +
                 "<td>" + list[i].toCompanyNameValue + "</td>" + "<td>" + list[i].the_nuValue + "</td>" +
-                "<td>" + list[i].orderCount + "</td>" + "<td>" + list[i].number + "</td>" +
-                "<td  " + list[i].remarkValue + "</td>" + list[i].remarkValue + "</td>" + "<td>" + list[i]
+                "<td>" + list[i].orderCount + "</td>" + "<td>" + list[i].number + "</td>" + "<td>" + list[i]
+                .orgPersonnelName + "</td>" +
+                "<td  " + list[i].remarkValue + "</td>" + "<td>" + list[i]
                 .happenDateValue + "</td>" +
                 "<td><span onclick='handeldetails(" + i + ") '>点击查看</span></td></tr>"
             $("#tbodyData").append(html);
@@ -460,7 +468,7 @@
         if ($("#orderNumber").val()) data.orderNumber = $("#orderNumber").val();
         if ($("#orderFrom").val()) data.orderFrom = $("#orderFrom").val();
         if ($("#orderType").val()) data.orderType = $("#orderType").val();
-        if (orgCompanyID != "") {
+        if (orgCompanyIDdata != "") {
             if ($("#staffList").val()) data.staffId = $("#staffList").val();
         }
 
