@@ -71,6 +71,12 @@ import bsClientOrderDetails from "@/views/bsPage/bsSiteSharing/bsCustomerOrder/b
 /** 展厅业务订单详情 */
 import bsHallBusinessOrderDetails from "@/views/bsPage/bsBusinessManage/bsHallBusiness/bsHallBusinessOrderDetails/BsHallBusinessOrderDetails.vue";
 
+/** 公司业务订单详情 */
+import bsCompanyBusinessOrderDetails from "@/views/bsPage/bsBusinessManage/bsCompanyBusiness/bsCompanyBusinessOrderDetails/BsCompanyBusinessOrderDetails.vue";
+
+/** 厂商业务订单详情 */
+import bsVendorBusinessOrderDetails from "@/views/bsPage/bsBusinessManage/bsVendorBusiness/bsVendorBusinessOrderDetails/BsVendorBusinessOrderDetails.vue";
+
 // 站点列表
 import bsSiteLlis from "@/views/bsPage/bsSiteSharing/bsSiteLlis/BsSiteLlis.vue";
 
@@ -179,6 +185,8 @@ export default {
     bsProductDetails,
     bsClientOrderDetails,
     bsHallBusinessOrderDetails,
+    bsCompanyBusinessOrderDetails,
+    bsVendorBusinessOrderDetails,
     bsSiteLlis,
     bsSiteSettings,
     bsCustomerOrder,

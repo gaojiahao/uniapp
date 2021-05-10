@@ -1,16 +1,391 @@
-<!--  -->
 <template>
-  <div></div>
+  <div class="bsCompanyQuery">
+    <div class="title">
+      <div class="left">公司查询</div>
+    </div>
+    <div class="searchBox">
+      <div class="left">
+        <div class="item">
+          <span class="label">关键字：</span>
+          <el-input
+            type="text"
+            size="medium"
+            v-model="keyword"
+            clearable
+            placeholder="请输入关键词"
+            @keyup.native.enter="search"
+            @focus="showHistoryModal(true)"
+            @blur="showHistoryModalY(false)"
+            @change="showHistoryModal(false)"
+          ></el-input>
+        </div>
+        <div class="item">
+          <el-button
+            @click="search"
+            type="primary"
+            icon="el-icon-search"
+            size="medium"
+          >
+            搜索
+          </el-button>
+        </div>
+      </div>
+      <div
+        class="history"
+        v-if="isShowHistoryPanel && searchHistoryList.length"
+      >
+        <ul class="history_list">
+          <li class="history_item del">
+            最近搜索
+            <div class="del_all" @click="historyDel">清空</div>
+          </li>
+          <template v-for="(item, index) in searchHistoryList">
+            <li
+              class="history_item"
+              @click="historySearch(item.value)"
+              :key="index"
+            >
+              {{ item.value }}
+            </li>
+          </template>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 厂商列表 -->
+    <div class="tableBox">
+      <div class="title">公司列表 ({{ totalCount }})</div>
+      <el-table
+        :data="tableData"
+        stripe
+        style="width: 100%"
+        :header-cell-style="{ backgroundColor: '#f9fafc' }"
+        @row-click="handleDetail"
+      >
+        <el-table-column label="序号" type="index" align="center" width="70">
+        </el-table-column>
+        <el-table-column label="公司">
+          <template slot-scope="scope">
+            <div class="nameBox">
+              <el-avatar
+                style="background-color: #e4efff"
+                :size="40"
+                :src="scope.row.companyLogo"
+              >
+                <p class="errText">
+                  {{ scope.row.linkman }}
+                </p>
+              </el-avatar>
+              <span style="margin-left: 10px" class="name">{{
+                scope.row.companyName
+              }}</span>
+              <span class="isMain" v-if="scope.row.isMain"><i>主账号</i></span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="contactsMan"
+          label="联系人"
+          width="180"
+        >
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="phoneNumber"
+          label="手机"
+          width="180"
+        >
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="telePhoneNumber"
+          label="电话"
+          width="180"
+        >
+        </el-table-column>
+        <el-table-column align="center" prop="address" label="地址">
+        </el-table-column>
+      </el-table>
+      <!-- 分页 -->
+      <center style="padding: 20px 0">
+        <el-pagination
+          layout="total, sizes, prev, pager, next, jumper"
+          :page-sizes="[10, 20, 30, 40]"
+          background
+          :total="totalCount"
+          :page-size="pageSize"
+          :current-page.sync="currentPage"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+        ></el-pagination>
+      </center>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "",
+  name: "bsVendorQuery",
   data() {
-    return {};
+    return {
+      totalCount: 0,
+      pageSize: 12,
+      currentPage: 1,
+      keyword: null,
+      dateTime: null,
+      tableData: [],
+      myKeyword: "",
+      isShowHistoryPanel: false,
+      searchHistoryList: [],
+      vuex: {}
+    };
   },
-  created() {},
-  mounted() {}
+  methods: {
+    async getVendorListPage() {
+      const fd = {
+        skipCount: this.currentPage,
+        maxResultCount: this.pageSize,
+        keyword: this.keyword,
+        OppositeRole: "Supplier"
+      };
+      for (const key in fd) {
+        if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
+          delete fd[key];
+        }
+      }
+      const res = await this.$http.post("/api/ContactsCompanyListByID", fd);
+      if (res.data.result.code === 200) {
+        this.tableData = res.data.result.item.items;
+        this.totalCount = res.data.result.item.totalCount;
+        console.log("contactsMan", this.tableData);
+      }
+    },
+    //点击详情
+    async handleDetail(e) {
+      console.log(e);
+      const fd = {
+        name: e.companyName,
+        linkUrl: "/bsIndex/bsVendorQuery",
+        component: "bsMyClientsDetail",
+        refresh: true,
+        noPush: true,
+        label: e.companyName,
+        value: e
+      };
+      this.$store.commit("myAddTab", fd);
+    },
+    // 搜索
+    search() {
+      var uid = this.vuex.userInfo.uid;
+      var id = {
+        value: this.keyword
+      };
+      var history = {};
+      localStorage.getItem("searchHistory")
+        ? (history = JSON.parse(localStorage.getItem("searchHistory")))
+        : (history = {});
+      if (history[uid + "_cs"] && history[uid + "_cs"].length != 0) {
+        history[uid + "_cs"].forEach((res, index) => {
+          res.value == id.value ? history[uid + "_cs"].splice(index, 1) : "";
+        });
+      } else {
+        history[uid + "_cs"] = [];
+      }
+      history[uid + "_cs"].unshift(id);
+      if (history[uid + "_cs"].length > 8) {
+        history[uid + "_cs"].splice(8, history[uid + "_cs"].length - 8);
+      }
+      localStorage.setItem("searchHistory", JSON.stringify(history));
+      this.showHistoryModal(false);
+      this.currentPage = 1;
+      this.getVendorListPage();
+    },
+    // 切換頁容量
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+      if (
+        this.currentPage * pageSize > this.totalCount &&
+        this.currentPage != 1
+      )
+        return false;
+      this.getVendorListPage();
+    },
+    // 修改当前页
+    handleCurrentChange(page) {
+      this.currentPage = page;
+      this.getVendorListPage();
+    },
+    //是否显示历史搜索面板
+    showHistoryModal(value) {
+      if (value) {
+        var history = {};
+        var uid = this.vuex.userInfo.uid;
+        localStorage.getItem("searchHistory")
+          ? (history = JSON.parse(localStorage.getItem("searchHistory")))
+          : (history = {});
+        this.searchHistoryList = history[uid + "_cs"] || [];
+      }
+      this.isShowHistoryPanel = value;
+    },
+    showHistoryModalY(value) {
+      var me = this;
+      setTimeout(function() {
+        me.isShowHistoryPanel = value;
+      }, 500);
+    },
+    //点击历史搜索
+    historySearch(value) {
+      this.keyword = value;
+      this.search();
+    },
+    //搜索清空
+    historyDel() {
+      var uid = this.vuex.userInfo.uid;
+      var history = {};
+      localStorage.getItem("searchHistory")
+        ? (history = JSON.parse(localStorage.getItem("searchHistory")))
+        : (history = {});
+      if (history[uid + "_cs"] && history[uid + "_cs"].length != 0) {
+        history[uid + "_cs"] = [];
+        localStorage.setItem("searchHistory", JSON.stringify(history));
+        this.showHistoryModal(false);
+      }
+    }
+  },
+  created() {
+    this.vuex = JSON.parse(sessionStorage.getItem("vuex"));
+  },
+  mounted() {
+    this.getVendorListPage();
+  }
 };
 </script>
-<style scoped lang="less"></style>
+<style scoped lang="less">
+@deep: ~">>>";
+@{deep} .el-table {
+  color: #666;
+  tr {
+    cursor: pointer;
+  }
+  .nameBox {
+    width: 300px;
+    display: flex;
+    align-items: center;
+    .el-avatar {
+      color: #3368a9;
+      img {
+        width: 40px;
+        min-height: 40px;
+      }
+    }
+  }
+}
+.bsCompanyQuery {
+  min-height: 100%;
+  background-color: #fff;
+  padding: 0 20px;
+  .title {
+    height: 55px;
+    font-size: 15px;
+    font-weight: 700;
+    padding-left: 15px;
+    box-sizing: border-box;
+    position: relative;
+    border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .left::before {
+      width: 4px;
+      height: 14px;
+      background-color: #3368a9;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      content: "";
+      transform: translate(0, -50%);
+    }
+  }
+  .searchBox {
+    height: 76px;
+    display: flex;
+    align-items: center;
+    .name {
+      margin-left: 16px;
+    }
+    .isMain {
+      margin-left: 10px;
+      width: 44px;
+      height: 18px;
+      text-align: center;
+      background: #ff4848;
+      border-radius: 9px;
+      color: #fff;
+      font-size: 12px;
+      i {
+        display: block;
+        position: relative;
+        top: -3px;
+        -webkit-transform: scale(0.7);
+        -moz-transform: scale(0.7);
+        -ms-transform: scale(0.7);
+        transform: scale(0.7);
+      }
+    }
+    .left {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      .item {
+        display: flex;
+        align-items: center;
+        max-width: 258px;
+        margin-right: 20px;
+        .label {
+          width: 58px;
+          min-width: 58px;
+        }
+      }
+    }
+    .history {
+      position: absolute;
+      left: 77px;
+      transform-origin: center top;
+      z-index: 2037;
+      width: 315px;
+      margin: 5px 0;
+      box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+      border-radius: 4px;
+      border: 1px solid #e4e7ed;
+      box-sizing: border-box;
+      background-color: #fff;
+      top: 130px;
+      .history_list {
+        .history_item {
+          padding: 0 20px;
+          margin: 0;
+          line-height: 34px;
+          cursor: pointer;
+          color: #5e8ce8;
+          font-size: 14px;
+          list-style: none;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          color: #666666;
+        }
+        .del {
+          color: #333333;
+          .del_all {
+            float: right;
+          }
+        }
+        .history_item:hover {
+          background-color: #f9fafc;
+        }
+      }
+    }
+  }
+}
+</style>

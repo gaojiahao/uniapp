@@ -161,8 +161,14 @@
       <div slot="title" class="el-dialog__header_right">
         <i class="el-icon-full-screen" @click="isThreeDFullscreen"></i>
       </div>
-      <div :class="[threeDFullscreen?'lg_panel':'sm_panel']">
-        <iframe :src="threeDimensional" id="map" scrolling="no" frameborder="0" :class="[threeDFullscreen?'lg_iframe':'sm_iframe']"></iframe>
+      <div :class="[threeDFullscreen ? 'lg_panel' : 'sm_panel']">
+        <iframe
+          :src="threeDimensional"
+          id="map"
+          scrolling="no"
+          frameborder="0"
+          :class="[threeDFullscreen ? 'lg_iframe' : 'sm_iframe']"
+        ></iframe>
       </div>
     </el-dialog>
   </div>
@@ -209,9 +215,9 @@ export default {
       default: 2, // 缩略比例,放大比例
       type: Number
     },
-    threeDimensional:{
-      default: '',
-      type: String  
+    threeDimensional: {
+      default: "",
+      type: String
     }
   },
   data() {
