@@ -182,8 +182,8 @@
 
 
 <script>
-    // var baseUrl = "https://www.toysbear.com"
-    var baseUrl = "http://139.9.71.135:8081";
+    var baseUrl = "https://www.toysbear.com"
+    // var baseUrl = "http://139.9.71.135:8081";
     // var userToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJMaXR0bGVCZWFyIiwianRpIjoiNjUwY2NhNTMtYzk5YS00M2M5LWJiMWEtNTcyZGQzNDY5YTRjIiwiaWF0IjoxNjE4MjIwODU3LCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMTc2MDMwMzM0NTgiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zeXN0ZW0iOiJQQyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6ImU2Yzg5ODllLTUyMGEtNGEyOS05Y2Y1LTAwZDAyNmVmZDBhMiIsIm5iZiI6MTYxODIyMDg1NywiZXhwIjoxNjE4MzA3MjU3LCJpc3MiOiJMaXR0bGVCZWFyIiwiYXVkIjoiTGl0dGxlQmVhciJ9.PpBz-nmKoqz5ZVlRY9x2H8nA1Nm7iQy8h26CB9NfSGs"
     var userToken;
     var orgCompanyIDdata
@@ -209,7 +209,7 @@
             userToken = token
             currentSelectTableValue.token = token;
             var IsMain = window.localStorage.getItem("userInfoIsMain")
-            if (IsMain === true) {
+            if (IsMain === "true") {
                 orgCompanyIDdata = window.localStorage.getItem("orgCompanyID")
                 getStaffList()
             } else {
@@ -217,8 +217,8 @@
             }
             getSampleOrderERPPage()
         } else {
-            //   window.location.href = "https://www.toysbear.com/erpProduct/erpPage/erpHome/erpHome.html"
-            window.location.href = "http://139.9.71.135:8080/erpProduct/erpPage/erpHome/erpHome.html"
+              window.location.href = "https://www.toysbear.com/erpProduct/erpPage/erpHome/erpHome.html"
+            // window.location.href = "http://139.9.71.135:8080/erpProduct/erpPage/erpHome/erpHome.html"
 
         }
     })
@@ -315,6 +315,11 @@
     }
     // 请求列表
     function getSampleOrderERPPage() {
+        for (var key in data) {
+            if (data[key] === null || data[key] === undefined || data[key] === "" || data[key] === "null") {
+                delete data[key];
+            }
+        }
         $.ajax({
             type: "post",
             url: baseUrl + "/api/SampleOrderERPPage",
@@ -484,15 +489,15 @@
     //退出
     function signOut() {
         window.localStorage.clear()
-        // window.location.href = "https://www.toysbear.com/erpProduct/erpPage/erpLogin/erpLogin.html"
+        window.location.href = "https://www.toysbear.com/erpProduct/erpPage/erpLogin/erpLogin.html"
 
-        window.location.href = "http://139.9.71.135:8080/erpProduct/erpPage/erpLogin/erpLogin.html"
+        // window.location.href = "http://139.9.71.135:8080/erpProduct/erpPage/erpLogin/erpLogin.html"
     }
     // 去首页
     function toHome() {
-        // window.location.href = "https://www.toysbear.com/erpProduct/erpPage/erpHome/erpHome.html"
+        window.location.href = "https://www.toysbear.com/erpProduct/erpPage/erpHome/erpHome.html"
 
-        window.location.href = "http://139.9.71.135:8080/erpProduct/erpPage/erpHome/erpHome.html"
+        // window.location.href = "http://139.9.71.135:8080/erpProduct/erpPage/erpHome/erpHome.html"
     }
     //点击跳转
     function handeldetails(index) {
@@ -513,10 +518,10 @@
                 window.localStorage.setItem("supplierCount", supplierCount);
                 window.localStorage.setItem("orderCount", orderCount);
                 window.localStorage.setItem("happenDate", happenDate);
-                // window.location.href = 
-                //     "https://www.toysbear.com/erpProduct/erpPage/erpOrderDetails/erpOrderDetails.html"
-                window.location.href =
-                    "http://139.9.71.135:8080/erpProduct/erpPage/erpOrderDetails/erpOrderDetails.html"
+                window.location.href = 
+                    "https://www.toysbear.com/erpProduct/erpPage/erpOrderDetails/erpOrderDetails.html"
+                // window.location.href =
+                //     "http://139.9.71.135:8080/erpProduct/erpPage/erpOrderDetails/erpOrderDetails.html"
             }
         }
     }

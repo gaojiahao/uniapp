@@ -114,6 +114,9 @@ import bsPushSettings from "@/views/bsPage/bsPersonalManage/bsPushSettings/BsPus
 // 联系方式
 import bsContactWay from "@/views/bsPage/bsPersonalManage/bsContactWay/BsContactWay.vue";
 
+// 屏蔽设置
+import bsShieldSettings from "@/views/bsPage/bsPersonalManage/bsShieldSettings/BsShieldSettings.vue";
+
 // 我的消息
 import bsNews from "@/views/bsPage/bsMyNews/bsNews/BsNews.vue";
 // 我的好友
@@ -142,6 +145,8 @@ import bsHallBusiness from "@/views/bsPage/bsBusinessManage/bsHallBusiness/BsHal
 import bsCompanyBusiness from "@/views/bsPage/bsBusinessManage/bsCompanyBusiness/BsCompanyBusiness.vue";
 // 厂商业务
 import bsVendorBusiness from "@/views/bsPage/bsBusinessManage/bsVendorBusiness/BsVendorBusiness.vue";
+// 展厅明细
+import bsHallDetail from "@/views/bsPage/bsBusinessManage/bsHallDetail/BsHallDetail.vue";
 // 购物车
 import bsShoppingCart from "@/views/bsPage/bsBusinessManage/bsShoppingCart/BsShoppingCart.vue";
 // 找样报价
@@ -189,6 +194,7 @@ export default {
     bsPushIndex,
     bsPushSettings,
     bsContactWay,
+    bsShieldSettings,
     bsNews,
     bsMyGoodFriend,
     bsToyCircle,
@@ -201,6 +207,7 @@ export default {
     bsHallBusiness,
     bsCompanyBusiness,
     bsVendorBusiness,
+    bsHallDetail,
     bsShoppingCart,
     bsSampleQuotation,
     bsSampleQuotationDetails,

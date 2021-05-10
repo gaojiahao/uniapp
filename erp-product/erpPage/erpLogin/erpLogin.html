@@ -117,12 +117,12 @@
     if (timeID) clearInterval(timeID);
     $(function () {
 
-        // var baseWsUrl = "wss://impush.toysbear.com/ws?UserId=";
-        // var baseUrl = "https://www.toysbear.com";
+        var baseWsUrl = "wss://impush.toysbear.com/ws?UserId=";
+        var baseUrl = "https://www.toysbear.com";
 
         // 测试
-        var baseUrl = "http://139.9.71.135:8081";
-        var baseWsUrl = "ws://139.9.71.135:8090/ws?UserId=";
+        // var baseUrl = "http://139.9.71.135:8081";
+        // var baseWsUrl = "ws://139.9.71.135:8090/ws?UserId=";
         var myWs;
         var showQrCode = false;
         var qrTimer = null;
@@ -228,10 +228,10 @@
 
                     window.localStorage.setItem("token", res.result.accessToken);
                     qrTimer = null;
-                    // window.location.href =
-                    //     'https://www.toysbear.com/erpProduct/erpPage/erpOrder/erpOrder.html';
-                    window.location.href = 
-                        'http://139.9.71.135:8080/erpProduct/erpPage/erpOrder/erpOrder.html';
+                    window.location.href =
+                        'https://www.toysbear.com/erpProduct/erpPage/erpOrder/erpOrder.html';
+                    // window.location.href = 
+                    //     'http://139.9.71.135:8080/erpProduct/erpPage/erpOrder/erpOrder.html';
                 }
             })
         };
@@ -375,10 +375,10 @@
                                 window.localStorage.setItem("orgCompanyID", res
                                         .result.commparnyList[0].commparnyId);
                                 // 一个角色
-                                window.location.href =
-                                    'http://139.9.71.135:8080/erpProduct/erpPage/erpOrder/erpOrder.html';
-                                    // window.location.href = 
-                                    // '/erpProduct/erpPage/erpOrder/erpOrder.html';
+                                // window.location.href =
+                                //     'http://139.9.71.135:8080/erpProduct/erpPage/erpOrder/erpOrder.html';
+                                    window.location.href = 
+                                    '/erpProduct/erpPage/erpOrder/erpOrder.html';
                                 // this.$router.push("/me");
                             } else if (res.result.commparnyList.length > 1) {
                                 // 多个角色
@@ -386,10 +386,10 @@
                                     .userInfo.id));
                                 window.localStorage.setItem("userList", JSON.stringify(res.result
                                     .commparnyList));
-                                    window.location.href =
-                                    'http://139.9.71.135:8080/erpProduct/erpPage/erpLoginConfirm/erpLoginConfirm.html';
-                                // window.location.href =
-                                //     'https://www.toysbear.com/erpProduct/erpPage/erpLoginConfirm/erpLoginConfirm.html';
+                                    // window.location.href =
+                                    // 'http://139.9.71.135:8080/erpProduct/erpPage/erpLoginConfirm/erpLoginConfirm.html';
+                                window.location.href =
+                                    'https://www.toysbear.com/erpProduct/erpPage/erpLoginConfirm/erpLoginConfirm.html';
                             }
                         } else {
                             alert(res.result.message);
