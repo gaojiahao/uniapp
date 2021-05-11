@@ -491,9 +491,9 @@ export default {
           break;
         case "择样明细":
           fd = {
-            name: "/bsIndex/bsSampleDetail",
-            linkUrl: "/bsIndex/bsSampleDetail",
-            component: "bsSampleDetail",
+            name: "/bsIndex/bsSampleDetailed",
+            linkUrl: "/bsIndex/bsSampleDetailed",
+            component: "bsSampleDetailed",
             refresh: true,
             label: title
           };
