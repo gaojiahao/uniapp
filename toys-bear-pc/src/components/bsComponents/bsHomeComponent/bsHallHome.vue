@@ -275,14 +275,6 @@ export default {
         shareTotalToday: "" //客户订单今日
       },
       hotValue: "热门择样",
-      hotList: [
-        {
-          value: "热门择样"
-        },
-        {
-          value: "热门搜索"
-        }
-      ],
       dayValue: "7天",
       dayList: [
         {
@@ -301,28 +293,27 @@ export default {
       gongzuoList: [
         {
           title: "公司业务",
-          icon: require("@/assets/images/zhantingyewu.png")
+          icon: require("@/assets/images/gongsiyewu.png")
         },
         {
           title: "厂商业务",
           icon: require("@/assets/images/caigoudingdan.png")
         },
         {
+          title: "购物车",
+          icon: require("@/assets/images/gouwuche.png")
+        },
+        {
           title: "找样报价",
           icon: require("@/assets/images/zhaoyangbaojia.png")
         },
-
         {
-          title: "浏览足迹",
-          icon: require("@/assets/images/liulanzuji.png")
-        },
-        {
-          title: "站点分享",
-          icon: require("@/assets/images/zhandianfenxiang.png")
-        },
-        {
-          title: "客户订单",
+          title: "我的客户",
           icon: require("@/assets/images/kehudingdan.png")
+        },
+        {
+          title: "择样明细",
+          icon: require("@/assets/images/zeyang.png")
         }
       ],
       labelList: [
@@ -381,15 +372,6 @@ export default {
     changeTime(value) {
       this.timeData = Object.assign(calculateDate(value));
       if (this.hotValue === "热门择样") {
-        this.getGetSalesHotSample();
-      } else {
-        this.getGetSalesHotSearch();
-      }
-    },
-    // 热门泽洋和热门搜索切换
-    changeHot(value) {
-      console.log(value);
-      if (value === "热门择样") {
         this.getGetSalesHotSample();
       } else {
         this.getGetSalesHotSearch();
@@ -462,11 +444,29 @@ export default {
     openMyGongzuo(title) {
       let fd = {};
       switch (title) {
-        case "展厅业务":
+        case "公司业务":
           fd = {
             name: "/bsIndex/bsHallBusiness",
             linkUrl: "/bsIndex/bsHallBusiness",
             component: "bsHallBusiness",
+            refresh: true,
+            label: title
+          };
+          break;
+        case "厂商业务":
+          fd = {
+            name: "/bsIndex/bsVendorBusiness",
+            linkUrl: "/bsIndex/bsVendorBusiness",
+            component: "bsVendorBusiness",
+            refresh: true,
+            label: title
+          };
+          break;
+        case "购物车":
+          fd = {
+            name: "/bsIndex/bsShoppingCart",
+            linkUrl: "/bsIndex/bsShoppingCart",
+            component: "bsShoppingCart",
             refresh: true,
             label: title
           };
@@ -480,43 +480,20 @@ export default {
             label: title
           };
           break;
-        case "采购订单":
+        case "我的客户":
           fd = {
-            name: "/bsIndex/bsPurchaseOrder",
-            linkUrl: "/bsIndex/bsPurchaseOrder",
-            component: "bsPurchaseOrder",
+            name: "/bsIndex/bsMyClients",
+            linkUrl: "/bsIndex/bsMyClients",
+            component: "bsMyClients",
             refresh: true,
             label: title
           };
           break;
-        case "浏览足迹":
-          // this.$common.handlerMsgState({
-          //   msg: "敬请期待",
-          //   type: "warning"
-          // });
-          // return false;
+        case "择样明细":
           fd = {
-            name: "/bsIndex/bsBrowsingFootprints",
-            linkUrl: "/bsIndex/bsBrowsingFootprints",
-            component: "bsBrowsingFootprints",
-            refresh: true,
-            label: title
-          };
-          break;
-        case "站点分享":
-          fd = {
-            name: "/bsIndex/bsSiteLlis",
-            linkUrl: "/bsIndex/bsSiteLlis",
-            component: "bsSiteLlis",
-            refresh: true,
-            label: "站点列表"
-          };
-          break;
-        case "客户订单":
-          fd = {
-            name: "/bsIndex/bsCustomerOrder",
-            linkUrl: "/bsIndex/bsCustomerOrder",
-            component: "bsCustomerOrder",
+            name: "/bsIndex/bsSampleDetail",
+            linkUrl: "/bsIndex/bsSampleDetail",
+            component: "bsSampleDetail",
             refresh: true,
             label: title
           };
@@ -576,7 +553,8 @@ export default {
         justify-content: space-around;
         .item {
           margin: 15px 0;
-          width: 150px;
+          width: 40%;
+          //   width: 150px;
           height: 60px;
           box-sizing: border-box;
           display: flex;
@@ -615,6 +593,7 @@ export default {
       flex-direction: column;
       .item {
         height: 100px;
+        width: 100%;
         background-color: #fff;
         border-radius: 4px;
         padding: 0 25px;
@@ -692,6 +671,9 @@ export default {
   .myFooter {
     display: flex;
     height: 463px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    box-sizing: border-box;
     .statistics {
       flex: 1;
       background-color: #fff;
@@ -716,19 +698,20 @@ export default {
       .increase {
         display: flex;
         flex-wrap: wrap;
-
         li:nth-of-type(1) {
-          border-right: 1px solid #dcdfe6;
+          border-bottom: 1px solid #dcdfe6;
+        }
+        li:nth-of-type(2) {
+          border-left: 1px solid #dcdfe6;
           border-bottom: 1px solid #dcdfe6;
         }
         li:nth-of-type(4) {
-          border-top: 1px solid #dcdfe6;
           border-left: 1px solid #dcdfe6;
         }
+
         li {
-          width: 214px;
           height: 180px;
-          padding-top: 30px;
+          padding: 25px 0 15px;
           box-sizing: border-box;
           flex: 1;
           h3 {
