@@ -291,7 +291,7 @@
                     <div class="userItem"></div>
                   </div>
                   <div
-                    class="pinglunInput"
+                    class="pinglunqu"
                     v-if="item.isHuiPinglun || item.isPinglun"
                   >
                     <!-- 回复 -->

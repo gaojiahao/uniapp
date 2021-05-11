@@ -160,8 +160,8 @@
       :visible.sync="selectPush"
       destroy-on-close
       append-to-body
-      width="800px"
-      top="50px"
+      width="700px"
+      top="70px"
     >
       <el-radio-group class="myRadios" v-model="radio" @change="changeRadios">
         <el-radio
@@ -173,7 +173,7 @@
               $store.state.userInfo.commparnyList[0].companyType === 'Sales'
           "
         >
-          <el-avatar :size="30" src=""></el-avatar>平台所有人
+          <el-avatar :size="50" src=""></el-avatar>平台所有人
         </el-radio>
         <el-radio
           label="Sales"
@@ -181,7 +181,7 @@
             $store.state.userInfo.commparnyList[0].companyType === 'Supplier'
           "
         >
-          <el-avatar :size="30" src=""></el-avatar>所有公司联系人
+          <el-avatar :size="50" src=""></el-avatar>所有公司
         </el-radio>
         <el-radio
           label="Supplier"
@@ -191,7 +191,7 @@
               $store.state.userInfo.commparnyList[0].companyType === 'Sales'
           "
         >
-          <el-avatar :size="30" src=""></el-avatar>所有厂商联系人
+          <el-avatar :size="50" src=""></el-avatar>所有厂商
         </el-radio>
       </el-radio-group>
       <div class="tongxunlu">
@@ -543,21 +543,26 @@ export default {
     isSelectPush() {
       this.$refs.refGonggao.validate(valid => {
         if (valid) {
-          this.$confirm("是否需要推送公告?", {
+          this.$confirm("是否需要推送公告?", "提示", {
             distinguishCancelAndClose: true,
             cancelButtonText: "需要推送",
-            confirmButtonText: "不了，谢谢"
+            confirmButtonText: "不了，谢谢",
+            iconClass: "iconfont icon-laba2"
           })
             .then(() => {
               this.sendGonggao();
             })
             .catch(action => {
               if (action === "cancel") {
-                this.orgListCurrentPage = 1;
-                this.getOrgList(false);
-                this.radio = "";
-                this.checkUserList = [];
-                this.selectPush = true;
+                this.$common.handlerMsgState({
+                  msg: "敬请期待",
+                  type: "warning"
+                });
+                // this.orgListCurrentPage = 1;
+                // this.getOrgList(false);
+                // this.radio = "";
+                // this.checkUserList = [];
+                // this.selectPush = true;
               }
             });
         }
@@ -751,7 +756,9 @@ export default {
   }
 }
 @{deep} .myRadios {
+  display: flex;
   .el-radio {
+    flex: 1;
     font-size: 30px;
     display: flex;
     align-items: center;
