@@ -14,11 +14,24 @@
       <div class="title">择样明细</div>
       <div class="bs_sample_detail_panel">
         <div class="bs_sample_detail_panel_title">
-          {{userInfo.commparnyList[0]&&userInfo.commparnyList[0]['companyName']}}
+          {{
+            userInfo.commparnyList[0] &&
+              userInfo.commparnyList[0]["companyName"]
+          }}
         </div>
         <div class="bs_sample_detail_panel_logo">
-          <img :src="userInfo.commparnyList[0]&&userInfo.commparnyList[0]['companyLogo']">
-          <div class="sm_title">{{userInfo.commparnyList[0]&&userInfo.commparnyList[0]['companyName']}}</div>
+          <img
+            :src="
+              userInfo.commparnyList[0] &&
+                userInfo.commparnyList[0]['companyLogo']
+            "
+          />
+          <div class="sm_title">
+            {{
+              userInfo.commparnyList[0] &&
+                userInfo.commparnyList[0]["companyName"]
+            }}
+          </div>
         </div>
         <div class="bs_sample_detail_panel_form">
           <el-form
@@ -36,7 +49,7 @@
                 placeholder="请输入内容"
                 v-model.trim="form.code"
                 clearable
-                :style="{width:'300px'}"
+                :style="{ width: '300px' }"
               ></el-input>
             </el-form-item>
             <el-form-item label="验证码" prop="number">
@@ -44,7 +57,7 @@
                 placeholder="请输入内容"
                 v-model.trim="form.number"
                 clearable
-                :style="{width:'300px'}"
+                :style="{ width: '300px' }"
               ></el-input>
             </el-form-item>
             <el-form-item>
@@ -57,18 +70,14 @@
                 >
               </div>
             </el-form-item>
-          </el-form>  
+          </el-form>
         </div>
       </div>
     </div>
     <div class="bs_sample_list" v-else>
       <div class="bs_sample_detail_box">
-        <div class="bs_sample_detail_info">
-
-        </div>
-        <div class="bs_sample_detail_list">
-          
-        </div>
+        <div class="bs_sample_detail_info"></div>
+        <div class="bs_sample_detail_list"></div>
       </div>
     </div>
   </div>
@@ -81,36 +90,32 @@ export default {
   components: {},
   data() {
     return {
-      form:{
-        code:null,
-        number:null
-      },  //表单数据
+      form: {
+        code: null,
+        number: null
+      }, //表单数据
       rules: {
-        code: [
-          { required: true, message: '请填写代号', trigger: 'blur' }
-        ],
-        number: [
-          { required: true, message: '请填写验证码', trigger: 'blur' }
-        ]
+        code: [{ required: true, message: "请填写代号", trigger: "blur" }],
+        number: [{ required: true, message: "请填写验证码", trigger: "blur" }]
       }, //表单规则
-      isShowSample:true, //是否显示填写择样
-      sampleList:[], //择样数据
+      isShowSample: true, //是否显示填写择样
+      sampleList: [] //择样数据
     };
   },
   methods: {
-    changeShowSample(value){
+    changeShowSample(value) {
       this.isShowSample = value;
-      if(value){
+      if (value) {
         this.form = {
-          code:null,
-          number:null
-        }
+          code: null,
+          number: null
+        };
       }
     },
-    async goDetail(){
+    async goDetail() {
       const fd = {
-        the_nu:this.form.code,
-        Verify_Code:this.form.number
+        the_nu: this.form.code,
+        Verify_Code: this.form.number
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
@@ -159,8 +164,8 @@ export default {
         transform: translate(0, -50%);
       }
     }
-    .bs_sample_detail_panel{
-      .bs_sample_detail_panel_title{
+    .bs_sample_detail_panel {
+      .bs_sample_detail_panel_title {
         width: 100px;
         height: 26px;
         opacity: 1;
@@ -171,18 +176,18 @@ export default {
         line-height: 30px;
         margin: 71px auto 50px auto;
       }
-      .bs_sample_detail_panel_logo{
+      .bs_sample_detail_panel_logo {
         width: 120px;
         height: 120px;
         margin: 0px auto 50px auto;
-        img{
+        img {
           width: 60px;
           height: 60px;
           opacity: 1;
-          background: rgba(0,0,0,0.00);
+          background: rgba(0, 0, 0, 0);
           margin: 16px 30px 11px 30px;
         }
-        .sm_title{
+        .sm_title {
           width: 70px;
           height: 19px;
           opacity: 1;
@@ -190,10 +195,10 @@ export default {
           font-weight: 400;
           text-align: center;
           color: #333333;
-          margin:auto
+          margin: auto;
         }
       }
-      .bs_sample_detail_panel_form{
+      .bs_sample_detail_panel_form {
         width: 600px;
         height: 322px;
         opacity: 1;
@@ -218,13 +223,11 @@ export default {
       }
     }
   }
-  .bs_sample_list{
-    .bs_sample_detail_box{
-      .bs_sample_detail_info{
-
+  .bs_sample_list {
+    .bs_sample_detail_box {
+      .bs_sample_detail_info {
       }
-      .bs_sample_detail_list{
-        
+      .bs_sample_detail_list {
       }
     }
   }

@@ -1,11 +1,11 @@
 /*
- * @Description: 
+ * @Description:
  * @Author: gaojiahao
  * @Date: 2021-03-31 17:09:19
  * @FilePath: \projectd:\LittleBearPC\toys-bear-pc\src\router\bsRouter\bsBusinessManage\index.js
  * @LastEditTime: 2021-05-11 16:27:55
  * @LastEditors: sueRimn
- * @Descripttion: 
+ * @Descripttion:
  * @version: 1.0.0
  */
 // 展厅择样
