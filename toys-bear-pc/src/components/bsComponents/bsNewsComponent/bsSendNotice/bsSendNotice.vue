@@ -43,7 +43,7 @@
                   :move="moveGonggaoImg"
                 >
                   <el-col
-                    :span="8"
+                    :span="6"
                     v-for="(value, i) in formData.fileList"
                     :key="i"
                   >
@@ -96,7 +96,7 @@
                   />
                 </div>
               </template>
-              <el-col class="imgsItemBox" :span="8">
+              <el-col class="imgsItemBox" :span="6">
                 <el-upload
                   action="#"
                   list-type="picture-card"
@@ -613,10 +613,13 @@ export default {
       .syllable_ul {
         .el-col {
           margin-top: 5px;
+          width: 148px;
+          margin-right: 10px;
           box-sizing: border-box;
           .imgItemBox {
-            width: 100%;
+            width: 148px;
             box-sizing: border-box;
+            border: 1px solid #dcdfe6;
             height: 0;
             padding-bottom: 100%;
             position: relative;
