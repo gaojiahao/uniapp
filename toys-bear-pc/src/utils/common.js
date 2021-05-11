@@ -1,23 +1,30 @@
 import Vue from "vue";
 import store from "@/store/index";
-const v = new Vue();
+// const v = new Vue();
 export default {
   install(Vue) {
     Vue.prototype.$common = this;
   },
   //刷新tab页
   refreshTab(n) {
-    let tab = store.state.tabList;
+    let tabs = store.state.tabList;
     let a = n || store.state.activeTab;
-    for (const i of tab) {
-      if (i.name == a) {
-        v.$set(i, "refresh", false);
-        v.$nextTick(() => {
-          v.$set(i, "refresh", true);
-        });
+    for (let i = 0; i < tabs.length; i++) {
+      if (tabs[i].name == a) {
+        const current = tabs[i];
+        tabs.splice(i, 1, current);
         break;
       }
     }
+    // for (const i of tab) {
+    //   if (i.name == a) {
+    //     v.$set(i, "refresh", false);
+    //     v.$nextTick(() => {
+    //       v.$set(i, "refresh", true);
+    //     });
+    //     break;
+    //   }
+    // }
   },
   /**
    * 修改全局msg状态
