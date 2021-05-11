@@ -238,6 +238,23 @@ export default {
     add(value) {
       this.isAddDialog = value;
     },
+    // 导出
+    exportOrder(row) {
+      this.orderRow = row;
+      this.exportTemplateDialog = true;
+    },
+    // 去订单详情
+    toDetails(row) {
+      const fd = {
+        name: row.orderNumber,
+        linkUrl: "/bsIndex/bsHallBusiness",
+        component: "bsHallBusinessOrderDetails",
+        refresh: true,
+        label: row.orderNumber,
+        value: row
+      };
+      this.$store.commit("myAddTab", fd);
+    },
     // 获取列表
     async getTableDataList() {
       const fd = {

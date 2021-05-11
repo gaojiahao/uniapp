@@ -291,7 +291,6 @@ export default {
   },
   watch: {
     "$route.path"(path) {
-      console.log(path);
       if (
         path.includes("bsProductSearchIndex") ||
         path.includes("bsLatestProducts") ||

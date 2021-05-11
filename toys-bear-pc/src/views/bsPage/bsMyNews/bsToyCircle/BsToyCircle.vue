@@ -291,7 +291,7 @@
                     <div class="userItem"></div>
                   </div>
                   <div
-                    class="pinglunInput"
+                    class="pinglunqu"
                     v-if="item.isHuiPinglun || item.isPinglun"
                   >
                     <!-- 回复 -->
@@ -373,7 +373,7 @@
       title="发布公告"
       :visible.sync="sendNoticeDialog"
       v-if="sendNoticeDialog"
-      width="1200px"
+      width="800px"
     >
       <bsSendNotice @close="closeSendNotice" />
     </el-dialog>
