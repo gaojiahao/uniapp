@@ -1,15 +1,5 @@
-<!--
- * @Description: 
- * @Author: gaojiahao
- * @Date: 2021-05-10 15:23:13
- * @FilePath: \projectd:\LittleBearPC\toys-bear-pc\src\views\bsPage\bsBusinessManage\bsSampleDetail\BsSampleDetailed.vue
- * @LastEditTime: 2021-05-11 16:32:28
- * @LastEditors: sueRimn
- * @Descripttion: 
- * @version: 1.0.0
--->
 <template>
-  <div class="bsSampleDetail">
+  <div class="bsHallSampleDetails">
     <div class="bs_sample_detail" v-if="isShowSample">
       <div class="title">择样明细</div>
       <div class="bs_sample_detail_panel">
@@ -139,7 +129,7 @@ export default {
 </script>
 <style scoped lang="less">
 @deep: ~">>>";
-.bsSampleDetail {
+.bsHallSampleDetails {
   .bs_sample_detail {
     height: 775px;
     background-color: #fff;

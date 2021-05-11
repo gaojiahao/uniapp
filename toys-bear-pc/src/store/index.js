@@ -342,8 +342,8 @@ const store = new Vuex.Store({
       n["refresh"] || (n["refresh"] = true);
       let flag = true;
       tab.find(val => val.name == n.name) || (tab.push(n), (flag = false));
-      flag && v.$common.refreshTab(n.name);
       this.commit("updateActiveTab", n);
+      flag && v.$common.refreshTab(n.name);
     },
     updateActiveTab(state, n) {
       state.activeTab = n.name;

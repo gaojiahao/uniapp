@@ -25,8 +25,10 @@ const BsVendorBusiness = () =>
     "@/views/bsPage/bsBusinessManage/bsVendorBusiness/BsVendorBusiness.vue"
   );
 // 择样明细
-const BsSampleDetailed = () =>
-  import("@/views/bsPage/bsBusinessManage/bsSampleDetail/BsSampleDetailed.vue");
+const BsHallSampleDetails = () =>
+  import(
+    "@/views/bsPage/bsBusinessManage/bsHallSampleDetails/BsHallSampleDetails.vue"
+  );
 // 购物车
 const BsShoppingCart = () =>
   import("@/views/bsPage/bsBusinessManage/bsShoppingCart/BsShoppingCart.vue");
@@ -74,9 +76,9 @@ export default [
     }
   },
   {
-    path: "/bsIndex/bsSampleDetailed",
-    name: "bsSampleDetailed",
-    component: BsSampleDetailed,
+    path: "/bsIndex/bsHallSampleDetails",
+    name: "bsHallSampleDetails",
+    component: BsHallSampleDetails,
     meta: {
       keepAlive: true
     }
