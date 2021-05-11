@@ -9,11 +9,13 @@
 import { mapState } from "vuex";
 import bsCompanyHome from "@/components/bsComponents/bsHomeComponent/bsCompanyHome";
 import bsHallHome from "@/components/bsComponents/bsHomeComponent/bsHallHome";
+import bsVendorHome from "@/components/bsComponents/bsHomeComponent/bsVendorHome";
 export default {
   name: "bsHome",
   components: {
     bsCompanyHome,
-    bsHallHome
+    bsHallHome,
+    bsVendorHome
   },
   data() {
     return {
@@ -23,12 +25,18 @@ export default {
   created() {},
   mounted() {
     switch (this.userInfo.commparnyList[0].companyType) {
-      case "Exhibition": // 展厅首页
-        this.isHome = "bsHallHome";
-        break;
+      //   case "Exhibition": // 展厅首页
+      //     this.isHome = "bsHallHome";
+      //     break;
       case "Sales": // 公司首页
         this.isHome = "bsCompanyHome";
         break;
+      case "Exhibition": // 公司首页
+        this.isHome = "bsVendorHome";
+        break;
+      //   case "bsVendorHome": // 厂商首页
+      //     this.isHome = "bsVendorHome";
+      //     break;
       default:
         this.getOrgCompany();
         this.getGetSalesOrderDataStatistics();
