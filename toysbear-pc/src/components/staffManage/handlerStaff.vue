@@ -73,7 +73,7 @@
     </el-form>
     <center>
       <el-button type="primary" @click="addEmployee">保存</el-button>
-      <el-button type="danger" @click="resetForm">取消</el-button>
+      <el-button type="danger" @click="close">取消</el-button>
     </center>
   </div>
 </template>
@@ -142,8 +142,8 @@ export default {
       return await this.$http.post("/api/File/InsertPic", fd);
     },
     // 取消新增员工
-    resetForm() {
-      this.innerVisible = false;
+    close() {
+      this.$emit("close");
     },
     // 新增员工
     async addEmployee() {

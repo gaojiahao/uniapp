@@ -11,7 +11,12 @@
       append-to-body
     >
       <!-- 新增编辑员工 -->
-      <handlerStaff @submit="submit" :row="addEmployeeForm" :isEdit="isEdit" />
+      <handlerStaff
+        @submit="submit"
+        @close="close"
+        :row="addEmployeeForm"
+        :isEdit="isEdit"
+      />
     </el-dialog>
     <div class="addStaffBtn">
       <div class="left">
@@ -355,6 +360,10 @@ export default {
       });
       this.getPersinnelList(this.relatedConfig.phoneNumber);
       console.log(res);
+    },
+    // 取消
+    close() {
+      this.innerVisible = false;
     },
     // 提交新增 | 编辑员工
     async submit(form) {
