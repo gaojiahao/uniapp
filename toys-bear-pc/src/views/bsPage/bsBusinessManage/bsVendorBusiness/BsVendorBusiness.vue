@@ -1,6 +1,6 @@
 <template>
   <div class="bsVendorBusiness">
-    <div class="title">公司业务 ({{ totalCount }})</div>
+    <div class="title">厂商业务 ({{ totalCount }})</div>
     <div class="searchBox">
       <div class="item">
         <span class="label">关键字：</span>
@@ -165,16 +165,16 @@
           label="操作"
           header-align="center"
           align="center"
-          width="200"
+          width="100"
         >
           <template slot-scope="scope">
-            <el-button
+            <!-- <el-button
               size="mini"
               type="primary"
               @click="exportOrder(scope.row)"
             >
               推送
-            </el-button>
+            </el-button> -->
             <el-button
               size="mini"
               type="warning"
@@ -322,7 +322,7 @@ export default {
       console.log(this.searchForm.fromCompanyName);
       const fd = {
         readStatus: this.searchForm.readStatus,
-        sampleFrom: "hall",
+        sampleFrom: "Hall",
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         keyWord: this.searchForm.keyword,

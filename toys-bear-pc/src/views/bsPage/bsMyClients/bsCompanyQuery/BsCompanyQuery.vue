@@ -147,7 +147,7 @@ export default {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         keyword: this.keyword,
-        OppositeRole: "Supplier"
+        OppositeRole: "Sales"
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {

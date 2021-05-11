@@ -37,6 +37,16 @@
           搜索
         </el-button>
       </div>
+      <div class="item" :style="{ marginLeft: 'auto' }">
+        <el-button
+          @click="add(true)"
+          type="primary"
+          icon="el-icon-plus"
+          size="medium"
+        >
+          新增屏蔽展厅
+        </el-button>
+      </div>
     </div>
     <div class="tableBox">
       <el-table
@@ -47,18 +57,10 @@
       >
         <el-table-column label="序号" type="index" align="center" width="70">
         </el-table-column>
-        <el-table-column label="展厅名称" min-width="180">
-          <template slot-scope="scope">
-            <div
-              style="color: #3368a9; cursor: pointer"
-              @click="toDetails(scope.row)"
-            >
-              {{ scope.row.orderNumber }}
-            </div>
-          </template>
+        <el-table-column prop="shieldName" label="展厅名称" min-width="180">
         </el-table-column>
         <el-table-column
-          prop="the_nu"
+          prop="hallNumber"
           label="展厅编号"
           align="center"
           width="100"
@@ -67,9 +69,7 @@
         <el-table-column label="屏蔽时间" align="center" min-width="150">
           <template slot-scope="scope">
             <span>
-              {{
-                scope.row.happenDate && scope.row.happenDate.replace(/T/, " ")
-              }}
+              {{ scope.row.createdOn && scope.row.createdOn.replace(/T/, " ") }}
             </span>
           </template>
         </el-table-column>
@@ -80,11 +80,7 @@
           width="100"
         >
           <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="danger"
-              @click="exportOrder(scope.row)"
-            >
+            <el-button size="mini" type="danger" @click="del(scope.row.id)">
               删除
             </el-button>
           </template>
@@ -106,12 +102,53 @@
     <!-- 导出订单模板dialog -->
     <transition name="el-zoom-in-center">
       <el-dialog
-        title="订单模板"
+        title="选择屏蔽展厅"
         class="exportOrder"
-        v-if="exportTemplateDialog"
-        :visible.sync="exportTemplateDialog"
-        width="1200px"
+        v-if="isAddDialog"
+        :visible.sync="isAddDialog"
+        width="700px"
+        top="32vh"
       >
+        <el-form
+          ref="form"
+          :model="form"
+          label-width="80px"
+          class="add_hall_dialog"
+        >
+          <el-form-item label="选择展厅">
+            <el-select
+              v-model="form.shieldNumber"
+              filterable
+              placeholder=""
+              :style="{ width: '100%' }"
+              @change="changeHall"
+            >
+              <el-option
+                :label="item.companyName"
+                :value="item.companyNumber"
+                v-for="(item, index) in hallList"
+                :key="index"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <div class="add_hall_button">
+              <el-button
+                type="primary"
+                @click="addHall"
+                :style="{ width: '150px' }"
+                size="mini"
+                >保存</el-button
+              >
+              <el-button
+                :style="{ width: '150px' }"
+                size="mini"
+                @click="add(false)"
+                >取消</el-button
+              >
+            </div>
+          </el-form-item>
+        </el-form>
       </el-dialog>
     </transition>
   </div>
@@ -125,7 +162,7 @@ export default {
   data() {
     return {
       staffList: [],
-      exportTemplateDialog: false,
+      isAddDialog: false,
       orderRow: {},
       typesList: [
         {
@@ -173,8 +210,12 @@ export default {
       },
       tableData: [],
       totalCount: 0,
-      pageSize: 10,
-      currentPage: 1
+      pageSize: 99999,
+      currentPage: 1,
+      form: {
+        shieldName: null,
+        shieldNumber: null
+      }
     };
   },
   methods: {
@@ -193,36 +234,16 @@ export default {
       }
       this.getTableDataList();
     },
-    // 导出
-    exportOrder(row) {
-      this.orderRow = row;
-      this.exportTemplateDialog = true;
-    },
-    // 去订单详情
-    toDetails(row) {
-      console.log(row);
-      const fd = {
-        name: row.orderNumber,
-        linkUrl: "/bsIndex/bsHallBusiness",
-        component: "bsHallBusinessOrderDetails",
-        refresh: true,
-        label: row.orderNumber,
-        value: row
-      };
-      this.$store.commit("myAddTab", fd);
+    // 新增展厅屏蔽弹窗
+    add(value) {
+      this.isAddDialog = value;
     },
     // 获取列表
     async getTableDataList() {
-      console.log(this.searchForm.fromCompanyName);
       const fd = {
-        readStatus: this.searchForm.readStatus,
-        sampleFrom: "hall",
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         keyWord: this.searchForm.keyword,
-        staffId: this.searchForm.staffId,
-        fromCompanyName: this.searchForm.fromCompanyName,
-        messageExt: this.searchForm.messageExt,
         startTime: this.searchForm.dateTime && this.searchForm.dateTime[0],
         endTime: this.searchForm.dateTime && this.searchForm.dateTime[1]
       };
@@ -231,7 +252,7 @@ export default {
           delete fd[key];
         }
       }
-      const res = await this.$http.post("/api/GetERPOrderListByPage", fd);
+      const res = await this.$http.post("/api/GetExhibitionShieldPage", fd);
       if (res.data.result.code === 200) {
         this.totalCount = res.data.result.item.totalCount;
         this.tableData = res.data.result.item.items;
@@ -260,10 +281,95 @@ export default {
     search() {
       this.currentPage = 1;
       this.getTableDataList();
+    },
+    //选择展厅change
+    changeHall(value) {
+      let obj = {};
+      obj = this.hallList.find(item => {
+        //遍历list的数据
+        return item.companyNumber === value; //筛选出匹配数据
+      });
+      this.form.shieldName = obj.companyName;
+    },
+    //新增展厅屏蔽
+    async addHall() {
+      const fd = {
+        ...this.form
+      };
+      for (const key in fd) {
+        if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
+          delete fd[key];
+        }
+      }
+      const res = await this.$http.post("/api/InsertableExhibitionShield", fd);
+      if (res.data.result.code === 200) {
+        this.$common.handlerMsgState({
+          msg: "屏蔽成功",
+          type: "success"
+        });
+        this.isAddDialog = false;
+        this.form = {
+          shieldName: null,
+          shieldNumber: null
+        };
+        this.getTableDataList();
+      }
+    },
+    //确认是否删除
+    del(id) {
+      this.$confirm("是否删除？", "确认信息", {
+        distinguishCancelAndClose: true,
+        confirmButtonText: "确认",
+        cancelButtonText: "取消"
+      })
+        .then(() => {
+          this.delHall(id);
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消成功！"
+          });
+        });
+    },
+    //删除展厅屏蔽
+    async delHall(id) {
+      const fd = {
+        id: id
+      };
+      for (const key in fd) {
+        if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
+          delete fd[key];
+        }
+      }
+      const res = await this.$http.post("/api/DeleteExhibitionShield", fd);
+      if (res.data.result.code === 200) {
+        this.$common.handlerMsgState({
+          msg: "删除屏蔽成功",
+          type: "success"
+        });
+        this.getTableDataList();
+      }
+    },
+    //获取展厅数据
+    async getHallList() {
+      const fd = {
+        companyType: "Exhibition"
+      };
+      for (const key in fd) {
+        if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
+          delete fd[key];
+        }
+      }
+      const res = await this.$http.post("/api/OrgCompanyList", fd);
+      if (res.data.result.code === 200) {
+        this.hallList = res.data.result.item;
+        this.getTableDataList();
+      }
     }
   },
   created() {
-    this.getStaffList();
+    this.getHallList();
   },
   filters: {
     switchMessageExt(val) {
@@ -377,6 +483,12 @@ export default {
 @{deep} .exportOrder {
   .el-dialog__body {
     padding: 0;
+  }
+  .add_hall_dialog {
+    padding: 20px;
+    .add_hall_button {
+      margin-left: 100px;
+    }
   }
 }
 </style>
