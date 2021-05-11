@@ -272,17 +272,17 @@ export default {
     },
     // 打开3D效果
     open3D(value) {
-      console.log(value);
-      this.$common.handlerMsgState({
-        msg: "敬请期待",
-        type: "warning"
-      });
-      console.log("3d");
-      return;
-      //   this.dialogVisibleThreeD = value;
-      //   if (!value) {
-      //     this.threeDFullscreen = false;
-      //   }
+      if (!this.threeDimensional) {
+        this.$common.handlerMsgState({
+          msg: "暂无产品3D数据！",
+          type: "warning"
+        });
+        return;
+      }
+      this.dialogVisibleThreeD = value;
+      if (!value) {
+        this.threeDFullscreen = false;
+      }
     },
     touchEnd(e) {
       e = e || window.event;
