@@ -200,7 +200,6 @@ export default {
     },
     // 去订单详情
     toDetails(row) {
-      console.log(row);
       const fd = {
         name: row.orderNumber,
         linkUrl: "/bsIndex/bsHallBusiness",
