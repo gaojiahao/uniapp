@@ -1,3 +1,13 @@
+/*
+ * @Description: 
+ * @Author: gaojiahao
+ * @Date: 2021-03-31 17:09:19
+ * @FilePath: \projectd:\LittleBearPC\toys-bear-pc\src\router\bsRouter\bsBusinessManage\index.js
+ * @LastEditTime: 2021-05-11 16:27:55
+ * @LastEditors: sueRimn
+ * @Descripttion: 
+ * @version: 1.0.0
+ */
 // 展厅择样
 const BsHallSample = () =>
   import("@/views/bsPage/bsBusinessManage/bsHallSample/BsHallSample.vue");
@@ -15,8 +25,8 @@ const BsVendorBusiness = () =>
     "@/views/bsPage/bsBusinessManage/bsVendorBusiness/BsVendorBusiness.vue"
   );
 // 择样明细
-const BsSampleDetail = () =>
-  import("@/views/bsPage/bsBusinessManage/bsSampleDetail/BsSampleDetail.vue");
+const BsSampleDetailed = () =>
+  import("@/views/bsPage/bsBusinessManage/bsSampleDetail/BsSampleDetailed.vue");
 // 购物车
 const BsShoppingCart = () =>
   import("@/views/bsPage/bsBusinessManage/bsShoppingCart/BsShoppingCart.vue");
@@ -64,9 +74,9 @@ export default [
     }
   },
   {
-    path: "/bsIndex/bsSampleDetail",
-    name: "bsSampleDetail",
-    component: BsSampleDetail,
+    path: "/bsIndex/bsSampleDetailed",
+    name: "bsSampleDetailed",
+    component: BsSampleDetailed,
     meta: {
       keepAlive: true
     }

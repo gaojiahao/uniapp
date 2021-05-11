@@ -151,8 +151,8 @@ import bsHallBusiness from "@/views/bsPage/bsBusinessManage/bsHallBusiness/BsHal
 import bsCompanyBusiness from "@/views/bsPage/bsBusinessManage/bsCompanyBusiness/BsCompanyBusiness.vue";
 // 厂商业务
 import bsVendorBusiness from "@/views/bsPage/bsBusinessManage/bsVendorBusiness/BsVendorBusiness.vue";
-// 展厅明细
-import bsSampleDetail from "@/views/bsPage/bsBusinessManage/bsSampleDetail/BsSampleDetail.vue";
+// 择样明细
+import bsSampleDetailed from "@/views/bsPage/bsBusinessManage/bsSampleDetail/BsSampleDetailed.vue";
 // 购物车
 import bsShoppingCart from "@/views/bsPage/bsBusinessManage/bsShoppingCart/BsShoppingCart.vue";
 // 找样报价
@@ -215,7 +215,7 @@ export default {
     bsHallBusiness,
     bsCompanyBusiness,
     bsVendorBusiness,
-    bsSampleDetail,
+    bsSampleDetailed,
     bsShoppingCart,
     bsSampleQuotation,
     bsSampleQuotationDetails,
@@ -249,9 +249,6 @@ export default {
       let len = this.tabList.length;
       len > 1 && this.$store.commit("closeTab", e);
       this.$nextTick(() => {});
-    },
-    refresh() {
-      this.$common.refreshTab();
     },
     // 关闭所有tab标签
     closeAll() {
