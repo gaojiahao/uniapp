@@ -51,13 +51,6 @@
             </div>
           </el-image>
           <div
-            @click.stop="handlerDeleteBrowsing(item)"
-            class="BrowsingFootprintsIcon"
-            v-if="$route.path === '/bsIndex/bsBrowsingFootprints'"
-          >
-            <i class="el-icon-delete"></i>
-          </div>
-          <div
             class="spotProductIcon"
             v-if="$route.path === '/bsIndex/bsSpotProducts'"
           ></div>
@@ -228,6 +221,7 @@ export default {
         value: item
       };
       this.$store.commit("myAddTab", fd);
+      this.$router.push("/bsIndex/bsProductSearchIndex");
     },
     // 打开报价公式
     openQuotationFormula() {

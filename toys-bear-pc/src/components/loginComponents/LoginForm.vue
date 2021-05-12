@@ -240,7 +240,7 @@ export default {
             this.$store.commit("globalJson/setGlobalJson", Json);
 
             switch (res.data.result.commparnyList[0].companyType) {
-              case "Exhibition":
+              // case "Exhibition":
               case "Sales":
                 this.$store.commit("updateActiveTab", this.bsHome);
                 this.$store.commit("closeTabAll", this.$router);
@@ -377,7 +377,7 @@ export default {
                 //   break;
                 // case "Supplier":
                 //   break;
-                case "Exhibition":
+                // case "Exhibition":
                 case "Sales":
                   this.$store.commit("updateActiveTab", this.bsHome);
                   this.$store.commit("closeTabAll", this.$router);

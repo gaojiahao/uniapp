@@ -347,14 +347,14 @@ const store = new Vuex.Store({
     },
     updateActiveTab(state, n) {
       state.activeTab = n.name;
-      let flag = false;
+      let flag = true;
       for (let i = 0; i < state.tabList.length; i++) {
         if (state.tabList[i].name == n.name) {
-          flag = true;
+          flag = false;
           break;
         }
       }
-      if (!flag) {
+      if (flag) {
         state.tabList.push(n);
       }
     }

@@ -9,22 +9,16 @@ export default {
   refreshTab(n) {
     let tabs = store.state.tabList;
     let a = n || store.state.activeTab;
-    for (let i = 0; i < tabs.length; i++) {
-      if (tabs[i].name == a) {
-        const current = tabs[i];
-        tabs.splice(i, 1, current);
+    for (const v of tabs) {
+      if (v.name == a) {
+        Vue.prototype.$set(v, "refresh", false);
+        Vue.prototype.$nextTick(() => {
+          Vue.prototype.$set(v, "refresh", true);
+          sessionStorage.setItem("vuex", JSON.stringify(store.state));
+        });
         break;
       }
     }
-    // for (const i of tab) {
-    //   if (i.name == a) {
-    //     v.$set(i, "refresh", false);
-    //     v.$nextTick(() => {
-    //       v.$set(i, "refresh", true);
-    //     });
-    //     break;
-    //   }
-    // }
   },
   /**
    * 修改全局msg状态

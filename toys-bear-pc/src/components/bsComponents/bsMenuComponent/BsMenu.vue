@@ -88,7 +88,7 @@ export default {
         name: route.linkUrl,
         linkUrl: route.linkUrl,
         component: component,
-        refresh: true,
+        refresh: false,
         label: route.name
       };
       this.$store.commit("myAddTab", fd);
