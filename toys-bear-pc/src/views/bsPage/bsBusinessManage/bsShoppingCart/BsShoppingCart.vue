@@ -47,20 +47,22 @@
                     {{ scope.row.supplierName }}
                   </div>
                   <div class="icons">
-                    <el-tooltip
+                    <!-- <el-tooltip
                       class="item"
                       effect="dark"
                       :content="scope.row.supplierPhone || '暂时没有厂商电话'"
                       placement="top"
                     >
                       <div class="cartPhoneIcon"></div>
-                    </el-tooltip>
+                    </el-tooltip> -->
                     <div class="cartInfoIcon" @click="toNews(scope.row)"></div>
                   </div>
                 </div>
               </div>
             </div>
           </template>
+        </el-table-column>
+        <el-table-column align="center" label="联系厂商" prop="supplierPhone">
         </el-table-column>
         <el-table-column align="center" label="资料来源" min-width="80">
           <template slot-scope="scope">
