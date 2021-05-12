@@ -60,6 +60,7 @@
         stripe
         style="width: 100%"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
+        @row-click="showDetailModal"
       >
         <el-table-column label="序号" type="index" align="center" width="70">
         </el-table-column>
@@ -120,6 +121,63 @@
         ></el-pagination>
       </center>
     </div>
+    <!-- 公司详情dialog -->
+    <transition name="el-zoom-in-center">
+      <el-dialog
+        title=""
+        class="detail_dialog"
+        v-if="isShowModal"
+        :visible.sync="isShowModal"
+        width="455px"
+        top="11vh"
+      >
+        <div class="detail_dialog_panel">
+          <div class="detail_dialog_head">
+            <img :src="defaultBgImg" />
+          </div>
+          <div class="detail_dialog_title">
+            <div class="detail_dialog_title_text">
+              {{ detailInfo.abbreviation }}
+            </div>
+          </div>
+          <div class="detail_dialog_content">
+            <div class="detail_dialog_content_name">
+              {{ detailInfo.companyName }}
+            </div>
+            <div class="detail_dialog_content_list_item">
+              <div class="detail_dialog_content_item">
+                <div class="label">
+                  联系人：<span>{{ detailInfo.contactsMan }}</span>
+                </div>
+              </div>
+              <div class="detail_dialog_content_item">
+                <div class="label">
+                  电话：<span>{{ detailInfo.telePhoneNumber }}</span>
+                </div>
+              </div>
+              <div class="detail_dialog_content_item">
+                <div class="label">
+                  手机：<span>{{ detailInfo.phoneNumber }}</span>
+                </div>
+              </div>
+              <div class="detail_dialog_content_item">
+                <div class="label">
+                  地址：<span>{{ detailInfo.address }}</span>
+                </div>
+              </div>
+              <div class="detail_dialog_content_item_zixun">
+                <div class="label">
+                  <div class="icon_box">
+                    <i class="el-icon-chat-dot-round"></i>
+                  </div>
+                  <div class="icon_title">在线咨询</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </el-dialog>
+    </transition>
   </div>
 </template>
 
@@ -137,7 +195,10 @@ export default {
       myKeyword: "",
       isShowHistoryPanel: false,
       searchHistoryList: [],
-      vuex: {}
+      vuex: {},
+      isShowModal: false, //是否显示详情弹窗
+      defaultBgImg: require("@/assets/images/bsCompanyQueryBg.png"),
+      detailInfo: {} //公司详情
     };
   },
   methods: {
@@ -249,6 +310,22 @@ export default {
         history[uid + "_cs"] = [];
         localStorage.setItem("searchHistory", JSON.stringify(history));
         this.showHistoryModal(false);
+      }
+    },
+    //详情弹窗
+    showDetailModal(value) {
+      var flag = this.isShowModal ? false : true;
+      this.isShowModal = flag;
+      if (this.isShowModal) {
+        this.detailInfo = value;
+        this.$set(
+          this.detailInfo,
+          "abbreviation",
+          this.detailInfo.companyName &&
+            this.detailInfo.companyName.substring(0, 2)
+        );
+      } else {
+        this.detailInfo = {};
       }
     }
   },
@@ -382,6 +459,103 @@ export default {
         }
         .history_item:hover {
           background-color: #f9fafc;
+        }
+      }
+    }
+  }
+}
+@{deep} .detail_dialog {
+  .el-dialog__body {
+    padding: 0;
+  }
+}
+.detail_dialog {
+  .detail_dialog_panel {
+    width: 100%;
+    height: 699px;
+    opacity: 1;
+    background: #ffffff;
+    border-radius: 4px;
+    position: relative;
+    .detail_dialog_head {
+      width: 100%;
+      height: 185px;
+      opacity: 1;
+      background: #ffffff;
+    }
+    .detail_dialog_title {
+      width: 120px;
+      height: 120px;
+      opacity: 1;
+      background: #3368a9;
+      border: 1px solid #3368a9;
+      border-radius: 50%;
+      position: absolute;
+      top: 125px;
+      left: 167.5px;
+      .detail_dialog_title_text {
+        text-align: center;
+        width: 120px;
+        height: 52px;
+        opacity: 1;
+        font-size: 40px;
+        font-weight: 400;
+        color: #ffffff;
+        line-height: 24px;
+        margin-top: 48px;
+      }
+    }
+    .detail_dialog_content {
+      margin-top: 76px;
+      .detail_dialog_content_name {
+        width: 192px;
+        height: 31px;
+        opacity: 1;
+        font-size: 24px;
+        font-weight: 400;
+        text-align: center;
+        color: #333333;
+        line-height: 34px;
+        margin: auto;
+      }
+      .detail_dialog_content_list_item {
+        margin-top: 48px;
+        .detail_dialog_content_item {
+          opacity: 1;
+          font-size: 14px;
+          font-weight: 400;
+          text-align: left;
+          color: #666666;
+          line-height: 34px;
+          margin-left: 90px;
+        }
+        .detail_dialog_content_item_zixun {
+          opacity: 1;
+          font-size: 14px;
+          font-weight: 400;
+          text-align: left;
+          color: #666666;
+          line-height: 45px;
+          margin-left: 90px;
+          .label {
+            display: flex;
+            .icon_box {
+              width: 28px;
+              height: 28px;
+              opacity: 1;
+              background: #3368a9;
+              border: 1px solid #3368a9;
+              border-radius: 50%;
+              color: white;
+              margin-top: 7.5px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            .icon_title {
+              margin-left: 10px;
+            }
+          }
         }
       }
     }
