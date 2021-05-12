@@ -45,6 +45,7 @@
             <el-form-item label="验证码" prop="number">
               <el-input
                 placeholder="请输入内容"
+                @keyup.native.enter="goDetail"
                 v-model.trim="form.number"
                 clearable
                 :style="{ width: '300px' }"
@@ -64,20 +65,25 @@
         </div>
       </div>
     </div>
-    <div class="bs_sample_list" v-else>
-      <div class="bs_sample_detail_box">
-        <div class="bs_sample_detail_info"></div>
-        <div class="bs_sample_detail_list"></div>
-      </div>
-    </div>
+    <!-- 明细列表 -->
+    <template v-else>
+      <sampleDetails
+        :sampleOption="sampleOption"
+        :the_nu="form.code"
+        @checkCode="checkCode"
+      />
+    </template>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import sampleDetails from "./sampleDetails/SampleDetails";
 export default {
   name: "bsSampleDetailed",
-  components: {},
+  components: {
+    sampleDetails
+  },
   data() {
     return {
       form: {
@@ -89,7 +95,7 @@ export default {
         number: [{ required: true, message: "请填写验证码", trigger: "blur" }]
       }, //表单规则
       isShowSample: true, //是否显示填写择样
-      sampleList: [] //择样数据
+      sampleOption: null //择样数据
     };
   },
   methods: {
@@ -102,7 +108,12 @@ export default {
         };
       }
     },
-    async goDetail() {
+    // 切换代号
+    checkCode() {
+      this.isShowSample = true;
+    },
+    // 去明细
+    goDetail() {
       const fd = {
         the_nu: this.form.code,
         Verify_Code: this.form.number
@@ -112,11 +123,20 @@ export default {
           delete fd[key];
         }
       }
-      const res = await this.$http.post("/api/CheckThe_nuVerify_Code", fd);
-      if (res.data.result.code === 200) {
-        this.sampleList = res.data.result.item;
-        this.changeShowSample(false);
-      }
+      this.$refs.form.validate(async valid => {
+        if (valid) {
+          const res = await this.$http.post("/api/CheckThe_nuVerify_Code", fd);
+          if (res.data.result.code === 200) {
+            this.sampleOption = res.data.result.item;
+            this.changeShowSample(false);
+          } else {
+            this.$common.handlerMsgState({
+              msg: res.data.result.msg,
+              type: "danger"
+            });
+          }
+        }
+      });
     }
   },
   created() {},
@@ -213,13 +233,6 @@ export default {
       }
     }
   }
-  .bs_sample_list {
-    .bs_sample_detail_box {
-      .bs_sample_detail_info {
-      }
-      .bs_sample_detail_list {
-      }
-    }
-  }
+  // .bs_sample_list {}
 }
 </style>

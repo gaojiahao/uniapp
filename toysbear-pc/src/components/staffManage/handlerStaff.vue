@@ -193,7 +193,7 @@ export default {
   created() {},
   mounted() {
     this.addEmployeeForm = JSON.parse(JSON.stringify(this.row));
-    if (this.isEdit)
+    if (this.isEdit && this.row.userImage)
       this.$set(this, "fileList", [{ url: this.addEmployeeForm.userImage }]);
   }
 };
