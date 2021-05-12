@@ -327,9 +327,10 @@ export default {
         keyWord: this.searchForm.keyword,
         staffId: this.searchForm.staffId,
         fromCompanyName: this.searchForm.fromCompanyName,
-        messageExt: this.searchForm.messageExt,
+        messageExt: this.searchForm.messageExt || "-1",
         startTime: this.searchForm.dateTime && this.searchForm.dateTime[0],
-        endTime: this.searchForm.dateTime && this.searchForm.dateTime[1]
+        endTime: this.searchForm.dateTime && this.searchForm.dateTime[1],
+        messageModal: "1"
       };
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {

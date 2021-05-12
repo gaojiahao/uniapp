@@ -169,9 +169,40 @@
         </el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
-            <span style="color: #f56c6c">
-              {{ scope.aa || "不可带" }}
-            </span>
+            <template v-if="scope.row.messageExt == '3'">
+              <span :class="[scope.row.messageStatus == '1' ? 'green' : 'red']">
+                {{ scope.row.messageStatus == "1" ? "不补样" : "补样" }}
+              </span>
+            </template>
+            <template v-else-if="scope.row.messageExt == '5'">
+              <span :class="[scope.row.messageStatus == '1' ? 'green' : 'red']">
+                {{ scope.row.messageStatus == "1" ? "不借样" : "借样" }}
+              </span>
+            </template>
+            <template v-else-if="scope.row.messageExt == '11'">
+              <span
+                :class="[
+                  scope.row.messageStatus == '1'
+                    ? 'red'
+                    : scope.row.messageStatus == '2'
+                    ? 'green'
+                    : 'red'
+                ]"
+              >
+                {{
+                  scope.row.messageStatus == "1"
+                    ? "借样"
+                    : scope.row.messageStatus == "2"
+                    ? "不允许"
+                    : "补样"
+                }}
+              </span>
+            </template>
+            <template v-else-if="scope.row.messageExt == '12'">
+              <span :class="[scope.row.messageStatus == '1' ? 'red' : 'green']">
+                {{ scope.row.messageStatus == "1" ? "不接受" : "结束" }}
+              </span>
+            </template>
           </template>
         </el-table-column>
       </el-table>
@@ -239,6 +270,7 @@
 <script>
 import bsExportOrder from "@/components/commonComponent/exportOrderComponent/zhantingyewu.vue";
 export default {
+  name: "bsVendorBusinessOrderDetails",
   components: { bsExportOrder },
   props: {
     item: {
@@ -571,6 +603,15 @@ export default {
         height: 60px;
       }
     }
+  }
+  .red {
+    color: #f56c6c;
+  }
+  .green {
+    color: #67c23a;
+  }
+  .orange {
+    color: #e6a23c;
   }
 }
 @{deep} .exportOrder {
