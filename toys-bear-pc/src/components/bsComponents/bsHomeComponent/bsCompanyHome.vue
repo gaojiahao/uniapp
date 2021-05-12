@@ -9,7 +9,7 @@
         <div class="content">
           <li
             class="item"
-            @click="openMyGongzuo(item.title)"
+            @click="handleGoToUrl(item.title)"
             v-for="(item, i) in gongzuoList"
             :key="i"
           >
@@ -104,7 +104,7 @@
     <div class="labels">
       <div
         class="item"
-        @click="openLabel(item.title)"
+        @click="handleGoToUrl(item.title)"
         v-for="(item, i) in labelList"
         :key="i"
       >
@@ -248,7 +248,7 @@
             v-show="hotValue === '热门择样'"
             :data="tableData"
             height="365"
-            style="width:100%;"
+            style="width: 100%"
             @row-click="toProductDetails"
             :row-style="rowStyle"
             :header-row-style="{ height: '40px', padding: '0' }"
@@ -268,7 +268,7 @@
               <template slot-scope="scope">
                 <div class="productInfo">
                   <el-image
-                    style="width: 70px; height: 54px; min-width: 70px;"
+                    style="width: 70px; height: 54px; min-width: 70px"
                     :src="scope.row.imgUrl"
                     fit="contain"
                   >
@@ -320,7 +320,7 @@
           <el-table
             v-if="hotValue === '热门搜索'"
             :data="HotTableData"
-            style="width: 100%;"
+            style="width: 100%"
             height="365"
             @row-click="rowClick"
             :row-style="rowStyle"
@@ -338,7 +338,7 @@
             </el-table-column>
             <el-table-column prop="keyWord" label="关键词" width="350">
               <template slot-scope="scope">
-                <span style="font-size: 13px;">
+                <span style="font-size: 13px">
                   {{ scope.row.keyWord }}
                 </span>
               </template>
@@ -555,145 +555,9 @@ export default {
         cursor: "pointer"
       };
     },
-    // 点击label
-    openLabel(title) {
-      let fd = {};
-      switch (title) {
-        case "找玩具":
-          fd = {
-            name: "/bsIndex/bsProductSearchIndex",
-            linkUrl: "/bsIndex/bsProductSearchIndex",
-            component: "bsProductSearchIndex",
-            refresh: true,
-            label: "产品查询"
-          };
-          break;
-        case "按图找样":
-          fd = {
-            name: "/bsIndex/bsProductSearchIndex",
-            linkUrl: "/bsIndex/bsProductSearchIndex",
-            component: "bsProductSearchIndex",
-            refresh: true,
-            label: "产品查询"
-          };
-          this.$store.commit("handlerHallSearchCate", null);
-          this.$store.commit("handlerimgSearch", true);
-          break;
-        case "新品区":
-          fd = {
-            name: "/bsIndex/bsLatestProducts",
-            linkUrl: "/bsIndex/bsLatestProducts",
-            component: "bsLatestProducts",
-            refresh: true,
-            label: "最新产品"
-          };
-          break;
-        case "现货区":
-          fd = {
-            name: "/bsIndex/bsSpotProducts",
-            linkUrl: "/bsIndex/bsSpotProducts",
-            component: "bsSpotProducts",
-            refresh: true,
-            label: "现货产品"
-          };
-          break;
-        case "VIP区":
-          fd = {
-            name: "/bsIndex/bsVIPProducts",
-            linkUrl: "/bsIndex/bsVIPProducts",
-            component: "bsVIPProducts",
-            refresh: true,
-            label: "VIP产品"
-          };
-          break;
-        case "玩具圈":
-          fd = {
-            name: "/bsIndex/bsToyCircle",
-            linkUrl: "/bsIndex/bsToyCircle",
-            component: "bsToyCircle",
-            refresh: true,
-            label: title
-          };
-          break;
-      }
-      this.$store.commit("myAddTab", fd);
-      this.$router.push(fd.linkUrl);
-    },
-    // 点击工作台
-    openMyGongzuo(title) {
-      let fd = {};
-      switch (title) {
-        case "展厅业务":
-          fd = {
-            name: "/bsIndex/bsHallBusiness",
-            linkUrl: "/bsIndex/bsHallBusiness",
-            component: "bsHallBusiness",
-            refresh: true,
-            label: title
-          };
-          break;
-        case "找样报价":
-          fd = {
-            name: "/bsIndex/bsSampleQuotation",
-            linkUrl: "/bsIndex/bsSampleQuotation",
-            component: "bsSampleQuotation",
-            refresh: true,
-            label: title
-          };
-          break;
-        case "采购订单":
-          fd = {
-            name: "/bsIndex/bsPurchaseOrder",
-            linkUrl: "/bsIndex/bsPurchaseOrder",
-            component: "bsPurchaseOrder",
-            refresh: true,
-            label: title
-          };
-          break;
-        case "浏览足迹":
-          // this.$common.handlerMsgState({
-          //   msg: "敬请期待",
-          //   type: "warning"
-          // });
-          // return false;
-          fd = {
-            name: "/bsIndex/bsBrowsingFootprints",
-            linkUrl: "/bsIndex/bsBrowsingFootprints",
-            component: "bsBrowsingFootprints",
-            refresh: true,
-            label: title
-          };
-          break;
-        case "站点分享":
-          fd = {
-            name: "/bsIndex/bsSiteLlis",
-            linkUrl: "/bsIndex/bsSiteLlis",
-            component: "bsSiteLlis",
-            refresh: true,
-            label: "站点列表"
-          };
-          break;
-        case "客户订单":
-          fd = {
-            name: "/bsIndex/bsCustomerOrder",
-            linkUrl: "/bsIndex/bsCustomerOrder",
-            component: "bsCustomerOrder",
-            refresh: true,
-            label: title
-          };
-          break;
-        case "我的消息":
-          fd = {
-            name: "/bsIndex/bsNews",
-            linkUrl: "/bsIndex/bsNews",
-            component: "bsNews",
-            refresh: true,
-            label: "消息"
-          };
-          break;
-      }
-      this.$store.commit("myAddTab", fd);
-      this.$router.push(fd.linkUrl);
+    //跳转页面路由
+    handleGoToUrl(title) {
+      this.$common.goToUrl(title);
     },
     group(array, subGroupLength) {
       let index = 0;
