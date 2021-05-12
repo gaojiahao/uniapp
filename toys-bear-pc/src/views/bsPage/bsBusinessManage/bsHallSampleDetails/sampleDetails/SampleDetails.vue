@@ -73,14 +73,14 @@
             @click.stop="addCollect(item)"
           ></i> -->
           <!-- 找相似，找同款 -->
-          <div class="similaritySame">
+          <!-- <div class="similaritySame">
             <div class="simiBox">
               <div class="similarity" @click.stop="similarityEvent(item)">
                 找相似
               </div>
               <div class="same" @click.stop="sameEvent(item)">找同款</div>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="content">
           <div class="productName">
@@ -211,6 +211,13 @@ export default {
       //   type: "warning"
       // });
       // return false;
+      if (!item.productNumber) {
+        this.$common.handlerMsgState({
+          msg: "没有产品编号",
+          type: "danger"
+        });
+        return false;
+      }
       item.type = "same";
       const fd = {
         name: "same" + item.productNumber,
@@ -229,15 +236,16 @@ export default {
     },
     // 去产品详情
     async toProductDetails() {
-      const fd = {
-        name: this.item.productNumber,
-        linkUrl: "/bsIndex/bsProductSearchIndex",
-        component: "bsProductDetails",
-        refresh: true,
-        label: this.item.fa_no || "产品详情",
-        value: this.item
-      };
-      this.$store.commit("myAddTab", fd);
+      return false;
+      // const fd = {
+      //   name: this.item.productNumber,
+      //   linkUrl: "/bsIndex/bsProductSearchIndex",
+      //   component: "bsProductDetails",
+      //   refresh: true,
+      //   label: this.item.fa_no || "产品详情",
+      //   value: this.item
+      // };
+      // this.$store.commit("myAddTab", fd);
     },
     // 收藏
     async addCollect(item) {
