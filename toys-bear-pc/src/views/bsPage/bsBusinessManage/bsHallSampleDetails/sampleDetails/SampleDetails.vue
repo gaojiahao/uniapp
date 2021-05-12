@@ -106,7 +106,8 @@
           <p class="item">
             <span class="title">产品规格：</span>
             <span class="conText">
-              {{ item.pr_le }} x {{ item.pr_wi }} x {{ item.pr_hi }} (cm)
+              {{ item.pr_le || 0 }} x {{ item.pr_wi || 0 }} x
+              {{ item.pr_hi || 0 }} (cm)
             </span>
           </p>
           <p class="item">
