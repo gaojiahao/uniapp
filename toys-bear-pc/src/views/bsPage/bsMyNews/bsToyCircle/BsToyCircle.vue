@@ -270,14 +270,15 @@
                       </div>
                       <div
                         class="right"
-                        v-show="val.createdBy != userInfo.userInfo.id"
+                        v-show="
+                          val.interactionType == 'Comment' &&
+                            val.createdBy != userInfo.userInfo.id
+                        "
                         @click="openHuiPinglun(item, val)"
                       >
-                        <template v-if="val.interactionType == 'Comment'">
-                          <div class="huifu">
-                            回复
-                          </div>
-                        </template>
+                        <div class="huifu">
+                          回复
+                        </div>
                       </div>
                     </div>
                     <div class="userItem"></div>
