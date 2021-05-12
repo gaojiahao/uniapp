@@ -180,7 +180,7 @@ export default {
         shieldName: null,
         shieldNumber: null
       },
-      hallList:[]
+      hallList: []
     };
   },
   methods: {
@@ -315,8 +315,13 @@ export default {
       const res = await this.$http.post("/api/OrgCompanyList", fd);
       if (res.data.result.code === 200) {
         this.hallList = res.data.result.item;
-        if(this.hallList.length){
-          var newArr = this.hallList.filter(item => item.id!=(this.userInfo.commparnyList&&this.userInfo.commparnyList[0]['commparnyId']));
+        if (this.hallList.length) {
+          var newArr = this.hallList.filter(
+            item =>
+              item.id !=
+              (this.userInfo.commparnyList &&
+                this.userInfo.commparnyList[0]["commparnyId"])
+          );
           this.hallList = newArr;
         }
         this.getTableDataList();
