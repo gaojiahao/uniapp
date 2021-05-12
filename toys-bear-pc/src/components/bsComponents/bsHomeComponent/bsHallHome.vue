@@ -10,7 +10,7 @@
         <div class="content">
           <li
             class="item"
-            @click="openMyGongzuo(item.title)"
+            @click="handleGoToUrl(item.title)"
             v-for="(item, i) in gongzuoList"
             :key="i"
           >
@@ -32,7 +32,7 @@
       <div class="labels">
         <div
           class="item"
-          @click="openLabel(item.title)"
+          @click="handleGoToUrl(item.title)"
           v-for="(item, i) in labelList"
           :key="i"
         >
@@ -402,105 +402,9 @@ export default {
       this.$router.push(fd.linkUrl);
       this.$store.commit("handlerSearchTxt", row.keyWord);
     },
-    // 点击label
-    openLabel(title) {
-      let fd = {};
-      switch (title) {
-        case "找玩具":
-          fd = {
-            name: "/bsIndex/bsProductSearchIndex",
-            linkUrl: "/bsIndex/bsProductSearchIndex",
-            component: "bsProductSearchIndex",
-            refresh: true,
-            label: "产品查询"
-          };
-          break;
-        case "按图找样":
-          fd = {
-            name: "/bsIndex/bsProductSearchIndex",
-            linkUrl: "/bsIndex/bsProductSearchIndex",
-            component: "bsProductSearchIndex",
-            refresh: true,
-            label: "产品查询"
-          };
-          this.$store.commit("handlerHallSearchCate", null);
-          this.$store.commit("handlerimgSearch", true);
-          break;
-
-        case "玩具圈":
-          fd = {
-            name: "/bsIndex/bsToyCircle",
-            linkUrl: "/bsIndex/bsToyCircle",
-            component: "bsToyCircle",
-            refresh: true,
-            label: title
-          };
-          break;
-      }
-      this.$store.commit("myAddTab", fd);
-      this.$router.push(fd.linkUrl);
-    },
-    // 点击工作台
-    openMyGongzuo(title) {
-      let fd = {};
-      switch (title) {
-        case "公司业务":
-          fd = {
-            name: "/bsIndex/bsHallBusiness",
-            linkUrl: "/bsIndex/bsHallBusiness",
-            component: "bsHallBusiness",
-            refresh: true,
-            label: title
-          };
-          break;
-        case "厂商业务":
-          fd = {
-            name: "/bsIndex/bsVendorBusiness",
-            linkUrl: "/bsIndex/bsVendorBusiness",
-            component: "bsVendorBusiness",
-            refresh: true,
-            label: title
-          };
-          break;
-        case "购物车":
-          fd = {
-            name: "/bsIndex/bsShoppingCart",
-            linkUrl: "/bsIndex/bsShoppingCart",
-            component: "bsShoppingCart",
-            refresh: true,
-            label: title
-          };
-          break;
-        case "找样报价":
-          fd = {
-            name: "/bsIndex/bsSampleQuotation",
-            linkUrl: "/bsIndex/bsSampleQuotation",
-            component: "bsSampleQuotation",
-            refresh: true,
-            label: title
-          };
-          break;
-        case "我的客户":
-          fd = {
-            name: "/bsIndex/bsMyClients",
-            linkUrl: "/bsIndex/bsMyClients",
-            component: "bsMyClients",
-            refresh: true,
-            label: title
-          };
-          break;
-        case "择样明细":
-          fd = {
-            name: "/bsIndex/bsSampleDetailed",
-            linkUrl: "/bsIndex/bsSampleDetailed",
-            component: "bsSampleDetailed",
-            refresh: true,
-            label: title
-          };
-          break;
-      }
-      this.$store.commit("myAddTab", fd);
-      this.$router.push(fd.linkUrl);
+    //跳转页面路由
+    handleGoToUrl(title) {
+      this.$common.goToUrl(title);
     }
   }
 };
