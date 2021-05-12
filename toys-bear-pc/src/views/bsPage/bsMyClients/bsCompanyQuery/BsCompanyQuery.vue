@@ -60,7 +60,6 @@
         stripe
         style="width: 100%"
         :header-cell-style="{ backgroundColor: '#f9fafc' }"
-        @row-click="handleDetail"
       >
         <el-table-column label="序号" type="index" align="center" width="70">
         </el-table-column>
@@ -130,7 +129,7 @@ export default {
   data() {
     return {
       totalCount: 0,
-      pageSize: 12,
+      pageSize: 10,
       currentPage: 1,
       keyword: null,
       dateTime: null,

@@ -164,42 +164,6 @@ export default {
       staffList: [],
       isAddDialog: false,
       orderRow: {},
-      typesList: [
-        {
-          label: "系统通知",
-          value: 0
-        },
-        {
-          label: "补样",
-          value: 3
-        },
-        {
-          label: "借样",
-          value: 5
-        },
-        {
-          label: "补样借样",
-          value: 11
-        },
-        {
-          label: "洽谈",
-          value: 12
-        }
-      ],
-      readStatusList: [
-        {
-          label: "全部",
-          value: "-1"
-        },
-        {
-          label: "未读",
-          value: 0
-        },
-        {
-          label: "已读",
-          value: 1
-        }
-      ],
       searchForm: {
         keyword: null,
         fromCompanyName: null,
@@ -215,25 +179,11 @@ export default {
       form: {
         shieldName: null,
         shieldNumber: null
-      }
+      },
+      hallList: []
     };
   },
   methods: {
-    // 获取公司下的员工列表
-    async getStaffList() {
-      const res = await this.$http.post("/api/CompanyUserList", {
-        orgCompanyID: this.currentComparnyId
-      });
-      if (res.data.result.code === 200) {
-        this.staffList = res.data.result.item.personnels;
-      } else {
-        this.$common.handlerMsgState({
-          msg: res.data.result.msg,
-          type: "danger"
-        });
-      }
-      this.getTableDataList();
-    },
     // 新增展厅屏蔽弹窗
     add(value) {
       this.isAddDialog = value;
@@ -242,18 +192,6 @@ export default {
     exportOrder(row) {
       this.orderRow = row;
       this.exportTemplateDialog = true;
-    },
-    // 去订单详情
-    toDetails(row) {
-      const fd = {
-        name: row.orderNumber,
-        linkUrl: "/bsIndex/bsHallBusiness",
-        component: "bsHallBusinessOrderDetails",
-        refresh: true,
-        label: row.orderNumber,
-        value: row
-      };
-      this.$store.commit("myAddTab", fd);
     },
     // 获取列表
     async getTableDataList() {
@@ -274,10 +212,6 @@ export default {
         this.totalCount = res.data.result.item.totalCount;
         this.tableData = res.data.result.item.items;
       }
-    },
-    // 删除
-    handleDelete(row) {
-      console.log(row);
     },
     // 切換頁容量
     handleSizeChange(pageSize) {
@@ -381,6 +315,15 @@ export default {
       const res = await this.$http.post("/api/OrgCompanyList", fd);
       if (res.data.result.code === 200) {
         this.hallList = res.data.result.item;
+        if (this.hallList.length) {
+          var newArr = this.hallList.filter(
+            item =>
+              item.id !=
+              (this.userInfo.commparnyList &&
+                this.userInfo.commparnyList[0]["commparnyId"])
+          );
+          this.hallList = newArr;
+        }
         this.getTableDataList();
       }
     }
@@ -388,32 +331,9 @@ export default {
   created() {
     this.getHallList();
   },
-  filters: {
-    switchMessageExt(val) {
-      let msg;
-      switch (val) {
-        case "0":
-          msg = "系统通知";
-          break;
-        case "3":
-          msg = "补样";
-          break;
-        case "5":
-          msg = "借样";
-          break;
-        case "11":
-          msg = "补样借样";
-          break;
-        case "12":
-          msg = "洽谈";
-          break;
-      }
-      return msg;
-    }
-  },
   mounted() {},
   computed: {
-    ...mapState(["currentComparnyId", "userInfo"])
+    ...mapState(["userInfo"])
   }
 };
 </script>

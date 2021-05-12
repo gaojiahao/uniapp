@@ -137,7 +137,7 @@ export default {
   data() {
     return {
       totalCount: 0,
-      pageSize: 12,
+      pageSize: 10,
       currentPage: 1,
       keyword: null,
       dateTime: null,
