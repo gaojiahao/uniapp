@@ -314,6 +314,18 @@ export default {
         imageUrl: this.item.img
       });
       if (res.data.result.code === 200) {
+        if (this.shoppingList) {
+          for (let i = 0; i < res.data.result.item.length; i++) {
+            this.$set(res.data.result.item[i], "isShopping", false);
+            for (let j = 0; j < this.shoppingList.length; j++) {
+              if (
+                res.data.result.item.productNumber ===
+                this.shoppingList[j].productNumber
+              )
+                this.$set(res.data.result.item[i], "isShopping", true);
+            }
+          }
+        }
         this.productList = res.data.result.item;
         this.totalCount = res.data.result.item.length;
       } else {
@@ -438,12 +450,13 @@ export default {
       if (code === 200) {
         if (this.shoppingList) {
           for (let i = 0; i < item.items.length; i++) {
+            this.$set(item.items[i], "isShopping", false);
             for (let j = 0; j < this.shoppingList.length; j++) {
               if (
                 item.items[i].productNumber ===
                 this.shoppingList[j].productNumber
               )
-                item.items[i].isShopping = true;
+                this.$set(item.items[i], "isShopping", true);
             }
           }
         }
