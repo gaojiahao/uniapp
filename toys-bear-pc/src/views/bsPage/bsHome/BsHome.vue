@@ -27,16 +27,16 @@ export default {
   created() {},
   mounted() {
     switch (this.userInfo.commparnyList[0].companyType) {
-    //   case "Exhibition": // 展厅首页
-    //     this.isHome = "bsHallHome";
-    //     break;
+      //   case "Exhibition": // 展厅首页
+      //     this.isHome = "bsHallHome";
+      //     break;
       case "Sales": // 公司首页
         this.isHome = "bsCompanyHome";
         break;
       //   case "bsVendorHome": // 厂商首页
       //     this.isHome = "bsVendorHome";
       //     break;
-       case "Exhibition": // 超级管理员
+      case "Exhibition": // 超级管理员
         this.isHome = "bsSuperAdminHome";
         break;
       default:

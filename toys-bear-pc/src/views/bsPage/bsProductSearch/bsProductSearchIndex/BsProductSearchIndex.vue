@@ -997,6 +997,17 @@ export default {
             let endDate = Date.now();
             this.searchHttpTime = (endDate - startDate) / 1000;
             this.$store.commit("searchValues", res.data.result.object);
+            const items = res.data.result.object;
+            for (let i = 0; i < items.length; i++) {
+              this.$set(items[i], "isShopping", false);
+              for (let j = 0; j < this.shoppingList.length; j++) {
+                if (
+                  items[i].productNumber === this.shoppingList[j].productNumber
+                ) {
+                  this.$set(items[i], "isShopping", true);
+                }
+              }
+            }
             this.productList = res.data.result.object;
             this.totalCount = res.data.result.object.length;
             this.cropperCancel();

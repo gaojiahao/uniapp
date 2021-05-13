@@ -31,7 +31,7 @@
         :key="index"
         :prop="col.prop"
         :label="col.label"
-        :show-overflow-tooltip="table.isHiden"
+        :show-overflow-tooltip="table.isHiden || true"
         cell-mouse-enter
       >
         <template slot-scope="scope">
