@@ -186,7 +186,10 @@
               $store.state.userInfo.commparnyList[0].companyType === 'Sales'
           "
         >
-          <el-avatar :size="50" src=""></el-avatar>平台所有人
+          <div class="icon_box">
+            <i class="el-icon-s-custom"></i>
+          </div>
+          <span class="icon_box_text">平台所有人</span>
         </el-radio>
         <el-radio
           label="Sales"
@@ -194,7 +197,10 @@
             $store.state.userInfo.commparnyList[0].companyType === 'Supplier'
           "
         >
-          <el-avatar :size="50" src=""></el-avatar>所有公司
+          <div class="icon_box_cs">
+            <i class="el-icon-s-custom"></i>
+          </div>
+          <span class="icon_box_text">所有公司</span>
         </el-radio>
         <el-radio
           label="Supplier"
@@ -204,7 +210,10 @@
               $store.state.userInfo.commparnyList[0].companyType === 'Sales'
           "
         >
-          <el-avatar :size="50" src=""></el-avatar>所有厂商
+          <div class="icon_box_cs">
+            <i class="el-icon-s-home"></i>
+          </div>
+          <span class="icon_box_text">所有厂商</span>
         </el-radio>
       </el-radio-group>
       <div class="tongxunlu">
@@ -802,6 +811,35 @@ export default {
     .el-radio__inner {
       display: flex;
       align-items: center;
+    }
+    .icon_box {
+      opacity: 1;
+      background: #6b3bed;
+      border: 1px solid #6b3bed;
+      border-radius: 50%;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      font-size: 27px;
+    }
+    .icon_box_cs {
+      opacity: 1;
+      background: #ff6060;
+      border: 1px solid #ff6060;
+      border-radius: 50%;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      font-size: 27px;
+    }
+    .icon_box_text {
+      margin-left: 10px;
     }
   }
 }
