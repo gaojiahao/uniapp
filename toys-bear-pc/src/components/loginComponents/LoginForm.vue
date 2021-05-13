@@ -241,6 +241,10 @@ export default {
             this.$store.commit("globalJson/setGlobalJson", Json);
 
             switch (res.data.result.commparnyList[0].companyType) {
+              // case "Admin":
+              //   break;
+              // case "Supplier":
+              //   break;
               // case "Exhibition":
               case "Sales":
                 this.$store.commit("updateActiveTab", this.bsHome);

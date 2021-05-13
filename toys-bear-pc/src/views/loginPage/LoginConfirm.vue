@@ -189,7 +189,11 @@ export default {
             refresh: true
           };
           switch (item.companyType) {
-            case "Exhibition":
+            // case "Admin":
+            //   break;
+            // case "Supplier":
+            //   break;
+            // case "Exhibition":
             case "Sales":
               this.$store.commit("updateActiveTab", fd);
               this.$store.commit("closeTabAll", this.$router);
