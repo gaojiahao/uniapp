@@ -73,7 +73,7 @@
           <div class="tusou_del" @click="isShowPicBox(false)">
             <i class="el-icon-error"></i>
           </div>
-          <img :src="defaultBgImg" />
+          <img :src="baseImg" />
         </div>
       </div>
     </div>
@@ -140,7 +140,7 @@
         </el-table-column>
       </el-table>
       <!-- 分页 -->
-      <center style="padding: 20px 0">
+      <center style="padding: 20px 0" v-if="!isShowPic">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
           :page-sizes="[10, 20, 30, 40]"
@@ -211,6 +211,7 @@ export default {
     },
     // 搜索
     search() {
+      this.isShowPic = false;
       var uid = this.vuex.userInfo.uid;
       var id = {
         value: this.keyword
@@ -306,15 +307,21 @@ export default {
       // 上传
       try {
         const fd = new FormData();
+        fd.append("oppositeRole", 'Supplier');
         fd.append("file", file.raw);
+        let startDate = Date.now();
         const res = await this.$http.post("/api/ImageSearchCompany", fd);
         if (res.data.result.code === 200) {
-          let startDate = Date.now();
           let endDate = Date.now();
           this.searchHttpTime = (endDate - startDate) / 1000;
           this.$store.commit("searchValues", res.data.result.object);
-          this.productList = res.data.result.object;
-          this.totalCount = res.data.result.object.length;
+          this.tableData = res.data.result.item.items;
+          this.totalCount = res.data.result.item.totalCount;
+          this.$nextTick(() => {
+            const f = window.URL.createObjectURL(file.raw);
+            this.baseImg = f;
+            this.isShowPic = true;
+          });
         } else {
           this.$common.handlerMsgState({
             msg: res.data.result.message,
