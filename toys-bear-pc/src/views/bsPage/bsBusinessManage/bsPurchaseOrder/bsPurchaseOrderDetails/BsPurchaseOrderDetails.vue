@@ -116,19 +116,9 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="资料来源">
+        <el-table-column label="资料来源" show-overflow-tooltip>
           <template slot-scope="scope">
-            <div
-              style="
-                width: 110px;
-                overflow: hidden;
-                max-width: 100px;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-              "
-            >
-              {{ scope.row.exhibitionName }}
-            </div>
+            {{ scope.row.exhibitionName }}
           </template>
         </el-table-column>
         <el-table-column prop="fa_no" label="出厂货号"></el-table-column>
