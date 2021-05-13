@@ -10,12 +10,14 @@ import { mapState } from "vuex";
 import bsCompanyHome from "@/components/bsComponents/bsHomeComponent/bsCompanyHome";
 import bsHallHome from "@/components/bsComponents/bsHomeComponent/bsHallHome";
 import bsVendorHome from "@/components/bsComponents/bsHomeComponent/bsVendorHome";
+import bsSuperAdminHome from "@/components/bsComponents/bsHomeComponent/bsSuperAdminHome";
 export default {
   name: "bsHome",
   components: {
     bsCompanyHome,
     bsHallHome,
-    bsVendorHome
+    bsVendorHome,
+    bsSuperAdminHome
   },
   data() {
     return {
@@ -25,15 +27,18 @@ export default {
   created() {},
   mounted() {
     switch (this.userInfo.commparnyList[0].companyType) {
-      case "Exhibition": // 展厅首页
-        this.isHome = "bsHallHome";
-        break;
+    //   case "Exhibition": // 展厅首页
+    //     this.isHome = "bsHallHome";
+    //     break;
       case "Sales": // 公司首页
         this.isHome = "bsCompanyHome";
         break;
       //   case "bsVendorHome": // 厂商首页
       //     this.isHome = "bsVendorHome";
       //     break;
+       case "Exhibition": // 超级管理员
+        this.isHome = "bsSuperAdminHome";
+        break;
       default:
         this.getOrgCompany();
         this.getGetSalesOrderDataStatistics();
