@@ -109,7 +109,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="资料来源">
+        <el-table-column label="资料来源" show-overflow-tooltip>
           <template slot-scope="scope">
             {{ scope.row.exhibitionName }}
           </template>
