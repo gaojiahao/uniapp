@@ -99,7 +99,7 @@
             show-overflow-tooltip
           >
             <template slot-scope="scope">
-              {{ scope.row.supplierName }}
+              {{ scope.row.companyName }}
             </template>
           </el-table-column>
           <el-table-column
