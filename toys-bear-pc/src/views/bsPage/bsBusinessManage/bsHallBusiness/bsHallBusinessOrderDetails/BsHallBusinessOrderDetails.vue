@@ -201,7 +201,7 @@
         </p>
         <p class="item">
           <span class="itemTitle">总报出价/总金额：</span>
-          <span class="price">￥{{ options.SumHa_in_qu||0 }}</span>
+          <span class="price">￥{{ options.SumHa_in_qu || 0 }}</span>
           <span>/</span>
           <span class="price">{{ options.sumFa_pr_pr }}</span>
         </p>

@@ -145,6 +145,19 @@
                 />
               </el-dialog>
             </div>
+            <!-- <div class="sendGonggaoBtn">
+              <el-button type="primary" class="sendBtn" @click="isSelectPush"
+                >发 布</el-button
+              >
+            </div> -->
+          </el-form-item>
+          <el-form-item label="是否广播" prop="isPush">
+            <el-radio-group v-model="formData.isPush">
+              <el-radio label="false">否</el-radio>
+              <el-radio label="true">是</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item>
             <div class="sendGonggaoBtn">
               <el-button type="primary" class="sendBtn" @click="isSelectPush"
                 >发 布</el-button
@@ -156,7 +169,7 @@
     </div>
     <!-- 选择公告推送人 -->
     <el-dialog
-      title="选择收信人"
+      title="选择广播对象"
       :visible.sync="selectPush"
       destroy-on-close
       append-to-body
@@ -238,7 +251,8 @@ export default {
       formData: {
         type: null,
         content: null,
-        fileList: []
+        fileList: [],
+        isPush: "false"
       },
       rules: {
         type: [
@@ -246,6 +260,9 @@ export default {
         ],
         content: [
           { required: true, message: "请输入公告内容", trigger: "blur" }
+        ],
+        isPush: [
+          { required: true, message: "请选择是否广播", trigger: "change" }
         ]
       },
       type: "",
@@ -543,28 +560,37 @@ export default {
     isSelectPush() {
       this.$refs.refGonggao.validate(valid => {
         if (valid) {
-          this.$confirm("是否需要推送公告?", "提示", {
-            distinguishCancelAndClose: true,
-            cancelButtonText: "需要推送",
-            confirmButtonText: "不了，谢谢",
-            iconClass: "iconfont icon-laba2"
-          })
-            .then(() => {
-              this.sendGonggao();
-            })
-            .catch(action => {
-              if (action === "cancel") {
-                this.$common.handlerMsgState({
-                  msg: "敬请期待",
-                  type: "warning"
-                });
-                // this.orgListCurrentPage = 1;
-                // this.getOrgList(false);
-                // this.radio = "";
-                // this.checkUserList = [];
-                // this.selectPush = true;
-              }
-            });
+          // this.$confirm("是否需要推送公告?", "提示", {
+          //   distinguishCancelAndClose: true,
+          //   cancelButtonText: "需要推送",
+          //   confirmButtonText: "不了，谢谢",
+          //   iconClass: "iconfont icon-laba2"
+          // })
+          //   .then(() => {
+          //     this.sendGonggao();
+          //   })
+          //   .catch(action => {
+          //     if (action === "cancel") {
+          //       this.$common.handlerMsgState({
+          //         msg: "敬请期待",
+          //         type: "warning"
+          //       });
+          //       // this.orgListCurrentPage = 1;
+          //       // this.getOrgList(false);
+          //       // this.radio = "";
+          //       // this.checkUserList = [];
+          //       // this.selectPush = true;
+          //     }
+          //   });
+          if (this.formData.isPush == "true") {
+            this.orgListCurrentPage = 1;
+            this.getOrgList(false);
+            this.radio = "";
+            this.checkUserList = [];
+            this.selectPush = true;
+          } else {
+            this.sendGonggao();
+          }
         }
       });
     }
@@ -696,9 +722,11 @@ export default {
     .sendGonggaoBtn {
       text-align: center;
       margin: 20px 0;
+      width: 264px;
+      margin-left: 143px;
       .sendBtn {
         width: 80%;
-        border-radius: 20px;
+        border-radius: 5px;
       }
     }
   }

@@ -75,7 +75,7 @@
           </div>
           <img :src="defaultBgImg" />
         </div>
-      </div>  
+      </div>
     </div>
     <!-- 厂商列表 -->
     <div class="tableBox">
@@ -171,8 +171,8 @@ export default {
       isShowHistoryPanel: false,
       searchHistoryList: [],
       vuex: {},
-      baseImg:{},  //图搜图片
-      isShowPic:false,  //是否显示图搜
+      baseImg: {}, //图搜图片
+      isShowPic: false //是否显示图搜
     };
   },
   methods: {
@@ -293,7 +293,6 @@ export default {
     },
     // 图搜上传
     async uploadPic(file) {
-      debugger
       const isLt5M = file.size / 1024 / 1024 < 3;
       if (!isLt5M) {
         this.$common.handlerMsgState({
@@ -310,14 +309,13 @@ export default {
         fd.append("file", file.raw);
         const res = await this.$http.post("/api/ImageSearchCompany", fd);
         if (res.data.result.code === 200) {
-          debugger
+          let startDate = Date.now();
           let endDate = Date.now();
           this.searchHttpTime = (endDate - startDate) / 1000;
           this.$store.commit("searchValues", res.data.result.object);
           this.productList = res.data.result.object;
           this.totalCount = res.data.result.object.length;
         } else {
-          debugger
           this.$common.handlerMsgState({
             msg: res.data.result.message,
             type: "danger"
@@ -325,13 +323,13 @@ export default {
         }
       } catch (error) {
         this.$common.handlerMsgState({
-          msg: '上传出错',
+          msg: "上传出错",
           type: "danger"
         });
       }
     },
     //是否显示图搜框
-    isShowPicBox(value){
+    isShowPicBox(value) {
       this.isShowPic = value;
     }
   },
@@ -405,9 +403,9 @@ export default {
     .item {
       display: flex;
       align-items: center;
-      .tusou_img{ 
+      .tusou_img {
         position: relative;
-        img{
+        img {
           width: 87px;
           height: 87px;
           border: 1px solid #e2e2e2;
