@@ -17,7 +17,22 @@
             @focus="showHistoryModal(true)"
             @blur="showHistoryModalY(false)"
             @change="showHistoryModal(false)"
-          ></el-input>
+            @input="showHistoryModalI"
+          >
+            <!-- <template slot="prefix">
+              <el-upload
+                :auto-upload="false"
+                ref="uploadRef"
+                accept=".jpg,.jpeg,.png,.ico,.bmp,.JPG,.JPEG,.PNG,.ICO,.BMP"
+                class="upload-demo"
+                action="/api/WebsiteShare/SearchProductsByPicture"
+                :show-file-list="false"
+                :on-change="openUpload"
+              >
+                <i class="iconXj"></i>
+              </el-upload>
+            </template> -->
+          </el-input>
         </div>
         <div class="item">
           <el-button
@@ -42,7 +57,7 @@
           <template v-for="(item, index) in searchHistoryList">
             <li
               class="history_item"
-              @click="historySearch(item.value)"
+              @mousedown="historySearch(item.value)"
               :key="index"
             >
               {{ item.value }}
@@ -145,22 +160,31 @@
               {{ detailInfo.companyName }}
             </div>
             <div class="detail_dialog_content_list_item">
-              <div class="detail_dialog_content_item">
+              <div
+                class="detail_dialog_content_item"
+                v-if="detailInfo.contactsMan"
+              >
                 <div class="label">
                   联系人：<span>{{ detailInfo.contactsMan }}</span>
                 </div>
               </div>
-              <div class="detail_dialog_content_item">
+              <div
+                class="detail_dialog_content_item"
+                v-if="detailInfo.telePhoneNumber"
+              >
                 <div class="label">
                   电话：<span>{{ detailInfo.telePhoneNumber }}</span>
                 </div>
               </div>
-              <div class="detail_dialog_content_item">
+              <div
+                class="detail_dialog_content_item"
+                v-if="detailInfo.phoneNumber"
+              >
                 <div class="label">
                   手机：<span>{{ detailInfo.phoneNumber }}</span>
                 </div>
               </div>
-              <div class="detail_dialog_content_item">
+              <div class="detail_dialog_content_item" v-if="detailInfo.address">
                 <div class="label">
                   地址：<span>{{ detailInfo.address }}</span>
                 </div>
@@ -182,8 +206,10 @@
 </template>
 
 <script>
+import eventBus from "@/assets/js/common/eventBus";
+
 export default {
-  name: "bsVendorQuery",
+  name: "bsCompanyQuery",
   data() {
     return {
       totalCount: 0,
@@ -257,6 +283,7 @@ export default {
         history[uid + "_cs"].splice(8, history[uid + "_cs"].length - 8);
       }
       localStorage.setItem("searchHistory", JSON.stringify(history));
+      this.searchHistoryList = history[uid + "_cs"] || [];
       this.showHistoryModal(false);
       this.currentPage = 1;
       this.getVendorListPage();
@@ -279,20 +306,28 @@ export default {
     //是否显示历史搜索面板
     showHistoryModal(value) {
       if (value) {
-        var history = {};
-        var uid = this.vuex.userInfo.uid;
-        localStorage.getItem("searchHistory")
-          ? (history = JSON.parse(localStorage.getItem("searchHistory")))
-          : (history = {});
-        this.searchHistoryList = history[uid + "_cs"] || [];
+        this.initSearchList();
       }
       this.isShowHistoryPanel = value;
+    },
+    initSearchList() {
+      var history = {};
+      var uid = this.vuex.userInfo.uid;
+      localStorage.getItem("searchHistory")
+        ? (history = JSON.parse(localStorage.getItem("searchHistory")))
+        : (history = {});
+      this.searchHistoryList = history[uid + "_cs"] || [];
     },
     showHistoryModalY(value) {
       var me = this;
       setTimeout(function() {
         me.isShowHistoryPanel = value;
       }, 500);
+    },
+    showHistoryModalI(value) {
+      if (!value) {
+        this.isShowHistoryPanel = true;
+      }
     },
     //点击历史搜索
     historySearch(value) {
@@ -327,6 +362,10 @@ export default {
       } else {
         this.detailInfo = {};
       }
+    },
+    // 选择图片-图搜
+    openUpload(file) {
+      eventBus.$emit("openUpload", file);
     }
   },
   created() {
@@ -462,6 +501,17 @@ export default {
         }
       }
     }
+  }
+  .upload-demo {
+    margin-top: 7px;
+  }
+  .iconXj {
+    display: inline-block;
+    vertical-align: bottom;
+    width: 20px;
+    height: 20px;
+    background: url("~@/assets/images/xiangji.png") no-repeat center;
+    background-size: contain;
   }
 }
 @{deep} .detail_dialog {
