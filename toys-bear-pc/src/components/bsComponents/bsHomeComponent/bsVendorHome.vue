@@ -239,7 +239,7 @@ export default {
               console.log(row);
               return 2222;
             },
-            priceHtml: row => {
+            fcatoryNameHtml: row => {
               console.log(row);
               return 6565654;
             }
