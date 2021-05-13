@@ -50,11 +50,11 @@
               <p style="box-sizing: border-box; padding-right: 10px">
                 {{ item.companyName }}
               </p>
-              <el-radio
-                v-if="$route.query.id === 'checkted'"
+              <el-checkbox
+                v-if="$route.query.id === 'checkted' || isLogin"
                 v-model="item.checked"
                 :label="true"
-                ><span style="display: none">1</span></el-radio
+                ><span style="display: none">1</span></el-checkbox
               >
             </li>
           </template>
@@ -214,11 +214,11 @@ export default {
     }
   },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(["userInfo", "isLogin"])
   },
   mounted() {
     this.userList = this.userInfo.commparnyList;
-    if (this.$route.query.id === "checkted") {
+    if (this.$route.query.id === "checkted" || this.isLogin) {
       this.loginTow();
     }
   }
@@ -226,6 +226,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@deep: ~">>>";
 .confirmBox {
   width: 100%;
   height: 100vh;
@@ -272,10 +273,17 @@ export default {
           cursor: pointer;
           margin-bottom: 30px;
           position: relative;
-          .el-radio {
+          @{deep} .el-checkbox {
             position: absolute;
             bottom: 10px;
             right: 0;
+            overflow: hidden;
+            .el-checkbox__input {
+              .el-checkbox__inner {
+                border-radius: 50% !important;
+                overflow: hidden;
+              }
+            }
           }
           &.active {
             border: 2px solid #3368a9;
