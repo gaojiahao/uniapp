@@ -62,7 +62,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="联系厂商" show-overflow-tooltip>
+        <el-table-column align="center" label="联系厂商">
           <template slot-scope="scope">
             <div v-if="scope.row.supplierPhone">
               {{ scope.row.supplierPhone }}
