@@ -118,8 +118,8 @@ export default {
       totalCount: 0,
       pageSize: 48,
       currentPage: 1,
-      productList: [],
-      footprintArr: []
+      productList: []
+      //   footprintArr: [],
     };
   },
   computed: {
@@ -165,10 +165,11 @@ export default {
         // item.items.forEach(val => {
         //   this.footprintArr.push(val);
         // });
+        let footprintArr = [];
         for (let i = 0; i < item.items.length; i++) {
-          this.footprintArr.push(item.items[i]);
+          footprintArr.push(item.items[i]);
         }
-        this.dataResort(this.footprintArr);
+        this.dataResort(footprintArr);
         this.totalCount = res.data.result.item.totalCount;
       } else {
         this.totalCount = 0;
@@ -201,8 +202,11 @@ export default {
           newArr[index].list.push(item);
         }
       });
-
-      this.productList = newArr;
+      for (let i = 0; i < newArr.length; i++) {
+        this.$set(this.productList, i, newArr[i]);
+      }
+      //   this.productList = newArr;
+      console.log(this.productList);
       // return newArr;
     },
     // 清空浏览记录
@@ -219,7 +223,6 @@ export default {
             fd
           });
           if (res.data.result.code === 200) {
-            this.footprintArr = [];
             this.getCollectList();
             this.$common.handlerMsgState({
               msg: "清空成功",
@@ -247,7 +250,6 @@ export default {
       };
       const res = await this.$http.post("/api/DeleteProductRecord", fd);
       if (res.data.result.code === 200) {
-        this.footprintArr = [];
         this.getCollectList();
         this.$common.handlerMsgState({
           msg: "删除成功",
@@ -332,7 +334,7 @@ export default {
     });
     // 刷新页面
     eventBus.$on("refreshHtml", () => {
-      this.footprintArr = [];
+      //   this.footprintArr = [];
       this.getCollectList();
     });
 
