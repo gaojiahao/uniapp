@@ -31,6 +31,7 @@
         :key="index"
         :prop="col.prop"
         :label="col.label"
+        :show-overflow-tooltip="table.isHiden"
         cell-mouse-enter
       >
         <template slot-scope="scope">
@@ -60,6 +61,7 @@
             <div class="infoBox">
               <div
                 class="name"
+                @click="goDetails(scope.row)"
                 v-if="col.nameHtml"
                 v-html="col.nameHtml(scope.row)"
               ></div>
@@ -386,6 +388,9 @@ export default {
 .productInfo {
   display: flex;
   justify-content: center;
+  .el-image {
+    cursor: pointer;
+  }
   .infoBox {
     width: 190px;
     height: 60px;
@@ -394,11 +399,13 @@ export default {
       line-height: 25px;
     }
     .name {
+      cursor: pointer;
       overflow: hidden; /*超出部分隐藏*/
       white-space: nowrap; /*不换行*/
       text-overflow: ellipsis; /*超出部分文字以...显示*/
     }
     .factory {
+      cursor: pointer;
       display: flex;
       align-items: center;
       color: #3368a9;

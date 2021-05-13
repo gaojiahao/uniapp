@@ -32,6 +32,7 @@ export default {
       tableData: {
         data: [],
         showLoading: false,
+        isHiden: true,
         sizeMini: "mini",
         columns: [
           {
