@@ -17,7 +17,22 @@
             @focus="showHistoryModal(true)"
             @blur="showHistoryModalY(false)"
             @change="showHistoryModal(false)"
-          ></el-input>
+            @input="showHistoryModalI"
+          >
+            <template slot="prefix">
+              <el-upload
+                :auto-upload="false"
+                ref="uploadRef"
+                accept=".jpg,.jpeg,.png,.ico,.bmp,.JPG,.JPEG,.PNG,.ICO,.BMP"
+                class="upload-demo"
+                action="/api/WebsiteShare/ImageSearchCompany"
+                :show-file-list="false"
+                :on-change="uploadPic"
+              >
+                <i class="iconXj"></i>
+              </el-upload>
+            </template>
+          </el-input>
         </div>
         <div class="item">
           <el-button
@@ -42,7 +57,7 @@
           <template v-for="(item, index) in searchHistoryList">
             <li
               class="history_item"
-              @click="historySearch(item.value)"
+              @mousedown="historySearch(item.value)"
               :key="index"
             >
               {{ item.value }}
@@ -51,7 +66,17 @@
         </ul>
       </div>
     </div>
-
+    <div class="tusou_box" v-if="isShowPic">
+      <div class="item">
+        <span class="label">按图搜：</span>
+        <div class="tusou_img">
+          <div class="tusou_del" @click="isShowPicBox(false)">
+            <i class="el-icon-error"></i>
+          </div>
+          <img :src="defaultBgImg" />
+        </div>
+      </div>  
+    </div>
     <!-- 厂商列表 -->
     <div class="tableBox">
       <div class="title">厂商列表 ({{ totalCount }})</div>
@@ -145,7 +170,9 @@ export default {
       myKeyword: "",
       isShowHistoryPanel: false,
       searchHistoryList: [],
-      vuex: {}
+      vuex: {},
+      baseImg:{},  //图搜图片
+      isShowPic:false,  //是否显示图搜
     };
   },
   methods: {
@@ -241,6 +268,11 @@ export default {
         me.isShowHistoryPanel = value;
       }, 500);
     },
+    showHistoryModalI(value) {
+      if (!value) {
+        this.isShowHistoryPanel = true;
+      }
+    },
     //点击历史搜索
     historySearch(value) {
       this.keyword = value;
@@ -258,6 +290,49 @@ export default {
         localStorage.setItem("searchHistory", JSON.stringify(history));
         this.showHistoryModal(false);
       }
+    },
+    // 图搜上传
+    async uploadPic(file) {
+      debugger
+      const isLt5M = file.size / 1024 / 1024 < 3;
+      if (!isLt5M) {
+        this.$common.handlerMsgState({
+          msg: "上传文件大小不能超过 3MB!",
+          type: "danger"
+        });
+        this.baseImg = "";
+        this.$refs.uploadRef.value = "";
+        return false;
+      }
+      // 上传
+      try {
+        const fd = new FormData();
+        fd.append("file", file.raw);
+        const res = await this.$http.post("/api/ImageSearchCompany", fd);
+        if (res.data.result.code === 200) {
+          debugger
+          let endDate = Date.now();
+          this.searchHttpTime = (endDate - startDate) / 1000;
+          this.$store.commit("searchValues", res.data.result.object);
+          this.productList = res.data.result.object;
+          this.totalCount = res.data.result.object.length;
+        } else {
+          debugger
+          this.$common.handlerMsgState({
+            msg: res.data.result.message,
+            type: "danger"
+          });
+        }
+      } catch (error) {
+        this.$common.handlerMsgState({
+          msg: '上传出错',
+          type: "danger"
+        });
+      }
+    },
+    //是否显示图搜框
+    isShowPicBox(value){
+      this.isShowPic = value;
     }
   },
   created() {
@@ -312,6 +387,40 @@ export default {
       top: 50%;
       content: "";
       transform: translate(0, -50%);
+    }
+  }
+  .upload-demo {
+    margin-top: 7px;
+  }
+  .iconXj {
+    display: inline-block;
+    vertical-align: bottom;
+    width: 20px;
+    height: 20px;
+    background: url("~@/assets/images/xiangji.png") no-repeat center;
+    background-size: contain;
+  }
+  .tusou_box {
+    margin-top: 10px;
+    .item {
+      display: flex;
+      align-items: center;
+      .tusou_img{ 
+        position: relative;
+        img{
+          width: 87px;
+          height: 87px;
+          border: 1px solid #e2e2e2;
+        }
+        .tusou_del {
+          position: absolute;
+          right: -14px;
+          top: -17px;
+          font-size: 24px;
+          color: #2c2c2c;
+          opacity: 0.5;
+        }
+      }
     }
   }
   .searchBox {

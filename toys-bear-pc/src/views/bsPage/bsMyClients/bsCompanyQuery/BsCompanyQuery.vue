@@ -19,19 +19,19 @@
             @change="showHistoryModal(false)"
             @input="showHistoryModalI"
           >
-            <!-- <template slot="prefix">
+            <template slot="prefix">
               <el-upload
                 :auto-upload="false"
                 ref="uploadRef"
                 accept=".jpg,.jpeg,.png,.ico,.bmp,.JPG,.JPEG,.PNG,.ICO,.BMP"
                 class="upload-demo"
-                action="/api/WebsiteShare/SearchProductsByPicture"
+                action="/api/WebsiteShare/ImageSearchCompany"
                 :show-file-list="false"
-                :on-change="openUpload"
+                :on-change="uploadPic"
               >
                 <i class="iconXj"></i>
               </el-upload>
-            </template> -->
+            </template>
           </el-input>
         </div>
         <div class="item">
@@ -66,7 +66,17 @@
         </ul>
       </div>
     </div>
-
+    <div class="tusou_box" v-if="isShowPic">
+      <div class="item">
+        <span class="label">按图搜：</span>
+        <div class="tusou_img">
+          <div class="tusou_del" @click="isShowPicBox(false)">
+            <i class="el-icon-error"></i>
+          </div>
+          <img :src="defaultBgImg" />
+        </div>
+      </div>  
+    </div>
     <!-- 厂商列表 -->
     <div class="tableBox">
       <div class="title">公司列表 ({{ totalCount }})</div>
@@ -206,8 +216,6 @@
 </template>
 
 <script>
-import eventBus from "@/assets/js/common/eventBus";
-
 export default {
   name: "bsCompanyQuery",
   data() {
@@ -224,7 +232,9 @@ export default {
       vuex: {},
       isShowModal: false, //是否显示详情弹窗
       defaultBgImg: require("@/assets/images/bsCompanyQueryBg.png"),
-      detailInfo: {} //公司详情
+      detailInfo: {}, //公司详情
+      baseImg:{},  //图搜图片
+      isShowPic:false,  //是否显示图搜
     };
   },
   methods: {
@@ -271,19 +281,19 @@ export default {
       localStorage.getItem("searchHistory")
         ? (history = JSON.parse(localStorage.getItem("searchHistory")))
         : (history = {});
-      if (history[uid + "_cs"] && history[uid + "_cs"].length != 0) {
-        history[uid + "_cs"].forEach((res, index) => {
-          res.value == id.value ? history[uid + "_cs"].splice(index, 1) : "";
+      if (history[uid + "_cy"] && history[uid + "_cy"].length != 0) {
+        history[uid + "_cy"].forEach((res, index) => {
+          res.value == id.value ? history[uid + "_cy"].splice(index, 1) : "";
         });
       } else {
-        history[uid + "_cs"] = [];
+        history[uid + "_cy"] = [];
       }
-      history[uid + "_cs"].unshift(id);
-      if (history[uid + "_cs"].length > 8) {
-        history[uid + "_cs"].splice(8, history[uid + "_cs"].length - 8);
+      history[uid + "_cy"].unshift(id);
+      if (history[uid + "_cy"].length > 8) {
+        history[uid + "_cy"].splice(8, history[uid + "_cy"].length - 8);
       }
       localStorage.setItem("searchHistory", JSON.stringify(history));
-      this.searchHistoryList = history[uid + "_cs"] || [];
+      this.searchHistoryList = history[uid + "_cy"] || [];
       this.showHistoryModal(false);
       this.currentPage = 1;
       this.getVendorListPage();
@@ -316,7 +326,7 @@ export default {
       localStorage.getItem("searchHistory")
         ? (history = JSON.parse(localStorage.getItem("searchHistory")))
         : (history = {});
-      this.searchHistoryList = history[uid + "_cs"] || [];
+      this.searchHistoryList = history[uid + "_cy"] || [];
     },
     showHistoryModalY(value) {
       var me = this;
@@ -341,8 +351,8 @@ export default {
       localStorage.getItem("searchHistory")
         ? (history = JSON.parse(localStorage.getItem("searchHistory")))
         : (history = {});
-      if (history[uid + "_cs"] && history[uid + "_cs"].length != 0) {
-        history[uid + "_cs"] = [];
+      if (history[uid + "_cy"] && history[uid + "_cy"].length != 0) {
+        history[uid + "_cy"] = [];
         localStorage.setItem("searchHistory", JSON.stringify(history));
         this.showHistoryModal(false);
       }
@@ -363,9 +373,48 @@ export default {
         this.detailInfo = {};
       }
     },
-    // 选择图片-图搜
-    openUpload(file) {
-      eventBus.$emit("openUpload", file);
+    // 图搜上传
+    async uploadPic(file) {
+      debugger
+      const isLt5M = file.size / 1024 / 1024 < 3;
+      if (!isLt5M) {
+        this.$common.handlerMsgState({
+          msg: "上传文件大小不能超过 3MB!",
+          type: "danger"
+        });
+        this.baseImg = "";
+        this.$refs.uploadRef.value = "";
+        return false;
+      }
+      // 上传
+      try {
+        const fd = new FormData();
+        fd.append("file", file.raw);
+        const res = await this.$http.post("/api/ImageSearchCompany", fd);
+        if (res.data.result.code === 200) {
+          debugger
+          let endDate = Date.now();
+          this.searchHttpTime = (endDate - startDate) / 1000;
+          this.$store.commit("searchValues", res.data.result.object);
+          this.productList = res.data.result.object;
+          this.totalCount = res.data.result.object.length;
+        } else {
+          debugger
+          this.$common.handlerMsgState({
+            msg: res.data.result.message,
+            type: "danger"
+          });
+        }
+      } catch (error) {
+        this.$common.handlerMsgState({
+          msg: '上传出错',
+          type: "danger"
+        });
+      }
+    },
+    //是否显示图搜框
+    isShowPicBox(value){
+      this.isShowPic = value;
     }
   },
   created() {
@@ -512,6 +561,29 @@ export default {
     height: 20px;
     background: url("~@/assets/images/xiangji.png") no-repeat center;
     background-size: contain;
+  }
+  .tusou_box {
+    margin-top: 10px;
+    .item {
+      display: flex;
+      align-items: center;
+      .tusou_img{ 
+        position: relative;
+        img{
+          width: 87px;
+          height: 87px;
+          border: 1px solid #e2e2e2;
+        }
+        .tusou_del {
+          position: absolute;
+          right: -14px;
+          top: -17px;
+          font-size: 24px;
+          color: #2c2c2c;
+          opacity: 0.5;
+        }
+      }
+    }
   }
 }
 @{deep} .detail_dialog {

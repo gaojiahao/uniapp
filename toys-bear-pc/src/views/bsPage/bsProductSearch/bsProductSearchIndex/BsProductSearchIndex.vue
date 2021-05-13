@@ -963,6 +963,7 @@ export default {
           img: urlPreView,
           baseImg: this.baseImg
         });
+        debugger
         // 上传
         try {
           const companynumber =
