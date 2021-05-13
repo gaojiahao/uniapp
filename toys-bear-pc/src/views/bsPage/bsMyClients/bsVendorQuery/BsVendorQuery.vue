@@ -307,7 +307,7 @@ export default {
       // 上传
       try {
         const fd = new FormData();
-        fd.append("oppositeRole", 'Supplier');
+        fd.append("oppositeRole", "Supplier");
         fd.append("file", file.raw);
         let startDate = Date.now();
         const res = await this.$http.post("/api/ImageSearchCompany", fd);
