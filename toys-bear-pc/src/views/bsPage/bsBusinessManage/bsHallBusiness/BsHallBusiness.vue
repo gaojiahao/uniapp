@@ -109,7 +109,7 @@
       >
         <el-table-column label="序号" type="index" align="center" width="70">
         </el-table-column>
-        <el-table-column label="择样单号" min-width="180">
+        <el-table-column label="择样单号" min-width="100">
           <template slot-scope="scope">
             <div
               style="color: #3368a9; cursor: pointer"

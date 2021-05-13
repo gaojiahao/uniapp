@@ -108,7 +108,15 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="联系厂商" prop="supplierPhone" align="center">
+        <el-table-column label="联系厂商" align="center">
+          <template slot-scope="scope">
+            <div v-if="scope.row.supplierPhone">
+              {{ scope.row.supplierPhone }}
+            </div>
+            <div v-if="scope.row.supplierTelephoneNumber">
+              {{ scope.row.supplierTelephoneNumber }}
+            </div>
+          </template>
         </el-table-column>
         <el-table-column label="资料来源" align="center">
           <template slot-scope="scope">
