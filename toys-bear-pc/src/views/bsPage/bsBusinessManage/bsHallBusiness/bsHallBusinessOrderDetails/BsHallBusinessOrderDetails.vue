@@ -184,7 +184,7 @@
         <el-table-column prop="ha_in_qu" label="报出价">
           <template slot-scope="scope">
             <span style="color: #f56c6c">
-              {{ scope.row.cu_de + (scope.row.ha_in_qu || 0) }}
+              {{ scope.row.cu_de + (scope.row.ha_in_qu || scope.row.fa_pr) }}
             </span>
           </template>
         </el-table-column>
@@ -208,12 +208,10 @@
           <span>{{ options.sumGr_we }}/{{ options.sumNe_we }}(KG)</span>
         </p>
         <p class="item">
-          <span class="itemTitle">总出厂价/总金额/总报出价：</span>
-          <span class="price">￥{{ options.sumAmountFa_pr }}</span>
+          <span class="itemTitle">总报出价/总金额：</span>
+          <span class="price">￥{{ options.SumHa_in_qu || 0 }}</span>
           <span>/</span>
           <span class="price">{{ options.sumFa_pr_pr }}</span>
-          <span>/</span>
-          <span class="price">{{ options.SumHa_in_qu || 0 }}</span>
         </p>
       </div>
     </div>
