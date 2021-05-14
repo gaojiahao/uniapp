@@ -160,7 +160,7 @@ import bsSampleQuotation from "@/views/bsPage/bsBusinessManage/bsSampleQuotation
 //数据统计
 import bsDataTotal from "@/views/bsPage/bsBusinessManage/bsDataTotal/bsDataTotal.vue";
 // 找样报价-报价详情
-import bsSampleQuotationDetails from "@/components/bsComponents/bsSampleComponent/bsSampleQuotationDetails";
+import bsSampleQuotationDetails from "@/views/bsPage/bsBusinessManage/bsSampleQuotation/components/bsSampleQuotationDetails";
 // 找样报价-选择报价产品
 import bsSampleOfferCommodity from "@/components/bsComponents/bsSampleComponent/bsSampleOfferCommodity";
 

@@ -185,7 +185,7 @@
           <div v-if="table.actions">
             <template v-for="btn in table.actions">
               <el-button
-                v-if="!btn.hidden"
+                v-if="!btn.hidden || btn.hidden(scope.row)"
                 :key="btn.index"
                 :type="btn.classWrapper(scope.row)"
                 :disabled="btn.disabledWrapper(scope.row)"

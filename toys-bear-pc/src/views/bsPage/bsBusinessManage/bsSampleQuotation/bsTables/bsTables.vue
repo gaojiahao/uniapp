@@ -140,8 +140,8 @@ export default {
             textWrapper() {
               return "编辑";
             },
-            disabledWrapper(row) {
-              return row.offerNumber[0] == "S";
+            hidden(row) {
+              return row.offerNumber[0] != "S";
             },
             methods: row => {
               const fd = {
@@ -160,8 +160,8 @@ export default {
             textWrapper() {
               return "推送";
             },
-            disabledWrapper(row) {
-              return row.offerNumber[0] == "S";
+            hidden(row) {
+              return row.offerNumber[0] != "S";
             },
             methods: row => {
               console.log(row);
@@ -172,8 +172,8 @@ export default {
             textWrapper() {
               return "删除";
             },
-            disabledWrapper(row) {
-              return row.offerNumber[0] == "S";
+            hidden(row) {
+              return row.offerNumber[0] != "S";
             },
             methods: row => {
               this.$emit("handleDelete", row);

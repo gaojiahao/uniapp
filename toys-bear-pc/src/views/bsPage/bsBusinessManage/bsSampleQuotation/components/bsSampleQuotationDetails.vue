@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="tableBox">
-        <el-table
+        <!-- <el-table
           :data="tableData"
           size="mini"
           style="width: 100%"
@@ -63,14 +63,6 @@
                       {{ scope.row.supplierName }}
                     </div>
                     <div class="icons">
-                      <!-- <el-tooltip
-                        class="item"
-                        effect="dark"
-                        :content="scope.row.supplierPhone || '暂时没有厂商电话'"
-                        placement="top"
-                      >
-                        <div class="cartPhoneIcon"></div>
-                      </el-tooltip> -->
                       <div class="cartInfoIcon"></div>
                     </div>
                   </div>
@@ -178,18 +170,6 @@
               </span>
             </template>
           </el-table-column>
-          <!-- <el-table-column label="箱数" align="center" width="100">
-            <template slot-scope="scope">
-              <input
-                class="inputNumber"
-                type="number"
-                @input="changeInputNumber($event, scope.row)"
-                @focus="selectInputValue($event)"
-                @keydown="nextInput($event)"
-                v-model="scope.row.boxNumber"
-              />
-            </template>
-          </el-table-column> -->
           <el-table-column prop="ch_pa" label="总数量" align="center">
             <template slot-scope="scope">
               <span>
@@ -235,7 +215,7 @@
               </span>
             </template>
           </el-table-column>
-        </el-table>
+        </el-table> -->
         <!-- 统计 -->
         <div class="tableBtoBox">
           <div class="tableBto">
