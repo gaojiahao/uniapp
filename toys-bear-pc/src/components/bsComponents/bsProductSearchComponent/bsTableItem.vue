@@ -86,52 +86,52 @@ export default {
           { prop: "ch_pa", label: "包装", isHiden: true, width: 90 },
           {
             prop: "pr_le",
-            label: "产品规格",
+            label: "产品规格(cm)",
             isHiden: true,
             render: row => {
-              return row.pr_le + "x" + row.pr_wi + "x" + row.pr_hi + "(cm)";
+              return row.pr_le + "x" + row.pr_wi + "x" + row.pr_hi;
             }
           },
           {
             prop: "pr_le",
-            label: "包装规格",
+            label: "包装规格(cm)",
             isHiden: true,
             render: row => {
-              return row.in_le + "x" + row.in_wi + "x" + row.in_hi + "(cm)";
+              return row.in_le + "x" + row.in_wi + "x" + row.in_hi;
             }
           },
           {
             prop: "pr_le",
-            label: "外箱规格",
+            label: "外箱规格(cm)",
             isHiden: true,
             render: row => {
-              return row.ou_le + "x" + row.ou_wi + "x" + row.ou_hi + "(cm)";
+              return row.ou_le + "x" + row.ou_wi + "x" + row.ou_hi;
             }
           },
           {
             prop: "bulk_stere",
-            label: "体积/材积",
+            label: "体积/材积(cuft)",
             isHiden: true,
             width: 150,
             render: row => {
-              return row.bulk_stere + "(cbm)/" + row.bulk_feet + "(cuft)";
+              return row.bulk_stere + "(cbm)/" + row.bulk_feet;
             }
           },
           {
             prop: "gr_we",
-            label: "毛重/净重",
+            label: "毛重/净重(kg)",
             isHiden: true,
             render: row => {
-              return row.gr_we + "/" + row.ne_we + "(kg)";
+              return row.gr_we + "/" + row.ne_we;
             }
           },
           {
             prop: "in_en",
-            label: "装箱量",
+            label: "装箱量(pcs)",
             width: 90,
             isHiden: true,
             render: row => {
-              return row.in_en + "/" + row.ou_lo + "(pcs)";
+              return row.in_en + "/" + row.ou_lo;
             }
           },
           {
