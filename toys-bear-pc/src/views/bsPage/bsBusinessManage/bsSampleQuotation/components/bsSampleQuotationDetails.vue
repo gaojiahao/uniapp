@@ -13,6 +13,7 @@
         </div>
       </div>
       <div class="tableBox">
+        <bsTable :productList="tableData" />
         <!-- <el-table
           :data="tableData"
           size="mini"
@@ -286,11 +287,13 @@
 <script>
 import bsExportOrder from "@/components/commonComponent/exportOrderComponent/gongsizhaoyangbaojia.vue";
 import bsSampleQuotationTopComponent from "@/components/bsComponents/bsSampleComponent/bsSampleQuotationTopComponent";
+import bsTable from "./bsTable/bsTable";
 export default {
   name: "bsSampleQuotationDetails",
   components: {
     bsExportOrder,
-    bsSampleQuotationTopComponent
+    bsSampleQuotationTopComponent,
+    bsTable
   },
   props: {
     item: {
