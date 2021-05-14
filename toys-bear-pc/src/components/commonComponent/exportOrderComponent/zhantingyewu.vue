@@ -16,9 +16,9 @@
       <li :class="{ item: true, active: tp == 5 }" @click="checkTp(5)">
         宏升导入EXCEL模板
       </li>
-      <!-- <li :class="{ item: true, active: tp == 6 }" @click="checkTp(6)">
+      <li :class="{ item: true, active: tp == 6 }" @click="checkTp(6)">
         报出价不带厂商资料 (英文)
-      </li> -->
+      </li>
     </div>
     <div class="right">
       <div class="tp1" v-show="tp === 1">
