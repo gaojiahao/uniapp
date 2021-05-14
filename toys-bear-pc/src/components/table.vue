@@ -3,7 +3,7 @@
     <el-table
       :data="table.data"
       v-loading="table.showLoading"
-      :height="table.height || '100%'"
+      :height="table.height"
       fit
       :size="table.sizeMini"
       :header-cell-style="{ backgroundColor: '#f9fafc' }"
@@ -21,12 +21,13 @@
         label="序号"
         type="index"
         align="center"
-        width="60"
+        width="50"
       >
       </el-table-column>
       <el-table-column
         v-for="(col, index) in table.columns"
         :width="col.width"
+        :min-width="col.minWidth"
         :align="col.align || 'center'"
         :key="index"
         :prop="col.prop"
@@ -34,8 +35,15 @@
         :show-overflow-tooltip="col.isHiden"
         cell-mouse-enter
       >
+        <template v-if="col.renderHeard" slot="header">
+          <div v-html="col.renderHeard()"></div>
+        </template>
         <template slot-scope="scope">
-          <span v-if="col.render" v-html="col.render(scope.row)"></span>
+          <span
+            v-if="col.render"
+            :style="{ color: col.color }"
+            v-html="col.render(scope.row)"
+          ></span>
           <div class="productInfo" v-else-if="col.productInfo">
             <el-tooltip
               effect="light"
@@ -46,8 +54,8 @@
                 <el-image
                   v-if="col.elImage"
                   style="width: 300px;height: auto; cursor: pointer;"
-                  :preview-src-list="[col.elImage(scope.row)]"
-                  :src="col.elImage(scope.row)"
+                  :preview-src-list="isArray(col.elImage(scope.row))"
+                  :src="isString(col.elImage(scope.row))"
                   fit="contain"
                 >
                   <div
@@ -76,7 +84,7 @@
                 v-if="col.elImage"
                 @click.native="goDetails(scope.row)"
                 style="width: 82px; height: 62px; min-width: 82px"
-                :src="col.elImage(scope.row)"
+                :src="isString(col.elImage(scope.row))"
                 fit="contain"
               >
                 <div
@@ -132,9 +140,10 @@
             </div>
           </div>
           <span
-            v-else-if="col.textData"
+            v-else-if="col.isCallback"
+            @click="col.event(scope.row)"
             :style="{ color: col.color }"
-            v-html="col.textData(scope.row)"
+            v-html="col.isCallback(scope.row)"
           >
           </span>
           <span v-else-if="register(col)">
@@ -257,6 +266,23 @@ export default {
   },
   mounted() {},
   methods: {
+    isString(img) {
+      if (Array.isArray(img)) {
+        return img[0];
+      } else {
+        return img;
+      }
+    },
+    // 图片是数组或字符串
+    isArray(img) {
+      if (Array.isArray(img)) {
+        return img;
+      } else if (typeof img == "string") {
+        return [img];
+      } else {
+        return [];
+      }
+    },
     // 点击产品名字跳转
     goDetails(row) {
       const fd = {

@@ -54,141 +54,8 @@
           导出列表
         </el-button>
       </div>
-      <el-table
-        :data="tableData"
-        style="width: 100%"
-        ref="myTableRef"
-        size="mini"
-        :header-cell-style="{
-          'font-size': '14px',
-          color: '#666',
-          backgroundColor: '#f9fafc',
-          'font-weight': '400'
-        }"
-      >
-        <el-table-column label="序号" type="index" align="center" width="50">
-        </el-table-column>
-        <el-table-column label="产品" width="300">
-          <template slot-scope="scope">
-            <div class="imgBox">
-              <el-image
-                fit="contain"
-                @click.native="goDetails(scope.row)"
-                style="width: 80px; height: 60px"
-                :src="scope.row.imgUrl && scope.row.imgUrl[0]"
-              >
-                <div slot="placeholder" class="errorImg">
-                  <img src="~@/assets/images/imgError.png" alt />
-                </div>
-                <div slot="error" class="errorImg">
-                  <img src="~@/assets/images/imgError.png" alt />
-                </div>
-              </el-image>
-              <div class="productName">
-                <div class="name" @click="goDetails(scope.row)">
-                  {{ scope.row.pr_na }}
-                </div>
-                <div class="factory">
-                  <div class="fcatoryName" @click="toFactory(scope.row)">
-                    {{ scope.row.supplierName }}
-                  </div>
-                  <div class="icons">
-                    <!-- <el-tooltip
-                      class="item"
-                      effect="dark"
-                      :content="scope.row.supplierPhone || '暂时没有厂商电话'"
-                      placement="top"
-                    >
-                      <div class="cartPhoneIcon"></div>
-                    </el-tooltip> -->
-                    <div class="cartInfoIcon"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="联系厂商" align="center">
-          <template slot-scope="scope">
-            <div v-if="scope.row.supplierPhone">
-              {{ scope.row.supplierPhone }}
-            </div>
-            <div v-if="scope.row.supplierTelephoneNumber">
-              {{ scope.row.supplierTelephoneNumber }}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="资料来源" align="center" show-overflow-tooltip>
-          <template slot-scope="scope">
-            {{ scope.row.exhibitionName }}
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="fa_no"
-          label="出厂货号"
-          align="center"
-        ></el-table-column>
-        <el-table-column prop="ch_pa" label="包装" align="center">
-        </el-table-column>
-        <el-table-column label="产品规格" min-width="100" align="center">
-          <template slot-scope="scope">
-            <span>
-              {{ scope.row.pr_le }}x{{ scope.row.pr_wi }}x{{
-                scope.row.pr_hi
-              }}(cm)
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="包装规格" min-width="100" align="center">
-          <template slot-scope="scope">
-            <span>
-              {{ scope.row.in_le }}x{{ scope.row.in_wi }}x{{
-                scope.row.in_hi
-              }}(cm)
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="外箱规格" min-width="100" align="center">
-          <template slot-scope="scope">
-            <span>
-              {{ scope.row.ou_le }}x{{ scope.row.ou_wi }}x{{
-                scope.row.ou_hi
-              }}(cm)
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="体积/材积" min-width="150" align="center">
-          <template slot-scope="scope">
-            <span>
-              {{ scope.row.bulk_stere }}(cbm)/{{ scope.row.bulk_feet }}(cuft)
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="毛重/净重" align="center">
-          <template slot-scope="scope">
-            <span> {{ scope.row.gr_we }}/{{ scope.row.ne_we }}(kg) </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="装箱量" align="center">
-          <template slot-scope="scope">
-            <span> {{ scope.row.in_en }}/{{ scope.row.ou_lo }}(pcs) </span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="productPrice" label="参考单价" align="center">
-          <template slot-scope="scope">
-            <span style="color: #f56c6c">
-              {{ scope.row.cu_de + scope.row.fa_pr }}
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="ha_in_qu" label="报出价">
-          <template slot-scope="scope">
-            <span style="color: #f56c6c">
-              {{ scope.row.cu_de + (scope.row.ha_in_qu || scope.row.fa_pr) }}
-            </span>
-          </template>
-        </el-table-column>
-      </el-table>
+      <!-- 表格 -->
+      <bsTables :productList="tableData" />
       <div class="totalBox">
         <p class="item">
           <span class="itemTitle">总款数：</span>
@@ -252,9 +119,10 @@
 
 <script>
 import bsExportOrder from "@/components/commonComponent/exportOrderComponent/zhantingyewu.vue";
+import bsTables from "./bsTables/bsTables";
 export default {
   name: "bsHallBusinessOrderDetails",
-  components: { bsExportOrder },
+  components: { bsExportOrder, bsTables },
   props: {
     item: {
       type: Object

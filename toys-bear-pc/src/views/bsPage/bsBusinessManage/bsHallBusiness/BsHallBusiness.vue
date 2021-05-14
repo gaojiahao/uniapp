@@ -101,7 +101,8 @@
       </div>
     </div>
     <div class="tableBox">
-      <el-table
+      <bsTables :myData="tableData" />
+      <!-- <el-table
         :data="tableData"
         style="width: 100%"
         ref="collecTable"
@@ -177,7 +178,7 @@
             </el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </el-table> -->
       <center style="padding: 20px 0">
         <el-pagination
           layout="total, sizes, prev, pager, next, jumper"
@@ -216,10 +217,12 @@
 <script>
 import bsExportOrder from "@/components/commonComponent/exportOrderComponent/zhantingyewu.vue";
 import { mapState } from "vuex";
+import bsTables from "./bsTables/bsTables";
 export default {
   name: "bsHallBusiness",
   components: {
-    bsExportOrder
+    bsExportOrder,
+    bsTables
   },
   data() {
     return {
@@ -311,7 +314,6 @@ export default {
     },
     // 获取列表
     async getTableDataList() {
-      console.log(this.searchForm.fromCompanyName);
       const fd = {
         readStatus: this.searchForm.readStatus,
         sampleFrom: "hall",
@@ -436,41 +438,41 @@ export default {
       }
     }
   }
-  @{deep} .tableBox {
-    .el-table {
-      font-size: 13px;
-      .imgBox {
-        text-align: left;
-        display: flex;
-        font-size: 14px;
-        .productName {
-          width: 190px;
-          height: 60px;
-          margin-left: 15px;
-          .name,
-          .factory {
-            width: 190px;
-            max-width: 190px;
-            overflow: hidden; /*超出部分隐藏*/
-            white-space: nowrap; /*不换行*/
-            text-overflow: ellipsis; /*超出部分文字以...显示*/
-          }
-          .factory {
-            color: #3368a9;
-          }
-          .name {
-            margin-top: 8px;
-          }
-        }
-      }
-    }
-    .errorImg {
-      img {
-        width: 80px;
-        height: 60px;
-      }
-    }
-  }
+  // @{deep} .tableBox {
+  // .el-table {
+  //   font-size: 13px;
+  //   .imgBox {
+  //     text-align: left;
+  //     display: flex;
+  //     font-size: 14px;
+  //     .productName {
+  //       width: 190px;
+  //       height: 60px;
+  //       margin-left: 15px;
+  //       .name,
+  //       .factory {
+  //         width: 190px;
+  //         max-width: 190px;
+  //         overflow: hidden; /*超出部分隐藏*/
+  //         white-space: nowrap; /*不换行*/
+  //         text-overflow: ellipsis; /*超出部分文字以...显示*/
+  //       }
+  //       .factory {
+  //         color: #3368a9;
+  //       }
+  //       .name {
+  //         margin-top: 8px;
+  //       }
+  //     }
+  //   }
+  // }
+  // .errorImg {
+  //   img {
+  //     width: 80px;
+  //     height: 60px;
+  //   }
+  // }
+  // }
 }
 @{deep} .exportOrder {
   .el-dialog__body {
