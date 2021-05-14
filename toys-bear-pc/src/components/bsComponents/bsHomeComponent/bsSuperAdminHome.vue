@@ -104,20 +104,76 @@
             </el-radio-group>
           </div>
         </div>
-        <div class="marketGross"></div>
+        <div class="marketGross">
+          <div class="grossBox">
+            <h3>926,800.00</h3>
+            <p>今日销售总额</p>
+          </div>
+        </div>
+        <div class="compare">
+          <div class="item">
+            <p class="total">{{ statisticsData.hallOrderTotal }}</p>
+            <p
+              :class="{
+                today: true,
+                active: statisticsData.hallOrderTotalToday > 0
+              }"
+            >
+              <img
+                :src="statisticsData.hallOrderTotalToday > 0 ? up_t : up_f"
+                alt=""
+              />
+              较今日:{{ statisticsData.hallOrderTotalToday }}
+            </p>
+            <p class="text">今日买家数</p>
+          </div>
+          <div class="item">
+            <p class="total">{{ statisticsData.hallOrderTotal }}</p>
+            <p
+              :class="{
+                today: true,
+                active: statisticsData.hallOrderTotalToday > 0
+              }"
+            >
+              <img
+                :src="statisticsData.hallOrderTotalToday > 0 ? up_t : up_f"
+                alt=""
+              />
+              较昨日:{{ statisticsData.hallOrderTotalToday }}
+            </p>
+            <p class="text">今日客单均价</p>
+          </div>
+        </div>
       </div>
       <div class="peopleCounting">
         <div class="title">
           <i class="icon myProductIcon"></i>
           <span>在线人数统计</span>
         </div>
-        <Table :table="peopleTableData"></Table>
+        <div class="peopleNum">
+          <div>
+            <p class="dian">·</p>
+            <p>当前在线：</p>
+
+            <p><span class="txt">222</span> 人</p>
+          </div>
+          <div>
+            <p>今日总在线：</p>
+
+            <p><span class="txt">333</span> 人</p>
+          </div>
+          <div>
+            <p>昨日总在线：</p>
+            <p><span class="txt">444</span> 人</p>
+          </div>
+        </div>
       </div>
       <div class="trendingSearch">
         <div class="title">
           <i class="icon myProductIcon"></i>
           <span>热搜词</span>
         </div>
+        <Table :table="trendingTableData"></Table>
       </div>
     </div>
   </div>
@@ -141,7 +197,19 @@ export default {
           value: "昨日"
         }
       ],
-      peopleTableData: {
+      statisticsData: {
+        hallOrderTotal: "", //展厅业务
+        hallOrderTotalToday: "", //展厅今日
+        sampleOfferTotal: "", //找样报价
+        sampleOfferTotalToday: "", //找样报价今日
+        purchaseTotal: "", //采购订单
+        purchaseTotalToday: "", //采购今日
+        shareTotal: "", //客户订单
+        shareTotalToday: "" //客户订单今日
+      },
+      up_f: require("@/assets/images/up_f.png"),
+      up_t: require("@/assets/images/up_t.png"),
+      trendingTableData: {
         data: [],
         showLoading: false,
         isHiden: true,
@@ -149,27 +217,13 @@ export default {
         columns: [
           {
             prop: "name",
-            label: "产品",
-            width: 300,
-            color: "#3368a9",
-            align: "left",
-            productInfo: true,
-            elImage: row => {
-              return row.img;
-            },
-            nameHtml: row => {
-              return row.name;
-            },
-            fcatoryNameHtml: row => {
-              return row.supplierName;
+            label: "排名",
+            render: row => {
+              console.log(row);
             }
           },
 
-          {
-            prop: "exhibitionName",
-            label: "资料来源"
-          },
-          { prop: "fa_no", label: "出厂货号" },
+          { prop: "fa_no", label: "关键词", width: 150 },
           { prop: "ch_pa", label: "包装" }
         ]
       }
@@ -360,11 +414,89 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
+        .grossBox {
+          width: 183px;
+          height: 183px;
+          border: 6px solid #f9ae3e;
+          border-radius: 50%;
+          text-align: center;
+          h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-top: 60px;
+            color: #333333;
+          }
+          p {
+            color: #666666;
+          }
+        }
+      }
+      .compare {
+        padding: 0 10px;
+        padding-top: 5px;
+        box-sizing: border-box;
+        display: flex;
+        .item {
+          width: 180px;
+          text-align: center;
+          cursor: pointer;
+          margin-bottom: 20px;
+          p {
+            line-height: 34px;
+            img {
+              width: 10px;
+              height: 15px;
+              margin-right: 10px;
+            }
+            &.total {
+              font-size: 24px;
+              font-weight: 700;
+            }
+            &.today {
+              color: #999999;
+            }
+            &.text {
+              color: #999999;
+            }
+            &.active {
+              color: #ff4848;
+            }
+          }
+        }
       }
     }
     .peopleCounting {
       width: 780px;
       margin: 0 20px;
+      .peopleNum {
+        height: 56px;
+        background: #f9fafc;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        box-sizing: border-box;
+        div {
+          flex: 1;
+          text-align: center;
+          color: #666666;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          p {
+            .txt {
+              font-size: 24px;
+              font-weight: 700;
+              color: #333333;
+            }
+          }
+          .dian {
+            color: #33a96a;
+            font-size: 40px;
+            padding: 0 8px;
+          }
+        }
+      }
     }
     .trendingSearch {
       width: 420px;
