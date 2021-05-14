@@ -31,7 +31,7 @@
         :key="index"
         :prop="col.prop"
         :label="col.label"
-        :show-overflow-tooltip="table.isHiden || true"
+        :show-overflow-tooltip="col.isHiden"
         cell-mouse-enter
       >
         <template slot-scope="scope">
@@ -40,19 +40,27 @@
             <el-image
               v-if="col.elImage"
               @click.native="goDetails(scope.row)"
-              style="width: 80px; height: 60px; min-width: 70px"
+              style="width: 82px; height: 62px; min-width: 82px"
               :src="col.elImage(scope.row)"
               fit="contain"
             >
-              <div slot="placeholder" class="image-slot">
+              <div
+                slot="placeholder"
+                class="image-slot"
+                style="width: 82px; height: 62px"
+              >
                 <img
-                  style="width: 80px; height: 60px"
+                  style="width: 82px; height: 62px"
                   :src="require('@/assets/images/imgError.png')"
                 />
               </div>
-              <div slot="error" class="image-slot">
+              <div
+                slot="error"
+                class="image-slot"
+                style="width: 82px; height: 62px"
+              >
                 <img
-                  style="width: 80px; height: 60px"
+                  style="width: 82px; height: 62px"
                   @click="goDetails(scope.row)"
                   :src="require('@/assets/images/imgError.png')"
                 />
@@ -379,6 +387,11 @@ export default {
   .cell {
     padding: 0 5px;
   }
+  .el-table__body-wrapper {
+    .cell {
+      padding: 8px 0;
+    }
+  }
 }
 .operate-menu img {
   float: left;
@@ -399,6 +412,7 @@ export default {
       line-height: 25px;
     }
     .name {
+      margin-top: 5px;
       cursor: pointer;
       overflow: hidden; /*超出部分隐藏*/
       white-space: nowrap; /*不换行*/
@@ -454,7 +468,6 @@ export default {
   .right {
     width: 46px;
     min-width: 46px;
-    padding-left: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
