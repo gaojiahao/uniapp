@@ -1,7 +1,7 @@
 <template>
   <div class="bsMyCollection">
     <div class="title">购物车 ({{ tableData.length }})</div>
-    <div class="tableBox">
+    <div class="tableBox" id="tableId">
       <el-table
         :data="tableData"
         style="width: 100%"
@@ -164,7 +164,7 @@
             <span> {{ scope.row.in_en }}/{{ scope.row.ou_lo }}(pcs) </span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="箱数" min-width="50">
+        <el-table-column align="center" label="箱数" width="50" min-width="50">
           <template slot-scope="scope">
             <input
               class="inputNumber"
@@ -218,7 +218,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="totalBox">
+      <div class="totalBox" id="totalBox">
         <div class="total_wrap">
           <div class="left">
             <el-checkbox
@@ -1244,6 +1244,12 @@ export default {
         ? JSON.parse(JSON.stringify(this.shoppingList))
         : [];
     });
+    const totalEl = document.getElementById("totalBox");
+    eventBus.$on("handlerLeft", left => {
+      totalEl.style.left = -left + "px";
+    });
+    totalEl.style.width =
+      document.getElementById("tableId").offsetWidth + 60 + "px";
   },
   computed: {
     ...mapGetters({
@@ -1333,9 +1339,11 @@ export default {
       font-size: 12px;
       .el-table__header-wrapper .el-checkbox {
         display: none;
+        font-size: 13px;
       }
       .el-table__header-wrapper {
         .cell {
+          font-size: 13px;
           padding: 10px 0;
         }
       }
@@ -1345,7 +1353,8 @@ export default {
         }
       }
       .inputNumber {
-        width: 50px;
+        width: 40px;
+        min-width: 40px;
         outline: none;
         -moz-appearance: textfield;
         text-align: center;

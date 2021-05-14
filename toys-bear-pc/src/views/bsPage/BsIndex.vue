@@ -34,7 +34,7 @@
                 </el-tooltip>
               </span>
 
-              <div class="myScrollbar" ref="myScrollbar">
+              <div class="myScrollbar" @scroll="scrollevent" ref="myScrollbar">
                 <component
                   class="componentContent"
                   :item="item.value"
@@ -234,6 +234,13 @@ export default {
     };
   },
   methods: {
+    // 滚动
+    scrollevent(e) {
+      if (this.$route.path == "/bsIndex/bsShoppingCart") {
+        // console.log(e.target.scrollLeft);
+        eventBus.$emit("handlerLeft", e.target.scrollLeft);
+      }
+    },
     // 刷新tab标签
     triggerTab() {
       for (let i = 0; i < this.tabList.length; i++) {
