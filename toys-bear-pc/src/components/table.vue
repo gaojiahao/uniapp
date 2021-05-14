@@ -31,33 +31,77 @@
         :key="index"
         :prop="col.prop"
         :label="col.label"
-        :show-overflow-tooltip="table.isHiden || true"
+        :show-overflow-tooltip="col.isHiden"
         cell-mouse-enter
       >
         <template slot-scope="scope">
           <span v-if="col.render" v-html="col.render(scope.row)"></span>
           <div class="productInfo" v-else-if="col.productInfo">
-            <el-image
-              v-if="col.elImage"
-              @click.native="goDetails(scope.row)"
-              style="width: 80px; height: 60px; min-width: 70px"
-              :src="col.elImage(scope.row)"
-              fit="contain"
+            <el-tooltip
+              effect="light"
+              placement="right"
+              popper-class="testtooltip"
             >
-              <div slot="placeholder" class="image-slot">
-                <img
-                  style="width: 80px; height: 60px"
-                  :src="require('@/assets/images/imgError.png')"
-                />
+              <div slot="content">
+                <el-image
+                  v-if="col.elImage"
+                  style="width: 300px;height: auto; cursor: pointer;"
+                  :preview-src-list="[col.elImage(scope.row)]"
+                  :src="col.elImage(scope.row)"
+                  fit="contain"
+                >
+                  <div
+                    slot="placeholder"
+                    class="image-slot"
+                    style="width: 300px; height: 280px; min-width: 300px"
+                  >
+                    <img
+                      style="width: 300px; height: 280px; min-width: 300px"
+                      :src="require('@/assets/images/imgError.png')"
+                    />
+                  </div>
+                  <div
+                    slot="error"
+                    class="image-slot"
+                    style="width: 300px; height: 280px; min-width: 300px"
+                  >
+                    <img
+                      style="width: 300px; height: 280px; min-width: 300px"
+                      :src="require('@/assets/images/imgError.png')"
+                    />
+                  </div>
+                </el-image>
               </div>
-              <div slot="error" class="image-slot">
-                <img
-                  style="width: 80px; height: 60px"
-                  @click="goDetails(scope.row)"
-                  :src="require('@/assets/images/imgError.png')"
-                />
-              </div>
-            </el-image>
+              <el-image
+                v-if="col.elImage"
+                @click.native="goDetails(scope.row)"
+                style="width: 82px; height: 62px; min-width: 82px"
+                :src="col.elImage(scope.row)"
+                fit="contain"
+              >
+                <div
+                  slot="placeholder"
+                  class="image-slot"
+                  style="width: 82px; height: 62px"
+                >
+                  <img
+                    style="width: 82px; height: 62px"
+                    :src="require('@/assets/images/imgError.png')"
+                  />
+                </div>
+                <div
+                  slot="error"
+                  class="image-slot"
+                  style="width: 82px; height: 62px"
+                >
+                  <img
+                    style="width: 82px; height: 62px"
+                    @click="goDetails(scope.row)"
+                    :src="require('@/assets/images/imgError.png')"
+                  />
+                </div>
+              </el-image>
+            </el-tooltip>
             <div class="infoBox">
               <div
                 class="name"
@@ -127,6 +171,7 @@
               :style="{ margin: btn.margin }"
             >
               {{ btn.textWrapper(scope.row) }}
+              {{ btn.index }}
             </el-button>
           </div>
         </template>
@@ -379,6 +424,11 @@ export default {
   .cell {
     padding: 0 5px;
   }
+  .el-table__body-wrapper {
+    .cell {
+      padding: 8px 0;
+    }
+  }
 }
 .operate-menu img {
   float: left;
@@ -399,6 +449,7 @@ export default {
       line-height: 25px;
     }
     .name {
+      margin-top: 5px;
       cursor: pointer;
       overflow: hidden; /*超出部分隐藏*/
       white-space: nowrap; /*不换行*/
@@ -454,7 +505,6 @@ export default {
   .right {
     width: 46px;
     min-width: 46px;
-    padding-left: 10px;
     display: flex;
     align-items: center;
     justify-content: center;

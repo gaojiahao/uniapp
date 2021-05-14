@@ -32,7 +32,6 @@ export default {
       tableData: {
         data: [],
         showLoading: false,
-        isHiden: true,
         sizeMini: "mini",
         columns: [
           {
@@ -41,6 +40,7 @@ export default {
             width: 300,
             color: "#3368a9",
             align: "left",
+            isHiden: true,
             productInfo: true,
             elImage: row => {
               return row.img;
@@ -79,13 +79,15 @@ export default {
           },
           {
             prop: "exhibitionName",
+            isHiden: true,
             label: "资料来源"
           },
-          { prop: "fa_no", label: "出厂货号" },
-          { prop: "ch_pa", label: "包装" },
+          { prop: "fa_no", label: "出厂货号", isHiden: true },
+          { prop: "ch_pa", label: "包装", isHiden: true, width: 90 },
           {
             prop: "pr_le",
             label: "产品规格",
+            isHiden: true,
             textData: row => {
               return row.pr_le + "x" + row.pr_wi + "x" + row.pr_hi + "(cm)";
             }
@@ -93,6 +95,7 @@ export default {
           {
             prop: "pr_le",
             label: "包装规格",
+            isHiden: true,
             textData: row => {
               return row.in_le + "x" + row.in_wi + "x" + row.in_hi + "(cm)";
             }
@@ -100,6 +103,7 @@ export default {
           {
             prop: "pr_le",
             label: "外箱规格",
+            isHiden: true,
             textData: row => {
               return row.ou_le + "x" + row.ou_wi + "x" + row.ou_hi + "(cm)";
             }
@@ -107,6 +111,7 @@ export default {
           {
             prop: "bulk_stere",
             label: "体积/材积",
+            isHiden: true,
             width: 150,
             textData: row => {
               return row.bulk_stere + "(cbm)/" + row.bulk_feet + "(cuft)";
@@ -115,6 +120,7 @@ export default {
           {
             prop: "gr_we",
             label: "毛重/净重",
+            isHiden: true,
             textData: row => {
               return row.gr_we + "/" + row.ne_we + "(kg)";
             }
@@ -122,6 +128,8 @@ export default {
           {
             prop: "in_en",
             label: "装箱量",
+            width: 90,
+            isHiden: true,
             textData: row => {
               return row.in_en + "/" + row.ou_lo + "(pcs)";
             }
@@ -129,6 +137,8 @@ export default {
           {
             prop: "price",
             label: "单价",
+            isHiden: true,
+            width: 80,
             color: "red",
             textData: row => {
               return row.cu_de + " " + row.price;

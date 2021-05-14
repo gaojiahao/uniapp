@@ -1,7 +1,7 @@
 <template>
   <div class="bsMyCollection">
     <div class="title">购物车 ({{ tableData.length }})</div>
-    <div class="tableBox">
+    <div class="tableBox" id="tableId">
       <el-table
         :data="tableData"
         style="width: 100%"
@@ -16,9 +16,9 @@
           lable="选择"
           type="selection"
         ></el-table-column>
-        <el-table-column label="序号" type="index" align="center" width="60">
+        <el-table-column label="序号" type="index" align="center" width="40">
         </el-table-column>
-        <el-table-column label="产品" width="300">
+        <el-table-column label="产品" width="280">
           <template slot-scope="scope">
             <div class="imgBox">
               <el-image
@@ -83,7 +83,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          width="60"
+          width="80"
           align="center"
           prop="fa_no"
           label="出厂货号"
@@ -135,7 +135,7 @@
         <el-table-column
           align="center"
           label="体积/材积"
-          min-width="100"
+          width="150"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
@@ -144,17 +144,27 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="毛重/净重" show-overflow-tooltip>
+        <el-table-column
+          align="center"
+          label="毛重/净重"
+          width="80"
+          show-overflow-tooltip
+        >
           <template slot-scope="scope">
             <span> {{ scope.row.gr_we }}/{{ scope.row.ne_we }}(kg) </span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="装箱量" show-overflow-tooltip>
+        <el-table-column
+          align="center"
+          label="装箱量"
+          width="80"
+          show-overflow-tooltip
+        >
           <template slot-scope="scope">
             <span> {{ scope.row.in_en }}/{{ scope.row.ou_lo }}(pcs) </span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="箱数" min-width="70">
+        <el-table-column align="center" label="箱数" width="50" min-width="50">
           <template slot-scope="scope">
             <input
               class="inputNumber"
@@ -182,7 +192,8 @@
           align="center"
           prop="price"
           label="单价"
-          min-width="60"
+          width="50"
+          show-overflow-tooltip
         >
           <template slot-scope="scope">
             <span style="color: #f56c6c">
@@ -207,7 +218,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="totalBox">
+      <div class="totalBox" id="totalBox">
         <div class="total_wrap">
           <div class="left">
             <el-checkbox
@@ -1233,6 +1244,12 @@ export default {
         ? JSON.parse(JSON.stringify(this.shoppingList))
         : [];
     });
+    const totalEl = document.getElementById("totalBox");
+    eventBus.$on("handlerLeft", left => {
+      totalEl.style.left = -left + "px";
+    });
+    totalEl.style.width =
+      document.getElementById("tableId").offsetWidth + 60 + "px";
   },
   computed: {
     ...mapGetters({
@@ -1319,11 +1336,14 @@ export default {
   .tableBox {
     padding-bottom: 60px;
     @{deep} .el-table {
+      font-size: 12px;
       .el-table__header-wrapper .el-checkbox {
         display: none;
+        font-size: 13px;
       }
       .el-table__header-wrapper {
         .cell {
+          font-size: 13px;
           padding: 10px 0;
         }
       }
@@ -1332,9 +1352,9 @@ export default {
           padding: 10px 0;
         }
       }
-      font-size: 12px;
       .inputNumber {
-        width: 50px;
+        width: 40px;
+        min-width: 40px;
         outline: none;
         -moz-appearance: textfield;
         text-align: center;
@@ -1351,22 +1371,22 @@ export default {
       }
       .tableTotalNumber {
         color: #ff3e3e;
-        font-size: 14px;
+        // font-size: 14px;
         margin-top: 5px;
       }
       .imgBox {
         text-align: left;
         display: flex;
-        font-size: 14px;
+        // font-size: 14px;
         cursor: pointer;
         .productName {
-          width: 190px;
+          width: 170px;
           height: 60px;
           margin-left: 15px;
           .name,
           .factory {
-            width: 190px;
-            max-width: 190px;
+            width: 170px;
+            max-width: 170px;
             overflow: hidden; /*超出部分隐藏*/
             white-space: nowrap; /*不换行*/
             text-overflow: ellipsis; /*超出部分文字以...显示*/
