@@ -232,6 +232,7 @@ export default {
         history[uid + "_cs"].splice(8, history[uid + "_cs"].length - 8);
       }
       localStorage.setItem("searchHistory", JSON.stringify(history));
+      this.searchHistoryList = history[uid + "_cs"] || [];
       this.showHistoryModal(false);
       this.currentPage = 1;
       this.getVendorListPage();
