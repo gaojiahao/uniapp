@@ -9,6 +9,7 @@
       :header-cell-style="{ backgroundColor: '#f9fafc' }"
       @selection-change="handleSelectionChange"
       @current-change="handleTableCurrentChange"
+      @row-click="handleDetail"
     >
       <el-table-column
         v-if="table.selection || false"
@@ -53,7 +54,7 @@
               <div slot="content">
                 <el-image
                   v-if="col.elImage"
-                  style="width: 300px;height: auto; cursor: pointer;"
+                  style="width: 300px; height: auto; cursor: pointer"
                   :preview-src-list="isArray(col.elImage(scope.row))"
                   :src="isString(col.elImage(scope.row))"
                   fit="contain"
@@ -139,6 +140,19 @@
               </div>
             </div>
           </div>
+          <div class="nameBox" v-else-if="col.companyInfo">
+            <el-avatar
+              style="background-color: #e4efff"
+              :size="40"
+              :src="scope.row.companyLogo"
+            >
+              <p class="errText">{{ scope.row.linkman }}</p>
+            </el-avatar>
+            <span style="margin-left: 10px" class="name">{{
+              scope.row.companyName
+            }}</span>
+            <span class="isMain" v-if="scope.row.isMain"><i>主账号</i></span>
+          </div>
           <span
             v-else-if="col.isCallback"
             @click="col.event(scope.row)"
@@ -169,19 +183,21 @@
       >
         <template slot-scope="scope">
           <div v-if="table.actions">
-            <el-button
-              v-for="btn in table.actions"
-              :key="btn.index"
-              :type="btn.classWrapper(scope.row)"
-              :disabled="btn.disabledWrapper(scope.row)"
-              size="mini"
-              @click="btn.methods(scope.row)"
-              :icon="btn.icon"
-              :style="{ margin: btn.margin }"
-            >
-              {{ btn.textWrapper(scope.row) }}
-              {{ btn.index }}
-            </el-button>
+            <template v-for="btn in table.actions">
+              <el-button
+                v-if="!btn.hidden"
+                :key="btn.index"
+                :type="btn.classWrapper(scope.row)"
+                :disabled="btn.disabledWrapper(scope.row)"
+                size="mini"
+                @click="btn.methods(scope.row)"
+                :icon="btn.icon"
+                :style="{ margin: btn.margin }"
+              >
+                {{ btn.textWrapper(scope.row) }}
+                {{ btn.index }}
+              </el-button>
+            </template>
           </div>
         </template>
       </el-table-column>
@@ -315,6 +331,10 @@ export default {
       };
       this.$router.push("/bsIndex/bsVendorQuery");
       this.$store.commit("myAddTab", fd);
+    },
+    //厂商跳转
+    handleDetail(v) {
+      this.$emit("handleDetail", v);
     },
     // 去聊天
     toNews(item) {
@@ -521,6 +541,18 @@ export default {
     width: 70px;
     height: 54px;
     min-width: 70px;
+  }
+}
+.nameBox {
+  width: 300px;
+  display: flex;
+  align-items: center;
+  .el-avatar {
+    color: #3368a9;
+    img {
+      width: 40px;
+      min-height: 40px;
+    }
   }
 }
 .addIcon {
