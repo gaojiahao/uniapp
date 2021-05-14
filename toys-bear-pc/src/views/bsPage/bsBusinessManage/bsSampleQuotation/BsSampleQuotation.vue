@@ -69,122 +69,11 @@
         </div>
       </div>
       <div class="tableBox">
-        <el-table
-          :data="tableData"
-          style="width: 100%"
-          ref="collecTable"
-          :header-cell-style="{ backgroundColor: '#f9fafc' }"
-        >
-          <el-table-column label="序号" type="index" align="center" width="50">
-          </el-table-column>
-          <el-table-column label="报价单号" min-width="100">
-            <template slot-scope="scope">
-              <span
-                @click="goDetails(scope.row)"
-                style="color: #3368a9; cursor: pointer"
-              >
-                {{ scope.row.offerNumber }}
-              </span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="customerName"
-            label="客户名称"
-            align="center"
-          ></el-table-column>
-          <el-table-column
-            prop="createdOn"
-            label="报价时间"
-            min-width="100"
-            align="center"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.createdOn.replace(/T/, " ") }}
-            </template>
-          </el-table-column>
-          <el-table-column align="center" label="业务员">
-            <template slot-scope="scope">
-              <span>
-                {{ scope.row.linkman }}
-              </span>
-            </template>
-          </el-table-column>
-          <el-table-column label="报价总数" prop="total" align="center">
-          </el-table-column>
-          <el-table-column label="总金额" align="center">
-            <template slot-scope="scope">
-              <span style="color: #eb1515">
-                {{ scope.row.cu_de }}
-              </span>
-              <span style="color: #eb1515">
-                {{ scope.row.offerTotalAmount }}
-              </span>
-            </template>
-          </el-table-column>
-          <el-table-column label="币种" align="center">
-            <template slot-scope="scope">
-              <span>
-                {{ scope.row.cu_deName }}
-              </span>
-            </template>
-          </el-table-column>
-          <el-table-column label="汇率" align="center">
-            <template slot-scope="scope">
-              <span>{{ scope.row.exchange }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="profit" label="利润" align="center">
-          </el-table-column>
-          <el-table-column prop="status" label="状态" align="center">
-            <template slot-scope="scope">
-              {{
-                scope.row.status === 0
-                  ? "未审核"
-                  : scope.row.status === 1
-                  ? "审核通过"
-                  : "审核不通过"
-              }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="操作"
-            header-align="center"
-            align="center"
-            width="300"
-          >
-            <template slot-scope="scope">
-              <el-button
-                v-show="scope.row.offerNumber.indexOf('S') < 0"
-                size="mini"
-                type="success"
-                @click="handleEdit(scope.$index, scope.row)"
-                >编辑</el-button
-              >
-              <el-button
-                v-show="scope.row.offerNumber.indexOf('S') < 0"
-                size="mini"
-                type="info"
-                @click="toPushDetails(scope.$index, scope.row)"
-                >推送</el-button
-              >
-              <el-button
-                size="mini"
-                @click="exportOrder(scope.row)"
-                type="warning"
-              >
-                导出
-              </el-button>
-              <el-button
-                v-show="scope.row.offerNumber.indexOf('S') < 0"
-                style="margin-left: 10px"
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.row)"
-                >删除</el-button
-              >
-            </template>
-          </el-table-column>
-        </el-table>
+        <bsTables
+          :myData="tableData"
+          @exportOrder="exportOrder"
+          @handleDelete="handleDelete"
+        />
         <center style="padding: 20px 0">
           <el-pagination
             layout="total, sizes, prev, pager, next, jumper"
@@ -217,11 +106,13 @@
 <script>
 import bsExportOrder from "@/components/commonComponent/exportOrderComponent/gongsizhaoyangbaojia.vue";
 import eventBus from "@/assets/js/common/eventBus.js";
+import bsTables from "./bsTables/bsTables";
 import { mapState } from "vuex";
 export default {
   name: "bsSampleQuotation",
   components: {
-    bsExportOrder
+    bsExportOrder,
+    bsTables
   },
   data() {
     return {
@@ -350,7 +241,6 @@ export default {
         linkUrl: "/bsIndex/bsSampleQuotation",
         component: "bsSampleQuotationDetails",
         refresh: true,
-        noPush: true,
         label: "详情" + row.offerNumber,
         value: row
       };
@@ -381,7 +271,6 @@ export default {
         linkUrl: "/bsIndex/bsSampleQuotation",
         component: "bsSampleUpdata",
         refresh: true,
-        noPush: true,
         label: "编辑" + row.offerNumber,
         value: row
       };

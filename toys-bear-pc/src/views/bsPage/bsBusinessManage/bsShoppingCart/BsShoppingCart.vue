@@ -18,26 +18,61 @@
         ></el-table-column>
         <el-table-column label="序号" type="index" align="center" width="40">
         </el-table-column>
-        <el-table-column label="产品" width="280">
+        <el-table-column label="产品" width="280" show-overflow-tooltip>
           <template slot-scope="scope">
             <div class="imgBox">
-              <el-image
-                @click.native="goDetails(scope.row)"
-                fit="contain"
-                style="width: 80px; height: 60px"
-                :src="scope.row.img"
+              <el-tooltip
+                effect="light"
+                placement="right"
+                popper-class="testtooltip"
               >
-                <div slot="placeholder" class="errorImg">
-                  <img src="~@/assets/images/imgError.png" alt />
+                <div slot="content">
+                  <el-image
+                    style="width: 300px;height: auto; cursor: pointer;"
+                    :preview-src-list="[scope.row.img]"
+                    :src="scope.row.img"
+                    fit="contain"
+                  >
+                    <div
+                      slot="placeholder"
+                      class="image-slot"
+                      style="width: 300px; height: 280px; min-width: 300px"
+                    >
+                      <img
+                        style="width: 300px; height: 280px; min-width: 300px"
+                        :src="require('@/assets/images/imgError.png')"
+                      />
+                    </div>
+                    <div
+                      slot="error"
+                      class="image-slot"
+                      style="width: 300px; height: 280px; min-width: 300px"
+                    >
+                      <img
+                        style="width: 300px; height: 280px; min-width: 300px"
+                        :src="require('@/assets/images/imgError.png')"
+                      />
+                    </div>
+                  </el-image>
                 </div>
-                <div
-                  slot="error"
-                  class="errorImg"
-                  @click="goDetails(scope.row)"
+                <el-image
+                  @click.native="goDetails(scope.row)"
+                  fit="contain"
+                  style="width: 80px; height: 60px"
+                  :src="scope.row.img"
                 >
-                  <img src="~@/assets/images/imgError.png" alt />
-                </div>
-              </el-image>
+                  <div slot="placeholder" class="errorImg">
+                    <img src="~@/assets/images/imgError.png" alt />
+                  </div>
+                  <div
+                    slot="error"
+                    class="errorImg"
+                    @click="goDetails(scope.row)"
+                  >
+                    <img src="~@/assets/images/imgError.png" alt />
+                  </div>
+                </el-image>
+              </el-tooltip>
               <div class="productName">
                 <div class="name" @click="goDetails(scope.row)">
                   {{ scope.row.name }}
@@ -47,14 +82,6 @@
                     {{ scope.row.supplierName }}
                   </div>
                   <div class="icons">
-                    <!-- <el-tooltip
-                      class="item"
-                      effect="dark"
-                      :content="scope.row.supplierPhone || '暂时没有厂商电话'"
-                      placement="top"
-                    >
-                      <div class="cartPhoneIcon"></div>
-                    </el-tooltip> -->
                     <div class="cartInfoIcon" @click="toNews(scope.row)"></div>
                   </div>
                 </div>
@@ -92,76 +119,68 @@
         </el-table-column>
         <el-table-column
           align="center"
-          label="产品规格"
+          label="产品规格(cm)"
           min-width="100"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
             <span>
-              {{ scope.row.pr_le }}x{{ scope.row.pr_wi }}x{{
-                scope.row.pr_hi
-              }}(cm)
+              {{ scope.row.pr_le }}x{{ scope.row.pr_wi }}x{{ scope.row.pr_hi }}
             </span>
           </template>
         </el-table-column>
         <el-table-column
           align="center"
-          label="包装规格"
+          label="包装规格(cm)"
           min-width="100"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
             <span>
-              {{ scope.row.in_le }}x{{ scope.row.in_wi }}x{{
-                scope.row.in_hi
-              }}(cm)
+              {{ scope.row.in_le }}x{{ scope.row.in_wi }}x{{ scope.row.in_hi }}
             </span>
           </template>
         </el-table-column>
         <el-table-column
           align="center"
-          label="外箱规格"
+          label="外箱规格(cm)"
           min-width="100"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
             <span>
-              {{ scope.row.ou_le }}x{{ scope.row.ou_wi }}x{{
-                scope.row.ou_hi
-              }}(cm)
+              {{ scope.row.ou_le }}x{{ scope.row.ou_wi }}x{{ scope.row.ou_hi }}
             </span>
           </template>
         </el-table-column>
         <el-table-column
           align="center"
-          label="体积/材积"
+          label="体积(cbm)/材积(cuft)"
           width="150"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-            <span>
-              {{ scope.row.bulk_stere }}(cbm)/{{ scope.row.bulk_feet }}(cuft)
-            </span>
+            <span> {{ scope.row.bulk_stere }}/{{ scope.row.bulk_feet }} </span>
           </template>
         </el-table-column>
         <el-table-column
           align="center"
-          label="毛重/净重"
-          width="80"
+          label="毛重/净重(kg)"
+          width="100"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-            <span> {{ scope.row.gr_we }}/{{ scope.row.ne_we }}(kg) </span>
+            <span>{{ scope.row.gr_we }}/{{ scope.row.ne_we }}</span>
           </template>
         </el-table-column>
         <el-table-column
           align="center"
-          label="装箱量"
+          label="装箱量(pcs)"
           width="80"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-            <span> {{ scope.row.in_en }}/{{ scope.row.ou_lo }}(pcs) </span>
+            <span> {{ scope.row.in_en }}/{{ scope.row.ou_lo }}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="箱数" width="50" min-width="50">
@@ -1380,7 +1399,7 @@ export default {
         // font-size: 14px;
         cursor: pointer;
         .productName {
-          width: 170px;
+          // width: 170px;
           height: 60px;
           margin-left: 15px;
           .name,
