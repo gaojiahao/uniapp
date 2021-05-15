@@ -176,18 +176,56 @@
         <Table :table="trendingTableData"></Table>
       </div>
     </div>
+    <div class="hottable">
+      <div style="margin-right: 20px">
+        <BsHotProductTable :productdata="searchProductdata" />
+      </div>
+      <div>
+        <BsHotProductTable :productdata="purchaseProductdata" />
+      </div>
+    </div>
+    <div class="hottable">
+      <div style="margin-right: 20px">
+        <BsHotProductTable :productdata="sampleProductdata" />
+      </div>
+      <div>
+        <BsHotProductTable :productdata="offerProductdata" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import Table from "@/components/table";
+import BsHotProductTable from "@/components/bsComponents/bsHomeComponent/bsHotProductTable";
 export default {
   name: "bsSuperAdminHome",
   components: {
-    Table
+    Table,
+    BsHotProductTable
   },
   data() {
     return {
+      searchProductdata: {
+        title: "热门搜索产品",
+        className: "searchProductIcon",
+        data: []
+      },
+      purchaseProductdata: {
+        title: "热门采购产品",
+        className: "purchaseProductIcon",
+        data: []
+      },
+      sampleProductdata: {
+        title: "热门择样产品",
+        className: "sampleProductIcon",
+        data: []
+      },
+      offerProductdata: {
+        title: "热门报价产品",
+        className: "offerProductIcon",
+        data: []
+      },
       dayValue: "今日",
       dayList: [
         {
@@ -500,6 +538,15 @@ export default {
     }
     .trendingSearch {
       width: 420px;
+    }
+  }
+  .hottable {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    div {
+      height: 470px;
+      flex: 1;
     }
   }
 }
