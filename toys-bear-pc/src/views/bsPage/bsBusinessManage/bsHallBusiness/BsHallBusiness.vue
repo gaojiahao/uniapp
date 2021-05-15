@@ -250,6 +250,18 @@ export default {
               return msg;
             }
           }
+        ],
+        btnWidth: 100,
+        actions: [
+          {
+            type: "success",
+            textWrapper() {
+              return "导出";
+            },
+            methods: row => {
+              this.exportOrder(row);
+            }
+          }
         ]
       },
       staffList: [],
