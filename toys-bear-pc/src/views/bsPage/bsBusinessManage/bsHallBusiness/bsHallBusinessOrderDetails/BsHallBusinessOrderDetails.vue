@@ -75,10 +75,10 @@
           <span>{{ options.sumGr_we }}/{{ options.sumNe_we }}(KG)</span>
         </p>
         <p class="item">
-          <span class="itemTitle">总报出价/总金额：</span>
-          <span class="price">￥{{ options.SumHa_in_qu || 0 }}</span>
-          <span>/</span>
+          <span class="itemTitle">总出厂价/总报出价</span>
           <span class="price">{{ options.sumFa_pr_pr }}</span>
+          <span>/</span>
+          <span class="price">￥{{ options.SumHa_in_qu || 0 }}</span>
         </p>
       </div>
     </div>
