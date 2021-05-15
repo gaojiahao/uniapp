@@ -111,7 +111,7 @@
                 </div>
               </el-image>
             </el-tooltip>
-            <div class="infoBox">
+            <div class="infoBox" v-if="col.infoBox">
               <div
                 class="name"
                 @click="goDetails(scope.row)"
