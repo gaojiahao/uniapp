@@ -123,7 +123,7 @@ export default {
         isIndex: true,
         columns: [
           {
-            prop: "orderNumber",
+            prop: "offerNumber",
             minWidth: 100,
             isHiden: true,
             label: "报价单号",
@@ -194,7 +194,7 @@ export default {
             label: "利润"
           },
           {
-            prop: "profit",
+            prop: "status",
             isHiden: true,
             label: "状态",
             render(row) {
