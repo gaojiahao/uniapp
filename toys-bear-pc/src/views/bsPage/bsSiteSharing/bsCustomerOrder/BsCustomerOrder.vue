@@ -197,6 +197,8 @@
               <div class="imgBox">
                 <el-image
                   fit="contain"
+                  :z-index="5000"
+                  :preview-src-list="[require('@/assets/images/mode1.png')]"
                   class="myImg"
                   :src="require('@/assets/images/mode1.png')"
                 ></el-image>
@@ -258,6 +260,8 @@
               <div class="imgBox">
                 <el-image
                   fit="contain"
+                  :z-index="5000"
+                  :preview-src-list="[require('@/assets/images/mode2.png')]"
                   class="myImg"
                   :src="require('@/assets/images/mode2.png')"
                 ></el-image>
@@ -319,6 +323,8 @@
               <div class="imgBox">
                 <el-image
                   fit="contain"
+                  :z-index="5000"
+                  :preview-src-list="[require('@/assets/images/mode3.png')]"
                   class="myImg"
                   :src="require('@/assets/images/mode3.png')"
                 ></el-image>
@@ -380,6 +386,8 @@
               <div class="imgBox">
                 <el-image
                   fit="contain"
+                  :z-index="5000"
+                  :preview-src-list="[require('@/assets/images/mode4.png')]"
                   class="myImg"
                   :src="require('@/assets/images/mode4.png')"
                 ></el-image>
@@ -442,6 +450,8 @@
                 <el-image
                   fit="contain"
                   class="myImg"
+                  :z-index="5000"
+                  :preview-src-list="[require('@/assets/images/mode5.png')]"
                   :src="require('@/assets/images/mode5.png')"
                 ></el-image>
               </div>
@@ -479,7 +489,9 @@
                 <el-image
                   fit="contain"
                   class="myImg"
-                  :src="require('@/assets/images/mode2.png')"
+                  :src="require('@/assets/images/mode6.png')"
+                  :z-index="5000"
+                  :preview-src-list="[require('@/assets/images/mode6.png')]"
                 ></el-image>
               </div>
               <div class="selectTions">

@@ -165,7 +165,7 @@ import bsSampleQuotationDetails from "@/views/bsPage/bsBusinessManage/bsSampleQu
 import bsSampleOfferCommodity from "@/components/bsComponents/bsSampleComponent/bsSampleOfferCommodity";
 
 // 找样报价-编辑详情
-import bsSampleUpdata from "@/components/bsComponents/bsSampleComponent/bsSampleUpdata";
+import bsSampleUpdata from "@/views/bsPage/bsBusinessManage/bsSampleQuotation/components/bsSampleUpdata";
 // 采购订单
 import bsPurchaseOrder from "@/views/bsPage/bsBusinessManage/bsPurchaseOrder/BsPurchaseOrder.vue";
 // 采购订单详情
