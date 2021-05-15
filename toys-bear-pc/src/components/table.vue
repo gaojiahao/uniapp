@@ -111,7 +111,7 @@
                 </div>
               </el-image>
             </el-tooltip>
-            <div class="infoBox">
+            <div class="infoBox" v-if="col.infoBox">
               <div
                 class="name"
                 @click="goDetails(scope.row)"
@@ -144,13 +144,15 @@
             <el-avatar
               style="background-color: #e4efff"
               :size="40"
-              :src="scope.row.companyLogo"
+              :src="col.companyLogo(scope.row)"
             >
-              <p class="errText">{{ scope.row.linkman }}</p>
+              <p class="errText" v-html="col.linkman(scope.row)"></p>
             </el-avatar>
-            <span style="margin-left: 10px" class="name">{{
-              scope.row.companyName
-            }}</span>
+            <span
+              style="margin-left: 10px"
+              class="name"
+              v-html="col.companyName(scope.row)"
+            ></span>
             <span class="isMain" v-if="scope.row.isMain"><i>主账号</i></span>
           </div>
           <span
@@ -195,7 +197,6 @@
                 :style="{ margin: btn.margin }"
               >
                 {{ btn.textWrapper(scope.row) }}
-                {{ btn.index }}
               </el-button>
             </template>
           </div>

@@ -100,10 +100,17 @@ export default {
         sizeMini: "mini",
         isIndex: true,
         columns: [
-          { prop: "name", label: "客户姓名" },
+          {
+            prop: "imgUrl",
+            label: "图片",
+            productInfo: true,
+            elImage: row => {
+              return row.imgUrl;
+            }
+          },
           { prop: "yardName", label: "货场名称" },
           {
-            prop: "email",
+            prop: "yardType",
             label: "货场类型",
             render: row => {
               return row.yardType === 0 ? "货场" : "货运";
@@ -119,27 +126,6 @@ export default {
             label: "时间",
             render: row => {
               return row.createdOn.replace(/T.*/, "");
-            }
-          }
-        ],
-        btnWidth: 200,
-        actions: [
-          {
-            type: "primary",
-            textWrapper: () => {
-              return "编辑";
-            },
-            methods: row => {
-              this.handleEdit(row);
-            }
-          },
-          {
-            type: "danger",
-            textWrapper: () => {
-              return "删除";
-            },
-            methods: row => {
-              this.handleDelete(row);
             }
           }
         ]
