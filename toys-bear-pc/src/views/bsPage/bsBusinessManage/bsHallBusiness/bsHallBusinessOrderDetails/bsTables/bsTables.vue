@@ -161,7 +161,7 @@ export default {
             width: 80,
             color: "red",
             render: row => {
-              return row.cu_de + " " + row.ha_in_qu;
+              return row.cu_de + " " + (row.ha_in_qu || row.fa_pr); //报出价没有 用单价
             }
           }
         ]
