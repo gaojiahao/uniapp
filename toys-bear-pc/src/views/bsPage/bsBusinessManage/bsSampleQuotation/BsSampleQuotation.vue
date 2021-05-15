@@ -69,11 +69,7 @@
         </div>
       </div>
       <div class="tableBox">
-        <bsTables
-          :table="tableData"
-          @exportOrder="exportOrder"
-          @handleDelete="handleDelete"
-        />
+        <bsTables :table="tableData" />
         <center style="padding: 20px 0">
           <el-pagination
             layout="total, sizes, prev, pager, next, jumper"

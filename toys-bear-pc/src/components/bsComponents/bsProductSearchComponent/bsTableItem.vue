@@ -41,6 +41,7 @@ export default {
             color: "#3368a9",
             align: "left",
             isHiden: true,
+            infoBox: true,
             productInfo: true,
             elImage: row => {
               return row.img;
