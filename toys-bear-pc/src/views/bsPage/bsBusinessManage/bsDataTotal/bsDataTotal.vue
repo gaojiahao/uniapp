@@ -3,7 +3,7 @@
  * @Author: gaojiahao
  * @Date: 2021-05-14 14:44:05
  * @FilePath: \projectd:\LittleBearPC\toys-bear-pc\src\views\bsPage\bsBusinessManage\bsDataTotal\bsDataTotal.vue
- * @LastEditTime: 2021-05-15 09:06:10
+ * @LastEditTime: 2021-05-15 12:38:13
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
@@ -36,16 +36,18 @@
         关注我
       </div>
     </div>
-    <VisitTotal> </VisitTotal>
+    <VisitTotal v-if="isDiyu == 0"> </VisitTotal>
+    <SampleTotal v-if="isDiyu == 1"></SampleTotal>
   </div>
 </template>
 <script>
 import VisitTotal from "@/views/bsPage/bsBusinessManage/bsDataTotal/bsDataTotalComponent/visitTotal.vue";
-
+import SampleTotal from "@/views/bsPage/bsBusinessManage/bsDataTotal/bsDataTotalComponent/sampleTotal.vue";
 export default {
   name: "bsDataTotal",
   components: {
-    VisitTotal
+    VisitTotal,
+    SampleTotal
   },
   data() {
     return {

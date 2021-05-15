@@ -2,16 +2,16 @@
  * @Description: 
  * @Author: gaojiahao
  * @Date: 2021-05-14 18:06:13
- * @FilePath: \projectd:\LittleBearPC\toys-bear-pc\src\views\bsPage\bsBusinessManage\bsDataTotal\bsDataTotalComponent\visitTotal.vue
- * @LastEditTime: 2021-05-15 12:32:31
+ * @FilePath: \projectd:\LittleBearPC\toys-bear-pc\src\views\bsPage\bsBusinessManage\bsDataTotal\bsDataTotalComponent\sampleTotal.vue
+ * @LastEditTime: 2021-05-15 12:41:06
  * @LastEditors: sueRimn
  * @Descripttion: 
  * @version: 1.0.0
 -->
 <template>
-  <div class="visitTotal">
+  <div class="sampleTotal">
     <div class="title">
-      <div class="left">来访趋势图</div>
+      <div class="left">择样产品数趋势</div>
       <div>
         <div style="margin-top: 20px">
           <el-radio-group v-model="radio" size="mini">
@@ -135,7 +135,7 @@
 import * as echarts from "echarts";
 
 export default {
-  name: "VisitTotal",
+  name: "SampleTotal",
   data() {
     return {
       radio: "30天",
@@ -195,19 +195,9 @@ export default {
       var option;
 
       option = {
-        title: {
-          text: "",
-          left: "center"
-        },
-        tooltip: {
-          trigger: "axis"
-        },
-        legend: {
-          right: "right"
-        },
         xAxis: {
           type: "category",
-          name: "",
+          boundaryGap: false,
           data: [
             "2.13",
             "2.14",
@@ -242,13 +232,13 @@ export default {
           ]
         },
         yAxis: {
-          type: "value",
-          name: ""
+          type: "value"
         },
         series: [
           {
             data: [1888, 1500, 500, 1100, 800, 953, 556],
-            type: "bar"
+            type: "line",
+            areaStyle: {}
           }
         ]
       };
@@ -262,7 +252,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.visitTotal {
+.sampleTotal {
   min-height: 100%;
   background-color: #fff;
   padding: 0 20px;
