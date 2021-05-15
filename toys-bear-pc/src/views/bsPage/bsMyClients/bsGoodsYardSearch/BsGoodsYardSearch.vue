@@ -110,7 +110,7 @@ export default {
           },
           { prop: "yardName", label: "货场名称" },
           {
-            prop: "email",
+            prop: "yardType",
             label: "货场类型",
             render: row => {
               return row.yardType === 0 ? "货场" : "货运";

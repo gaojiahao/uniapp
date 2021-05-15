@@ -122,7 +122,16 @@ export default {
             prop: "",
             label: "厂商",
             align: "left",
-            companyInfo: true
+            companyInfo: true,
+            companyLogo: row => {
+              return row.companyLogo;
+            },
+            linkman: row => {
+              return row.linkman;
+            },
+            companyName: row => {
+              return row.companyName;
+            }
           },
           { prop: "contactsMan", label: "联系人", width: 180 },
           { prop: "phoneNumber", label: "手机", width: 180 },
