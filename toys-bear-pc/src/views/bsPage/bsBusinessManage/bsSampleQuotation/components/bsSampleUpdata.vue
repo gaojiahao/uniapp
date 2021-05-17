@@ -36,12 +36,78 @@
           <el-table-column
             prop="img"
             label="产品"
-            width="220"
+            width="250"
             show-overflow-tooltip
           >
             <template slot-scope="scope">
               <div class="imgBox">
-                <el-image
+                <el-tooltip
+                  effect="light"
+                  placement="right"
+                  popper-class="testtooltip"
+                >
+                  <div
+                    slot="content"
+                    v-if="scope.row.imgUrlList && scope.row.imgUrlList[0]"
+                  >
+                    <el-image
+                      style="width: 300px; height: auto; cursor: pointer;"
+                      :preview-src-list="scope.row.imgUrlList"
+                      :src="scope.row.imgUrlList && scope.row.imgUrlList[0]"
+                      fit="contain"
+                    >
+                      <div
+                        slot="placeholder"
+                        class="image-slot"
+                        style="width: 300px; height: auto; cursor: pointer;"
+                      >
+                        <img
+                          style="width: 300px; height: auto; cursor: pointer;"
+                          :src="require('@/assets/images/imgError.png')"
+                        />
+                      </div>
+                      <div
+                        slot="error"
+                        class="image-slot"
+                        style="width: 300px; height: auto; cursor: pointer;"
+                      >
+                        <img
+                          style="width: 300px; height: auto; cursor: pointer;"
+                          :src="require('@/assets/images/imgError.png')"
+                        />
+                      </div>
+                    </el-image>
+                  </div>
+                  <el-image
+                    @click.native="goDetails(scope.row)"
+                    style="width: 82px; height: 62px; min-width: 82px"
+                    :src="scope.row.imgUrlList && scope.row.imgUrlList[0]"
+                    fit="contain"
+                  >
+                    <div
+                      slot="placeholder"
+                      class="image-slot"
+                      style="width: 82px; height: 62px"
+                    >
+                      <img
+                        style="width: 82px; height: 62px"
+                        :src="require('@/assets/images/imgError.png')"
+                      />
+                    </div>
+                    <div
+                      slot="error"
+                      class="image-slot"
+                      style="width: 82px; height: 62px"
+                    >
+                      <img
+                        style="width: 82px; height: 62px"
+                        @click="goDetails(scope.row)"
+                        :src="require('@/assets/images/imgError.png')"
+                      />
+                    </div>
+                  </el-image>
+                </el-tooltip>
+                <!-- <el-image
                   @click.native="goDetails(scope.row)"
                   fit="contain"
                   style="width: 60px; height: 60px"
@@ -69,7 +135,7 @@
                       alt
                     />
                   </div>
-                </el-image>
+                </el-image> -->
                 <div class="productName">
                   <div class="name" @click="goDetails(scope.row)">
                     {{ scope.row.name }}
@@ -79,15 +145,10 @@
                       {{ scope.row.supplierName }}
                     </div>
                     <div class="icons">
-                      <!-- <el-tooltip
-                        class="item"
-                        effect="dark"
-                        :content="scope.row.supplierPhone || '暂时没有厂商电话'"
-                        placement="top"
-                      >
-                        <div class="cartPhoneIcon"></div>
-                      </el-tooltip> -->
-                      <div class="cartInfoIcon"></div>
+                      <div
+                        class="cartInfoIcon"
+                        @click="toNews(scope.row)"
+                      ></div>
                     </div>
                   </div>
                 </div>
@@ -258,7 +319,7 @@
           <el-table-column
             prop="offerAmount"
             label="报出价"
-            width="50"
+            width="80"
             align="center"
           >
             <template slot-scope="scope">
@@ -267,7 +328,7 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column label="报出总价" width="70" align="center">
+          <el-table-column label="报出总价" width="80" align="center">
             <template slot-scope="scope">
               <p class="item price">
                 <span style="color: #f56c6c">{{ scope.row.cu_de }}</span>
@@ -803,6 +864,18 @@ export default {
     eventBus.$off("resetOffProduct");
   },
   methods: {
+    // 去聊天
+    toNews(item) {
+      const fd = {
+        name: item.supplierNumber + "bsNews",
+        linkUrl: "/bsIndex/bsNews",
+        component: "bsNews",
+        refresh: true,
+        label: item.supplierName,
+        value: item
+      };
+      this.$store.commit("myAddTab", fd);
+    },
     // 打开编辑报价方式
     async openEditOffMethods() {
       //   this.clienFormData = {
@@ -1456,13 +1529,13 @@ export default {
         font-size: 14px;
         cursor: pointer;
         .productName {
-          width: 130px;
+          width: 150px;
           height: 60px;
           margin-left: 15px;
           .name,
           .factory {
-            width: 130px;
-            max-width: 130px;
+            width: 150px;
+            max-width: 150px;
             overflow: hidden; /*超出部分隐藏*/
             white-space: nowrap; /*不换行*/
             text-overflow: ellipsis; /*超出部分文字以...显示*/
@@ -1485,7 +1558,7 @@ export default {
               .cartInfoIcon {
                 width: 20px;
                 height: 20px;
-                margin-left: 15px;
+                margin-left: 5px;
                 cursor: pointer;
               }
               .cartPhoneIcon {
