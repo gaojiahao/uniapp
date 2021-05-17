@@ -20,7 +20,7 @@
 			}
 		},
 		{
-			"path": "pages/offerDetail/offerDetail",	//报价详情
+			"path": "pages/offerSharing/offerDetail",	//报价详情
 			"aliasPath":"/offerDetail/:pid/:id",
 			"style": {
 				"navigationBarTitleText": "offerDetail",
@@ -30,7 +30,7 @@
 			}
 		},
 		{
-			"path": "pages/offerContact/offerContact",	//报价联系方式
+			"path": "pages/offerSharing/offerContact",	//报价联系方式
 			"aliasPath":"/offerContact/:id",
 			"style": {
 				"navigationBarTitleText": "offerContact",
@@ -45,5 +45,8 @@
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
+	},
+	"easycom": {
+		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
 	}
 }

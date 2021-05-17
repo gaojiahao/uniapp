@@ -6,7 +6,7 @@ import App from './App'
 import {router,RouterMount} from './router/router.js'  //路径换成自己的
 import store from '@/store'
 import uView from 'uview-ui'
-// 引入uView提供的对vuex的简写法文件
+
 let vuexStore = require('@/store/$u.mixin.js')
 Vue.mixin(vuexStore);
 
