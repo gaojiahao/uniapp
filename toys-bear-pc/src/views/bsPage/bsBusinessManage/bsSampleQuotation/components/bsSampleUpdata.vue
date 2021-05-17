@@ -145,15 +145,10 @@
                       {{ scope.row.supplierName }}
                     </div>
                     <div class="icons">
-                      <!-- <el-tooltip
-                        class="item"
-                        effect="dark"
-                        :content="scope.row.supplierPhone || '暂时没有厂商电话'"
-                        placement="top"
-                      >
-                        <div class="cartPhoneIcon"></div>
-                      </el-tooltip> -->
-                      <div class="cartInfoIcon"></div>
+                      <div
+                        class="cartInfoIcon"
+                        @click="toNews(scope.row)"
+                      ></div>
                     </div>
                   </div>
                 </div>
@@ -869,6 +864,18 @@ export default {
     eventBus.$off("resetOffProduct");
   },
   methods: {
+    // 去聊天
+    toNews(item) {
+      const fd = {
+        name: item.supplierNumber + "bsNews",
+        linkUrl: "/bsIndex/bsNews",
+        component: "bsNews",
+        refresh: true,
+        label: item.supplierName,
+        value: item
+      };
+      this.$store.commit("myAddTab", fd);
+    },
     // 打开编辑报价方式
     async openEditOffMethods() {
       //   this.clienFormData = {
