@@ -155,11 +155,15 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="是否有图：">
-                    <el-radio-group v-model="advancedFormdata.isUpInsetImg">
-                      <el-radio label="是"></el-radio>
-                      <el-radio label="否"></el-radio>
-                    </el-radio-group>
+                  <el-form-item label="多媒体：" class="abbrLabel">
+                    <el-checkbox v-model="advancedFormdata.isUpInsetImg"
+                      >是否有图</el-checkbox
+                    >
+                    <el-checkbox
+                      v-model="addrSearch"
+                      @change="handleraddrSearchChange"
+                      >3D展示</el-checkbox
+                    >
                   </el-form-item>
                   <el-form-item style="margin: 0" label="">
                     <el-button
@@ -554,11 +558,15 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="是否有图：">
-                    <el-radio-group v-model="advancedFormdata.isUpInsetImg">
-                      <el-radio label="是"></el-radio>
-                      <el-radio label="否"></el-radio>
-                    </el-radio-group>
+                  <el-form-item label="多媒体：">
+                    <el-checkbox v-model="advancedFormdata.isUpInsetImg"
+                      >是否有图</el-checkbox
+                    >
+                    <el-checkbox
+                      v-model="addrSearch"
+                      @change="handleraddrSearchChange"
+                      >3D展示</el-checkbox
+                    >
                   </el-form-item>
                   <el-form-item style="margin: 0" label="">
                     <el-button
@@ -874,7 +882,8 @@ export default {
       fileinfo: null,
       isShowCropper: false,
       advancedFormdata: {
-        isUpInsetImg: "是"
+        isUpInsetImg: true
+        // addrSearch: false
       }, //高级搜索条件
       screeningFlag: false,
       isAccurate: "模糊",
@@ -1181,7 +1190,8 @@ export default {
         sortType: this.sortType,
         // 高级搜索条件
         fa_no: this.advancedFormdata.fa_no,
-        isUpInsetImg: this.advancedFormdata.isUpInsetImg == "否" ? false : true,
+        isUpInsetImg: this.advancedFormdata.isUpInsetImg,
+        //  sand: this.advancedFormdata.sand,
         ch_pa: this.advancedFormdata.ch_pa,
         pr_le: this.advancedFormdata.pr_le,
         pr_wi: this.advancedFormdata.pr_wi,
@@ -1211,10 +1221,12 @@ export default {
           });
           break;
       }
+      console.log(fd);
       for (const key in fd) {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "")
           delete fd[key];
       }
+
       const res = await this.$http.post("/api/SearchBearProductPage", fd);
       const { code, item, msg } = res.data.result;
       if (code === 200) {
@@ -1299,7 +1311,9 @@ export default {
         });
       }
     },
-
+    handleraddrSearchChange(val) {
+      this.$store.commit("handleraddrSearch", val);
+    },
     // 选择综合
     async handleSynthesis() {
       this.synthesis = !this.synthesis;
@@ -1412,6 +1426,7 @@ export default {
     clearRootEvent() {
       eventBus.$off("searchProducts");
       eventBus.$off("openUpload");
+      eventBus.$off("addrsearchProducts");
     },
     // 关闭关联搜索
     closeTag() {
@@ -1510,6 +1525,14 @@ export default {
     ...mapGetters({
       shoppingList: "myShoppingList"
     }),
+    addrSearch: {
+      get() {
+        return this.$store.state.addrSearch;
+      },
+      set(val) {
+        this.$store.commit("handleraddrSearch", val);
+      }
+    },
     ...mapState([
       "myColles",
       "searchTxt",
@@ -1625,7 +1648,11 @@ export default {
         width: 700px;
         form {
           display: flex;
-
+          .abbrLabel {
+            .el-form-item__label {
+              width: 82px;
+            }
+          }
           .el-form-item {
             height: 30px;
             display: flex;

@@ -38,6 +38,7 @@ const store = new Vuex.Store({
     historyNames: [],
     searchTxt: "",
     imgSearch: false,
+    addrSearch: false,
     searchHallCate: null,
     httpTime: 0, // 请求时长
     httpContent: "", // 请求内容
@@ -80,6 +81,10 @@ const store = new Vuex.Store({
     // 首页图搜
     handlerimgSearch(state, payLoad) {
       state.imgSearch = payLoad;
+    },
+    // 首页3D
+    handleraddrSearch(state, payLoad) {
+      state.addrSearch = payLoad;
     },
     //修改查询值
     handlerSearchTxt(state, payLoad) {
