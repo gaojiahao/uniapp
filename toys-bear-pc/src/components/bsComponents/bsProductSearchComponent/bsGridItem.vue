@@ -41,6 +41,7 @@
         class="vipProductIcon"
         v-if="$route.path === '/bsIndex/bsVIPProducts'"
       ></div>
+      <!-- <i class="threeIcon"></i> -->
       <i
         v-show="item.isFavorite"
         class="iconClient activeClientIcon"
@@ -445,6 +446,17 @@ export default {
     box-sizing: border-box;
     padding: 16px;
     cursor: pointer;
+    .threeIcon {
+      position: absolute;
+      right: 100px;
+      bottom: 65px;
+      width: 46px;
+      height: 46px;
+      background: url("~@/assets/images/3Dicon.png") no-repeat center;
+      background-size: contain;
+      cursor: pointer;
+      z-index: 1;
+    }
     .iconClient {
       position: absolute;
       right: 25px;

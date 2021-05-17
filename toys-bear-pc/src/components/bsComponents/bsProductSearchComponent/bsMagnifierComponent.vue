@@ -471,9 +471,9 @@ export default {
     position: absolute;
     right: 20px;
     bottom: 20px;
-    width: 36px;
-    height: 36px;
-    background: url("~@/assets/images/3Dicon.png") no-repeat center;
+    width: 60px;
+    height: 60px;
+    background: url("~@/assets/images/orange3D.png") no-repeat center;
     background-size: contain;
     cursor: pointer;
     z-index: 1;
