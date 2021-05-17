@@ -9,9 +9,6 @@ import v from "vue";
 import { proEnv, testEnv } from "@/assets/js/config/config.js";
 const env = process.env.NODE_ENV;
 let target = "";
-let push_target = "";
-let export_target = "";
-// let im_target = "";
 
 // 默认是本地环境
 switch (env) {
@@ -26,67 +23,7 @@ switch (env) {
     target = "";
     break;
 }
-/**
- * IMBaseURL
- */
-// import { im_devEnv, im_testEnv, im_proEnv } from "@/assets/js/config/config.js";
-// // 默认是本地环境
-// switch (env) {
-//   case "production": // 生产环境
-//     im_target = im_proEnv.hosturl;
-//     break;
-//   case "test": // 测试环境
-//     im_target = im_testEnv.hosturl;
-//     break;
-//   default:
-//     // 本地环境
-//     im_target = im_devEnv.hosturl;
-//     break;
-// }
-// console.log(im_target);
-/**
- * 推送BaseURL
- */
-import {
-  push_devEnv,
-  push_testEnv,
-  push_proEnv
-} from "@/assets/js/config/pushConfig.js";
-// 默认是本地环境
-switch (env) {
-  case "production": // 生产环境
-    push_target = push_proEnv.hosturl;
-    break;
-  case "test": // 测试环境
-    push_target = push_testEnv.hosturl;
-    break;
-  default:
-    // 本地环境
-    push_target = push_devEnv.hosturl;
-    break;
-}
-/**
- * 导出BaseURL
- */
-import {
-  export_devEnv,
-  export_testEnv,
-  export_proEnv
-} from "@/assets/js/config/exportConfig.js";
-// 默认是本地环境
-switch (env) {
-  case "production": // 生产环境
-    export_target = export_proEnv.hosturl;
-    break;
-  case "test": // 测试环境
-    export_target = export_testEnv.hosturl;
-    break;
-  default:
-    // 本地环境
-    export_target = export_devEnv.hosturl;
-    break;
-}
-console.log(push_target, target, export_target);
+
 const createLogRecord = async function(obj) {
   if (obj.Url.includes("CreateLogRecord")) {
     v.prototype.$common.handlerMsgState({
@@ -123,70 +60,7 @@ myAxios.install = function(Vue) {
   };
   // 基础实例
   const instance = axios.create(instanceOptions);
-  // 推送实例
-  const push_instance = axios.create({
-    baseURL: push_target,
-    timeout: 20000, // 超时时间
-    retry: 1, // 请求次数
-    retryDelay: 1000, // 请求间隙
-    startDate: 0, // 请求开始时间
-    endDate: 0 // 请求结束时间
-  });
-  // 导出实例
-  const export_instance = axios.create({
-    baseURL: export_target,
-    timeout: 20000, // 超时时间
-    retry: 1, // 请求次数
-    retryDelay: 1000, // 请求间隙
-    startDate: 0, // 请求开始时间
-    endDate: 0 // 请求结束时间
-  });
   // 超过一秒没有返回请求数据的才出现loading
-  // const loaddingOptions = {};
-  // 推送请求拦截
-  push_instance.interceptors.request.use(
-    config => {
-      config.headers.Utoken =
-        $Store.state.userInfo && $Store.state.userInfo.accessToken;
-      config.headers["content-type"] = "application/json";
-      return config;
-    },
-    error => {
-      // console.log('请求错误拦截', error)
-      var config = error.config;
-      // If config does not exist or the retry option is not set, reject
-      if (!config || !push_instance.defaults.retry)
-        return Promise.reject(error);
-
-      // Set the variable for keeping track of the retry count
-      config.__retryCount = config.__retryCount || 0;
-      // Check if we've maxed out the total number of retries
-      if (config.__retryCount >= push_instance.defaults.retry) {
-        $Store.commit("updateAppLoading", false);
-        v.prototype.$common.handlerMsgState({
-          msg: "请求超时，请检查网络",
-          type: "danger"
-        });
-        // Reject with the error
-        return Promise.reject(error);
-      }
-
-      // Increase the retry count
-      config.__retryCount += 1;
-
-      // Create new promise to handle exponential backoff
-      var backoff = new Promise(function(resolve) {
-        setTimeout(function() {
-          resolve();
-        }, push_instance.defaults.retryDelay || 1);
-      });
-
-      // Return the promise in which recalls axios to retry the request
-      return backoff.then(function() {
-        return axios(config);
-      });
-    }
-  );
   // 使用axios请求拦截器
   instance.interceptors.request.use(
     config => {
@@ -472,9 +346,5 @@ myAxios.install = function(Vue) {
     }
   );
   Vue.prototype.$http = instance;
-  Vue.prototype.$push = push_instance;
-  Vue.prototype.$export = export_instance;
-  // Vue.prototype.baseAPI = target;
-  // Vue.prototype.baseAPI = "";
 };
 export default myAxios;
