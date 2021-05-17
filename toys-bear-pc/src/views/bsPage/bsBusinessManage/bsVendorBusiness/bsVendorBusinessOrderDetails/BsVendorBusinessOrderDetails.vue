@@ -228,7 +228,7 @@
         </p>
         <p class="item">
           <span class="itemTitle">总出厂价：</span>
-          <span class="price">￥{{ options.sumAmountFa_pr }}</span>
+          <span class="price">￥{{ options.sumFa_pr_pr }}</span>
         </p>
       </div>
     </div>
