@@ -11,6 +11,8 @@ const env = process.env.NODE_ENV;
 let target = "";
 let push_target = "";
 let export_target = "";
+// let im_target = "";
+
 // 默认是本地环境
 switch (env) {
   case "production": // 生产环境
@@ -24,6 +26,24 @@ switch (env) {
     target = "";
     break;
 }
+/**
+ * IMBaseURL
+ */
+// import { im_devEnv, im_testEnv, im_proEnv } from "@/assets/js/config/config.js";
+// // 默认是本地环境
+// switch (env) {
+//   case "production": // 生产环境
+//     im_target = im_proEnv.hosturl;
+//     break;
+//   case "test": // 测试环境
+//     im_target = im_testEnv.hosturl;
+//     break;
+//   default:
+//     // 本地环境
+//     im_target = im_devEnv.hosturl;
+//     break;
+// }
+// console.log(im_target);
 /**
  * 推送BaseURL
  */
@@ -46,7 +66,7 @@ switch (env) {
     break;
 }
 /**
- * 推送BaseURL
+ * 导出BaseURL
  */
 import {
   export_devEnv,

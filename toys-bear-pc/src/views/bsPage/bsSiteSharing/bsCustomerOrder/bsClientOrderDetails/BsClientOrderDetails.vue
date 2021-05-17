@@ -537,7 +537,7 @@ export default {
     // 打开选择导出模板
     openSelectTemplate() {
       this.exportTemplateDialog = true;
-      // const str = "http://139.9.71.135:8087/ConversationListIcon.rar";
+      // const str = "http://124.71.6.26:8087/ConversationListIcon.rar";
       // const link = document.createElement("a");
       // link.href = str;
       // link.style.display = "none";

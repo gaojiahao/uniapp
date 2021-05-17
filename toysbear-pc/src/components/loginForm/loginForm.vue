@@ -90,10 +90,10 @@ export default {
       value: null,
       ws: null,
       // loginUrl: "http://1.14.158.14:8081/new/#/bsIndex",
-      loginUrl: "https://www.toysbear.com/new/#/bsIndex",
-      wsBaseUrl: "wss://impush.toysbear.com/ws?UserId=",
-      // loginUrl: "http://139.9.71.135:8080/new/#/bsIndex",
-      // wsBaseUrl: "ws://139.9.71.135:8090/ws?UserId=",
+      // loginUrl: "https://www.toysbear.com/new/#/bsIndex",
+      // wsBaseUrl: "wss://impush.toysbear.com/ws?UserId=",
+      loginUrl: "http://124.71.6.26:8080/new/#/bsIndex",
+      wsBaseUrl: "ws://124.71.6.26:8090/ws?UserId=",
       lang: "zh-CN",
       qrTimer: null,
       randomCode: null,
@@ -140,7 +140,7 @@ export default {
         this.ws = new WebSocket(this.wsBaseUrl + this.randomCode);
         // 测试
         // this.ws = new WebSocket(
-        //   'ws://139.9.71.135:8090/ws?UserId=' + this.randomCode
+        //   'ws://124.71.6.26:8090/ws?UserId=' + this.randomCode
         // )
         // 监听webSocket连接
         this.ws.onopen = this.websocketonopen;
@@ -235,11 +235,11 @@ export default {
               case "Sales":
                 // this.$router.push("/bsIndex");
                 location.href = this.loginUrl;
-                // location.href = "http://139.9.71.135:8080/new/#/bsIndex";
+                // location.href = "http://124.71.6.26:8080/new/#/bsIndex";
                 break;
               default:
                 this.$router.push("/me");
-                // location.href = "http://139.9.71.135:8080/#/me";
+                // location.href = "http://124.71.6.26:8080/#/me";
                 break;
             }
           } else {
@@ -368,11 +368,11 @@ export default {
                 case "Sales":
                   // this.$router.push("/bsIndex");
                   location.href = this.loginUrl;
-                  // location.href = "http://139.9.71.135:8080/new/#/bsIndex";
+                  // location.href = "http://124.71.6.26:8080/new/#/bsIndex";
                   break;
                 default:
                   this.$router.push("/me");
-                  // location.href = "http://139.9.71.135:8080/#/me";
+                  // location.href = "http://124.71.6.26:8080/#/me";
                   break;
               }
             } else if (res.data.result.commparnyList.length > 1) {

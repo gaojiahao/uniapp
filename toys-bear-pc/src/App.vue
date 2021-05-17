@@ -94,34 +94,42 @@ export default {
     });
   },
   methods: {
-    getExistedConversationList() {
-      return new Promise((result, reject) => {
-        // 获取会话列表
-        this.im.Conversation.getList()
-          .then(conversationList => {
-            console.log("获取会话列表成功", conversationList);
-            result(conversationList);
-          })
-          .catch(error => {
-            reject([]);
-            console.log("获取会话列表失败: ", error.code, error.msg);
-          });
+    // 获取个人信息
+    async getInfoIm(userId) {
+      const res = await this.$http.post("/api/User/GetUserInfoByChatUserId", {
+        chatUserId: userId
       });
+      console.log(res);
+    },
+    // 获取会话列表
+    getExistedConversationList(startTime = 0) {
+      // const _that = this;
+      // 获取会话列表
+      this.im.Conversation.getList({
+        count: 30,
+        startTime: startTime,
+        order: 0
+      })
+        .then(conversationList => {
+          console.log("获取会话列表成功", conversationList);
+          // for (let i = 0; i < conversationList.length; i++) {
+          //   _that.getInfoIm(conversationList[i].latestMessage.senderUserId);
+          // }
+        })
+        .catch(error => {
+          console.log("获取会话列表失败: ", error.code, error.msg);
+        });
     },
     // IM 添加事件监听
     watchIm() {
       // 添加事件监听
       this.im.watch({
         // 监听会话列表变更事件
-        conversation: async event => {
-          // 假定存在 getExistedConversationList 方法，以获取当前已存在的会话列表数据
-          const conversationList = await this.getExistedConversationList();
-          console.log("获取会话列表成功", conversationList);
+        conversation(event) {
           // 发生变更的会话列表
           const updatedConversationList = event.updatedConversationList;
           // 通过 im.Conversation.merge 计算最新的会话列表
           const latestConversationList = this.im.Conversation.merge({
-            conversationList,
             updatedConversationList
           });
           console.log(latestConversationList, "最新的会话列表");
@@ -179,6 +187,7 @@ export default {
         .connect({ token: this.userInfo.chatUser.chatUserToken })
         .then(user => {
           console.log("链接成功, 链接用户 id 为: ", user.id);
+          this.getExistedConversationList();
         })
         .catch(error => {
           console.log("链接失败: ", error.code, error.msg);
