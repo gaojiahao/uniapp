@@ -1,5 +1,6 @@
 <template>
-  <div class="bsNews">
+  <div>敬请期待</div>
+  <!-- <div class="bsNews">
     <div class="bsNewsLeft">
       <div>
         <h3>业务消息</h3>
@@ -75,33 +76,33 @@
       </div>
     </div>
     <component :is="isGrid" :dataName="dataList"></component>
-  </div>
+  </div> -->
 </template>
 
 <script>
 //展厅业务
-import bsNewsExhibition from "@/components/bsComponents/bsNewsComponent/bsNewsExhibition";
-//公司业务
-import bsNewsCompany from "@/components/bsComponents/bsNewsComponent/bsNewsCompany";
-//系统消息
-import bsNewsSystemMsg from "@/components/bsComponents/bsNewsComponent/bsNewsSystemMsg";
-//厂商业务
-import bsNewsFirm from "@/components/bsComponents/bsNewsComponent/bsNewsFirm";
-//消息列表
-import bsNewsMessageList from "@/components/bsComponents/bsNewsComponent/bsNewsMessageList";
+// import bsNewsExhibition from "@/components/bsComponents/bsNewsComponent/bsNewsExhibition";
+// //公司业务
+// import bsNewsCompany from "@/components/bsComponents/bsNewsComponent/bsNewsCompany";
+// //系统消息
+// import bsNewsSystemMsg from "@/components/bsComponents/bsNewsComponent/bsNewsSystemMsg";
+// //厂商业务
+// import bsNewsFirm from "@/components/bsComponents/bsNewsComponent/bsNewsFirm";
+// //消息列表
+// import bsNewsMessageList from "@/components/bsComponents/bsNewsComponent/bsNewsMessageList";
 export default {
   name: "bsNews",
-  components: {
-    bsNewsExhibition,
-    bsNewsCompany,
-    bsNewsSystemMsg,
-    bsNewsFirm,
-    bsNewsMessageList
-  },
+  // components: {
+  //   bsNewsExhibition,
+  //   bsNewsCompany,
+  //   bsNewsSystemMsg,
+  //   bsNewsFirm,
+  //   bsNewsMessageList
+  // },
   data() {
     return {
       colorId: "2",
-      isGrid: "bsNewsMessageList",
+      isGrid: "bsNewsSystemMsg",
       isDiyu: "0",
       dataList: [],
       msgList: [

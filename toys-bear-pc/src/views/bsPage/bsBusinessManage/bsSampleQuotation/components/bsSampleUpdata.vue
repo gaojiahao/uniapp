@@ -137,7 +137,12 @@
                   </div>
                 </el-image> -->
                 <div class="productName">
-                  <div class="name" @click="goDetails(scope.row)">
+                  <div
+                    class="name"
+                    @mouseenter="productNameMouse(true)"
+                    @mouseleave="productNameMouse(false)"
+                    @click="goDetails(scope.row)"
+                  >
                     {{ scope.row.name }}
                   </div>
                   <div class="factory">
@@ -729,6 +734,7 @@ export default {
   },
   data() {
     return {
+      showTooltip: false,
       chufa: "(出厂价+总费用/(每车尺码/外箱材积*外箱装量)/(1-报价利润%)/汇率",
       chengfa: "(出厂价+总费用/(每车尺码/外箱材积*外箱装量)*(1+报价利润%)/汇率",
       showEditMethod: true,
@@ -864,6 +870,10 @@ export default {
     eventBus.$off("resetOffProduct");
   },
   methods: {
+    // 鼠标移入产品名称
+    productNameMouse(flag) {
+      console.log(flag);
+    },
     // 去聊天
     toNews(item) {
       const fd = {
@@ -1546,8 +1556,8 @@ export default {
             align-items: center;
             .factoryName {
               cursor: pointer;
-              width: 120px;
-              max-width: 120px;
+              width: 110px;
+              max-width: 110px;
               overflow: hidden; /*超出部分隐藏*/
               white-space: nowrap; /*不换行*/
               text-overflow: ellipsis; /*超出部分文字以...显示*/
