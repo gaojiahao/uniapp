@@ -41,7 +41,7 @@
         class="vipProductIcon"
         v-if="$route.path === '/bsIndex/bsVIPProducts'"
       ></div>
-      <!-- <i class="threeIcon"></i> -->
+      <i v-show="item.threeDimensional" class="threeIcon"></i>
       <i
         v-show="item.isFavorite"
         class="iconClient activeClientIcon"

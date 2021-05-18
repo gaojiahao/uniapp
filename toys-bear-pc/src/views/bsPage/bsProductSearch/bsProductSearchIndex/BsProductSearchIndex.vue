@@ -1191,7 +1191,7 @@ export default {
         // 高级搜索条件
         fa_no: this.advancedFormdata.fa_no,
         isUpInsetImg: this.advancedFormdata.isUpInsetImg,
-        //  sand: this.advancedFormdata.sand,
+        isUpInset3D: this.addrSearch,
         ch_pa: this.advancedFormdata.ch_pa,
         pr_le: this.advancedFormdata.pr_le,
         pr_wi: this.advancedFormdata.pr_wi,
@@ -1578,6 +1578,7 @@ export default {
   beforeDestroy() {
     this.clearRootEvent();
     this.$store.commit("handlerHallSearchCate", null);
+    this.$store.commit("handleraddrSearch", false);
   }
 };
 </script>

@@ -38,6 +38,26 @@
 					"titleNView": false //禁用原生导航栏
 				}
 			}
+		},
+		{
+			"path": "pages/erpProduct/home",	//分享展厅
+			"aliasPath":"/home",
+			"style": {
+				"navigationBarTitleText": "home",
+				"app-plus": {
+					"titleNView": false //禁用原生导航栏
+				}
+			}
+		},
+		{
+			"path": "pages/erpProduct/productDetails",	//分享展厅
+			"aliasPath":"/productDetails",
+			"style": {
+				"navigationBarTitleText": "productDetails",
+				"app-plus": {
+					"titleNView": false //禁用原生导航栏
+				}
+			}
 		}
 	],
 	"globalStyle": {

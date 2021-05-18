@@ -4,7 +4,7 @@
     <div class="left_contaner">
       <div class="middle_img" @click="openBigImg(middleImg.url)">
         <!-- 3D -->
-        <i class="threeIcon" @click="open3D(true)"></i>
+        <i v-if="threeDimensional" class="threeIcon" @click="open3D(true)"></i>
         <div class="pic" v-if="middleImg.type === 'img'">
           <pic-zoom :url="rerunImg(middleImg.url)" :scale="3"></pic-zoom>
         </div>
