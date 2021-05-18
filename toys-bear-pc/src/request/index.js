@@ -1,5 +1,5 @@
-import http from "@/request/http";
-import im from "@/request/im";
+import http from "./servers/http";
+import im from "./servers/im";
 
 export default {
   install(Vue) {
