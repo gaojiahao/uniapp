@@ -7,16 +7,9 @@ const hotSearchUrl = '/ebapi/store_api/hot_search';
 const GetToken = '/api/GetToken'
 
 /**
- * 产品模块 
- */
-const SearchBearProductPage = '/api/GetProductsWithSpotGoodsPage'
-const newProducts = '/api/GetProductsWithNew'
-
-/**
- * vip专区
- */
-const getVipRegionsAPI = '/api/getVipRegions'
-const getProductsWithVipRegionPageAPI = '/api/GetProductsWithVipRegionPage'
+* 找样报价
+*/
+const GetProductOfferByNumberApi = '/api/GetProductOfferByNumber'
 
 // 此处第二个参数vm，就是我们在页面使用的this，你可以通过vm获取vuex等操作，更多内容详见uView对拦截器的介绍部分：
 // https://uviewui.com/js/http.html#%E4%BD%95%E8%B0%93%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA%EF%BC%9F
@@ -28,17 +21,10 @@ const install = (Vue, vm) => {
 	
 	// 此处使用了传入的params参数，一切自定义即可
 	const getToken = (params = {}) => vm.$u.post(GetToken, params);
-	
-	// 此处使用了传入的params参数，一切自定义即可
-	const getProductList = (params = {}) => vm.$u.post(SearchBearProductPage, params);
-	
-	// 此处使用了传入的params参数，一切自定义即可
-	const getNewProductList = (params = {}) => vm.$u.post(newProducts, params);
-	const getVipRegions = (params = {}) => vm.$u.post(getVipRegionsAPI, params);
-	const getProductsWithVipRegionPage = (params = {}) => vm.$u.post(getProductsWithVipRegionPageAPI, params);
+	const GetProductOfferByNumberInfo = (params = {}) => vm.$u.post(GetProductOfferByNumberApi, params);
 	
 	// 将各个定义的接口名称，统一放进对象挂载到vm.$u.api(因为vm就是this，也即this.$u.api)下
-	vm.$u.api = {getSearch, getToken, getProductList, getNewProductList, getVipRegions, getProductsWithVipRegionPage};
+	vm.$u.api = {getSearch, getToken, GetProductOfferByNumberInfo};
 }
 
 export default {
