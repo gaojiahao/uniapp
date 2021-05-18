@@ -165,11 +165,44 @@ export function calculateDate(code) {
   }
 }
 // 格式化时间
-function formatTime(param) {
+export function formatTime(param) {
   var y = param.getFullYear();
   var m = param.getMonth() + 1;
   var d = param.getDate();
   m = m < 10 ? "0" + m : m;
   d = d < 10 ? "0" + d : d;
   return y + "-" + m + "-" + d;
+}
+
+// 筛选消息类型
+export function filterMsgTypes(param) {
+  let msg = "";
+  switch (param.messageType) {
+    case "RC:TxtMsg": // 文本消息
+      msg = param.content.content;
+      break;
+    case "XZX:ProductMessage": // 产品消息
+      msg = "[产品]";
+      break;
+    case "XZX:OrderMessage": // 订单消息
+      msg = "[订单]";
+      break;
+    case "XZX:VideoMessage": // 视频消息
+      msg = ["视频"];
+      break;
+    case "RC:VcMsg": // 语音消息
+    case "RC:HQVCMsg": // 语音消息
+      msg = ["语音"];
+      break;
+    case "XZX:LinkMessage": // 链接消息
+      msg = param.content;
+      break;
+    case "RC:ImgMsg": // 链接消息
+      msg = "[图片]";
+      break;
+    case "RC:ReferenceMsg": // 引用消息
+      msg = "[引用]";
+      break;
+  }
+  return msg;
 }

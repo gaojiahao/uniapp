@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import router from "../router";
-import axios from "axios";
+// import axios from "axios";
 import createPersistedState from "vuex-persistedstate";
 import globalJson from "./Json.js";
 Vue.use(Vuex);
@@ -17,6 +17,7 @@ function myForEach(oList, yList) {
 }
 const store = new Vuex.Store({
   state: {
+    chatList: [],
     myColles: [],
     isJindu: false,
     activeTab: "/bsIndex/bsHome",
@@ -75,6 +76,11 @@ const store = new Vuex.Store({
     currentComparnyId: null
   },
   mutations: {
+    // 保存融云聊天列表
+    handlerChatList(state, payLoad) {
+      state.chatList = payLoad;
+    },
+    // 修改上一次历史菜单
     handlerOldTabName(state, payLoad) {
       state.oldTabName = payLoad;
     },
@@ -366,7 +372,7 @@ const store = new Vuex.Store({
   },
   actions: {
     async getToken({ commit }) {
-      const res = await axios.post("/api/GetToken", {
+      const res = await Vue.prototype.$http.post("/api/GetToken", {
         companyNum: "LittleBearWeb",
         platForm: "PC"
       });

@@ -96,25 +96,39 @@ export default {
   methods: {
     // 获取个人信息
     async getInfoIm(userId) {
-      const res = await this.$http.post("/api/User/GetUserInfoByChatUserId", {
-        chatUserId: userId
-      });
-      console.log(res);
+      const res = await this.$im_http.post(
+        "/api/User/GetUserInfoByChatUserId",
+        {
+          chatUserId: userId
+        }
+      );
+      const { code, item, msg } = res.data.result;
+      if (code === 200) {
+        return item;
+      } else {
+        this.$common.handlerMsgState({
+          msg: msg,
+          type: "danger"
+        });
+      }
     },
     // 获取会话列表
     getExistedConversationList(startTime = 0) {
-      // const _that = this;
+      const _that = this;
       // 获取会话列表
       this.im.Conversation.getList({
         count: 30,
         startTime: startTime,
         order: 0
       })
-        .then(conversationList => {
+        .then(async conversationList => {
           console.log("获取会话列表成功", conversationList);
-          // for (let i = 0; i < conversationList.length; i++) {
-          //   _that.getInfoIm(conversationList[i].latestMessage.senderUserId);
-          // }
+          for (let i = 0; i < conversationList.length; i++) {
+            conversationList[i].userInfo = await _that.getInfoIm(
+              conversationList[i].latestMessage.senderUserId
+            );
+          }
+          this.$store.commit("handlerChatList", conversationList);
         })
         .catch(error => {
           console.log("获取会话列表失败: ", error.code, error.msg);

@@ -30,8 +30,22 @@
           <div><img src="@/assets/images/tupian.png" alt="" /></div>
         </div>
         <div class="input-box">
-          <input type="text" />
-          <el-button type="primary">发送</el-button>
+          <div class="left">
+            <el-scrollbar style="height: 100%;">
+              <el-input
+                class="myInput"
+                type="textarea"
+                ref="userInfo"
+                resize="none"
+                placeholder="请输入内容"
+                v-model="textarea2"
+              >
+              </el-input>
+            </el-scrollbar>
+          </div>
+          <div class="right">
+            <el-button type="primary">发送</el-button>
+          </div>
         </div>
       </div>
     </div>
@@ -92,6 +106,7 @@ export default {
   props: {},
   data() {
     return {
+      textarea2: "",
       isDiyu: 0
     };
   },
@@ -102,10 +117,16 @@ export default {
     }
   },
   created() {},
-  mounted() {}
+  mounted() {
+    this.$nextTick(() => {
+      //滚动条显示问题
+      this.$refs.userInfo.resizeTextarea();
+    });
+  }
 };
 </script>
 <style scoped lang="less">
+@deep: ~">>>";
 .bsNewsMessageList {
   width: 80%;
   display: flex;
@@ -198,38 +219,48 @@ export default {
           width: 18px;
           height: 18px;
           margin-right: 20px;
+          cursor: pointer;
         }
       }
       .input-box {
-        position: relative;
+        border-radius: 4px;
         border: 1px solid #dcdfe6;
         height: 115px;
         box-sizing: border-box;
-        input {
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 100%;
-          border: none;
-          outline: none;
-          padding: 5px;
-          box-sizing: border-box;
+        display: flex;
+        .left {
+          flex: 1;
+          @{deep} .myInput {
+            .el-textarea__inner {
+              resize: none; // 去掉右角下的斜线
+              min-height: 110px !important;
+              height: 100%;
+              box-sizing: border-box;
+              border: none;
+              // overflow-y: hidden; // 解决在微信下滚动条还是显示问题
+            }
+          }
         }
-        .el-button--primary {
-          position: absolute;
-          right: 12px;
-          bottom: 12px;
-          width: 80px;
-          height: 36px;
-          background: #3368a9;
-          border-radius: 6px;
-          font-size: 15px;
-          font-weight: 400;
-          color: #ffffff;
-          display: flex;
-          justify-content: center;
-          align-items: center;
+        .right {
+          width: 100px;
+          min-width: 100px;
+          position: relative;
+          .el-button {
+            position: absolute;
+            right: 0;
+            right: 12px;
+            bottom: 12px;
+            width: 80px;
+            height: 36px;
+            background: #3368a9;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 400;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
         }
       }
     }
@@ -323,6 +354,12 @@ export default {
         }
       }
     }
+  }
+}
+@{deep} .el-scrollbar__wrap {
+  overflow-x: hidden;
+  .el-scrollbar__view {
+    height: 100%;
   }
 }
 </style>

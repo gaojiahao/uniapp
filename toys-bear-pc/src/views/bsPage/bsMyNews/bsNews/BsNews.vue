@@ -1,110 +1,115 @@
 <template>
-  <div>敬请期待</div>
-  <!-- <div class="bsNews">
+  <!-- <div>敬请期待</div> -->
+  <div class="bsNews">
     <div class="bsNewsLeft">
       <div>
         <h3>业务消息</h3>
         <ul class="exhibition">
-          <li @click="handerIsGrid('bsNewsExhibition')">
+          <li
+            @click="handerIsGrid(item, item.businessType)"
+            v-for="(item, i) in businessConversations"
+            :key="i"
+          >
             <div class="exhibition_left">
               <div class="_leftImg">
-                <img src="@/assets/images/gallery.png" alt="" />
+                <!-- <img :src="item.icon" alt="" /> -->
+                <el-image :src="item.icon">
+                  <div slot="error">
+                    <img src="~@/assets/images/imgError.png" alt="" />
+                  </div>
+                  <div slot="placeholder">
+                    <img src="~@/assets/images/logo.png" alt="" />
+                  </div>
+                </el-image>
               </div>
             </div>
             <div class="exhibition_right">
-              <h4>展厅业务</h4>
-              <p>您有0个展厅业务需要处理</p>
+              <el-badge :is-dot="item.unreadCount > 0 ? true : false">
+                <h4>{{ item.title }}</h4>
+              </el-badge>
+              <p>{{ item.subtitle }}</p>
             </div>
           </li>
-          <li @click="handerIsGrid('bsNewsCompany')">
+          <li
+            @click="handerIsGrid(item, 2)"
+            v-for="item in companyConversations"
+            :key="item.client_nu"
+          >
             <div class="exhibition_left">
               <div class="_leftImg">
-                <img src="@/assets/images/manufacturer.png" alt="" />
+                <!-- <img :src="item.companyLogo" alt="" /> -->
+                <el-image :src="item.companyLogo">
+                  <div slot="error">
+                    <img src="~@/assets/images/imgError.png" alt="" />
+                  </div>
+                  <div slot="placeholder">
+                    <img src="~@/assets/images/logo.png" alt="" />
+                  </div>
+                </el-image>
               </div>
             </div>
             <div class="exhibition_right">
-              <h4>公司业务</h4>
-              <p>您有0个公司业务需要处理</p>
-            </div>
-          </li>
-          <li @click="handerIsGrid('bsNewsFirm')">
-            <div class="exhibition_left">
-              <div class="_leftImg">
-                <img src="@/assets/images/manufacturer.png" alt="" />
-              </div>
-            </div>
-            <div class="exhibition_right">
-              <h4>厂商业务</h4>
-              <p>您有0个厂商业务需要处理</p>
-            </div>
-          </li>
-          <li @click="handerIsGrid('bsNewsSystemMsg')">
-            <div class="exhibition_left">
-              <div class="_leftImg">
-                <img src="@/assets/images/system.png" alt="" />
-              </div>
-            </div>
-            <div class="exhibition_right">
-              <h4>系统消息</h4>
-              <p>您有0条消息需要处理</p>
+              <h4>{{ item.client_na }}</h4>
+              <p>{{ item.client_nu }}</p>
             </div>
           </li>
         </ul>
       </div>
       <div>
         <h3 style=" border-bottom: 1px solid #e5e5e5;">其他消息</h3>
-        <ul class="exhibition">
+        <ul class="exhibition" v-if="chatList.length">
           <li
-            v-for="list in msgList"
-            :key="list.id"
-            @click="
-              handerIsGrid('bsNewsMessageList');
-              handerMsgList(list);
-            "
+            v-for="item in chatList"
+            :key="item.chatUserId"
+            @click="handerIsGrid(item, 0)"
           >
             <div class="exhibition_left">
               <div class="_leftImg">
-                <img :src="list.img" alt="" />
+                <img :src="item.userInfo.avatar" alt="" />
               </div>
             </div>
             <div class="exhibition_right">
-              <h4>{{ list.name }}</h4>
-              <p>{{ list.message }}</p>
+              <h4>{{ item.userInfo.nickname }}</h4>
+              <p>{{ myFilterMsgTypes(item.latestMessage) }}</p>
             </div>
           </li>
         </ul>
       </div>
     </div>
-    <component :is="isGrid" :dataName="dataList"></component>
-  </div> -->
+    <component v-if="isGrid" :is="isGrid" :dataOption="dataOption"></component>
+  </div>
 </template>
 
 <script>
+//系统消息
+import System from "@/components/bsComponents/bsNewsComponent/bsNewsSystemMsg";
 //展厅业务
-// import bsNewsExhibition from "@/components/bsComponents/bsNewsComponent/bsNewsExhibition";
-// //公司业务
-// import bsNewsCompany from "@/components/bsComponents/bsNewsComponent/bsNewsCompany";
-// //系统消息
-// import bsNewsSystemMsg from "@/components/bsComponents/bsNewsComponent/bsNewsSystemMsg";
-// //厂商业务
-// import bsNewsFirm from "@/components/bsComponents/bsNewsComponent/bsNewsFirm";
-// //消息列表
-// import bsNewsMessageList from "@/components/bsComponents/bsNewsComponent/bsNewsMessageList";
+import Exhibition from "@/components/bsComponents/bsNewsComponent/bsNewsExhibition";
+//公司业务
+import Sales from "@/components/bsComponents/bsNewsComponent/bsNewsCompany";
+// 厂商业务
+import Supplier from "@/components/bsComponents/bsNewsComponent/bsNewsFirm";
+//消息列表
+import BsNewsMessageList from "@/components/bsComponents/bsNewsComponent/bsNewsMessageList";
+import { mapState } from "vuex";
+import { filterMsgTypes } from "@/assets/js/common/common.js";
 export default {
   name: "bsNews",
-  // components: {
-  //   bsNewsExhibition,
-  //   bsNewsCompany,
-  //   bsNewsSystemMsg,
-  //   bsNewsFirm,
-  //   bsNewsMessageList
-  // },
+  components: {
+    System,
+    Exhibition,
+    Sales,
+    Supplier,
+    BsNewsMessageList
+  },
   data() {
     return {
+      businessConversations: [],
+      companyConversations: [],
       colorId: "2",
-      isGrid: "bsNewsSystemMsg",
+      isGrid: null,
       isDiyu: "0",
-      dataList: [],
+      dataOption: {},
       msgList: [
         {
           id: 1,
@@ -128,18 +133,68 @@ export default {
     };
   },
   methods: {
-    // 切换专区
-    handerIsGrid(type) {
-      this.isGrid = type;
+    // 获取业务消息会话列表
+    async getConversationList() {
+      const res = await this.$im_http.post("/api/Conversation/List", {});
+      console.log(res);
+      const { code, item, msg } = res.data.result;
+      if (code === 200) {
+        console.log(item);
+        this.businessConversations = item.businessConversations;
+        this.companyConversations = item.companyConversations;
+        this.dataOption =
+          this.businessConversations.find(val => val.businessType == 1) || {};
+        this.isGrid = System;
+      } else {
+        this.$common.handlerMsgState({
+          msg: msg,
+          type: "danger"
+        });
+      }
     },
-    handerMsgList(val) {
-      console.log(val, "22222s");
-      console.log(typeof val);
-      // this.dataList = val;
+    // 消息筛选
+    myFilterMsgTypes(item) {
+      return filterMsgTypes(item);
+    },
+    // 切换
+    handerIsGrid(item, num) {
+      this.dataOption = item;
+      this.isGrid = null;
+      this.$nextTick(() => {
+        switch (num) {
+          case 0:
+            this.isGrid = "BsNewsMessageList";
+            break;
+          case 1:
+            this.isGrid = "System";
+            break;
+          case 2:
+            console.log(item.sampleFrom == "EXHIBITION", "展厅对公司");
+            this.isGrid = "Exhibition";
+            break;
+          case 3:
+            console.log(item.sampleFrom == "SALES", "公司对厂商");
+            console.log(item.sampleFrom == "EXHIBITION", "展厅对厂商");
+            this.isGrid = "Supplier";
+            break;
+          case 4:
+            console.log(item.sampleFrom == "EXHIBITION", "展厅对公司");
+            this.isGrid = "Sales";
+            break;
+          case 5:
+            this.isGrid = "Supplier";
+            break;
+        }
+      });
     }
   },
   created() {},
-  mounted() {}
+  mounted() {
+    this.getConversationList();
+  },
+  computed: {
+    ...mapState(["chatList"])
+  }
 };
 </script>
 <style scoped lang="less">
@@ -172,6 +227,7 @@ export default {
       height: 70px;
       display: flex;
       padding-left: 20px;
+      cursor: pointer;
       .exhibition_left {
         width: 20%;
         display: flex;
@@ -182,6 +238,7 @@ export default {
           img {
             width: 50px;
             height: 50px;
+            border-radius: 50%;
           }
         }
       }
