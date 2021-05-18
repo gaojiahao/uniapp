@@ -13,11 +13,7 @@ const createLogRecord = async function(obj) {
     });
     return false;
   }
-  const res = await axios.post("/api/CreateLogRecord", obj, {
-    headers: {
-      Utoken: $Store.state.userInfo.accessToken
-    }
-  });
+  const res = await v.prototype.$http.post("/api/CreateLogRecord", obj);
   if (res.data.result.code !== 200) {
     const msg =
       "api/CreateLogRecord报错code=" +
@@ -32,11 +28,11 @@ const createLogRecord = async function(obj) {
 };
 
 /**
- * apiBaseURL
+ * imBaseURL
  */
-import { proEnv, testEnv, devEnv } from "@/assets/js/config/config.js";
+import { proEnv, testEnv, devEnv } from "@/assets/js/config/imConfig.js";
 const env = process.env.NODE_ENV;
-let target = devEnv.hosturl;
+let target = "";
 
 // 默认是本地环境
 switch (env) {
@@ -51,7 +47,7 @@ switch (env) {
     target = devEnv.hosturl;
     break;
 }
-console.log(target);
+
 // 基础实例
 const instance = axios.create({
   baseURL: target,
@@ -60,31 +56,17 @@ const instance = axios.create({
   startDate: 0, // 请求开始时间
   endDate: 0 // 请求结束时间
 });
+
 // 请求拦截
 instance.interceptors.request.use(
   config => {
-    axios.defaults.baseURL = target;
-    if (!config.url.includes("GetToken")) {
-      config.headers.Utoken =
-        $Store.state.userInfo && $Store.state.userInfo.accessToken;
-      config.headers["content-type"] = "application/json";
-    }
-    /**
-     * 不需要loadding的请求，如下载导出等
-     */
-    if (
-      !config.url.includes("GetHallStatisticsCount") &&
-      !config.url.includes("SelectProductOfferFormulaList") &&
-      !config.url.includes("CreateProductCollection") &&
-      !config.url.includes("ExportSampleOfferToExcel") &&
-      !config.url.includes("ExportCustomerOrderDetailToExcel") &&
-      !config.url.includes("GetSampleOrderExcel")
-    ) {
-      $Store.commit("updateAppLoading", true);
-    }
+    config.headers.Utoken =
+      $Store.state.userInfo && $Store.state.userInfo.accessToken;
+    config.headers["content-type"] = "application/json";
     return config;
   },
   error => {
+    $Store.commit("updateAppLoading", false);
     console.log("请求错误拦截", error);
     var config = error.config;
     // If config does not exist or the retry option is not set, reject
@@ -122,103 +104,14 @@ instance.interceptors.request.use(
 // 响应拦截
 instance.interceptors.response.use(
   res => {
-    // loaddingOptions[res.config.url] = false;
-    v.prototype.$nextTick(() => {
-      $Store.commit("updateAppLoading", false);
-    });
-    /** 全局设置请求时长和请求内容 */
-    const myUrl = res.config.url;
-    let httpDate;
-    switch (myUrl) {
-      case "/api/SearchBearProductPage":
-        instance.endDate = Date.now();
-        // eslint-disable-next-line no-case-declarations
-        const httpTXT = JSON.parse(res.config.data).name || "所有产品";
-        httpDate = instance.endDate - instance.startDate;
-        $Store.commit("handlerHttpTime", httpDate);
-        $Store.commit("handlerHttpContent", httpTXT);
-        break;
-      case "/api/HotRecommendPage":
-        instance.endDate = Date.now();
-        // eslint-disable-next-line no-case-declarations
-        const httpHotTXT = JSON.parse(res.config.data).name || "所有产品";
-        httpDate = instance.endDate - instance.startDate;
-        $Store.commit("handlerHttpTime", httpDate);
-        $Store.commit("handlerHttpContent", httpHotTXT);
-        break;
-      case "/api/File/SearchPicture":
-        instance.endDate = Date.now();
-        // eslint-disable-next-line no-case-declarations
-        httpDate = instance.endDate - instance.startDate;
-        $Store.commit("handlerHttpTime", httpDate);
-        $Store.commit("handlerHttpContent", "[图片]");
-    }
-
-    if (
-      // 不需要loading的请求
-      !res.config.url.includes("GetHotWord") &&
-      !res.config.url.includes("CreateLogRecord") &&
-      !res.config.url.includes("ExportSampleOfferToExcel") &&
-      // !res.config.url.includes('ProductCategoryList') &&
-      !res.config.url.includes("UserConfirm") &&
-      !res.config.url.includes("OrgCompanyList") &&
-      !res.config.url.includes("SampleOrderTotal")
-    ) {
-      $Store.commit("updateAppLoading", false);
-    }
-    // 屏蔽不需要验证code的请求，如下载导出等
-    if (
-      res.config.url.includes("ExportSampleOfferToExcel") ||
-      res.config.url.includes("GetSampleOrderExcel") ||
-      res.config.url.includes("GetProductOfferOrderExcel") ||
-      res.config.url.includes("LittleBearInstallDownload") ||
-      res.config.url.includes("LittleBearInstallRepeatDownload") ||
-      res.config.url.includes("ExportCompanySampleListToExcel") ||
-      res.config.url.includes("GetERPOrderExcel") ||
-      res.config.url.includes("ExportCustomerOrderDetailToExcel")
-    ) {
-      return res;
-    } else {
-      if (res.data.result.code === 401 || res.data.result.code === 403) {
-        $Store.commit("updateAppLoading", false);
-        v.prototype.$common.handlerMsgState({
-          msg: "登录过期，请重新登录",
-          type: "danger"
-        });
-        router.push({
-          path: "/login?id=signOut"
-        });
-      }
-    }
     return res;
   },
   error => {
     if (error.response) {
-      /** 全局设置请求时长和请求内容 */
-      const myUrl = error.response.config.url;
-      let httpDate;
-      switch (myUrl) {
-        case "/api/SearchBearProductPage":
-          instance.endDate = Date.now();
-          // eslint-disable-next-line no-case-declarations
-          const httpTXT =
-            JSON.parse(error.response.config.data).name || "所有产品";
-          httpDate = instance.endDate - instance.startDate;
-          $Store.commit("handlerHttpTime", httpDate);
-          $Store.commit("handlerHttpContent", httpTXT);
-          break;
-        case "/api/File/SearchPicture":
-          instance.endDate = Date.now();
-          // eslint-disable-next-line no-case-declarations
-          httpDate = instance.endDate - instance.startDate;
-          $Store.commit("handlerHttpTime", httpDate);
-          $Store.commit("handlerHttpContent", "[图片]");
-      }
+      $Store.commit("updateAppLoading", false);
       // 如果请求报404 | 500 | 401 之类的
-      // console.log('响应失败拦截', error.response)
       switch (error.response.status) {
         case 401:
-          $Store.commit("updateAppLoading", false);
           v.prototype.$common.handlerMsgState({
             msg: "登录过期，请重新登录",
             type: "danger"
@@ -241,17 +134,6 @@ instance.interceptors.response.use(
           });
           break;
         default:
-          if (
-            // 不需要loading的请求
-            !error.response.config.url.includes("GetHotWord") &&
-            !error.response.config.url.includes("CreateLogRecord") &&
-            !error.response.config.url.includes("UserConfirm") &&
-            !error.response.config.url.includes("OrgCompanyList") &&
-            !error.response.config.url.includes("ExportSampleOfferToExcel") &&
-            !error.response.config.url.includes("SampleOrderTotal")
-          ) {
-            $Store.commit("updateAppLoading", false);
-          }
           createLogRecord({
             Message:
               "接口" +
@@ -278,6 +160,7 @@ instance.interceptors.response.use(
       }
       return Promise.reject(error);
     } else {
+      $Store.commit("updateAppLoading", false);
       // 请求超时， 重新请求
       var config = error.config;
       // If config does not exist or the retry option is not set, reject
@@ -287,7 +170,6 @@ instance.interceptors.response.use(
       config.__retryCount = config.__retryCount || 0;
       // Check if we've maxed out the total number of retries
       if (config.__retryCount >= instance.defaults.retry) {
-        $Store.commit("updateAppLoading", false);
         createLogRecord({
           Message:
             "接口：" +

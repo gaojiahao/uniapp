@@ -96,14 +96,17 @@ export default {
   methods: {
     // 获取个人信息
     async getInfoIm(userId) {
-      const res = await this.$http.post("/api/User/GetUserInfoByChatUserId", {
-        chatUserId: userId
-      });
+      const res = await this.$im_http.post(
+        "/api/User/GetUserInfoByChatUserId",
+        {
+          chatUserId: userId
+        }
+      );
       console.log(res);
     },
     // 获取会话列表
     getExistedConversationList(startTime = 0) {
-      // const _that = this;
+      const _that = this;
       // 获取会话列表
       this.im.Conversation.getList({
         count: 30,
@@ -112,9 +115,9 @@ export default {
       })
         .then(conversationList => {
           console.log("获取会话列表成功", conversationList);
-          // for (let i = 0; i < conversationList.length; i++) {
-          //   _that.getInfoIm(conversationList[i].latestMessage.senderUserId);
-          // }
+          for (let i = 0; i < conversationList.length; i++) {
+            _that.getInfoIm(conversationList[i].latestMessage.senderUserId);
+          }
         })
         .catch(error => {
           console.log("获取会话列表失败: ", error.code, error.msg);

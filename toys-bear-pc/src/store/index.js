@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import router from "../router";
-import axios from "axios";
+// import axios from "axios";
 import createPersistedState from "vuex-persistedstate";
 import globalJson from "./Json.js";
 Vue.use(Vuex);
@@ -366,7 +366,7 @@ const store = new Vuex.Store({
   },
   actions: {
     async getToken({ commit }) {
-      const res = await axios.post("/api/GetToken", {
+      const res = await Vue.prototype.$http.post("/api/GetToken", {
         companyNum: "LittleBearWeb",
         platForm: "PC"
       });
