@@ -6,7 +6,9 @@
           <bsProductSearch
             ref="searchRef"
             :keyword="searchForm.keyword"
+            :MyisGaoji="searchForm.MyisGaoji"
             v-model="searchForm.keyword"
+            @handleIsgaoji="handleIsgaoji"
             @closeTag="closeTag"
             @handleSynthesis="handleSynthesis"
             @screeningShow="screeningShow"
@@ -156,9 +158,7 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item label="多媒体：" class="abbrLabel">
-                    <el-checkbox v-model="advancedFormdata.isUpInsetImg"
-                      >是否有图</el-checkbox
-                    >
+                    <el-checkbox v-model="isUpInsetImg">是否有图</el-checkbox>
                     <el-checkbox
                       v-model="addrSearch"
                       @change="handleraddrSearchChange"
@@ -559,9 +559,7 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item label="多媒体：">
-                    <el-checkbox v-model="advancedFormdata.isUpInsetImg"
-                      >是否有图</el-checkbox
-                    >
+                    <el-checkbox v-model="isUpInsetImg">是否有图</el-checkbox>
                     <el-checkbox
                       v-model="addrSearch"
                       @change="handleraddrSearchChange"
@@ -881,11 +879,10 @@ export default {
       baseImg: null,
       fileinfo: null,
       isShowCropper: false,
-      advancedFormdata: {
-        isUpInsetImg: true
-        // addrSearch: false
-      }, //高级搜索条件
-      screeningFlag: false,
+
+      advancedFormdata: {},
+      isUpInsetImg: true,
+      screeningFlag: false, //高级搜索条件
       isAccurate: "模糊",
       chpaList: [],
       // 裁剪组件的基础配置option
@@ -929,6 +926,7 @@ export default {
         maxPrice: "",
         categoryNumber: null,
         time: [],
+        MyisGaoji: false,
         fa_no: true,
         number: false,
         name: true,
@@ -971,6 +969,9 @@ export default {
     textSearchProducts() {
       this.currentPage = 1;
       this.getProductList(false);
+    },
+    handleIsgaoji(val) {
+      this.$set(this.searchForm, "MyisGaoji", val);
     },
     // 确定裁剪图片
     onCubeImg() {
@@ -1190,7 +1191,7 @@ export default {
         sortType: this.sortType,
         // 高级搜索条件
         fa_no: this.advancedFormdata.fa_no,
-        isUpInsetImg: this.advancedFormdata.isUpInsetImg,
+        isUpInsetImg: this.isUpInsetImg,
         isUpInset3D: this.addrSearch,
         ch_pa: this.advancedFormdata.ch_pa,
         pr_le: this.advancedFormdata.pr_le,
@@ -1255,7 +1256,16 @@ export default {
             }
           }
         }
-
+        for (const item in this.advancedFormdata) {
+          if (
+            this.advancedFormdata[item] != null ||
+            this.advancedFormdata[item] != undefined ||
+            this.advancedFormdata[item] != ""
+          ) {
+            this.$set(this.searchForm, "MyisGaoji", true);
+            break;
+          }
+        }
         this.productList = item.items;
         this.totalCount = item.totalCount;
         let endDate = Date.now();
@@ -1578,7 +1588,6 @@ export default {
   beforeDestroy() {
     this.clearRootEvent();
     this.$store.commit("handlerHallSearchCate", null);
-    this.$store.commit("handleraddrSearch", false);
   }
 };
 </script>

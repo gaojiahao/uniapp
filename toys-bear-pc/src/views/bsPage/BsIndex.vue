@@ -256,6 +256,7 @@ export default {
     },
     // 关闭标签
     closeTab(e) {
+      this.$store.commit("handleraddrSearch", false);
       let len = this.tabList.length;
       len > 1 && this.$store.commit("closeTab", e);
       this.$nextTick(() => {});

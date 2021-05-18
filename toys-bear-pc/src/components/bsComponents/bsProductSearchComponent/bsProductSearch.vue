@@ -8,11 +8,12 @@
         </el-tag>
         <div class="history_box">
           <el-input
+            :class="{ isPadding: isGaoji === true }"
             size="medium"
             ref="focusKeyword"
             @keyup.native.enter="searchProducts"
             style="width: 340px; margin: 0 15px"
-            placeholder="输入关键词+空格可模糊搜索"
+            :placeholder="isGaoji === true ? '' : placeholderVal"
             v-model="myKeyword"
             clearable
             @focus="showHistoryModal(true)"
@@ -36,8 +37,13 @@
                 class="el-input__icon el-icon-camera-solid"
               ></i> -->
               </el-upload>
+              <!-- <div>高级搜索</div> -->
             </template>
           </el-input>
+          <div v-if="isGaoji" class="gaoji">
+            高级搜索
+            <i @click="handleIsgaoji" class="el-icon-close"></i>
+          </div>
           <div
             class="history"
             v-show="isShowHistoryPanel && searchHistoryList.length"
@@ -101,9 +107,11 @@ import eventBus from "@/assets/js/common/eventBus";
 import { mapGetters, mapState } from "vuex";
 export default {
   name: "bsProductSearch",
-  props: ["keyword"],
+  props: ["keyword", "MyisGaoji"],
   data() {
     return {
+      isGaoji: null,
+      placeholderVal: "输入关键词+空格可模糊搜索",
       synthesis: false,
       advanced: true,
       myKeyword: "",
@@ -118,9 +126,17 @@ export default {
     },
     keyword(val) {
       this.myKeyword = val;
+    },
+    MyisGaoji(val) {
+      this.isGaoji = val;
     }
   },
   methods: {
+    //关闭高级搜素显示
+    handleIsgaoji() {
+      this.isGaoji = !this.isGaoji;
+      this.$emit("handleIsgaoji", this.isGaoji);
+    },
     // 关闭关联搜索
     closeTag() {
       this.$emit("closeTag");
@@ -275,6 +291,23 @@ export default {
       }
       .history_box {
         position: relative;
+        @{deep}.isPadding {
+          .el-input__inner {
+            padding-left: 130px;
+          }
+        }
+        .gaoji {
+          position: absolute;
+          top: 6px;
+          left: 50px;
+          height: 24px;
+          background: #f9723e;
+          border-radius: 4px;
+          color: #fff;
+          line-height: 24px;
+          padding: 0 9px;
+          cursor: pointer;
+        }
         .history {
           position: absolute;
           // top: 50px;
