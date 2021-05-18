@@ -102,7 +102,15 @@ export default {
           chatUserId: userId
         }
       );
-      console.log(res);
+      const { code, item, msg } = res.data.result;
+      if (code === 200) {
+        return item;
+      } else {
+        this.$common.handlerMsgState({
+          msg: msg,
+          type: "danger"
+        });
+      }
     },
     // 获取会话列表
     getExistedConversationList(startTime = 0) {
@@ -113,11 +121,14 @@ export default {
         startTime: startTime,
         order: 0
       })
-        .then(conversationList => {
+        .then(async conversationList => {
           console.log("获取会话列表成功", conversationList);
           for (let i = 0; i < conversationList.length; i++) {
-            _that.getInfoIm(conversationList[i].latestMessage.senderUserId);
+            conversationList[i].userInfo = await _that.getInfoIm(
+              conversationList[i].latestMessage.senderUserId
+            );
           }
+          this.$store.commit("handlerChatList", conversationList);
         })
         .catch(error => {
           console.log("获取会话列表失败: ", error.code, error.msg);

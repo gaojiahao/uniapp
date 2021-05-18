@@ -17,6 +17,7 @@ function myForEach(oList, yList) {
 }
 const store = new Vuex.Store({
   state: {
+    chatList: [],
     myColles: [],
     isJindu: false,
     activeTab: "/bsIndex/bsHome",
@@ -75,6 +76,11 @@ const store = new Vuex.Store({
     currentComparnyId: null
   },
   mutations: {
+    // 保存融云聊天列表
+    handlerChatList(state, payLoad) {
+      state.chatList = payLoad;
+    },
+    // 修改上一次历史菜单
     handlerOldTabName(state, payLoad) {
       state.oldTabName = payLoad;
     },
