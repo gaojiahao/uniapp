@@ -428,6 +428,7 @@ export default {
   min-height: 100%;
   background-color: #fff;
   padding: 0 20px;
+  padding-bottom: 100px;
   .title {
     height: 55px;
     line-height: 55px;

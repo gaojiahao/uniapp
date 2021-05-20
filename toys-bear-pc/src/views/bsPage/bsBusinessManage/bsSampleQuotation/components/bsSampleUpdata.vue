@@ -33,12 +33,7 @@
         >
           <el-table-column label="序号" type="index" align="center" width="50">
           </el-table-column>
-          <el-table-column
-            prop="img"
-            label="产品"
-            width="250"
-            show-overflow-tooltip
-          >
+          <el-table-column prop="img" label="产品" width="250">
             <template slot-scope="scope">
               <div class="imgBox">
                 <el-tooltip
@@ -368,7 +363,7 @@
           </el-table-column>
         </el-table>
         <!-- 统计 -->
-        <div class="tableBtoBox">
+        <div class="tableBtoBox" style="width: 1670px;">
           <div class="tableBto">
             <div class="right">
               <p class="item">
@@ -1510,6 +1505,7 @@ export default {
   min-height: 100%;
   background-color: #fff;
   padding: 0 20px;
+  padding-bottom: 100px;
   .title {
     height: 55px;
     font-size: 15px;
@@ -1636,6 +1632,7 @@ export default {
       bottom: 0;
       box-sizing: border-box;
       padding-right: 20px;
+      margin-right: 30px;
       .tableBto {
         display: flex;
         align-items: center;
