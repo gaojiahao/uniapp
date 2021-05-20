@@ -65,7 +65,7 @@
           @size-change="handleSizeChange"
         ></el-pagination>
       </center>
-      <div class="totalBoxFooter" style="width: 1680px;">
+      <div class="totalBoxFooter" style="width: 1670px;">
         <div class="totalBox">
           <p class="item">
             <span class="itemTitle">总款数：</span>
@@ -548,6 +548,7 @@ export default {
   min-height: 100%;
   background-color: #fff;
   padding: 0 20px;
+  padding-bottom: 100px;
   .title {
     height: 55px;
     line-height: 55px;
