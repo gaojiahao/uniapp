@@ -257,13 +257,6 @@ export default {
 	data() {
 		return {
 			home_icon: require("@/static/images/home.png"),
-			bg0: require("@/static/images/offer_share_0.png"),
-			bg1: require("@/static/images/offer_share_1.png"),
-			bg2: require("@/static/images/offer_share_2.png"),
-			bg3: require("@/static/images/offer_share_3.png"),
-			bg4: require("@/static/images/offer_share_4.png"),
-			bg6: require("@/static/images/offer_share_6.png"),
-			bg8: require("@/static/images/offer_share_8.png"),
 			keyword:'' ,//搜索关键字
 			sampleInfo:{}, //择样信息
 			productList:[] ,//产品列表
@@ -448,7 +441,7 @@ export default {
 				left: 195px;
 				width: 245px;
 				height: 212px;
-				background-image: url(/static/img/offer_share_1.dc5f07c8.png);
+				background-image: url(/static/img/offer_share_1_sm.png);
 				background-size: cover;
 				background-repeat: no-repeat;
 				.head_bakcground{
@@ -784,7 +777,7 @@ export default {
 				left: 58%;
 				width: 445rpx;
 				height: 385rpx;
-				background-image: url(../../static/images/offer_share_1.png);
+				background-image: url(../../static/images/offer_share_1_bg.png);
 				.head_bakcground{
 					width: 445rpx;
 					height: 385rpx;

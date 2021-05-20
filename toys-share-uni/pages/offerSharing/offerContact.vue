@@ -67,7 +67,7 @@ export default {
 		return {
 			home_icon: require("@/static/images/home.png"),
 			bg0: require("@/static/images/offer_share_0.png"),
-			bg1: require("@/static/images/offer_share_1.png"),
+			bg1: require("@/static/images/offer_share_1_bg.png"),
 			bg2: require("@/static/images/offer_share_2.png"),
 			bg3: require("@/static/images/offer_share_3.png"),
 			bg4: require("@/static/images/offer_share_4.png"),
