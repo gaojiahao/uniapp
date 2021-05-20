@@ -300,7 +300,7 @@
 									</view>
 								</u-col>
 							</u-row> -->
-							<b-row v-if="listShowType=='grid'">
+							<b-row v-if="listShowType=='grid'" no-gutters>
 								<b-col cols="6" sm="3" v-for="(item,index) in productList" :key='index'>
 									<view class="product_list_item">
 										<view class="product_list_img">
