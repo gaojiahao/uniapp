@@ -880,7 +880,19 @@ export default {
       fileinfo: null,
       isShowCropper: false,
 
-      advancedFormdata: {},
+      advancedFormdata: {
+        fa_no: "",
+        ch_pa: "",
+        pr_le: "",
+        pr_wi: "",
+        pr_hi: "",
+        ou_le: "",
+        ou_wi: "",
+        ou_hi: "",
+        in_le: "",
+        in_wi: "",
+        in_hi: ""
+      },
       isUpInsetImg: true,
       screeningFlag: false, //高级搜索条件
       isAccurate: "模糊",
@@ -972,6 +984,7 @@ export default {
     },
     handleIsgaoji(val) {
       this.$set(this.searchForm, "MyisGaoji", val);
+      this.advancedFormdata = {};
     },
     // 确定裁剪图片
     onCubeImg() {
@@ -1190,9 +1203,9 @@ export default {
         sortOrder: this.sortOrder,
         sortType: this.sortType,
         // 高级搜索条件
-        fa_no: this.advancedFormdata.fa_no,
         isUpInsetImg: this.isUpInsetImg,
         isUpInset3D: this.addrSearch,
+        fa_no: this.advancedFormdata.fa_no,
         ch_pa: this.advancedFormdata.ch_pa,
         pr_le: this.advancedFormdata.pr_le,
         pr_wi: this.advancedFormdata.pr_wi,
@@ -1256,16 +1269,19 @@ export default {
             }
           }
         }
-        for (const item in this.advancedFormdata) {
-          if (
-            this.advancedFormdata[item] != null ||
-            this.advancedFormdata[item] != undefined ||
-            this.advancedFormdata[item] != ""
-          ) {
-            this.$set(this.searchForm, "MyisGaoji", true);
-            break;
-          }
+        if (Object.values(this.advancedFormdata).some(Boolean)) {
+          this.$set(this.searchForm, "MyisGaoji", true);
         }
+        // for (const item in this.advancedFormdata) {
+        //   console.log(this.advancedFormdata[item]);
+        //   if (this.advancedFormdata[item] != "") {
+        //     this.$set(this.searchForm, "MyisGaoji", true);
+        //     console.log(222);
+        //     break;
+        //   } else {
+        //     this.$set(this.searchForm, "MyisGaoji", false);
+        //   }
+        // }
         this.productList = item.items;
         this.totalCount = item.totalCount;
         let endDate = Date.now();
@@ -1573,6 +1589,18 @@ export default {
         }
       }
     },
+    advancedFormdata: {
+      deep: true,
+      handler(val) {
+        if (!Object.values(val).some(Boolean)) {
+          // console.log("都为空");
+          this.$set(this.searchForm, "MyisGaoji", false);
+        }
+
+        // console.log(!Object.values(val).some(Boolean));
+      }
+    },
+
     shoppingList: {
       deep: true,
       handler() {

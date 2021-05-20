@@ -56,45 +56,50 @@
       </div>
       <!-- 表格 -->
       <bsTables :table="tableData" />
-      <div class="totalBox">
-        <p class="item">
-          <span class="itemTitle">总款数：</span>
-          <span>{{ totalCount }}</span>
-        </p>
-        <p class="item">
-          <span class="itemTitle">总箱数：</span>
-          <span>{{ options.sumtAmount }}</span>
-        </p>
-        <p class="item">
-          <span class="itemTitle">总体积/总材积：</span>
-          <span>{{ options.sumBulk_stere }}</span
-          >/<span>{{ options.sumBulk_feet }}</span>
-        </p>
-        <p class="item">
-          <span class="itemTitle">总毛重/总净重：</span>
-          <span>{{ options.sumGr_we }}/{{ options.sumNe_we }}(KG)</span>
-        </p>
-        <p class="item">
-          <span class="itemTitle">总出厂价/总报出价</span>
-          <span class="price">￥{{ options.sumFa_pr_pr }}</span>
-          <span>/</span>
-          <span class="price">￥{{ options.SumHa_in_qu || 0 }}</span>
-        </p>
+      <center style="margin-top: 20px">
+        <el-pagination
+          layout="total, sizes, prev, pager, next, jumper"
+          background
+          :page-sizes="[10, 20, 30, 50]"
+          :page-size="pageSize"
+          :total="totalCount"
+          :current-page.sync="currentPage"
+          @current-change="currentChange"
+          @size-change="handleSizeChange"
+        ></el-pagination>
+      </center>
+      <div class="totalBoxFooter" style="width: 1680px;">
+        <div class="totalBox">
+          <p class="item">
+            <span class="itemTitle">总款数：</span>
+            <span>{{ totalCount }}</span>
+          </p>
+          <!-- <p class="item">
+            <span class="itemTitle">总箱数：</span>
+            <span>{{ options.sumtAmount }}</span>
+          </p> -->
+          <p class="item">
+            <span class="itemTitle">总数量：</span>
+            <span>{{ options.sumAmountOu_lo }}</span>
+          </p>
+          <p class="item">
+            <span class="itemTitle">总体积/总材积：</span>
+            <span>{{ options.sumBulk_stere }}</span
+            >/<span>{{ options.sumBulk_feet }}</span>
+          </p>
+          <p class="item">
+            <span class="itemTitle">总毛重/总净重：</span>
+            <span>{{ options.sumGr_we }}/{{ options.sumNe_we }}(KG)</span>
+          </p>
+          <p class="item">
+            <span class="itemTitle">总出厂价/总报出价</span>
+            <span class="price">￥{{ options.sumAmountFa_pr }}</span>
+            <span>/</span>
+            <span class="price">￥{{ options.sumHa_in_qu || 0 }}</span>
+          </p>
+        </div>
       </div>
     </div>
-
-    <center style="margin-top: 20px">
-      <el-pagination
-        layout="total, sizes, prev, pager, next, jumper"
-        background
-        :page-sizes="[10, 20, 30, 50]"
-        :page-size="pageSize"
-        :total="totalCount"
-        :current-page.sync="currentPage"
-        @current-change="currentChange"
-        @size-change="handleSizeChange"
-      ></el-pagination>
-    </center>
     <!-- 导出订单模板dialog -->
     <transition name="el-zoom-in-center">
       <el-dialog
@@ -244,6 +249,15 @@ export default {
             isHiden: true,
             render: row => {
               return row.in_en + "/" + row.ou_lo;
+            }
+          },
+          {
+            prop: "ou_lo",
+            label: "数量",
+            width: 90,
+            isHiden: true,
+            render: row => {
+              return row.ou_lo;
             }
           },
           {
@@ -564,23 +578,36 @@ export default {
         }
       }
     }
-    .totalBox {
-      display: flex;
-      align-items: center;
-      height: 80px;
-      padding-left: 10px;
+    .totalBoxFooter {
+      position: absolute;
+      width: 100%;
+      margin-right: 30px;
+      z-index: 1;
+      left: 0;
+      bottom: 0;
       box-sizing: border-box;
-      justify-content: flex-end;
-      .item {
-        margin-right: 15px;
+      padding-right: 20px;
+
+      .totalBox {
+        width: 100%;
+        background-color: #fff;
+        height: 80px;
+        padding: 0 20px;
+        box-sizing: border-box;
         display: flex;
         align-items: center;
-        // .itemTitle {
-        // }
-        .price {
-          color: #eb1515;
-          font-weight: 700;
-          font-size: 18px;
+        justify-content: flex-end;
+        .item {
+          margin-right: 15px;
+          display: flex;
+          align-items: center;
+          // .itemTitle {
+          // }
+          .price {
+            color: #eb1515;
+            font-weight: 700;
+            font-size: 18px;
+          }
         }
       }
     }

@@ -29,11 +29,6 @@ const BsSampleOfferCommodity = () =>
   import(
     "@/components/bsComponents/bsSampleComponent/bsSampleOfferCommodity.vue"
   );
-
-// 找样报价-编辑详情
-const BsSampleUpdata = () =>
-  import("@/components/bsComponents/bsSampleComponent/bsSampleUpdata.vue");
-
 // 查询厂商详情页
 const BsMyClientsDetail = () =>
   import(
@@ -76,11 +71,6 @@ export default [
     path: "/bsIndex/BsSampleOfferCommodity",
     name: "BsSampleOfferCommodity",
     component: BsSampleOfferCommodity
-  },
-  {
-    path: "/bsIndex/bsSampleUpdata",
-    name: "bsSampleUpdata",
-    component: BsSampleUpdata
   },
   {
     path: "/bsIndex/bsMyClientsDetail",

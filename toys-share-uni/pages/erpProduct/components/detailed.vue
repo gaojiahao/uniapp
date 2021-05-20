@@ -1,6 +1,6 @@
 <template>
 	<view class="productList" v-if="productList.length>0">
-		<view class="item" v-for="(item,index) in productList" :key="index">
+		<view class="item" v-for="(item,index) in productList" :key="index" @click="toDetails">
 			<view class="productImg">
 				<view class="itemImg">
 					<u-image width="100%" height="156" :src="item.src"></u-image>
@@ -37,6 +37,14 @@
 		},
 		data() {
 			return {}
+		},
+		methods:{
+			toDetails(){
+					uni.navigateTo({
+					    url:'/productDetails'
+					})
+					
+			}
 		}
 	}
 </script>

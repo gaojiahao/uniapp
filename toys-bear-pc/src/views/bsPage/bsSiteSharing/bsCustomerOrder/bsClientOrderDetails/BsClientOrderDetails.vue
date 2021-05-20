@@ -53,175 +53,6 @@
         </el-button>
       </div>
       <bsTables :table="tableData" />
-      <!-- <el-table
-        <el-table-column label="序号" type="index" align="center" width="50">
-        </el-table-column>
-        <el-table-column label="产品" width="220">
-          <template slot-scope="scope">
-            <div class="imgBox">
-              <el-image
-                fit="contain"
-                @click.native="goDetails(scope.row)"
-                style="width: 80px; height: 60px; cursor: pointer"
-                :src="scope.row.productImage"
-              >
-                <div slot="placeholder" class="errorImg">
-                  <img src="~@/assets/images/imgError.png" alt />
-                </div>
-                <div slot="error" class="errorImg">
-                  <img src="~@/assets/images/imgError.png" alt />
-                </div>
-              </el-image>
-              <div class="productName">
-                <div class="name" @click="goDetails(scope.row)">
-                  {{ scope.row.productName }}
-                </div>
-                <div class="factory">
-                  <div class="fcatoryName" @click="toFactory(scope.row)">
-                    {{ scope.row.supplierName }}
-                  </div>
-                  <div class="icons">
-                    <div class="cartInfoIcon" @click="toNews(scope.row)"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="联系厂商" prop="supplierPhone" align="center">
-          <template slot-scope="scope">
-            <div v-if="scope.row.supplierPhone">
-              {{ scope.row.supplierPhone }}
-            </div>
-            <div v-if="scope.row.supplierTelephoneNumber">
-              {{ scope.row.supplierTelephoneNumber }}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="资料来源" show-overflow-tooltip>
-          <template slot-scope="scope">
-            {{ scope.row.exhibitionName }}
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="fa_no"
-          label="出厂货号"
-          show-overflow-tooltip
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="ch_pa"
-          label="包装"
-          align="center"
-          show-overflow-tooltip
-        >
-        </el-table-column>
-        <el-table-column label="产品规格" align="center" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>
-              {{ scope.row.pr_le }}x{{ scope.row.pr_wi }}x{{
-                scope.row.pr_hi
-              }}(cm)
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="包装规格" align="center" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>
-              {{ scope.row.in_le }}x{{ scope.row.in_wi }}x{{
-                scope.row.in_hi
-              }}(cm)
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="外箱规格" align="center" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>
-              {{ scope.row.ou_le }}x{{ scope.row.ou_wi }}x{{
-                scope.row.ou_hi
-              }}(cm)
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="体积/材积" show-overflow-tooltip align="center">
-          <template slot-scope="scope">
-            <span>
-              {{ scope.row.bulk_stere }}(cbm)/{{ scope.row.bulk_feet }}(cuft)
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="毛重/净重" align="center" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span> {{ scope.row.gr_we }}/{{ scope.row.ne_we }}(kg) </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="装箱量" align="center" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span> {{ scope.row.in_en }}/{{ scope.row.ou_lo }}(pcs) </span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="productCount"
-          show-overflow-tooltip
-          width="50"
-          align="center"
-          label="箱数"
-        >
-        </el-table-column>
-        <el-table-column
-          width="80"
-          align="center"
-          show-overflow-tooltip
-          label="总数量"
-        >
-          <template slot-scope="scope">
-            {{ scope.row.productCount * scope.row.ou_lo }}
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="costPrice"
-          align="center"
-          show-overflow-tooltip
-          label="参考单价"
-        >
-          <template slot-scope="scope">
-            <span style="color: #3368a9">
-              {{ "￥" + scope.row.costPrice }}
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="productPrice"
-          show-overflow-tooltip
-          align="center"
-          label="报出价"
-        >
-          <template slot-scope="scope">
-            <span style="color: #f56c6c">
-              {{ options.currencyType + scope.row.productPrice }}
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="OfferTotalAmount"
-          label="报出总价"
-          align="center"
-          show-overflow-tooltip
-        >
-          <template slot-scope="scope">
-            <span style="color: #f56c6c">{{ scope.row.cu_de }}</span>
-            <span style="color: #f56c6c">
-              {{
-                priceCount(
-                  scope.row.productCount,
-                  scope.row.ou_lo,
-                  scope.row.productPrice
-                )
-              }}
-            </span>
-          </template>
-        </el-table-column>
-      </el-table> -->
       <div class="totalBox">
         <p class="item">
           <span class="itemTitle">总款数：</span>
@@ -230,6 +61,10 @@
         <p class="item">
           <span class="itemTitle">总箱数：</span>
           <span>{{ options.totalCount }}</span>
+        </p>
+        <p class="item">
+          <span class="itemTitle">总数量：</span>
+          <span>{{ calculationTotalBox(tableData.data) }}</span>
         </p>
         <p class="item">
           <span class="itemTitle">总体积/总材积：</span>
@@ -434,7 +269,7 @@ export default {
             isHiden: true
           },
           {
-            label: "总数量",
+            label: "数量",
             isHiden: true,
             width: 50,
             render: row => {
@@ -666,6 +501,17 @@ export default {
           result = (n1 / n2) * (t2 / t1);
           return result;
       }
+    },
+    // 计算总数量
+    calculationTotalBox(list) {
+      let number = 0;
+      for (let i = 0; i < list.length; i++) {
+        number = this.add(
+          number,
+          this.multiply(list[i].boxNumber, list[i].ou_lo) || 0
+        );
+      }
+      return number;
     },
     // 加
     add(a, b, digits) {

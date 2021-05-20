@@ -1,5 +1,5 @@
 <template>
-  <div class="clientOrderDetails">
+  <div class="BsPurchaseOrderDetails">
     <div class="title">采购订单详情</div>
     <ul class="customerInfoBox">
       <div class="clientContentBox">
@@ -60,6 +60,10 @@
         <p class="item">
           <span class="itemTitle">总箱数：</span>
           <span>{{ options.sumtAmount }}</span>
+        </p>
+        <p class="item">
+          <span class="itemTitle">总数量：</span>
+          <span>{{ options.sumAmountOu_lo }}</span>
         </p>
         <p class="item">
           <span class="itemTitle">总体积/总材积：</span>
@@ -239,6 +243,15 @@ export default {
             }
           },
           {
+            prop: "ou_lo",
+            label: "数量",
+            width: 90,
+            isHiden: true,
+            render: row => {
+              return row.ou_lo;
+            }
+          },
+          {
             prop: "fa_pr",
             label: "参考单价",
             isHiden: true,
@@ -387,7 +400,7 @@ export default {
 </script>
 <style scoped lang="less">
 @deep: ~">>>";
-.clientOrderDetails {
+.BsPurchaseOrderDetails {
   min-height: 100%;
   background-color: #fff;
   padding: 0 20px;

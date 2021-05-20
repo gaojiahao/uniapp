@@ -116,8 +116,20 @@
                 class="name"
                 @click="goDetails(scope.row)"
                 v-if="col.nameHtml"
-                v-html="col.nameHtml(scope.row)"
-              ></div>
+              >
+                <el-tooltip
+                  effect="dark"
+                  :disabled="col.nameHtml(scope.row).length < 15"
+                  :content="col.nameHtml(scope.row)"
+                  placement="top-start"
+                >
+                  <span
+                    class=" spanName"
+                    style="max-width:190px; display:inline-block"
+                    v-html="col.nameHtml(scope.row)"
+                  ></span>
+                </el-tooltip>
+              </div>
               <div class="factory">
                 <div
                   class="fcatoryName"
@@ -488,7 +500,7 @@ export default {
   .el-image {
     cursor: pointer;
   }
-  .infoBox {
+  @{deep}.infoBox {
     width: 190px;
     height: 60px;
     margin-left: 10px;
@@ -501,6 +513,11 @@ export default {
       overflow: hidden; /*超出部分隐藏*/
       white-space: nowrap; /*不换行*/
       text-overflow: ellipsis; /*超出部分文字以...显示*/
+      .spanName {
+        overflow: hidden; /*超出部分隐藏*/
+        white-space: nowrap; /*不换行*/
+        text-overflow: ellipsis; /*超出部分文字以...显示*/
+      }
     }
     .factory {
       cursor: pointer;
