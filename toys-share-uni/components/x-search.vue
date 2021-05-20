@@ -35,7 +35,7 @@
 					backgroundColor: bgColor,
 				}, inputStyle]"
 			/>
-			<view class="u-close-wrap" v-if="keyword && clearabled && focused" @tap="clear" @click="clear">111
+			<view class="u-close-wrap" v-if="keyword && clearabled && focused" @tap="clear" @mousedown="clear">111
 				<u-icon class="u-clear-icon" name="close-circle-fill" size="34" color="#c0c4cc"></u-icon>
 			</view>
 		</view>
@@ -80,7 +80,7 @@
  * @example <u-search placeholder="日照香炉生紫烟" v-model="keyword"></u-search>
  */
 export default {
-	name: "u-search",
+	name: "x-search",
 	props: {
 		// 搜索框形状，round-圆形，square-方形
 		shape: {
@@ -271,7 +271,7 @@ export default {
 			// 这里改为监听点击事件，手点击清除图标时，同时也发生了@blur事件，导致图标消失而无法点击，这里做一个延时
 			setTimeout(() => {
 				this.focused = false;
-			}, 100)
+			}, 500)
 			this.show = false;
 			this.$emit('blur', this.keyword);
 		},
@@ -284,7 +284,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../libs/css/style.components.scss";
+@import "@/uview-ui/libs/css/style.components.scss";
 
 .u-search {
 	@include vue-flex;
