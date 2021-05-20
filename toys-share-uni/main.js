@@ -1,5 +1,5 @@
 // #ifdef H5
-import '@/common/js/pc.js'
+import '@/common/js/rem.js'
 // #endif
 import Vue from 'vue'
 import App from './App'

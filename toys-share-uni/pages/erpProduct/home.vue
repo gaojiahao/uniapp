@@ -84,7 +84,7 @@
 				],
 				keyword: '',
 				list: [{
-						image: '../../static/images/offer_share_1.png',
+						image: '../../static/images/offer_share_1_bg.png',
 					},
 					{
 						image: '../../static/images/advertisingIcon.png',
