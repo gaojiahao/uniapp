@@ -54,7 +54,8 @@ export default {
       isShowCartBox: false,
       myScrollTop: 0,
       timeID: null,
-      im: new IM().RongIMClient
+      im: new IM().RongIMClient,
+      disabled: false
     };
   },
   watch: {
@@ -73,7 +74,8 @@ export default {
       "userInfo",
       "showGlobalMsg",
       "msgType",
-      "globalMsg"
+      "globalMsg",
+      "chatList"
     ]),
     ...mapGetters({
       shoppingList: "myShoppingList"
@@ -91,6 +93,39 @@ export default {
     });
     eventBus.$on("toTop", () => {
       this.toTop();
+    });
+    eventBus.$on("getChatInfo", ({ targetId, type }) => {
+      // console.log(option, callback);
+      this.getHistoryChat(targetId, type);
+    });
+    eventBus.$on("scrollSessionList", () => {
+      if (!this.disabled) {
+        const lastInfo = this.chatList[this.chatList.length - 1];
+        let startTime = 0;
+        const count = 8;
+        if (lastInfo) {
+          startTime = lastInfo.latestMessage.sentTime;
+        }
+        this.getExistedConversationList(startTime, count)
+          .then(async conversationList => {
+            if (conversationList.length < count) {
+              this.disabled = true;
+            }
+            if (conversationList) {
+              for (let i = 0; i < conversationList.length; i++) {
+                conversationList[i].userInfo = await this.getInfoIm(
+                  conversationList[i].targetId
+                );
+                this.$store.commit("pushChatList", conversationList[i]);
+              }
+              console.log(this.chatList);
+            }
+          })
+          .catch(err => {
+            console.log(err);
+            this.disabled = false;
+          });
+      }
     });
   },
   methods: {
@@ -112,44 +147,69 @@ export default {
         });
       }
     },
+    // 获取历史消息,聊天窗口消息
+    getHistoryChat(targetId, type) {
+      var conversation = this.im.Conversation.get({
+        targetId: targetId,
+        type: type
+      });
+      var option = {
+        timestamp: +new Date(),
+        count: 20
+      };
+      conversation.getMessages(option).then(result => {
+        var list = result.list; // 历史消息列表
+        var hasMore = result.hasMore; // 是否还有历史消息可以获取
+        console.log("获取历史消息成功", list, hasMore);
+      });
+      // 清除未读
+      conversation.read().then(function() {
+        console.log("清除未读数成功"); // im.watch conversation 将被触发
+      });
+    },
     // 获取会话列表
-    getExistedConversationList(startTime = 0) {
-      const _that = this;
-      // 获取会话列表
-      this.im.Conversation.getList({
-        count: 30,
-        startTime: startTime,
-        order: 0
-      })
-        .then(async conversationList => {
-          console.log("获取会话列表成功", conversationList);
-          for (let i = 0; i < conversationList.length; i++) {
-            conversationList[i].userInfo = await _that.getInfoIm(
-              conversationList[i].latestMessage.senderUserId
-            );
-          }
-          this.$store.commit("handlerChatList", conversationList);
+    getExistedConversationList(startTime = 0, count = 7) {
+      return new Promise((result, reject) => {
+        this.im.Conversation.getList({
+          count: count,
+          startTime: startTime,
+          order: 0
         })
-        .catch(error => {
-          console.log("获取会话列表失败: ", error.code, error.msg);
-        });
+          .then(async conversationList => {
+            result(conversationList);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
     },
     // IM 添加事件监听
     watchIm() {
+      const _that = this;
       // 添加事件监听
       this.im.watch({
         // 监听会话列表变更事件
-        conversation(event) {
+        async conversation(event) {
           // 发生变更的会话列表
           const updatedConversationList = event.updatedConversationList;
-          // 通过 im.Conversation.merge 计算最新的会话列表
-          const latestConversationList = this.im.Conversation.merge({
-            updatedConversationList
-          });
-          console.log(latestConversationList, "最新的会话列表");
+          if (updatedConversationList && updatedConversationList.length) {
+            _that.getExistedConversationList().then(async conversationList => {
+              // 通过 im.Conversation.merge 计算最新的会话列表
+              const latestConversationList = _that.im.Conversation.merge({
+                conversationList,
+                updatedConversationList
+              });
+              for (let i = 0; i < latestConversationList.length; i++) {
+                latestConversationList[i].userInfo = await _that.getInfoIm(
+                  latestConversationList[i].targetId
+                );
+              }
+              _that.$store.commit("handlerChatList", latestConversationList);
+            });
+          }
         },
         // 监听消息通知
-        message(event) {
+        async message(event) {
           // 新接收到的消息内容
           const message = event.message;
           console.log(message);
@@ -196,12 +256,20 @@ export default {
           console.log(updatedExpansion, deletedExpansion);
         }
       });
-      console.log(this.userInfo.chatUser.chatUserToken);
       this.im
         .connect({ token: this.userInfo.chatUser.chatUserToken })
         .then(user => {
           console.log("链接成功, 链接用户 id 为: ", user.id);
-          this.getExistedConversationList();
+          this.getExistedConversationList(0).then(async conversationList => {
+            if (conversationList) {
+              for (let i = 0; i < conversationList.length; i++) {
+                conversationList[i].userInfo = await this.getInfoIm(
+                  conversationList[i].targetId
+                );
+              }
+              this.$store.commit("handlerChatList", conversationList);
+            }
+          });
         })
         .catch(error => {
           console.log("链接失败: ", error.code, error.msg);
@@ -261,6 +329,8 @@ export default {
   },
   beforeDestroy() {
     this.im.disconnect().then(() => console.log("断开链接成功"));
+    eventBus.$off("getChatInfo");
+    eventBus.$off("scrollSessionList");
   }
 };
 </script>

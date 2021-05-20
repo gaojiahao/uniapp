@@ -2,79 +2,99 @@
   <!-- <div>敬请期待</div> -->
   <div class="bsNews">
     <div class="bsNewsLeft">
-      <div>
-        <h3>业务消息</h3>
-        <ul class="exhibition">
-          <li
-            @click="handerIsGrid(item, item.businessType)"
-            v-for="(item, i) in businessConversations"
-            :key="i"
-          >
-            <div class="exhibition_left">
-              <div class="_leftImg">
-                <!-- <img :src="item.icon" alt="" /> -->
-                <el-image :src="item.icon">
-                  <div slot="error">
-                    <img src="~@/assets/images/imgError.png" alt="" />
+      <el-scrollbar style="height: 100%;">
+        <div
+          class="infinite-list"
+          :infinite-scroll-immediate="false"
+          v-infinite-scroll="scrollSessionList"
+          infinite-scroll-delay="50"
+        >
+          <div>
+            <h3>业务消息</h3>
+            <ul class="exhibition">
+              <li
+                @click="handerIsGrid(item, item.businessType)"
+                v-for="(item, i) in businessConversations"
+                :key="i"
+              >
+                <div class="exhibition_left">
+                  <div class="_leftImg">
+                    <!-- <img :src="item.icon" alt="" /> -->
+                    <el-image :src="item.icon">
+                      <div slot="error">
+                        <img src="~@/assets/images/imgError.png" alt="" />
+                      </div>
+                      <div slot="placeholder">
+                        <img src="~@/assets/images/logo.png" alt="" />
+                      </div>
+                    </el-image>
                   </div>
-                  <div slot="placeholder">
-                    <img src="~@/assets/images/logo.png" alt="" />
+                </div>
+                <div class="exhibition_right">
+                  <el-badge :is-dot="item.unreadCount > 0 ? true : false">
+                    <h4>{{ item.title }}</h4>
+                  </el-badge>
+                  <p>{{ item.subtitle }}</p>
+                </div>
+              </li>
+              <li
+                @click="handerIsGrid(item, 2)"
+                v-for="item in companyConversations"
+                :key="item.client_nu"
+              >
+                <div class="exhibition_left">
+                  <div class="_leftImg">
+                    <!-- <img :src="item.companyLogo" alt="" /> -->
+                    <el-image :src="item.companyLogo">
+                      <div slot="error">
+                        <img src="~@/assets/images/imgError.png" alt="" />
+                      </div>
+                      <div slot="placeholder">
+                        <img src="~@/assets/images/logo.png" alt="" />
+                      </div>
+                    </el-image>
                   </div>
-                </el-image>
-              </div>
-            </div>
-            <div class="exhibition_right">
-              <el-badge :is-dot="item.unreadCount > 0 ? true : false">
-                <h4>{{ item.title }}</h4>
-              </el-badge>
-              <p>{{ item.subtitle }}</p>
-            </div>
-          </li>
-          <li
-            @click="handerIsGrid(item, 2)"
-            v-for="item in companyConversations"
-            :key="item.client_nu"
-          >
-            <div class="exhibition_left">
-              <div class="_leftImg">
-                <!-- <img :src="item.companyLogo" alt="" /> -->
-                <el-image :src="item.companyLogo">
-                  <div slot="error">
-                    <img src="~@/assets/images/imgError.png" alt="" />
+                </div>
+                <div class="exhibition_right">
+                  <h4>{{ item.client_na }}</h4>
+                  <p>{{ item.client_nu }}</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 style="border-bottom: 1px solid #e5e5e5;margin-bottom: 10px;">
+              其他消息
+            </h3>
+            <ul
+              class="exhibition"
+              v-if="chatList.length"
+              style="border-top: none;"
+            >
+              <li
+                v-for="(item, i) in chatList"
+                :key="i"
+                @click="handerIsGrid(item, 0)"
+              >
+                <div class="exhibition_left">
+                  <div class="_leftImg">
+                    <el-badge
+                      :value="item.unreadMessageCount"
+                      :hidden="item.unreadMessageCount < 1"
+                    >
+                      <img :src="item.userInfo.avatar" alt="" />
+                    </el-badge>
                   </div>
-                  <div slot="placeholder">
-                    <img src="~@/assets/images/logo.png" alt="" />
-                  </div>
-                </el-image>
-              </div>
-            </div>
-            <div class="exhibition_right">
-              <h4>{{ item.client_na }}</h4>
-              <p>{{ item.client_nu }}</p>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div>
-        <h3 style=" border-bottom: 1px solid #e5e5e5;">其他消息</h3>
-        <ul class="exhibition" v-if="chatList.length">
-          <li
-            v-for="item in chatList"
-            :key="item.chatUserId"
-            @click="handerIsGrid(item, 0)"
-          >
-            <div class="exhibition_left">
-              <div class="_leftImg">
-                <img :src="item.userInfo.avatar" alt="" />
-              </div>
-            </div>
-            <div class="exhibition_right">
-              <h4>{{ item.userInfo.nickname }}</h4>
-              <p>{{ myFilterMsgTypes(item.latestMessage) }}</p>
-            </div>
-          </li>
-        </ul>
-      </div>
+                </div>
+                <div class="exhibition_right">
+                  <h4>{{ item.userInfo.nickname }}</h4>
+                  <p>{{ myFilterMsgTypes(item.latestMessage) }}</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </el-scrollbar>
     </div>
     <component v-if="isGrid" :is="isGrid" :dataOption="dataOption"></component>
   </div>
@@ -93,6 +113,7 @@ import Supplier from "@/components/bsComponents/bsNewsComponent/bsNewsFirm";
 import BsNewsMessageList from "@/components/bsComponents/bsNewsComponent/bsNewsMessageList";
 import { mapState } from "vuex";
 import { filterMsgTypes } from "@/assets/js/common/common.js";
+import eventBus from "@/assets/js/common/eventBus.js";
 export default {
   name: "bsNews",
   components: {
@@ -133,13 +154,16 @@ export default {
     };
   },
   methods: {
-    // 获取业务消息会话列表
+    // 会话列表滚动到底事件
+    scrollSessionList() {
+      eventBus.$emit("scrollSessionList");
+      // this.getConversationList();
+    },
+    // 获取业务消息列表
     async getConversationList() {
       const res = await this.$im_http.post("/api/Conversation/List", {});
-      console.log(res);
       const { code, item, msg } = res.data.result;
       if (code === 200) {
-        console.log(item);
         this.businessConversations = item.businessConversations;
         this.companyConversations = item.companyConversations;
         this.dataOption =
@@ -206,9 +230,10 @@ export default {
     margin-right: 20px;
     background-color: #fff;
     width: 300px;
-    height: 780px;
+    height: 770px;
     opacity: 1;
     border-radius: 6px;
+    // overflow: hidden;
     h3 {
       height: 55px;
       font-size: 15px;

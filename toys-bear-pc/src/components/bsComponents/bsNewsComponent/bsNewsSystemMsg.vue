@@ -114,7 +114,6 @@ export default {
         skipCount: this.currentPage,
         maxResultCount: this.pageSize
       });
-      console.log(res);
       const { code, item, msg } = res.data.result;
       if (code === 200) {
         this.infoList = item.items;

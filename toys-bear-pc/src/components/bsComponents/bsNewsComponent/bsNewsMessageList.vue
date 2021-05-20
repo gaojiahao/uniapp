@@ -7,25 +7,47 @@
         <i class="el-icon-more"></i>
       </div>
       <div class="center">
-        <div class="item left">
-          <img class="header-img" src="@/assets/images/3Dicon.png" />
-          <span class="message">1231312311</span>
-        </div>
-        <div class="chart-timer">
-          2019-5-17
-        </div>
-        <div class="item right">
-          <img class="header-img" src="@/assets/images/3Dicon.png" />
-          <span class="message">哈哈哈哈哈</span>
-        </div>
-        <div class="item left">
-          <img class="header-img" src="@/assets/images/3Dicon.png" />
-          <span class="message">87987987987 </span>
-        </div>
+        <el-scrollbar style="height: 100%;" ref="myScrollbar">
+          <template v-for="item in chatInfoList">
+            <div :key="item.sentTime">
+              <!-- 别人 -->
+              <div
+                class="others"
+                v-if="item.senderUserId != userInfo.chatUser.chatUserId"
+              >
+                <!-- 时间 -->
+                <div class="chart-timer">
+                  {{ dateDiff(item.sentTime) }}
+                </div>
+                <div class="item left">
+                  <img class="header-img" :src="dataOption.userInfo.avatar" />
+                  <div class="youChat">
+                    <span class="name">{{ dataOption.userInfo.nickname }}</span>
+                    <span class="message">{{ item.content.content }}</span>
+                  </div>
+                </div>
+              </div>
+              <!-- 我 -->
+              <div class="my" v-else>
+                <!-- 时间 -->
+                <div class="chart-timer">
+                  {{ dateDiff(item.sentTime) }}
+                </div>
+                <div class="item right">
+                  <img class="header-img" :src="userInfo.userInfo.userImage" />
+                  <div class="meChat">
+                    <span class="name">{{ userInfo.userInfo.linkman }}</span>
+                    <span class="message">{{ item.content.content }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </el-scrollbar>
       </div>
       <div class="footer">
         <div class="footerHead">
-          <div><img src="@/assets/images/tupian.png" alt="" /></div>
+          <!-- <div><img src="@/assets/images/tupian.png" alt="" /></div> -->
           <div><img src="@/assets/images/biaoq.png" alt="" /></div>
           <div><img src="@/assets/images/tupian.png" alt="" /></div>
         </div>
@@ -34,11 +56,14 @@
             <el-scrollbar style="height: 100%;">
               <el-input
                 class="myInput"
+                autosize
+                autofocus
                 type="textarea"
+                @keydown.enter.native="myInputEvent"
                 ref="userInfo"
                 resize="none"
                 placeholder="请输入内容"
-                v-model="textarea2"
+                v-model.trim="textInfo"
               >
               </el-input>
             </el-scrollbar>
@@ -101,27 +126,54 @@
 </template>
 
 <script>
+import eventBus from "@/assets/js/common/eventBus.js";
+import { dateDiff } from "@/assets/js/common/common.js";
+import { mapState } from "vuex";
 export default {
   name: "bsNewsMessageList",
-  props: {},
+  props: ["dataOption"],
   data() {
     return {
-      textarea2: "",
+      textInfo: "",
       isDiyu: 0
     };
   },
   methods: {
+    // 格式化时间
+    dateDiff(time) {
+      return dateDiff(time);
+    },
     // 切换专区
     checkTabs(num) {
       this.isDiyu = num;
+    },
+    myInputEvent(e) {
+      //阻止默认浏览器动作(W3C)
+      if (e && e.preventDefault) e.preventDefault();
+      //IE中阻止函数器默认动作的方式
+      else window.event.returnValue = false;
+      if (e.ctrlKey && e.keyCode == 13) {
+        // 用户点击了ctrl+enter触发
+        this.textInfo += "\n";
+        console.log(this.textInfo);
+      } else {
+        //用户点击了enter触发
+        console.log("用户点击了回车");
+      }
     }
   },
   created() {},
   mounted() {
+    console.log(this.dataOption);
+    eventBus.$emit("getChatInfo", this.dataOption);
     this.$nextTick(() => {
-      //滚动条显示问题
-      this.$refs.userInfo.resizeTextarea();
+      this.$refs["myScrollbar"].wrap.scrollTop = this.$refs[
+        "myScrollbar"
+      ].wrap.scrollHeight;
     });
+  },
+  computed: {
+    ...mapState(["userInfo", "chatInfoList"])
   }
 };
 </script>
@@ -162,7 +214,7 @@ export default {
     }
     .center {
       height: 540px;
-      padding-top: 20px;
+      padding: 10px 0;
       box-sizing: border-box;
       .item {
         display: flex;
@@ -171,18 +223,39 @@ export default {
       .left {
         flex-direction: row;
         padding-left: 25px;
+        .youChat {
+          margin-left: 15px;
+          margin-right: 50px;
+          .name {
+            color: #333;
+          }
+          .message {
+            margin-top: 10px;
+            color: #666;
+            background: #f5f7fa;
+            border: 1px solid #e6e9ee;
+          }
+        }
       }
 
       .right {
         flex-direction: row-reverse;
         padding-right: 35px;
-      }
-
-      .right .message {
-        margin-right: 10px;
-      }
-      .left .message {
-        margin-left: 10px;
+        display: flex;
+        .meChat {
+          flex-direction: row-reverse;
+          text-align: right;
+          margin-right: 15px;
+          margin-left: 50px;
+          .name {
+            color: #333;
+          }
+          .message {
+            margin-top: 10px;
+            color: #fff;
+            background-color: #3368a9;
+          }
+        }
       }
 
       .header-img {
@@ -192,18 +265,16 @@ export default {
       }
       .chart-timer {
         text-align: center;
-        color: #616161;
+        color: #999;
         font-size: 13px;
+        padding: 20px 0;
       }
       .message {
-        background: #f5f7fa;
-        border: 1px solid #e6e9ee;
         border-radius: 10px;
         display: flex;
         min-height: 25px;
         padding: 9px 10px;
         align-items: center;
-        color: #222121;
       }
     }
     .footer {
@@ -232,12 +303,9 @@ export default {
           flex: 1;
           @{deep} .myInput {
             .el-textarea__inner {
-              resize: none; // 去掉右角下的斜线
+              // resize: none; // 去掉右角下的斜线
               min-height: 110px !important;
-              height: 100%;
-              box-sizing: border-box;
               border: none;
-              // overflow-y: hidden; // 解决在微信下滚动条还是显示问题
             }
           }
         }

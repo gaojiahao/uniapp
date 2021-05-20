@@ -188,11 +188,11 @@ export function filterMsgTypes(param) {
       msg = "[订单]";
       break;
     case "XZX:VideoMessage": // 视频消息
-      msg = ["视频"];
+      msg = "[视频]";
       break;
     case "RC:VcMsg": // 语音消息
     case "RC:HQVCMsg": // 语音消息
-      msg = ["语音"];
+      msg = "[语音]";
       break;
     case "XZX:LinkMessage": // 链接消息
       msg = param.content;
