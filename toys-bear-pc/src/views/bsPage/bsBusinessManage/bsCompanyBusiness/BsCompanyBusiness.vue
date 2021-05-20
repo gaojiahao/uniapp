@@ -432,7 +432,7 @@ export default {
       console.log(this.searchForm.fromCompanyName);
       const fd = {
         readStatus: this.searchForm.readStatus,
-        sampleFrom: "Hall",
+        sampleFrom: "sales",
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         keyWord: this.searchForm.keyword,
