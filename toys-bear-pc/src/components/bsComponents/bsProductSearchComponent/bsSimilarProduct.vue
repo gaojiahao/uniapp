@@ -228,7 +228,11 @@
       <div
         class="productWrap"
         :style="
-          isGrid === 'bsColumnComponent' ? ' padding:20px' : ' padding:0 20px'
+          isGrid === 'bsColumnComponent'
+            ? ' padding:20px'
+            : ' padding:0  20px 100px' && item.type === 'same'
+            ? ' padding:20px'
+            : ' padding:0  20px 100px'
         "
       >
         <!-- 产品列表 -->

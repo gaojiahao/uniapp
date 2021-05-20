@@ -53,7 +53,7 @@
 			}
 		},
 		{
-			"path": "pages/erpProduct/productDetails",	//分享展厅
+			"path": "pages/erpProduct/productDetails",	//产品详情
 			"aliasPath":"/productDetails",
 			"style": {
 				"navigationBarTitleText": "productDetails",

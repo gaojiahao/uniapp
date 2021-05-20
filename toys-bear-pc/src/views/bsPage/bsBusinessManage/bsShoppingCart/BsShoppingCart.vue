@@ -197,7 +197,7 @@
         </el-table-column>
         <el-table-column
           align="center"
-          label="总数量"
+          label="数量"
           min-width="60"
           show-overflow-tooltip
         >
@@ -273,6 +273,10 @@
             </p>
             <p class="item">
               <span class="itemTitle">总箱数：</span>
+              <span>{{ myTotalCartons }}</span>
+            </p>
+            <p class="item">
+              <span class="itemTitle">总数量：</span>
               <span>{{ myTotalQuantity }}</span>
             </p>
             <p class="item">
@@ -621,6 +625,7 @@ export default {
       myTotalOuterBoxFeet: 0,
       myTotalJingzhong: 0,
       myTotalQuantity: 0,
+      myTotalCartons: 0,
       myTotalMaozhong: 0,
       selectTableData: [],
       addMyClientDialog: false,
@@ -840,10 +845,21 @@ export default {
       return this.multiply(this.multiply(price, ou_lo), shoppingCount);
     },
     // 计算总箱数
-    calculationTotalBox(list) {
+    calculationTotalBoxCartons(list) {
       let number = 0;
       for (let i = 0; i < list.length; i++) {
         number = this.add(number, list[i].shoppingCount || 0);
+      }
+      this.myTotalCartons = number;
+    },
+    // 计算总数量
+    calculationTotalBox(list) {
+      let number = 0;
+      for (let i = 0; i < list.length; i++) {
+        number = this.add(
+          number,
+          this.multiply(list[i].ou_lo, list[i].shoppingCount) || 0
+        );
       }
       this.myTotalQuantity = number;
     },
@@ -1151,6 +1167,11 @@ export default {
           if (this.userInfo.commparnyList[0].companyType == "Sales") {
             this.clienFormData.productOfferType = "company";
           }
+          for (let i = 0; i < this.clientList.length; i++) {
+            if (this.clienFormData.customerId == this.clientList[i].id) {
+              this.clienFormData.customerName = this.clientList[i].name;
+            }
+          }
           this.clienFormData.miniPrice = this.clienFormData.miniPrice || 0;
           this.clienFormData.miniPriceDecimalPlaces =
             this.clienFormData.miniPriceDecimalPlaces || 0;
@@ -1284,6 +1305,8 @@ export default {
       deep: true,
       handler(list) {
         // 计算总箱数
+        this.calculationTotalBoxCartons(list);
+        // 计算总数量
         this.calculationTotalBox(list);
         // 计算总毛重
         this.calculationTotalMaozhong(list);

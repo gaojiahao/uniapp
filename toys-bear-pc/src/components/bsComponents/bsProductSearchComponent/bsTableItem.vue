@@ -40,7 +40,7 @@ export default {
             width: 300,
             color: "#3368a9",
             align: "left",
-            isHiden: true,
+            // isHiden: true,
             infoBox: true,
             productInfo: true,
             elImage: row => {

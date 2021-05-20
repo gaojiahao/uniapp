@@ -6,7 +6,7 @@
 					成卓玩具厂
 				</text>
 				<view class="vendorInfo">
-					<text>联系人</text>
+					<text class="contact">联系人</text>
 					<text>电话</text>
 				</view>
 			</view>
@@ -14,7 +14,7 @@
 				<u-search
 					:action-style="{background:'#1FBFCB',height:'32px',color:'#fff',lineHeight:'32px',borderRadius: '4px'}"
 					bg-color="#fff" border-color="#1FBFCB" :clearabled="true" shape="square" placeholder="请输入关键词"
-					v-model="keyword"></u-search>
+					@clear="clear" v-model="keyword"></u-search>
 			</view>
 
 		</view>
@@ -23,7 +23,11 @@
 				@scrolltoupper="upper" @scrolltolower="lower">
 
 				<view class="wrap">
-					<u-swiper height="350" :border-radius="0" :list="list"></u-swiper>
+					<u-swiper interval="4000" height="350" :border-radius="0" :list="list">
+
+
+					</u-swiper>
+
 				</view>
 				<view class="controls">
 					<view class="left">
@@ -43,12 +47,12 @@
 						</view>
 					</view>
 					<view class="right">
-						<u-icon name="grid-fill" color="#666666" size="8"></u-icon>
+						<u-icon @click="switchover" name="grid-fill" color="#666666" size="8"></u-icon>
 					</view>
 				</view>
-<!-- 产品列表 -->
-					<component :is="isGrid" :productList="productList"></component>
-				
+				<!-- 产品列表 -->
+				<component :is="isGrid" :productList="productList"></component>
+
 				<view class="footer">
 					<text>资料来源：耀昇展厅</text>
 					<text>技术支持：深圳宏升软件技术开发有限公司</text>
@@ -62,19 +66,21 @@
 	import Detailed from './components/detailed.vue'
 	import JaneVersion from './components/JaneVersion.vue'
 	export default {
-		components:{
-			Detailed,JaneVersion
+		components: {
+			Detailed,
+			JaneVersion
 		},
 		data() {
 			return {
-				isGrid:"JaneVersion",
+				isGrid: "Detailed",
 				scrollTop: 0,
+				keyGuid: "BE9757F5-E2B7-43DC-BABC-09251BCE3C72",
 				old: {
 					scrollTop: 0
 				},
-				productList:[
-					// {},
-					// {}
+				productList: [{},
+					{},
+					{}
 				],
 				keyword: '',
 				list: [{
@@ -86,7 +92,24 @@
 				]
 			}
 		},
+		mounted() {
+			this.getProductkeyGuid()
+		},
 		methods: {
+			getProductkeyGuid() {
+				uni.request({
+					url: "https://hall.toysbear.com/api/Manufacturer/ManufacturerInfo?keyGuid="+this.keyGuid, //仅为示例，并非真实接口地址。
+					method: 'GET',
+				
+					success: (res) => {
+						console.log(res.data);
+
+					}
+				});
+
+			},
+
+
 			// 滚动到顶部/左边，会触发 scrolltoupper 事件
 			upper: function(e) {
 				console.log(e)
@@ -95,6 +118,21 @@
 			lower: function(e) {
 				console.log(111111)
 				console.log(e)
+			},
+			clear() {
+				console.log(88888)
+			},
+			switchover() {
+
+				switch (this.isGrid) {
+					case "JaneVersion":
+						this.isGrid = "Detailed";
+						break;
+					case "Detailed":
+						this.isGrid = "JaneVersion"
+						break;
+				}
+
 			},
 
 		}
@@ -126,6 +164,12 @@
 
 				.vendorName {
 					font-size: 17px;
+				}
+
+				.vendorInfo {
+					.contact {
+						padding-right: 20px;
+					}
 				}
 			}
 
@@ -174,6 +218,7 @@
 					width: 16px;
 				}
 			}
+
 			.footer {
 				height: 58px;
 				display: flex;

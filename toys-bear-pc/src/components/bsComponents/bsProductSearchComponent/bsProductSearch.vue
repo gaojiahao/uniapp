@@ -8,12 +8,12 @@
         </el-tag>
         <div class="history_box">
           <el-input
-            :class="{ isPadding: isGaoji === true }"
+            :class="{ isPadding: MyisGaoji === true }"
             size="medium"
             ref="focusKeyword"
             @keyup.native.enter="searchProducts"
             style="width: 340px; margin: 0 15px"
-            :placeholder="isGaoji === true ? '' : placeholderVal"
+            :placeholder="MyisGaoji === true ? '' : placeholderVal"
             v-model="myKeyword"
             clearable
             @focus="showHistoryModal(true)"
@@ -40,7 +40,7 @@
               <!-- <div>高级搜索</div> -->
             </template>
           </el-input>
-          <div v-if="isGaoji" class="gaoji">
+          <div v-if="MyisGaoji" class="gaoji">
             高级搜索
             <i @click="handleIsgaoji" class="el-icon-close"></i>
           </div>
@@ -126,16 +126,12 @@ export default {
     },
     keyword(val) {
       this.myKeyword = val;
-    },
-    MyisGaoji(val) {
-      this.isGaoji = val;
     }
   },
   methods: {
     //关闭高级搜素显示
     handleIsgaoji() {
-      this.isGaoji = !this.isGaoji;
-      this.$emit("handleIsgaoji", this.isGaoji);
+      this.$emit("handleIsgaoji", false);
     },
     // 关闭关联搜索
     closeTag() {

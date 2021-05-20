@@ -27,6 +27,10 @@
                 <span>{{ myTotalQuantity(tableData.data) }}</span>
               </p>
               <p class="item">
+                <span class="itemTitle">总数量：</span>
+                <span>{{ calculationTotalBox(tableData.data) }}</span>
+              </p>
+              <p class="item">
                 <span class="itemTitle">总体积/总材积：</span>
                 <span
                   >{{
@@ -39,8 +43,8 @@
               <p class="item">
                 <span class="itemTitle">总毛重/总净重：</span>
                 <span
-                  >{{ handleOffer(totalMaozhong()) }}/{{
-                    handleOffer(totalJingzhong())
+                  >{{ handleOffer(totalMaozhong(tableData.data)) }}/{{
+                    handleOffer(totalJingzhong(tableData.data))
                   }}(KG)</span
                 >
               </p>
@@ -113,7 +117,7 @@ export default {
             width: 300,
             color: "#3368a9",
             align: "left",
-            isHiden: true,
+            // isHiden: true,
             infoBox: true,
             productInfo: true,
             elImage: row => {
@@ -213,7 +217,7 @@ export default {
             width: 50
           },
           {
-            label: "总数量",
+            label: "数量",
             width: 50,
             render: row => {
               return this.sumPriceCount(row.boxNumber, row.ou_lo);
@@ -479,23 +483,34 @@ export default {
       return this.multiply(this.multiply(price, ou_lo), boxNumber);
     },
     // 计算总净重
-    totalJingzhong() {
+    totalJingzhong(list) {
       let number = 0;
-      for (let i = 0; i < this.tableData.length; i++) {
+      for (let i = 0; i < list.length; i++) {
         number = this.add(
           number,
-          this.multiply(this.tableData[i].boxNumber, this.tableData[i].ne_we)
+          this.multiply(list[i].boxNumber, list[i].ne_we)
+        );
+      }
+      return number;
+    },
+    // 计算总数量
+    calculationTotalBox(list) {
+      let number = 0;
+      for (let i = 0; i < list.length; i++) {
+        number = this.add(
+          number,
+          this.multiply(list[i].boxNumber, list[i].ou_lo) || 0
         );
       }
       return number;
     },
     // 计算总毛重
-    totalMaozhong() {
+    totalMaozhong(list) {
       let number = 0;
-      for (let i = 0; i < this.tableData.length; i++) {
+      for (let i = 0; i < list.length; i++) {
         number = this.add(
           number,
-          this.multiply(this.tableData[i].boxNumber, this.tableData[i].gr_we)
+          this.multiply(list[i].boxNumber, list[i].gr_we)
         );
       }
       return number;
@@ -520,11 +535,13 @@ export default {
       };
     },
     // 计算总箱数量
-    myTotalQuantity() {
+    myTotalQuantity(list) {
+      // console.log(val);
       let number = 0;
-      for (let i = 0; i < this.tableData.length; i++) {
-        number = this.add(number, this.tableData[i].boxNumber || 0);
+      for (let i = 0; i < list.length; i++) {
+        number = this.add(number, list[i].boxNumber || 0);
       }
+      console.log(number);
       return number;
     },
     // 计算总价

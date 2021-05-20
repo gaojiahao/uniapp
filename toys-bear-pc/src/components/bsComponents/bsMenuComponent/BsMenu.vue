@@ -93,6 +93,9 @@ export default {
         refresh: false,
         label: route.name
       };
+      if (route.linkUrl === "/bsIndex/bsProductSearchIndex") {
+        this.$store.commit("handleraddrSearch", false);
+      }
       this.$store.commit("myAddTab", fd);
     }
   },

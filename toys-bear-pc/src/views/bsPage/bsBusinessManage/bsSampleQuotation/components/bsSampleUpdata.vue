@@ -305,7 +305,7 @@
           </el-table-column>
           <el-table-column
             prop="ch_pa"
-            label="总数量"
+            label="数量"
             width="50"
             align="center"
             show-overflow-tooltip
@@ -371,6 +371,10 @@
               <p class="item">
                 <span class="itemTitle">总箱数：</span>
                 <span>{{ myTotalQuantity(offerProductList) }}</span>
+              </p>
+              <p class="item">
+                <span class="itemTitle">总数量：</span>
+                <span>{{ calculationTotalBox(offerProductList) }}</span>
               </p>
               <p class="item">
                 <span class="itemTitle">总体积/总材积：</span>
@@ -1029,6 +1033,7 @@ export default {
         this.getClientList();
       }, 1000);
     },
+
     // 获取该订单报价公式详情
     async getProductOfferNumber() {
       if (this.item.offerNumber.indexOf("S") < 0) {
@@ -1370,6 +1375,17 @@ export default {
       }
       return number;
     },
+    // 计算总数量
+    calculationTotalBox(list) {
+      let number = 0;
+      for (let i = 0; i < list.length; i++) {
+        number = this.add(
+          number,
+          this.multiply(list[i].boxNumber, list[i].ou_lo) || 0
+        );
+      }
+      return number;
+    },
     // 计算总价
     myTotalPrice(list) {
       let price = 0;
@@ -1454,6 +1470,22 @@ export default {
           this.clienFormData.decimalPlaces = obj.decimalPlaces;
           this.clienFormData.rejectionMethod = obj.rejectionMethod;
           this.clienFormData.profitCalcMethod = obj.profitCalcMethod;
+        }
+      }
+    },
+    "clienFormData.profit": {
+      deep: true,
+      handler(newVal) {
+        console.log(newVal);
+        if (newVal == 100) {
+          console.log(this.clienFormData.profitCalcMethod);
+          if (this.clienFormData.profitCalcMethod == 2) {
+            this.clienFormData.profit = 0;
+            this.$common.handlerMsgState({
+              msg: "除法利润率不可为100",
+              error: "danger"
+            });
+          }
         }
       }
     },
