@@ -18,7 +18,7 @@
         ></el-table-column>
         <el-table-column label="序号" type="index" align="center" width="40">
         </el-table-column>
-        <el-table-column label="产品" width="280" show-overflow-tooltip>
+        <el-table-column label="产品" width="280">
           <template slot-scope="scope">
             <div class="imgBox">
               <el-tooltip
@@ -75,7 +75,19 @@
               </el-tooltip>
               <div class="productName">
                 <div class="name" @click="goDetails(scope.row)">
-                  {{ scope.row.name }}
+                  <el-tooltip
+                    effect="dark"
+                    :disabled="scope.row.name.length < 15"
+                    :content="scope.row.name"
+                    placement="top-start"
+                  >
+                    <span
+                      class=" spanName"
+                      style="max-width:190px; display:inline-block"
+                    >
+                      {{ scope.row.name }}</span
+                    >
+                  </el-tooltip>
                 </div>
                 <div class="factory">
                   <div class="fcatoryName" @click="toFactory(scope.row)">
@@ -1335,6 +1347,20 @@ export default {
         }
       }
     },
+    "clienFormData.profit": {
+      deep: true,
+      handler(newVal) {
+        if (newVal == 100) {
+          if (this.clienFormData.profitCalcMethod == 2) {
+            this.clienFormData.profit = 10;
+            this.$common.handlerMsgState({
+              msg: "除法利润率不可为100",
+              error: "danger"
+            });
+          }
+        }
+      }
+    },
     "clienFormData.cu_de": {
       deep: true,
       handler(newVal) {
@@ -1432,6 +1458,11 @@ export default {
             overflow: hidden; /*超出部分隐藏*/
             white-space: nowrap; /*不换行*/
             text-overflow: ellipsis; /*超出部分文字以...显示*/
+            .spanName {
+              overflow: hidden; /*超出部分隐藏*/
+              white-space: nowrap; /*不换行*/
+              text-overflow: ellipsis; /*超出部分文字以...显示*/
+            }
           }
           .factory {
             color: #3368a9;

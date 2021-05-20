@@ -1073,6 +1073,20 @@ export default {
         }
       }
     },
+    "clienFormData.profit": {
+      deep: true,
+      handler(newVal) {
+        if (newVal == 100) {
+          if (this.clienFormData.profitCalcMethod == 2) {
+            this.clienFormData.profit = 10;
+            this.$common.handlerMsgState({
+              msg: "除法利润率不可为100",
+              error: "danger"
+            });
+          }
+        }
+      }
+    },
     "clienFormData.currencyType": {
       deep: true,
       handler(newVal) {

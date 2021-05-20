@@ -242,6 +242,23 @@ export default {
       type: Object
     }
   },
+  watch: {
+    "addDefaultForm.profit": {
+      deep: true,
+      handler(newVal) {
+        console.log(newVal);
+        if (newVal == 100) {
+          if (this.addDefaultForm.profitCalcMethod == 2) {
+            this.addDefaultForm.profit = 10;
+            this.$common.handlerMsgState({
+              msg: "除法利润率不可为100",
+              error: "danger"
+            });
+          }
+        }
+      }
+    }
+  },
   data() {
     return {
       chufa: "(出厂价+总费用/(每车尺码/外箱材积*外箱装量)/(1-报价利润%)/汇率",

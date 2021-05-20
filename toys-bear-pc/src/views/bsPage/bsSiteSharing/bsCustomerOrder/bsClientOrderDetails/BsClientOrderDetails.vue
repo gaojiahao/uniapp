@@ -53,59 +53,61 @@
         </el-button>
       </div>
       <bsTables :table="tableData" />
-      <div class="totalBox">
-        <p class="item">
-          <span class="itemTitle">总款数：</span>
-          <span>{{ options.totalKuanshu }}</span>
-        </p>
-        <p class="item">
-          <span class="itemTitle">总箱数：</span>
-          <span>{{ options.totalCount }}</span>
-        </p>
-        <p class="item">
-          <span class="itemTitle">总数量：</span>
-          <span>{{ calculationTotalBox(tableData.data) }}</span>
-        </p>
-        <p class="item">
-          <span class="itemTitle">总体积/总材积：</span>
-          <span>{{ options.totalStere }}</span
-          >/<span>{{ options.totalFeet }}</span>
-        </p>
-        <p class="item">
-          <span class="itemTitle">总毛重/总净重：</span>
-          <span
-            >{{ options.totalGrossWeight }}/{{
-              options.totalNetWeight
-            }}(KG)</span
-          >
-        </p>
-        <p class="item">
-          <span class="itemTitle">总出厂价/总金额：</span>
-          <span style="color: #3368a9">
-            ￥
-          </span>
-          <span style="color: #3368a9">{{ options.totalCostPrice }}</span>
-          <span style="margin: 5px"></span>
-          <span class="price">
-            {{ options.currencyType }}
-          </span>
-          <span class="price">{{ options.totalAmount }}</span>
-        </p>
+      <center style="margin-top: 20px">
+        <el-pagination
+          layout="total, sizes, prev, pager, next, jumper"
+          background
+          :page-sizes="[10, 20, 30, 40]"
+          :page-size="pageSize"
+          :total="totalCount"
+          :current-page.sync="currentPage"
+          @current-change="currentChange"
+          @size-change="handleSizeChange"
+        ></el-pagination>
+      </center>
+      <div class="totalBoxFooter" style="width: 1680px;">
+        <div class="totalBox">
+          <p class="item">
+            <span class="itemTitle">总款数：</span>
+            <span>{{ options.totalKuanshu }}</span>
+          </p>
+          <p class="item">
+            <span class="itemTitle">总箱数：</span>
+            <span>{{ options.totalCount }}</span>
+          </p>
+          <p class="item">
+            <span class="itemTitle">总数量：</span>
+            <span>{{ calculationTotalBox(tableData.data) }}</span>
+          </p>
+          <p class="item">
+            <span class="itemTitle">总体积/总材积：</span>
+            <span>{{ options.totalStere }}</span
+            >/<span>{{ options.totalFeet }}</span>
+          </p>
+          <p class="item">
+            <span class="itemTitle">总毛重/总净重：</span>
+            <span
+              >{{ options.totalGrossWeight }}/{{
+                options.totalNetWeight
+              }}(KG)</span
+            >
+          </p>
+          <p class="item">
+            <span class="itemTitle">总出厂价/总金额：</span>
+            <span style="color: #3368a9">
+              ￥
+            </span>
+            <span style="color: #3368a9">{{ options.totalCostPrice }}</span>
+            <span style="margin: 5px"></span>
+            <span class="price">
+              {{ options.currencyType }}
+            </span>
+            <span class="price">{{ options.totalAmount }}</span>
+          </p>
+        </div>
       </div>
     </div>
 
-    <center style="margin-top: 20px">
-      <el-pagination
-        layout="total, sizes, prev, pager, next, jumper"
-        background
-        :page-sizes="[10, 20, 30, 40]"
-        :page-size="pageSize"
-        :total="totalCount"
-        :current-page.sync="currentPage"
-        @current-change="currentChange"
-        @size-change="handleSizeChange"
-      ></el-pagination>
-    </center>
     <!-- 导出订单模板dialog -->
     <transition name="el-zoom-in-center">
       <el-dialog
@@ -508,7 +510,7 @@ export default {
       for (let i = 0; i < list.length; i++) {
         number = this.add(
           number,
-          this.multiply(list[i].boxNumber, list[i].ou_lo) || 0
+          this.multiply(list[i].productCount, list[i].ou_lo) || 0
         );
       }
       return number;
@@ -604,23 +606,36 @@ export default {
         }
       }
     }
-    .totalBox {
-      display: flex;
-      align-items: center;
-      height: 80px;
-      padding-left: 10px;
+    .totalBoxFooter {
+      position: absolute;
+      width: 100%;
+      margin-right: 30px;
+      z-index: 1;
+      left: 0;
+      bottom: 0;
       box-sizing: border-box;
-      justify-content: flex-end;
-      .item {
-        margin-right: 15px;
+      padding-right: 20px;
+
+      .totalBox {
+        width: 100%;
+        background-color: #fff;
+        height: 80px;
+        padding: 0 20px;
+        box-sizing: border-box;
         display: flex;
         align-items: center;
-        // .itemTitle {
-        // }
-        .price {
-          color: #eb1515;
-          font-weight: 700;
-          font-size: 18px;
+        justify-content: flex-end;
+        .item {
+          margin-right: 15px;
+          display: flex;
+          align-items: center;
+          // .itemTitle {
+          // }
+          .price {
+            color: #eb1515;
+            font-weight: 700;
+            font-size: 18px;
+          }
         }
       }
     }

@@ -628,6 +628,7 @@ export default {
     }
     .left {
       padding: 40px;
+      width: 526px;
     }
   }
   .productDetails {

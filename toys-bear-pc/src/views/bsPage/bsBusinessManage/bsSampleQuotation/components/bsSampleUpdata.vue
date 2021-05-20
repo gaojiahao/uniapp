@@ -137,13 +137,20 @@
                   </div>
                 </el-image> -->
                 <div class="productName">
-                  <div
-                    class="name"
-                    @mouseenter="productNameMouse(true)"
-                    @mouseleave="productNameMouse(false)"
-                    @click="goDetails(scope.row)"
-                  >
-                    {{ scope.row.name }}
+                  <div class="name" @click="goDetails(scope.row)">
+                    <el-tooltip
+                      effect="dark"
+                      :disabled="scope.row.name.length < 15"
+                      :content="scope.row.name"
+                      placement="top-start"
+                    >
+                      <span
+                        class=" spanName"
+                        style="max-width:190px; display:inline-block"
+                      >
+                        {{ scope.row.name }}</span
+                      >
+                    </el-tooltip>
                   </div>
                   <div class="factory">
                     <div class="factoryName" @click="toFactory(scope.row)">
@@ -874,10 +881,6 @@ export default {
     eventBus.$off("resetOffProduct");
   },
   methods: {
-    // 鼠标移入产品名称
-    productNameMouse(flag) {
-      console.log(flag);
-    },
     // 去聊天
     toNews(item) {
       const fd = {
@@ -1476,11 +1479,9 @@ export default {
     "clienFormData.profit": {
       deep: true,
       handler(newVal) {
-        console.log(newVal);
         if (newVal == 100) {
-          console.log(this.clienFormData.profitCalcMethod);
           if (this.clienFormData.profitCalcMethod == 2) {
-            this.clienFormData.profit = 0;
+            this.clienFormData.profit = 10;
             this.$common.handlerMsgState({
               msg: "除法利润率不可为100",
               error: "danger"
@@ -1581,6 +1582,11 @@ export default {
             overflow: hidden; /*超出部分隐藏*/
             white-space: nowrap; /*不换行*/
             text-overflow: ellipsis; /*超出部分文字以...显示*/
+            .spanName {
+              overflow: hidden; /*超出部分隐藏*/
+              white-space: nowrap; /*不换行*/
+              text-overflow: ellipsis; /*超出部分文字以...显示*/
+            }
           }
           .factory {
             color: #3368a9;
