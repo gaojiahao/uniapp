@@ -43,8 +43,6 @@
 <script>
 import eventBus from "@/assets/js/common/eventBus.js";
 import { mapGetters, mapState } from "vuex";
-/** IM */
-import IM from "@/assets/js/common/im.js";
 const cubic = value => Math.pow(value, 3);
 const easeInOutCubic = value =>
   value < 0.5 ? cubic(value * 2) / 2 : 1 - cubic((1 - value) * 2) / 2;
@@ -53,15 +51,8 @@ export default {
     return {
       isShowCartBox: false,
       myScrollTop: 0,
-      timeID: null,
-      im: new IM().RongIMClient
+      timeID: null
     };
-  },
-  watch: {
-    isLogin(val) {
-      if (val) this.watchIm();
-      else this.im.disconnect().then(() => console.log("断开链接成功"));
-    }
   },
   computed: {
     ...mapState([
@@ -80,7 +71,6 @@ export default {
     })
   },
   mounted() {
-    if (this.isLogin) this.watchIm();
     this.$store.commit("updateAppLoading", false);
     this.$store.commit("handlerShowGlobalMsg", false);
     this.$store.commit("handlerIsJindu", false);
@@ -94,138 +84,6 @@ export default {
     });
   },
   methods: {
-    // 获取个人信息
-    async getInfoIm(userId) {
-      const res = await this.$im_http.post(
-        "/api/User/GetUserInfoByChatUserId",
-        {
-          chatUserId: userId
-        }
-      );
-      const { code, item, msg } = res.data.result;
-      if (code === 200) {
-        return item;
-      } else {
-        this.$common.handlerMsgState({
-          msg: msg,
-          type: "danger"
-        });
-      }
-    },
-    // 获取会话列表
-    getExistedConversationList(startTime = 0) {
-      const _that = this;
-      // 获取会话列表
-      this.im.Conversation.getList({
-        count: 30,
-        startTime: startTime,
-        order: 0
-      })
-        .then(async conversationList => {
-          console.log("获取会话列表成功", conversationList);
-          for (let i = 0; i < conversationList.length; i++) {
-            conversationList[i].userInfo = await _that.getInfoIm(
-              conversationList[i].latestMessage.senderUserId
-            );
-          }
-          this.$store.commit("handlerChatList", conversationList);
-        })
-        .catch(error => {
-          console.log("获取会话列表失败: ", error.code, error.msg);
-        });
-    },
-    // IM 添加事件监听
-    watchIm() {
-      // 添加事件监听
-      this.im.watch({
-        // 监听会话列表变更事件
-        conversation(event) {
-          // 发生变更的会话列表
-          const updatedConversationList = event.updatedConversationList;
-          // 通过 im.Conversation.merge 计算最新的会话列表
-          const latestConversationList = this.im.Conversation.merge({
-            updatedConversationList
-          });
-          console.log(latestConversationList, "最新的会话列表");
-        },
-        // 监听消息通知
-        message(event) {
-          // 新接收到的消息内容
-          const message = event.message;
-          console.log(message);
-        },
-        // 监听 IM 连接状态变化
-        status(event) {
-          console.log("connection status:", event.status);
-        },
-        // 监听聊天室 KV 数据变更
-        chatroom(event) {
-          /**
-           * 聊天室 KV 存储数据更新
-           * @example
-           * [
-           *  {
-           *    "key": "name",
-           *    "value": "我是小融融",
-           *    "timestamp": 1597591258338,
-           *    "chatroomId": "z002",
-           *    "type": 1 // 1: 更新（ 含:修改和新增 ）、2: 删除
-           *  },
-           * ]
-           */
-          const updatedEntries = event.updatedEntries;
-          console.log(updatedEntries);
-        },
-        expansion(event) {
-          /**
-           * 更新的消息拓展数据
-           * @example {
-           *    expansion: { key: 'value' },      // 设置或更新的扩展值
-           *    messageUId: 'URIT-URIT-ODMF-DURR' // 设置或更新扩展的消息 uid
-           * }
-           */
-          const updatedExpansion = event.updatedExpansion;
-          /**
-           * 删除的消息拓展数据
-           * @example {
-           *    deletedKeys: ['key1', 'key2'],    // 设置或更新的扩展值
-           *    messageUId: 'URIT-URIT-ODMF-DURR' // 设置或更新扩展的消息 uid
-           * }
-           */
-          const deletedExpansion = event.deletedExpansion;
-          console.log(updatedExpansion, deletedExpansion);
-        }
-      });
-      console.log(this.userInfo.chatUser.chatUserToken);
-      this.im
-        .connect({ token: this.userInfo.chatUser.chatUserToken })
-        .then(user => {
-          console.log("链接成功, 链接用户 id 为: ", user.id);
-          this.getExistedConversationList();
-        })
-        .catch(error => {
-          console.log("链接失败: ", error.code, error.msg);
-        });
-    },
-    // 使用的地方
-    handleShowConfirm() {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消"
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "点击确认的回调!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "warning",
-            message: "点击取消或删除的回调"
-          });
-        });
-    },
     // 去购物车
     toMyShoppingCart() {
       const fd = {
@@ -258,9 +116,6 @@ export default {
         rAF(frameFunc);
       });
     }
-  },
-  beforeDestroy() {
-    this.im.disconnect().then(() => console.log("断开链接成功"));
   }
 };
 </script>

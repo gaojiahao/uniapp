@@ -2,81 +2,138 @@
   <!-- <div>敬请期待</div> -->
   <div class="bsNews">
     <div class="bsNewsLeft">
-      <div>
-        <h3>业务消息</h3>
-        <ul class="exhibition">
-          <li
-            @click="handerIsGrid(item, item.businessType)"
-            v-for="(item, i) in businessConversations"
-            :key="i"
-          >
-            <div class="exhibition_left">
-              <div class="_leftImg">
-                <!-- <img :src="item.icon" alt="" /> -->
-                <el-image :src="item.icon">
-                  <div slot="error">
-                    <img src="~@/assets/images/imgError.png" alt="" />
+      <el-scrollbar style="height: 100%;">
+        <div
+          class="infinite-list"
+          :infinite-scroll-immediate="false"
+          v-infinite-scroll="scrollSessionList"
+          infinite-scroll-delay="50"
+        >
+          <div>
+            <h3>业务消息</h3>
+            <ul class="exhibition">
+              <li
+                @click="handerIsGrid(item, item.businessType)"
+                v-for="(item, i) in businessConversations"
+                :key="i"
+              >
+                <div class="exhibition_left">
+                  <div class="_leftImg">
+                    <!-- <img :src="item.icon" alt="" /> -->
+                    <el-image :src="item.icon">
+                      <div slot="error">
+                        <img src="~@/assets/images/imgError.png" alt="" />
+                      </div>
+                      <div slot="placeholder">
+                        <img src="~@/assets/images/logo.png" alt="" />
+                      </div>
+                    </el-image>
                   </div>
-                  <div slot="placeholder">
-                    <img src="~@/assets/images/logo.png" alt="" />
+                </div>
+                <div class="exhibition_right">
+                  <el-badge :is-dot="item.unreadCount > 0 ? true : false">
+                    <h4>{{ item.title }}</h4>
+                  </el-badge>
+                  <p>{{ item.subtitle }}</p>
+                </div>
+              </li>
+              <li
+                @click="handerIsGrid(item, 2)"
+                v-for="item in companyConversations"
+                :key="item.client_nu"
+              >
+                <div class="exhibition_left">
+                  <div class="_leftImg">
+                    <!-- <img :src="item.companyLogo" alt="" /> -->
+                    <el-image :src="item.companyLogo">
+                      <div slot="error">
+                        <img src="~@/assets/images/imgError.png" alt="" />
+                      </div>
+                      <div slot="placeholder">
+                        <img src="~@/assets/images/logo.png" alt="" />
+                      </div>
+                    </el-image>
                   </div>
-                </el-image>
-              </div>
-            </div>
-            <div class="exhibition_right">
-              <el-badge :is-dot="item.unreadCount > 0 ? true : false">
-                <h4>{{ item.title }}</h4>
-              </el-badge>
-              <p>{{ item.subtitle }}</p>
-            </div>
-          </li>
-          <li
-            @click="handerIsGrid(item, 2)"
-            v-for="item in companyConversations"
-            :key="item.client_nu"
-          >
-            <div class="exhibition_left">
-              <div class="_leftImg">
-                <!-- <img :src="item.companyLogo" alt="" /> -->
-                <el-image :src="item.companyLogo">
-                  <div slot="error">
-                    <img src="~@/assets/images/imgError.png" alt="" />
+                </div>
+                <div class="exhibition_right">
+                  <h4>{{ item.client_na }}</h4>
+                  <p>{{ item.client_nu }}</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 style="border-bottom: 1px solid #e5e5e5;margin-bottom: 10px;">
+              其他消息
+            </h3>
+            <ul
+              class="exhibition"
+              v-if="chatList.length"
+              style="border-top: none;"
+            >
+              <li
+                v-for="(item, i) in chatList"
+                :key="i"
+                @click="handerIsGrid(item, 0)"
+              >
+                <div class="exhibition_left">
+                  <div class="_leftImg">
+                    <el-badge
+                      :value="item.unreadMessageCount"
+                      :hidden="item.unreadMessageCount < 1"
+                    >
+                      <img
+                        v-if="item.type === 1"
+                        :src="item.userInfo.avatar"
+                        alt=""
+                      />
+                      <img
+                        v-if="item.type === 3"
+                        :src="item.userInfo.userImage"
+                        alt=""
+                      />
+                    </el-badge>
                   </div>
-                  <div slot="placeholder">
-                    <img src="~@/assets/images/logo.png" alt="" />
-                  </div>
-                </el-image>
-              </div>
-            </div>
-            <div class="exhibition_right">
-              <h4>{{ item.client_na }}</h4>
-              <p>{{ item.client_nu }}</p>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div>
-        <h3 style=" border-bottom: 1px solid #e5e5e5;">其他消息</h3>
-        <ul class="exhibition" v-if="chatList.length">
-          <li
-            v-for="item in chatList"
-            :key="item.chatUserId"
-            @click="handerIsGrid(item, 0)"
-          >
-            <div class="exhibition_left">
-              <div class="_leftImg">
-                <img :src="item.userInfo.avatar" alt="" />
-              </div>
-            </div>
-            <div class="exhibition_right">
-              <h4>{{ item.userInfo.nickname }}</h4>
-              <p>{{ myFilterMsgTypes(item.latestMessage) }}</p>
-            </div>
-          </li>
-        </ul>
-      </div>
+                </div>
+                <div class="exhibition_right">
+                  <el-tooltip
+                    class="item"
+                    effect="dark"
+                    :disabled="
+                      item.userInfo.nickname &&
+                        item.userInfo.nickname.length < 15
+                    "
+                    :content="item.userInfo.nickname"
+                    placement="top"
+                  >
+                    <h4 v-if="item.type === 1">{{ item.userInfo.nickname }}</h4>
+                  </el-tooltip>
+                  <el-tooltip
+                    class="item"
+                    effect="dark"
+                    :disabled="
+                      item.userInfo.linkName &&
+                        item.userInfo.linkName.length < 15
+                    "
+                    :content="item.userInfo.linkName"
+                    placement="top"
+                  >
+                    <h4 v-if="item.type === 3">{{ item.userInfo.linkName }}</h4>
+                  </el-tooltip>
+                  <p>{{ myFilterMsgTypes(item.latestMessage) }}</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </el-scrollbar>
     </div>
-    <component v-if="isGrid" :is="isGrid" :dataOption="dataOption"></component>
+    <component
+      v-if="isGrid"
+      :is="isGrid"
+      :dataOption="dataOption"
+      :im="im"
+    ></component>
   </div>
 </template>
 
@@ -91,8 +148,10 @@ import Sales from "@/components/bsComponents/bsNewsComponent/bsNewsCompany";
 import Supplier from "@/components/bsComponents/bsNewsComponent/bsNewsFirm";
 //消息列表
 import BsNewsMessageList from "@/components/bsComponents/bsNewsComponent/bsNewsMessageList";
-import { mapState } from "vuex";
+
 import { filterMsgTypes } from "@/assets/js/common/common.js";
+
+import { mapState } from "vuex";
 export default {
   name: "bsNews",
   components: {
@@ -102,8 +161,12 @@ export default {
     Supplier,
     BsNewsMessageList
   },
+  props: ["im"],
   data() {
     return {
+      connectState: false,
+      chatList: [],
+      disabled: false,
       businessConversations: [],
       companyConversations: [],
       colorId: "2",
@@ -133,13 +196,202 @@ export default {
     };
   },
   methods: {
-    // 获取业务消息会话列表
+    // IM 添加事件监听
+    watchIm() {
+      const _that = this;
+      // 添加事件监听
+      this.im.watch({
+        // 监听会话列表变更事件
+        async conversation(event) {
+          // 发生变更的会话列表
+          const updatedConversationList = event.updatedConversationList;
+          if (updatedConversationList && updatedConversationList.length) {
+            _that
+              .getExistedConversationList(0, _that.chatList.length)
+              .then(async conversationList => {
+                // 通过 im.Conversation.merge 计算最新的会话列表
+                const latestConversationList = _that.im.Conversation.merge({
+                  conversationList,
+                  updatedConversationList
+                });
+                for (let i = 0; i < latestConversationList.length; i++) {
+                  switch (latestConversationList[i].type) {
+                    case 1:
+                      latestConversationList[
+                        i
+                      ].userInfo = await _that.getInfoIm(
+                        latestConversationList[i].targetId
+                      );
+                      break;
+                    case 3:
+                      latestConversationList[
+                        i
+                      ].userInfo = await _that.getMemberByGroupNumber(
+                        latestConversationList[i].targetId
+                      );
+                      break;
+                  }
+                }
+                _that.chatList = latestConversationList;
+                _that.connectState = true;
+              });
+          }
+        },
+        // 监听消息通知
+        async message(event) {
+          // 新接收到的消息内容
+          const message = event.message;
+          console.log(message);
+        },
+        // 监听 IM 连接状态变化
+        status(event) {
+          console.log("connection status:", event.status);
+        },
+        // 监听聊天室 KV 数据变更
+        chatroom(event) {
+          /**
+           * 聊天室 KV 存储数据更新
+           * @example
+           * [
+           *  {
+           *    "key": "name",
+           *    "value": "我是小融融",
+           *    "timestamp": 1597591258338,
+           *    "chatroomId": "z002",
+           *    "type": 1 // 1: 更新（ 含:修改和新增 ）、2: 删除
+           *  },
+           * ]
+           */
+          const updatedEntries = event.updatedEntries;
+          console.log(updatedEntries);
+        },
+        expansion(event) {
+          /**
+           * 更新的消息拓展数据
+           * @example {
+           *    expansion: { key: 'value' },      // 设置或更新的扩展值
+           *    messageUId: 'URIT-URIT-ODMF-DURR' // 设置或更新扩展的消息 uid
+           * }
+           */
+          const updatedExpansion = event.updatedExpansion;
+          /**
+           * 删除的消息拓展数据
+           * @example {
+           *    deletedKeys: ['key1', 'key2'],    // 设置或更新的扩展值
+           *    messageUId: 'URIT-URIT-ODMF-DURR' // 设置或更新扩展的消息 uid
+           * }
+           */
+          const deletedExpansion = event.deletedExpansion;
+          console.log(updatedExpansion, deletedExpansion);
+        }
+      });
+      this.im
+        .connect({ token: this.userInfo.chatUser.chatUserToken })
+        .then(user => {
+          console.log("链接成功, 链接用户 id 为: ", user.id);
+          _that.getExistedConversationList(0).then(async conversationList => {
+            if (conversationList) {
+              for (let i = 0; i < conversationList.length; i++) {
+                switch (conversationList[i].type) {
+                  case 1:
+                    conversationList[i].userInfo = await _that.getInfoIm(
+                      conversationList[i].targetId
+                    );
+                    break;
+                  case 3:
+                    conversationList[
+                      i
+                    ].userInfo = await _that.getMemberByGroupNumber(
+                      conversationList[i].targetId
+                    );
+                    break;
+                }
+              }
+              _that.chatList = _that.chatList.concat(conversationList);
+              _that.connectState = true;
+            }
+          });
+        })
+        .catch(error => {
+          console.log("链接失败: ", error.code, error.msg);
+          this.connectState = false;
+        });
+    },
+    // im获取会话列表
+    getExistedConversationList(startTime = 0, count = 10) {
+      return new Promise((result, reject) => {
+        this.im.Conversation.getList({
+          count: count,
+          startTime: startTime,
+          order: 0
+        })
+          .then(async conversationList => {
+            result(conversationList);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+    // im获取单聊个人信息
+    async getInfoIm(userId) {
+      const res = await this.$im_http.post(
+        "/api/User/GetUserInfoByChatUserId",
+        {
+          chatUserId: userId
+        }
+      );
+      const { code, item } = res.data.result;
+      if (code === 200) {
+        return item;
+      }
+    },
+    // im获取群聊信息
+    async getMemberByGroupNumber(groupNumber) {
+      const res = await this.$im_http.post(
+        "/api/ChatGroup/GetMemberByGroupNumber",
+        {
+          groupNumber,
+          skipCount: 1,
+          maxResultCount: 9999
+        }
+      );
+      const { code, item } = res.data.result;
+      if (code === 200) {
+        return item;
+      }
+    },
+    // 会话列表滚动到底事件
+    scrollSessionList() {
+      if (!this.connectState) {
+        return false;
+      }
+      const _that = this;
+      const startTime = this.chatList[this.chatList.length - 1]
+        ? this.chatList[this.chatList.length - 1].latestMessage.sentTime
+        : null;
+      this.getExistedConversationList(startTime).then(async res => {
+        for (let i = 0; i < res.length; i++) {
+          switch (res[i].type) {
+            case 1:
+              res[i].userInfo = await _that.getInfoIm(res[i].targetId);
+              break;
+            case 3:
+              res[i].userInfo = await _that.getMemberByGroupNumber(
+                res[i].targetId
+              );
+              break;
+          }
+        }
+        this.chatList = this.chatList.concat(res);
+        console.log(this.chatList);
+      });
+    },
+    // 获取业务消息列表
     async getConversationList() {
       const res = await this.$im_http.post("/api/Conversation/List", {});
-      console.log(res);
       const { code, item, msg } = res.data.result;
       if (code === 200) {
-        console.log(item);
         this.businessConversations = item.businessConversations;
         this.companyConversations = item.companyConversations;
         this.dataOption =
@@ -190,10 +442,11 @@ export default {
   },
   created() {},
   mounted() {
+    this.watchIm();
     this.getConversationList();
   },
   computed: {
-    ...mapState(["chatList"])
+    ...mapState(["userInfo"])
   }
 };
 </script>
@@ -206,9 +459,10 @@ export default {
     margin-right: 20px;
     background-color: #fff;
     width: 300px;
-    height: 780px;
+    height: 770px;
     opacity: 1;
     border-radius: 6px;
+    // overflow: hidden;
     h3 {
       height: 55px;
       font-size: 15px;
@@ -226,8 +480,9 @@ export default {
     .exhibition li {
       height: 70px;
       display: flex;
-      padding-left: 20px;
+      padding: 0 20px;
       cursor: pointer;
+      box-sizing: border-box;
       .exhibition_left {
         width: 20%;
         display: flex;
@@ -250,9 +505,17 @@ export default {
           line-height: 20px;
           color: #333;
           font-size: 14px;
+          max-width: 195px;
+          overflow: hidden;
+          white-space: nowrap; /*不换行*/
+          text-overflow: ellipsis; /*超出部分文字以...显示*/
         }
         p {
           color: #999;
+          max-width: 195px;
+          overflow: hidden;
+          white-space: nowrap; /*不换行*/
+          text-overflow: ellipsis; /*超出部分文字以...显示*/
         }
       }
     }
