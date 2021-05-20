@@ -43,8 +43,6 @@
 <script>
 import eventBus from "@/assets/js/common/eventBus.js";
 import { mapGetters, mapState } from "vuex";
-/** IM */
-import IM from "@/assets/js/common/im.js";
 const cubic = value => Math.pow(value, 3);
 const easeInOutCubic = value =>
   value < 0.5 ? cubic(value * 2) / 2 : 1 - cubic((1 - value) * 2) / 2;
@@ -53,16 +51,8 @@ export default {
     return {
       isShowCartBox: false,
       myScrollTop: 0,
-      timeID: null,
-      im: new IM().RongIMClient,
-      disabled: false
+      timeID: null
     };
-  },
-  watch: {
-    isLogin(val) {
-      if (val) this.watchIm();
-      else this.im.disconnect().then(() => console.log("断开链接成功"));
-    }
   },
   computed: {
     ...mapState([
@@ -74,15 +64,13 @@ export default {
       "userInfo",
       "showGlobalMsg",
       "msgType",
-      "globalMsg",
-      "chatList"
+      "globalMsg"
     ]),
     ...mapGetters({
       shoppingList: "myShoppingList"
     })
   },
   mounted() {
-    if (this.isLogin) this.watchIm();
     this.$store.commit("updateAppLoading", false);
     this.$store.commit("handlerShowGlobalMsg", false);
     this.$store.commit("handlerIsJindu", false);
@@ -94,206 +82,8 @@ export default {
     eventBus.$on("toTop", () => {
       this.toTop();
     });
-    eventBus.$on("getChatInfo", ({ targetId, type }) => {
-      // console.log(option, callback);
-      this.getHistoryChat(targetId, type);
-    });
-    eventBus.$on("scrollSessionList", () => {
-      if (!this.disabled) {
-        const lastInfo = this.chatList[this.chatList.length - 1];
-        let startTime = 0;
-        const count = 8;
-        if (lastInfo) {
-          startTime = lastInfo.latestMessage.sentTime;
-        }
-        this.getExistedConversationList(startTime, count)
-          .then(async conversationList => {
-            if (conversationList.length < count) {
-              this.disabled = true;
-            }
-            if (conversationList) {
-              for (let i = 0; i < conversationList.length; i++) {
-                conversationList[i].userInfo = await this.getInfoIm(
-                  conversationList[i].targetId
-                );
-                this.$store.commit("pushChatList", conversationList[i]);
-              }
-              console.log(this.chatList);
-            }
-          })
-          .catch(err => {
-            console.log(err);
-            this.disabled = false;
-          });
-      }
-    });
   },
   methods: {
-    // 获取个人信息
-    async getInfoIm(userId) {
-      const res = await this.$im_http.post(
-        "/api/User/GetUserInfoByChatUserId",
-        {
-          chatUserId: userId
-        }
-      );
-      const { code, item, msg } = res.data.result;
-      if (code === 200) {
-        return item;
-      } else {
-        this.$common.handlerMsgState({
-          msg: msg,
-          type: "danger"
-        });
-      }
-    },
-    // 获取历史消息,聊天窗口消息
-    getHistoryChat(targetId, type) {
-      var conversation = this.im.Conversation.get({
-        targetId: targetId,
-        type: type
-      });
-      var option = {
-        timestamp: +new Date(),
-        count: 20
-      };
-      conversation.getMessages(option).then(result => {
-        var list = result.list; // 历史消息列表
-        var hasMore = result.hasMore; // 是否还有历史消息可以获取
-        console.log("获取历史消息成功", list, hasMore);
-      });
-      // 清除未读
-      conversation.read().then(function() {
-        console.log("清除未读数成功"); // im.watch conversation 将被触发
-      });
-    },
-    // 获取会话列表
-    getExistedConversationList(startTime = 0, count = 7) {
-      return new Promise((result, reject) => {
-        this.im.Conversation.getList({
-          count: count,
-          startTime: startTime,
-          order: 0
-        })
-          .then(async conversationList => {
-            result(conversationList);
-          })
-          .catch(error => {
-            reject(error);
-          });
-      });
-    },
-    // IM 添加事件监听
-    watchIm() {
-      const _that = this;
-      // 添加事件监听
-      this.im.watch({
-        // 监听会话列表变更事件
-        async conversation(event) {
-          // 发生变更的会话列表
-          const updatedConversationList = event.updatedConversationList;
-          if (updatedConversationList && updatedConversationList.length) {
-            _that.getExistedConversationList().then(async conversationList => {
-              // 通过 im.Conversation.merge 计算最新的会话列表
-              const latestConversationList = _that.im.Conversation.merge({
-                conversationList,
-                updatedConversationList
-              });
-              for (let i = 0; i < latestConversationList.length; i++) {
-                latestConversationList[i].userInfo = await _that.getInfoIm(
-                  latestConversationList[i].targetId
-                );
-              }
-              _that.$store.commit("handlerChatList", latestConversationList);
-            });
-          }
-        },
-        // 监听消息通知
-        async message(event) {
-          // 新接收到的消息内容
-          const message = event.message;
-          console.log(message);
-        },
-        // 监听 IM 连接状态变化
-        status(event) {
-          console.log("connection status:", event.status);
-        },
-        // 监听聊天室 KV 数据变更
-        chatroom(event) {
-          /**
-           * 聊天室 KV 存储数据更新
-           * @example
-           * [
-           *  {
-           *    "key": "name",
-           *    "value": "我是小融融",
-           *    "timestamp": 1597591258338,
-           *    "chatroomId": "z002",
-           *    "type": 1 // 1: 更新（ 含:修改和新增 ）、2: 删除
-           *  },
-           * ]
-           */
-          const updatedEntries = event.updatedEntries;
-          console.log(updatedEntries);
-        },
-        expansion(event) {
-          /**
-           * 更新的消息拓展数据
-           * @example {
-           *    expansion: { key: 'value' },      // 设置或更新的扩展值
-           *    messageUId: 'URIT-URIT-ODMF-DURR' // 设置或更新扩展的消息 uid
-           * }
-           */
-          const updatedExpansion = event.updatedExpansion;
-          /**
-           * 删除的消息拓展数据
-           * @example {
-           *    deletedKeys: ['key1', 'key2'],    // 设置或更新的扩展值
-           *    messageUId: 'URIT-URIT-ODMF-DURR' // 设置或更新扩展的消息 uid
-           * }
-           */
-          const deletedExpansion = event.deletedExpansion;
-          console.log(updatedExpansion, deletedExpansion);
-        }
-      });
-      this.im
-        .connect({ token: this.userInfo.chatUser.chatUserToken })
-        .then(user => {
-          console.log("链接成功, 链接用户 id 为: ", user.id);
-          this.getExistedConversationList(0).then(async conversationList => {
-            if (conversationList) {
-              for (let i = 0; i < conversationList.length; i++) {
-                conversationList[i].userInfo = await this.getInfoIm(
-                  conversationList[i].targetId
-                );
-              }
-              this.$store.commit("handlerChatList", conversationList);
-            }
-          });
-        })
-        .catch(error => {
-          console.log("链接失败: ", error.code, error.msg);
-        });
-    },
-    // 使用的地方
-    handleShowConfirm() {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消"
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "点击确认的回调!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "warning",
-            message: "点击取消或删除的回调"
-          });
-        });
-    },
     // 去购物车
     toMyShoppingCart() {
       const fd = {
@@ -326,11 +116,6 @@ export default {
         rAF(frameFunc);
       });
     }
-  },
-  beforeDestroy() {
-    this.im.disconnect().then(() => console.log("断开链接成功"));
-    eventBus.$off("getChatInfo");
-    eventBus.$off("scrollSessionList");
   }
 };
 </script>
