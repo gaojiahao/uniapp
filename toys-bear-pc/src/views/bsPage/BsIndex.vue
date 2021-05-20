@@ -36,6 +36,7 @@
 
               <div class="myScrollbar" @scroll="scrollevent" ref="myScrollbar">
                 <component
+                  :im="im"
                   class="componentContent"
                   :item="item.value"
                   v-if="item.refresh"
@@ -181,6 +182,8 @@ import bsTop from "@/components/bsComponents/bsTopComponent/BsTop";
 import bsMenu from "@/components/bsComponents/bsMenuComponent/BsMenu";
 import eventBus from "@/assets/js/common/eventBus.js";
 import { mapState } from "vuex";
+/** IM */
+import IM from "@/assets/js/common/im.js";
 export default {
   components: {
     bsHome,
@@ -233,6 +236,7 @@ export default {
   },
   data() {
     return {
+      im: new IM().RongIMClient,
       isCollapse: false
     };
   },
@@ -336,6 +340,7 @@ export default {
   mounted() {},
   beforeDestroy() {
     eventBus.$emit("showCart", false);
+    this.im.disconnect().then(() => console.log("断开链接成功"));
   }
 };
 </script>

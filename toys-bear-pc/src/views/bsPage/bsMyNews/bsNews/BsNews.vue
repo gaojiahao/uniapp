@@ -82,12 +82,44 @@
                       :value="item.unreadMessageCount"
                       :hidden="item.unreadMessageCount < 1"
                     >
-                      <img :src="item.userInfo.avatar" alt="" />
+                      <img
+                        v-if="item.type === 1"
+                        :src="item.userInfo.avatar"
+                        alt=""
+                      />
+                      <img
+                        v-if="item.type === 3"
+                        :src="item.userInfo.userImage"
+                        alt=""
+                      />
                     </el-badge>
                   </div>
                 </div>
                 <div class="exhibition_right">
-                  <h4>{{ item.userInfo.nickname }}</h4>
+                  <el-tooltip
+                    class="item"
+                    effect="dark"
+                    :disabled="
+                      item.userInfo.nickname &&
+                        item.userInfo.nickname.length < 15
+                    "
+                    :content="item.userInfo.nickname"
+                    placement="top"
+                  >
+                    <h4 v-if="item.type === 1">{{ item.userInfo.nickname }}</h4>
+                  </el-tooltip>
+                  <el-tooltip
+                    class="item"
+                    effect="dark"
+                    :disabled="
+                      item.userInfo.linkName &&
+                        item.userInfo.linkName.length < 15
+                    "
+                    :content="item.userInfo.linkName"
+                    placement="top"
+                  >
+                    <h4 v-if="item.type === 3">{{ item.userInfo.linkName }}</h4>
+                  </el-tooltip>
                   <p>{{ myFilterMsgTypes(item.latestMessage) }}</p>
                 </div>
               </li>
@@ -96,7 +128,12 @@
         </div>
       </el-scrollbar>
     </div>
-    <component v-if="isGrid" :is="isGrid" :dataOption="dataOption"></component>
+    <component
+      v-if="isGrid"
+      :is="isGrid"
+      :dataOption="dataOption"
+      :im="im"
+    ></component>
   </div>
 </template>
 
@@ -113,9 +150,8 @@ import Supplier from "@/components/bsComponents/bsNewsComponent/bsNewsFirm";
 import BsNewsMessageList from "@/components/bsComponents/bsNewsComponent/bsNewsMessageList";
 
 import { filterMsgTypes } from "@/assets/js/common/common.js";
-import eventBus from "@/assets/js/common/eventBus.js";
-/** IM */
-import IM from "@/assets/js/common/im.js";
+
+import { mapState } from "vuex";
 export default {
   name: "bsNews",
   components: {
@@ -125,10 +161,11 @@ export default {
     Supplier,
     BsNewsMessageList
   },
+  props: ["im"],
   data() {
     return {
+      connectState: false,
       chatList: [],
-      im: new IM().RongIMClient,
       disabled: false,
       businessConversations: [],
       companyConversations: [],
@@ -169,20 +206,35 @@ export default {
           // 发生变更的会话列表
           const updatedConversationList = event.updatedConversationList;
           if (updatedConversationList && updatedConversationList.length) {
-            _that.getExistedConversationList().then(async conversationList => {
-              // 通过 im.Conversation.merge 计算最新的会话列表
-              const latestConversationList = _that.im.Conversation.merge({
-                conversationList,
-                updatedConversationList
+            _that
+              .getExistedConversationList(0, _that.chatList.length)
+              .then(async conversationList => {
+                // 通过 im.Conversation.merge 计算最新的会话列表
+                const latestConversationList = _that.im.Conversation.merge({
+                  conversationList,
+                  updatedConversationList
+                });
+                for (let i = 0; i < latestConversationList.length; i++) {
+                  switch (latestConversationList[i].type) {
+                    case 1:
+                      latestConversationList[
+                        i
+                      ].userInfo = await _that.getInfoIm(
+                        latestConversationList[i].targetId
+                      );
+                      break;
+                    case 3:
+                      latestConversationList[
+                        i
+                      ].userInfo = await _that.getMemberByGroupNumber(
+                        latestConversationList[i].targetId
+                      );
+                      break;
+                  }
+                }
+                _that.chatList = latestConversationList;
+                _that.connectState = true;
               });
-              console.log(latestConversationList, "最新会话列表");
-              // for (let i = 0; i < latestConversationList.length; i++) {
-              //   latestConversationList[i].userInfo = await _that.getInfoIm(
-              //     latestConversationList[i].targetId
-              //   );
-              // }
-              // _that.$store.commit("handlerChatList", latestConversationList);
-            });
           }
         },
         // 监听消息通知
@@ -237,23 +289,36 @@ export default {
         .connect({ token: this.userInfo.chatUser.chatUserToken })
         .then(user => {
           console.log("链接成功, 链接用户 id 为: ", user.id);
-          this.getExistedConversationList(0).then(async conversationList => {
+          _that.getExistedConversationList(0).then(async conversationList => {
             if (conversationList) {
               for (let i = 0; i < conversationList.length; i++) {
-                conversationList[i].userInfo = await this.getInfoIm(
-                  conversationList[i].targetId
-                );
+                switch (conversationList[i].type) {
+                  case 1:
+                    conversationList[i].userInfo = await _that.getInfoIm(
+                      conversationList[i].targetId
+                    );
+                    break;
+                  case 3:
+                    conversationList[
+                      i
+                    ].userInfo = await _that.getMemberByGroupNumber(
+                      conversationList[i].targetId
+                    );
+                    break;
+                }
               }
-              this.$store.commit("handlerChatList", conversationList);
+              _that.chatList = _that.chatList.concat(conversationList);
+              _that.connectState = true;
             }
           });
         })
         .catch(error => {
           console.log("链接失败: ", error.code, error.msg);
+          this.connectState = false;
         });
     },
     // im获取会话列表
-    getExistedConversationList(startTime = 0, count = 7) {
+    getExistedConversationList(startTime = 0, count = 10) {
       return new Promise((result, reject) => {
         this.im.Conversation.getList({
           count: count,
@@ -268,27 +333,7 @@ export default {
           });
       });
     },
-    // im获取历史消息,聊天窗口消息
-    getHistoryChat(targetId, type) {
-      var conversation = this.im.Conversation.get({
-        targetId: targetId,
-        type: type
-      });
-      var option = {
-        timestamp: +new Date(),
-        count: 20
-      };
-      conversation.getMessages(option).then(result => {
-        var list = result.list; // 历史消息列表
-        var hasMore = result.hasMore; // 是否还有历史消息可以获取
-        console.log("获取历史消息成功", list, hasMore);
-      });
-      // 清除未读
-      conversation.read().then(function() {
-        console.log("清除未读数成功"); // im.watch conversation 将被触发
-      });
-    },
-    // im获取个人信息
+    // im获取单聊个人信息
     async getInfoIm(userId) {
       const res = await this.$im_http.post(
         "/api/User/GetUserInfoByChatUserId",
@@ -296,20 +341,51 @@ export default {
           chatUserId: userId
         }
       );
-      const { code, item, msg } = res.data.result;
+      const { code, item } = res.data.result;
       if (code === 200) {
         return item;
-      } else {
-        this.$common.handlerMsgState({
-          msg: msg,
-          type: "danger"
-        });
+      }
+    },
+    // im获取群聊信息
+    async getMemberByGroupNumber(groupNumber) {
+      const res = await this.$im_http.post(
+        "/api/ChatGroup/GetMemberByGroupNumber",
+        {
+          groupNumber,
+          skipCount: 1,
+          maxResultCount: 9999
+        }
+      );
+      const { code, item } = res.data.result;
+      if (code === 200) {
+        return item;
       }
     },
     // 会话列表滚动到底事件
     scrollSessionList() {
-      eventBus.$emit("scrollSessionList");
-      // this.getConversationList();
+      if (!this.connectState) {
+        return false;
+      }
+      const _that = this;
+      const startTime = this.chatList[this.chatList.length - 1]
+        ? this.chatList[this.chatList.length - 1].latestMessage.sentTime
+        : null;
+      this.getExistedConversationList(startTime).then(async res => {
+        for (let i = 0; i < res.length; i++) {
+          switch (res[i].type) {
+            case 1:
+              res[i].userInfo = await _that.getInfoIm(res[i].targetId);
+              break;
+            case 3:
+              res[i].userInfo = await _that.getMemberByGroupNumber(
+                res[i].targetId
+              );
+              break;
+          }
+        }
+        this.chatList = this.chatList.concat(res);
+        console.log(this.chatList);
+      });
     },
     // 获取业务消息列表
     async getConversationList() {
@@ -369,9 +445,8 @@ export default {
     this.watchIm();
     this.getConversationList();
   },
-  computed: {},
-  beforeDestroy() {
-    this.im.disconnect().then(() => console.log("断开链接成功"));
+  computed: {
+    ...mapState(["userInfo"])
   }
 };
 </script>
@@ -405,8 +480,9 @@ export default {
     .exhibition li {
       height: 70px;
       display: flex;
-      padding-left: 20px;
+      padding: 0 20px;
       cursor: pointer;
+      box-sizing: border-box;
       .exhibition_left {
         width: 20%;
         display: flex;
@@ -429,9 +505,17 @@ export default {
           line-height: 20px;
           color: #333;
           font-size: 14px;
+          max-width: 195px;
+          overflow: hidden;
+          white-space: nowrap; /*不换行*/
+          text-overflow: ellipsis; /*超出部分文字以...显示*/
         }
         p {
           color: #999;
+          max-width: 195px;
+          overflow: hidden;
+          white-space: nowrap; /*不换行*/
+          text-overflow: ellipsis; /*超出部分文字以...显示*/
         }
       }
     }

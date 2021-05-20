@@ -2,47 +2,238 @@
   <div class="bsNewsMessageList">
     <div class="chatMain">
       <div class="head">
-        <img src="@/assets/images/3Dicon.png" alt="" />
-        <p>小竹熊大家族</p>
+        <img
+          v-if="dataOption.type === 1"
+          :src="dataOption.userInfo.avatar"
+          alt=""
+        />
+        <img
+          v-else-if="dataOption.type === 3"
+          :src="dataOption.userInfo.userImage"
+          alt=""
+        />
+        <p v-if="dataOption.type === 1">{{ dataOption.userInfo.nickname }}</p>
+        <p v-else-if="dataOption.type === 3">
+          {{ dataOption.userInfo.linkName }}
+        </p>
         <i class="el-icon-more"></i>
       </div>
       <div class="center">
         <el-scrollbar style="height: 100%;" ref="myScrollbar">
-          <template v-for="item in chatInfoList">
-            <div :key="item.sentTime">
-              <!-- 别人 -->
-              <div
-                class="others"
-                v-if="item.senderUserId != userInfo.chatUser.chatUserId"
-              >
-                <!-- 时间 -->
-                <div class="chart-timer">
-                  {{ dateDiff(item.sentTime) }}
+          <div ref="scrollMain" class="scrollMain">
+            <template v-for="item in chatInfoList">
+              <div :key="item.sentTime">
+                <!-- 别人 -->
+                <div
+                  class="others"
+                  v-if="item.senderUserId != userInfo.chatUser.chatUserId"
+                >
+                  <!-- 时间 -->
+                  <div class="chart-timer">
+                    {{ dateDiff(item.sentTime) }}
+                  </div>
+                  <div class="item left">
+                    <!-- 单聊头像 -->
+                    <template v-if="dataOption.type === 1">
+                      <img
+                        class="header-img"
+                        :src="dataOption.userInfo.avatar"
+                      />
+                    </template>
+                    <!-- 群聊头像 -->
+                    <template v-else-if="dataOption.type === 3">
+                      <!-- {{
+                      filterUserInfo(
+                        dataOption.userInfo.groupMemberInfos.items,
+                        item
+                      )
+                    }} -->
+                      <img
+                        class="header-img"
+                        :src="
+                          filterUserInfo(
+                            dataOption.userInfo.groupMemberInfos.items,
+                            item
+                          ).userImage
+                        "
+                      />
+                    </template>
+                    <div class="youChat">
+                      <!-- 单聊用户名 -->
+                      <template v-if="dataOption.type === 1">
+                        <span class="name">
+                          {{ dataOption.userInfo.nickname }}
+                        </span>
+                      </template>
+                      <!-- 群聊用户名 -->
+                      <template v-else-if="dataOption.type === 3">
+                        <span class="name">
+                          {{
+                            filterUserInfo(
+                              dataOption.userInfo.groupMemberInfos.items,
+                              item
+                            ).linkman
+                          }}
+                        </span>
+                      </template>
+                      <!-- 别人的内容 -->
+                      <div class="messageBox">
+                        <!-- 文本 -->
+                        <span
+                          class="message"
+                          v-if="item.messageType === 'RC:TxtMsg'"
+                        >
+                          {{ item.content.content }}
+                        </span>
+                        <!-- 语音 -->
+                        <span
+                          class="message"
+                          v-if="item.messageType === 'RC:VcMsg'"
+                        >
+                          {{ item.content.content }}
+                        </span>
+                        <!-- 图片 -->
+                        <div
+                          class="imgBox"
+                          v-else-if="item.messageType === 'RC:ImgMsg'"
+                        >
+                          <el-image
+                            style="width: 300px; height: auto; min-width: 100px;"
+                            :src="item.content.imageUri"
+                            :preview-src-list="[item.content.imageUri]"
+                            fit="contain"
+                          >
+                            <div
+                              slot="placeholder"
+                              class="image-slot"
+                              style="width: 300px; height: auto; min-width: 100px"
+                            >
+                              <img
+                                style="width: 300px; height: auto; min-width: 100px"
+                                :src="require('@/assets/images/imgError.png')"
+                              />
+                            </div>
+                            <div
+                              slot="error"
+                              class="image-slot"
+                              style="width: 300px; height: auto; min-width: 100px"
+                            >
+                              <img
+                                style="width: 300px; height: auto; min-width: 100px"
+                                :src="require('@/assets/images/imgError.png')"
+                              />
+                            </div>
+                          </el-image>
+                        </div>
+                        <!-- 视频 -->
+                        <div
+                          class="videoBox"
+                          v-else-if="item.messageType === 'XZX:VideoMessage'"
+                        >
+                          <video
+                            class="video-js vjs-default-skin vjs-big-play-centered"
+                            controls
+                            :lazy-src="item.content.videoUrl"
+                            style="object-fit: contain; width: 100%;height: 100%;"
+                          >
+                            <source
+                              :src="item.content.videoUrl"
+                              type="video/mp4"
+                            />
+                          </video>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="item left">
-                  <img class="header-img" :src="dataOption.userInfo.avatar" />
-                  <div class="youChat">
-                    <span class="name">{{ dataOption.userInfo.nickname }}</span>
-                    <span class="message">{{ item.content.content }}</span>
+                <!-- 我 -->
+                <div class="my" v-else>
+                  <!-- 时间 -->
+                  <div class="chart-timer">
+                    {{ dateDiff(item.sentTime) }}
+                  </div>
+                  <div class="item right">
+                    <img
+                      class="header-img"
+                      :src="userInfo.userInfo.userImage"
+                    />
+                    <div class="meChat">
+                      <!-- 我的名字 -->
+                      <span class="name">{{ userInfo.userInfo.linkman }}</span>
+                      <!-- 我的聊天内容 -->
+                      <div class="messageBox">
+                        <!-- 文本 -->
+                        <span
+                          class="message"
+                          v-if="item.messageType === 'RC:TxtMsg'"
+                        >
+                          {{ item.content.content }}
+                        </span>
+                        <!-- 语音 -->
+                        <span
+                          class="message"
+                          v-if="item.messageType === 'RC:VcMsg'"
+                        >
+                          {{ item.content.content }}
+                        </span>
+                        <!-- 图片 -->
+                        <div
+                          class="imgBox"
+                          v-else-if="item.messageType === 'RC:ImgMsg'"
+                        >
+                          <el-image
+                            style="width: 300px; height: auto; min-width: 100px;"
+                            :src="item.content.imageUri"
+                            :preview-src-list="[item.content.imageUri]"
+                            fit="contain"
+                          >
+                            <div
+                              slot="placeholder"
+                              class="image-slot"
+                              style="width: 300px; height: auto; min-width: 100px"
+                            >
+                              <img
+                                style="width: 300px; height: auto; min-width: 100px"
+                                :src="require('@/assets/images/imgError.png')"
+                              />
+                            </div>
+                            <div
+                              slot="error"
+                              class="image-slot"
+                              style="width: 300px; height: auto; min-width: 100px"
+                            >
+                              <img
+                                style="width: 300px; height: auto; min-width: 100px"
+                                :src="require('@/assets/images/imgError.png')"
+                              />
+                            </div>
+                          </el-image>
+                        </div>
+
+                        <!-- 视频 -->
+                        <div
+                          class="videoBox"
+                          v-else-if="item.messageType === 'XZX:VideoMessage'"
+                        >
+                          <video
+                            class="video-js vjs-default-skin vjs-big-play-centered"
+                            controls
+                            :lazy-src="item.content.videoUrl"
+                            style="object-fit: contain; width: 100%;height: 100%;"
+                          >
+                            <source
+                              :src="item.content.videoUrl"
+                              type="video/mp4"
+                            />
+                          </video>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-              <!-- 我 -->
-              <div class="my" v-else>
-                <!-- 时间 -->
-                <div class="chart-timer">
-                  {{ dateDiff(item.sentTime) }}
-                </div>
-                <div class="item right">
-                  <img class="header-img" :src="userInfo.userInfo.userImage" />
-                  <div class="meChat">
-                    <span class="name">{{ userInfo.userInfo.linkman }}</span>
-                    <span class="message">{{ item.content.content }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </template>
+            </template>
+          </div>
         </el-scrollbar>
       </div>
       <div class="footer">
@@ -126,19 +317,54 @@
 </template>
 
 <script>
-import eventBus from "@/assets/js/common/eventBus.js";
+// import eventBus from "@/assets/js/common/eventBus.js";
 import { dateDiff } from "@/assets/js/common/common.js";
 import { mapState } from "vuex";
 export default {
   name: "bsNewsMessageList",
-  props: ["dataOption"],
+  props: ["dataOption", "im"],
   data() {
     return {
       textInfo: "",
-      isDiyu: 0
+      isDiyu: 0,
+      chatInfoList: []
     };
   },
   methods: {
+    // 解读base64
+    unscrambleBase64(code) {
+      console.log(window.Base64.decode(code));
+    },
+    // 筛选群聊聊天用户信息
+    filterUserInfo(list, item) {
+      const user = list.find(v => v.chatUserId === item.senderUserId);
+      if (user) return user;
+    },
+    // im获取历史消息,聊天窗口消息
+    getHistoryChat() {
+      var conversation = this.im.Conversation.get({
+        targetId: this.dataOption.targetId,
+        type: this.dataOption.type
+      });
+      var option = {
+        timestamp: +new Date(),
+        count: 20
+      };
+      conversation.getMessages(option).then(result => {
+        var list = result.list; // 历史消息列表
+        var hasMore = result.hasMore; // 是否还有历史消息可以获取
+        console.log("获取历史消息成功", list, hasMore, this.dataOption);
+        this.chatInfoList = list;
+      });
+      // 清除未读
+      const qingchu = this.im.Conversation.get({
+        targetId: this.dataOption.targetId,
+        type: this.dataOption.type
+      });
+      qingchu.read().then(function() {
+        console.log("清除未读数成功"); // im.watch conversation 将被触发
+      });
+    },
     // 格式化时间
     dateDiff(time) {
       return dateDiff(time);
@@ -164,16 +390,22 @@ export default {
   },
   created() {},
   mounted() {
-    console.log(this.dataOption);
-    eventBus.$emit("getChatInfo", this.dataOption);
-    this.$nextTick(() => {
-      this.$refs["myScrollbar"].wrap.scrollTop = this.$refs[
-        "myScrollbar"
-      ].wrap.scrollHeight;
-    });
+    this.getHistoryChat();
+  },
+  watch: {
+    chatInfoList: {
+      deep: true,
+      handler() {
+        this.$nextTick(() => {
+          this.$refs["myScrollbar"].wrap.scrollTop = this.$refs[
+            "scrollMain"
+          ].scrollHeight;
+        });
+      }
+    }
   },
   computed: {
-    ...mapState(["userInfo", "chatInfoList"])
+    ...mapState(["userInfo"])
   }
 };
 </script>
@@ -186,6 +418,7 @@ export default {
     border-radius: 4px;
     flex-grow: 1;
     background: #ffffff;
+    height: 770px;
     .head {
       height: 54px;
       display: flex;
@@ -195,6 +428,7 @@ export default {
         width: 30px;
         height: 30px;
         margin: 0 13px 0 20px;
+        border-radius: 50%;
       }
       p {
         flex: 1;
@@ -216,6 +450,13 @@ export default {
       height: 540px;
       padding: 10px 0;
       box-sizing: border-box;
+      overflow-x: hidden;
+      overflow-y: auto;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE 10+ */
+      &::-webkit-scrollbar {
+        display: none; /* Chrome Safari */
+      }
       .item {
         display: flex;
         margin-bottom: 10px;
@@ -229,11 +470,21 @@ export default {
           .name {
             color: #333;
           }
-          .message {
+          .messageBox {
             margin-top: 10px;
-            color: #666;
-            background: #f5f7fa;
-            border: 1px solid #e6e9ee;
+            .message {
+              color: #666;
+              background: #f5f7fa;
+              border: 1px solid #e6e9ee;
+              word-break: break-word;
+            }
+            .imgBox {
+              box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+            }
+            .videoBox {
+              width: 400px;
+              height: 250px;
+            }
           }
         }
       }
@@ -250,10 +501,20 @@ export default {
           .name {
             color: #333;
           }
-          .message {
+          .messageBox {
             margin-top: 10px;
-            color: #fff;
-            background-color: #3368a9;
+            .message {
+              color: #fff;
+              background-color: #3368a9;
+              word-break: break-word;
+            }
+            .imgBox {
+              box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+            }
+            .videoBox {
+              width: 400px;
+              height: 250px;
+            }
           }
         }
       }
@@ -278,7 +539,7 @@ export default {
       }
     }
     .footer {
-      height: 180px;
+      height: 170px;
       box-sizing: border-box;
       border-top: 1px solid #dcdfe6;
       padding: 0 20px 20px;
@@ -335,7 +596,7 @@ export default {
   }
   .chattingRecords {
     width: 458px;
-    height: 780px;
+    height: 770px;
     background: #ffffff;
     border-radius: 4px;
     margin-left: 20px;
