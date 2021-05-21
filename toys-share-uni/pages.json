@@ -15,6 +15,7 @@
 		{
 			"path": "pages/offerSharing/offerSharing",	//报价分享
 			"aliasPath":"/offerSharing",
+			"name":"offerSharing",
 			"style": {
 				"navigationBarTitleText": "offerSharing",
 				"app-plus": {
@@ -25,6 +26,7 @@
 		{
 			"path": "pages/offerSharing/offerDetail",	//报价详情
 			"aliasPath":"/offerDetail/:pid/:id",
+			"name":"offerDetail",
 			"style": {
 				"navigationBarTitleText": "offerDetail",
 				"app-plus": {
@@ -34,7 +36,8 @@
 		},
 		{
 			"path": "pages/offerSharing/offerContact",	//报价联系方式
-			"aliasPath":"/offerContact/:id",
+			"aliasPath":"/offerContact",
+			"name":"offerContact",
 			"style": {
 				"navigationBarTitleText": "offerContact",
 				"app-plus": {

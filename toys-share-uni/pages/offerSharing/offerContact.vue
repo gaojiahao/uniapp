@@ -1,17 +1,13 @@
 <template>
-	<view class="contact">
+	<view class="offer_contact">
 		<view class="head_bakcground_right_2">
-			<image :src="bg6" class="head_bakcground"></image>
 		</view>
 		<view class="head_bakcground_left_1">
-			<image :src="bg2" class="head_bakcground"></image>
 		</view>
 		<view class="head">
 			<view class="head_bakcground">
-				<image :src="bg0" class="head_bakcground_0"></image>
 			</view>
 			<view class="head_bakcground_right">
-				<image :src="bg1" class="head_bakcground"></image>
 			</view>
 			<view class="head_home">
 				<view class="icon"><image :src="home_icon" class="head_home_icon"></image></view>
@@ -31,13 +27,10 @@
 		</view>
 		<view class="content">
 			<view class="content_bg_0">
-				<image :src="bg8" class="head_bakcground"></image>
 			</view>
 			<view class="content_bg_4">
-				<image :src="bg3" class="head_bakcground"></image>
 			</view>
 			<view class="content_bg_5">
-				<image :src="bg4" class="head_bakcground"></image>
 			</view>
 			<view class="content_bg_1">
 				<view class="content_bg_2">
@@ -47,7 +40,36 @@
 					
 				</view>
 				<view class="offer_panel">
-					
+					<view class="offer_info">
+						<view class="title">
+							<b-row>
+								<b-col cols="3" sm="2">
+									<view class="text">联系方式</view>
+								</b-col>
+								<b-col cols="9" offset-sm="8" sm="2">
+									<view class="return" @click="toSharing" @tab="toSharing"><u-icon name="arrow-leftward"></u-icon>返回</view>
+								</b-col>
+							</b-row>
+						</view>
+					</view>
+					<view class="contact_info">
+						<b-row class="u_row">
+							<b-col cols="12" sm="6">
+								<view class="map">
+									<map style="width: 100%; height: 300px;" :latitude="latitude" :longitude="longitude" :markers="covers"></map>
+								</view>
+							</b-col>
+							<b-col cols="12" sm="6">
+								<view class="info">
+									<view class="item title">联系方式</view>
+									<view class="item">公司名称：<text>小竹熊玩具云科技公司</text></view>
+									<view class="item">联系人：<text>18902747007</text></view>
+									<view class="item">邮箱：<text>aly@alytrading.com</text></view>
+									<view class="item">地址：<text>广东省汕头市澄海区莱美路港口路段</text></view>
+								</view>
+							</b-col>
+						</b-row>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -66,17 +88,48 @@ export default {
 	data() {
 		return {
 			home_icon: require("@/static/images/home.png"),
-			bg0: require("@/static/images/offer_share_0.png"),
-			bg1: require("@/static/images/offer_share_1_bg.png"),
-			bg2: require("@/static/images/offer_share_2.png"),
-			bg3: require("@/static/images/offer_share_3.png"),
-			bg4: require("@/static/images/offer_share_4.png"),
-			bg6: require("@/static/images/offer_share_6.png"),
-			bg8: require("@/static/images/offer_share_8.png"),
+			latitude: 23.446463,
+			longitude: 116.784154,
+			covers: [{
+				latitude: 23.446463,
+				longitude: 116.784154,
+				iconPath: '@/static/images/map.png'
+			}, {
+				latitude: 23.446463,
+				longitude: 116.784154,
+				iconPath: '@/static/images/map.png'
+			}]
 		}
+	},
+	methods:{
+		//获取content背景高度赋值
+		getContentStyle(){
+			var content = document.getElementsByClassName('content_bg_1');
+			var content3 = document.getElementsByClassName('content_bg_3');
+			content3[0].style.height = content[0].clientHeight+"px";
+		},
+		//to分享首页
+		toSharing(){
+			var id = uni.getStorageSync('offer_sharing_id');
+			this.$Router.push({
+			    path:'/offerSharing',
+				query:{
+					id:id
+				}
+			})
+		}
+	},
+	mounted() {
+		this.getContentStyle();
+	},
+	updated: function () {
+	  this.$nextTick(function () {
+	    this.getContentStyle();
+	  })
 	},
 }
 </script>
 
-<style>
+<style lang="less" scoped>
+@import  "@/less/offerSharing/offerContact.less";
 </style>
