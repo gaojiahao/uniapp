@@ -15,6 +15,7 @@ import waterfall from "vue-waterfall2";
 import Video from "video.js";
 import "video.js/dist/video-js.css";
 import common from "@/utils/common";
+import calculate from "@/utils/calculate";
 import VueCookies from "vue-cookies";
 import CollapseTransition from "element-ui/lib/transitions/collapse-transition";
 // import VueAwesomeSwiper from "vue-awesome-swiper";
@@ -26,6 +27,7 @@ import CollapseTransition from "element-ui/lib/transitions/collapse-transition";
 import MessageComponent from "@/components/commonComponent/messageComponent/main.js";
 
 Vue.prototype.$PreviewPic = PreviewPic;
+Vue.prototype.$calculate = calculate;
 Vue.prototype.$video = Video;
 Vue.config.productionTip = false;
 getMenuFuc();

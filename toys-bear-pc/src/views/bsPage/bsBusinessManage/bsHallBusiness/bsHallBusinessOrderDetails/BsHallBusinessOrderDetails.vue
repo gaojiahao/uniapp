@@ -68,38 +68,9 @@
           @size-change="handleSizeChange"
         ></el-pagination>
       </center>
-      <div class="totalBoxFooter" style="width: 1680px;">
-        <div class="totalBox">
-          <p class="item">
-            <span class="itemTitle">总款数：</span>
-            <span>{{ totalCount }}</span>
-          </p>
-          <!-- <p class="item">
-            <span class="itemTitle">总箱数：</span>
-            <span>{{ options.sumtAmount }}</span>
-          </p> -->
-          <p class="item">
-            <span class="itemTitle">总数量：</span>
-            <span>{{ options.sumAmountOu_lo }}</span>
-          </p>
-          <p class="item">
-            <span class="itemTitle">总体积/总材积：</span>
-            <span>{{ options.sumBulk_stere }}</span
-            >/<span>{{ options.sumBulk_feet }}</span>
-          </p>
-          <p class="item">
-            <span class="itemTitle">总毛重/总净重：</span>
-            <span>{{ options.sumGr_we }}/{{ options.sumNe_we }}(KG)</span>
-          </p>
-          <p class="item">
-            <span class="itemTitle">总出厂价/总报出价</span>
-            <span class="price">￥{{ options.sumAmountFa_pr }}</span>
-            <span>/</span>
-            <span class="price">￥{{ options.sumHa_in_qu || 0 }}</span>
-          </p>
-        </div>
-      </div>
     </div>
+    <!-- 统计 -->
+    <Summary :summaryData="summaryData"></Summary>
     <!-- 导出订单模板dialog -->
     <transition name="el-zoom-in-center">
       <el-dialog
@@ -125,9 +96,10 @@
 <script>
 import bsExportOrder from "@/components/commonComponent/exportOrderComponent/zhantingyewu.vue";
 import bsTables from "@/components/table";
+import Summary from "@/components/summaryComponent/summary";
 export default {
   name: "bsHallBusinessOrderDetails",
-  components: { bsExportOrder, bsTables },
+  components: { bsExportOrder, bsTables, Summary },
   props: {
     item: {
       type: Object
@@ -135,6 +107,20 @@ export default {
   },
   data() {
     return {
+      summaryData: {
+        //汇总数据
+        isHandle: false,
+        totalDegree: 0, //总款数
+        totalCartons: -1, //总箱数
+        totalQuantity: 0, //总数量
+        totalBulkStere: 0, //总体积
+        totalBulkFeet: 0, //总材积
+        totalGrWe: 0, //总毛重
+        totalNeWe: 0, //总净重
+        cu_de: "", //金额单位
+        totalMoney: 0 //总金额
+        // countData: [],
+      },
       tableData: {
         data: [],
         showLoading: false,
@@ -179,7 +165,7 @@ export default {
                 case undefined:
                 case "null":
                 case "undefined":
-                  row.supplierTelephoneNumber = "";
+                  row.supplierPhone = "";
                   break;
               }
               return row.supplierPhone + "<br>" + row.supplierTelephoneNumber;
@@ -231,7 +217,7 @@ export default {
             isHiden: true,
             width: 150,
             render: row => {
-              return row.bulk_stere + row.bulk_feet;
+              return row.bulk_stere + "/" + row.bulk_feet;
             }
           },
           {
@@ -352,6 +338,14 @@ export default {
       });
       if (res.data.result.code === 200) {
         this.options = res.data.result.item;
+        this.summaryData.totalDegree = this.totalCount;
+        this.summaryData.totalQuantity = this.options.sumAmountOu_lo;
+        this.summaryData.totalBulkStere = this.options.sumBulk_stere;
+        this.summaryData.totalBulkFeet = this.options.sumBulk_feet;
+        this.summaryData.totalGrWe = this.options.sumGr_we;
+        this.summaryData.totalNeWe = this.options.sumNe_we;
+        this.summaryData.sumAmountFa_pr = this.options.sumAmountFa_pr;
+        this.summaryData.sumHa_in_qu = this.options.sumHa_in_qu;
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -377,6 +371,7 @@ export default {
       }
       this.getERPOrderTotal();
     },
+
     // 切换当前页
     currentChange(page) {
       this.currentPage = page;
@@ -575,39 +570,6 @@ export default {
           }
           .name {
             margin-top: 8px;
-          }
-        }
-      }
-    }
-    .totalBoxFooter {
-      position: absolute;
-      width: 100%;
-      margin-right: 30px;
-      z-index: 1;
-      left: 0;
-      bottom: 0;
-      box-sizing: border-box;
-      padding-right: 20px;
-
-      .totalBox {
-        width: 100%;
-        background-color: #fff;
-        height: 80px;
-        padding: 0 20px;
-        box-sizing: border-box;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        .item {
-          margin-right: 15px;
-          display: flex;
-          align-items: center;
-          // .itemTitle {
-          // }
-          .price {
-            color: #eb1515;
-            font-weight: 700;
-            font-size: 18px;
           }
         }
       }

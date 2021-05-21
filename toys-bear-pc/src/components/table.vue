@@ -480,12 +480,18 @@ export default {
 @deep: ~">>>";
 
 @{deep}.el-table {
+  font-size: 13px !important;
   .cell {
     padding: 0 5px;
   }
   .el-table__body-wrapper {
     .cell {
       padding: 8px 0;
+    }
+  }
+  .el-table__row {
+    .el-tooltip {
+      font-size: 12px;
     }
   }
 }
