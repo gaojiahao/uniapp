@@ -84,12 +84,12 @@
                     >
                       <img
                         v-if="item.type === 1"
-                        :src="item.userInfo.avatar"
+                        :src="item.userInfo && item.userInfo.avatar"
                         alt=""
                       />
                       <img
                         v-if="item.type === 3"
-                        :src="item.userInfo.userImage"
+                        :src="item.userInfo && item.userInfo.userImage"
                         alt=""
                       />
                     </el-badge>
@@ -100,25 +100,31 @@
                     class="item"
                     effect="dark"
                     :disabled="
-                      item.userInfo.nickname &&
+                      item.userInfo &&
+                        item.userInfo.nickname &&
                         item.userInfo.nickname.length < 15
                     "
-                    :content="item.userInfo.nickname"
+                    :content="item.userInfo && item.userInfo.nickname"
                     placement="top"
                   >
-                    <h4 v-if="item.type === 1">{{ item.userInfo.nickname }}</h4>
+                    <h4 v-if="item.type === 1">
+                      {{ item.userInfo && item.userInfo.nickname }}
+                    </h4>
                   </el-tooltip>
                   <el-tooltip
                     class="item"
                     effect="dark"
                     :disabled="
-                      item.userInfo.linkName &&
+                      item.userInfo &&
+                        item.userInfo.linkName &&
                         item.userInfo.linkName.length < 15
                     "
-                    :content="item.userInfo.linkName"
+                    :content="item.userInfo && item.userInfo.linkName"
                     placement="top"
                   >
-                    <h4 v-if="item.type === 3">{{ item.userInfo.linkName }}</h4>
+                    <h4 v-if="item.type === 3">
+                      {{ item.userInfo && item.userInfo.linkName }}
+                    </h4>
                   </el-tooltip>
                   <p>{{ myFilterMsgTypes(item.latestMessage) }}</p>
                 </div>
@@ -132,6 +138,7 @@
       v-if="isGrid"
       :is="isGrid"
       :dataOption="dataOption"
+      ref="childEvent"
       :im="im"
     ></component>
   </div>
@@ -215,21 +222,26 @@ export default {
                   updatedConversationList
                 });
                 for (let i = 0; i < latestConversationList.length; i++) {
-                  switch (latestConversationList[i].type) {
-                    case 1:
-                      latestConversationList[
-                        i
-                      ].userInfo = await _that.getInfoIm(
-                        latestConversationList[i].targetId
-                      );
-                      break;
-                    case 3:
-                      latestConversationList[
-                        i
-                      ].userInfo = await _that.getMemberByGroupNumber(
-                        latestConversationList[i].targetId
-                      );
-                      break;
+                  const userInfo = _that[latestConversationList[i].targetId];
+                  if (userInfo) {
+                    latestConversationList[i].userInfo = userInfo;
+                  } else {
+                    switch (latestConversationList[i].type) {
+                      case 1:
+                        latestConversationList[
+                          i
+                        ].userInfo = await _that.getInfoIm(
+                          latestConversationList[i].targetId
+                        );
+                        break;
+                      case 3:
+                        latestConversationList[
+                          i
+                        ].userInfo = await _that.getMemberByGroupNumber(
+                          latestConversationList[i].targetId
+                        );
+                        break;
+                    }
                   }
                 }
                 _that.chatList = latestConversationList;
@@ -238,10 +250,11 @@ export default {
           }
         },
         // 监听消息通知
-        async message(event) {
+        message() {
           // 新接收到的消息内容
-          const message = event.message;
-          console.log(message);
+          if (_that.$refs.childEvent.getHistoryChat) {
+            _that.$refs.childEvent.getHistoryChat();
+          }
         },
         // 监听 IM 连接状态变化
         status(event) {
@@ -297,6 +310,8 @@ export default {
                     conversationList[i].userInfo = await _that.getInfoIm(
                       conversationList[i].targetId
                     );
+                    _that[conversationList[i].targetId] =
+                      conversationList[i].userInfo;
                     break;
                   case 3:
                     conversationList[
@@ -304,10 +319,13 @@ export default {
                     ].userInfo = await _that.getMemberByGroupNumber(
                       conversationList[i].targetId
                     );
+                    _that[conversationList[i].targetId] =
+                      conversationList[i].userInfo;
                     break;
                 }
               }
               _that.chatList = _that.chatList.concat(conversationList);
+              console.log(_that.chatList);
               _that.connectState = true;
             }
           });
@@ -384,7 +402,6 @@ export default {
           }
         }
         this.chatList = this.chatList.concat(res);
-        console.log(this.chatList);
       });
     },
     // 获取业务消息列表
