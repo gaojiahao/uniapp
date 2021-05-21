@@ -1,10 +1,17 @@
 <template>
-  <div>敬请期待</div>
+  <!-- <div>敬请期待</div> -->
+  <div>
+    <bsaa />
+  </div>
 </template>
 
 <script>
+import bsaa from "./Bsaa";
 export default {
   name: "",
+  components: {
+    bsaa
+  },
   data() {
     return {};
   },
