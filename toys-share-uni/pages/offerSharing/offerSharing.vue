@@ -45,108 +45,6 @@
 							<view class="text">报价信息</view>
 						</view>
 						<view class="wrap">
-							<!-- <u-row gutter="16">
-								<u-col span="3">
-									<view class="offer_info_item">
-										<view class="offer_info_item_label">
-											报价单号：
-										</view>
-										<view class="active offer_info_item_text">
-											{{sampleInfo.offerNumber}}
-										</view>
-									</view>
-								</u-col>
-								<u-col span="3">
-									<view class="offer_info_item">
-										<view class="offer_info_item_label">
-											报价时间：
-										</view>
-										<view class="offer_info_item_text">
-											{{sampleInfo.modifyOn}}
-										</view>
-									</view>
-								</u-col>
-								<u-col span="2">
-									<view class="offer_info_item">
-										<view class="offer_info_item_label">
-											客户名称：
-										</view>
-										<view class="offer_info_item_text">
-											{{sampleInfo.customerName}}
-										</view>
-									</view>
-								</u-col>
-								<u-col span="2">
-									<view class="offer_info_item">
-										<view class="offer_info_item_label">
-											业务员：
-										</view>
-										<view class="offer_info_item_text blue_color">
-											{{sampleInfo.linkman}}
-										</view>
-									</view>
-								</u-col>
-								<u-col span="2">
-									<view class="offer_info_item active_button">
-										<view class="offer_info_item_label">
-											<u-button class="custom_style" :hair-line="false">查看联系方式</u-button>
-										</view>
-									</view>
-								</u-col>
-							</u-row>
-							<div class="row_diver"></div>
-							<u-row gutter="16">
-								<u-col span="2">
-									<view class="offer_info_item">
-										<view class="offer_info_item_label">
-											商品总款数：
-										</view>
-										<view class="offer_info_item_text">
-											{{sampleInfo.total}}
-										</view>
-									</view>
-								</u-col>
-								<u-col span="2">
-									<view class="offer_info_item">
-										<view class="offer_info_item_label">
-											商品总箱数：
-										</view>
-										<view class="offer_info_item_text">
-											{{sampleInfo.totalCost}}
-										</view>
-									</view>
-								</u-col>
-								<u-col span="2.5">
-									<view class="offer_info_item">
-										<view class="offer_info_item_label">
-											总体积/总材积：
-										</view>
-										<view class="offer_info_item_text">
-											{{sampleInfo.aaa/sampleInfo.bbb}}
-										</view>
-									</view>
-								</u-col>
-								<u-col span="2.5">
-									<view class="offer_info_item">
-										<view class="offer_info_item_label">
-											总毛重/总净重：
-										</view>
-										<view class="offer_info_item_text">
-											30.02/20.01(KG)
-										</view>
-									</view>
-								</u-col>
-								<u-col span="2">
-									<view class="offer_info_item">
-										<view class="offer_info_item_label">
-											总金额：
-										</view>
-										<view class="offer_info_item_text red_color">
-											￥190.00
-										</view>
-									</view>
-								</u-col>
-							</u-row> -->
 							<b-row>
 								<b-col cols="12" sm="3">
 									<view class="offer_info_item">
@@ -191,7 +89,7 @@
 								<b-col cols="6" sm="2">
 									<view class="offer_info_item active_button">
 										<view class="offer_info_item_label">
-											<u-button class="custom_style" :hair-line="false">查看联系方式</u-button>
+											<u-button class="custom_style" :hair-line="false" @click="toContact" @tab="toContact">查看联系方式</u-button>
 										</view>
 									</view>
 								</b-col>
@@ -228,7 +126,7 @@
 										</view>
 									</view>
 								</b-col>
-								<b-col cols="12" sm="2">
+								<b-col cols="12" sm="3">
 									<view class="offer_info_item">
 										<view class="offer_info_item_label">
 											总毛重/总净重：
@@ -255,54 +153,60 @@
 						<view class="title">
 							<view class="text">报价商品</view>
 							<view class="tool_bar">
+								<template v-if="!isMobile">
+									<view class="tool_bar_item" :class="[searchType=='zonghe'?'active':'']" @click="change_search_type('zonghe')">综合</view>
+									<view class="tool_bar_item" :class="[searchType=='price'?'active':'']" @click="change_search_type('price')">单价<u-icon :name="sortOrder < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+									<view class="tool_bar_item" :class="[searchType=='time'?'active':'']" @click="change_search_type('time')">时间<u-icon :name="sortType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+									<view class="tool_bar_item grid" :class="[listShowType=='grid'?'active':'']" @click="change_show_type('grid')"><u-icon name="grid"></u-icon></view>
+									<view class="tool_bar_item grid" :class="[listShowType=='list'?'active':'']" @click="change_show_type('list')"><u-icon name="list"></u-icon></view>
+									<view class="tool_bar_item search">
+										<x-search placeholder="请输入关键词" shape="round" height="0.30rem" v-model="keyword" :clearabled="true"
+											bg-color="#fff"
+											:input-style="{fontSize:'14px'}" 
+											:action-style="{fontSize:'14px',width: '0.30rem',
+											marginLeft: '0.10rem',
+											marginRight: '0.20rem',
+											color: '#fff',}"
+											@clear="clearKeyWord"
+											@search="getProductOfferDetailPage"
+											@custom="getProductOfferDetailPage"
+											>
+										</x-search>
+									</view>
+								</template>
+								<template v-else>
+									<view class="tool_bar_item search">
+										<x-search placeholder="请输入关键词" shape="round" height="0.30rem" v-model="keyword" :clearabled="true"
+											bg-color="#fff"
+											:input-style="{fontSize:'14px'}" 
+											:action-style="{fontSize:'14px',width: '1rem',
+											marginLeft: '0.10rem',
+											marginRight: '0.20rem',
+											color: '#fff',}"
+											@clear="clearKeyWord"
+											@search="getProductOfferDetailPage"
+											@custom="getProductOfferDetailPage"
+											>
+										</x-search>
+									</view>
+								</template>
+							</view>
+						</view>
+						<template v-if="isMobile">
+							<view class="tool_bar_mobile">
 								<view class="tool_bar_item" :class="[searchType=='zonghe'?'active':'']" @click="change_search_type('zonghe')">综合</view>
 								<view class="tool_bar_item" :class="[searchType=='price'?'active':'']" @click="change_search_type('price')">单价<u-icon :name="sortOrder < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
 								<view class="tool_bar_item" :class="[searchType=='time'?'active':'']" @click="change_search_type('time')">时间<u-icon :name="sortType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
-								<view class="tool_bar_item grid" :class="[listShowType=='grid'?'active':'']" @click="change_show_type('grid')"><u-icon name="grid"></u-icon></view>
-								<view class="tool_bar_item grid" :class="[listShowType=='list'?'active':'']" @click="change_show_type('list')"><u-icon name="list"></u-icon></view>
-								<view class="tool_bar_item search">
-									<x-search placeholder="请输入关键词" shape="round" height="0.30rem" v-model="keyword" :clearabled="true"
-										bg-color="#fff"
-										:input-style="{fontSize:'14px'}" 
-										:action-style="{fontSize:'14px',width: '0.30rem',
-										marginLeft: '0.10rem',
-										marginRight: '0.20rem',
-										color: '#fff',}"
-										@clear="clearKeyWord"
-										@search="getProductOfferDetailPage"
-										@custom="getProductOfferDetailPage"
-										>
-									</x-search>
+								<view class="tool_bar_item_right">
+									<view class="tool_bar_item grid" :class="[listShowType=='grid'?'active':'']" @click="change_show_type('grid')"><u-icon name="grid"></u-icon></view>
+									<view class="tool_bar_item grid" :class="[listShowType=='list'?'active':'']" @click="change_show_type('list')"><u-icon name="list"></u-icon></view>
 								</view>
 							</view>
-						</view>
+						</template>
 						<view class="product_list">
-							<!-- <u-row v-if="listShowType=='grid'">
-								<u-col span="3" v-for="(item,index) in productList" :key='index'>
-									<view class="product_list_item">
-										<view class="product_list_img">
-											<image class="img" :src="item.imageUrl"></image>
-										</view>
-										<view class="product_list_info">
-											<view class="product_list_info_text active" :title="item.name">
-												{{item.name}}
-											</view>
-											<view class="product_list_info_text">
-												参考单价：<text class="red_color">{{item.cu_de}}{{item.offerAmount}}</text>
-											</view>
-											<view class="product_list_info_text">
-												出厂货号：{{item.fa_no}}
-											</view>
-											<view class="product_list_info_text">
-												装箱量：{{item.in_en}}/{{item.ou_lo}}(PCS)
-											</view>
-										</view>
-									</view>
-								</u-col>
-							</u-row> -->
 							<b-row v-if="listShowType=='grid'" no-gutters>
 								<b-col cols="6" sm="3" v-for="(item,index) in productList" :key='index'>
-									<view class="product_list_item">
+									<view class="product_list_item" @click="toProductDetail(item.id)" tap="toProductDetail(item.id)">
 										<view class="product_list_img">
 											<image class="img" :src="item.imageUrl"></image>
 										</view>
@@ -325,35 +229,54 @@
 							</b-row>
 							<u-row v-else-if="listShowType=='list'" class="u_row">
 								<u-col span="12" v-for="(item,index) in productList" :key='index'>
-									<u-row :style="{borderBottom: '1px solid #e9e9e9'}" class="product_list_item2">
-										<u-col span="2">
+									<b-row :style="isMobile ?{border: '1px solid #dcdfe6',borderRadius: '5px',marginBottom:'5px'}:{borderBottom: '1px solid #e9e9e9'}" class="product_list_item2">
+										<b-col cols="6" sm="2">
 											<image :src="item.imageUrl" class="product_list_img2"></image>
-										</u-col>
-										<u-col span="3">
-											<view style="margin-left: 40px;">
+										</b-col>
+										<b-col cols="6" sm="3">
+											<view style="margin-left: 40px;" v-if="!isMobile">
 												<view class="product_list_info_text2">产品名称：<span>{{item.name}}</span></view>
-												<view class="product_list_info_text2">产品货号：<span>{{item.fa_no}}</span></view>
+												<view class="product_list_info_text2">出厂货号：<span>{{item.fa_no}}</span></view>
 												<view class="product_list_info_text2">包装方式：<span>{{item.chinesePack}}</span></view>
 												<view class="product_list_info_text2">样品规格：<span>{{item.pr_le}}x{{item.pr_wi}}x{{item.pr_hi}}(cm)</span></view>
 											</view>
-										</u-col>
-										<u-col span="3">
-											<view>
+											<view v-else>
+												<view class="product_list_info_text2 active"><span>{{item.name}}</span></view>
+												<view class="product_list_info_text2">出厂货号：<span>{{item.fa_no}}</span></view>
+												<view class="product_list_info_text2 red_color">报价：<span>{{item.cu_de}}{{item.offerAmount}}</span></view>
+												<view class="product_list_info_text2 red_color">报价箱数：<span>{{item.boxNumber}}</span></view>
+												<view class="product_list_info_text2 red_color">总金额：<span>{{item.cu_de}}{{item.offerAmount}}</span></view>
+												
+											</view>
+										</b-col>
+										<b-col cols="12" sm="3">
+											<view v-if="!isMobile">
 												<view class="product_list_info_text2">包装规格：<span>{{item.in_le}}x{{item.in_wi}}x{{item.in_hi}}(cm)</span></view>
 												<view class="product_list_info_text2">外箱规格：<span>{{item.ou_le}}x{{item.ou_wi}}x{{item.ou_hi}}(cm)</span></view>
 												<view class="product_list_info_text2">装箱量：<span>{{item.in_en}}/{{item.ou_lo}}(PCS)</span></view>
 												<view class="product_list_info_text2">体积/材积：<span>{{item.bulk_stere}}(CBM)/{{item.bulk_feet}}(CUFT)</span></view>
 											</view>
-										</u-col>
-										<u-col span="3">
-											<view>
+											<view v-else>
+												<view class="product_list_info_text2">包装方式：<span>{{item.chinesePack}}</span></view>
+												<view class="product_list_info_text2">样品规格：<span>{{item.pr_le}}x{{item.pr_wi}}x{{item.pr_hi}}(cm)</span></view>
+												<view class="product_list_info_text2">包装规格：<span>{{item.in_le}}x{{item.in_wi}}x{{item.in_hi}}(cm)</span></view>
+												<view class="product_list_info_text2">外箱规格：<span>{{item.ou_le}}x{{item.ou_wi}}x{{item.ou_hi}}(cm)</span></view>
+											</view>
+										</b-col>
+										<b-col cols="12" sm="3">
+											<view v-if="!isMobile">
 												<view class="product_list_info_text2">毛重/净重：<span>{{item.gr_we}}/{{item.ne_we}}(KG)</span></view>
 												<view class="product_list_info_text2 red_color">报价：<span>{{item.cu_de}}{{item.offerAmount}}</span></view>
 												<view class="product_list_info_text2 red_color">报价箱数：<span>{{item.boxNumber}}</span></view>
 												<view class="product_list_info_text2 red_color">总金额：<span>{{item.cu_de}}{{item.offerAmount}}</span></view>
 											</view>
-										</u-col>
-									</u-row>
+											<view v-else>
+												<view class="product_list_info_text2">装箱量：<span>{{item.in_en}}/{{item.ou_lo}}(PCS)</span></view>
+												<view class="product_list_info_text2">体积/材积：<span>{{item.bulk_stere}}(CBM)/{{item.bulk_feet}}(CUFT)</span></view>
+												<view class="product_list_info_text2">毛重/净重：<span>{{item.gr_we}}/{{item.ne_we}}(KG)</span></view>
+											</view>
+										</b-col>
+									</b-row>
 								</u-col>
 							</u-row>
 						</view>
@@ -373,6 +296,7 @@
 <script>
 import uniPagination from "@/uni_modules/uni-pagination/components/uni-pagination/uni-pagination.vue"
 import xSearch from "@/components/x-search.vue"
+import util from "@/common/js/util.js"
 export default {
 	name: "OfferSharing",
 	components: {
@@ -393,6 +317,7 @@ export default {
 			sortType: 0,   //时间搜索
 			searchType:'zonghe',
 			listShowType:'grid', //列表显示类型 grid list
+			isMobile:false   //是否移动端
 		}
 	},
 	methods:{
@@ -433,7 +358,7 @@ export default {
 		async getProductOfferByNumber() {
 			var me = this;
 			const res = await me.$u.api.GetProductOfferByNumberInfo({
-				offerNumber: me.$route.query.id
+				offerNumber: uni.getStorageSync('offer_sharing_id')
 			});
 			if (res.result.code === 200) {
 				this.sampleInfo = {
@@ -485,7 +410,7 @@ export default {
 			const fd = {
 				skipCount: me.currentPage,
 				maxResultCount: me.pageSize,
-				offerNumber: me.$route.query.id,
+				offerNumber: uni.getStorageSync('offer_sharing_id'),
 				categoryNumber: me.currentCate && me.currentCate.id,
 				keyword: me.keyword,
 				sortOrder: me.sortOrder,
@@ -511,7 +436,29 @@ export default {
 			this.currentPage = e.current;
 			this.getProductOfferDetailPage();
 		},
+		//to联系页
+		toContact(){
+			this.$Router.push({
+			    name:'offerContact'
+			})
+		},
+		//to产品详情页
+		toProductDetail(id) {
+		  if (!id) {
+			this.$refs.uToast.show({
+				title: '温馨提示：该产品没有编号！',
+				type:'error'
+			})
+			return false;
+		  }
+		  this.$Router.push({
+			name: "offerDetail",
+			params: { id: id, pid: uni.getStorageSync('offer_sharing_id') }
+		  });
+		},
+		//初始化
 		async init(){
+			this.isMobile=util.isMobile();
 			await this.getToken();
 			await this.getProductOfferByNumber();
 			await this.getProductOfferDetailPage();
@@ -526,6 +473,7 @@ export default {
 	  })
 	},
 	created(){
+		uni.setStorageSync('offer_sharing_id', this.$route.query.id);
 		this.init();
 	}
 }
@@ -533,53 +481,4 @@ export default {
 
 <style lang="less" scoped>
 @import  "@/less/offerSharing/offerSharing.less";
-
-/deep/ .u-divider-line {
-    border-bottom: 3px solid #e4e7ed;
-}
-.wrap {
-
-}
-.u-row {
-	margin: 0.20rem 0;
-}
-.active_button{
-	height: 0.34rem !important;
-	margin-top: 0.08rem;
-}
-.offer_info_item {
-	height: 0.50rem;
-	display: flex;
-	line-height: 0.5rem;
-	.offer_info_item_label{
-		font-size: 14px;
-		font-weight: 400;
-		color: #333333;
-	}
-	//加粗
-	.active{
-		font-size: 16px !important;
-		font-weight: 700;
-		// line-height: 0.20rem;
-	}
-	.offer_info_item_text{
-		font-size: 14px;
-		color: #333333;
-	}
-}
-.row_diver{
-	width: 100%;
-	height: 1px;
-	border-color: #ebebeb;
-	background-color: #ebebeb;
-}
-.red_color{
-	color: #fa3534 !important;
-}
-.blue_color{
-	color: #2b85e4 !important;
-}
-.u_row{
-	margin: 0!important;
-}
 </style>
