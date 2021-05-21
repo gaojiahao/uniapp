@@ -74,17 +74,9 @@ function getClientTypeList(type, token) {
 function resetPersonInfo(token) {
   return new Promise((result, reject) => {
     Vue.prototype.$http
-      .post(
-        "/api/RefreshToken",
-        {
-          token: token
-        },
-        {
-          headers: {
-            "content-type": "application/json"
-          }
-        }
-      )
+      .post("/api/RefreshToken", {
+        token: token
+      })
       .then(res => {
         result(res);
       })

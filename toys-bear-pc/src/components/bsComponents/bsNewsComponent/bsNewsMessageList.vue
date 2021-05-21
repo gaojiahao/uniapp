@@ -4,17 +4,19 @@
       <div class="head">
         <img
           v-if="dataOption.type === 1"
-          :src="dataOption.userInfo.avatar"
+          :src="dataOption.userInfo && dataOption.userInfo.avatar"
           alt=""
         />
         <img
           v-else-if="dataOption.type === 3"
-          :src="dataOption.userInfo.userImage"
+          :src="dataOption.userInfo && dataOption.userInfo.userImage"
           alt=""
         />
-        <p v-if="dataOption.type === 1">{{ dataOption.userInfo.nickname }}</p>
+        <p v-if="dataOption.type === 1">
+          {{ dataOption.userInfo && dataOption.userInfo.nickname }}
+        </p>
         <p v-else-if="dataOption.type === 3">
-          {{ dataOption.userInfo.linkName }}
+          {{ dataOption.userInfo && dataOption.userInfo.linkName }}
         </p>
         <i class="el-icon-more"></i>
       </div>
@@ -33,41 +35,278 @@
                     {{ dateDiff(item.sentTime) }}
                   </div>
                   <div class="item left">
-                    <!-- 单聊头像 -->
-                    <template v-if="dataOption.type === 1">
-                      <img
-                        class="header-img"
-                        :src="dataOption.userInfo.avatar"
-                      />
-                    </template>
-                    <!-- 群聊头像 -->
-                    <template v-else-if="dataOption.type === 3">
-                      <!-- {{
-                      filterUserInfo(
-                        dataOption.userInfo.groupMemberInfos.items,
-                        item
-                      )
-                    }} -->
-                      <img
-                        class="header-img"
-                        :src="
-                          filterUserInfo(
-                            dataOption.userInfo.groupMemberInfos.items,
-                            item
-                          ).userImage
-                        "
-                      />
-                    </template>
+                    <!-- 头像 -->
+                    <div class="youTouxiang" @click.stop="openShowCart(item)">
+                      <!-- 单聊头像 -->
+                      <template v-if="dataOption.type === 1">
+                        <el-image
+                          class="header-img"
+                          style="width: 50px;height: 50px;border-radius: 100px;"
+                          :src="
+                            dataOption.userInfo && dataOption.userInfo.avatar
+                          "
+                          fit="contain"
+                        >
+                          <div
+                            slot="placeholder"
+                            class="image-slot"
+                            style="width: 50px;height: 50px;border-radius: 100px;"
+                          >
+                            <img
+                              style="width: 50px;height: 50px;border-radius: 100px;"
+                              :src="require('@/assets/images/imgError.png')"
+                            />
+                          </div>
+                          <div
+                            slot="error"
+                            class="image-slot"
+                            style="width: 50px;height: 50px;border-radius: 100px;"
+                          >
+                            <img
+                              style="width: 50px;height: 50px;border-radius: 100px;"
+                              :src="require('@/assets/images/imgError.png')"
+                            />
+                          </div>
+                        </el-image>
+                      </template>
+                      <!-- 群聊头像 -->
+                      <template v-else-if="dataOption.type === 3">
+                        <el-image
+                          v-if="dataOption.userInfo"
+                          class="header-img"
+                          style="width: 50px;height: 50px;border-radius: 100px;"
+                          :src="
+                            filterUserInfo(
+                              dataOption.userInfo.groupMemberInfos.items,
+                              item
+                            ).userImage
+                          "
+                          fit="contain"
+                        >
+                          <div
+                            slot="placeholder"
+                            class="image-slot"
+                            style="width: 50px;height: 50px;border-radius: 100px;"
+                          >
+                            <img
+                              style="width: 50px;height: 50px;border-radius: 100px;"
+                              :src="require('@/assets/images/imgError.png')"
+                            />
+                          </div>
+                          <div
+                            slot="error"
+                            class="image-slot"
+                            style="width: 50px;height: 50px;border-radius: 100px;"
+                          >
+                            <img
+                              style="width: 50px;height: 50px;border-radius: 100px;"
+                              :src="require('@/assets/images/imgError.png')"
+                            />
+                          </div>
+                        </el-image>
+                      </template>
+                      <!-- 名片 -->
+                      <div
+                        class="youCart"
+                        v-show="dialogBusiness === item.messageUId"
+                      >
+                        <div class="header">
+                          <div class="imgBox">
+                            <template v-if="dataOption.type === 1">
+                              <el-image
+                                class="header-img"
+                                style="width: 50px;height: 50px;border-radius: 100px;position:static;"
+                                :src="
+                                  dataOption.userInfo &&
+                                    dataOption.userInfo.avatar
+                                "
+                                fit="contain"
+                              >
+                                <div
+                                  slot="placeholder"
+                                  class="image-slot"
+                                  style="width: 50px;height: 50px;border-radius: 100px;"
+                                >
+                                  <img
+                                    style="width: 50px;height: 50px;border-radius: 100px;"
+                                    :src="
+                                      require('@/assets/images/imgError.png')
+                                    "
+                                  />
+                                </div>
+                                <div
+                                  slot="error"
+                                  class="image-slot"
+                                  style="width: 50px;height: 50px;border-radius: 100px;"
+                                >
+                                  <img
+                                    style="width: 50px;height: 50px;border-radius: 100px;"
+                                    :src="
+                                      require('@/assets/images/imgError.png')
+                                    "
+                                  />
+                                </div>
+                              </el-image>
+                            </template>
+                            <!-- 群聊头像 -->
+                            <template v-else-if="dataOption.type === 3">
+                              <el-image
+                                v-if="dataOption.userInfo"
+                                class="header-img"
+                                style="width: 50px;height: 50px;border-radius: 100px;position:static;"
+                                :src="
+                                  filterUserInfo(
+                                    dataOption.userInfo.groupMemberInfos.items,
+                                    item
+                                  ).userImage
+                                "
+                                fit="contain"
+                              >
+                                <div
+                                  slot="placeholder"
+                                  class="image-slot"
+                                  style="width: 50px;height: 50px;border-radius: 100px;"
+                                >
+                                  <img
+                                    style="width: 50px;height: 50px;border-radius: 100px;"
+                                    :src="
+                                      require('@/assets/images/imgError.png')
+                                    "
+                                  />
+                                </div>
+                                <div
+                                  slot="error"
+                                  class="image-slot"
+                                  style="width: 50px;height: 50px;border-radius: 100px;"
+                                >
+                                  <img
+                                    style="width: 50px;height: 50px;border-radius: 100px;"
+                                    :src="
+                                      require('@/assets/images/imgError.png')
+                                    "
+                                  />
+                                </div>
+                              </el-image>
+                            </template>
+                          </div>
+                          <div class="nameBox">
+                            <div class="name" v-if="dataOption.type === 1">
+                              {{
+                                dataOption.userInfo &&
+                                  dataOption.userInfo.nickname
+                              }}
+                            </div>
+                            <template v-else-if="dataOption.type === 3">
+                              <div class="name" v-if="dataOption.userInfo">
+                                {{
+                                  filterUserInfo(
+                                    dataOption.userInfo.groupMemberInfos.items,
+                                    item
+                                  ).linkman
+                                }}
+                              </div>
+                            </template>
+
+                            <div class="company">成卓玩具厂成卓玩具厂成卓</div>
+                          </div>
+                        </div>
+                        <div class="contentBody">
+                          <p class="contentBody_item">
+                            <span class="item_title">性名：</span>
+                            <span v-if="dataOption.type === 1">
+                              {{
+                                dataOption.userInfo &&
+                                  dataOption.userInfo.nickname
+                              }}
+                            </span>
+                            <template v-else-if="dataOption.type === 3">
+                              <span v-if="dataOption.userInfo">
+                                {{
+                                  filterUserInfo(
+                                    dataOption.userInfo.groupMemberInfos.items,
+                                    item
+                                  ).linkman
+                                }}
+                              </span>
+                            </template>
+                          </p>
+                          <p class="contentBody_item">
+                            <template v-if="dataOption.userInfo">
+                              <span class="item_title">手机：</span>
+                              <span
+                                v-if="
+                                  dataOption.type === 1 &&
+                                    dataOption.userInfo.phoneNumber
+                                "
+                              >
+                                {{ dataOption.userInfo.phoneNumber }}
+                              </span>
+                              <span v-else-if="dataOption.type === 3">
+                                {{
+                                  filterUserInfo(
+                                    dataOption.userInfo.groupMemberInfos.items,
+                                    item
+                                  ).phoneNumber
+                                }}
+                              </span>
+                            </template>
+                          </p>
+                          <p
+                            class="contentBody_item"
+                            v-if="dataOption.userInfo"
+                          >
+                            <template>
+                              <span class="item_title">公司：</span>
+                              <span
+                                class="factory"
+                                v-if="
+                                  dataOption.type === 1 &&
+                                    dataOption.userInfo.companyName
+                                "
+                              >
+                                {{ dataOption.userInfo.companyName }}
+                              </span>
+                              <span
+                                v-else-if="dataOption.type === 3"
+                                class="factory"
+                              >
+                                {{
+                                  filterUserInfo(
+                                    dataOption.userInfo.groupMemberInfos.items,
+                                    item
+                                  ).companyName
+                                }}
+                              </span>
+                            </template>
+                          </p>
+                          <p class="contentBody_item">
+                            <span class="item_title">备注：</span>
+                            <span class="el-icon-edit openEditRemark"></span>
+                          </p>
+                        </div>
+                        <!-- 按钮 -->
+                        <div class="foot_btns">
+                          <el-button type="primary" size="medium">
+                            发消息
+                          </el-button>
+                          <el-button type="danger" size="medium" plain>
+                            删除好友
+                          </el-button>
+                        </div>
+                      </div>
+                    </div>
                     <div class="youChat">
                       <!-- 单聊用户名 -->
                       <template v-if="dataOption.type === 1">
                         <span class="name">
-                          {{ dataOption.userInfo.nickname }}
+                          {{
+                            dataOption.userInfo && dataOption.userInfo.nickname
+                          }}
                         </span>
                       </template>
                       <!-- 群聊用户名 -->
                       <template v-else-if="dataOption.type === 3">
-                        <span class="name">
+                        <span class="name" v-if="dataOption.userInfo">
                           {{
                             filterUserInfo(
                               dataOption.userInfo.groupMemberInfos.items,
@@ -239,8 +478,22 @@
       <div class="footer">
         <div class="footerHead">
           <!-- <div><img src="@/assets/images/tupian.png" alt="" /></div> -->
-          <div><img src="@/assets/images/biaoq.png" alt="" /></div>
-          <div><img src="@/assets/images/tupian.png" alt="" /></div>
+          <div class="imgBox">
+            <img src="@/assets/images/biaoq.png" alt="" />
+          </div>
+          <div class="imgBox" @click="selectFile">
+            <img src="@/assets/images/tupian.png" alt="" />
+            <el-upload
+              action=""
+              ref="uploadFile"
+              :auto-upload="false"
+              :on-change="changeFile"
+              :http-request="httpFile"
+              :accept="uploadAccept()"
+              style="display: none;"
+            >
+            </el-upload>
+          </div>
         </div>
         <div class="input-box">
           <div class="left">
@@ -260,7 +513,7 @@
             </el-scrollbar>
           </div>
           <div class="right">
-            <el-button type="primary">发送</el-button>
+            <el-button type="primary" @click="sendClick">发送</el-button>
           </div>
         </div>
       </div>
@@ -317,7 +570,7 @@
 </template>
 
 <script>
-// import eventBus from "@/assets/js/common/eventBus.js";
+import eventBus from "@/assets/js/common/eventBus.js";
 import { dateDiff } from "@/assets/js/common/common.js";
 import { mapState } from "vuex";
 export default {
@@ -325,15 +578,150 @@ export default {
   props: ["dataOption", "im"],
   data() {
     return {
+      base64Url: null,
+      sendMsgType: "RC:TxtMsg",
       textInfo: "",
+      dialogBusiness: null,
+      hasMore: false,
       isDiyu: 0,
       chatInfoList: []
     };
   },
   methods: {
-    // 解读base64
-    unscrambleBase64(code) {
-      console.log(window.Base64.decode(code));
+    // 发送求传图片
+    async httpFile(file) {
+      console.log(file);
+      const fd = new FormData();
+      fd.append("file", file.raw);
+      const res = await this.$http.post("/api/File/MessageUploadFile", fd);
+      const { code, object, message } = res.data.result;
+      if (code === 200) {
+        if (object && object[0]) {
+          const url = object[0].filePath;
+          const option = {
+            targetId: this.dataOption.targetId,
+            messageType: this.sendMsgType
+          };
+          switch (this.sendMsgType) {
+            case "RC:TxtMsg":
+              option.content = {
+                content: {
+                  content: this.textInfo
+                }
+              };
+              break;
+            case "RC:ImgMsg":
+              option.content = {
+                content: {
+                  content: "",
+                  full: true,
+                  imageUri: url
+                }
+              };
+              break;
+            case "XZX:VideoMessage":
+              option.content = {
+                content: {
+                  videoCoverBase64: "",
+                  videoUrl: url
+                }
+              };
+              break;
+          }
+          this.sendInfo(option);
+        }
+      } else {
+        this.$common.handlerMsgState({
+          msg: message,
+          type: "danger"
+        });
+      }
+    },
+    // 文件发生了改变
+    changeFile(file) {
+      // 当前选中文件
+      const rowFileType = file.raw.type.split("/")[1].toUpperCase();
+      // 当前选中文件的大小
+      const rowFileSize = file.size;
+      // 图片
+      const imgType = this.globalJson.Json.MessageRestriction[0].itemCode;
+      const imgSize = Number(
+        this.globalJson.Json.MessageRestriction[7].itemCode
+      );
+      // 视频
+      const videoType = this.globalJson.Json.MessageRestriction[2].itemCode;
+      const videoSize = Number(
+        this.globalJson.Json.MessageRestriction[6].itemCode
+      );
+      // 文件
+      // const fileType = this.globalJson.Json.MessageRestriction[4].itemCode;
+      // const fileSize = Number(
+      //   this.globalJson.Json.MessageRestriction[8].itemCode
+      // );
+      // 图片
+      if (imgType.includes(rowFileType)) {
+        this.sendMsgType = "RC:ImgMsg";
+        if (rowFileSize > imgSize) {
+          this.$common.handlerMsgState({
+            msg: "图片太大",
+            type: "danger"
+          });
+          return false;
+        }
+        // 视频
+      } else if (videoType.includes(rowFileType)) {
+        this.sendMsgType = "XZX:VideoMessage";
+        if (rowFileSize > videoSize) {
+          this.$common.handlerMsgState({
+            msg: "视频太大",
+            type: "danger"
+          });
+          return false;
+        }
+      }
+      //转base64
+      // const _that = this;
+      // const event = event || window.event;
+      // const file64 = event.target.files[0];
+      // const reader = new FileReader();
+      // reader.onload = function(e) {
+      //   _that.base64Url = e.target.result; //将图片路径赋值给src
+      // };
+      // reader.readAsDataURL(file64);
+      // console.log(_that.base64Url);
+      // 文件
+      // else if (fileType.includes(rowFileType)) {
+      //   this.sendMsgType = "RC:FileMsg";
+      //   if (rowFileSize > fileSize) {
+      //     this.$common.handlerMsgState({
+      //       msg: "文件太大",
+      //       type: "danger"
+      //     });
+      //     return false;
+      //   }
+      // }
+      /**
+       * 发送请求
+       */
+      this.httpFile(file);
+    },
+    // 选择文件
+    selectFile() {
+      this.$refs.uploadFile.$refs["upload-inner"].handleClick();
+    },
+    // 限制文件类型
+    uploadAccept() {
+      return (
+        this.globalJson.Json.MessageRestriction[0].itemCode +
+        "," +
+        this.globalJson.Json.MessageRestriction[2].itemCode
+        // "," +
+        // this.globalJson.Json.MessageRestriction[4].itemCode
+      );
+    },
+    // 点击头像打开卡片
+    openShowCart(item) {
+      this.dialogBusiness = item.messageUId;
     },
     // 筛选群聊聊天用户信息
     filterUserInfo(list, item) {
@@ -352,11 +740,18 @@ export default {
       };
       conversation.getMessages(option).then(result => {
         var list = result.list; // 历史消息列表
-        var hasMore = result.hasMore; // 是否还有历史消息可以获取
-        console.log("获取历史消息成功", list, hasMore, this.dataOption);
+        this.hasMore = result.hasMore; // 是否还有历史消息可以获取
+        console.log("是否还有历史消息可以获取", this.hasMore);
+        console.log(list, this.dataOption);
         this.chatInfoList = list;
+        // 清除未读
+        this.clearReadInfo();
       });
       // 清除未读
+      // this.clearReadInfo();
+    },
+    // 清除未读
+    clearReadInfo() {
       const qingchu = this.im.Conversation.get({
         targetId: this.dataOption.targetId,
         type: this.dataOption.type
@@ -373,6 +768,43 @@ export default {
     checkTabs(num) {
       this.isDiyu = num;
     },
+    // 发送消息
+    sendInfo({ targetId, messageType, content }) {
+      var conversation = this.im.Conversation.get({
+        targetId: targetId,
+        type: this.dataOption.type
+      });
+      conversation
+        .send({
+          messageType: messageType, // 填写开发者定义的 messageType
+          content: content
+        })
+        .then(message => {
+          console.log("发送消息成功", message);
+          this.getHistoryChat();
+        });
+    },
+    // 按钮发送文本
+    sendClick() {
+      if (!this.textInfo) {
+        this.$common.handlerMsgState({
+          msg: "发送内容不能为空",
+          type: "danger"
+        });
+        return false;
+      }
+      this.sendMsgType = "RC:TxtMsg";
+
+      this.sendInfo({
+        targetId: this.dataOption.targetId,
+        messageType: "RC:TxtMsg",
+        content: {
+          content: this.textInfo
+        }
+      });
+      this.textInfo = "";
+    },
+    // 发送文本消息
     myInputEvent(e) {
       //阻止默认浏览器动作(W3C)
       if (e && e.preventDefault) e.preventDefault();
@@ -385,16 +817,35 @@ export default {
       } else {
         //用户点击了enter触发
         console.log("用户点击了回车");
+        if (!this.textInfo) {
+          this.$common.handlerMsgState({
+            msg: "发送内容不能为空",
+            type: "danger"
+          });
+          return false;
+        }
+        this.sendInfo({
+          targetId: this.dataOption.targetId,
+          messageType: "RC:TxtMsg",
+          content: {
+            content: this.textInfo
+          }
+        });
+        this.textInfo = "";
       }
     }
   },
   created() {},
   mounted() {
     this.getHistoryChat();
+    // 名片弹框关闭
+    eventBus.$on("handleHiddle", () => {
+      this.dialogBusiness = null;
+    });
   },
   watch: {
     chatInfoList: {
-      deep: true,
+      deep: false,
       handler() {
         this.$nextTick(() => {
           this.$refs["myScrollbar"].wrap.scrollTop = this.$refs[
@@ -405,7 +856,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(["userInfo", "globalJson"])
+  },
+  beforeDestroy() {
+    eventBus.$off("handleHiddle");
   }
 };
 </script>
@@ -448,10 +902,11 @@ export default {
     }
     .center {
       height: 540px;
-      padding: 10px 0;
+      padding: 5px 0;
       box-sizing: border-box;
       overflow-x: hidden;
       overflow-y: auto;
+      background-color: transparent;
       scrollbar-width: none; /* Firefox */
       -ms-overflow-style: none; /* IE 10+ */
       &::-webkit-scrollbar {
@@ -464,6 +919,90 @@ export default {
       .left {
         flex-direction: row;
         padding-left: 25px;
+        .youTouxiang {
+          position: relative;
+          margin-bottom: 20px;
+          .header-img {
+            cursor: pointer;
+          }
+          .youCart {
+            position: absolute;
+            width: 300px;
+            height: 406px;
+            left: 65px;
+            top: 28px;
+            background: #ffffff;
+            border-radius: 4px;
+            border-bottom: 1px solid #e5e5e5;
+            box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+            box-sizing: border-box;
+            .header {
+              height: 90px;
+              box-sizing: border-box;
+              padding: 20px;
+              border-bottom: 1px solid #dcdfe6;
+              display: flex;
+              .imgBox {
+                width: 70px;
+                min-width: 70px;
+              }
+              .nameBox {
+                .name {
+                  font-size: 18px;
+                  font-weight: 700;
+                  width: 190px;
+                  color: #333333;
+                  overflow: hidden; /*超出部分隐藏*/
+                  white-space: nowrap; /*不换行*/
+                  text-overflow: ellipsis; /*超出部分文字以...显示*/
+                }
+                .company {
+                  font-size: 14px;
+                  font-weight: 400;
+                  width: 190px;
+                  color: #999999;
+                  line-height: 34px;
+                  overflow: hidden; /*超出部分隐藏*/
+                  white-space: nowrap; /*不换行*/
+                  text-overflow: ellipsis; /*超出部分文字以...显示*/
+                }
+              }
+            }
+            .contentBody {
+              padding: 20px;
+              .contentBody_item {
+                padding-bottom: 20px;
+                overflow: hidden; /*超出部分隐藏*/
+                white-space: nowrap; /*不换行*/
+                text-overflow: ellipsis; /*超出部分文字以...显示*/
+                .item_title {
+                  color: #999999;
+                  margin-right: 30px;
+                }
+                .factory {
+                  color: #3368a9;
+                  cursor: pointer;
+                }
+                .openEditRemark {
+                  cursor: pointer;
+                }
+                &:last-of-type {
+                  border-bottom: 1px solid #dcdfe6;
+                }
+              }
+            }
+            .foot_btns {
+              padding: 15px 20px;
+              .el-button {
+                width: 100%;
+                margin: 0;
+                &:last-of-type {
+                  margin-top: 15px;
+                }
+              }
+            }
+          }
+        }
         .youChat {
           margin-left: 15px;
           margin-right: 50px;
@@ -547,11 +1086,17 @@ export default {
         display: flex;
         align-items: center;
         height: 46px;
+        .imgBox {
+          width: 30px;
+          height: 30px;
+          text-align: center;
+          line-height: 30px;
+          cursor: pointer;
+          margin-right: 3px;
+        }
         img {
           width: 18px;
           height: 18px;
-          margin-right: 20px;
-          cursor: pointer;
         }
       }
       .input-box {

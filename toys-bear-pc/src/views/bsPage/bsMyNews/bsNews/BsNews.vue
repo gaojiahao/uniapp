@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 敬请期待 -->
-    <bsaa />
+    <bsaa :im="im" />
   </div>
 </template>
 
@@ -9,6 +9,7 @@
 import bsaa from "./Bsaa";
 export default {
   name: "",
+  props: ["im"],
   components: {
     bsaa
   },
