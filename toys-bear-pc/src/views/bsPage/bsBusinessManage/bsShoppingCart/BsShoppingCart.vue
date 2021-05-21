@@ -1361,6 +1361,20 @@ export default {
         }
       }
     },
+    "clienFormData.profitCalcMethod": {
+      deep: true,
+      handler(newVal) {
+        if (newVal == 2) {
+          if (this.clienFormData.profit == 100) {
+            this.clienFormData.profit = 10;
+            this.$common.handlerMsgState({
+              msg: "除法利润率不可为100",
+              error: "danger"
+            });
+          }
+        }
+      }
+    },
     "clienFormData.cu_de": {
       deep: true,
       handler(newVal) {

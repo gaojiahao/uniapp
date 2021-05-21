@@ -246,9 +246,22 @@ export default {
     "addDefaultForm.profit": {
       deep: true,
       handler(newVal) {
-        console.log(newVal);
         if (newVal == 100) {
           if (this.addDefaultForm.profitCalcMethod == 2) {
+            this.addDefaultForm.profit = 10;
+            this.$common.handlerMsgState({
+              msg: "除法利润率不可为100",
+              error: "danger"
+            });
+          }
+        }
+      }
+    },
+    "addDefaultForm.profitCalcMethod": {
+      deep: true,
+      handler(newVal) {
+        if (newVal == 2) {
+          if (this.addDefaultForm.profit == 100) {
             this.addDefaultForm.profit = 10;
             this.$common.handlerMsgState({
               msg: "除法利润率不可为100",
