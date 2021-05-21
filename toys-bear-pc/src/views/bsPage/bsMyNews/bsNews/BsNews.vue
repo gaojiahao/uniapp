@@ -1,6 +1,6 @@
 <template>
-  <!-- <div>敬请期待</div> -->
   <div>
+    <!-- 敬请期待 -->
     <bsaa />
   </div>
 </template>
