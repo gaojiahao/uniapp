@@ -27,9 +27,10 @@
       <div class="tableBox">
         <el-table
           :data="offerProductList"
-          style="width: 100%"
+          style="width: 100%;font-sizi:13px"
           ref="collecTable"
           :header-cell-style="{ backgroundColor: '#f9fafc' }"
+          size="mini"
         >
           <el-table-column label="序号" type="index" align="center" width="50">
           </el-table-column>
@@ -314,7 +315,12 @@
           >
             <template slot-scope="scope">
               <span>
-                {{ sumPriceCount(scope.row.boxNumber, scope.row.ou_lo) }}
+                {{
+                  $calculate.countTotalQuantity(
+                    scope.row.boxNumber,
+                    scope.row.ou_lo
+                  )
+                }}
               </span>
             </template>
           </el-table-column>
@@ -341,7 +347,7 @@
                 <span style="color: #f56c6c">{{ scope.row.cu_de }}</span>
                 <span style="color: #f56c6c">
                   {{
-                    priceCount(
+                    $calculate.countTotalprice(
                       scope.row.offerAmount,
                       scope.row.ou_lo,
                       scope.row.boxNumber
@@ -362,65 +368,10 @@
             </template>
           </el-table-column>
         </el-table>
-        <!-- 统计 -->
-        <div class="tableBtoBox" style="width: 1670px;">
-          <div class="tableBto">
-            <div class="right">
-              <p class="item">
-                <span class="itemTitle">总款数：</span>
-                <span>{{ offerProductList.length }}</span>
-              </p>
-              <p class="item">
-                <span class="itemTitle">总箱数：</span>
-                <span>{{ myTotalQuantity(offerProductList) }}</span>
-              </p>
-              <p class="item">
-                <span class="itemTitle">总数量：</span>
-                <span>{{ calculationTotalBox(offerProductList) }}</span>
-              </p>
-              <p class="item">
-                <span class="itemTitle">总体积/总材积：</span>
-                <span
-                  >{{ myTotalVolume(offerProductList).outerBoxStere }}/{{
-                    myTotalVolume(offerProductList).outerBoxFeet
-                  }}</span
-                >
-              </p>
-              <p class="item">
-                <span class="itemTitle">总毛重/总净重：</span>
-                <span>{{ totalMaozhong() }}/{{ totalJingzhong() }}(KG)</span>
-              </p>
-              <p class="item">
-                <span class="itemTitle">总金额：</span>
-                <span class="price"
-                  >{{ clienFormData.cu_de + myTotalPrice(offerProductList) }}
-                </span>
-              </p>
-              <el-button
-                type="primary"
-                @click="openSub(false)"
-                style="margin-left: 10px"
-                size="small"
-                >确定提交</el-button
-              >
-            </div>
-          </div>
-        </div>
       </div>
     </div>
-    <!-- 分页 -->
-    <!-- <center style="padding:20px 0;">
-        <el-pagination
-          layout="total, sizes, prev, pager, next, jumper"
-          :page-sizes="[12, 24, 36, 48]"
-          background
-          :total="totalCount"
-          :page-size="pageSize"
-          :current-page.sync="currentPage"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange"
-        ></el-pagination>
-      </center> -->
+    <!-- 统计 -->
+    <Summary :summaryData="summaryData" @openSub="openSub"></Summary>
     <!-- 提交信息 -->
     <el-dialog
       title="修改报价信息"
@@ -727,11 +678,13 @@
 // import { mapState } from "vuex";
 // import bsSampleSearch from "@/components/bsComponents/bsSampleComponent/bsSampleSearch";
 import bsSampleQuotationTopComponent from "@/components/bsComponents/bsSampleComponent/bsSampleQuotationTopComponent";
+import Summary from "@/components/summaryComponent/summary";
 import eventBus from "@/assets/js/common/eventBus.js";
 export default {
   name: "bsSampleUpdata",
   components: {
-    bsSampleQuotationTopComponent
+    bsSampleQuotationTopComponent,
+    Summary
   },
   props: {
     item: {
@@ -740,6 +693,20 @@ export default {
   },
   data() {
     return {
+      summaryData: {
+        //汇总数据
+        isHandle: true,
+        totalDegree: 0, //总款数
+        totalCartons: 0, //总箱数
+        totalQuantity: 0, //总数量
+        totalBulkStere: 0, //总体积
+        totalBulkFeet: 0, //总材积
+        totalGrWe: 0, //总毛重
+        totalNeWe: 0, //总净重
+        cu_de: "", //金额单位
+        totalMoney: 0 //总金额
+        // countData: [],
+      },
       showTooltip: false,
       chufa: "(出厂价+总费用/(每车尺码/外箱材积*外箱装量)/(1-报价利润%)/汇率",
       chengfa: "(出厂价+总费用/(每车尺码/外箱材积*外箱装量)*(1+报价利润%)/汇率",
@@ -1094,12 +1061,61 @@ export default {
       const res = await this.$http.post("/api/ProductOfferDetailPage", fd);
       if (res.data.result.code === 200) {
         this.offerProductList = res.data.result.item.items;
+        // this.summaryData.countData = res.data.result.item.items;
+        this.handleCountData(res.data.result.item.items);
         this.totalCount = res.data.result.item.totalCount;
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
           type: "danger"
         });
+      }
+    },
+    //计算汇总数据
+    handleCountData(array) {
+      //总款数
+      this.summaryData.totalDegree = array.length;
+      this.summaryData.cu_de = this.clienFormData.cu_de;
+      //金额单位
+      for (let i = 0; i < array.length; i++) {
+        //总箱数
+        this.summaryData.totalCartons = this.$calculate.add(
+          this.summaryData.totalCartons,
+          array[i].boxNumber || 0
+        );
+        //总数量
+        this.summaryData.totalQuantity = this.$calculate.add(
+          this.summaryData.totalQuantity,
+          this.$calculate.multiply(array[i].boxNumber, array[i].ou_lo) || 0
+        );
+        //总体积
+        this.summaryData.totalBulkStere = this.$calculate.add(
+          this.summaryData.totalBulkStere,
+          this.$calculate.multiply(array[i].boxNumber, array[i].bulk_stere) || 0
+        );
+        //总材积
+        this.summaryData.totalBulkFeet = this.$calculate.add(
+          this.summaryData.totalBulkFeet,
+          this.$calculate.multiply(array[i].boxNumber, array[i].bulk_feet) || 0
+        );
+        //总毛重
+        this.summaryData.totalGrWe = this.$calculate.add(
+          this.summaryData.totalGrWe,
+          this.$calculate.multiply(array[i].boxNumber, array[i].gr_we) || 0
+        );
+        //总净重
+        this.summaryData.totalNeWe = this.$calculate.add(
+          this.summaryData.totalNeWe,
+          this.$calculate.multiply(array[i].boxNumber, array[i].ne_we) || 0
+        );
+        //总金额
+        this.summaryData.totalMoney = this.$calculate.add(
+          this.summaryData.totalMoney,
+          this.$calculate.multiply(
+            this.$calculate.multiply(array[i].offerAmount, array[i].boxNumber),
+            array[i].ou_lo
+          )
+        );
       }
     },
     //确定提交数据
@@ -1196,24 +1212,7 @@ export default {
       };
       this.$store.commit("myAddTab", fd);
     },
-    isInteger(obj) {
-      return Math.floor(obj) === obj;
-    },
-    // 切換頁容量
-    handleSizeChange(pageSize) {
-      this.pageSize = pageSize;
-      if (
-        this.currentPage * pageSize > this.totalCount &&
-        this.currentPage != 1
-      )
-        return false;
-      this.getProductOfferDetailPage();
-    },
-    // 修改当前页
-    handleCurrentChange(page) {
-      this.currentPage = page;
-      this.getProductOfferDetailPage();
-    },
+
     // 新增客户
     openAddMyClient() {
       this.addClientFormData = {
@@ -1223,182 +1222,6 @@ export default {
       };
       this.addMyClientDialog = true;
     },
-    /*
-     * 将一个浮点数转成整数，返回整数和倍数。如 3.14 >> 314，倍数是 100
-     * @param floatNum {number} 小数
-     * @return {object}
-     *   {times:100, num: 314}
-     */
-    toInteger(floatNum) {
-      const ret = { times: 1, num: 0 };
-      if (this.isInteger(floatNum)) {
-        ret.num = floatNum;
-        return ret;
-      }
-      const strfi = floatNum + "";
-      const dotPos = strfi.indexOf(".");
-      const len = strfi.substr(dotPos + 1).length;
-      const times = Math.pow(10, len);
-      const intNum = parseInt(floatNum * times + 0.5, 10);
-      ret.times = times;
-      ret.num = intNum;
-      return ret;
-    },
-    /*
-     * 核心方法，实现加减乘除运算，确保不丢失精度
-     * 思路：把小数放大为整数（乘），进行算术运算，再缩小为小数（除）
-     *
-     * @param a {number} 运算数1
-     * @param b {number} 运算数2
-     * @param digits {number} 精度，保留的小数点数，比如 2, 即保留为两位小数
-     * @param op {string} 运算类型，有加减乘除（add/subtract/multiply/divide）
-     *
-     */
-    operation(a, b, digits, op) {
-      const o1 = this.toInteger(a);
-      const o2 = this.toInteger(b);
-      const n1 = o1.num;
-      const n2 = o2.num;
-      const t1 = o1.times;
-      const t2 = o2.times;
-      const max = t1 > t2 ? t1 : t2;
-      let result = null;
-      switch (op) {
-        case "add":
-          if (t1 === t2) {
-            // 两个小数位数相同
-            result = n1 + n2;
-          } else if (t1 > t2) {
-            // o1 小数位 大于 o2
-            result = n1 + n2 * (t1 / t2);
-          } else {
-            // o1 小数位 小于 o2
-            result = n1 * (t2 / t1) + n2;
-          }
-          return result / max;
-        case "subtract":
-          if (t1 === t2) {
-            result = n1 - n2;
-          } else if (t1 > t2) {
-            result = n1 - n2 * (t1 / t2);
-          } else {
-            result = n1 * (t2 / t1) - n2;
-          }
-          return result / max;
-        case "multiply":
-          result = (n1 * n2) / (t1 * t2);
-          return result;
-        case "divide":
-          result = (n1 / n2) * (t2 / t1);
-          return result;
-      }
-    },
-    // 加
-    add(a, b, digits) {
-      return this.operation(a, b, digits, "add");
-    },
-    // 减
-    subtract(a, b, digits) {
-      return this.operation(a, b, digits, "subtract");
-    },
-    // 乘
-    multiply(a, b, digits) {
-      return this.operation(a, b, digits, "multiply");
-    },
-    // 除
-    divide(a, b, digits) {
-      return this.operation(a, b, digits, "divide");
-    },
-    // 总数量
-    sumPriceCount(boxNumber, ou_lo) {
-      return this.multiply(boxNumber, ou_lo);
-    },
-    // 单个产品总价
-    priceCount(price, ou_lo, boxNumber) {
-      return this.multiply(this.multiply(price, ou_lo), boxNumber);
-    },
-    // 计算总体积材积
-    myTotalVolume(list) {
-      let outerBoxStere = 0,
-        outerBoxFeet = 0;
-      for (let i = 0; i < list.length; i++) {
-        outerBoxStere = this.add(
-          outerBoxStere,
-          this.multiply(list[i].bulk_stere, list[i].boxNumber)
-        );
-        outerBoxFeet = this.add(
-          outerBoxFeet,
-          this.multiply(list[i].bulk_feet, list[i].boxNumber)
-        );
-      }
-      return {
-        outerBoxStere,
-        outerBoxFeet
-      };
-    },
-    // 计算总净重
-    totalJingzhong() {
-      let number = 0;
-      for (let i = 0; i < this.offerProductList.length; i++) {
-        number = this.add(
-          number,
-          this.multiply(
-            this.offerProductList[i].boxNumber,
-            this.offerProductList[i].ne_we
-          )
-        );
-      }
-      return number;
-    },
-    // 计算总毛重
-    totalMaozhong() {
-      let number = 0;
-      for (let i = 0; i < this.offerProductList.length; i++) {
-        number = this.add(
-          number,
-          this.multiply(
-            this.offerProductList[i].boxNumber,
-            this.offerProductList[i].gr_we
-          )
-        );
-      }
-      return number;
-    },
-    onSubmit() {},
-    // 计算总箱数量
-    myTotalQuantity() {
-      let number = 0;
-      for (let i = 0; i < this.offerProductList.length; i++) {
-        number = this.add(number, this.offerProductList[i].boxNumber || 0);
-      }
-      return number;
-    },
-    // 计算总数量
-    calculationTotalBox(list) {
-      let number = 0;
-      for (let i = 0; i < list.length; i++) {
-        number = this.add(
-          number,
-          this.multiply(list[i].boxNumber, list[i].ou_lo) || 0
-        );
-      }
-      return number;
-    },
-    // 计算总价
-    myTotalPrice(list) {
-      let price = 0;
-      for (let i = 0; i < list.length; i++) {
-        price = this.add(
-          price,
-          this.multiply(
-            this.multiply(list[i].offerAmount, list[i].boxNumber),
-            list[i].ou_lo
-          )
-        );
-      }
-      return price;
-    },
-
     // 点击箱数选中输入框中的所有值
     selectInputValue(e) {
       e.currentTarget.select();
@@ -1619,43 +1442,6 @@ export default {
           }
           .name {
             margin-top: 8px;
-          }
-        }
-      }
-    }
-    .tableBtoBox {
-      position: absolute;
-      width: 100%;
-      margin-right: 20px;
-      z-index: 1;
-      left: 0;
-      bottom: 0;
-      box-sizing: border-box;
-      padding-right: 20px;
-      margin-right: 30px;
-      .tableBto {
-        display: flex;
-        align-items: center;
-        height: 80px;
-        padding: 0 30px;
-        box-sizing: border-box;
-        background-color: #fff;
-        .right {
-          flex: 1;
-          display: flex;
-          justify-content: flex-end;
-          align-items: center;
-          .item {
-            margin-right: 15px;
-            display: flex;
-            align-items: center;
-            // .itemTitle {
-            // }
-            .price {
-              color: #eb1515;
-              font-weight: 700;
-              font-size: 18px;
-            }
           }
         }
       }
