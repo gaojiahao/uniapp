@@ -64,7 +64,10 @@ const instance = axios.create({
 instance.interceptors.request.use(
   config => {
     axios.defaults.baseURL = target;
-    if (!config.url.includes("GetToken")) {
+    if (
+      !config.url.includes("GetToken") &&
+      !config.url.includes("RefreshToken")
+    ) {
       config.headers.Utoken =
         $Store.state.userInfo && $Store.state.userInfo.accessToken;
       config.headers["content-type"] = "application/json";
