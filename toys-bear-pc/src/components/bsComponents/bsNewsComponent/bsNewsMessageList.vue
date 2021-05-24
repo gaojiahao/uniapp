@@ -602,6 +602,7 @@ export default {
     };
   },
   methods: {
+    // 分页获取消息
     // 发送表情
     sendEmoticon(b) {
       console.log(b);
