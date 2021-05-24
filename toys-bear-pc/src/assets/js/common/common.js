@@ -206,3 +206,58 @@ export function filterMsgTypes(param) {
   }
   return msg;
 }
+
+// 压缩图片
+export function compress(file, size) {
+  let canvas = document.createElement("canvas");
+  let ctx = canvas.getContext("2d");
+  // let initSize = file.src.length;
+  let width = file.width;
+  let height = file.height;
+  canvas.width = width;
+  canvas.height = height;
+  // 铺底色
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(file, 0, 0, width, height);
+  //进行最小压缩
+  let ndata = canvas.toDataURL("image/jpeg", size);
+  console.log("*******压缩后的文件大小*******", ndata.length / 1024);
+  return ndata;
+}
+
+// 图片转bese64
+export function base64file(file, type) {
+  //判断支不支持FileReader
+  if (!file || !window.FileReader) {
+    return false;
+  }
+  return new Promise(resolve => {
+    let reader = new FileReader();
+    reader.readAsDataURL(file); // 把图片文件对象转换base64
+    if (type === "RC:ImgMsg") {
+      //读取成功后的回调
+      reader.onloadend = function() {
+        let result = this.result;
+        let img = new Image();
+        img.src = result;
+        img.onload = function() {
+          const dataURL = compress(img, 0.01);
+          resolve(dataURL);
+        };
+      };
+    } else if (type === "XZX:VideoMessage") {
+      reader.onloadend = function() {
+        let result = this.result;
+        let video = document.createElement("video");
+        video.setAttribute("crossOrigin", "anonymous"); //处理跨域
+        video.setAttribute("src", result);
+        video.currentTime = 1; // 第一帧
+        video.addEventListener("loadeddata", function() {
+          const dataURL = compress(video, 0.01);
+          resolve(dataURL);
+        });
+      };
+    }
+  });
+}

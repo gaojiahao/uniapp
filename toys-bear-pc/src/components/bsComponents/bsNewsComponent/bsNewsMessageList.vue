@@ -329,7 +329,8 @@
                           class="message"
                           v-if="item.messageType === 'RC:VcMsg'"
                         >
-                          {{ item.content.content }}
+                          <i class="yuyinMsg"></i>
+                          <!-- {{ item.content.content }} -->
                         </span>
                         <!-- 图片 -->
                         <div
@@ -477,8 +478,16 @@
       </div>
       <div class="footer">
         <div class="footerHead">
-          <!-- <div><img src="@/assets/images/tupian.png" alt="" /></div> -->
-          <div class="imgBox">
+          <div class="emoticon" v-show="emoticon" @click.stop>
+            <el-scrollbar style="height: 100%;">
+              <div class="item" v-for="(item, i) in expressionLibrary" :key="i">
+                <span class="biaoQing" @click="sendEmoticon(item)">
+                  {{ item.emoji }}
+                </span>
+              </div>
+            </el-scrollbar>
+          </div>
+          <div class="imgBox" @click.stop="emoticon = !emoticon">
             <img src="@/assets/images/biaoq.png" alt="" />
           </div>
           <div class="imgBox" @click="selectFile">
@@ -533,7 +542,7 @@
           :class="{ tabs: true, active: isDiyu === 1 }"
           @click="checkTabs(1)"
         >
-          全部
+          图片
         </div>
         <div
           :class="{ tabs: true, active: isDiyu === 2 }"
@@ -571,26 +580,61 @@
 
 <script>
 import eventBus from "@/assets/js/common/eventBus.js";
-import { dateDiff } from "@/assets/js/common/common.js";
+import { dateDiff, base64file } from "@/assets/js/common/common.js";
 import { mapState } from "vuex";
+import RongIMLib from "RongIMLib";
 export default {
   name: "bsNewsMessageList",
   props: ["dataOption", "im"],
   data() {
     return {
+      emoticon: false,
+      noScroll: false,
+      isFixedTop: false,
       base64Url: null,
       sendMsgType: "RC:TxtMsg",
       textInfo: "",
       dialogBusiness: null,
       hasMore: false,
       isDiyu: 0,
-      chatInfoList: []
+      chatInfoList: [],
+      expressionLibrary: [] // 表情库
     };
   },
   methods: {
+    // 分页获取消息
+    // 发送表情
+    sendEmoticon(b) {
+      console.log(b);
+      this.textInfo += b.emoji;
+    },
+    // 聊天窗口滚动事件
+    handleScroll() {
+      let scrollbarEl = this.$refs.myScrollbar.wrap;
+      scrollbarEl.onscroll = () => {
+        // 到顶部了
+        if (scrollbarEl.scrollTop < 1) {
+          this.isFixedTop = true;
+          // 是否还有历史数据可获取 hasMore
+          if (this.hasMore) {
+            console.log(this.hasMore, "还有历史消息");
+            this.noScroll = true;
+            const startTime =
+              this.chatInfoList[0] && this.chatInfoList[0].sentTime;
+            const scrollHeight = scrollbarEl.scrollHeight;
+            this.getHistoryChat(startTime, scrollHeight);
+          }
+        } else {
+          this.isFixedTop = false;
+        }
+      };
+    },
     // 发送求传图片
     async httpFile(file) {
-      console.log(file);
+      let url64 = await base64file(file.raw, this.sendMsgType);
+      if (url64) {
+        url64 = url64.split(",")[1];
+      }
       const fd = new FormData();
       fd.append("file", file.raw);
       const res = await this.$http.post("/api/File/MessageUploadFile", fd);
@@ -612,19 +656,14 @@ export default {
               break;
             case "RC:ImgMsg":
               option.content = {
-                content: {
-                  content: "",
-                  full: true,
-                  imageUri: url
-                }
+                content: url64,
+                imageUri: url
               };
               break;
             case "XZX:VideoMessage":
               option.content = {
-                content: {
-                  videoCoverBase64: "",
-                  videoUrl: url
-                }
+                videoCoverBase64: url64,
+                videoUrl: url
               };
               break;
           }
@@ -679,30 +718,6 @@ export default {
           return false;
         }
       }
-      //转base64
-      // const _that = this;
-      // const event = event || window.event;
-      // const file64 = event.target.files[0];
-      // const reader = new FileReader();
-      // reader.onload = function(e) {
-      //   _that.base64Url = e.target.result; //将图片路径赋值给src
-      // };
-      // reader.readAsDataURL(file64);
-      // console.log(_that.base64Url);
-      // 文件
-      // else if (fileType.includes(rowFileType)) {
-      //   this.sendMsgType = "RC:FileMsg";
-      //   if (rowFileSize > fileSize) {
-      //     this.$common.handlerMsgState({
-      //       msg: "文件太大",
-      //       type: "danger"
-      //     });
-      //     return false;
-      //   }
-      // }
-      /**
-       * 发送请求
-       */
       this.httpFile(file);
     },
     // 选择文件
@@ -729,26 +744,36 @@ export default {
       if (user) return user;
     },
     // im获取历史消息,聊天窗口消息
-    getHistoryChat() {
+    getHistoryChat(startTime, height) {
       var conversation = this.im.Conversation.get({
         targetId: this.dataOption.targetId,
         type: this.dataOption.type
       });
       var option = {
-        timestamp: +new Date(),
+        timestamp: startTime || +new Date(),
         count: 20
       };
       conversation.getMessages(option).then(result => {
         var list = result.list; // 历史消息列表
         this.hasMore = result.hasMore; // 是否还有历史消息可以获取
-        console.log("是否还有历史消息可以获取", this.hasMore);
-        console.log(list, this.dataOption);
-        this.chatInfoList = list;
+        if (startTime) {
+          this.chatInfoList = [...list, ...this.chatInfoList];
+          this.$nextTick(() => {
+            this.$refs["myScrollbar"].wrap.scrollTop =
+              this.$refs["myScrollbar"].wrap.scrollHeight - height;
+            this.noScroll = false;
+          });
+        } else {
+          this.chatInfoList = list;
+        }
+        console.log(
+          "是否还有历史消息可以获取",
+          this.hasMore,
+          this.chatInfoList
+        );
         // 清除未读
         this.clearReadInfo();
       });
-      // 清除未读
-      // this.clearReadInfo();
     },
     // 清除未读
     clearReadInfo() {
@@ -781,7 +806,7 @@ export default {
         })
         .then(message => {
           console.log("发送消息成功", message);
-          this.getHistoryChat();
+          this.chatInfoList.push(message);
         });
     },
     // 按钮发送文本
@@ -837,16 +862,26 @@ export default {
   },
   created() {},
   mounted() {
+    RongIMLib.RongIMEmoji.init();
+    this.expressionLibrary = RongIMLib.RongIMEmoji.list;
+    console.log(this.expressionLibrary, "表情包库");
     this.getHistoryChat();
     // 名片弹框关闭
     eventBus.$on("handleHiddle", () => {
       this.dialogBusiness = null;
     });
+    eventBus.$on("hideEmoticon", () => {
+      this.emoticon = false;
+    });
+    this.handleScroll();
   },
   watch: {
     chatInfoList: {
       deep: false,
       handler() {
+        if (this.noScroll) {
+          return false;
+        }
         this.$nextTick(() => {
           this.$refs["myScrollbar"].wrap.scrollTop = this.$refs[
             "scrollMain"
@@ -1016,6 +1051,14 @@ export default {
               background: #f5f7fa;
               border: 1px solid #e6e9ee;
               word-break: break-word;
+              .yuyinMsg {
+                width: 13px;
+                height: 17px;
+                cursor: pointer;
+                background: url("~@/assets/images/yuyinMsg.png") no-repeat
+                  center;
+                background-size: contain;
+              }
             }
             .imgBox {
               box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
@@ -1046,6 +1089,14 @@ export default {
               color: #fff;
               background-color: #3368a9;
               word-break: break-word;
+              .yuyinMsg {
+                width: 13px;
+                height: 17px;
+                cursor: pointer;
+                background: url("~@/assets/images/yuyinMsg.png") no-repeat
+                  center;
+                background-size: contain;
+              }
             }
             .imgBox {
               box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
@@ -1086,6 +1137,43 @@ export default {
         display: flex;
         align-items: center;
         height: 46px;
+        position: relative;
+        // 表情包库
+        .emoticon {
+          position: absolute;
+          width: 100%;
+          height: 200px;
+          border: 1px solid #dcdfe6;
+          background-color: #fff;
+          box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
+          border-radius: 4px;
+          left: -100px;
+          top: -210px;
+          padding: 0 0 5px 5px;
+          .item {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            margin-top: 1px;
+            margin-right: 2px;
+            box-sizing: border-box;
+            overflow: hidden;
+            text-align: center;
+            line-height: 29px;
+            border-radius: 4px;
+            .biaoQing {
+              cursor: pointer;
+              font-size: 20px;
+              transition: all 0.5s;
+            }
+            &:hover {
+              background-color: #f1f1f2;
+              .biaoQing {
+                font-size: 21px;
+              }
+            }
+          }
+        }
         .imgBox {
           width: 30px;
           height: 30px;

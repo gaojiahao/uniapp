@@ -250,11 +250,16 @@ export default {
           }
         },
         // 监听消息通知
-        message() {
-          // 新接收到的消息内容
-          if (_that.$refs.childEvent.getHistoryChat) {
+        async message(e) {
+          // console.log(e.message, _that.$refs.childEvent.chatInfoList);
+          if (
+            _that.$refs.childEvent &&
+            _that.dataOption.targetId === e.message.targetId
+          ) {
+            _that.$refs.childEvent.chatInfoList.push(e.message);
             _that.$refs.childEvent.getHistoryChat();
           }
+          // 新接收到的消息内容
         },
         // 监听 IM 连接状态变化
         status(event) {
