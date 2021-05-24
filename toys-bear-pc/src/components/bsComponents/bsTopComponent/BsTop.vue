@@ -145,6 +145,7 @@ export default {
       // 好友名片弹框关闭
       eventBus.$emit("handleDialogBusiness", false);
       eventBus.$emit("handleHiddle");
+      eventBus.$emit("hideEmoticon");
       //如果提供了事件对象，则这是一个非IE浏览器
       // if (e && e.stopPropagation)
       //   //因此它支持W3C的stopPropagation()方法

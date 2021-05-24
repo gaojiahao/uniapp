@@ -68,7 +68,8 @@ const configureWebpack = {
     }
   },
   externals: {
-    BMap: "BMap"
+    BMap: "BMap",
+    RongIMLib: "RongIMLib"
   }
 };
 if (env === "production") {
