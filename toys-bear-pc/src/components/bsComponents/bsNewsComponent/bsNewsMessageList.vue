@@ -658,6 +658,10 @@ export default {
   props: ["dataOption", "im"],
   data() {
     return {
+      msgType: 1,
+      historyKeyword: "",
+      skipCount: 1,
+      maxResultCount: 10,
       emoticon: false,
       noScroll: false,
       isFixedTop: false,
@@ -678,14 +682,17 @@ export default {
         skipCount: 1,
         maxResultCount: 10,
         type: this.dataOption.type === 1 ? 1 : 2,
-        messageType: 1,
+        messageType: this.msgType,
         myChatUserId: this.userInfo.chatUser.chatUserId,
         friendChatUserId: this.dataOption.targetId,
-        groupNumber: this.dataOption.targetId,
-        keyWord: ""
+        groupNumber: this.dataOption.type === 1 ? "" : this.dataOption.targetId,
+        keyWord: this.historyKeyword
       };
       const res = await this.$im_http.post("/api/Message/MessageHisByPage", fd);
       console.log(res);
+      if (res.data.result.code === 200) {
+        console.log(123);
+      }
     },
     // 发送表情
     sendEmoticon(b) {
