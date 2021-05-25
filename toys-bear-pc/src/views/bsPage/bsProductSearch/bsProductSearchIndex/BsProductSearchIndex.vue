@@ -863,7 +863,7 @@ import bsProductSearch from "@/components/bsComponents/bsProductSearchComponent/
 import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/bsGridComponent";
 import bsColumnComponent from "@/components/bsComponents/bsProductSearchComponent/bsTableItem";
 import eventBus from "@/assets/js/common/eventBus";
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "vuex";
 import { VueCropper } from "vue-cropper";
 export default {
   name: "bsProductSearchIndex",
@@ -1022,17 +1022,17 @@ export default {
             let endDate = Date.now();
             this.searchHttpTime = (endDate - startDate) / 1000;
             this.$store.commit("searchValues", res.data.result.object);
-            const items = res.data.result.object;
-            for (let i = 0; i < items.length; i++) {
-              this.$set(items[i], "isShopping", false);
-              for (let j = 0; j < this.shoppingList.length; j++) {
-                if (
-                  items[i].productNumber === this.shoppingList[j].productNumber
-                ) {
-                  this.$set(items[i], "isShopping", true);
-                }
-              }
-            }
+            // const items = res.data.result.object;
+            // for (let i = 0; i < items.length; i++) {
+            //   this.$set(items[i], "isShopping", false);
+            //   for (let j = 0; j < this.shoppingList.length; j++) {
+            //     if (
+            //       items[i].productNumber === this.shoppingList[j].productNumber
+            //     ) {
+            //       this.$set(items[i], "isShopping", true);
+            //     }
+            //   }
+            // }
             this.productList = res.data.result.object;
             this.totalCount = res.data.result.object.length;
             this.cropperCancel();
@@ -1256,32 +1256,10 @@ export default {
               }
             }
           }
-        } else {
-          for (let i = 0; i < item.items.length; i++) {
-            this.$set(item.items[i], "isShopping", false);
-            for (let j = 0; j < this.shoppingList.length; j++) {
-              if (
-                item.items[i].productNumber ===
-                this.shoppingList[j].productNumber
-              ) {
-                this.$set(item.items[i], "isShopping", true);
-              }
-            }
-          }
         }
         if (Object.values(this.advancedFormdata).some(Boolean)) {
           this.$set(this.searchForm, "MyisGaoji", true);
         }
-        // for (const item in this.advancedFormdata) {
-        //   console.log(this.advancedFormdata[item]);
-        //   if (this.advancedFormdata[item] != "") {
-        //     this.$set(this.searchForm, "MyisGaoji", true);
-        //     console.log(222);
-        //     break;
-        //   } else {
-        //     this.$set(this.searchForm, "MyisGaoji", false);
-        //   }
-        // }
         this.productList = item.items;
         this.totalCount = item.totalCount;
         let endDate = Date.now();
@@ -1476,6 +1454,15 @@ export default {
     eventBus.$on("openUpload", file => {
       this.uploadPic(file);
     });
+    // 取消获加购样式/刷新页面
+    eventBus.$on("resetProductIsShop", item => {
+      for (let i = 0; i < this.productList.length; i++) {
+        if (this.productList[i].productNumber == item.productNumber) {
+          this.productList[i].isShop = item.isShop;
+        }
+      }
+    });
+
     // 取消收藏/刷新页面
     eventBus.$on("resetProductCollection", item => {
       // this.getProductList();
@@ -1486,36 +1473,36 @@ export default {
       }
     });
     // 加购删除购物车
-    eventBus.$on("resetMyCart", item => {
-      if (Object.prototype.toString.call(item) === "[object Array]") {
-        // 数组
-        if (item.length) {
-          for (let i = 0; i < this.productList.length; i++) {
-            for (let j = 0; j < item.length; j++) {
-              if (this.productList[i].productNumber == item[j].productNumber) {
-                this.$set(this.productList[i], "isShopping", true);
-                // this.productList[i].isShopping = true;
-                break;
-              } else {
-                this.$set(this.productList[i], "isShopping", false);
-                // this.productList[i].isShopping = false;
-              }
-            }
-          }
-        } else {
-          this.productList.forEach(val => {
-            val.isShopping = false;
-          });
-        }
-      } else if (Object.prototype.toString.call(item) === "[object Object]") {
-        // 对象;
-        for (let i = 0; i < this.productList.length; i++) {
-          if (item.productNumber == this.productList[i].productNumber) {
-            this.productList[i].isShopping = item.isShopping;
-          }
-        }
-      }
-    });
+    // eventBus.$on("resetMyCart", item => {
+    //   if (Object.prototype.toString.call(item) === "[object Array]") {
+    //     // 数组
+    //     if (item.length) {
+    //       for (let i = 0; i < this.productList.length; i++) {
+    //         for (let j = 0; j < item.length; j++) {
+    //           if (this.productList[i].productNumber == item[j].productNumber) {
+    //             this.$set(this.productList[i], "isShopping", true);
+    //             // this.productList[i].isShopping = true;
+    //             break;
+    //           } else {
+    //             this.$set(this.productList[i], "isShopping", false);
+    //             // this.productList[i].isShopping = false;
+    //           }
+    //         }
+    //       }
+    //     } else {
+    //       this.productList.forEach(val => {
+    //         val.isShopping = false;
+    //       });
+    //     }
+    //   } else if (Object.prototype.toString.call(item) === "[object Object]") {
+    //     // 对象;
+    //     for (let i = 0; i <script this.productList.length; i++) {
+    //       if (item.productNumber == this.productList[i].productNumber) {
+    //         this.productList[i].isShopping = item.isShopping;
+    //       }
+    //     }
+    //   }
+    // });
     this.$nextTick(async () => {
       if (this.searchTxt != "") {
         // 首页文字搜索跳转
@@ -1548,9 +1535,6 @@ export default {
     });
   },
   computed: {
-    ...mapGetters({
-      shoppingList: "myShoppingList"
-    }),
     addrSearch: {
       get() {
         return this.$store.state.addrSearch;
@@ -1593,20 +1577,11 @@ export default {
       deep: true,
       handler(val) {
         if (!Object.values(val).some(Boolean)) {
-          // console.log("都为空");
           this.$set(this.searchForm, "MyisGaoji", false);
         }
-
-        // console.log(!Object.values(val).some(Boolean));
       }
     },
 
-    shoppingList: {
-      deep: true,
-      handler() {
-        eventBus.$emit("upDateProductView");
-      }
-    },
     "searchForm.time"(newVal) {
       if (newVal == null) {
         this.searchForm.time = [];

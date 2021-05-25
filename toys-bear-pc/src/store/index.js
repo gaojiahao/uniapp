@@ -6,15 +6,15 @@ import createPersistedState from "vuex-persistedstate";
 import globalJson from "./Json.js";
 Vue.use(Vuex);
 const v = new Vue();
-function myForEach(oList, yList) {
-  for (let i = 0; i < oList.length; i++) {
-    for (let j = 0; j < yList.length; j++) {
-      if (oList[i].productNumber === yList[j].productNumber) {
-        oList.splice(i, 1);
-      }
-    }
-  }
-}
+// function myForEach(oList, yList) {
+//   for (let i = 0; i < oList.length; i++) {
+//     for (let j = 0; j < yList.length; j++) {
+//       if (oList[i].productNumber === yList[j].productNumber) {
+//         oList.splice(i, 1);
+//       }
+//     }
+//   }
+// }
 const store = new Vuex.Store({
   state: {
     myColles: [],
@@ -72,9 +72,14 @@ const store = new Vuex.Store({
     imageSearchValue: null,
     routers: null,
     userInfo: null,
-    currentComparnyId: null
+    currentComparnyId: null,
+    myShoppingCartCount: 0
   },
   mutations: {
+    // 购物车CartCount
+    handlerShoppingCartCount(state, payLoad) {
+      state.myShoppingCartCount = payLoad;
+    },
     // 修改上一次历史菜单
     handlerOldTabName(state, payLoad) {
       state.oldTabName = payLoad;
@@ -178,22 +183,22 @@ const store = new Vuex.Store({
         }
       }
     },
-    // 修改数量方法
-    replaceShoppingCartValueCount(state, payLoad) {
-      const key = state.userInfo.uid;
-      for (let i = 0; i < state[key].length; i++) {
-        for (const keys in state[key][i]) {
-          Vue.prototype.$set(state[key][i], keys, payLoad[i][keys]);
-        }
-      }
-      localStorage.setItem(key, JSON.stringify(state[key]));
-    },
-    // 更新购物车
-    resetShoppingCart(state, payLoad) {
-      const key = state.userInfo.uid;
-      myForEach(state[key], payLoad);
-      localStorage.setItem(key, JSON.stringify(state[key]));
-    },
+    // // 修改数量方法
+    // replaceShoppingCartValueCount(state, payLoad) {
+    //   const key = state.userInfo.uid;
+    //   for (let i = 0; i < state[key].length; i++) {
+    //     for (const keys in state[key][i]) {
+    //       Vue.prototype.$set(state[key][i], keys, payLoad[i][keys]);
+    //     }
+    //   }
+    //   localStorage.setItem(key, JSON.stringify(state[key]));
+    // },
+    // // 更新购物车
+    // resetShoppingCart(state, payLoad) {
+    //   const key = state.userInfo.uid;
+    //   myForEach(state[key], payLoad);
+    //   localStorage.setItem(key, JSON.stringify(state[key]));
+    // },
     // 加购
     pushShopping(state, payLoad) {
       const key = state.userInfo.uid;
@@ -208,14 +213,14 @@ const store = new Vuex.Store({
     },
 
     // 删除购物车某指定一个产品
-    popShopping(state, payLoad) {
-      const key = state.userInfo.uid;
-      for (let i = 0; i < state[key].length; i++) {
-        if (state[key][i].productNumber === payLoad.productNumber)
-          state[key].splice(i, 1);
-      }
-      localStorage.setItem(key, JSON.stringify(state[key]));
-    },
+    // popShopping(state, payLoad) {
+    //   const key = state.userInfo.uid;
+    //   for (let i = 0; i < state[key].length; i++) {
+    //     if (state[key][i].productNumber === payLoad.productNumber)
+    //       state[key].splice(i, 1);
+    //   }
+    //   localStorage.setItem(key, JSON.stringify(state[key]));
+    // },
     handlerBeforeSearchKeyWord(state, value) {
       state.beforeSearch.name = value;
     },
@@ -380,13 +385,13 @@ const store = new Vuex.Store({
     }
   },
   getters: {
-    myShoppingList(state) {
-      if (state && state.userInfo && state.userInfo.uid) {
-        return state[state.userInfo.uid];
-      } else {
-        return [];
-      }
-    },
+    // myShoppingList(state) {
+    //   if (state && state.userInfo && state.userInfo.uid) {
+    //     return state[state.userInfo.uid];
+    //   } else {
+    //     return [];
+    //   }
+    // },
     tabList(state) {
       return state.tabList.map(val => {
         if (val) {

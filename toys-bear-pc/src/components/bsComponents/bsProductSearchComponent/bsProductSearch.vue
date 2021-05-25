@@ -97,14 +97,14 @@
     >
       <i class="whiteCart"></i>
       <span>购物车</span>
-      <span>({{ shoppingList && shoppingList.length }})</span>
+      <span>({{ myShoppingCartCount }})</span>
     </el-button>
   </div>
 </template>
 
 <script>
 import eventBus from "@/assets/js/common/eventBus";
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "vuex";
 export default {
   name: "bsProductSearch",
   props: ["keyword", "MyisGaoji"],
@@ -252,10 +252,7 @@ export default {
     });
   },
   computed: {
-    ...mapGetters({
-      shoppingList: "myShoppingList"
-    }),
-    ...mapState(["searchHallCate", "typeId"])
+    ...mapState(["searchHallCate", "typeId", "myShoppingCartCount"])
   },
   beforeDestroy() {
     eventBus.$off("imgSearchChange");

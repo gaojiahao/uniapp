@@ -9,7 +9,7 @@
           <el-button type="warning" size="medium" @click="toShoppingCart">
             <i class="whiteCart"></i>
             <span>购物车</span>
-            <span>({{ shoppingList.length }})</span>
+            <span>({{ myShoppingCartCount }})</span>
           </el-button>
         </div>
       </div>
@@ -91,10 +91,10 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 // import bsColumnComponent from "@/components/bsComponents/bsProductSearchComponent/bsColumnComponent";
 import bsColumnComponent from "@/components/bsComponents/bsProductSearchComponent/bsTableItem";
 import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/bsGridComponent";
-import { mapGetters } from "vuex";
 import eventBus from "@/assets/js/common/eventBus";
 export default {
   name: "bsLatestProducts",
@@ -115,18 +115,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({
-      shoppingList: "myShoppingList"
-    })
+    ...mapState(["myShoppingCartCount"])
   },
-  watch: {
-    shoppingList: {
-      deep: true,
-      handler() {
-        eventBus.$emit("upDateProductView");
-      }
-    }
-  },
+  watch: {},
   methods: {
     // 获取列表
     async getProductsList() {
@@ -147,20 +138,6 @@ export default {
       }
       const res = await this.$http.post("/api/GetProductsByTypePage", fd);
       if (res.data.result.code === 200) {
-        if (this.shoppingList) {
-          const item = res.data.result.item;
-          for (let i = 0; i < item.items.length; i++) {
-            this.$set(item.items[i], "isShopping", false);
-            for (let j = 0; j < this.shoppingList.length; j++) {
-              if (
-                item.items[i].productNumber ===
-                this.shoppingList[j].productNumber
-              ) {
-                this.$set(item.items[i], "isShopping", true);
-              }
-            }
-          }
-        }
         this.totalCount = res.data.result.item.totalCount;
         this.productList = res.data.result.item.items;
         let endDate = Date.now();
@@ -218,34 +195,34 @@ export default {
     });
     // 删除购物车
     // 加购删除购物车
-    eventBus.$on("resetMyCart", item => {
-      if (Object.prototype.toString.call(item) === "[object Array]") {
-        // 数组
-        if (item.length) {
-          for (let i = 0; i < this.productList.length; i++) {
-            for (let j = 0; j < item.length; j++) {
-              if (this.productList[i].productNumber == item[j].productNumber) {
-                this.productList[i].isShopping = true;
-                break;
-              } else {
-                this.productList[i].isShopping = false;
-              }
-            }
-          }
-        } else {
-          this.productList.forEach(val => {
-            val.isShopping = false;
-          });
-        }
-      } else if (Object.prototype.toString.call(item) === "[object Object]") {
-        // 对象;
-        for (let i = 0; i < this.productList.length; i++) {
-          if (item.productNumber == this.productList[i].productNumber) {
-            this.productList[i].isShopping = item.isShopping;
-          }
-        }
-      }
-    });
+    // eventBus.$on("resetMyCart", item => {
+    //   if (Object.prototype.toString.call(item) === "[object Array]") {
+    //     // 数组
+    //     if (item.length) {
+    //       for (let i = 0; i < this.productList.length; i++) {
+    //         for (let j = 0; j < item.length; j++) {
+    //           if (this.productList[i].productNumber == item[j].productNumber) {
+    //             this.productList[i].isShopping = true;
+    //             break;
+    //           } else {
+    //             this.productList[i].isShopping = false;
+    //           }
+    //         }
+    //       }
+    //     } else {
+    //       this.productList.forEach(val => {
+    //         val.isShopping = false;
+    //       });
+    //     }
+    //   } else if (Object.prototype.toString.call(item) === "[object Object]") {
+    //     // 对象;
+    //     for (let i = 0; i < this.productList.length; i++) {
+    //       if (item.productNumber == this.productList[i].productNumber) {
+    //         this.productList[i].isShopping = item.isShopping;
+    //       }
+    //     }
+    //   }
+    // });
   },
   beforeDestroy() {
     // eventBus.$off("resetProductCollection");

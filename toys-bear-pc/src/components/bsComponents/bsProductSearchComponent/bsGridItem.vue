@@ -82,7 +82,7 @@
           </p>
         </div>
         <div v-if="typeId != 1" class="right" @click.stop="handlerShopping">
-          <i v-if="item.isShopping" class="shoppingCartActive"></i>
+          <i v-if="item.isShop" class="shoppingCartActive"></i>
           <i v-else class="shoppingCart"></i>
         </div>
         <div
@@ -167,7 +167,7 @@
 
 <script>
 import eventBus from "@/assets/js/common/eventBus";
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "vuex";
 export default {
   props: {
     item: {
@@ -321,47 +321,97 @@ export default {
         });
       }
     },
+    // 加购
+    handlerShopping() {
+      if (this.item.isShop) {
+        this.removeShopping();
+      } else {
+        if (this.myShoppingCartCount >= 500 && !this.item.isShop) {
+          this.$common.handlerMsgState({
+            msg: "购物车已满500条",
+            type: "warning"
+          });
+          return;
+        }
+        if (this.canClick) {
+          this.canClick = false;
+          this.callbackShopping();
+          setTimeout(() => {
+            this.canClick = true;
+          }, 500);
+        } else {
+          this.$common.handlerMsgState({
+            msg: "操作过于频繁",
+            type: "danger"
+          });
+        }
+      }
+    },
     // 加购事件
-    callbackShopping() {
-      this.item.isShopping = !this.item.isShopping;
-      if (this.item.isShopping) {
-        this.item.shoppingCount = 1;
-        this.$store.commit("pushShopping", this.item);
+    async callbackShopping() {
+      const fd = {
+        userID: this.userInfo.userInfo.id,
+        companyNumber: this.userInfo.commparnyList[0].companyNumber,
+        sourceFrom: "active",
+        number: 1,
+        currency: "￥",
+        Price: 0,
+        shopType: "companysamples",
+        productNumber: this.item.productNumber
+      };
+      const res = await this.$http.post("/api/AddShoppingCart", fd);
+      if (res.data.result.code === 200) {
+        this.item.isShop = !this.item.isShop;
+
+        this.$store.commit("handlerShoppingCartCount", res.data.result.item);
         this.$common.handlerMsgState({
           msg: "加购成功",
           type: "success"
         });
       } else {
-        this.item.shoppingCount = 0;
-        this.$store.commit("popShopping", this.item);
         this.$common.handlerMsgState({
-          msg: "取消加购成功",
-          type: "warning"
+          msg: "加购失败",
+          type: "danger"
         });
       }
-      eventBus.$emit("resetMyCart", this.item);
-      this.$nextTick(() => {
-        this.$forceUpdate();
-      });
+      // this.item.isShopping = !this.item.isShopping;
+      // if (this.item.isShopping) {
+      //   this.item.shoppingCount = 1;
+      //   this.$store.commit("pushShopping", this.item);
+      //   this.$common.handlerMsgState({
+      //     msg: "加购成功",
+      //     type: "success"
+      //   });
+      // } else {
+      //   this.item.shoppingCount = 0;
+      //   this.$store.commit("popShopping", this.item);
+      //   this.$common.handlerMsgState({
+      //     msg: "取消加购成功",
+      //     type: "warning"
+      //   });
+      // }
+      // eventBus.$emit("resetMyCart", this.item);
     },
-    // 加购
-    handlerShopping() {
-      if (this.shoppingList.length >= 500 && !this.item.isShopping) {
+    // 删除当前购物车产品
+    async removeShopping() {
+      const fd = {
+        userID: this.userInfo.userInfo.id,
+        companyNumber: this.userInfo.commparnyList[0].companyNumber,
+        sourceFrom: "active",
+        shopType: "companysamples",
+        productNumber: this.item.productNumber
+      };
+      const res = await this.$http.post("/api/RemoveShoppingCart", fd);
+      if (res.data.result.code === 200) {
+        this.item.isShop = !this.item.isShop;
+        this.$store.commit("handlerShoppingCartCount", res.data.result.item);
         this.$common.handlerMsgState({
-          msg: "购物车已满500条",
-          type: "warning"
+          msg: "取消加购",
+          type: "success"
         });
-        return;
-      }
-      if (this.canClick) {
-        this.canClick = false;
-        this.callbackShopping();
-        setTimeout(() => {
-          this.canClick = true;
-        }, 500);
       } else {
         this.$common.handlerMsgState({
-          msg: "操作过于频繁",
+          msg: "取消失败",
           type: "danger"
         });
       }
@@ -411,18 +461,10 @@ export default {
   },
   created() {},
   computed: {
-    ...mapGetters({
-      shoppingList: "myShoppingList"
-    }),
-    ...mapState(["typeId"])
+    ...mapState(["typeId"]),
+    ...mapState(["userInfo"], "myShoppingCartCount")
   },
-  mounted() {
-    eventBus.$on("upDateProductView", () => {
-      this.$nextTick(() => {
-        this.$forceUpdate();
-      });
-    });
-  }
+  mounted() {}
 };
 </script>
 <style scoped lang="less">
