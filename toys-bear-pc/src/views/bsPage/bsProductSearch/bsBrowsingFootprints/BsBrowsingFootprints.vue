@@ -143,22 +143,6 @@ export default {
       const res = await this.$http.post("/api/GetBrowseProductRecordPage", fd);
       const { code, item, msg } = res.data.result;
       if (code === 200) {
-        // if (this.shoppingList) {
-        //   for (let i = 0; i < item.items.length; i++) {
-        //     this.$set(item.items[i], "isShopping", false);
-        //     for (let j = 0; j < this.shoppingList.length; j++) {
-        //       if (
-        //         item.items[i].productNumber ===
-        //         this.shoppingList[j].productNumber
-        //       ) {
-        //         this.$set(item.items[i], "isShopping", true);
-        //       }
-        //     }
-        //   }
-        // }
-        // item.items.forEach(val => {
-        //   this.footprintArr.push(val);
-        // });
         let footprintArr = [];
         for (let i = 0; i < item.items.length; i++) {
           footprintArr.push(item.items[i]);
@@ -331,48 +315,14 @@ export default {
       //   this.footprintArr = [];
       this.getCollectList();
     });
-
-    // 加购删除购物车
-    // eventBus.$on("resetMyCart", item => {
-    //   if (Object.prototype.toString.call(item) === "[object Array]") {
-    //     // 数组
-    //     if (item.length) {
-    //       for (let index = 0; index < this.productList.length; index++) {
-    //         for (let i = 0; i < this.productList[index].list.length; i++) {
-    //           for (let j = 0; j < item.length; j++) {
-    //             if (
-    //               this.productList[index].list[i].productNumber ==
-    //               item[j].productNumber
-    //             ) {
-    //               this.productList[index].list[i].isShopping = true;
-    //               break;
-    //             } else {
-    //               this.productList[index].list[i].isShopping = false;
-    //             }
-    //           }
-    //         }
-    //       }
-    //     } else {
-    //       for (let index = 0; index < this.productList.length; index++) {
-    //         this.productList[index].list.forEach(val => {
-    //           val.isShopping = false;
-    //         });
-    //       }
-    //     }
-    //   } else if (Object.prototype.toString.call(item) === "[object Object]") {
-    //     // 对象;
-    //     for (let index = 0; index < this.productList.length; index++) {
-    //       for (let i = 0; i < this.productList[index].list.length; i++) {
-    //         if (
-    //           item.productNumber ==
-    //           this.productList[index].list[i].productNumber
-    //         ) {
-    //           this.productList[index].list[i].isShopping = item.isShopping;
-    //         }
-    //       }
-    //     }
-    //   }
-    // });
+    // 取消获加购样式/刷新页面
+    eventBus.$on("resetProductIsShop", item => {
+      for (let i = 0; i < this.productList.length; i++) {
+        if (this.productList[i].productNumber == item.productNumber) {
+          this.productList[i].isShop = item.isShop;
+        }
+      }
+    });
   },
 
   beforeDestroy() {

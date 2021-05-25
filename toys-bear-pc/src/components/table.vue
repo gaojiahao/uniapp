@@ -248,7 +248,7 @@
 
 <script>
 import Vue from "vue";
-// import eventBus from "@/assets/js/common/eventBus";
+import eventBus from "@/assets/js/common/eventBus";
 import { mapState } from "vuex";
 export default {
   name: "Table",
@@ -256,7 +256,7 @@ export default {
     table: Object
   },
   computed: {
-    ...mapState(["userInfo"]),
+    ...mapState(["userInfo", "myShoppingCartCount"]),
     ...mapState(["typeId"])
   },
   data() {
@@ -364,13 +364,13 @@ export default {
       if (item.isShop) {
         this.removeShopping(item);
       } else {
-        // if (this.shoppingList.length >= 500 && !this.item.isShopping) {
-        //   this.$common.handlerMsgState({
-        //     msg: "购物车已满500条",
-        //     type: "warning"
-        //   });
-        //   return;
-        // }
+        if (this.myShoppingCartCount >= 500 && !this.item.isShop) {
+          this.$common.handlerMsgState({
+            msg: "购物车已满500条",
+            type: "warning"
+          });
+          return;
+        }
         if (this.canClick) {
           this.canClick = false;
           this.callbackShopping(item);
@@ -400,6 +400,7 @@ export default {
       const res = await this.$http.post("/api/AddShoppingCart", fd);
       if (res.data.result.code === 200) {
         item.isShop = !item.isShop;
+        eventBus.$emit("resetProductIsShop", item);
         this.$store.commit("handlerShoppingCartCount", res.data.result.item);
         this.$common.handlerMsgState({
           msg: "加购成功",
@@ -427,7 +428,7 @@ export default {
         this.$store.commit("handlerShoppingCartCount", res.data.result.item);
         this.$common.handlerMsgState({
           msg: "取消加购",
-          type: "success"
+          type: "warning"
         });
       } else {
         this.$common.handlerMsgState({

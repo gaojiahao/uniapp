@@ -374,23 +374,6 @@ export default {
           type: "danger"
         });
       }
-      // this.item.isShopping = !this.item.isShopping;
-      // if (this.item.isShopping) {
-      //   this.item.shoppingCount = 1;
-      //   this.$store.commit("pushShopping", this.item);
-      //   this.$common.handlerMsgState({
-      //     msg: "加购成功",
-      //     type: "success"
-      //   });
-      // } else {
-      //   this.item.shoppingCount = 0;
-      //   this.$store.commit("popShopping", this.item);
-      //   this.$common.handlerMsgState({
-      //     msg: "取消加购成功",
-      //     type: "warning"
-      //   });
-      // }
-      // eventBus.$emit("resetMyCart", this.item);
     },
     // 删除当前购物车产品
     async removeShopping() {
@@ -407,7 +390,7 @@ export default {
         this.$store.commit("handlerShoppingCartCount", res.data.result.item);
         this.$common.handlerMsgState({
           msg: "取消加购",
-          type: "success"
+          type: "warning"
         });
       } else {
         this.$common.handlerMsgState({

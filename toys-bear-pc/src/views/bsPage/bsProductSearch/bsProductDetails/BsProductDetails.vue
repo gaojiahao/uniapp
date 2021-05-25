@@ -263,17 +263,16 @@ export default {
     },
     // 加购
     handlerShopping(item) {
-      // console.log(item);
       if (item.isShop) {
         this.removeShopping(item);
       } else {
-        // if (this.shoppingList.length >= 500 && !this.item.isShopping) {
-        //   this.$common.handlerMsgState({
-        //     msg: "购物车已满500条",
-        //     type: "warning"
-        //   });
-        //   return;
-        // }
+        if (this.myShoppingCartCount >= 500 && !this.item.isShop) {
+          this.$common.handlerMsgState({
+            msg: "购物车已满500条",
+            type: "warning"
+          });
+          return;
+        }
         if (this.canClick) {
           this.canClick = false;
           this.callbackShopping(item);
@@ -332,7 +331,7 @@ export default {
         this.$store.commit("handlerShoppingCartCount", res.data.result.item);
         this.$common.handlerMsgState({
           msg: "取消加购",
-          type: "success"
+          type: "warning"
         });
       } else {
         this.$common.handlerMsgState({
@@ -398,7 +397,7 @@ export default {
     });
     this.getProductDetails();
   },
-  computed: { ...mapState(["userInfo"]) },
+  computed: { ...mapState(["userInfo", "myShoppingCartCount"]) },
   beforeDestroy() {}
 };
 </script>

@@ -279,38 +279,21 @@ export default {
         }
       }
     });
-    // 加购删除购物车
-    // eventBus.$on("resetMyCart", item => {
-    //   if (Object.prototype.toString.call(item) === "[object Array]") {
-    //     // 数组
-    //     if (item.length) {
-    //       for (let i = 0; i < this.productList.length; i++) {
-    //         for (let j = 0; j < item.length; j++) {
-    //           if (this.productList[i].productNumber == item[j].productNumber) {
-    //             this.productList[i].isShopping = true;
-    //             break;
-    //           } else {
-    //             this.productList[i].isShopping = false;
-    //           }
-    //         }
-    //       }
-    //     } else {
-    //       this.productList.forEach(val => {
-    //         val.isShopping = false;
-    //       });
-    //     }
-    //   } else if (Object.prototype.toString.call(item) === "[object Object]") {
-    //     // 对象;
-    //     for (let i = 0; i < this.productList.length; i++) {
-    //       if (item.productNumber == this.productList[i].productNumber) {
-    //         this.productList[i].isShopping = item.isShopping;
-    //       }
-    //     }
-    //   }
-    // });
+    // 取消获加购样式/刷新页面
+    eventBus.$on("resetProductIsShop", item => {
+      for (let i = 0; i < this.productList.length; i++) {
+        if (this.productList[i].productNumber == item.productNumber) {
+          this.productList[i].isShop = item.isShop;
+        }
+      }
+    });
   },
   computed: { ...mapState(["myShoppingCartCount"]) },
-  watch: {}
+  watch: {},
+  beforeDestroy() {
+    eventBus.$off("resetProductCollection");
+    eventBus.$off("resetProductIsShop");
+  }
 };
 </script>
 <style scoped lang="less">

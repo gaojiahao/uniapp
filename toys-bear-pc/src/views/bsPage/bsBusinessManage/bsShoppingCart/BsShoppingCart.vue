@@ -118,7 +118,7 @@
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-            {{ scope.row.exhibitionCompany.exhibitionName }}
+            {{ scope.row.exhibitionCompany.companyName }}
           </template>
         </el-table-column>
         <el-table-column
@@ -140,6 +140,10 @@
           min-width="100"
           show-overflow-tooltip
         >
+          <template slot="header">
+            <div>产品规格</div>
+            <div>(cm)</div>
+          </template>
           <template slot-scope="scope">
             <span>
               {{ scope.row.productJson.pr_le }}x{{
@@ -154,6 +158,10 @@
           min-width="100"
           show-overflow-tooltip
         >
+          <template slot="header">
+            <div>包装规格</div>
+            <div>(cm)</div>
+          </template>
           <template slot-scope="scope">
             <span>
               {{ scope.row.productJson.in_le }}x{{
@@ -168,6 +176,10 @@
           min-width="100"
           show-overflow-tooltip
         >
+          <template slot="header">
+            <div>外箱规格</div>
+            <div>(cm)</div>
+          </template>
           <template slot-scope="scope">
             <span>
               {{ scope.row.productJson.ou_le }}x{{
@@ -182,6 +194,10 @@
           width="150"
           show-overflow-tooltip
         >
+          <template slot="header">
+            <div>体积/材积</div>
+            <div>(cbm)/(cuft)</div>
+          </template>
           <template slot-scope="scope">
             <span>
               {{ scope.row.productJson.bulk_stere }}/{{
@@ -196,6 +212,10 @@
           width="100"
           show-overflow-tooltip
         >
+          <template slot="header">
+            <div>毛重/净重</div>
+            <div>(kg)</div>
+          </template>
           <template slot-scope="scope">
             <span
               >{{ scope.row.productJson.gr_we }}/{{
@@ -210,6 +230,10 @@
           width="80"
           show-overflow-tooltip
         >
+          <template slot="header">
+            <div>装箱量</div>
+            <div>(pcs)</div>
+          </template>
           <template slot-scope="scope">
             <span>
               {{ scope.row.productJson.in_en }}/{{
@@ -660,8 +684,9 @@ export default {
   name: "bsShoppingCart",
   data() {
     return {
-      chufa: "(出厂价+总费用/(每车尺码/外箱材积*外箱装量)/(1-报价利润%)/汇率",
-      chengfa: "(出厂价+总费用/(每车尺码/外箱材积*外箱装量)*(1+报价利润%)/汇率",
+      chufa: "(出厂价+(总费用/(每车尺码/体积*外箱装量)))/(1-报价利润/100)/汇率",
+      chengfa:
+        "(出厂价+(总费用/(每车尺码/体积*外箱装量)))*(1+报价利润/100)/汇率",
       myTotalPrice: 0,
       myTotalOuterBoxStere: 0,
       myTotalOuterBoxFeet: 0,

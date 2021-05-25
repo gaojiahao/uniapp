@@ -1433,6 +1433,7 @@ export default {
       eventBus.$off("searchProducts");
       eventBus.$off("openUpload");
       eventBus.$off("addrsearchProducts");
+      eventBus.$off("resetProductIsShop");
     },
     // 关闭关联搜索
     closeTag() {
