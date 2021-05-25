@@ -230,6 +230,7 @@ export function compress(file, size) {
 export function base64file(file, type) {
   //判断支不支持FileReader
   if (!file || !window.FileReader) {
+    console.log(window.FileReader);
     return false;
   }
   return new Promise(resolve => {
@@ -242,7 +243,7 @@ export function base64file(file, type) {
         let img = new Image();
         img.src = result;
         img.onload = function() {
-          const dataURL = compress(img, 0.01);
+          const dataURL = compress(img, 0.001);
           resolve(dataURL);
         };
       };
@@ -254,7 +255,7 @@ export function base64file(file, type) {
         video.setAttribute("src", result);
         video.currentTime = 1; // 第一帧
         video.addEventListener("loadeddata", function() {
-          const dataURL = compress(video, 0.01);
+          const dataURL = compress(video, 0.1);
           resolve(dataURL);
         });
       };

@@ -20,7 +20,10 @@
                 <div class="exhibition_left">
                   <div class="_leftImg">
                     <!-- <img :src="item.icon" alt="" /> -->
-                    <el-image :src="item.icon">
+                    <el-image
+                      :src="item.icon"
+                      style="width: 50px;height: 50px;"
+                    >
                       <div slot="error">
                         <img src="~@/assets/images/imgError.png" alt="" />
                       </div>

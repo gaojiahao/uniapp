@@ -1,10 +1,6 @@
 module.exports = {
   devEnv: {
     NODE_ENV: "development", // 本地环境
-    // hosturl: "http://139.9.71.135:8080",
-    // loginUrl: "http://139.9.71.135:8080/#/me",
-    // wsBaseUrl: "ws://139.9.71.135:8090/ws?UserId=",
-    // 124 .测试环境
     hosturl: "http://124.71.6.26:8080",
     loginUrl: "http://124.71.6.26:8080/#/me",
     wsBaseUrl: "ws://124.71.6.26:8090/ws?UserId="
@@ -14,10 +10,6 @@ module.exports = {
   },
   testEnv: {
     NODE_ENV: "test", // 测试环境
-    // hosturl: "http://139.9.71.135:8080",
-    // loginUrl: "http://139.9.71.135:8080/#/me",
-    // wsBaseUrl: "ws://139.9.71.135:8090/ws?UserId=",
-    // 124 .测试环境
     hosturl: "http://124.71.6.26:8080",
     loginUrl: "http://124.71.6.26:8080/#/me",
     wsBaseUrl: "ws://124.71.6.26:8090/ws?UserId="
@@ -28,10 +20,6 @@ module.exports = {
   proEnv: {
     NODE_ENV: "production",
     // 测试环境
-    // hosturl: "http://139.9.71.135:8080",
-    // loginUrl: "http://139.9.71.135:8080/#/me",
-    // wsBaseUrl: "ws://139.9.71.135:8090/ws?UserId=",
-    // 124 .测试环境
     hosturl: "http://124.71.6.26:8080",
     loginUrl: "http://124.71.6.26:8080/#/me",
     wsBaseUrl: "ws://124.71.6.26:8090/ws?UserId="

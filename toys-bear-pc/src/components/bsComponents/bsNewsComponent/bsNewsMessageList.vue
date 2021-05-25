@@ -372,28 +372,29 @@
                           v-else-if="item.messageType === 'RC:ImgMsg'"
                         >
                           <el-image
-                            style="width: 300px; height: auto; min-width: 100px;"
+                            style="width: 300px; height: 400px; min-width: 300px;"
                             :src="item.content.imageUri"
                             :preview-src-list="[item.content.imageUri]"
+                            lazy
                             fit="contain"
                           >
                             <div
                               slot="placeholder"
                               class="image-slot"
-                              style="width: 300px; height: auto; min-width: 100px"
+                              style="width: 300px; height: 400px; min-width: 300px;"
                             >
                               <img
-                                style="width: 300px; height: auto; min-width: 100px"
+                                style="width: 300px; height: 400px; min-width: 300px;"
                                 :src="require('@/assets/images/imgError.png')"
                               />
                             </div>
                             <div
                               slot="error"
                               class="image-slot"
-                              style="width: 300px; height: auto; min-width: 100px"
+                              style="width: 300px; height: 400px; min-width: 300px;"
                             >
                               <img
-                                style="width: 300px; height: auto; min-width: 100px"
+                                style="width: 300px; height: 400px; min-width: 300px;"
                                 :src="require('@/assets/images/imgError.png')"
                               />
                             </div>
@@ -490,7 +491,8 @@
                           v-else-if="item.messageType === 'RC:ImgMsg'"
                         >
                           <el-image
-                            style="width: 300px; height: auto; min-width: 100px;"
+                            lazy
+                            style="width: 300px; height: 400px; min-width: 100px;"
                             :src="item.content.imageUri"
                             :preview-src-list="[item.content.imageUri]"
                             fit="contain"
@@ -498,20 +500,20 @@
                             <div
                               slot="placeholder"
                               class="image-slot"
-                              style="width: 300px; height: auto; min-width: 100px"
+                              style="width: 300px; height: 400px; min-width: 100px"
                             >
                               <img
-                                style="width: 300px; height: auto; min-width: 100px"
+                                style="width: 300px; height: 400px; min-width: 100px"
                                 :src="require('@/assets/images/imgError.png')"
                               />
                             </div>
                             <div
                               slot="error"
                               class="image-slot"
-                              style="width: 300px; height: auto; min-width: 100px"
+                              style="width: 300px; height: 400px; min-width: 100px"
                             >
                               <img
-                                style="width: 300px; height: auto; min-width: 100px"
+                                style="width: 300px; height: 400px; min-width: 100px"
                                 :src="require('@/assets/images/imgError.png')"
                               />
                             </div>
@@ -670,7 +672,21 @@ export default {
     };
   },
   methods: {
-    // 分页获取消息
+    // 分页获取历史消息
+    async getMessageHisByPage() {
+      const fd = {
+        skipCount: 1,
+        maxResultCount: 10,
+        type: this.dataOption.type === 1 ? 1 : 2,
+        messageType: 1,
+        myChatUserId: this.userInfo.chatUser.chatUserId,
+        friendChatUserId: this.dataOption.targetId,
+        groupNumber: this.dataOption.targetId,
+        keyWord: ""
+      };
+      const res = await this.$im_http.post("/api/Message/MessageHisByPage", fd);
+      console.log(res);
+    },
     // 发送表情
     sendEmoticon(b) {
       console.log(b);
@@ -697,7 +713,7 @@ export default {
         }
       };
     },
-    // 发送求传图片
+    // 发送上传图片
     async httpFile(file) {
       let url64 = await base64file(file.raw, this.sendMsgType);
       if (url64) {
@@ -744,7 +760,7 @@ export default {
         });
       }
     },
-    // 文件发生了改变
+    // 选择文件
     changeFile(file) {
       // 当前选中文件
       const rowFileType = file.raw.type.split("/")[1].toUpperCase();
@@ -812,16 +828,8 @@ export default {
       if (user) return user;
     },
     // 记录聊天消息
-    async recordMessageHis() {
-      const fd = {
-        chatType: "",
-        targetId: "",
-        rongCloudMessageType: "",
-        content: "",
-        attachment: ""
-      };
-      const res = await this.$http.post("/api/Message/RecordMessageHis", fd);
-      console.log(res);
+    recordMessageHis(fd) {
+      this.$im_http.post("/api/Message/RecordMessageHis", fd);
     },
     // 刷新历史记录
     resetHistoryChat(msg) {
@@ -908,6 +916,21 @@ export default {
           content: content
         })
         .then(message => {
+          console.log(message);
+          const fd = {
+            chatType: message.type == 1 ? 1 : 2,
+            targetId: message.targetId,
+            rongCloudMessageType: message.messageType,
+            content:
+              message.messageType == "RC:TxtMsg" ? message.content.content : "",
+            attachment:
+              message.messageType == "RC:ImgMsg"
+                ? message.content.imageUri
+                : message.messageType == "XZX:VideoMessage"
+                ? message.content.videoUrl
+                : ""
+          };
+          this.recordMessageHis(fd);
           this.chatInfoList.push(message);
         });
     },
@@ -975,6 +998,7 @@ export default {
       this.emoticon = false;
     });
     this.handleScroll();
+    this.getMessageHisByPage();
   },
   watch: {
     chatInfoList: {
@@ -1048,6 +1072,10 @@ export default {
       &::-webkit-scrollbar {
         display: none; /* Chrome Safari */
       }
+      // .scrollMain {
+      //   white-space: normal;
+      //   word-break: break-all;
+      // }
       .item {
         display: flex;
         margin-bottom: 10px;
@@ -1147,11 +1175,22 @@ export default {
           }
           .messageBox {
             margin-top: 10px;
+            max-width: 400px;
+            white-space: normal;
+            word-break: break-all;
             .message {
               color: #666;
               background: #f5f7fa;
               border: 1px solid #e6e9ee;
-              word-break: break-word;
+              white-space: normal;
+              word-break: break-all;
+              // word-break: break-word;
+              // white-space: pre-wrap; /* css-3 */
+              // white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+              // white-space: -pre-wrap; /* Opera 4-6 */
+              // white-space: -o-pre-wrap; /* Opera 7 */
+              // word-wrap: break-word; /* Internet Explorer 5.5+ */
+
               .yuyinMsg {
                 width: 13px;
                 height: 17px;
@@ -1198,10 +1237,12 @@ export default {
           }
           .messageBox {
             margin-top: 10px;
+            max-width: 400px;
             .message {
               color: #fff;
               background-color: #3368a9;
               word-break: break-word;
+              text-align: left;
               .yuyinMsg {
                 width: 13px;
                 height: 17px;
@@ -1239,6 +1280,8 @@ export default {
         min-height: 25px;
         padding: 9px 10px;
         align-items: center;
+        white-space: normal;
+        word-break: break-all;
       }
     }
     .footer {
@@ -1254,6 +1297,7 @@ export default {
         // 表情包库
         .emoticon {
           position: absolute;
+          z-index: 1;
           width: 100%;
           height: 200px;
           border: 1px solid #dcdfe6;
@@ -1312,6 +1356,7 @@ export default {
             .el-textarea__inner {
               // resize: none; // 去掉右角下的斜线
               min-height: 110px !important;
+              overflow-y: hidden;
               border: none;
             }
           }
