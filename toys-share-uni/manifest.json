@@ -69,6 +69,20 @@
         "enable" : false
     },
     "h5" : {
-        "template" : "template.h5.html"
+        "template" : "template.h5.html",
+        "domain" : "http://www.toysbear.com",
+        "router" : {
+            "base" : ""
+        },
+        "sdkConfigs" : {
+            "maps" : {
+                "qqmap" : {
+                    "key" : ""
+                }
+            }
+        },
+        "devServer" : {
+            "https" : true
+        }
     }
 }

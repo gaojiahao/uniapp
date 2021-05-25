@@ -160,7 +160,7 @@
 									<view class="tool_bar_item grid" :class="[listShowType=='grid'?'active':'']" @click="change_show_type('grid')"><u-icon name="grid"></u-icon></view>
 									<view class="tool_bar_item grid" :class="[listShowType=='list'?'active':'']" @click="change_show_type('list')"><u-icon name="list"></u-icon></view>
 									<view class="tool_bar_item search">
-										<x-search placeholder="请输入关键词" shape="round" height="0.30rem" v-model="keyword" :clearabled="true"
+										<x-search placeholder="请输入关键词" shape="round" height="60" v-model="keyword" :clearabled="true"
 											bg-color="#fff"
 											:input-style="{fontSize:'14px'}" 
 											:action-style="{fontSize:'14px',width: '0.30rem',
@@ -179,7 +179,7 @@
 										<x-search placeholder="请输入关键词" shape="round" height="0.30rem" v-model="keyword" :clearabled="true"
 											bg-color="#fff"
 											:input-style="{fontSize:'14px'}" 
-											:action-style="{fontSize:'14px',width: '1rem',
+											:action-style="{fontSize:'14px',width: '1.5rem',
 											marginLeft: '0.10rem',
 											marginRight: '0.20rem',
 											color: '#fff',}"
@@ -229,7 +229,7 @@
 							</b-row>
 							<u-row v-else-if="listShowType=='list'" class="u_row">
 								<u-col span="12" v-for="(item,index) in productList" :key='index'>
-									<b-row :style="isMobile ?{border: '1px solid #dcdfe6',borderRadius: '5px',marginBottom:'5px'}:{borderBottom: '1px solid #e9e9e9'}" class="product_list_item2">
+									<b-row :style="isMobile ?{border: '1px solid #dcdfe6',borderRadius: '5px',marginBottom:'5px'}:{borderBottom: '1px solid #e9e9e9'}" class="product_list_item2" @click="toProductDetail(item.id)">
 										<b-col cols="6" sm="2">
 											<image :src="item.imageUrl" class="product_list_img2"></image>
 										</b-col>
