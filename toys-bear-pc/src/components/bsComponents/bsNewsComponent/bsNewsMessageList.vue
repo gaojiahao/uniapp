@@ -324,6 +324,40 @@
                         >
                           {{ item.content.content }}
                         </span>
+                        <!-- 引用消息 -->
+                        <div
+                          class="yinyongMsg"
+                          v-if="item.messageType === 'RC:ReferenceMsg'"
+                        >
+                          <div class="yinyong">
+                            <p v-if="dataOption.type === 1">
+                              <span class="name">
+                                引用@
+                                {{
+                                  dataOption.userInfo &&
+                                    dataOption.userInfo.nickname
+                                }}
+                              </span>
+                            </p>
+                            <p v-else-if="dataOption.type === 3">
+                              <span class="name">
+                                引用@
+                                {{
+                                  filterUserInfo(
+                                    dataOption.userInfo.groupMemberInfos.items,
+                                    {
+                                      senderUserId: item.content.referMsgUserId
+                                    }
+                                  ).linkman
+                                }}:
+                                <span>
+                                  {{ item.content.referMsg.content }}</span
+                                >
+                              </span>
+                            </p>
+                          </div>
+                          <p>{{ item.content.content }}</p>
+                        </div>
                         <!-- 语音 -->
                         <span
                           class="message"
@@ -416,6 +450,40 @@
                         >
                           {{ item.content.content }}
                         </span>
+                        <!-- 引用消息 -->
+                        <div
+                          class="yinyongMsg"
+                          v-if="item.messageType === 'RC:ReferenceMsg'"
+                        >
+                          <div class="yinyong">
+                            <p v-if="dataOption.type === 1">
+                              <span class="name">
+                                引用@
+                                {{
+                                  dataOption.userInfo &&
+                                    dataOption.userInfo.nickname
+                                }}
+                              </span>
+                            </p>
+                            <p v-else-if="dataOption.type === 3">
+                              <span class="name">
+                                引用@
+                                {{
+                                  filterUserInfo(
+                                    dataOption.userInfo.groupMemberInfos.items,
+                                    {
+                                      senderUserId: item.content.referMsgUserId
+                                    }
+                                  ).linkman
+                                }}:
+                                <span>
+                                  {{ item.content.referMsg.content }}</span
+                                >
+                              </span>
+                            </p>
+                          </div>
+                          <p>{{ item.content.content }}</p>
+                        </div>
                         <!-- 图片 -->
                         <div
                           class="imgBox"
@@ -743,6 +811,41 @@ export default {
       const user = list.find(v => v.chatUserId === item.senderUserId);
       if (user) return user;
     },
+    // 记录聊天消息
+    async recordMessageHis() {
+      const fd = {
+        chatType: "",
+        targetId: "",
+        rongCloudMessageType: "",
+        content: "",
+        attachment: ""
+      };
+      const res = await this.$http.post("/api/Message/RecordMessageHis", fd);
+      console.log(res);
+    },
+    // 刷新历史记录
+    resetHistoryChat(msg) {
+      var conversation = this.im.Conversation.get({
+        targetId: this.dataOption.targetId,
+        type: this.dataOption.type
+      });
+      var option = {
+        timestamp: +new Date(),
+        count: 20
+      };
+      conversation.getMessages(option).then(() => {
+        if (msg.messageType === "RC:ReadNtf") {
+          console.log("已读");
+        } else if (msg.messageType === "RC:TypSts") {
+          console.log("正在输入");
+        } else {
+          // 回复成功
+          this.chatInfoList.push(msg);
+        }
+        // 清除未读
+        this.clearReadInfo();
+      });
+    },
     // im获取历史消息,聊天窗口消息
     getHistoryChat(startTime, height) {
       var conversation = this.im.Conversation.get({
@@ -805,7 +908,6 @@ export default {
           content: content
         })
         .then(message => {
-          console.log("发送消息成功", message);
           this.chatInfoList.push(message);
         });
     },
@@ -864,7 +966,6 @@ export default {
   mounted() {
     RongIMLib.RongIMEmoji.init();
     this.expressionLibrary = RongIMLib.RongIMEmoji.list;
-    console.log(this.expressionLibrary, "表情包库");
     this.getHistoryChat();
     // 名片弹框关闭
     eventBus.$on("handleHiddle", () => {
@@ -1058,6 +1159,18 @@ export default {
                 background: url("~@/assets/images/yuyinMsg.png") no-repeat
                   center;
                 background-size: contain;
+              }
+            }
+            .yinyongMsg {
+              color: #666;
+              background: #f5f7fa;
+              border: 1px solid #e6e9ee;
+              border-radius: 10px;
+              padding: 9px 10px;
+              .yinyong {
+                .name {
+                  color: #999;
+                }
               }
             }
             .imgBox {

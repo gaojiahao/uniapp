@@ -251,13 +251,11 @@ export default {
         },
         // 监听消息通知
         async message(e) {
-          // console.log(e.message, _that.$refs.childEvent.chatInfoList);
           if (
             _that.$refs.childEvent &&
             _that.dataOption.targetId === e.message.targetId
           ) {
-            _that.$refs.childEvent.chatInfoList.push(e.message);
-            _that.$refs.childEvent.getHistoryChat();
+            _that.$refs.childEvent.resetHistoryChat(e.message);
           }
           // 新接收到的消息内容
         },
