@@ -22,8 +22,8 @@
           <div class="cartIconBox">
             <el-badge
               class="appBadge"
-              :hidden="!shoppingList || shoppingList.length < 1"
-              :value="shoppingList && shoppingList.length"
+              :hidden="!myShoppingCartCount || myShoppingCartCount < 1"
+              :value="myShoppingCartCount"
             >
               <i class="cartIcon"></i>
             </el-badge>
@@ -42,7 +42,7 @@
 </template>
 <script>
 import eventBus from "@/assets/js/common/eventBus.js";
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "vuex";
 const cubic = value => Math.pow(value, 3);
 const easeInOutCubic = value =>
   value < 0.5 ? cubic(value * 2) / 2 : 1 - cubic((1 - value) * 2) / 2;
@@ -64,11 +64,9 @@ export default {
       "userInfo",
       "showGlobalMsg",
       "msgType",
-      "globalMsg"
-    ]),
-    ...mapGetters({
-      shoppingList: "myShoppingList"
-    })
+      "globalMsg",
+      "myShoppingCartCount"
+    ])
   },
   mounted() {
     this.$store.commit("updateAppLoading", false);

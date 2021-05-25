@@ -7,7 +7,7 @@
 
 <script>
 import Table from "@/components/table";
-import eventBus from "@/assets/js/common/eventBus";
+// import eventBus from "@/assets/js/common/eventBus";
 export default {
   name: "bsTableItem",
   components: {
@@ -155,11 +155,6 @@ export default {
   mounted() {
     this.tableData.data = this.productList;
     // this.$set(this.tableData, "data", this.productList);
-    eventBus.$on("upDateProductView", () => {
-      this.$nextTick(() => {
-        this.$forceUpdate();
-      });
-    });
   },
   methods: {}
 };

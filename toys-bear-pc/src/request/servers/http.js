@@ -81,7 +81,9 @@ instance.interceptors.request.use(
       !config.url.includes("CreateProductCollection") &&
       !config.url.includes("ExportSampleOfferToExcel") &&
       !config.url.includes("ExportCustomerOrderDetailToExcel") &&
-      !config.url.includes("GetSampleOrderExcel")
+      !config.url.includes("GetSampleOrderExcel") &&
+      !config.url.includes("AddShoppingCart") &&
+      !config.url.includes("UpdateShoppingCart")
     ) {
       $Store.commit("updateAppLoading", true);
     }

@@ -9,7 +9,7 @@
           <el-button type="warning" size="medium" @click="toShoppingCart">
             <i class="whiteCart"></i>
             <span>购物车</span>
-            <span>({{ shoppingList.length }})</span>
+            <span>( {{ myShoppingCartCount }})</span>
           </el-button>
         </div>
       </div>
@@ -93,10 +93,10 @@
 
 <script>
 import eventBus from "@/assets/js/common/eventBus";
+import { mapState } from "vuex";
 // import bsColumnComponent from "@/components/bsComponents/bsProductSearchComponent/bsColumnComponent";
 import bsColumnComponent from "@/components/bsComponents/bsProductSearchComponent/bsTableItem";
 import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/bsGridComponent";
-import { mapGetters } from "vuex";
 export default {
   name: "bsMyCollection",
   components: {
@@ -115,19 +115,8 @@ export default {
       searchHttpTime: null
     };
   },
-  computed: {
-    ...mapGetters({
-      shoppingList: "myShoppingList"
-    })
-  },
-  watch: {
-    shoppingList: {
-      deep: true,
-      handler() {
-        eventBus.$emit("upDateProductView");
-      }
-    }
-  },
+  computed: { ...mapState(["myShoppingCartCount"]) },
+  watch: {},
   methods: {
     // 获取列表
     async getCollectList() {
@@ -145,21 +134,21 @@ export default {
         }
       }
       const res = await this.$http.post("/api/ProductCollectionPage", fd);
-      const { code, item, msg } = res.data.result;
+      const { code, msg } = res.data.result;
       if (code === 200) {
-        if (this.shoppingList) {
-          for (let i = 0; i < item.items.length; i++) {
-            this.$set(item.items[i], "isShopping", false);
-            for (let j = 0; j < this.shoppingList.length; j++) {
-              if (
-                item.items[i].productNumber ===
-                this.shoppingList[j].productNumber
-              ) {
-                this.$set(item.items[i], "isShopping", true);
-              }
-            }
-          }
-        }
+        // if (this.shoppingList) {
+        //   for (let i = 0; i < item.items.length; i++) {
+        //     this.$set(item.items[i], "isShopping", false);
+        //     for (let j = 0; j < this.shoppingList.length; j++) {
+        //       if (
+        //         item.items[i].productNumber ===
+        //         this.shoppingList[j].productNumber
+        //       ) {
+        //         this.$set(item.items[i], "isShopping", true);
+        //       }
+        //     }
+        //   }
+        // }
         this.totalCount = res.data.result.item.totalCount;
         this.productList = res.data.result.item.items;
         let endDate = Date.now();
@@ -217,34 +206,34 @@ export default {
       this.getCollectList();
     });
     // 加购删除购物车
-    eventBus.$on("resetMyCart", item => {
-      if (Object.prototype.toString.call(item) === "[object Array]") {
-        // 数组
-        if (item.length) {
-          for (let i = 0; i < this.productList.length; i++) {
-            for (let j = 0; j < item.length; j++) {
-              if (this.productList[i].productNumber == item[j].productNumber) {
-                this.productList[i].isShopping = true;
-                break;
-              } else {
-                this.productList[i].isShopping = false;
-              }
-            }
-          }
-        } else {
-          this.productList.forEach(val => {
-            val.isShopping = false;
-          });
-        }
-      } else if (Object.prototype.toString.call(item) === "[object Object]") {
-        // 对象
-        for (let i = 0; i < this.productList.length; i++) {
-          if (item.productNumber == this.productList[i].productNumber) {
-            this.productList[i].isShopping = item.isShopping;
-          }
-        }
-      }
-    });
+    // eventBus.$on("resetMyCart", item => {
+    //   if (Object.prototype.toString.call(item) === "[object Array]") {
+    //     // 数组
+    //     if (item.length) {
+    //       for (let i = 0; i < this.productList.length; i++) {
+    //         for (let j = 0; j < item.length; j++) {
+    //           if (this.productList[i].productNumber == item[j].productNumber) {
+    //             this.productList[i].isShopping = true;
+    //             break;
+    //           } else {
+    //             this.productList[i].isShopping = false;
+    //           }
+    //         }
+    //       }
+    //     } else {
+    //       this.productList.forEach(val => {
+    //         val.isShopping = false;
+    //       });
+    //     }
+    //   } else if (Object.prototype.toString.call(item) === "[object Object]") {
+    //     // 对象
+    //     for (let i = 0; i < this.productList.length; i++) {
+    //       if (item.productNumber == this.productList[i].productNumber) {
+    //         this.productList[i].isShopping = item.isShopping;
+    //       }
+    //     }
+    //   }
+    // });
   },
   beforeDestroy() {
     eventBus.$off("resetMyCollectionMenu");

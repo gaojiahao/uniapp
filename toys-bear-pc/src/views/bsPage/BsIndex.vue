@@ -318,6 +318,10 @@ export default {
       if (!path.includes("bsSampleQuotation")) {
         this.$store.commit("resetCheckTabstypeId", 0);
       }
+      console.log(path);
+      if (path.includes("bsShoppingCart")) {
+        eventBus.$emit("handlergetClientList");
+      }
     },
     activeTab(newN, oldN) {
       // console.log(newN, "现在", oldN, "上一次"); // tabName

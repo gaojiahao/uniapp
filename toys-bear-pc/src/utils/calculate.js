@@ -109,6 +109,7 @@ export default {
     }
     return number;
   }
+
   // 计算总箱数
   //   countTotalCartons() {
   //     let number = 0;

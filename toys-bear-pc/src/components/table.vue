@@ -228,7 +228,7 @@
               class="right"
               @click.stop="handlerShopping(scope.row)"
             >
-              <i v-if="scope.row.isShopping" class="shoppingCartActive"></i>
+              <i v-if="scope.row.isShop" class="shoppingCartActive"></i>
               <i v-else class="shoppingCart"></i>
             </div>
             <!-- <div
@@ -248,17 +248,15 @@
 
 <script>
 import Vue from "vue";
-import eventBus from "@/assets/js/common/eventBus";
-import { mapGetters, mapState } from "vuex";
+// import eventBus from "@/assets/js/common/eventBus";
+import { mapState } from "vuex";
 export default {
   name: "Table",
   props: {
     table: Object
   },
   computed: {
-    ...mapGetters({
-      shoppingList: "myShoppingList"
-    }),
+    ...mapState(["userInfo"]),
     ...mapState(["typeId"])
   },
   data() {
@@ -363,49 +361,80 @@ export default {
     },
     // 加购
     handlerShopping(item) {
-      this.item = item;
-      if (this.shoppingList.length >= 500 && !item.isShopping) {
-        this.$common.handlerMsgState({
-          msg: "购物车已满500条",
-          type: "warning"
-        });
-        return;
-      }
-      if (this.canClick) {
-        this.canClick = false;
-        this.callbackShopping();
-        setTimeout(() => {
-          this.canClick = true;
-        }, 500);
+      if (item.isShop) {
+        this.removeShopping(item);
       } else {
-        this.$common.handlerMsgState({
-          msg: "操作过于频繁",
-          type: "danger"
-        });
+        // if (this.shoppingList.length >= 500 && !this.item.isShopping) {
+        //   this.$common.handlerMsgState({
+        //     msg: "购物车已满500条",
+        //     type: "warning"
+        //   });
+        //   return;
+        // }
+        if (this.canClick) {
+          this.canClick = false;
+          this.callbackShopping(item);
+          setTimeout(() => {
+            this.canClick = true;
+          }, 500);
+        } else {
+          this.$common.handlerMsgState({
+            msg: "操作过于频繁",
+            type: "danger"
+          });
+        }
       }
     },
     // 加购事件
-    callbackShopping() {
-      this.item.isShopping = !this.item.isShopping;
-      if (this.item.isShopping) {
-        this.item.shoppingCount = 1;
-        this.$store.commit("pushShopping", this.item);
+    async callbackShopping(item) {
+      const fd = {
+        userID: this.userInfo.userInfo.id,
+        companyNumber: this.userInfo.commparnyList[0].companyNumber,
+        sourceFrom: "active",
+        number: 1,
+        currency: "￥",
+        Price: 0,
+        shopType: "companysamples",
+        productNumber: item.productNumber
+      };
+      const res = await this.$http.post("/api/AddShoppingCart", fd);
+      if (res.data.result.code === 200) {
+        item.isShop = !item.isShop;
+        this.$store.commit("handlerShoppingCartCount", res.data.result.item);
         this.$common.handlerMsgState({
           msg: "加购成功",
           type: "success"
         });
       } else {
-        this.item.shoppingCount = 0;
-        this.$store.commit("popShopping", this.item);
         this.$common.handlerMsgState({
-          msg: "取消加购成功",
-          type: "warning"
+          msg: "加购失败",
+          type: "danger"
         });
       }
-      eventBus.$emit("resetMyCart", this.item);
-      this.$nextTick(() => {
-        this.$forceUpdate();
-      });
+    },
+    // 删除当前购物车产品
+    async removeShopping(item) {
+      const fd = {
+        userID: this.userInfo.userInfo.id,
+        companyNumber: this.userInfo.commparnyList[0].companyNumber,
+        sourceFrom: "active",
+        shopType: "companysamples",
+        productNumber: item.productNumber
+      };
+      const res = await this.$http.post("/api/RemoveShoppingCart", fd);
+      if (res.data.result.code === 200) {
+        item.isShop = !item.isShop;
+        this.$store.commit("handlerShoppingCartCount", res.data.result.item);
+        this.$common.handlerMsgState({
+          msg: "取消加购",
+          type: "success"
+        });
+      } else {
+        this.$common.handlerMsgState({
+          msg: "取消失败",
+          type: "danger"
+        });
+      }
     },
     // 添加报价
     handlerUpadate(item) {

@@ -204,6 +204,7 @@ export default {
               // location.href = "https://www.toysbear.com/#/me";
               break;
           }
+          this.getShoppingCartCount();
           // this.$router.push("/bsIndex");
           // let token = JSON.stringify(res.data.result);
           // location =
@@ -212,6 +213,17 @@ export default {
           console.log(error);
           // this.$store.commit("updateAppLoading", false);
         }
+      }
+    },
+    // 获取购物车CartCount
+    async getShoppingCartCount() {
+      const fd = {
+        userID: this.userInfo.userInfo.id,
+        companyNumber: this.userInfo.commparnyList[0].companyNumber
+      };
+      const res = await this.$http.post("/api/ShoppingCartCount", fd);
+      if (res.data.result.code === 200) {
+        this.$store.commit("handlerShoppingCartCount", res.data.result.item);
       }
     }
   },
