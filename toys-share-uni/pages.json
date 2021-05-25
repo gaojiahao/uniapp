@@ -17,7 +17,7 @@
 			"aliasPath":"/offerSharing",
 			"name":"offerSharing",
 			"style": {
-				"navigationBarTitleText": "offerSharing",
+				"navigationBarTitleText": "报价分享",
 				"app-plus": {
 					"titleNView": false //禁用原生导航栏
 				}
@@ -28,7 +28,7 @@
 			"aliasPath":"/offerDetail/:pid/:id",
 			"name":"offerDetail",
 			"style": {
-				"navigationBarTitleText": "offerDetail",
+				"navigationBarTitleText": "产品详情",
 				"app-plus": {
 					"titleNView": false //禁用原生导航栏
 				}
@@ -39,7 +39,7 @@
 			"aliasPath":"/offerContact",
 			"name":"offerContact",
 			"style": {
-				"navigationBarTitleText": "offerContact",
+				"navigationBarTitleText": "联系方式",
 				"app-plus": {
 					"titleNView": false //禁用原生导航栏
 				}

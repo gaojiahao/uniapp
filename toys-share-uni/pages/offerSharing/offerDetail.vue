@@ -48,7 +48,7 @@
 										<view class="text">产品详情</view>
 									</b-col>
 									<b-col cols="9" offset-sm="8" sm="2">
-										<view class="return" @click="toSharing" @tab="toSharing"><u-icon name="arrow-leftward"></u-icon>返回</view>
+										<view class="return" @click="toSharing" @tab="toSharing"><u-icon name="fanhui" custom-prefix="custom-icon" :style="{marginRight: '10px'}"></u-icon>返回</view>
 									</b-col>
 								</b-row>
 							</view>
@@ -121,7 +121,7 @@
 					  class="mobild_sm_iframe"
 					></iframe>
 				</view>
-				<view class="three_d" @click='show_mobile_modal' @tap='show_mobile_modal'>3D展示</view>
+				<view class="three_d" @click='show_mobile_modal' @tap='show_mobile_modal'>{{is_show_pc_modal?'图片展示':'3D展示'}}</view>
 			</view>
 			<view class="mobile_content">
 				<view class="item active">{{productInfo.name}}</view>
@@ -187,9 +187,11 @@ export default {
 	methods:{
 		//获取content背景高度赋值
 		getContentStyle(){
-			var content = document.getElementsByClassName('content_bg_1');
-			var content3 = document.getElementsByClassName('content_bg_3');
-			content3[0].style.height = content[0].clientHeight+"px";
+			if(!this.isMobile){
+				var content = document.getElementsByClassName('content_bg_1');
+				var content3 = document.getElementsByClassName('content_bg_3');
+				content3[0].style.height = content[0].clientHeight+"px";
+			}
 		},
 		//to分享首页
 		toSharing(){
