@@ -782,7 +782,9 @@
           <div
             class="picProductListBox"
             :style="
-              isGrid === 'bsColumnComponent' ? ' padding:0' : ' padding:0 20px'
+              isGrid === 'bsColumnComponent'
+                ? ' padding:0'
+                : ' padding:0 20px 65px'
             "
           >
             <!-- 产品列表 -->
