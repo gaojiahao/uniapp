@@ -279,7 +279,7 @@ export default {
         }
       }
     });
-    // 取消获加购样式/刷新页面
+    // 取消或加购样式/刷新页面
     eventBus.$on("resetProductIsShop", item => {
       for (let i = 0; i < this.productList.length; i++) {
         if (this.productList[i].productNumber == item.productNumber) {

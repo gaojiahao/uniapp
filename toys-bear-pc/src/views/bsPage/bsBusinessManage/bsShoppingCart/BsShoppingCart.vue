@@ -1302,8 +1302,11 @@ export default {
         );
 
         this.$nextTick(() => {
-          this.$refs.myTableRef.toggleAllSelection();
+          const totalEl = document.getElementById("totalBox");
+          totalEl.style.width =
+            document.getElementById("tableId").offsetWidth + 60 + "px";
         });
+        this.$refs.myTableRef.toggleAllSelection();
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -1331,8 +1334,6 @@ export default {
     eventBus.$on("handlerLeft", left => {
       totalEl.style.left = -left + "px";
     });
-    totalEl.style.width =
-      document.getElementById("tableId").offsetWidth + 60 + "px";
   },
   beforeDestroy() {
     eventBus.$off("handlergetClientList");

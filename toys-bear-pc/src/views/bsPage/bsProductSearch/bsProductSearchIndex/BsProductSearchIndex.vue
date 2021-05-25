@@ -1457,7 +1457,7 @@ export default {
     eventBus.$on("openUpload", file => {
       this.uploadPic(file);
     });
-    // 取消获加购样式/刷新页面
+    // 取消或加购样式/刷新页面
     eventBus.$on("resetProductIsShop", item => {
       for (let i = 0; i < this.productList.length; i++) {
         if (this.productList[i].productNumber == item.productNumber) {
@@ -1475,37 +1475,7 @@ export default {
         }
       }
     });
-    // 加购删除购物车
-    // eventBus.$on("resetMyCart", item => {
-    //   if (Object.prototype.toString.call(item) === "[object Array]") {
-    //     // 数组
-    //     if (item.length) {
-    //       for (let i = 0; i < this.productList.length; i++) {
-    //         for (let j = 0; j < item.length; j++) {
-    //           if (this.productList[i].productNumber == item[j].productNumber) {
-    //             this.$set(this.productList[i], "isShopping", true);
-    //             // this.productList[i].isShopping = true;
-    //             break;
-    //           } else {
-    //             this.$set(this.productList[i], "isShopping", false);
-    //             // this.productList[i].isShopping = false;
-    //           }
-    //         }
-    //       }
-    //     } else {
-    //       this.productList.forEach(val => {
-    //         val.isShopping = false;
-    //       });
-    //     }
-    //   } else if (Object.prototype.toString.call(item) === "[object Object]") {
-    //     // 对象;
-    //     for (let i = 0; i <script this.productList.length; i++) {
-    //       if (item.productNumber == this.productList[i].productNumber) {
-    //         this.productList[i].isShopping = item.isShopping;
-    //       }
-    //     }
-    //   }
-    // });
+
     this.$nextTick(async () => {
       if (this.searchTxt != "") {
         // 首页文字搜索跳转
