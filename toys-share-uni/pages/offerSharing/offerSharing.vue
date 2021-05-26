@@ -95,14 +95,14 @@
 								</b-col>
 							</b-row>
 							<div class="row_diver"></div>
-							<b-row>
+							<b-row no-gutters>
 								<b-col cols="12" sm="2">
 									<view class="offer_info_item">
 										<view class="offer_info_item_label">
 											商品总款数：
 										</view>
 										<view class="offer_info_item_text">
-											{{sampleInfo.total}}
+											{{summaryData.totalDegree}}
 										</view>
 									</view>
 								</b-col>
@@ -112,17 +112,17 @@
 											商品总箱数：
 										</view>
 										<view class="offer_info_item_text">
-											{{sampleInfo.totalCost}}
+											{{summaryData.totalCartons}}
 										</view>
 									</view>
 								</b-col>
-								<b-col cols="12" sm="2">
+								<b-col cols="12" sm="3">
 									<view class="offer_info_item">
 										<view class="offer_info_item_label">
 											总体积/总材积：
 										</view>
 										<view class="offer_info_item_text">
-											{{sampleInfo.aaa/sampleInfo.bbb}}
+											{{summaryData.totalBulkStere}}(cbm)/{{summaryData.totalBulkFeet}}(cuft)
 										</view>
 									</view>
 								</b-col>
@@ -132,7 +132,7 @@
 											总毛重/总净重：
 										</view>
 										<view class="offer_info_item_text">
-											30.02/20.01(KG)
+											{{summaryData.totalBulkStere}}/{{ summaryData.totalNeWe }}(KG)
 										</view>
 									</view>
 								</b-col>
@@ -142,7 +142,7 @@
 											总金额：
 										</view>
 										<view class="offer_info_item_text red_color">
-											￥190.00
+											{{ summaryData.cu_de }}{{ summaryData.totalMoney }}
 										</view>
 									</view>
 								</b-col>
@@ -245,7 +245,7 @@
 												<view class="product_list_info_text2">出厂货号：<span>{{item.fa_no}}</span></view>
 												<view class="product_list_info_text2 red_color">报价：<span>{{item.cu_de}}{{item.offerAmount}}</span></view>
 												<view class="product_list_info_text2 red_color">报价箱数：<span>{{item.boxNumber}}</span></view>
-												<view class="product_list_info_text2 red_color">总金额：<span>{{item.cu_de}}{{item.offerAmount}}</span></view>
+												<view class="product_list_info_text2 red_color">总金额：<span>{{item.cu_de}}{{$calculate.countTotalprice(item.offerAmount,item.ou_lo,item.boxNumber)}}</span></view>
 												
 											</view>
 										</b-col>
@@ -268,7 +268,7 @@
 												<view class="product_list_info_text2">毛重/净重：<span>{{item.gr_we}}/{{item.ne_we}}(KG)</span></view>
 												<view class="product_list_info_text2 red_color">报价：<span>{{item.cu_de}}{{item.offerAmount}}</span></view>
 												<view class="product_list_info_text2 red_color">报价箱数：<span>{{item.boxNumber}}</span></view>
-												<view class="product_list_info_text2 red_color">总金额：<span>{{item.cu_de}}{{item.offerAmount}}</span></view>
+												<view class="product_list_info_text2 red_color">总金额：<span>{{item.cu_de}}{{$calculate.countTotalprice(item.offerAmount,item.ou_lo,item.boxNumber)}}</span></view>
 											</view>
 											<view v-else>
 												<view class="product_list_info_text2">装箱量：<span>{{item.in_en}}/{{item.ou_lo}}(PCS)</span></view>
@@ -283,9 +283,9 @@
 					</view>
 				</view>
 			</view>
-			<view class="page_box">
+			<!-- <view class="page_box">
 				<uni-pagination @change="handlePage" show-icon="true" :total="totalCount" :current="currentPage" :pageSize="pageSize"></uni-pagination>
-			</view>
+			</view> -->
 		</view>
 		<view class="footer">
 			<view class="title">Copyright©2021 深圳小竹熊科技有限公司 粤ICP备13031421号-4</view>
@@ -310,14 +310,27 @@ export default {
 			sampleInfo:{}, //择样信息
 			productList:[] ,//产品列表
 			currentPage: 1,
-			pageSize: 12,
+			pageSize: 9999,
 			categoryNumber: "",
 			totalCount: 0,
 			sortOrder: 0,  //价格搜索
 			sortType: 0,   //时间搜索
 			searchType:'zonghe',
 			listShowType:'grid', //列表显示类型 grid list
-			isMobile:false   //是否移动端
+			isMobile:false,   //是否移动端
+			summaryData: {
+				//汇总数据
+				totalDegree: 0, //总款数
+				totalCartons: 0, //总箱数
+				totalQuantity: 0, //总数量
+				totalBulkStere: 0, //总体积
+				totalBulkFeet: 0, //总材积
+				totalGrWe: 0, //总毛重
+				totalNeWe: 0, //总净重
+				cu_de: "", //金额单位
+				totalMoney: 0 //总金额
+				// countData: [],
+			}
 		}
 	},
 	methods:{
@@ -424,6 +437,7 @@ export default {
 			const res = await me.$u.api.ProductOfferDetailPage(fd);
 			if (res.result.code === 200) {
 				this.productList = res.result.item.items;
+				this.handleCountData(this.productList);
 				this.totalCount = res.result.item.totalCount;
 			} else {
 				this.$message.error(res.result.msg);
@@ -455,6 +469,53 @@ export default {
 			name: "offerDetail",
 			params: { id: id, pid: uni.getStorageSync('offer_sharing_id') }
 		  });
+		},
+		//计算汇总数据
+		handleCountData(array) {
+		  //总款数
+		  this.summaryData.totalDegree = array.length;
+		  this.summaryData.cu_de = this.sampleInfo.cu_de;
+		  //金额单位
+		  for (let i = 0; i < array.length; i++) {
+			//总箱数
+			this.summaryData.totalCartons = this.$calculate.add(
+			  this.summaryData.totalCartons,
+			  array[i].boxNumber || 0
+			);
+			//总数量
+			this.summaryData.totalQuantity = this.$calculate.add(
+			  this.summaryData.totalQuantity,
+			  this.$calculate.multiply(array[i].boxNumber, array[i].ou_lo) || 0
+			);
+			//总体积
+			this.summaryData.totalBulkStere = this.$calculate.add(
+			  this.summaryData.totalBulkStere,
+			  this.$calculate.multiply(array[i].boxNumber, array[i].bulk_stere) || 0
+			);
+			//总材积
+			this.summaryData.totalBulkFeet = this.$calculate.add(
+			  this.summaryData.totalBulkFeet,
+			  this.$calculate.multiply(array[i].boxNumber, array[i].bulk_feet) || 0
+			);
+			//总毛重
+			this.summaryData.totalGrWe = this.$calculate.add(
+			  this.summaryData.totalGrWe,
+			  this.$calculate.multiply(array[i].boxNumber, array[i].gr_we) || 0
+			);
+			//总净重
+			this.summaryData.totalNeWe = this.$calculate.add(
+			  this.summaryData.totalNeWe,
+			  this.$calculate.multiply(array[i].boxNumber, array[i].ne_we) || 0
+			);
+			//总金额
+			this.summaryData.totalMoney = this.$calculate.add(
+			  this.summaryData.totalMoney,
+			  this.$calculate.multiply(
+				this.$calculate.multiply(array[i].offerAmount, array[i].boxNumber),
+				array[i].ou_lo
+			  )
+			);
+		  }
 		},
 		//初始化
 		async init(){

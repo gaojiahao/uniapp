@@ -83,7 +83,7 @@
 										<view class="item">毛重/净重：<text>{{productInfo.gr_we}}/{{productInfo.gr_we}}(kg)</text></view>
 										<view class="item red_color">报价：<text>{{productInfo.cu_de}}{{productInfo.offerAmount}}</text></view>
 										<view class="item red_color">报价箱数：<text>{{productInfo.boxNumber}}</text></view>
-										<view class="item red_color">总金额：<text>{{productInfo.cu_de}}{{productInfo.offerAmount}}</text></view>
+										<view class="item red_color">总金额：<text>{{productInfo.cu_de}}{{$calculate.countTotalprice(productInfo.offerAmount,productInfo.ou_lo,productInfo.boxNumber)}}</text></view>
 									</view>
 								</b-col>
 							</b-row>
@@ -135,7 +135,7 @@
 				<view class="item">毛重/净重：{{productInfo.gr_we}}/{{productInfo.gr_we}}(kg)</view>
 				<view class="item red_color">报价：{{productInfo.cu_de}}{{productInfo.offerAmount}}</view>
 				<view class="item red_color">报价箱数：{{productInfo.boxNumber}}</view>
-				<view class="item red_color">总金额：{{productInfo.cu_de}}{{productInfo.offerAmount}}</view>
+				<view class="item red_color">总金额：{{productInfo.cu_de}}{{$calculate.countTotalprice(productInfo.offerAmount,productInfo.ou_lo,productInfo.boxNumber)}}</view>
 			</view>
 			<view class="footer">
 				<view class="title">Copyright©2021 深圳小竹熊科技有限公司 粤ICP备13031421号-4</view>
