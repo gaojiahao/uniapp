@@ -700,7 +700,11 @@
       :visible.sync="showCodeValue"
       width="450px"
     >
-      <bsQRcodeValue :QRcodeValue="QRcodeValue" />
+      <bsQRcodeValue
+        @close="showCodeValue = false"
+        @submitCode="submitCode"
+        :QRcodeValue="QRcodeValue"
+      />
     </el-dialog>
   </div>
 </template>
@@ -851,6 +855,23 @@ export default {
     };
   },
   methods: {
+    // 提交扫码加购
+    async submitCode() {
+      console.log(123);
+      const res = await this.$http.post("/api/AddShoppingCart", {
+        userID: this.userInfo.userInfo.id,
+        companyNumber: this.userInfo.commparnyList[0].companyNumber,
+        // sourceFrom: "active",
+        sourceFrom: "QRCodeSearch",
+        number: this.QRcodeValue.productCount,
+        currency: "￥",
+        Price: 0,
+        shopType: "companysamples",
+        productNumber: this.QRcodeValue.productNumber
+      });
+      console.log(res, 123);
+      this.showCodeValue = false;
+    },
     // 发送上传图片
     async httpFile(file) {
       const result = getQrUrl(file.raw);

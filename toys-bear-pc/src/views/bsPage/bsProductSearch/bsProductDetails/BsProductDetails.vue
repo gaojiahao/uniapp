@@ -33,7 +33,7 @@
             >
           </div>
           <div class="textWrap">
-            <div class="left">
+            <div class="textWrap_left">
               <div class="itemText">
                 出厂货号：<span>{{ productDetail.fa_no }}</span>
               </div>
@@ -59,7 +59,7 @@
                 >
               </div>
             </div>
-            <div class="right">
+            <div class="textWrap_right">
               <div class="itemText">
                 包装：<span>{{ productDetail.ch_pa }}</span>
               </div>
@@ -469,15 +469,15 @@ export default {
         }
         .textWrap {
           display: flex;
-          .left,
-          .right {
+          .textWrap_left,
+          .textWrap_right {
             padding: 0;
             .itemText {
               line-height: 32px;
             }
           }
-          .right {
-            margin-left: 50px;
+          .textWrap_right {
+            margin-left: 52px;
           }
         }
       }
