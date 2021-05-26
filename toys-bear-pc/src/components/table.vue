@@ -40,11 +40,13 @@
           <div v-html="col.renderHeard()"></div>
         </template>
         <template slot-scope="scope">
+          <!-- 字段判断 -->
           <span
             v-if="col.render"
             :style="{ color: col.color }"
             v-html="col.render(scope.row)"
           ></span>
+          <!-- 产品信息和图片 -->
           <div class="productInfo" v-else-if="col.productInfo">
             <el-tooltip
               effect="light"
@@ -152,6 +154,7 @@
               </div>
             </div>
           </div>
+          <!-- 用户头像和名字 -->
           <div class="nameBox" v-else-if="col.companyInfo">
             <el-avatar
               style="background-color: #e4efff"
@@ -167,6 +170,73 @@
             ></span>
             <span class="isMain" v-if="scope.row.isMain"><i>主账号</i></span>
           </div>
+          <!-- 只放图片 -->
+          <div class="productInfo" v-else-if="col.elImageUrl">
+            <el-tooltip
+              effect="light"
+              placement="right"
+              popper-class="testtooltip"
+            >
+              <div slot="content">
+                <el-image
+                  v-if="col.elImageUrl"
+                  style="width: 300px; height: auto; cursor: pointer"
+                  :preview-src-list="isArray(col.elImage(scope.row))"
+                  :src="isString(col.elImage(scope.row))"
+                  fit="contain"
+                >
+                  <div
+                    slot="placeholder"
+                    class="image-slot"
+                    style="width: 300px; height: 280px; min-width: 300px"
+                  >
+                    <img
+                      style="width: 300px; height: 280px; min-width: 300px"
+                      :src="require('@/assets/images/imgError.png')"
+                    />
+                  </div>
+                  <div
+                    slot="error"
+                    class="image-slot"
+                    style="width: 300px; height: 280px; min-width: 300px"
+                  >
+                    <img
+                      style="width: 300px; height: 280px; min-width: 300px"
+                      :src="require('@/assets/images/imgError.png')"
+                    />
+                  </div>
+                </el-image>
+              </div>
+              <el-image
+                v-if="col.elImage"
+                style="width: 82px; height: 62px; min-width: 82px"
+                :src="isString(col.elImage(scope.row))"
+                fit="contain"
+              >
+                <div
+                  slot="placeholder"
+                  class="image-slot"
+                  style="width: 82px; height: 62px"
+                >
+                  <img
+                    style="width: 82px; height: 62px"
+                    :src="require('@/assets/images/imgError.png')"
+                  />
+                </div>
+                <div
+                  slot="error"
+                  class="image-slot"
+                  style="width: 82px; height: 62px"
+                >
+                  <img
+                    style="width: 82px; height: 62px"
+                    :src="require('@/assets/images/imgError.png')"
+                  />
+                </div>
+              </el-image>
+            </el-tooltip>
+          </div>
+          <!-- 字段颜色 -->
           <span
             v-else-if="col.isCallback"
             @click="col.event(scope.row)"
@@ -174,6 +244,7 @@
             v-html="col.isCallback(scope.row)"
           >
           </span>
+          <!-- 模板字符串操作 -->
           <span v-else-if="register(col)">
             <component
               :is="templates[col.prop]"
@@ -182,6 +253,7 @@
               @action="col.action"
             ></component>
           </span>
+          <!-- 单纯字段 -->
           <span v-else>
             {{ scope.row[col.prop] }}
           </span>
