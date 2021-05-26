@@ -5,7 +5,29 @@
       <h2 class="title">登录系统</h2>
     </div>
     <el-tabs v-model="activeName" class="loginFormLaout" stretch>
-      <el-tab-pane label="短信登录" name="mobile">
+      <el-tab-pane label="二维码登录" name="erweima">
+        <div class="qrCodeBox">
+          <div class="qrcode">
+            <vue-qr
+              :text="options.url"
+              :logoSrc="options.icon + '?cache'"
+              colorLight="#fff"
+              colorDark="#018e37"
+              :margin="0"
+              :size="230"
+            ></vue-qr>
+            <div class="refresh" v-show="showQrCode">
+              <div class="refreshIcon" @click="getQrCodeUrl">
+                <i class="el-icon-refresh"></i>
+              </div>
+            </div>
+          </div>
+          <p class="qrText">
+            {{ qrcodeTitle }}
+          </p>
+        </div>
+      </el-tab-pane>
+         <el-tab-pane label="短信登录" name="mobile">
         <el-form
           :model="loginforms"
           ref="mobileRef"
@@ -52,28 +74,6 @@
           </el-form-item>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane label="二维码登录" name="erweima">
-        <div class="qrCodeBox">
-          <div class="qrcode">
-            <vue-qr
-              :text="options.url"
-              :logoSrc="options.icon + '?cache'"
-              colorLight="#fff"
-              colorDark="#018e37"
-              :margin="0"
-              :size="230"
-            ></vue-qr>
-            <div class="refresh" v-show="showQrCode">
-              <div class="refreshIcon" @click="getQrCodeUrl">
-                <i class="el-icon-refresh"></i>
-              </div>
-            </div>
-          </div>
-          <p class="qrText">
-            {{ qrcodeTitle }}
-          </p>
-        </div>
-      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -102,7 +102,7 @@ export default {
       showQrCode: false,
       count: "",
       timer: null,
-      activeName: "mobile",
+      activeName: "erweima",
       search: "",
       options: {
         // 二维码配置
@@ -420,12 +420,12 @@ export default {
     }
   },
   created() {},
-  mounted() {},
+  mounted() {this.getQrCodeUrl();},
   watch: {
     activeName(val) {
-      if (val === "erweima") {
-        this.getQrCodeUrl();
-      } else {
+      if (val === "mobile") {
+      //   this.getQrCodeUrl();
+      // } else {
         clearInterval(this.qrTimer);
         this.ws && this.ws.close();
       }
@@ -567,11 +567,18 @@ export default {
       justify-content: center;
       flex-wrap: wrap;
       .qrcode {
-        width: 230px;
-        height: 230px;
+        width: 190px;
+        height: 190px;
         position: relative;
+         margin-top: 15px;
+         img {
+          width: 190px;
+          height: 190px;
+        }
         .refresh {
           position: absolute;
+          top: 0;
+          left: 0;
           width: 100%;
           height: 100%;
           background-color: rgba(255, 255, 255, 0.9);

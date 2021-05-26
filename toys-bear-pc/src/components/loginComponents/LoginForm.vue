@@ -374,8 +374,6 @@ export default {
                 });
                 this.$store.commit("removeLoginItems");
               }
-              var u = navigator.userAgent;
-              console.log(u, "浏览器版本");
               switch (res.data.result.commparnyList[0].companyType) {
                 // case "Admin":
                 // case "Supplier":
@@ -554,6 +552,8 @@ export default {
         }
         .refresh {
           position: absolute;
+          left: 0;
+          top: 0;
           width: 100%;
           height: 100%;
           background-color: rgba(255, 255, 255, 0.9);

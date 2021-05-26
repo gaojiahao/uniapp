@@ -2,10 +2,12 @@
 import axios from "axios";
 import $Store from "@/store";
 import router from "@/router/index.js";
+import browerInfo from "@/utils/browerInfo";
 import v from "vue";
 
 // logo报错日志
 const createLogRecord = async function(obj) {
+  obj.Parameters = browerInfo.getBrowerInfo();
   if (obj.Url.includes("CreateLogRecord")) {
     v.prototype.$common.handlerMsgState({
       msg: obj.Message,
