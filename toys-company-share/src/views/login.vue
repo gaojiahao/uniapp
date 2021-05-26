@@ -5,14 +5,19 @@
       <div class="loginBox">
         <div class="title">
           <el-image :src="userLogo.companyLogo"></el-image>
-          <span class="titleText">{{ currentLang.companyName }}</span>
+          <div class="titleText">
+            <notice-bar
+              :text="currentLang.companyName"
+              :startRoll="companyNameLength"
+            />
+          </div>
         </div>
         <div class="minTitle">
           <el-image
             style="width:30px;height:37px"
             :src="require('@/assets/images/minTitleText.png')"
           ></el-image>
-          <span class="titleText">{{ loginLang.SignIn }}</span>
+          <div class="titleText">{{ loginLang.SignIn }}</div>
         </div>
         <div class="formBox">
           <el-form
@@ -54,7 +59,11 @@
 
 <script>
 import { mapState } from "vuex";
+import NoticeBar from "@/components/noticeBar/notice-bar";
 export default {
+  components: {
+    NoticeBar
+  },
   data() {
     return {
       userLogo: {
@@ -164,6 +173,9 @@ export default {
     ...mapState(["globalLang", "currentLang", "langs"]),
     loginLang() {
       return this.$t("lang.login");
+    },
+    companyNameLength() {
+      return this.currentLang.companyName.length > 7;
     }
   }
 };
@@ -222,6 +234,7 @@ export default {
         }
         .titleText {
           margin-left: 20px;
+          width: 250px;
         }
       }
       .minTitle {

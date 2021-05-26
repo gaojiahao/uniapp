@@ -109,7 +109,7 @@ export default {
   validate360(option, value) {
     let mimeTypes = window.navigator.mimeTypes;
     for (let mt in mimeTypes) {
-      console.log(mimeTypes[mt][option]);
+      // console.log(mimeTypes[mt][option]);
       if (mimeTypes[mt][option] == value) {
         return true;
       }
