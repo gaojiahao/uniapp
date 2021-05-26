@@ -1,3 +1,6 @@
+// 解析二维码插件
+import QrCode from "qrcode-decoder";
+
 /**
  * 获取年月日时分秒
  * @returns YYYYmmddhhmfss
@@ -261,4 +264,19 @@ export function base64file(file, type) {
       };
     }
   });
+}
+export function getQrUrl(file) {
+  // 获取临时路径 chrome有效，其他浏览器的方法请自行查找
+  let url;
+  if (window.webkitURL) {
+    url = window.webkitURL.createObjectURL(file);
+  } else if (window.URL) {
+    url = window.URL.createObjectURL(file);
+  } else {
+    return false;
+  }
+  // 初始化
+  const qr = new QrCode();
+  // 解析二维码，返回promise
+  return qr.decodeFromImage(url);
 }
