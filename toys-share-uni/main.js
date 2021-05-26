@@ -6,11 +6,12 @@ import App from './App'
 import store from '@/store'
 import {router,RouterMount} from './router/router.js'  //路径换成自己的
 import BootstrapVue from './common/js/bootstrap-vue.min'
+import calculate from "@/common/js/calculate.js";
 // 引入uView提供的对vuex的简写法文件
 let vuexStore = require('@/store/$u.mixin.js')
 Vue.mixin(vuexStore);
 Vue.use(BootstrapVue,{})
-
+Vue.prototype.$calculate = calculate;
 // 引入全局uView
 import uView from 'uview-ui'
 Vue.use(uView);
