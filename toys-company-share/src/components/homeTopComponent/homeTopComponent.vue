@@ -14,9 +14,13 @@
             <img :src="require('@/assets/images/logo.png')" />
           </div>
         </el-image>
-        <span class="leftTitleText">
-          {{ currentLang.companyName }}
-        </span>
+        <div class="leftTitleText">
+          <!-- {{ currentLang.companyName }} -->
+          <notice-bar
+            :text="currentLang.companyName"
+            :startRoll="companyNameLength"
+          />
+        </div>
       </div>
       <div class="right">
         <div class="myInput">
@@ -187,10 +191,13 @@
 <script>
 import { mapState, mapGetters } from "vuex";
 import { VueCropper } from "vue-cropper";
+import NoticeBar from "@/components/noticeBar/notice-bar";
+
 export default {
   name: "home-top-component",
   components: {
-    VueCropper
+    VueCropper,
+    NoticeBar
   },
   computed: {
     homeLang() {
@@ -199,6 +206,9 @@ export default {
     ...mapGetters({
       shoppingList: "myShoppingList"
     }),
+    companyNameLength() {
+      return this.currentLang.companyName.length > 15;
+    },
     ...mapState([
       "searchForm",
       "langs",
@@ -390,6 +400,9 @@ export default {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        .seamless-warp {
+          height: 50px;
+        }
       }
       .langBox {
         margin-left: 46px;
@@ -427,6 +440,12 @@ export default {
           font-size: 16px;
           border-radius: 0px;
         }
+      }
+    }
+    .left {
+      min-width: 500px;
+      .leftTitleText {
+        min-width: 460px;
       }
     }
   }
