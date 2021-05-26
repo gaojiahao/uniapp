@@ -857,7 +857,6 @@ export default {
   methods: {
     // 提交扫码加购
     async submitCode() {
-      console.log(123);
       const res = await this.$http.post("/api/AddShoppingCart", {
         userID: this.userInfo.userInfo.id,
         companyNumber: this.userInfo.commparnyList[0].companyNumber,
@@ -869,7 +868,19 @@ export default {
         shopType: "companysamples",
         productNumber: this.QRcodeValue.productNumber
       });
-      console.log(res, 123);
+      if (res.data.result.code === 200) {
+        this.getShoppingCartList();
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "success"
+        });
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+
       this.showCodeValue = false;
     },
     // 发送上传图片
