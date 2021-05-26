@@ -1,6 +1,24 @@
 <template>
   <div class="bsMyCollection">
-    <div class="title">购物车 ({{ myShoppingCartCount }})</div>
+    <div class="cartTitle">
+      <span>购物车 ({{ myShoppingCartCount }})</span>
+      <span>
+        <el-button type="warning" size="medium" @click="analysisCode">
+          <i class="iconfont icon-ico" style="margin-right: 5px;"></i>
+          解析二维码
+        </el-button>
+        <el-upload
+          action=""
+          ref="uploadFile"
+          :auto-upload="false"
+          :on-change="changeFile"
+          :http-request="httpFile"
+          :accept="globalJson.Json.MessageRestriction[0].itemCode"
+          style="display: none;"
+        >
+        </el-upload>
+      </span>
+    </div>
     <div class="tableBox" id="tableId">
       <el-table
         :data="tableData"
@@ -29,8 +47,8 @@
                 <div slot="content">
                   <el-image
                     style="width: 300px;height: auto; cursor: pointer;"
-                    :preview-src-list="[scope.row.img]"
-                    :src="scope.row.img"
+                    :preview-src-list="[scope.row.productImgs]"
+                    :src="scope.row.productImgs"
                     fit="contain"
                   >
                     <div
@@ -59,7 +77,7 @@
                   @click.native="goDetails(scope.row)"
                   fit="contain"
                   style="width: 80px; height: 60px"
-                  :src="scope.row.img"
+                  :src="scope.row.productImgs"
                 >
                   <div slot="placeholder" class="errorImg">
                     <img src="~@/assets/images/imgError.png" alt />
@@ -674,16 +692,33 @@
         </el-form>
       </el-dialog>
     </el-dialog>
+    <!-- 解析二维码后的 -->
+    <el-dialog
+      title="解析二维码"
+      top="30vh"
+      :close-on-click-modal="false"
+      :visible.sync="showCodeValue"
+      width="450px"
+    >
+      <bsQRcodeValue :QRcodeValue="QRcodeValue" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import eventBus from "@/assets/js/common/eventBus";
+import { getQrUrl } from "@/assets/js/common/common.js";
+import bsQRcodeValue from "./bsQRcodeValue.vue";
 export default {
   name: "bsShoppingCart",
+  components: {
+    bsQRcodeValue
+  },
   data() {
     return {
+      QRcodeValue: {},
+      showCodeValue: false,
       chufa: "(出厂价+(总费用/(每车尺码/体积*外箱装量)))/(1-报价利润/100)/汇率",
       chengfa:
         "(出厂价+(总费用/(每车尺码/体积*外箱装量)))*(1+报价利润/100)/汇率",
@@ -816,6 +851,71 @@ export default {
     };
   },
   methods: {
+    // 发送上传图片
+    async httpFile(file) {
+      const result = getQrUrl(file.raw);
+      result
+        .then(res => {
+          if (res.data) {
+            // console.log(res.data);
+            // this.$message.success("识别二维码成功!");
+            this.$http
+              .post("/api/QRCodeSearchProduct", { qRcode: res.data })
+              .then(res => {
+                if (res.data.result.code === 200) {
+                  this.QRcodeValue = res.data.result.item;
+                  this.showCodeValue = true;
+                } else {
+                  this.$common.handlerMsgState({
+                    msg: res.data.result.msg,
+                    type: "danger"
+                  });
+                }
+              });
+          } else {
+            this.$common.handlerMsgState({
+              msg: "识别二维码失败, 请重新上传",
+              type: "danger"
+            });
+          }
+        })
+        .catch(() => {
+          this.$common.handlerMsgState({
+            msg: "识别二维码失败, 请重新上传",
+            type: "danger"
+          });
+        });
+    },
+    // 选择文件
+    changeFile(file) {
+      // 当前选中文件的大小
+      const rowFileSize = file.size;
+      // 图片
+      const imgSize = Number(
+        this.globalJson.Json.MessageRestriction[7].itemCode
+      );
+      // 图片大小验证
+      if (rowFileSize > imgSize) {
+        this.$common.handlerMsgState({
+          msg: "图片太大",
+          type: "danger"
+        });
+        return false;
+      }
+      this.httpFile(file);
+    },
+    // 打开解析二维码
+    analysisCode() {
+      this.$confirm("请上传二维码", {
+        title: "解析二维码",
+        confirmButtonText: "上传",
+        cancelButtonText: "取消"
+      })
+        .then(() => {
+          this.$refs.uploadFile.$refs["upload-inner"].handleClick();
+        })
+        .catch(() => {});
+    },
     // 计算总箱数量
     calculationTotalBoxCartons(list) {
       let number = 0;
@@ -1339,7 +1439,7 @@ export default {
     eventBus.$off("handlergetClientList");
   },
   computed: {
-    ...mapState(["userInfo", "myShoppingCartCount"])
+    ...mapState(["userInfo", "myShoppingCartCount", "globalJson"])
   },
   watch: {
     selectTableData: {
@@ -1424,7 +1524,7 @@ export default {
   min-height: 100%;
   background-color: #fff;
   padding: 0 20px;
-  .title {
+  .cartTitle {
     height: 55px;
     line-height: 55px;
     font-size: 15px;
@@ -1433,6 +1533,8 @@ export default {
     box-sizing: border-box;
     position: relative;
     border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    justify-content: space-between;
     &::before {
       width: 4px;
       height: 14px;
