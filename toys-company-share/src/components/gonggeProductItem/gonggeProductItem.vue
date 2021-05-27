@@ -63,7 +63,7 @@ export default {
           cancelButtonText: "取消"
         })
           .then(({ value }) => {
-            
+            console.log(value);
           })
           .catch(() => {
             this.$message({
