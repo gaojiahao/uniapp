@@ -402,7 +402,7 @@
             :rules="addInfoRules"
             :model="clienFormData"
           >
-            <el-form-item label="报价客户：" prop="customerId">
+            <el-form-item label="客户名称：" prop="customerId">
               <div class="formItemBox">
                 <el-select
                   v-model="clienFormData.customerId"
@@ -425,7 +425,7 @@
                 >
               </div>
             </el-form-item>
-            <el-form-item label="报价备注：">
+            <el-form-item label="备注：">
               <el-input
                 maxlength="50"
                 show-word-limit
