@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState } from "vuex";
 export default {
   props: {
     item: {
@@ -106,9 +106,7 @@ export default {
   computed: {
     ...mapState(["globalLang"]),
     ...mapState(["userInfo"]),
-    ...mapGetters({
-      shoppingList: "myShoppingList"
-    }),
+
     publicLang() {
       return this.$t("lang.publicLang");
     }

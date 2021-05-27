@@ -316,9 +316,7 @@ export default {
     advancedSearchLang() {
       return this.$t("lang.advancedSearch");
     },
-    ...mapGetters({
-      shoppingList: "myShoppingList"
-    }),
+
     ...mapState(["searchForm"])
   },
   beforeDestroy() {

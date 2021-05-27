@@ -82,22 +82,22 @@ const pluginsProduction = [
 ];
 if (env !== "production") {
   config.devServer = {
-    open: true, // 开启自动打开浏览器
+    open: true // 开启自动打开浏览器
     // host: "localhost", // 地址
     // port: "8080", // 端口
-    disableHostCheck: true,
-    proxy: {
-      "/api": {
-        // 设置跨域变量代号
-        target: target, // 你想要代理的目标源链接
-        ws: true, // 开启websocket
-        changeOrigin: true, // 开启代理
-        pathRewrite: {
-          // 设置二级
-          "^/api": "/api"
-        }
-      }
-    }
+    // disableHostCheck: true,
+    // proxy: {
+    //   "/api": {
+    //     // 设置跨域变量代号
+    //     target: target, // 你想要代理的目标源链接
+    //     ws: true, // 开启websocket
+    //     changeOrigin: true, // 开启代理
+    //     pathRewrite: {
+    //       // 设置二级
+    //       "^/api": "/api"
+    //     }
+    //   }
+    // }
   };
   config.configureWebpack.plugins = plugins;
 } else {

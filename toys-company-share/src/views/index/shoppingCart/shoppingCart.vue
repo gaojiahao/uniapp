@@ -945,10 +945,7 @@ export default {
       return this.$t("lang.myOrder");
     },
     ...mapState(["globalLang"]),
-    ...mapState(["userInfo"]),
-    ...mapGetters({
-      shoppingList: "myShoppingList"
-    })
+    ...mapState(["userInfo"])
   },
   filters: {}
 };

@@ -89,10 +89,7 @@ export default {
   computed: {
     productLang() {
       return this.$t("lang.product");
-    },
-    ...mapGetters({
-      shoppingList: "myShoppingList"
-    })
+    }
   }
 };
 </script>

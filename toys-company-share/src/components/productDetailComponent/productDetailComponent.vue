@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState } from "vuex";
 import magnifierComponent from "@/components/magnifierComponent/magnifierComponent.vue";
 import relatedProducts from "@/components/relatedProducts/relatedProducts.vue";
 export default {
@@ -159,10 +159,7 @@ export default {
       return this.$t("lang.publicLang");
     },
     ...mapState(["globalLang"]),
-    ...mapState(["userInfo"]),
-    ...mapGetters({
-      shoppingList: "myShoppingList"
-    })
+    ...mapState(["userInfo"])
   }
 };
 </script>

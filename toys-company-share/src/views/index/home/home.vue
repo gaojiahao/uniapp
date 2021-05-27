@@ -70,10 +70,7 @@ export default {
     homeLang() {
       return this.$t("lang.home");
     },
-    ...mapState(["userInfo"]),
-    ...mapGetters({
-      shoppingList: "myShoppingList"
-    })
+    ...mapState(["userInfo"])
   },
   watch: {
     "$store.state.globalLang"(val) {

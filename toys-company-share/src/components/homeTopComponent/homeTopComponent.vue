@@ -203,9 +203,7 @@ export default {
     homeLang() {
       return this.$t("lang.home");
     },
-    ...mapGetters({
-      shoppingList: "myShoppingList"
-    }),
+
     companyNameLength() {
       return this.currentLang.companyName.length > 15;
     },
