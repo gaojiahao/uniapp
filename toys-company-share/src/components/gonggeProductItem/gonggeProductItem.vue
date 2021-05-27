@@ -55,23 +55,26 @@ export default {
   },
   methods: {
     // 加购
-    handlerShopping(item) {
-      if (!item.isShopping && this.shoppingList.length >= 500) {
+    async handlerShopping(item) {
+      console.log(item);
+      if (this.shopLength >= 500) {
         this.$message.error("购物车已满500条");
         return false;
       }
-      item.isShopping = !item.isShopping;
-      if (item.isShopping) {
-        item.shoppingCount = 1;
-        this.$store.commit("pushShopping", item);
-        this.$message.closeAll();
-        this.$message.success(this.publicLang.successfulPurchase);
-      } else {
-        item.shoppingCount = 0;
-        this.$message.closeAll();
-        this.$store.commit("popShopping", item);
-        this.$message.warning(this.publicLang.cancelSuccessfully);
-      }
+      this.$root.eventHub.$emit("resetProducts", item);
+      // const res = await this.$toys.post("/api/AddShoppingCart");
+      // item.isShopping = !item.isShopping;
+      // if (item.isShopping) {
+      //   item.shoppingCount = 1;
+      //   this.$store.commit("pushShopping", item);
+      //   this.$message.closeAll();
+      //   this.$message.success(this.publicLang.successfulPurchase);
+      // } else {
+      //   item.shoppingCount = 0;
+      //   this.$message.closeAll();
+      //   this.$store.commit("popShopping", item);
+      //   this.$message.warning(this.publicLang.cancelSuccessfully);
+      // }
       this.$forceUpdate();
     },
     // 查看详情
@@ -104,9 +107,7 @@ export default {
     // this.$root.eventHub.$off("resetProductsItem");
   },
   computed: {
-    ...mapState(["globalLang"]),
-    ...mapState(["userInfo"]),
-
+    ...mapState(["globalLang", "userInfo", "shopLength"]),
     publicLang() {
       return this.$t("lang.publicLang");
     }

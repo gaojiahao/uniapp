@@ -124,7 +124,7 @@
 <script>
 import thumbnailProducts from "@/components/thumbnailProducts/thumbnailProducts.vue";
 import listProducts from "@/components/listProducts/listProducts.vue";
-import { mapState, mapGetters } from "vuex";
+import { mapState } from "vuex";
 export default {
   components: {
     thumbnailProducts,
@@ -233,15 +233,6 @@ export default {
       );
       const { data, code, message } = res.data.result;
       if (code === 200) {
-        if (this.shoppingList) {
-          for (let i = 0; i < data.items.length; i++) {
-            for (let j = 0; j < this.shoppingList.length; j++) {
-              if (data.items[i].id === this.shoppingList[j].id)
-                data.items[i].isShopping = true;
-            }
-          }
-        }
-
         this.productList = data.items;
         this.totalCount = data.totalCount;
       } else this.$message.error(message);
@@ -266,18 +257,19 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next(_that => {
-      for (let i = 0; i < _that.productList.length; i++) {
-        _that.productList[i].isShopping = false;
-      }
-      if (_that.shoppingList.length) {
-        for (let i = 0; i < _that.productList.length; i++) {
-          for (let j = 0; j < _that.shoppingList.length; j++) {
-            if (_that.productList[i].id === _that.shoppingList[j].id)
-              _that.productList[i].isShopping = true;
-          }
-        }
-      }
-      _that.$root.eventHub.$emit("resetProductsItem", _that.productList);
+      console.log(_that);
+      // for (let i = 0; i < _that.productList.length; i++) {
+      //   _that.productList[i].isShopping = false;
+      // }
+      // if (_that.shoppingList.length) {
+      //   for (let i = 0; i < _that.productList.length; i++) {
+      //     for (let j = 0; j < _that.shoppingList.length; j++) {
+      //       if (_that.productList[i].id === _that.shoppingList[j].id)
+      //         _that.productList[i].isShopping = true;
+      //     }
+      //   }
+      // }
+      // _that.$root.eventHub.$emit("resetProductsItem", _that.productList);
       // _that.getSearchCompanyShareProductPage();
     });
   },
@@ -286,9 +278,9 @@ export default {
       this.currentPage = 1;
       this.getSearchCompanyShareProductPage();
     });
-    if (this.$store.state.imageSearchValue instanceof Array) {
-      this.productList = this.$store.state.imageSearchValue;
-      this.totalCount = this.$store.state.imageSearchValue.length;
+    if (this.imageSearchValue instanceof Array) {
+      this.productList = this.imageSearchValue;
+      this.totalCount = this.imageSearchValue.length;
       // this.$store.commit("imageSearch", null);
       // this.$store.commit("handlerSearchImgPreview", null);
     } else {
@@ -299,7 +291,7 @@ export default {
     "$store.state.globalLang"(val) {
       if (val) document.title = this.productLang.title;
     },
-    "$store.state.imageSearchValue"(newVal) {
+    imageSearchValue(newVal) {
       if (newVal) {
         this.productList = newVal;
         this.totalCount = newVal.length;
@@ -317,7 +309,7 @@ export default {
       return this.$t("lang.advancedSearch");
     },
 
-    ...mapState(["searchForm"])
+    ...mapState(["searchForm", "imageSearchValue"])
   },
   beforeDestroy() {
     this.$root.eventHub.$off("resetProductsItem");

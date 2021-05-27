@@ -273,15 +273,15 @@
                   effect="dark"
                   :content="scope.row.remark"
                   placement="top"
-                >
-                  <div class="remarkClass"> -->
-                {{
-                  scope.row.remark && scope.row.orderType != "Sample"
-                    ? scope.row.remark
-                    : ""
-                }}
-                <!-- </div>
-                </el-tooltip> -->
+                > -->
+                <div class="remarkClass">
+                  {{
+                    scope.row.remark && scope.row.orderType != "Sample"
+                      ? scope.row.remark
+                      : ""
+                  }}
+                </div>
+                <!--</el-tooltip> -->
               </template>
             </el-table-column>
             <el-table-column

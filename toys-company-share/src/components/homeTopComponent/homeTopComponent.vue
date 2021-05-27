@@ -111,8 +111,8 @@
               <template slot="title">
                 <el-badge
                   type="warning"
-                  :hidden="!shoppingList || shoppingList.length < 1"
-                  :value="shoppingList && shoppingList.length"
+                  :hidden="shopLength > 1"
+                  :value="shopLength"
                   class="myBadge"
                 >
                   <i class="iconfont icon-gouwuche"></i>
@@ -189,7 +189,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState } from "vuex";
 import { VueCropper } from "vue-cropper";
 import NoticeBar from "@/components/noticeBar/notice-bar";
 
@@ -213,7 +213,8 @@ export default {
       "userInfo",
       "currentLang",
       "globalLang",
-      "langList"
+      "langList",
+      "shopLength"
     ])
   },
   data() {
