@@ -251,13 +251,13 @@
             clearable
           ></el-input>
         </el-form-item>
-        <el-form-item label="选择客户：" prop="customerInfoId">
+        <el-form-item label="客户名称：" prop="customerInfoId">
           <div class="formItemBox">
             <el-select
               v-model="clienFormData.customerInfoId"
               filterable
               clearable
-              placeholder="请 输入/选择 客户"
+              placeholder="请输入/选择 客户"
             >
               <el-option
                 v-for="item in clientList"
@@ -275,7 +275,11 @@
             >
           </div>
         </el-form-item>
-        <el-form-item label="允许导出：" prop="isExportExcel">
+        <el-form-item
+          label="是否允许客户导出："
+          prop="isExportExcel"
+          label-width="170px"
+        >
           <el-select v-model="clienFormData.isExportExcel" placeholder="请选择">
             <el-option
               v-for="(item, i) in [
@@ -483,7 +487,7 @@
             </el-form-item>
           </div>
         </div>
-        <el-form-item label="过期时间：" prop="expireTime">
+        <el-form-item label="站点过期时间：" prop="expireTime">
           <el-date-picker
             v-model="clienFormData.expireTime"
             type="datetime"
