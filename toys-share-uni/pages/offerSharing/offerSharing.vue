@@ -405,8 +405,8 @@ export default {
 				},
 				dataType: 'json',
 			}
-			let promise = new Promise(function(resolve, reject) {
-				uni.request(httpDefaultOpts).then(
+			// let promise = new Promise(function(resolve, reject) {
+				await uni.request(httpDefaultOpts).then(
 					(res) => {
 						me.$u.vuex('Utoken', res[1].data.result.item)
 					}
@@ -415,7 +415,7 @@ export default {
 						console.log(response)
 					}
 				)
-			})
+			// })
 		},
 		// 获取报价信息产品列表
 		async getProductOfferDetailPage() {
