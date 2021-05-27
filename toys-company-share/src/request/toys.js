@@ -34,6 +34,7 @@ instance.interceptors.request.use(
     // 不需要loadding的请求
     if (
       !config.url.includes("/api/WebsiteShare/AddShoppingCart") &&
+      !config.url.includes("UpdateShoppingCart") &&
       !config.url.includes("RemoveShoppingCart") &&
       !config.url.includes("AddShoppingCart")
     ) {

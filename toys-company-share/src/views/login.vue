@@ -100,7 +100,7 @@ export default {
         this.$store.commit("handlerTemporaryToken", tokenRes.data.result.item);
         const res = await this.$toys.post("/api/ShoppingCartCount", {
           shareID: shareId,
-          customerRemarks: loginEmail || Date.now(),
+          customerRemarks: loginEmail,
           sourceFrom: "share",
           shopType: "customersamples"
         });
