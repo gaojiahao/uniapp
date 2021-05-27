@@ -1,13 +1,17 @@
 <!--  -->
 <template>
   <div>
-    <Table :table="tableData"></Table>
+    <Table
+      ref="bsTableItemRef"
+      @selectionChange="selectionChange"
+      :table="tableData"
+    ></Table>
   </div>
 </template>
 
 <script>
 import Table from "@/components/table";
-// import eventBus from "@/assets/js/common/eventBus";
+import eventBus from "@/assets/js/common/eventBus";
 export default {
   name: "bsTableItem",
   components: {
@@ -16,6 +20,11 @@ export default {
   props: {
     productList: {
       type: Array
+    },
+    // 浏览足迹没有分页，所以用传值修改
+    selection: {
+      type: Boolean,
+      default: true
     }
   },
   watch: {
@@ -31,6 +40,7 @@ export default {
     return {
       tableData: {
         data: [],
+        selection: true,
         showLoading: false,
         sizeMini: "mini",
         columns: [
@@ -165,10 +175,15 @@ export default {
   },
   created() {},
   mounted() {
+    this.tableData.selection = this.selection;
     this.tableData.data = this.productList;
     // this.$set(this.tableData, "data", this.productList);
   },
-  methods: {}
+  methods: {
+    selectionChange(val) {
+      eventBus.$emit("handleSelectionChangeBus", val);
+    }
+  }
 };
 </script>
 <style scoped lang="less"></style>

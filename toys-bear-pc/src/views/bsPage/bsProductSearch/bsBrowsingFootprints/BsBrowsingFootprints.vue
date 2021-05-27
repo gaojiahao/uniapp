@@ -74,7 +74,11 @@
               删除当天
             </el-button>
           </div>
-          <component :is="isGrid" :productList="item.list"></component>
+          <component
+            :is="isGrid"
+            :selection="selection"
+            :productList="item.list"
+          ></component>
         </div>
 
         <!-- 分页 -->
@@ -118,7 +122,8 @@ export default {
       totalCount: 0,
       pageSize: 48,
       currentPage: 1,
-      productList: []
+      productList: [],
+      selection: false
       //   footprintArr: [],
     };
   },
@@ -183,9 +188,6 @@ export default {
       for (let i = 0; i < newArr.length; i++) {
         this.$set(this.productList, i, newArr[i]);
       }
-      //   this.productList = newArr;
-      console.log(this.productList);
-      // return newArr;
     },
     // 清空浏览记录
     async emptyBrowse() {
@@ -297,6 +299,7 @@ export default {
   created() {},
   mounted() {
     this.getCollectList();
+
     // 收藏
     eventBus.$on("resetProductCollection", item => {
       // this.getCollectList();
@@ -317,9 +320,12 @@ export default {
     });
     // 取消或加购样式/刷新页面
     eventBus.$on("resetProductIsShop", item => {
+      // console.log(this.productList);
       for (let i = 0; i < this.productList.length; i++) {
-        if (this.productList[i].productNumber == item.productNumber) {
-          this.productList[i].isShop = item.isShop;
+        for (let j = 0; j < this.productList[i].list.length; j++) {
+          if (this.productList[i].list[j].productNumber == item.productNumber) {
+            this.productList[i].list[j].isShop = item.isShop;
+          }
         }
       }
     });
@@ -327,6 +333,7 @@ export default {
 
   beforeDestroy() {
     eventBus.$off("refreshHtml");
+    eventBus.$off("resetProductIsShop");
   }
 };
 </script>
