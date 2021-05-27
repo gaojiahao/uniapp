@@ -22,7 +22,7 @@
     <div class="cartBox" v-if="$route.path !== '/login'">
       <div class="cart" @click="toMyShoppingCart">
         <div class="cartIconBox">
-          <el-badge :hidden="shopLength > 1" :value="shopLength" class="item">
+          <el-badge :hidden="shopLength < 1" :value="shopLength" class="item">
             <i class="cartIcon"></i>
           </el-badge>
         </div>

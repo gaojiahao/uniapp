@@ -32,7 +32,11 @@ const instance = axios.create({
 instance.interceptors.request.use(
   config => {
     // 不需要loadding的请求
-    if (!config.url.includes("/api/WebsiteShare/AddShoppingCart")) {
+    if (
+      !config.url.includes("/api/WebsiteShare/AddShoppingCart") &&
+      !config.url.includes("RemoveShoppingCart") &&
+      !config.url.includes("AddShoppingCart")
+    ) {
       Message.closeAll();
       $Store.commit("handlerAppLoading", true);
     }

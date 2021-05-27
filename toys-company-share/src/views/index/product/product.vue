@@ -213,7 +213,8 @@ export default {
         sortType: this.sortType,
         productType: this.$route.query.productType,
         pageIndex: this.currentPage,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
+        loginName: this.userInfo.loginEmail
       };
       if (fd.pa_nu) {
         const { packChMethods, packNumber } = JSON.parse(fd.pa_nu);
@@ -278,7 +279,7 @@ export default {
       this.getSearchCompanyShareProductPage();
     });
     // 加购事件
-    this.$root.eventHub.$on("handShopCart", item => {
+    this.$root.eventHub.$on("handProductShopCart", item => {
       let api = "/api/AddShoppingCart";
       if (item.isShop) {
         api = "/api/RemoveShoppingCart";
@@ -286,6 +287,7 @@ export default {
       this.$toys
         .post(api, {
           shareID: this.userInfo.shareId,
+          customerRemarks: this.userInfo.loginEmail,
           sourceFrom: "share",
           shopType: "customersamples",
           number: 1,
@@ -294,8 +296,12 @@ export default {
           productNumber: item.productNumber
         })
         .then(res => {
-          console.log(res);
-          this.getSearchCompanyShareProductPage();
+          if (res.data.result.code === 200) {
+            item.isShop = !item.isShop;
+            this.$store.commit("handlerShopLength", res.data.result.item);
+          } else {
+            this.$message.error(res.data.result.msg);
+          }
         });
     });
     if (this.imageSearchValue instanceof Array) {
@@ -333,6 +339,7 @@ export default {
   },
   beforeDestroy() {
     this.$root.eventHub.$off("resetProducts");
+    this.$root.eventHub.$off("handProductShopCart");
     this.$store.commit("imageSearch", null);
     this.$store.commit("handlerSearchImgPreview", null);
   }

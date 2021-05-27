@@ -111,7 +111,7 @@
               <template slot="title">
                 <el-badge
                   type="warning"
-                  :hidden="shopLength > 1"
+                  :hidden="shopLength < 1"
                   :value="shopLength"
                   class="myBadge"
                 >

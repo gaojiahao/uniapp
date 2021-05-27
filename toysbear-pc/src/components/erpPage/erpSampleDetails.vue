@@ -483,7 +483,7 @@ export default {
   }
 }
 .remarkClass {
-  max-width: 200px;
+  max-width: 180px;
   overflow: hidden;
   white-space: nowrap; /*不换行*/
   text-overflow: ellipsis; /*超出部分文字以...显示*/

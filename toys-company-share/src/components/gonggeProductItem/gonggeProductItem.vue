@@ -57,11 +57,18 @@ export default {
     // 加购
     async handlerShopping(item) {
       console.log(item);
-      if (this.shopLength >= 500) {
+      if (!this.userInfo.loginEmail) {
+        this.$message.error("请输入用户名");
+        return false;
+      } else if (this.shopLength >= 500) {
         this.$message.error("购物车已满500条");
         return false;
+      } else {
+        // 产品加购事件
+        this.$root.eventHub.$emit("handProductShopCart", item);
+        // 主页加购事件
+        this.$root.eventHub.$emit("handHomeShopCart", item);
       }
-      this.$root.eventHub.$emit("handShopCart", item);
       // const res = await this.$toys.post("/api/AddShoppingCart");
       // item.isShopping = !item.isShopping;
       // if (item.isShopping) {
