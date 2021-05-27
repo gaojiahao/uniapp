@@ -27,7 +27,7 @@
           </p>
         </div>
       </el-tab-pane>
-         <el-tab-pane label="短信登录" name="mobile">
+      <el-tab-pane label="短信登录" name="mobile">
         <el-form
           :model="loginforms"
           ref="mobileRef"
@@ -420,12 +420,14 @@ export default {
     }
   },
   created() {},
-  mounted() {this.getQrCodeUrl();},
+  mounted() {
+    this.getQrCodeUrl();
+  },
   watch: {
     activeName(val) {
       if (val === "mobile") {
-      //   this.getQrCodeUrl();
-      // } else {
+        //   this.getQrCodeUrl();
+        // } else {
         clearInterval(this.qrTimer);
         this.ws && this.ws.close();
       }
@@ -570,8 +572,8 @@ export default {
         width: 190px;
         height: 190px;
         position: relative;
-         margin-top: 15px;
-         img {
+        margin-top: 15px;
+        img {
           width: 190px;
           height: 190px;
         }

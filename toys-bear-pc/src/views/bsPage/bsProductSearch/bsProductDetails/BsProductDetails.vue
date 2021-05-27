@@ -100,7 +100,7 @@
         </div>
         <!-- 上架时间，产品认证 -->
         <div class="shelfTimeBox">
-          <p>
+          <div class="item">
             <span class="newTime">
               上架时间：
               <span>{{
@@ -112,13 +112,43 @@
               库存：
               <span class="tockValue">--</span>
             </span>
-          </p>
-          <p>
+          </div>
+          <div class="item">
             产品认证：
-            <i v-if="productDetail.certificateNo" class="proveActiveIcon"></i>
+
+            <i
+              v-if="productDetail.manuCertificateList"
+              class="proveActiveIcon"
+            ></i>
+            <i v-else class="proveIcon"></i>
+
+            <div
+              v-if="productDetail.manuCertificateList"
+              class="manuCertificate"
+            >
+              <div
+                class="cate"
+                v-for="item in productDetail.manuCertificateList"
+                :key="item.index"
+              >
+                <img
+                  @click="openDialogCertificate(item)"
+                  :src="item.certificateAddres"
+                  alt=""
+                />
+                <span>{{ item.certificateName }}</span>
+              </div>
+            </div>
+          </div>
+          <!-- <p>
+            产品认证：
+            <i
+              v-if="productDetail.manuCertificateList.length > 0"
+              class="proveActiveIcon"
+            ></i>
             <i v-else class="proveIcon"></i>
             <span>{{ productDetail.certificateNo }}</span>
-          </p>
+          </p> -->
         </div>
         <!-- 联系方式 -->
         <div class="contactMode">
@@ -204,6 +234,12 @@
         </div>
       </div>
     </div>
+
+    <el-dialog title="证书详情" :visible.sync="dialogCertificate">
+      <div class="dialogCertificateCss">
+        <img :src="dataCertificate.certificateAddres" alt="" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -222,7 +258,9 @@ export default {
   },
   data() {
     return {
+      dialogCertificate: false,
       canClick: true,
+      dataCertificate: {},
       productDetail: {}
     };
   },
@@ -260,6 +298,11 @@ export default {
       };
       this.$store.commit("myAddTab", fd);
       this.$router.push("/bsIndex/bsVendorQuery");
+    },
+    openDialogCertificate(item) {
+      console.log(item, "证书信息");
+      this.dataCertificate = item;
+      // this.dialogCertificate = true;
     },
     // 加购
     handlerShopping(item) {
@@ -376,7 +419,7 @@ export default {
       });
       if (res.data.result.code === 200) {
         this.productDetail = res.data.result.item;
-        this.productDetail.isShopping = this.item.isShopping;
+        // this.productDetail.isShopping = this.item.isShopping;
         console.log(this.productDetail, "产品详情");
         eventBus.$emit("refreshHtml");
       } else {
@@ -536,7 +579,7 @@ export default {
       .shelfTimeBox {
         margin-top: 20px;
         color: #666;
-        p {
+        .item {
           height: 50px;
           display: flex;
           align-items: center;
@@ -565,6 +608,24 @@ export default {
             background: url("~@/assets/images/proveActiveIcon.png") no-repeat
               center;
             background-size: contain;
+          }
+          .manuCertificate {
+            display: flex;
+            align-items: center;
+            height: 50px;
+
+            .cate {
+              margin: 0 10px;
+              display: flex;
+              align-items: center;
+              img {
+                width: 21px;
+                height: 30px;
+              }
+              span {
+                margin: 0 5px;
+              }
+            }
           }
         }
       }

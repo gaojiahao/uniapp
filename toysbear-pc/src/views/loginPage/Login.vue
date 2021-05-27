@@ -5,14 +5,16 @@
     </div>
     <div class="myMiddle">
       <div class="loginContent">
-         <div class="center">
-        <div class="loginTitle">
-          <h1>小竹熊致力于玩具行业高效服务</h1>
-          <p>Xiaozhuxiong is committed to efficient service in toy industry</p>
-        </div>
-        <div class="loginbox">
-          <loginForm />
-        </div>
+        <div class="center">
+          <div class="loginTitle">
+            <h1>小竹熊致力于玩具行业高效服务</h1>
+            <p>
+              Xiaozhuxiong is committed to efficient service in toy industry
+            </p>
+          </div>
+          <div class="loginbox">
+            <loginForm />
+          </div>
         </div>
       </div>
     </div>
@@ -46,7 +48,7 @@ export default {
 .login {
   width: 100%;
   height: 100vh;
-    min-height: 820px;
+  min-height: 820px;
   .topLauot {
     width: 100%;
     height: 106px;
