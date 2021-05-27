@@ -1,25 +1,27 @@
 <template>
   <div class="loginTop">
-    <el-image
-      style="width: 213px; height: 53px"
-      :src="require('@/assets/images/loginTopImg.png')"
-      fit="contain"
-    >
-    </el-image>
-    <div class="line"></div>
-    <div class="welcome">欢迎登录</div>
-    <div class="right">
-      <div class="infoItem">
-        <div class="iconBox telephoneIcon"></div>
-        <span class="content">热线电话：0754-89671122</span>
-      </div>
-      <div class="infoItem qq" @click="toQQ('3300802838')">
-        <div class="iconBox QQIcon"></div>
-        <span class="content">客服QQ1</span>
-      </div>
-      <div class="infoItem qq" @click="toQQ('3300802838')">
-        <div class="iconBox QQIcon"></div>
-        <span class="content">客服QQ2</span>
+    <div class="top">
+      <el-image
+        style="width: 213px; height: 53px"
+        :src="require('@/assets/images/loginTopImg.png')"
+        fit="contain"
+      >
+      </el-image>
+      <div class="line"></div>
+      <div class="welcome">欢迎登录</div>
+      <div class="right">
+        <div class="infoItem">
+          <div class="iconBox telephoneIcon"></div>
+          <span class="content">热线电话：0754-89671122</span>
+        </div>
+        <div class="infoItem qq" @click="toQQ('3300802838')">
+          <div class="iconBox QQIcon"></div>
+          <span class="content">客服QQ1</span>
+        </div>
+        <div class="infoItem qq" @click="toQQ('3300802838')">
+          <div class="iconBox QQIcon"></div>
+          <span class="content">客服QQ2</span>
+        </div>
       </div>
     </div>
   </div>
@@ -51,10 +53,13 @@ export default {
 .loginTop {
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  .el-image {
-    margin-left: 361px;
+
+  .top {
+    width: 1200px;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
   }
   .line {
     width: 1px;
@@ -70,8 +75,9 @@ export default {
     margin-top: 18px;
   }
   .right {
+    flex: 1;
     height: 100%;
-    margin-left: 18%;
+    margin-left: 386px;
     justify-content: flex-end;
     display: flex;
     align-items: center;
