@@ -35,8 +35,13 @@
       </div>
     </div>
     <div class="contentProduct">
-      <div class="bsGridItem" v-for="item in productList" :key="item.id">
-        <div class="itemImg" @click="toProductDetails">
+      <div
+        class="bsGridItem"
+        v-for="item in productList"
+        :key="item.id"
+        @click="toProductDetails(item)"
+      >
+        <div class="itemImg">
           <el-image
             style="width: 222px; height: 166px"
             fit="contain"
@@ -202,8 +207,9 @@ export default {
       if (
         this.currentPage * pageSize > this.totalCount &&
         this.currentPage != 1
-      )
+      ) {
         return false;
+      }
       this.getQuoteListBasicPage();
     },
     // 修改当前页
@@ -218,6 +224,10 @@ export default {
     },
     // 去产品详情
     async toProductDetails() {
+      this.$common.handlerMsgState({
+        msg: "没有产品编号",
+        type: "danger"
+      });
       return false;
       // const fd = {
       //   name: this.item.productNumber,

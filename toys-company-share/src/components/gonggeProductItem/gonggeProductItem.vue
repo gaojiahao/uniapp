@@ -29,7 +29,7 @@
           <div
             class="cartIconBox kongCartIcon"
             @click.stop="handlerShopping(item)"
-            v-if="!item.isShopping"
+            v-if="!item.isShop"
           ></div>
           <div
             class="cartIconBox activeCartIcon"
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState } from "vuex";
 export default {
   props: {
     item: {
@@ -55,24 +55,56 @@ export default {
   },
   methods: {
     // 加购
-    handlerShopping(item) {
-      if (!item.isShopping && this.shoppingList.length >= 500) {
+    async handlerShopping(item) {
+      console.log(item);
+      if (!this.userInfo.loginEmail) {
+        this.$prompt("请输入用户名", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消"
+        })
+          .then(({ value }) => {
+            
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "取消输入"
+            });
+          });
+        return false;
+      } else if (this.shopLength >= 500) {
         this.$message.error("购物车已满500条");
         return false;
-      }
-      item.isShopping = !item.isShopping;
-      if (item.isShopping) {
-        item.shoppingCount = 1;
-        this.$store.commit("pushShopping", item);
-        this.$message.closeAll();
-        this.$message.success(this.publicLang.successfulPurchase);
       } else {
-        item.shoppingCount = 0;
-        this.$message.closeAll();
-        this.$store.commit("popShopping", item);
-        this.$message.warning(this.publicLang.cancelSuccessfully);
+        let api = "/api/AddShoppingCart";
+        if (item.isShop) {
+          api = "/api/RemoveShoppingCart";
+        }
+        this.$toys
+          .post(api, {
+            shareID: this.userInfo.shareId,
+            customerRemarks: this.userInfo.loginEmail,
+            sourceFrom: "share",
+            shopType: "customersamples",
+            number: 1,
+            currency: "￥",
+            Price: 0,
+            productNumber: item.productNumber
+          })
+          .then(res => {
+            if (res.data.result.code === 200) {
+              item.isShop = !item.isShop;
+              if (item.isShop) {
+                this.$message.success("加购成功");
+              } else {
+                this.$message.warning("取消加购");
+              }
+              this.$store.commit("handlerShopLength", res.data.result.item);
+            } else {
+              this.$message.error(res.data.result.msg);
+            }
+          });
       }
-      this.$forceUpdate();
     },
     // 查看详情
     toDetails(item) {
@@ -96,19 +128,15 @@ export default {
   },
   created() {},
   mounted() {
-    this.$root.eventHub.$on("resetProductsItem", () => {
-      this.$forceUpdate();
+    this.$root.eventHub.$on("resetShop", item => {
+      if (item.productNumber === this.item.productNumber) {
+        this.item.isShop = item.isShop;
+        this.$forceUpdate();
+      }
     });
   },
-  beforeDestroy() {
-    // this.$root.eventHub.$off("resetProductsItem");
-  },
   computed: {
-    ...mapState(["globalLang"]),
-    ...mapState(["userInfo"]),
-    ...mapGetters({
-      shoppingList: "myShoppingList"
-    }),
+    ...mapState(["globalLang", "userInfo", "shopLength"]),
     publicLang() {
       return this.$t("lang.publicLang");
     }

@@ -6,47 +6,47 @@
     </div>
     <div class="twoItem">
       <span class="title"><i class="xing">*</i>汇率：</span>
-      <span class="value">{{ options.cu_na }}</span>
+      <span class="value">{{ options.cu_er }}</span>
     </div>
     <div class="twoItem">
       <span class="title"><i class="xing">*</i>每车费用：</span>
-      <span class="value">RMB</span>
+      <span class="value">{{ options.ve_ca }}</span>
     </div>
     <div class="twoItem">
       <span class="title"><i class="xing">*</i>报关费用：</span>
-      <span class="value">1</span>
+      <span class="value">{{ options.atu_ra }}</span>
     </div>
     <div class="twoItem">
       <span class="title"><i class="xing">*</i>保险费用：</span>
-      <span class="value">RMB</span>
+      <span class="value">{{ options.in_ra }}</span>
     </div>
     <div class="twoItem">
       <span class="title"><i class="xing">*</i>其他费用：</span>
-      <span class="value">1</span>
+      <span class="value">{{ options.el_ra }}</span>
     </div>
     <div class="twoItem">
       <span class="title"><i class="xing">*</i>每车尺码：</span>
-      <span class="value">RMB</span>
+      <span class="value">{{ options.ve_si }}</span>
     </div>
     <div class="twoItem">
       <span class="title"><i class="xing">*</i>报价单位：</span>
-      <span class="value">1</span>
+      <span class="value">{{ options.qu_un }}</span>
     </div>
     <div class="twoItem">
       <span class="title"><i class="xing">*</i>报价利润：</span>
-      <span class="value">1%</span>
+      <span class="value">{{ options.qu_ga }}%</span>
     </div>
     <div class="twoItem">
       <span class="title"><i class="xing">*</i>小数位数：</span>
-      <span class="value">1</span>
+      <span class="value">{{ options.de_di }}</span>
     </div>
     <div class="twoItem">
       <span class="title"><i class="xing">*</i>佣金：</span>
-      <span class="value">1%</span>
+      <span class="value">{{ options.commision }}</span>
     </div>
     <div class="twoItem">
       <span class="title"><i class="xing">*</i>报价加价：</span>
-      <span class="value">1</span>
+      <span class="value">{{ options.addPrice }}</span>
     </div>
     <div class="oneItem">
       <div class="shuoming">
@@ -58,27 +58,19 @@
     </div>
     <div class="twoItem">
       <span class="title"><i class="xing">*</i>取舍方式：</span>
-      <span class="value">四舍五入</span>
+      <span class="value">{{ options.arorre }}</span>
     </div>
     <div class="twoItem">
       <span class="title"><i class="xing">*</i>取值方式：</span>
-      <span class="value">自然数</span>
+      <span class="value">{{ options.reorar }}</span>
     </div>
     <div class="twoItem">
       <span class="title"><i class="xing">*</i>价格小于：</span>
-      <span class="value">0</span>
+      <span class="value">{{ options.pr_un }}</span>
     </div>
     <div class="twoItem">
       <span class="title"><i class="xing">*</i>小数位数：</span>
-      <span class="value">1</span>
-    </div>
-    <div class="oneItem">
-      <center>
-        <el-radio v-model="radio" label="1">当前报价</el-radio>
-        <el-radio style="margin-left:150px;" v-model="radio" label="2">
-          使用进货价为默认报价
-        </el-radio>
-      </center>
+      <span class="value">{{ options.de_di }}</span>
     </div>
   </div>
 </template>
@@ -89,7 +81,6 @@ export default {
   props: ["sampleOption"],
   data() {
     return {
-      radio: "1",
       options: {}
     };
   },

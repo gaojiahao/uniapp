@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState } from "vuex";
 import magnifierComponent from "@/components/magnifierComponent/magnifierComponent.vue";
 import relatedProducts from "@/components/relatedProducts/relatedProducts.vue";
 export default {
@@ -113,34 +113,57 @@ export default {
   },
   methods: {
     // 加购
-    handlerShopping(item) {
-      item.isShopping = !item.isShopping;
-      if (item.isShopping) {
-        item.shoppingCount = 1;
-        this.$store.commit("pushShopping", item);
-        this.$message.closeAll();
-        this.$message.success(this.publicLang.successfulPurchase);
+    // 加购
+    async handlerShopping(item) {
+      console.log(item);
+      if (!this.userInfo.loginEmail) {
+        this.$message.error("请输入用户名");
+        return false;
+      } else if (this.shopLength >= 500) {
+        this.$message.error("购物车已满500条");
+        return false;
       } else {
-        item.shoppingCount = 0;
-        this.$message.closeAll();
-        this.$store.commit("popShopping", item);
-        this.$message.warning(this.publicLang.cancelSuccessfully);
+        let api = "/api/AddShoppingCart";
+        if (item.isShop) {
+          api = "/api/RemoveShoppingCart";
+        }
+        this.$toys
+          .post(api, {
+            shareID: this.userInfo.shareId,
+            customerRemarks: this.userInfo.loginEmail,
+            sourceFrom: "share",
+            shopType: "customersamples",
+            number: 1,
+            currency: "￥",
+            Price: 0,
+            productNumber: item.productNumber
+          })
+          .then(res => {
+            if (res.data.result.code === 200) {
+              item.isShop = !item.isShop;
+              if (item.isShop) {
+                this.$message.success("加购成功");
+              } else {
+                this.$message.warning("取消加购");
+              }
+              this.$store.commit("handlerShopLength", res.data.result.item);
+              this.$root.eventHub.$emit("resetShop", item);
+            } else {
+              this.$message.error(res.data.result.msg);
+            }
+          });
       }
-      // this.$root.eventHub.$emit("resetProducts");
     },
     // 获取产品详情接口
     async getProductDetails() {
       const res = await this.$http.get(
         "/api/WebsiteShare/SearchCompanyShareProductDetailPage?productNumber=" +
-          this.$route.query.id
+          this.$route.query.id +
+          "&loginName=" +
+          this.userInfo.loginEmail
       );
       const { code, data, message } = res.data.result;
       if (code == 200) {
-        for (let i = 0; i < this.shoppingList.length; i++) {
-          if (this.shoppingList[i].productNumber == data.productNumber) {
-            data.isShopping = true;
-          }
-        }
         this.productData = data;
       } else {
         this.$message.error(message);
@@ -158,11 +181,7 @@ export default {
     publicLang() {
       return this.$t("lang.publicLang");
     },
-    ...mapState(["globalLang"]),
-    ...mapState(["userInfo"]),
-    ...mapGetters({
-      shoppingList: "myShoppingList"
-    })
+    ...mapState(["globalLang", "userInfo", "shopLength"])
   }
 };
 </script>

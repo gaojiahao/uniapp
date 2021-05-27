@@ -25,7 +25,7 @@
         <div
           class="myCart"
           @click.stop="handlerShopping(item)"
-          v-if="!item.isShopping"
+          v-if="!item.isShop"
         ></div>
         <div
           class="activeCartIcon"
@@ -101,20 +101,44 @@ export default {
   },
   methods: {
     // 加购
-    handlerShopping(item) {
-      item.isShopping = !item.isShopping;
-      if (item.isShopping) {
-        item.shoppingCount = 1;
-        this.$store.commit("pushShopping", item);
-        this.$message.closeAll();
-        this.$message.success(this.publicLang.successfulPurchase);
+    async handlerShopping(item) {
+      console.log(item);
+      if (!this.userInfo.loginEmail) {
+        this.$message.error("请输入用户名");
+        return false;
+      } else if (this.shopLength >= 500) {
+        this.$message.error("购物车已满500条");
+        return false;
       } else {
-        item.shoppingCount = 0;
-        this.$message.closeAll();
-        this.$store.commit("popShopping", item);
-        this.$message.warning(this.publicLang.cancelSuccessfully);
+        let api = "/api/AddShoppingCart";
+        if (item.isShop) {
+          api = "/api/RemoveShoppingCart";
+        }
+        this.$toys
+          .post(api, {
+            shareID: this.userInfo.shareId,
+            customerRemarks: this.userInfo.loginEmail,
+            sourceFrom: "share",
+            shopType: "customersamples",
+            number: 1,
+            currency: "￥",
+            Price: 0,
+            productNumber: item.productNumber
+          })
+          .then(res => {
+            if (res.data.result.code === 200) {
+              item.isShop = !item.isShop;
+              if (item.isShop) {
+                this.$message.success("加购成功");
+              } else {
+                this.$message.warning("取消加购");
+              }
+              this.$store.commit("handlerShopLength", res.data.result.item);
+            } else {
+              this.$message.error(res.data.result.msg);
+            }
+          });
       }
-      this.$forceUpdate();
     },
     // 查看详情
     toDetails(item) {
@@ -135,14 +159,6 @@ export default {
       }
     }
   },
-  mounted() {
-    this.$root.eventHub.$on("resetProductsItem", () => {
-      this.$forceUpdate();
-    });
-  },
-  beforeDestroy() {
-    // this.$root.eventHub.$off("resetProductsItem");
-  },
   created() {},
   computed: {
     productLang() {
@@ -151,8 +167,7 @@ export default {
     publicLang() {
       return this.$t("lang.publicLang");
     },
-    ...mapState(["globalLang"]),
-    ...mapState(["userInfo"])
+    ...mapState(["globalLang", "shopLength", "userInfo"])
   }
 };
 </script>

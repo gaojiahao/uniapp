@@ -417,7 +417,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState } from "vuex";
 export default {
   components: {},
   data() {
@@ -738,7 +738,6 @@ export default {
         }
         this.$store.commit("resetShoppingCart", selectProducts);
         this.$router.push("/index/myOrder");
-        // this.$root.eventHub.$emit("resetProductsForeach", this.shoppingList);
       } else {
         this.$message.error(message);
       }
@@ -811,7 +810,6 @@ export default {
           this.$message.error(this.publicLang.deleteSuccessful);
         }
       });
-      this.$root.eventHub.$emit("resetProductsForeach", this.dataList);
     },
     // 计算总价
     calculationTotalPrice(list) {
@@ -945,10 +943,7 @@ export default {
       return this.$t("lang.myOrder");
     },
     ...mapState(["globalLang"]),
-    ...mapState(["userInfo"]),
-    ...mapGetters({
-      shoppingList: "myShoppingList"
-    })
+    ...mapState(["userInfo"])
   },
   filters: {}
 };
