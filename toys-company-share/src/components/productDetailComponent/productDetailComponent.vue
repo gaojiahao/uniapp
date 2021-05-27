@@ -114,19 +114,7 @@ export default {
   methods: {
     // 加购
     handlerShopping(item) {
-      item.isShopping = !item.isShopping;
-      if (item.isShopping) {
-        item.shoppingCount = 1;
-        this.$store.commit("pushShopping", item);
-        this.$message.closeAll();
-        this.$message.success(this.publicLang.successfulPurchase);
-      } else {
-        item.shoppingCount = 0;
-        this.$message.closeAll();
-        this.$store.commit("popShopping", item);
-        this.$message.warning(this.publicLang.cancelSuccessfully);
-      }
-      // this.$root.eventHub.$emit("resetProducts");
+      console.log(item);
     },
     // 获取产品详情接口
     async getProductDetails() {
@@ -136,11 +124,6 @@ export default {
       );
       const { code, data, message } = res.data.result;
       if (code == 200) {
-        for (let i = 0; i < this.shoppingList.length; i++) {
-          if (this.shoppingList[i].productNumber == data.productNumber) {
-            data.isShopping = true;
-          }
-        }
         this.productData = data;
       } else {
         this.$message.error(message);

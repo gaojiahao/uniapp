@@ -61,7 +61,7 @@ export default {
         this.$message.error("购物车已满500条");
         return false;
       }
-      this.$root.eventHub.$emit("resetProducts", item);
+      this.$root.eventHub.$emit("handShopCart", item);
       // const res = await this.$toys.post("/api/AddShoppingCart");
       // item.isShopping = !item.isShopping;
       // if (item.isShopping) {
@@ -98,14 +98,7 @@ export default {
     }
   },
   created() {},
-  mounted() {
-    this.$root.eventHub.$on("resetProductsItem", () => {
-      this.$forceUpdate();
-    });
-  },
-  beforeDestroy() {
-    // this.$root.eventHub.$off("resetProductsItem");
-  },
+  mounted() {},
   computed: {
     ...mapState(["globalLang", "userInfo", "shopLength"]),
     publicLang() {

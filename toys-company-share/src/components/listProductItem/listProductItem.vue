@@ -135,14 +135,6 @@ export default {
       }
     }
   },
-  mounted() {
-    this.$root.eventHub.$on("resetProductsItem", () => {
-      this.$forceUpdate();
-    });
-  },
-  beforeDestroy() {
-    // this.$root.eventHub.$off("resetProductsItem");
-  },
   created() {},
   computed: {
     productLang() {

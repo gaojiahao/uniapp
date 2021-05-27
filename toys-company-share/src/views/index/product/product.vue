@@ -269,7 +269,6 @@ export default {
       //     }
       //   }
       // }
-      // _that.$root.eventHub.$emit("resetProductsItem", _that.productList);
       // _that.getSearchCompanyShareProductPage();
     });
   },
@@ -277,6 +276,27 @@ export default {
     this.$root.eventHub.$on("resetProducts", () => {
       this.currentPage = 1;
       this.getSearchCompanyShareProductPage();
+    });
+    // 加购事件
+    this.$root.eventHub.$on("handShopCart", item => {
+      let api = "/api/AddShoppingCart";
+      if (item.isShop) {
+        api = "/api/RemoveShoppingCart";
+      }
+      this.$toys
+        .post(api, {
+          shareID: this.userInfo.shareId,
+          sourceFrom: "share",
+          shopType: "customersamples",
+          number: 1,
+          currency: "￥",
+          Price: 0,
+          productNumber: item.productNumber
+        })
+        .then(res => {
+          console.log(res);
+          this.getSearchCompanyShareProductPage();
+        });
     });
     if (this.imageSearchValue instanceof Array) {
       this.productList = this.imageSearchValue;
@@ -309,12 +329,10 @@ export default {
       return this.$t("lang.advancedSearch");
     },
 
-    ...mapState(["searchForm", "imageSearchValue"])
+    ...mapState(["searchForm", "imageSearchValue", "userInfo"])
   },
   beforeDestroy() {
-    this.$root.eventHub.$off("resetProductsItem");
     this.$root.eventHub.$off("resetProducts");
-    this.$root.eventHub.$off("resetProductsForeach");
     this.$store.commit("imageSearch", null);
     this.$store.commit("handlerSearchImgPreview", null);
   }

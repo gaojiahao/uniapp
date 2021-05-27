@@ -3,15 +3,6 @@ import Vuex from "vuex";
 import { Message } from "element-ui";
 import createPersistedState from "vuex-persistedstate";
 Vue.use(Vuex);
-// function myForEach(oList, yList) {
-//   for (let i = 0; i < oList.length; i++) {
-//     for (let j = 0; j < yList.length; j++) {
-//       if (oList[i].id === yList[j].id) {
-//         oList.splice(i, 1);
-//       }
-//     }
-//   }
-// }
 const store = new Vuex.Store({
   state: {
     temporaryToken: "",
