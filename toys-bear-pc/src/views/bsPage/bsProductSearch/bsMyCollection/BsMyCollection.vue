@@ -68,9 +68,33 @@
       </div>
       <div class="productListBox">
         <!-- 产品列表 -->
-        <component :is="isGrid" :productList="productList"></component>
+        <component
+          ref="componentRef"
+          :is="isGrid"
+          :productList="productList"
+        ></component>
+
         <!-- 分页 -->
-        <center class="myPagination">
+        <center
+          :class="{
+            myPagination: true,
+            leftCheckbox: isGrid === 'bsColumnComponent'
+          }"
+        >
+          <div class="left" v-show="isGrid === 'bsColumnComponent'">
+            <el-checkbox
+              :indeterminate="isIndeterminate"
+              v-model="checkAll"
+              @change="handleCheckAllChange"
+            >
+              全选
+            </el-checkbox>
+
+            <el-button class="purchased" size="small" @click="handelrPurchased">
+              <i class="selectionCart"></i>
+              <span>本页选中一键加购</span>
+            </el-button>
+          </div>
           <el-pagination
             background
             @size-change="handleSizeChange"
@@ -106,6 +130,9 @@ export default {
   data() {
     return {
       isGrid: "bsGridComponent",
+      selectTableData: null,
+      isIndeterminate: false,
+      checkAll: false,
       keyword: null,
       dateTime: null,
       totalCount: 0,
@@ -115,7 +142,7 @@ export default {
       searchHttpTime: null
     };
   },
-  computed: { ...mapState(["myShoppingCartCount"]) },
+  computed: { ...mapState(["userInfo", "myShoppingCartCount"]) },
   watch: {},
   methods: {
     // 获取列表
@@ -136,19 +163,6 @@ export default {
       const res = await this.$http.post("/api/ProductCollectionPage", fd);
       const { code, msg } = res.data.result;
       if (code === 200) {
-        // if (this.shoppingList) {
-        //   for (let i = 0; i < item.items.length; i++) {
-        //     this.$set(item.items[i], "isShopping", false);
-        //     for (let j = 0; j < this.shoppingList.length; j++) {
-        //       if (
-        //         item.items[i].productNumber ===
-        //         this.shoppingList[j].productNumber
-        //       ) {
-        //         this.$set(item.items[i], "isShopping", true);
-        //       }
-        //     }
-        //   }
-        // }
         this.totalCount = res.data.result.item.totalCount;
         this.productList = res.data.result.item.items;
         let endDate = Date.now();
@@ -196,11 +210,81 @@ export default {
     // 切换产品列表样式
     handerIsGrid(type) {
       this.isGrid = type;
+    },
+    // 点击全选
+    handleCheckAllChange(val) {
+      let myTableRef = this.$refs.componentRef.$refs.bsTableItemRef.$refs
+        .myTableRef;
+      if (val) myTableRef.toggleAllSelection();
+      else myTableRef.clearSelection();
+      this.isIndeterminate = false;
+    },
+    // 一键加购
+    handelrPurchased() {
+      this.$confirm("确定要加购选中的产品吗？", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消"
+      })
+        .then(async () => {
+          const selectProducts = this.$refs.componentRef.$refs.bsTableItemRef
+            .$refs.myTableRef.selection;
+
+          let productNumber = [];
+          for (let i = 0; i < selectProducts.length; i++) {
+            productNumber.push(selectProducts[i].productNumber);
+          }
+          const fd = {
+            userID: this.userInfo.userInfo.id,
+            companyNumber: this.userInfo.commparnyList[0].companyNumber,
+            sourceFrom: "active",
+            number: 1,
+            currency: "￥",
+            Price: 0,
+            shopType: "companysamples",
+            productNumber: productNumber.join()
+          };
+          const res = await this.$http.post("/api/AddShoppingCart", fd);
+          if (res.data.result.code === 200) {
+            this.$store.commit(
+              "handlerShoppingCartCount",
+              res.data.result.item
+            );
+            this.$common.handlerMsgState({
+              msg: " 一键加购成功",
+              type: "success"
+            });
+            this.getCollectList();
+          } else {
+            this.$common.handlerMsgState({
+              msg: " 一键加购失败",
+              type: "danger"
+            });
+          }
+        })
+        .catch(() => {
+          this.$common.handlerMsgState({
+            msg: "已取消一键加购",
+            type: "warning"
+          });
+        });
     }
   },
   created() {},
   mounted() {
     this.getCollectList();
+    // 选择中的产品
+    eventBus.$on("handleSelectionChangeBus", selection => {
+      this.selectTableData = selection;
+      if (selection.length) {
+        if (selection.length === this.productList.length) {
+          this.isIndeterminate = false;
+          this.checkAll = true;
+        } else this.isIndeterminate = true;
+      } else {
+        this.isIndeterminate = false;
+        this.checkAll = false;
+      }
+    });
     // 取消收藏/刷新页面
     eventBus.$on("resetMyCollectionMenu", () => {
       this.getCollectList();
@@ -217,6 +301,7 @@ export default {
   beforeDestroy() {
     eventBus.$off("resetMyCollectionMenu");
     eventBus.$off("resetProductIsShop");
+    eventBus.$off("handleSelectionChangeBus");
   }
 };
 </script>
@@ -324,6 +409,32 @@ export default {
     box-sizing: border-box;
     .myPagination {
       padding: 30px 0;
+    }
+    .leftCheckbox {
+      display: flex;
+      align-items: center;
+      width: 80%;
+
+      .left {
+        display: flex;
+        align-items: center;
+        padding: 0 300px 0 20px;
+        .purchased {
+          margin-left: 30px;
+          color: #3368a9;
+          border: 1px solid #3368a9;
+          .selectionCart {
+            display: inline-block;
+            vertical-align: bottom;
+            width: 14px;
+            height: 14px;
+            background: url("~@/assets/images/selectionCart.png") no-repeat
+              center;
+            background-size: contain;
+            margin-right: 10px;
+          }
+        }
+      }
     }
   }
 }

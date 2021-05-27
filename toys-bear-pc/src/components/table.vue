@@ -5,6 +5,7 @@
       v-loading="table.showLoading"
       :height="table.height"
       fit
+      ref="myTableRef"
       :size="table.sizeMini"
       :header-cell-style="{ backgroundColor: '#f9fafc' }"
       @selection-change="handleSelectionChange"
@@ -14,7 +15,7 @@
       <el-table-column
         v-if="table.selection || false"
         type="selection"
-        width="55"
+        width="50"
         align="center"
       />
       <el-table-column
@@ -532,11 +533,7 @@ export default {
       this.$forceUpdate();
     },
     handleSelectionChange(val) {
-      let res = [];
-      val.forEach(item => {
-        res.push(item.id);
-      });
-      this.$emit("selectionChange", res);
+      this.$emit("selectionChange", val);
     },
     handleTableCurrentChange(val) {
       this.$emit("tableCurrentChange", val);
