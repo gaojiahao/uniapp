@@ -46,7 +46,7 @@
     </div>
     <div class="twoItem">
       <span class="title"><i class="xing">*</i>报价加价：</span>
-      <span class="value"></span>
+      <span class="value">{{ options.addPrice }}</span>
     </div>
     <div class="oneItem">
       <div class="shuoming">
@@ -66,7 +66,7 @@
     </div>
     <div class="twoItem">
       <span class="title"><i class="xing">*</i>价格小于：</span>
-      <span class="value"></span>
+      <span class="value">{{ options.pr_un }}</span>
     </div>
     <div class="twoItem">
       <span class="title"><i class="xing">*</i>小数位数：</span>

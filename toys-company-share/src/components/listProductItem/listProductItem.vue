@@ -25,7 +25,7 @@
         <div
           class="myCart"
           @click.stop="handlerShopping(item)"
-          v-if="!item.isShopping"
+          v-if="!item.isShop"
         ></div>
         <div
           class="activeCartIcon"

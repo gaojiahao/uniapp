@@ -29,7 +29,7 @@
           <div
             class="cartIconBox kongCartIcon"
             @click.stop="handlerShopping(item)"
-            v-if="!item.isShopping"
+            v-if="!item.isShop"
           ></div>
           <div
             class="cartIconBox activeCartIcon"
