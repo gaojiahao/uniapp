@@ -278,32 +278,6 @@ export default {
       this.currentPage = 1;
       this.getSearchCompanyShareProductPage();
     });
-    // 加购事件
-    this.$root.eventHub.$on("handProductShopCart", item => {
-      let api = "/api/AddShoppingCart";
-      if (item.isShop) {
-        api = "/api/RemoveShoppingCart";
-      }
-      this.$toys
-        .post(api, {
-          shareID: this.userInfo.shareId,
-          customerRemarks: this.userInfo.loginEmail,
-          sourceFrom: "share",
-          shopType: "customersamples",
-          number: 1,
-          currency: "￥",
-          Price: 0,
-          productNumber: item.productNumber
-        })
-        .then(res => {
-          if (res.data.result.code === 200) {
-            item.isShop = !item.isShop;
-            this.$store.commit("handlerShopLength", res.data.result.item);
-          } else {
-            this.$message.error(res.data.result.msg);
-          }
-        });
-    });
     if (this.imageSearchValue instanceof Array) {
       this.productList = this.imageSearchValue;
       this.totalCount = this.imageSearchValue.length;
@@ -339,7 +313,6 @@ export default {
   },
   beforeDestroy() {
     this.$root.eventHub.$off("resetProducts");
-    this.$root.eventHub.$off("handProductShopCart");
     this.$store.commit("imageSearch", null);
     this.$store.commit("handlerSearchImgPreview", null);
   }

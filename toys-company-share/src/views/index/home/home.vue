@@ -32,7 +32,8 @@ export default {
     // 获取首页数据
     async getCompanyShareIndex() {
       const res = await this.$http.get(
-        "/api/WebsiteShare/GetCompanyShareIndex"
+        "/api/WebsiteShare/GetCompanyShareIndex?loginName=" +
+          this.userInfo.loginEmail
       );
       const { data, code } = res.data.result;
       if (code === 200) {
@@ -56,35 +57,6 @@ export default {
   },
   mounted() {
     this.getCompanyShareIndex();
-    // 加购事件
-    this.$root.eventHub.$on("handHomeShopCart", item => {
-      let api = "/api/AddShoppingCart";
-      if (item.isShop) {
-        api = "/api/RemoveShoppingCart";
-      }
-      this.$toys
-        .post(api, {
-          shareID: this.userInfo.shareId,
-          customerRemarks: this.userInfo.loginEmail,
-          sourceFrom: "share",
-          shopType: "customersamples",
-          number: 1,
-          currency: "￥",
-          Price: 0,
-          productNumber: item.productNumber
-        })
-        .then(res => {
-          if (res.data.result.code === 200) {
-            item.isShop = !item.isShop;
-            this.$store.commit("handlerShopLength", res.data.result.item);
-          } else {
-            this.$message.error(res.data.result.msg);
-          }
-        });
-    });
-  },
-  beforeDestroy() {
-    this.$root.eventHub.$off("handHomeShopCart");
   }
 };
 </script>

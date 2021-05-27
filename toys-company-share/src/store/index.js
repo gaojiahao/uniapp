@@ -42,6 +42,10 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
+    // 添加用户名
+    handlerLoginName(state, payLoad) {
+      state.userInfo.loginEmail = payLoad;
+    },
     // 修改临时token
     handlerTemporaryToken(state, payLoad) {
       state.temporaryToken = payLoad;

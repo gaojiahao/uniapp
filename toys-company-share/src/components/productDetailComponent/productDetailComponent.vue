@@ -113,14 +113,54 @@ export default {
   },
   methods: {
     // 加购
-    handlerShopping(item) {
+    // 加购
+    async handlerShopping(item) {
       console.log(item);
+      if (!this.userInfo.loginEmail) {
+        this.$message.error("请输入用户名");
+        return false;
+      } else if (this.shopLength >= 500) {
+        this.$message.error("购物车已满500条");
+        return false;
+      } else {
+        let api = "/api/AddShoppingCart";
+        if (item.isShop) {
+          api = "/api/RemoveShoppingCart";
+        }
+        this.$toys
+          .post(api, {
+            shareID: this.userInfo.shareId,
+            customerRemarks: this.userInfo.loginEmail,
+            sourceFrom: "share",
+            shopType: "customersamples",
+            number: 1,
+            currency: "￥",
+            Price: 0,
+            productNumber: item.productNumber
+          })
+          .then(res => {
+            if (res.data.result.code === 200) {
+              item.isShop = !item.isShop;
+              if (item.isShop) {
+                this.$message.success("加购成功");
+              } else {
+                this.$message.warning("取消加购");
+              }
+              this.$store.commit("handlerShopLength", res.data.result.item);
+              this.$root.eventHub.$emit("resetShop", item);
+            } else {
+              this.$message.error(res.data.result.msg);
+            }
+          });
+      }
     },
     // 获取产品详情接口
     async getProductDetails() {
       const res = await this.$http.get(
         "/api/WebsiteShare/SearchCompanyShareProductDetailPage?productNumber=" +
-          this.$route.query.id
+          this.$route.query.id +
+          "&loginName=" +
+          this.userInfo.loginEmail
       );
       const { code, data, message } = res.data.result;
       if (code == 200) {
@@ -141,8 +181,7 @@ export default {
     publicLang() {
       return this.$t("lang.publicLang");
     },
-    ...mapState(["globalLang"]),
-    ...mapState(["userInfo"])
+    ...mapState(["globalLang", "userInfo", "shopLength"])
   }
 };
 </script>
