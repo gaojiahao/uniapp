@@ -258,19 +258,7 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next(_that => {
-      console.log(_that);
-      // for (let i = 0; i < _that.productList.length; i++) {
-      //   _that.productList[i].isShopping = false;
-      // }
-      // if (_that.shoppingList.length) {
-      //   for (let i = 0; i < _that.productList.length; i++) {
-      //     for (let j = 0; j < _that.shoppingList.length; j++) {
-      //       if (_that.productList[i].id === _that.shoppingList[j].id)
-      //         _that.productList[i].isShopping = true;
-      //     }
-      //   }
-      // }
-      // _that.getSearchCompanyShareProductPage();
+      _that.getSearchCompanyShareProductPage();
     });
   },
   mounted() {
@@ -309,7 +297,7 @@ export default {
       return this.$t("lang.advancedSearch");
     },
 
-    ...mapState(["searchForm", "imageSearchValue", "userInfo"])
+    ...mapState(["searchForm", "imageSearchValue", "userInfo", "shopLength"])
   },
   beforeDestroy() {
     this.$root.eventHub.$off("resetProducts");
