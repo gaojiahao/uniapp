@@ -38,7 +38,8 @@ import {
   Link,
   Badge,
   InfiniteScroll,
-  Popover
+  Popover,
+  Cascader
 } from "element-ui";
 const element = {
   install: function(Vue) {
@@ -80,6 +81,7 @@ const element = {
     Vue.use(Scrollbar);
     Vue.use(Badge);
     Vue.use(Popover);
+    Vue.use(Cascader);
 
     // 往vue实例原型里添加消息提示，方便全局调用
     Vue.prototype.$msgbox = MessageBox;
