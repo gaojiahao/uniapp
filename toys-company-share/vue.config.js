@@ -5,25 +5,25 @@ function resolve(dir) {
 }
 const CompressionWebpackPlugin = require("compression-webpack-plugin");
 const productionGzipExtensions = ["js", "css", "html", "svg", "less"];
-const proEnv = require("./config/pro.env"); // 生产环境
-const testEnv = require("./config/test.env"); // 测试环境
-const devEnv = require("./config/dev.env"); // 本地环境
+// const proEnv = require("./config/pro.env"); // 生产环境
+// const testEnv = require("./config/test.env"); // 测试环境
+// const devEnv = require("./config/dev.env"); // 本地环境
 const env = process.env.NODE_ENV;
-let target = "";
-// 默认是本地环境
-switch (env) {
-  case "production": // 生产环境
-    target = proEnv.hosturl;
-    break;
-  case "test": // 测试环境
-    target = testEnv.hosturl;
-    break;
-  default:
-    // 本地环境
-    target = devEnv.hosturl;
-    break;
-}
-console.log(target);
+// let target = "";
+// // 默认是本地环境
+// switch (env) {
+//   case "production": // 生产环境
+//     target = proEnv.hosturl;
+//     break;
+//   case "test": // 测试环境
+//     target = testEnv.hosturl;
+//     break;
+//   default:
+//     // 本地环境
+//     target = devEnv.hosturl;
+//     break;
+// }
+// console.log(target);
 const config = {
   productionSourceMap: false,
   publicPath: "/",
