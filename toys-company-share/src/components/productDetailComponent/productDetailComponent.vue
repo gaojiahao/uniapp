@@ -113,45 +113,64 @@ export default {
   },
   methods: {
     // 加购
-    // 加购
+    addCart(item) {
+      let api = "/api/AddShoppingCart";
+      if (item.isShop) {
+        api = "/api/RemoveShoppingCart";
+      }
+      this.$toys
+        .post(api, {
+          shareID: this.userInfo.shareId,
+          customerRemarks: this.userInfo.loginEmail,
+          sourceFrom: "share",
+          shopType: "customersamples",
+          number: 1,
+          currency: "￥",
+          Price: 0,
+          productNumber: item.productNumber,
+          shareProductJson: JSON.stringify(item)
+        })
+        .then(res => {
+          if (res.data.result.code === 200) {
+            item.isShop = !item.isShop;
+            if (item.isShop) {
+              this.$message.success("加购成功");
+            } else {
+              this.$message.warning("取消加购");
+            }
+            this.$store.commit("handlerShopLength", res.data.result.item);
+          } else {
+            this.$message.error(res.data.result.msg);
+          }
+        });
+    },
+    // 是否加购
     async handlerShopping(item) {
-      console.log(item);
       if (!this.userInfo.loginEmail) {
-        this.$message.error("请输入用户名");
+        this.$prompt("请输入用户名", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消"
+        })
+          .then(({ value }) => {
+            if (value) {
+              this.$store.commit("handlerLoginName", value);
+              this.addCart(item);
+            } else {
+              this.$message.error("输入有误");
+            }
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "取消输入"
+            });
+          });
         return false;
       } else if (this.shopLength >= 500) {
         this.$message.error("购物车已满500条");
         return false;
       } else {
-        let api = "/api/AddShoppingCart";
-        if (item.isShop) {
-          api = "/api/RemoveShoppingCart";
-        }
-        this.$toys
-          .post(api, {
-            shareID: this.userInfo.shareId,
-            customerRemarks: this.userInfo.loginEmail,
-            sourceFrom: "share",
-            shopType: "customersamples",
-            number: 1,
-            currency: "￥",
-            Price: 0,
-            productNumber: item.productNumber
-          })
-          .then(res => {
-            if (res.data.result.code === 200) {
-              item.isShop = !item.isShop;
-              if (item.isShop) {
-                this.$message.success("加购成功");
-              } else {
-                this.$message.warning("取消加购");
-              }
-              this.$store.commit("handlerShopLength", res.data.result.item);
-              this.$root.eventHub.$emit("resetShop", item);
-            } else {
-              this.$message.error(res.data.result.msg);
-            }
-          });
+        this.addCart(item);
       }
     },
     // 获取产品详情接口

@@ -87,7 +87,7 @@
                   <el-image
                     style="width: 100px; height: 100px; cursor: pointer;"
                     fit="contain"
-                    :src="scope.row.productJson.productImgs"
+                    :src="scope.row.productImgs"
                   >
                     <div slot="placeholder" class="image-slot">
                       <img
@@ -110,7 +110,9 @@
                 <div class="productNameBox">
                   <p class="name">
                     {{
-                      globalLang === "zh-CN" ? scope.row.name : scope.row.ename
+                      globalLang === "zh-CN"
+                        ? scope.row.productJson.name
+                        : scope.row.productJson.ename
                     }}
                   </p>
                   <p class="fa_no">No.{{ scope.row.productJson.fa_no }}</p>
@@ -700,25 +702,27 @@ export default {
     // 提交订单
     async submitOrder() {
       const selectProducts = this.$refs.multipleTable.selection;
+      console.log(selectProducts);
       this.formInfo.currencyType = this.userInfo.currencyType;
       this.formInfo.shareOrderDetails = selectProducts.map(val => {
         return {
           productNumber: val.productNumber,
-          productName: val.name,
-          productEName: val.ename,
+          productName: val.productJson.name,
+          productEName: val.productJson.ename,
           productPrice: val.price,
-          productCount: val.shoppingCount,
-          productFeet: val.outerBoxFeet,
-          productStere: val.outerBoxStere,
-          productImage: val.imageUrls[0],
+          productCount: val.number,
+          productFeet: val.productJson.bulk_feet,
+          productStere: val.productJson.bulk_stere,
+          productImage: val.productImgs,
           currencyType: this.userInfo.currencyType,
-          outerBoxLo: val.outerBoxLo,
+          outerBoxLo: val.productJson.ou_lo,
           packMethod:
-            this.globalLang === "zh-CN" ? val.packMethod : val.ePackMethod,
-          productInfo: val
+            this.globalLang === "zh-CN"
+              ? val.productJson.ch_pa
+              : val.productJson.en_pa,
+          productInfo: JSON.parse(val.shareProductJson)
         };
       });
-      console.log(JSON.stringify(this.formInfo));
       const res = await this.$http.post(
         "/api/WebsiteShare/CreateShareOrder",
         this.formInfo
@@ -726,13 +730,6 @@ export default {
       const { code, message } = res.data.result;
       if (code === 200) {
         this.$message.success(this.publicLang.submittedSuccessfully);
-        for (let i = 0; i < this.dataList.length; i++) {
-          for (let j = 0; j < selectProducts.length; j++) {
-            if (this.dataList[i].id === selectProducts[j].id)
-              this.dataList.splice(i, 1);
-          }
-        }
-        this.$store.commit("resetShoppingCart", selectProducts);
         this.$router.push("/index/myOrder");
       } else {
         this.$message.error(message);
@@ -798,14 +795,28 @@ export default {
       return number;
     },
     // 删除购物车中的某项
-    handleDelete(row) {
-      this.$store.commit("popShopping", row);
-      this.dataList.forEach((val, i) => {
-        if (val.id === row.id) {
-          this.dataList.splice(i, 1);
-          this.$message.error(this.publicLang.deleteSuccessful);
-        }
+    async handleDelete(row) {
+      console.log(row);
+      const res = await this.$toys.post("/api/RemoveShoppingCart", {
+        shareID: this.userInfo.shareId,
+        customerRemarks: this.userInfo.loginEmail,
+        sourceFrom: "share",
+        shopType: "customersamples",
+        number: 1,
+        currency: "￥",
+        Price: 0,
+        productNumber: row.productNumber
       });
+      console.log(res);
+      if (res.data.result.code === 200) {
+        this.$store.commit("handlerShopLength", res.data.result.item);
+        this.$message.success("删除成功");
+        row.isShop = false; // 删除产品列表加购
+        this.$root.eventHub.$emit("resetShop", row);
+        this.getShoppingCartList();
+      } else {
+        this.$message.success(res.data.result.msg);
+      }
     },
     // 计算总价
     calculationTotalPrice(list) {
@@ -930,6 +941,7 @@ export default {
     //   ? JSON.parse(JSON.stringify(this.shoppingList))
     //   : [];
     this.formInfo.contactName = this.userInfo.loginEmail;
+    this.formInfo.loginEmail = this.userInfo.loginEmail;
     this.getShoppingCartList();
   },
   watch: {
@@ -967,8 +979,7 @@ export default {
     myOrderLang() {
       return this.$t("lang.myOrder");
     },
-    ...mapState(["globalLang"]),
-    ...mapState(["userInfo"])
+    ...mapState(["globalLang", "userInfo"])
   },
   filters: {}
 };
