@@ -62,11 +62,11 @@
 											报价时间：
 										</view>
 										<view class="offer_info_item_text">
-											{{sampleInfo.modifyOn}}
+											{{sampleInfo.createdOn&&sampleInfo.createdOn.replace(/T/, " ")}}
 										</view>
 									</view>
 								</b-col>
-								<b-col cols="12" sm="2">
+								<b-col cols="12" sm="2" v-if="!isMobile">
 									<view class="offer_info_item">
 										<view class="offer_info_item_label">
 											客户名称：
@@ -95,7 +95,17 @@
 								</b-col>
 							</b-row>
 							<div class="row_diver"></div>
-							<b-row no-gutters>
+							<b-row no-gutters v-if="isMobile">
+								<b-col cols="12" sm="2" v-if="isMobile">
+									<view class="offer_info_item">
+										<view class="offer_info_item_label">
+											客户名称：
+										</view>
+										<view class="offer_info_item_text">
+											{{sampleInfo.customerName}}
+										</view>
+									</view>
+								</b-col>
 								<b-col cols="12" sm="2">
 									<view class="offer_info_item">
 										<view class="offer_info_item_label">
@@ -132,7 +142,7 @@
 											总毛重/总净重：
 										</view>
 										<view class="offer_info_item_text">
-											{{summaryData.totalBulkStere}}/{{ summaryData.totalNeWe }}(KG)
+											{{summaryData.totalGrWe}}/{{ summaryData.totalNeWe }}(KG)
 										</view>
 									</view>
 								</b-col>
@@ -147,6 +157,48 @@
 									</view>
 								</b-col>
 							</b-row>
+							<view class="pc_offer_info_list" v-else>
+								<view class="offer_info_item">
+									<view class="offer_info_item_label">
+										商品总款数：
+									</view>
+									<view class="offer_info_item_text">
+										{{summaryData.totalDegree}}
+									</view>
+								</view>
+								<view class="offer_info_item">
+									<view class="offer_info_item_label">
+										商品总箱数：
+									</view>
+									<view class="offer_info_item_text">
+										{{summaryData.totalCartons}}
+									</view>
+								</view>
+								<view class="offer_info_item">
+									<view class="offer_info_item_label">
+										总体积/总材积：
+									</view>
+									<view class="offer_info_item_text">
+										{{summaryData.totalBulkStere}}(cbm)/{{summaryData.totalBulkFeet}}(cuft)
+									</view>
+								</view>
+								<view class="offer_info_item">
+									<view class="offer_info_item_label">
+										总毛重/总净重：
+									</view>
+									<view class="offer_info_item_text">
+										{{summaryData.totalGrWe}}/{{ summaryData.totalNeWe }}(KG)
+									</view>
+								</view>
+								<view class="offer_info_item">
+									<view class="offer_info_item_label">
+										总金额：
+									</view>
+									<view class="offer_info_item_text red_color">
+										{{ summaryData.cu_de }}{{ summaryData.totalMoney }}
+									</view>
+								</view>
+							</view>
 						</view>
 					</view>
 					<view class="offer_list">
@@ -170,6 +222,7 @@
 											@clear="clearKeyWord"
 											@search="getProductOfferDetailPage"
 											@custom="getProductOfferDetailPage"
+											class="x_search"
 											>
 										</x-search>
 									</view>
@@ -215,7 +268,7 @@
 												{{item.name}}
 											</view>
 											<view class="product_list_info_text">
-												参考单价：<text class="red_color">{{item.cu_de}}{{item.offerAmount}}</text>
+												报价：<text class="red_color">{{item.cu_de}}{{item.offerAmount}}</text>
 											</view>
 											<view class="product_list_info_text">
 												出厂货号：{{item.fa_no}}
@@ -237,7 +290,7 @@
 											<view style="margin-left: 40px;" v-if="!isMobile">
 												<view class="product_list_info_text2">产品名称：<span>{{item.name}}</span></view>
 												<view class="product_list_info_text2">出厂货号：<span>{{item.fa_no}}</span></view>
-												<view class="product_list_info_text2">包装方式：<span>{{item.chinesePack}}</span></view>
+												<view class="product_list_info_text2">包装方式：<span>{{item.ch_pa}}</span></view>
 												<view class="product_list_info_text2">样品规格：<span>{{item.pr_le}}x{{item.pr_wi}}x{{item.pr_hi}}(cm)</span></view>
 											</view>
 											<view v-else>
@@ -305,6 +358,7 @@ export default {
 	},
 	data() {
 		return {
+			id:null, //报价单号码
 			home_icon: require("@/static/images/home.png"),
 			keyword:'' ,//搜索关键字
 			sampleInfo:{}, //择样信息
@@ -316,7 +370,7 @@ export default {
 			sortOrder: 0,  //价格搜索
 			sortType: 0,   //时间搜索
 			searchType:'zonghe',
-			listShowType:'grid', //列表显示类型 grid list
+			listShowType:'list', //列表显示类型 grid list
 			isMobile:false,   //是否移动端
 			summaryData: {
 				//汇总数据
@@ -379,7 +433,7 @@ export default {
 					modifyOn:res.result.item.modifyOn?res.result.item.modifyOn.replace(/T.*/, "") : "",
 				};
 			} else {
-				this.$message.error(res.result.msg);
+				// this.$message.error(res.result.msg);
 			}
 		},
 		//获取token
@@ -419,6 +473,7 @@ export default {
 		},
 		// 获取报价信息产品列表
 		async getProductOfferDetailPage() {
+			this.$loading.show();
 			var me = this;
 			const fd = {
 				skipCount: me.currentPage,
@@ -428,8 +483,11 @@ export default {
 				keyword: me.keyword,
 				sortOrder: me.sortOrder,
 				sortType: me.sortType,
+				searchType:me.searchType,
+				listShowType:me.listShowType,
 				// ...this.packingOptions
 			};
+			uni.setStorageSync('offer_search'+this.id,JSON.stringify(fd));
 			for (const key in fd) {
 				if (fd[key] === null || fd[key] === undefined || fd[key] === "")
 					delete fd[key];
@@ -437,10 +495,16 @@ export default {
 			const res = await me.$u.api.ProductOfferDetailPage(fd);
 			if (res.result.code === 200) {
 				this.productList = res.result.item.items;
-				this.handleCountData(this.productList);
+				var session_productList = uni.getStorageSync('offer_sharing_info'+this.id)&&JSON.parse(uni.getStorageSync('offer_sharing_info'+this.id));
+				if(session_productList){
+					this.summaryData = session_productList;
+				} else {
+					this.handleCountData(this.productList);
+				}
 				this.totalCount = res.result.item.totalCount;
+				this.$loading.hide();
 			} else {
-				this.$message.error(res.result.msg);
+				// this.$message.error(res.result.msg);
 			}
 		},
 		//分页切换
@@ -472,50 +536,52 @@ export default {
 		},
 		//计算汇总数据
 		handleCountData(array) {
-		  //总款数
-		  this.summaryData.totalDegree = array.length;
-		  this.summaryData.cu_de = this.sampleInfo.cu_de;
-		  //金额单位
-		  for (let i = 0; i < array.length; i++) {
+			//总款数
+			this.summaryData.totalDegree = array.length;
+			this.summaryData.cu_de = this.sampleInfo.cu_de;
+			//金额单位
+			for (let i = 0; i < array.length; i++) {
 			//总箱数
-			this.summaryData.totalCartons = this.$calculate.add(
-			  this.summaryData.totalCartons,
-			  array[i].boxNumber || 0
-			);
-			//总数量
-			this.summaryData.totalQuantity = this.$calculate.add(
-			  this.summaryData.totalQuantity,
-			  this.$calculate.multiply(array[i].boxNumber, array[i].ou_lo) || 0
-			);
-			//总体积
-			this.summaryData.totalBulkStere = this.$calculate.add(
-			  this.summaryData.totalBulkStere,
-			  this.$calculate.multiply(array[i].boxNumber, array[i].bulk_stere) || 0
-			);
-			//总材积
-			this.summaryData.totalBulkFeet = this.$calculate.add(
-			  this.summaryData.totalBulkFeet,
-			  this.$calculate.multiply(array[i].boxNumber, array[i].bulk_feet) || 0
-			);
-			//总毛重
-			this.summaryData.totalGrWe = this.$calculate.add(
-			  this.summaryData.totalGrWe,
-			  this.$calculate.multiply(array[i].boxNumber, array[i].gr_we) || 0
-			);
-			//总净重
-			this.summaryData.totalNeWe = this.$calculate.add(
-			  this.summaryData.totalNeWe,
-			  this.$calculate.multiply(array[i].boxNumber, array[i].ne_we) || 0
-			);
-			//总金额
-			this.summaryData.totalMoney = this.$calculate.add(
-			  this.summaryData.totalMoney,
-			  this.$calculate.multiply(
-				this.$calculate.multiply(array[i].offerAmount, array[i].boxNumber),
-				array[i].ou_lo
-			  )
-			);
-		  }
+				this.summaryData.totalCartons = this.$calculate.add(
+					this.summaryData.totalCartons,
+					array[i].boxNumber || 0
+				);
+				//总数量
+				this.summaryData.totalQuantity = this.$calculate.add(
+					this.summaryData.totalQuantity,
+					this.$calculate.multiply(array[i].boxNumber, array[i].ou_lo) || 0
+				);
+				//总体积
+				this.summaryData.totalBulkStere = this.$calculate.add(
+					this.summaryData.totalBulkStere,
+					this.$calculate.multiply(array[i].boxNumber, array[i].bulk_stere) || 0
+				);
+				//总材积
+				this.summaryData.totalBulkFeet = this.$calculate.add(
+					this.summaryData.totalBulkFeet,
+					this.$calculate.multiply(array[i].boxNumber, array[i].bulk_feet) || 0
+				);
+				//总毛重
+				this.summaryData.totalGrWe = this.$calculate.add(
+					this.summaryData.totalGrWe,
+					this.$calculate.multiply(array[i].boxNumber, array[i].gr_we) || 0
+				);
+				//总净重
+				this.summaryData.totalNeWe = this.$calculate.add(
+					this.summaryData.totalNeWe,
+					this.$calculate.multiply(array[i].boxNumber, array[i].ne_we) || 0
+				);
+				//总金额
+				this.summaryData.totalMoney = this.$calculate.add(
+					this.summaryData.totalMoney,
+					this.$calculate.multiply(
+						this.$calculate.multiply(array[i].offerAmount, array[i].boxNumber),
+						array[i].ou_lo
+					)
+				);
+			}
+	
+			uni.setStorageSync('offer_sharing_info'+this.id,JSON.stringify(this.summaryData));
 		},
 		//初始化
 		async init(){
@@ -526,7 +592,7 @@ export default {
 		},
 	},
 	mounted() {
-		this.getContentStyle();
+		//this.getContentStyle();
 	},
 	updated: function () {
 	  this.$nextTick(function () {
@@ -534,7 +600,17 @@ export default {
 	  })
 	},
 	created(){
+		this.$loading.show();
+		this.id = this.$route.query.id
 		uni.setStorageSync('offer_sharing_id', this.$route.query.id);
+		var session_offer_search = uni.getStorageSync('offer_search'+this.id)&&JSON.parse(uni.getStorageSync('offer_search'+this.id));
+		if(session_offer_search){
+			this.sortOrder=session_offer_search.sortOrder;  //价格搜索
+			this.sortType=session_offer_search.sortType;   //时间搜索
+			this.searchType=session_offer_search.searchType;
+			this.keyword=session_offer_search.keyword;
+			this.listShowType=session_offer_search.listShowType;
+		}
 		this.init();
 	}
 }
