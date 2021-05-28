@@ -131,24 +131,42 @@
                 v-for="item in productDetail.manuCertificateList"
                 :key="item.index"
               >
-                <img
+                <!-- <img
                   @click="openDialogCertificate(item)"
                   :src="item.certificateAddres"
                   alt=""
-                />
+                /> -->
+                <el-image
+                  @click="openDialogCertificate(item)"
+                  style="width: 21px; height: 30px; min-width: 21px"
+                  :src="item.certificateAddres"
+                  fit="contain"
+                >
+                  <div
+                    slot="placeholder"
+                    class="image-slot"
+                    style="width: 82px; height: 62px"
+                  >
+                    <img
+                      style="width: 21px; height: 30px; min-width: 21px"
+                      :src="require('@/assets/images/PDF.png')"
+                    />
+                  </div>
+                  <div
+                    slot="error"
+                    class="image-slot"
+                    style="width: 21px; height: 30px; min-width: 21px"
+                  >
+                    <img
+                      style="width: 21px; height: 30px; min-width: 21px"
+                      :src="require('@/assets/images/PDF.png')"
+                    />
+                  </div>
+                </el-image>
                 <span>{{ item.certificateName }}</span>
               </div>
             </div>
           </div>
-          <!-- <p>
-            产品认证：
-            <i
-              v-if="productDetail.manuCertificateList.length > 0"
-              class="proveActiveIcon"
-            ></i>
-            <i v-else class="proveIcon"></i>
-            <span>{{ productDetail.certificateNo }}</span>
-          </p> -->
         </div>
         <!-- 联系方式 -->
         <div class="contactMode">
@@ -302,7 +320,7 @@ export default {
     openDialogCertificate(item) {
       console.log(item, "证书信息");
       this.dataCertificate = item;
-      // this.dialogCertificate = true;
+      this.dialogCertificate = true;
     },
     // 加购
     handlerShopping(item) {
@@ -618,6 +636,7 @@ export default {
               margin: 0 10px;
               display: flex;
               align-items: center;
+              cursor: pointer;
               img {
                 width: 21px;
                 height: 30px;
@@ -769,6 +788,12 @@ export default {
         }
       }
     }
+  }
+  .dialogCertificateCss {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>
