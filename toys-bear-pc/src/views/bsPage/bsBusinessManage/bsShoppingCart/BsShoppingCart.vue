@@ -889,7 +889,7 @@ export default {
       result
         .then(res => {
           if (res.data) {
-            // console.log(res.data);
+            console.log(res.data, "识别二维码成功");
             // this.$message.success("识别二维码成功!");
             this.$http
               .post("/api/QRCodeSearchProduct", { qRcode: res.data })

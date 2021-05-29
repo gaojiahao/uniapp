@@ -10,64 +10,8 @@
           infinite-scroll-delay="50"
         >
           <div>
-            <h3>业务消息</h3>
-            <ul class="exhibition">
-              <li
-                @click="handerIsGrid(item, item.businessType)"
-                v-for="(item, i) in businessConversations"
-                :key="i"
-              >
-                <div class="exhibition_left">
-                  <div class="_leftImg">
-                    <!-- <img :src="item.icon" alt="" /> -->
-                    <el-image
-                      :src="item.icon"
-                      style="width: 50px;height: 50px;"
-                    >
-                      <div slot="error">
-                        <img src="~@/assets/images/imgError.png" alt="" />
-                      </div>
-                      <div slot="placeholder">
-                        <img src="~@/assets/images/logo.png" alt="" />
-                      </div>
-                    </el-image>
-                  </div>
-                </div>
-                <div class="exhibition_right">
-                  <el-badge :is-dot="item.unreadCount > 0 ? true : false">
-                    <h4>{{ item.title }}</h4>
-                  </el-badge>
-                  <p>{{ item.subtitle }}</p>
-                </div>
-              </li>
-              <li
-                @click="handerIsGrid(item, 2)"
-                v-for="item in companyConversations"
-                :key="item.client_nu"
-              >
-                <div class="exhibition_left">
-                  <div class="_leftImg">
-                    <!-- <img :src="item.companyLogo" alt="" /> -->
-                    <el-image :src="item.companyLogo">
-                      <div slot="error">
-                        <img src="~@/assets/images/imgError.png" alt="" />
-                      </div>
-                      <div slot="placeholder">
-                        <img src="~@/assets/images/logo.png" alt="" />
-                      </div>
-                    </el-image>
-                  </div>
-                </div>
-                <div class="exhibition_right">
-                  <h4>{{ item.client_na }}</h4>
-                  <p>{{ item.client_nu }}</p>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <div>
             <h3 style="border-bottom: 1px solid #e5e5e5;margin-bottom: 10px;">
-              其他消息
+              消息
             </h3>
             <ul
               class="exhibition"
@@ -177,8 +121,6 @@ export default {
       connectState: false,
       chatList: [],
       disabled: false,
-      businessConversations: [],
-      companyConversations: [],
       colorId: "2",
       isGrid: null,
       isDiyu: "0",
@@ -410,23 +352,6 @@ export default {
         this.chatList = this.chatList.concat(res);
       });
     },
-    // 获取业务消息列表
-    async getConversationList() {
-      const res = await this.$im_http.post("/api/Conversation/List", {});
-      const { code, item, msg } = res.data.result;
-      if (code === 200) {
-        this.businessConversations = item.businessConversations;
-        this.companyConversations = item.companyConversations;
-        this.dataOption =
-          this.businessConversations.find(val => val.businessType == 1) || {};
-        this.isGrid = System;
-      } else {
-        this.$common.handlerMsgState({
-          msg: msg,
-          type: "danger"
-        });
-      }
-    },
     // 消息筛选
     myFilterMsgTypes(item) {
       return filterMsgTypes(item);
@@ -466,7 +391,6 @@ export default {
   created() {},
   mounted() {
     this.watchIm();
-    this.getConversationList();
   },
   computed: {
     ...mapState(["userInfo"])
