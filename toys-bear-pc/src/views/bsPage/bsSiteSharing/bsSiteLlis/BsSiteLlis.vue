@@ -560,6 +560,7 @@
               <div class="advertisingTising">
                 <div class="title">站点广告</div>
                 <el-button
+                  @click="addAdvertising"
                   icon="el-icon-plus"
                   style="margin-left: 10px;height:36px"
                   size="mini"
@@ -1180,6 +1181,7 @@ export default {
       this.currentPage = 1;
       this.getDataList();
     },
+    addAdvertising() {},
     // 点击导航菜单，页面滚动到指定位置
     handleTab(val, index) {
       this.tp = index;

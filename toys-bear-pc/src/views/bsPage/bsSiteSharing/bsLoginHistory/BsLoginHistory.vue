@@ -95,7 +95,7 @@
 import { mapState } from "vuex";
 import Table from "@/components/table";
 export default {
-  name: "bsBrowsingHistory",
+  name: "bsLoginHistory",
   components: {
     Table
   },
