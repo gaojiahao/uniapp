@@ -184,6 +184,9 @@ import bsSimilarProduct from "@/components/bsComponents/bsProductSearchComponent
 // 展厅主页
 import bsExhibitionHallHome from "@/components/bsComponents/bsExhibitionHallHomeComponent/BsExhibitionHallHome.vue";
 
+// 业务消息
+import bsBusinessMsg from "@/views/bsPage/bsMyNews/bsBusinessMsg/BsBusinessMsg.vue";
+
 import bsTop from "@/components/bsComponents/bsTopComponent/BsTop";
 import bsMenu from "@/components/bsComponents/bsMenuComponent/BsMenu";
 import eventBus from "@/assets/js/common/eventBus.js";
@@ -240,7 +243,8 @@ export default {
     bsMenu,
     bsPurchaseOrderDetails,
     bsSimilarProduct,
-    bsExhibitionHallHome
+    bsExhibitionHallHome,
+    bsBusinessMsg
   },
   data() {
     return {
