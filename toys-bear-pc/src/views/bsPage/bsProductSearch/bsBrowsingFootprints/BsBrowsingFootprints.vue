@@ -189,7 +189,7 @@ export default {
         this.$set(this.productList, i, newArr[i]);
       }
     },
-    // 清空浏览记录
+    // 清空登录记录
     async emptyBrowse() {
       const fd = {
         type: 3

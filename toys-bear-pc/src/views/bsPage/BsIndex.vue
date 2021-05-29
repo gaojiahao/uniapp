@@ -87,8 +87,14 @@ import bsSiteSettings from "@/views/bsPage/bsSiteSharing/bsSiteSettings/BsSiteSe
 // 客户订单
 import bsCustomerOrder from "@/views/bsPage/bsSiteSharing/bsCustomerOrder/BsCustomerOrder.vue";
 
+// 登录记录
+import bsLoginHistory from "@/views/bsPage/bsSiteSharing/bsLoginHistory/BsLoginHistory.vue";
+
 // 浏览记录
 import bsBrowsingHistory from "@/views/bsPage/bsSiteSharing/bsBrowsingHistory/BsBrowsingHistory.vue";
+
+// 广告管理
+import bsAdvertisingManage from "@/views/bsPage/bsSiteSharing/bsAdvertisingManage/BsAdvertisingManage.vue";
 
 // 产品搜索首页
 import bsProductSearchIndex from "@/views/bsPage/bsProductSearch/bsProductSearchIndex/BsProductSearchIndex.vue";
@@ -196,6 +202,8 @@ export default {
     bsSiteSettings,
     bsCustomerOrder,
     bsBrowsingHistory,
+    bsLoginHistory,
+    bsAdvertisingManage,
     bsProductSearchIndex,
     bsMyCollection,
     bsLatestProducts,
