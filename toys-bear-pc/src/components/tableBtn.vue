@@ -272,7 +272,7 @@
           <div v-if="table.actions">
             <template v-for="(btn, index) in table.actions">
               <el-button
-                v-if="(!btn.hidden || btn.hidden(scope.row))&&index<3"
+                v-if="(!btn.hidden || btn.hidden(scope.row)) && index < 3"
                 :key="btn.index"
                 :type="btn.classWrapper(scope.row)"
                 :disabled="btn.disabledWrapper(scope.row)"
@@ -284,7 +284,7 @@
                 {{ btn.textWrapper(scope.row) }}
               </el-button>
               <el-button
-                v-if="btn.hidden(scope.row)&&index>2"
+                v-if="btn.hidden(scope.row) && index > 2"
                 :key="btn.index"
                 :type="btn.classWrapper(scope.row)"
                 :disabled="btn.disabledWrapper(scope.row)"
@@ -302,14 +302,14 @@
               width="160"
               popper-class="more_btns"
               v-model="isShowMoreBtn[scope.row.id]"
-              v-if="table.actions&&table.actions.length > 3"
+              v-if="table.actions && table.actions.length > 3 && scope.row.offerNumber[0] != 'S'"
             >
               <div class="more_btn">
                 <div class="more_btn_panel">
                   <template v-for="(btn, index) in table.actions">
                     <div class="more_btn_item" v-if="index >= 3" :key="index">
                       <el-button
-                        v-if="!btn.hidden || btn.hidden(scope.row)"
+                        v-if="!btn.hidden(scope.row)"
                         :key="btn.index"
                         :type="btn.classWrapper(scope.row)"
                         :disabled="btn.disabledWrapper(scope.row)"
@@ -637,24 +637,24 @@ export default {
       }
       return false;
     },
-    getNoHiddenBtn(data){
+    getNoHiddenBtn(data) {
       var length = 0;
-      for(var i=0;i<data.length;i++){
-        if(!data[i].hidden){
+      for (var i = 0; i < data.length; i++) {
+        if (!data[i].hidden) {
           length++;
         }
       }
-      console.log(length)
+      console.log(length);
       return length;
     },
-    getNoHiddenBtns(data){
+    getNoHiddenBtns(data) {
       var res = data.filter(item => {
         return !item.hidden(item);
       });
       console.log(res);
       return res;
     }
-  },
+  }
 };
 </script>
 <style lang="less" scoped>

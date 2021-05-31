@@ -259,7 +259,7 @@ export default {
           {
             type: "warning",
             hidden(row) {
-              return row.offerNumber[0] != "S" ? false:true;
+              return row.offerNumber[0] != "S" ? false : true;
             },
             textWrapper() {
               return "导出";
@@ -272,7 +272,7 @@ export default {
             type: "warning",
             color: "#F9AE3E",
             hidden(row) {
-              return row.offerNumber[0] != "S" ? false:true;
+              return row.offerNumber[0] != "S" ? false : true;
             },
             textWrapper() {
               return "分享";
