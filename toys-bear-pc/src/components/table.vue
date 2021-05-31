@@ -210,27 +210,19 @@
               </div>
               <el-image
                 v-if="col.elImage"
-                style="width: 82px; height: 62px; min-width: 82px"
+                :style="col.style"
                 :src="isString(col.elImage(scope.row))"
                 fit="contain"
               >
-                <div
-                  slot="placeholder"
-                  class="image-slot"
-                  style="width: 82px; height: 62px"
-                >
+                <div slot="placeholder" class="image-slot" :style="col.style">
                   <img
-                    style="width: 82px; height: 62px"
+                    :style="col.style"
                     :src="require('@/assets/images/imgError.png')"
                   />
                 </div>
-                <div
-                  slot="error"
-                  class="image-slot"
-                  style="width: 82px; height: 62px"
-                >
+                <div slot="error" :style="col.style" class="image-slot">
                   <img
-                    style="width: 82px; height: 62px"
+                    :style="col.style"
                     :src="require('@/assets/images/imgError.png')"
                   />
                 </div>
