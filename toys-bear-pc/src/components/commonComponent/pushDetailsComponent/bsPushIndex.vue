@@ -7,23 +7,25 @@
     <div class="handerTop">
       <div class="flex_t">
         <p>
-          采购单号：<span class="pId">{{ item.offerNumber }} </span>
+          {{ orderData.OrderTypeName }}：<span class="pId"
+            >{{ orderData.orderNumber }}
+          </span>
         </p>
         <p>
-          客户名称：<span>{{ item.linkman }} </span>
+          客户名称：<span>{{ orderData.offerName }} </span>
         </p>
         <p>
-          业务员：<span style="color: #2d7fe4">{{ itemList.linkman }} </span>
+          业务员：<span style="color: #2d7fe4">{{ orderData.linkman }} </span>
         </p>
         <p>
           状态：<span
             :style="{
-              color: itemList.status == 0 ? '#3368A9' : '#2D7FE4'
+              color: orderData.status == 0 ? '#3368A9' : '#2D7FE4'
             }"
             >{{
-              itemList.status == 0
+              orderData.status == 0
                 ? "未审核"
-                : itemList.status == 1
+                : orderData.status == 1
                 ? "审核通过"
                 : "审核不通过"
             }}
@@ -32,13 +34,13 @@
       </div>
       <div class="flex_b">
         <p>
-          报价时间：<span v-if="itemList.createdOn"
-            >{{ itemList.createdOn.replace(/T/, " ") }}
+          报价时间：<span v-if="orderData.createdOn"
+            >{{ orderData.createdOn.replace(/T/, " ") }}
           </span>
         </p>
         <div class="right">
           <p class="remark">
-            报价备注：<span>{{ itemList.title }} </span>
+            报价备注：<span>{{ orderData.remark }} </span>
           </p>
         </div>
       </div>
@@ -92,7 +94,6 @@
         :item="item"
         :multipleSelection="multipleSelection"
         :orderData="orderData"
-        :pushList="pushList"
         @handlePushDialog="handlePushDialog"
       ></bsPushDialogComponent>
     </el-dialog>
@@ -133,61 +134,67 @@ export default {
       },
       itemList: {},
       title: null,
-      pushList: [],
+
       multipleSelection: [],
-      tableData: [
-        // {
-        //   id: 1,
-        //   checked: false,
-        //   name: "腾彩玩具有限公司",
-        //   phone: 222,
-        //   phoneNumber: 1232132,
-        // },
-        // {
-        //   id: 2,
-        //   name: "玩具",
-        //   checked: false,
-        //   phone: 222,
-        //   phoneNumber: 1232132,
-        // },
-        // {
-        //   id: 3,
-        //   name: "有限公司",
-        //   checked: false,
-        //   phone: 222,
-        //   phoneNumber: 1232132,
-        // },
-      ]
+      tableData: []
     };
   },
-  created() {},
+  created() {
+    console.log(this.item, "点击推送按钮传过来的数据");
+    switch (this.item.label) {
+      case "展厅业务推送":
+        this.title = "展厅业务推送";
+        this.orderData = {
+          OrderTypeName: "采购单号",
+          offerName: this.item.orgPersonnelName,
+          linkman: this.item.linkman,
+          status: this.item.orderStatus,
+          createdOn: this.item.createdOn,
+          remark: this.item.pushContent,
+          orderPushType: 1,
+          orderNumber: this.item.offerNumber
+        };
+        break;
+      case "报价推送":
+        this.title = "报价推送";
+        this.orderData = {
+          OrderTypeName: "报价单号",
+          offerName: this.item.customerName,
+          linkman: this.item.linkman,
+          orderStatus: this.item.status,
+          createdOn: this.item.createdOn,
+          remark: this.item.title,
+          orderPushType: 2,
+          orderNumber: this.item.offerNumber
+        };
+        break;
+      case "采购推送":
+        this.title = "采购推送";
+        this.orderData = {
+          orderPushType: 4,
+          orderNumber: this.item.offerNumber
+        };
+        break;
+      default:
+        this.$common.handlerMsgState({
+          msg: "该订单无法推送",
+          type: "danger"
+        });
+    }
+  },
   mounted() {
     this.getSendCompanyList();
-    this.getPushSettingsPage();
   },
   methods: {
     // 根据订单获取可以发送的接收者
     async getSendCompanyList() {
-      switch (this.item.label) {
-        case "报价推送":
-          this.title = "报价推送";
-          this.orderData = {
-            orderPushType: 2,
-            orderNumber: this.item.offerNumber
-          };
-          break;
-        default:
-          this.$common.handlerMsgState({
-            msg: "该订单无法推送",
-            type: "danger"
-          });
-      }
       const res = await this.$http.post("/api/SendCompanyList", this.orderData);
       if (res.data.result.code === 200) {
         for (let i = 0; i < res.data.result.item.length; i++) {
           res.data.result.item[i].checked = false;
         }
         this.tableData = res.data.result.item;
+        this.getPushSettingsPage();
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -195,17 +202,7 @@ export default {
         });
       }
     },
-    // 消息类型模板
-    async getPushSettingsPage() {
-      const fd = {
-        skipCount: 1,
-        maxResultCount: 99
-      };
-      const res = await this.$http.post("/api/PushSettings/ListByPage", fd);
-      if (res.data.result.code === 200) {
-        this.pushList = res.data.result.item.items;
-      }
-    },
+
     // 切换产品列表样式
     handerIsGrid(type) {
       this.isGrid = type;
@@ -281,7 +278,8 @@ export default {
       align-content: center;
       margin-bottom: 10px;
       p {
-        width: 235px;
+        // width: 260px;
+        min-width: 250px;
         margin-right: 30px;
         font-weight: 400;
         .pId {
@@ -296,7 +294,7 @@ export default {
       align-items: center;
       p {
         margin-right: 30px;
-        width: 235px;
+        min-width: 250px;
       }
       .right {
         flex: 1;

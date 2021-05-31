@@ -251,8 +251,27 @@ export default {
             }
           }
         ],
-        btnWidth: 100,
+        btnWidth: 150,
         actions: [
+          {
+            type: "info",
+            textWrapper() {
+              return "推送";
+            },
+            methods: row => {
+              row.label = "展厅业务推送";
+              const fd = {
+                name: row.offerNumber + "展厅业务推送",
+                linkUrl: "/bsIndex/bsSampleQuotation",
+                component: "bsPushIndex",
+                refresh: true,
+                noPush: true,
+                label: "展厅业务推送",
+                value: row
+              };
+              this.$store.commit("myAddTab", fd);
+            }
+          },
           {
             type: "warning",
             textWrapper() {

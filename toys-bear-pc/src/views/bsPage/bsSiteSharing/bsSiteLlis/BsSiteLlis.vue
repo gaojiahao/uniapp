@@ -1017,7 +1017,7 @@ export default {
     // 打开编辑分享
     openEdit(row) {
       this.defaultFormula = null;
-      // this.dialogTitle = "编辑站点";
+      this.dialogTitle = "编辑站点";
       for (const key in row) {
         this.clienFormData[key] = row[key];
       }

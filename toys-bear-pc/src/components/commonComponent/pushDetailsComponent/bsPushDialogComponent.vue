@@ -13,7 +13,7 @@
             <el-radio
               v-model="radio"
               @change="handleRadio(item)"
-              :label="item.messageExt"
+              :label="item.id"
             >
               {{ item.title }}</el-radio
             >
@@ -49,15 +49,15 @@
     <el-dialog
       :title="dialogTitle"
       :visible.sync="addLangDialog"
-      v-if="addLangDialog"
+      :close-on-click-modal="false"
+      destroy-on-close
+      append-to-body
       width="800px"
     >
       <bsAddOfferFormulaLang
         :messageExtType="messageExtType"
         :editRow="editRow"
-        :isEdit="isEdit"
         @submit="submit"
-        @handleUpdate="handleUpdate"
         @close="close"
       ></bsAddOfferFormulaLang>
     </el-dialog>
@@ -75,9 +75,9 @@ export default {
     pushDialog: {
       type: Boolean
     },
-    pushList: {
-      type: Array
-    },
+    // pushList: {
+    //   type: Array,
+    // },
     orderData: {
       type: Object
     },
@@ -99,8 +99,8 @@ export default {
       textareaData: "",
       messageExtType: [],
       toCompanyNumber: [],
+      pushList: [],
       PushContent: null,
-      isEdit: false,
       editRow: {},
       dialogTitle: "新增推送模板",
       addLangDialog: false
@@ -121,14 +121,30 @@ export default {
       // ],
     };
   },
+  created() {},
+  mounted() {
+    this.getPushSettingsPage();
+  },
   methods: {
+    // 消息类型模板
+    async getPushSettingsPage() {
+      const fd = {
+        skipCount: 1,
+        maxResultCount: 99
+      };
+      const res = await this.$http.post("/api/PushSettings/ListByPage", fd);
+      if (res.data.result.code === 200) {
+        this.pushList = res.data.result.item.items;
+      }
+    },
     //关闭弹框
     closeDialog() {
       this.$emit("handlePushDialog", false);
     },
     //新增推送模板
     addMsgTemplate() {
-      this.isEdit = false;
+      this.getServiceConfigurationList();
+
       this.addLangDialog = true;
     },
     // 提交新增或编辑
@@ -149,23 +165,6 @@ export default {
       }
     },
 
-    // 提交编辑
-    async handleUpdate(form) {
-      const res = await this.$http.post("/api/PushSettings/Update", form);
-      if (res.data.result.code === 200) {
-        this.close();
-        this.$common.handlerMsgState({
-          msg: "编辑成功",
-          type: "success"
-        });
-        this.getPushSettingsPage();
-      } else {
-        this.$common.handlerMsgState({
-          msg: res.data.result.msg,
-          type: "danger"
-        });
-      }
-    },
     // 单选框事件
     handleRadio(item) {
       this.dataRadio = item;
@@ -211,10 +210,47 @@ export default {
     // 关闭新增或编辑
     close() {
       this.addLangDialog = false;
+    },
+    // 获取推送类型
+    async getMessageTeplateSettingsByPage() {
+      const fd = {
+        skipCount: 1,
+        maxResultCount: 999,
+        messageModel: this.parameter
+      };
+
+      const res = await this.$http.post(
+        "/api/PushSettings/MessageTeplateSettingsByPage",
+        fd
+      );
+      if (res.data.result.code === 200) {
+        let list = res.data.result.item.items;
+        for (let i = 0; i < list.length; i++) {
+          if (list[i].messageExt > -1) {
+            this.messageExtType.push({
+              messageExt: list[i].messageExt,
+              title: list[i].title
+            });
+          }
+        }
+      }
+    },
+    // 获取消息类型系统参数
+    async getServiceConfigurationList() {
+      const res = await this.$http.post("/api/ServiceConfigurationList", {
+        basisParameters: "OrderMessageModel"
+      });
+      if (res.data.result.code === 200) {
+        res.data.result.item.forEach(val => {
+          if (val.itemCode === this.userInfo.commparnyList[0].companyType) {
+            this.parameter = val.parameter;
+          }
+        });
+
+        this.getMessageTeplateSettingsByPage();
+      }
     }
-  },
-  created() {},
-  mounted() {}
+  }
 };
 </script>
 <style scoped lang="less">
