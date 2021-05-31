@@ -857,12 +857,13 @@ export default {
   methods: {
     // 提交扫码加购
     async submitCode() {
+      this.$store.commit("updateAppLoading", true);
       const res = await this.$http.post("/api/AddShoppingCart", {
         userID: this.userInfo.userInfo.id,
         companyNumber: this.userInfo.commparnyList[0].companyNumber,
         // sourceFrom: "active",
         sourceFrom: "QRCodeSearch",
-        number: this.QRcodeValue.productCount,
+        number: 1,
         currency: "￥",
         Price: 0,
         shopType: "companysamples",
@@ -882,6 +883,7 @@ export default {
       }
 
       this.showCodeValue = false;
+      // this.$store.commit("updateAppLoading", true);
     },
     // 发送上传图片
     async httpFile(file) {
@@ -1144,14 +1146,20 @@ export default {
           const fd = {
             userID: this.userInfo.userInfo.id,
             companyNumber: this.userInfo.commparnyList[0].companyNumber,
-            sourceFrom: "active",
+            // sourceFrom: "active",
             shopType: "companysamples",
             productNumber: productNumber.join()
           };
+          this.$store.commit("updateAppLoading", true);
           const res = await this.$http.post("/api/RemoveShoppingCart", fd);
           if (res.data.result.code === 200) {
+            for (let i = 0; i < selectProducts.length; i++) {
+              eventBus.$emit(
+                "resetProductIsShop",
+                selectProducts[i].productJson
+              );
+            }
             this.getShoppingCartList();
-            eventBus.$emit("searchProducts");
             this.$common.handlerMsgState({
               msg: "删除成功",
               type: "success"
@@ -1162,6 +1170,7 @@ export default {
               type: "danger"
             });
           }
+          this.$store.commit("updateAppLoading", false);
         })
         .catch(() => {
           this.$common.handlerMsgState({
@@ -1322,6 +1331,10 @@ export default {
             let productNumber = [];
             for (let i = 0; i < selectProducts.length; i++) {
               productNumber.push(selectProducts[i].productJson.productNumber);
+              eventBus.$emit(
+                "resetProductIsShop",
+                selectProducts[i].productJson
+              );
             }
             const data = {
               userID: this.userInfo.userInfo.id,
@@ -1333,13 +1346,12 @@ export default {
             const res = await this.$http.post("/api/RemoveShoppingCart", data);
             if (res.data.result.code === 200) {
               this.getShoppingCartList();
-              eventBus.$emit("searchProducts");
               // this.$common.handlerMsgState({
               //   msg: "删除成功",
               //   type: "success"
               // });
             }
-            this.$store.commit("resetShoppingCart", selectProducts);
+            // this.$store.commit("resetShoppingCart", selectProducts);
             this.subDialogVisible = false;
             const fd = {
               name: "/bsIndex/bsSampleQuotation",
@@ -1437,30 +1449,23 @@ export default {
           const totalEl = document.getElementById("totalBox");
           totalEl.style.width =
             document.getElementById("tableId").offsetWidth + 60 + "px";
+          this.$refs.myTableRef.toggleAllSelection();
         });
-        this.$refs.myTableRef.toggleAllSelection();
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
           type: "danger"
         });
       }
+      this.getClientList();
     }
   },
-
-  created() {
-    this.getSelectProductOfferFormulaList();
-    this.getSelectCompanyOffer();
-  },
-  mounted() {
-    this.getClientList();
-    this.getShoppingCartList();
+  async mounted() {
+    await this.getSelectProductOfferFormulaList();
+    await this.getSelectCompanyOffer();
+    await this.getShoppingCartList();
     eventBus.$on("handlergetClientList", () => {
       this.getShoppingCartList();
-    });
-
-    this.$nextTick(() => {
-      this.$refs.myTableRef.toggleAllSelection();
     });
     const totalEl = document.getElementById("totalBox");
     eventBus.$on("handlerLeft", left => {

@@ -44,14 +44,6 @@ export default {
         this.getGetSalesOrderDataStatistics();
         this.getGetSalesHotSample();
     }
-    const localKey = this.userInfo.uid;
-    let localShoppingCart = localStorage.getItem(localKey);
-    if (localShoppingCart) {
-      localShoppingCart = JSON.parse(localShoppingCart);
-      this.$store.commit("initShoppingCart", localShoppingCart);
-    } else {
-      this.$store.commit("initShoppingCart", []);
-    }
   },
   computed: {
     ...mapState(["userInfo"])
