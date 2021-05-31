@@ -302,7 +302,11 @@
               width="160"
               popper-class="more_btns"
               v-model="isShowMoreBtn[scope.row.id]"
-              v-if="table.actions && table.actions.length > 3 && scope.row.offerNumber[0] != 'S'"
+              v-if="
+                table.actions &&
+                  table.actions.length > 3 &&
+                  scope.row.offerNumber[0] != 'S'
+              "
             >
               <div class="more_btn">
                 <div class="more_btn_panel">
