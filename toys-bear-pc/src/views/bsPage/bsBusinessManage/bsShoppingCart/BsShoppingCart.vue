@@ -1150,6 +1150,12 @@ export default {
           };
           const res = await this.$http.post("/api/RemoveShoppingCart", fd);
           if (res.data.result.code === 200) {
+            for (let i = 0; i < selectProducts.length; i++) {
+              eventBus.$emit(
+                "resetProductIsShop",
+                selectProducts[i].productJson
+              );
+            }
             this.getShoppingCartList();
             eventBus.$emit("searchProducts");
             this.$common.handlerMsgState({
@@ -1322,6 +1328,10 @@ export default {
             let productNumber = [];
             for (let i = 0; i < selectProducts.length; i++) {
               productNumber.push(selectProducts[i].productJson.productNumber);
+              eventBus.$emit(
+                "resetProductIsShop",
+                selectProducts[i].productJson
+              );
             }
             const data = {
               userID: this.userInfo.userInfo.id,
@@ -1339,7 +1349,7 @@ export default {
               //   type: "success"
               // });
             }
-            this.$store.commit("resetShoppingCart", selectProducts);
+            // this.$store.commit("resetShoppingCart", selectProducts);
             this.subDialogVisible = false;
             const fd = {
               name: "/bsIndex/bsSampleQuotation",
@@ -1437,8 +1447,8 @@ export default {
           const totalEl = document.getElementById("totalBox");
           totalEl.style.width =
             document.getElementById("tableId").offsetWidth + 60 + "px";
+          this.$refs.myTableRef.toggleAllSelection();
         });
-        this.$refs.myTableRef.toggleAllSelection();
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -1457,10 +1467,6 @@ export default {
     this.getShoppingCartList();
     eventBus.$on("handlergetClientList", () => {
       this.getShoppingCartList();
-    });
-
-    this.$nextTick(() => {
-      this.$refs.myTableRef.toggleAllSelection();
     });
     const totalEl = document.getElementById("totalBox");
     eventBus.$on("handlerLeft", left => {

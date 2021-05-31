@@ -6,7 +6,7 @@ module.exports = {
     // wsBaseUrl: "ws://124.71.6.26:8090/ws?UserId="
 
     // 老测试
-    hosturl: "http://139.9.71.135:8080/",
+    hosturl: "http://139.9.71.135:8080",
     loginUrl: "http://139.9.71.135:8080/#/me",
     wsBaseUrl: "ws://139.9.71.135:8090/ws?UserId="
 

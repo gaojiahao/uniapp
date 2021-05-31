@@ -1,6 +1,11 @@
 <template>
   <div class="msgTypeBox">
-    <el-form label-width="100px" ref="myForm" :rules="myRules" :model="formData">
+    <el-form
+      label-width="100px"
+      ref="myForm"
+      :rules="myRules"
+      :model="formData"
+    >
       <div class="myScroll">
         <el-scrollbar style="height: 100%;" ref="myScrollbar">
           <el-form-item label="角色：" prop="messageModel">
