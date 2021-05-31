@@ -1157,7 +1157,6 @@ export default {
               );
             }
             this.getShoppingCartList();
-            eventBus.$emit("searchProducts");
             this.$common.handlerMsgState({
               msg: "删除成功",
               type: "success"
@@ -1343,7 +1342,6 @@ export default {
             const res = await this.$http.post("/api/RemoveShoppingCart", data);
             if (res.data.result.code === 200) {
               this.getShoppingCartList();
-              eventBus.$emit("searchProducts");
               // this.$common.handlerMsgState({
               //   msg: "删除成功",
               //   type: "success"
