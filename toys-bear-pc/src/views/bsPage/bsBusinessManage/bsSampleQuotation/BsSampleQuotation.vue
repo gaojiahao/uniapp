@@ -102,7 +102,7 @@
 <script>
 import bsExportOrder from "@/components/commonComponent/exportOrderComponent/gongsizhaoyangbaojia.vue";
 import eventBus from "@/assets/js/common/eventBus.js";
-import bsTables from "@/components/table";
+import bsTables from "@/components/tableBtn";
 import { mapState } from "vuex";
 import { proEnv, testEnv, devEnv } from "@/assets/js/config/config.js";
 export default {
@@ -258,6 +258,9 @@ export default {
           },
           {
             type: "warning",
+            hidden(row) {
+              return row.offerNumber[0] != "S" ? false:true;
+            },
             textWrapper() {
               return "导出";
             },
@@ -268,6 +271,9 @@ export default {
           {
             type: "warning",
             color: "#F9AE3E",
+            hidden(row) {
+              return row.offerNumber[0] != "S" ? false:true;
+            },
             textWrapper() {
               return "分享";
             },
