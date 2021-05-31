@@ -1445,6 +1445,7 @@ export default {
           type: "danger"
         });
       }
+      this.getClientList();
     }
   },
 
@@ -1453,7 +1454,6 @@ export default {
     this.getSelectCompanyOffer();
   },
   mounted() {
-    this.getClientList();
     this.getShoppingCartList();
     eventBus.$on("handlergetClientList", () => {
       this.getShoppingCartList();

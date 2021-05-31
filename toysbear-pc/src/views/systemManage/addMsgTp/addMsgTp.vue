@@ -1,9 +1,9 @@
 <template>
   <div class="msgTypeBox">
-    <el-form label-width="100px" :model="formData">
+    <el-form label-width="100px" ref="myForm" :rules="myRules" :model="formData">
       <div class="myScroll">
-        <el-scrollbar style="height: 100%;">
-          <el-form-item label="角色：">
+        <el-scrollbar style="height: 100%;" ref="myScrollbar">
+          <el-form-item label="角色：" prop="messageModel">
             <el-select
               clearable
               v-model="formData.messageModel"
@@ -14,11 +14,11 @@
                 v-for="(item, index) in configList"
                 :key="index"
                 :label="item.itemText"
-                :value="item.itemCode"
+                :value="item.parameter"
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="消息编号：">
+          <el-form-item label="消息编号：" prop="messageExt">
             <div class="bangzuBox">
               <el-input v-model="formData.messageExt"></el-input>
               <div class="bangzu">
@@ -76,11 +76,7 @@
         </el-scrollbar>
       </div>
       <el-form-item>
-        <el-button
-          class="btnW"
-          type="primary"
-          @click="$emit('submit', formData)"
-        >
+        <el-button class="btnW" type="primary" @click="addSubmit(formData)">
           确定
         </el-button>
         <el-button class="btnW" @click="$emit('close')">取消</el-button>
@@ -110,13 +106,24 @@ export default {
             itemValue: 1
           }
         ]
+      },
+      myRules: {
+        messageModel: [
+          { required: true, message: "请选择", trigger: "change" }
+        ],
+        messageExt: [{ required: true, message: "请输入编号", trigger: "blur" }]
       }
     };
   },
   methods: {
+    // 提交
+    addSubmit(item) {
+      this.$refs.myForm.validate(valid => {
+        if (valid) this.$emit("submit", item);
+      });
+    },
     // 删除参数
     removeItemList(i) {
-      console.log(i);
       this.formData.itemList.splice(i, 1);
     },
     // 添加参数
@@ -124,6 +131,9 @@ export default {
       this.formData.itemList.push({
         itemText: "",
         itemValue: this.formData.itemList.length
+      });
+      this.$nextTick(() => {
+        this.$refs.myScrollbar.wrap.scrollTop = 99999;
       });
     }
   },
