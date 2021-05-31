@@ -63,6 +63,7 @@ export default {
         case "dontloadsharefactory":
           msg = "店铺产品总数";
           break;
+        case "QRCodeSearch":
         case "offerSharing":
           msg = "找样报价分享总数";
           break;

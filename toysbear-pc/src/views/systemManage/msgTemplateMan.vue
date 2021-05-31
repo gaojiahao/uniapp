@@ -107,6 +107,7 @@
           title="消息类型"
           :visible.sync="addVisible"
           v-if="addVisible"
+          class="addMsgDialog"
           width="475px"
         >
           <addMsgTp
@@ -293,6 +294,7 @@ export default {
 };
 </script>
 <style scoped lang="less">
+@deep: ~">>>";
 .searchBox {
   padding-top: 50px;
   box-sizing: border-box;
@@ -303,5 +305,20 @@ export default {
 .tableContent {
   padding-bottom: 20px;
   box-sizing: border-box;
+}
+@{deep} .addMsgDialog {
+  .el-dialog {
+    .el-dialog__body {
+      padding: 20px 0;
+      .myScroll {
+        .el-scrollbar {
+          .el-scrollbar__wrap {
+            padding: 0 20px;
+            overflow-x: hidden;
+          }
+        }
+      }
+    }
+  }
 }
 </style>
