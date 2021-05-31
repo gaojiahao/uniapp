@@ -236,8 +236,7 @@ export default {
 				if(!this.isMobile){
 					this.nowImg = this.productInfo.imgUrlList[0];
 					this.pc_img_index = 0;
-				}
-				if(this.productInfo.threeDimensional){ //有3d就默认显示3d
+				} else { //有3d就默认显示3d
 					this.is_show_pc_modal = true;
 				}
 			} else {

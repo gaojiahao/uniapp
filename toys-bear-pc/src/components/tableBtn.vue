@@ -210,19 +210,27 @@
               </div>
               <el-image
                 v-if="col.elImage"
-                :style="col.style"
+                style="width: 82px; height: 62px; min-width: 82px"
                 :src="isString(col.elImage(scope.row))"
                 fit="contain"
               >
-                <div slot="placeholder" class="image-slot" :style="col.style">
+                <div
+                  slot="placeholder"
+                  class="image-slot"
+                  style="width: 82px; height: 62px"
+                >
                   <img
-                    :style="col.style"
+                    style="width: 82px; height: 62px"
                     :src="require('@/assets/images/imgError.png')"
                   />
                 </div>
-                <div slot="error" :style="col.style" class="image-slot">
+                <div
+                  slot="error"
+                  class="image-slot"
+                  style="width: 82px; height: 62px"
+                >
                   <img
-                    :style="col.style"
+                    style="width: 82px; height: 62px"
                     :src="require('@/assets/images/imgError.png')"
                   />
                 </div>
@@ -262,9 +270,21 @@
       >
         <template slot-scope="scope">
           <div v-if="table.actions">
-            <template v-for="btn in table.actions">
+            <template v-for="(btn, index) in table.actions">
               <el-button
-                v-if="!btn.hidden || btn.hidden(scope.row)"
+                v-if="(!btn.hidden || btn.hidden(scope.row)) && index < 3"
+                :key="btn.index"
+                :type="btn.classWrapper(scope.row)"
+                :disabled="btn.disabledWrapper(scope.row)"
+                size="mini"
+                @click="btn.methods(scope.row)"
+                :icon="btn.icon"
+                :style="{ margin: btn.margin }"
+              >
+                {{ btn.textWrapper(scope.row) }}
+              </el-button>
+              <el-button
+                v-if="btn.hidden(scope.row) && index > 2"
                 :key="btn.index"
                 :type="btn.classWrapper(scope.row)"
                 :disabled="btn.disabledWrapper(scope.row)"
@@ -276,6 +296,60 @@
                 {{ btn.textWrapper(scope.row) }}
               </el-button>
             </template>
+            <el-popover
+              trigger="hover"
+              placement="left-start"
+              width="160"
+              popper-class="more_btns"
+              v-model="isShowMoreBtn[scope.row.id]"
+              v-if="
+                table.actions &&
+                  table.actions.length > 3 &&
+                  scope.row.offerNumber[0] != 'S'
+              "
+            >
+              <div class="more_btn">
+                <div class="more_btn_panel">
+                  <template v-for="(btn, index) in table.actions">
+                    <div class="more_btn_item" v-if="index >= 3" :key="index">
+                      <el-button
+                        v-if="!btn.hidden(scope.row)"
+                        :key="btn.index"
+                        :type="btn.classWrapper(scope.row)"
+                        :disabled="btn.disabledWrapper(scope.row)"
+                        size="mini"
+                        @click="btn.methods(scope.row)"
+                        :icon="btn.icon"
+                        :style="{
+                          margin: btn.margin,
+                          backgroundColor: btn.color,
+                          borderColor: btn.color
+                        }"
+                        :class="[
+                          btn.class ? 'copy_btn_share' + scope.row.id : ''
+                        ]"
+                      >
+                        {{ btn.textWrapper(scope.row) }}
+                      </el-button>
+                    </div>
+                  </template>
+                </div>
+              </div>
+              <el-button
+                slot="reference"
+                icon="el-icon-more"
+                size="mini"
+                type="success"
+                :style="{
+                  backgroundColor: '#1DCFC3',
+                  color: '#ffffff',
+                  borderColor: '#1DCFC3',
+                  marginLeft: '10px',
+                  position: 'relative'
+                }"
+              >
+              </el-button>
+            </el-popover>
           </div>
         </template>
       </el-table-column>
@@ -316,7 +390,7 @@ import Vue from "vue";
 import eventBus from "@/assets/js/common/eventBus";
 import { mapState } from "vuex";
 export default {
-  name: "Table",
+  name: "TableBtn",
   props: {
     table: Object
   },
@@ -330,7 +404,10 @@ export default {
       isShoppingUpdate: false,
       canClick: true,
       templates: {},
-      item: null
+      item: null,
+      isShowMoreBtn: [],
+      openDelay: 0,
+      closeDelay: 200
     };
   },
   created() {
@@ -563,6 +640,23 @@ export default {
         return true;
       }
       return false;
+    },
+    getNoHiddenBtn(data) {
+      var length = 0;
+      for (var i = 0; i < data.length; i++) {
+        if (!data[i].hidden) {
+          length++;
+        }
+      }
+      console.log(length);
+      return length;
+    },
+    getNoHiddenBtns(data) {
+      var res = data.filter(item => {
+        return !item.hidden(item);
+      });
+      console.log(res);
+      return res;
     }
   }
 };
@@ -744,6 +838,37 @@ export default {
         margin-bottom: 5px;
       }
     }
+  }
+}
+.more_btn {
+  position: absolute;
+  // right: 80px;
+  // top: 12px;
+  // width: 120px;
+  right: -5px;
+  top: 0;
+  width: 80px;
+  background-color: #fff;
+  color: #333333;
+  font-size: 15px;
+  border-radius: 4px;
+  z-index: 200;
+  box-shadow: 0px 4px 15px 0px rgba(42, 69, 116, 0.25);
+  .more_btn_panel {
+    padding: 10px 8px 0px 12px;
+    .more_btn_item {
+      margin-bottom: 10px;
+    }
+  }
+  &::after {
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-left-color: white;
+    right: -15px;
+    top: 5px;
   }
 }
 </style>
