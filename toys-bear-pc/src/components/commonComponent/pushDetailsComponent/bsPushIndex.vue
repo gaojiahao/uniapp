@@ -7,10 +7,10 @@
     <div class="handerTop">
       <div class="flex_t">
         <p>
-          采购单号：<span class="pId">{{ itemList.offerNumber }} </span>
+          采购单号：<span class="pId">{{ item.offerNumber }} </span>
         </p>
         <p>
-          客户名称：<span>{{ itemList.customerName }} </span>
+          客户名称：<span>{{ item.linkman }} </span>
         </p>
         <p>
           业务员：<span style="color: #2d7fe4">{{ itemList.linkman }} </span>
@@ -86,10 +86,16 @@
         >
       </div>
     </div>
-    <bsPushDialogComponent
-      @handlePushDialog="handlePushDialog"
-      :pushDialog="pushDialog"
-    ></bsPushDialogComponent>
+
+    <el-dialog :title="title" :visible.sync="pushDialog" width="800px">
+      <bsPushDialogComponent
+        :item="item"
+        :multipleSelection="multipleSelection"
+        :orderData="orderData"
+        :pushList="pushList"
+        @handlePushDialog="handlePushDialog"
+      ></bsPushDialogComponent>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -121,34 +127,85 @@ export default {
       isGrid: "bsGridPushComponent",
       checkAll: false,
       pushDialog: false,
+      orderData: {
+        orderPushType: null,
+        orderNumber: null
+      },
       itemList: {},
+      title: null,
+      pushList: [],
       multipleSelection: [],
       tableData: [
-        {
-          id: 1,
-          checked: false,
-          name: "腾彩玩具有限公司",
-          phone: 222,
-          phoneNumber: 1232132
-        },
-        {
-          id: 2,
-          name: "玩具",
-          checked: false,
-          phone: 222,
-          phoneNumber: 1232132
-        },
-        {
-          id: 3,
-          name: "有限公司",
-          checked: false,
-          phone: 222,
-          phoneNumber: 1232132
-        }
+        // {
+        //   id: 1,
+        //   checked: false,
+        //   name: "腾彩玩具有限公司",
+        //   phone: 222,
+        //   phoneNumber: 1232132,
+        // },
+        // {
+        //   id: 2,
+        //   name: "玩具",
+        //   checked: false,
+        //   phone: 222,
+        //   phoneNumber: 1232132,
+        // },
+        // {
+        //   id: 3,
+        //   name: "有限公司",
+        //   checked: false,
+        //   phone: 222,
+        //   phoneNumber: 1232132,
+        // },
       ]
     };
   },
+  created() {},
+  mounted() {
+    this.getSendCompanyList();
+    this.getPushSettingsPage();
+  },
   methods: {
+    // 根据订单获取可以发送的接收者
+    async getSendCompanyList() {
+      switch (this.item.label) {
+        case "报价推送":
+          this.title = "报价推送";
+          this.orderData = {
+            orderPushType: 2,
+            orderNumber: this.item.offerNumber
+          };
+          break;
+        default:
+          this.$common.handlerMsgState({
+            msg: "该订单无法推送",
+            type: "danger"
+          });
+      }
+      const res = await this.$http.post("/api/SendCompanyList", this.orderData);
+      if (res.data.result.code === 200) {
+        for (let i = 0; i < res.data.result.item.length; i++) {
+          res.data.result.item[i].checked = false;
+        }
+        this.tableData = res.data.result.item;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
+    // 消息类型模板
+    async getPushSettingsPage() {
+      const fd = {
+        skipCount: 1,
+        maxResultCount: 99
+      };
+      const res = await this.$http.post("/api/PushSettings/ListByPage", fd);
+      if (res.data.result.code === 200) {
+        this.pushList = res.data.result.item.items;
+      }
+    },
     // 切换产品列表样式
     handerIsGrid(type) {
       this.isGrid = type;
@@ -181,6 +238,7 @@ export default {
         }
       }
     },
+
     // 打开/关闭推送弹框
     handlePushDialog(flag) {
       this.pushDialog = flag;

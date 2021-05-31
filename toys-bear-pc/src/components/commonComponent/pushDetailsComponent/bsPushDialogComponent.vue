@@ -1,110 +1,124 @@
 <template>
   <div class="bsPushDialogComponent">
-    <el-dialog
-      title="推送"
-      :visible.sync="pushDialog"
-      width="800px"
-      :before-close="closeDialog"
-    >
-      <div class="pushBox">
-        <div class="titleDar">
-          <p>主题</p>
-          <p>消息内容</p>
-
-          <p class="addTemplate" @click="addMsgTemplate">+新增推送模板</p>
-        </div>
-        <div class="msgList">
-          <ul class="item" v-for="item in arr" :key="item.index">
-            <li><el-radio v-model="radio" label=""></el-radio></li>
-            <li>{{ item.zt }}</li>
-            <li>{{ item.nr }}</li>
-          </ul>
-        </div>
-      </div>
-      <div class="magContent">
+    <div class="pushBox">
+      <div class="titleDar">
+        <p>类型</p>
         <p>消息内容</p>
-        <el-input
-          type="textarea"
-          placeholder="请输入内容"
-          v-model="textarea"
-          maxlength="100"
-          size="medium"
-          show-word-limit
-        >
-        </el-input>
+
+        <p class="addTemplate" @click="addMsgTemplate">+新增推送模板</p>
       </div>
-      <center style="margin-top: 10px">
-        <template>
-          <el-button type="primary">确定推送</el-button>
-          <el-button style="margin-left: 30px" plain @click="closeDialog"
-            >取消</el-button
-          >
-        </template>
-      </center>
-    </el-dialog>
+      <div class="msgList">
+        <ul class="item" v-for="item in pushList" :key="item.index">
+          <li class="title">
+            <el-radio
+              v-model="radio"
+              @change="handleRadio(item)"
+              :label="item.messageExt"
+            >
+              {{ item.title }}</el-radio
+            >
+          </li>
+          <li>{{ item.content }}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="magContent">
+      <p>消息内容</p>
+      <el-input
+        type="textarea"
+        placeholder="请输入内容"
+        v-model="textareaData"
+        maxlength="100"
+        size="medium"
+        show-word-limit
+      >
+      </el-input>
+    </div>
+    <center style="margin-top: 10px">
+      <template>
+        <el-button @click="handleConfirmPush" type="primary"
+          >确定推送</el-button
+        >
+        <el-button style="margin-left: 30px" plain @click="closeDialog"
+          >取消</el-button
+        >
+      </template>
+    </center>
 
     <!-- 新增编辑推送常用语dialog -->
     <el-dialog
       :title="dialogTitle"
       :visible.sync="addLangDialog"
       v-if="addLangDialog"
-      width="1200px"
+      width="800px"
     >
       <bsAddOfferFormulaLang
+        :messageExtType="messageExtType"
         :editRow="editRow"
         :isEdit="isEdit"
         @submit="submit"
+        @handleUpdate="handleUpdate"
         @close="close"
-      />
+      ></bsAddOfferFormulaLang>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import bsAddOfferFormulaLang from "@/components/bsComponents/bsPersonalManageComponent/bsAddOfferFormulaLang";
+import { mapState } from "vuex";
 export default {
   props: {
-    productList: {
-      type: Array
+    item: {
+      type: Object
     },
     pushDialog: {
       type: Boolean
+    },
+    pushList: {
+      type: Array
+    },
+    orderData: {
+      type: Object
+    },
+    multipleSelection: {
+      type: Array
     }
   },
   components: {
     bsAddOfferFormulaLang
   },
+  computed: {
+    ...mapState(["userInfo"])
+  },
   data() {
     return {
       radio: "1",
+      dataRadio: null,
       checkAll: false,
-      textarea: "",
+      textareaData: "",
+      messageExtType: [],
+      toCompanyNumber: [],
+      PushContent: null,
       isEdit: false,
       editRow: {},
       dialogTitle: "新增推送模板",
-      addLangDialog: false,
-      arr: [
-        {
-          zt: "报价专用，针对部分厂商的",
-          nr: "这是一条非常有诚意的采购信息1"
-        },
-        {
-          zt: "报价专用，针对部分厂商的",
-          nr: "这是一条非常有诚意的采购信息1"
-        },
-        {
-          zt: "报价专用，针对部分厂商的",
-          nr: "这是一条非常有诚意的采购信息1"
-        },
-        {
-          zt: "报价专用，针对部分厂商的",
-          nr: "这是一条非常有诚意的采购信息1"
-        },
-        {
-          zt: "报价专用，针对部分厂商的",
-          nr: "这是一条非常有诚意的采购信息1"
-        }
-      ]
+      addLangDialog: false
+      // arr: [
+      //   {
+      //     zt: "报价专用，针对部分厂商的",
+      //     nr: "这是一条非常有诚意的采购信息1",
+      //   },
+      //   {
+      //     zt: "报价专用，针对部分厂商的",
+      //     nr: "这是一条非常有诚意的采购信息1",
+      //   },
+      //   {
+      //     zt: "报价专用，针对部分厂商的",
+      //     nr: "这是一条非常有诚意的采购信息1",
+      //   },
+
+      // ],
     };
   },
   methods: {
@@ -126,8 +140,67 @@ export default {
           msg: "新增成功",
           type: "success"
         });
-
         this.getPushSettingsPage();
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
+
+    // 提交编辑
+    async handleUpdate(form) {
+      const res = await this.$http.post("/api/PushSettings/Update", form);
+      if (res.data.result.code === 200) {
+        this.close();
+        this.$common.handlerMsgState({
+          msg: "编辑成功",
+          type: "success"
+        });
+        this.getPushSettingsPage();
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
+    // 单选框事件
+    handleRadio(item) {
+      this.dataRadio = item;
+      // console.log(item, "单选框事件");
+    },
+    // 确定推送
+    async handleConfirmPush() {
+      for (let i = 0; i < this.multipleSelection.length; i++) {
+        this.toCompanyNumber.push(this.multipleSelection[i].companyNumber);
+      }
+      if (this.textareaData != "") {
+        this.PushContent = this.textareaData;
+      } else {
+        this.PushContent = this.dataRadio.content;
+      }
+      const data = {
+        senderTo: "Supplier", //暂时写死
+        senderFrom: this.userInfo.commparnyList[0].companyType,
+        companyNumber: this.userInfo.commparnyList[0].companyNumber,
+        phoneNumber: this.userInfo.phoneNumber,
+        orderPushType: this.orderData.orderPushType,
+        orderNumber: this.item.offerNumber,
+        toCompanyNumber: this.toCompanyNumber,
+        PushContent: this.PushContent,
+        messageExt: this.dataRadio.messageExt,
+        messageModel: this.dataRadio.messageModel,
+        messageTitle: this.dataRadio.title
+      };
+      const res = await this.$http.post("/api/SendPushTemplate", data);
+      if (res.data.result.code === 200) {
+        this.closeDialog();
+        this.$common.handlerMsgState({
+          msg: "推送成功",
+          type: "success"
+        });
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -149,7 +222,6 @@ export default {
 .bsPushDialogComponent {
   @{deep} .pushBox {
     height: 270px;
-
     .titleDar {
       height: 50px;
       padding: 0 20px;
@@ -171,6 +243,9 @@ export default {
         height: 50px;
         display: flex;
         align-items: center;
+        .title {
+          width: 230px;
+        }
         li {
           margin-right: 20px;
         }
