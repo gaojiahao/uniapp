@@ -2,8 +2,18 @@
   <div class="bsBusinessMsg">
     <div class="topLaout">
       <div class="tagItem">
-        <i class="icon home"></i>
-        <span>玩具圈首页</span>
+        <el-avatar
+          style="width:28px;height:28px;margin-right:15px;"
+          :src="require('@/assets/images/2055.png')"
+        ></el-avatar>
+        <span>全部业务</span>
+      </div>
+      <div class="tagItem" v-for="(item, i) in businessConversations" :key="i">
+        <el-avatar
+          style="width:28px;height:28px;margin-right:15px;"
+          :src="item.icon"
+        ></el-avatar>
+        <span>{{ item.title }}</span>
       </div>
     </div>
   </div>
