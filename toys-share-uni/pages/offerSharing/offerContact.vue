@@ -57,7 +57,12 @@
 							<b-row class="u_row">
 								<b-col cols="12" sm="6">
 									<view class="map">
-										<map style="width: 100%; height: 300px;" :latitude="latitude" :longitude="longitude" :markers="covers"></map>
+										<!-- <map style="width: 100%; height: 300px;" :latitude="latitude" :longitude="longitude" :markers="covers"></map> -->
+										<BMapComponent
+											ref="mapBaiduMap"
+											:isMapClick="审核"
+											:address="广东省汕头市澄海区莱美路港口路段"
+										  ></BMapComponent>
 									</view>
 								</b-col>
 								<b-col cols="12" sm="6">
@@ -100,11 +105,12 @@
 </template>
 
 <script>
+import BMapComponent from "@/components/x-map.vue";
 import util from "@/common/js/util.js"
 export default {
 	name: "OfferContact",
 	components: {
-		
+		BMapComponent
 	},
 	data() {
 		return {
@@ -122,6 +128,10 @@ export default {
 			}],
 			isMobile:false,   //是否移动端
 			background:{ background:'#5365f4'},
+			defaultContact:{
+				cName:'小竹熊玩具云科技公司',
+				
+			}
 		}
 	},
 	methods:{

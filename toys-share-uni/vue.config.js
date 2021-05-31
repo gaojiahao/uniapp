@@ -11,6 +11,9 @@ module.exports = {
 					return JSON.stringify(tfPages.routes)
 				}, true )
 			})
-		]
+		],
+		externals: {
+			BMap: "BMap"
+		}
 	}
 }
