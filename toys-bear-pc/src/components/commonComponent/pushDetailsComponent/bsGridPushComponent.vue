@@ -25,7 +25,7 @@
           </el-image>
         </div>
         <div class="right">
-          <h4>{{ item.name }}</h4>
+          <h4>{{ item.companyName }}</h4>
           <p>联系电话：{{ item.phoneNumber }}</p>
           <p class="onlineConsultation" @click="toNews">
             <img src="~@/assets/images/consult.png" alt />
@@ -77,6 +77,7 @@ export default {
       this.$router.push("/bsIndex/bsNews");
       this.$store.commit("myAddTab", fd);
     },
+    // 单选
     handleChecked(value) {
       let arr = this.plantList.filter(item => {
         return item.checked === true;
