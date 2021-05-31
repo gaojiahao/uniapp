@@ -98,7 +98,7 @@
 				<view class="slot-content">
 					<view class="sm_btn_item">
 						<view class="item active">
-							<u-icon name="zhuanfa" @click="change_pc_modal_zoom"></u-icon>
+							<u-icon name="fangda" custom-prefix="custom-icon" @click="change_pc_modal_zoom"></u-icon>
 						</view>
 						<view class="item">
 							<u-icon name="close" @click="close_pc_modal"></u-icon>
@@ -208,13 +208,14 @@ export default {
 		},
 		//to分享首页
 		toSharing(){
-			var id = uni.getStorageSync('offer_sharing_id');
-			this.$Router.push({
-			    path:'/offerSharing',
-				query:{
-					id:id
-				}
-			})
+			// var id = uni.getStorageSync('offer_sharing_id');
+			// this.$Router.push({
+			//     path:'/offerSharing',
+			// 	query:{
+			// 		id:id
+			// 	}
+			// })
+			window.history.go(-1);
 		},
 		//获取产品信息
 		async getProductByProductNumber() {
@@ -237,7 +238,9 @@ export default {
 					this.nowImg = this.productInfo.imgUrlList[0];
 					this.pc_img_index = 0;
 				} else { //有3d就默认显示3d
-					this.is_show_pc_modal = true;
+					if(this.productInfo.threeDimensional){
+						this.is_show_pc_modal = true;
+					}
 				}
 			} else {
 				this.$message.error(res.result.msg);

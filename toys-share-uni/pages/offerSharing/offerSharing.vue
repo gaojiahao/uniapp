@@ -207,8 +207,8 @@
 							<view class="tool_bar">
 								<template v-if="!isMobile">
 									<view class="tool_bar_item" :class="[searchType=='zonghe'?'active':'']" @click="change_search_type('zonghe')">综合</view>
-									<view class="tool_bar_item" :class="[searchType=='price'?'active':'']" @click="change_search_type('price')">单价<u-icon :name="sortOrder < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
-									<view class="tool_bar_item" :class="[searchType=='time'?'active':'']" @click="change_search_type('time')">时间<u-icon :name="sortType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+									<view class="tool_bar_item" :class="[searchType=='price'?'active':'']" @click="change_search_type('price')">单价<u-icon :name="sortType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+									<view class="tool_bar_item" :class="[searchType=='time'?'active':'']" @click="change_search_type('time')">时间<u-icon :name="sortOrder < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
 									<view class="tool_bar_item grid" :class="[listShowType=='grid'?'active':'']" @click="change_show_type('grid')"><u-icon name="grid"></u-icon></view>
 									<view class="tool_bar_item grid" :class="[listShowType=='list'?'active':'']" @click="change_show_type('list')"><u-icon name="list"></u-icon></view>
 									<view class="tool_bar_item search">
@@ -248,8 +248,8 @@
 						<template v-if="isMobile">
 							<view class="tool_bar_mobile">
 								<view class="tool_bar_item" :class="[searchType=='zonghe'?'active':'']" @click="change_search_type('zonghe')">综合</view>
-								<view class="tool_bar_item" :class="[searchType=='price'?'active':'']" @click="change_search_type('price')">单价<u-icon :name="sortOrder < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
-								<view class="tool_bar_item" :class="[searchType=='time'?'active':'']" @click="change_search_type('time')">时间<u-icon :name="sortType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+								<view class="tool_bar_item" :class="[searchType=='price'?'active':'']" @click="change_search_type('price')">单价<u-icon :name="sortType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+								<view class="tool_bar_item" :class="[searchType=='time'?'active':'']" @click="change_search_type('time')">时间<u-icon :name="sortOrder < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
 								<view class="tool_bar_item_right">
 									<view class="tool_bar_item grid" :class="[listShowType=='grid'?'active':'']" @click="change_show_type('grid')"><u-icon name="grid"></u-icon></view>
 									<view class="tool_bar_item grid" :class="[listShowType=='list'?'active':'']" @click="change_show_type('list')"><u-icon name="list"></u-icon></view>
@@ -259,8 +259,8 @@
 						<view class="product_list">
 							<b-row v-if="listShowType=='grid'" no-gutters>
 								<b-col cols="6" sm="3" v-for="(item,index) in productList" :key='index'>
-									<view class="product_list_item" @click="toProductDetail(item.id)" tap="toProductDetail(item.id)">
-										<view class="product_list_img">
+									<view class="product_list_item">
+										<view class="product_list_img" @click="toProductDetail(item.id)" @tap="toProductDetail(item.id)">
 											<image class="img" :src="item.imageUrl"></image>
 										</view>
 										<view class="product_list_info">
@@ -282,9 +282,9 @@
 							</b-row>
 							<u-row v-else-if="listShowType=='list'" class="u_row">
 								<u-col span="12" v-for="(item,index) in productList" :key='index'>
-									<b-row :style="isMobile ?{border: '1px solid #dcdfe6',borderRadius: '5px',marginBottom:'5px'}:{borderBottom: '1px solid #e9e9e9'}" class="product_list_item2" @click="toProductDetail(item.id)">
+									<b-row :style="isMobile ?{border: '1px solid #dcdfe6',borderRadius: '5px',marginBottom:'5px'}:{borderBottom: '1px solid #e9e9e9'}" class="product_list_item2">
 										<b-col cols="6" sm="2">
-											<image :src="item.imageUrl" class="product_list_img2"></image>
+											<image :src="item.imageUrl" class="product_list_img2" @click="toProductDetail(item.id)" @tap="toProductDetail(item.id)"></image>
 										</b-col>
 										<b-col cols="6" sm="3">
 											<view style="margin-left: 40px;" v-if="!isMobile">
@@ -310,7 +310,7 @@
 												<view class="product_list_info_text2">体积/材积：<span>{{item.bulk_stere}}(CBM)/{{item.bulk_feet}}(CUFT)</span></view>
 											</view>
 											<view v-else>
-												<view class="product_list_info_text2">包装方式：<span>{{item.chinesePack}}</span></view>
+												<view class="product_list_info_text2">包装方式：<span>{{item.ch_pa}}</span></view>
 												<view class="product_list_info_text2">样品规格：<span>{{item.pr_le}}x{{item.pr_wi}}x{{item.pr_hi}}(cm)</span></view>
 												<view class="product_list_info_text2">包装规格：<span>{{item.in_le}}x{{item.in_wi}}x{{item.in_hi}}(cm)</span></view>
 												<view class="product_list_info_text2">外箱规格：<span>{{item.ou_le}}x{{item.ou_wi}}x{{item.ou_hi}}(cm)</span></view>
@@ -403,12 +403,12 @@ export default {
 				this.sortType = 0;
 			} else if(type=='price'){
 				this.searchType = type;
-				this.sortOrder = this.sortOrder == 1 ? 2:1;
-				this.sortType = 1;
-			} else if(type=='time'){
-				this.searchType = type;
 				this.sortOrder = 1;
 				this.sortType = this.sortType == 1 ? 2:1;
+			} else if(type=='time'){
+				this.searchType = type;
+				this.sortOrder = this.sortOrder == 1 ? 2:1;
+				this.sortType = 1;
 			}
 			this.getProductOfferDetailPage();
 		},
@@ -420,6 +420,19 @@ export default {
 		//修改显示类型
 		change_show_type(type){
 			this.listShowType = type;
+			var me = this;
+			const fd = {
+				skipCount: me.currentPage,
+				maxResultCount: me.pageSize,
+				offerNumber: uni.getStorageSync('offer_sharing_id'),
+				categoryNumber: me.currentCate && me.currentCate.id,
+				keyword: me.keyword,
+				sortOrder: me.sortOrder,
+				sortType: me.sortType,
+				searchType:me.searchType,
+				listShowType:me.listShowType,
+			};
+			uni.setStorageSync('offer_search'+this.id,JSON.stringify(fd));
 		},
 		//获取报价信息
 		async getProductOfferByNumber() {
@@ -432,6 +445,7 @@ export default {
 					...res.result.item,
 					modifyOn:res.result.item.modifyOn?res.result.item.modifyOn.replace(/T.*/, "") : "",
 				};
+				uni.setStorageSync('offer_sharing_companyNumber', this.sampleInfo.companyNumber);
 			} else {
 				// this.$message.error(res.result.msg);
 			}

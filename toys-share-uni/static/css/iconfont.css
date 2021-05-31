@@ -1,8 +1,8 @@
 @font-face {
   font-family: "custom-icon"; /* Project id 2569252 */
-  src: url('@/static/css/iconfont.woff2?t=1621910766647') format('woff2'),
-       url('@/static/css/iconfont.woff?t=1621910766647') format('woff'),
-       url('@/static/css/iconfont.ttf?t=1621910766647') format('truetype');
+  src: url('@/static/css/iconfont.woff2?t=1622442985594') format('woff2'),
+       url('@/static/css/iconfont.woff?t=1622442985594') format('woff'),
+       url('@/static/css/iconfont.ttf?t=1622442985594') format('truetype');
 }
 
 .custom-icon {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.custom-icon-fangda:before {
+  content: "\e62d";
 }
 
 .custom-icon-fanhui:before {

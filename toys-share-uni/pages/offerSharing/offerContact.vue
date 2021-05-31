@@ -57,21 +57,21 @@
 							<b-row class="u_row">
 								<b-col cols="12" sm="6">
 									<view class="map">
-										<!-- <map style="width: 100%; height: 300px;" :latitude="latitude" :longitude="longitude" :markers="covers"></map> -->
 										<BMapComponent
 											ref="mapBaiduMap"
-											:isMapClick="审核"
-											:address="广东省汕头市澄海区莱美路港口路段"
+											isMapClick="审核"
+											:address="defaultContact.contactAddress"
 										  ></BMapComponent>
 									</view>
 								</b-col>
 								<b-col cols="12" sm="6">
 									<view class="info">
 										<view class="item title">联系方式</view>
-										<view class="item">公司名称：<text>小竹熊玩具云科技公司</text></view>
-										<view class="item">联系人：<text>18902747007</text></view>
-										<view class="item">邮箱：<text>aly@alytrading.com</text></view>
-										<view class="item">地址：<text>广东省汕头市澄海区莱美路港口路段</text></view>
+										<view class="item">公司名称：<text>{{defaultContact.companyName}}</text></view>
+										<view class="item">联系人：<text>{{defaultContact.contactName}}</text></view>
+										<view class="item">联系电话：<text>{{defaultContact.phoneNumber||defaultContact.telephone}}</text></view>
+										<view class="item">邮箱：<text>{{defaultContact.email}}</text></view>
+										<view class="item">地址：<text>{{defaultContact.contactAddress}}</text></view>
 									</view>
 								</b-col>
 							</b-row>
@@ -87,15 +87,21 @@
 			<u-navbar back-text="" title="联系方式" :background="background" title-color="#ffffff" back-icon-color="#ffffff"></u-navbar>
 			<view class="mobile_head">
 				<view class="map">
-					<map style="width: 100%; height: 300px;" :latitude="latitude" :longitude="longitude" :markers="covers"></map>
+					<!-- <map style="width: 100%; height: 300px;" :latitude="latitude" :longitude="longitude" :markers="covers"></map> -->
+					<BMapComponent
+						ref="mapBaiduMap"
+						isMapClick="审核"
+						:address="defaultContact.contactAddress"
+					  ></BMapComponent>
 				</view>
 			</view>
 			<view class="mobile_content">
 				<view class="item title">联系方式</view>
-				<view class="item">公司名称：<text>小竹熊玩具云科技公司</text></view>
-				<view class="item">联系人：<text>18902747007</text></view>
-				<view class="item">邮箱：<text>aly@alytrading.com</text></view>
-				<view class="item">地址：<text>广东省汕头市澄海区莱美路港口路段</text></view>
+				<view class="item">公司名称：<text>{{defaultContact.companyName}}</text></view>
+				<view class="item">联系人：<text>{{defaultContact.contactName}}</text></view>
+				<view class="item">联系电话：<text>{{defaultContact.phoneNumber||defaultContact.telephone}}</text></view>
+				<view class="item">邮箱：<text>{{defaultContact.email}}</text></view>
+				<view class="item">地址：<text>{{defaultContact.contactAddress}}</text></view>
 			</view>
 			<view class="footer">
 				<view class="title">Copyright©2021 深圳小竹熊科技有限公司 粤ICP备13031421号-4</view>
@@ -129,8 +135,12 @@ export default {
 			isMobile:false,   //是否移动端
 			background:{ background:'#5365f4'},
 			defaultContact:{
-				cName:'小竹熊玩具云科技公司',
-				
+				companyName:'小竹熊玩具云科技公司',
+				contactName:'李小姐',
+				phoneNumber:'',
+				telephone:'18902747007',
+				email:'aly@alytrading.com',
+				contactAddress:'广东省汕头市澄海区莱美路港口路段',
 			}
 		}
 	},
@@ -145,17 +155,31 @@ export default {
 		},
 		//to分享首页
 		toSharing(){
-			var id = uni.getStorageSync('offer_sharing_id');
-			this.$Router.push({
-			    path:'/offerSharing',
-				query:{
-					id:id
-				}
-			})
+			// var id = uni.getStorageSync('offer_sharing_id');
+			// this.$Router.push({
+			//     path:'/offerSharing',
+			// 	query:{
+			// 		id:id
+			// 	}
+			// })
+			window.history.go(-1);
+		},
+		//获取联系方式
+		async getContactInformationListShare(){
+			var me = this;
+			const res = await me.$u.api.ContactInformationListShare({
+				CompanyNumber: uni.getStorageSync('offer_sharing_companyNumber')
+			});
+			if (res.result.code === 200) {
+				this.defaultContact = res.result.item;
+			} else {
+				// this.$message.error(res.result.msg);
+			}
 		},
 		//初始化
 		async init(){
 			this.isMobile=util.isMobile();
+			this.getContactInformationListShare();
 		}
 	},
 	mounted() {
