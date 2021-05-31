@@ -58,6 +58,7 @@ export default {
   methods: {},
   filters: {
     filterCodeType(val) {
+      console.log(val);
       let msg;
       switch (val) {
         case "dontloadsharefactory":
@@ -65,6 +66,7 @@ export default {
           break;
         case "QRCodeSearch":
         case "offerSharing":
+        case "offersharing":
           msg = "找样报价分享总数";
           break;
         default:
@@ -74,7 +76,9 @@ export default {
     }
   },
   created() {},
-  mounted() {}
+  mounted() {
+    console.log(this.QRcodeValue);
+  }
 };
 </script>
 <style scoped lang="less">

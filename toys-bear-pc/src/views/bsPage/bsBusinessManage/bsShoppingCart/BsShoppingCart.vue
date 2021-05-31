@@ -857,12 +857,13 @@ export default {
   methods: {
     // 提交扫码加购
     async submitCode() {
+      this.$store.commit("updateAppLoading", true);
       const res = await this.$http.post("/api/AddShoppingCart", {
         userID: this.userInfo.userInfo.id,
         companyNumber: this.userInfo.commparnyList[0].companyNumber,
         // sourceFrom: "active",
         sourceFrom: "QRCodeSearch",
-        number: this.QRcodeValue.productCount,
+        number: 1,
         currency: "￥",
         Price: 0,
         shopType: "companysamples",
@@ -882,6 +883,7 @@ export default {
       }
 
       this.showCodeValue = false;
+      // this.$store.commit("updateAppLoading", true);
     },
     // 发送上传图片
     async httpFile(file) {
@@ -1148,6 +1150,7 @@ export default {
             shopType: "companysamples",
             productNumber: productNumber.join()
           };
+          this.$store.commit("updateAppLoading", true);
           const res = await this.$http.post("/api/RemoveShoppingCart", fd);
           if (res.data.result.code === 200) {
             for (let i = 0; i < selectProducts.length; i++) {
@@ -1167,6 +1170,7 @@ export default {
               type: "danger"
             });
           }
+          this.$store.commit("updateAppLoading", false);
         })
         .catch(() => {
           this.$common.handlerMsgState({
@@ -1456,13 +1460,10 @@ export default {
       this.getClientList();
     }
   },
-
-  created() {
-    this.getSelectProductOfferFormulaList();
-    this.getSelectCompanyOffer();
-  },
-  mounted() {
-    this.getShoppingCartList();
+  async mounted() {
+    await this.getSelectProductOfferFormulaList();
+    await this.getSelectCompanyOffer();
+    await this.getShoppingCartList();
     eventBus.$on("handlergetClientList", () => {
       this.getShoppingCartList();
     });
