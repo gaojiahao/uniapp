@@ -137,12 +137,12 @@
 		z-index: 10000;
 		.action_text{
 			font-size: 40px;
-			color: #333333;
+			color: #666666;
 			text-align: center;
 			vertical-align: middle;
 			width: 45px;
 			height: 40px;
-			line-height: 48px;
+			line-height: 43px;
 		}
 	}
 	.next{
@@ -158,12 +158,12 @@
 		z-index: 10000;
 		.action_text{
 			font-size: 40px;
-			color: #333333;
+			color: #666666;
 			text-align: center;
 			vertical-align: middle;
 			width: 55px;
 			height: 40px;
-			line-height: 48px;
+			line-height: 43px;
 		}
 	}
 	.swiperPanel {

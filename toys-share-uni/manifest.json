@@ -72,7 +72,7 @@
         "template" : "template.h5.html",
         "domain" : "http://www.toysbear.com",
         "router" : {
-            "base" : "/share/"
+            "base" : ""
         },
         "sdkConfigs" : {
             "maps" : {
@@ -82,7 +82,7 @@
             }
         },
         "devServer" : {
-            "https" : true
+            "https" : false
         }
     }
 }

@@ -12,11 +12,21 @@
 						凯乐智玩具工厂
 					</view>
 					<view class="menu">
-						<view class="menu_item active">首页</view>
-						<view class="menu_item">3D产品</view>
-						<view class="menu_item">推荐产品</view>
-						<view class="menu_item">全部产品</view>
-						<view class="menu_item">联系方式</view>
+						<my-link to="{path: '/supplierSharing'}" navType="pushTab">
+							<view class="menu_item active">首页</view>
+						</my-link>
+						<my-link to="{path: '/supplierSharingList',query: {type: 'threeD'}}" navType="pushTab">
+							<view class="menu_item">3D产品</view>
+						</my-link>
+						<my-link to="{path: '/supplierSharingList',query: {type: 'tuijian'}}" navType="pushTab">
+							<view class="menu_item">推荐产品</view>
+						</my-link>
+						<my-link to="{path: '/supplierSharingList',query: {type: 'all'}}" navType="pushTab">
+							<view class="menu_item">全部产品</view>
+						</my-link>
+						<my-link to="{path: '/supplierSharingContact',query: {type: 'tuijian'}}" navType="pushTab">
+							<view class="menu_item">联系方式</view>
+						</my-link>
 					</view>
 				</view>
 			</view>

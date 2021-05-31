@@ -68,6 +68,29 @@
 		{
 			"path": "pages/supplierSharing/supplierSharing",	//厂商分享
 			"aliasPath":"/supplierSharing",
+			"name":"supplierSharing",
+			"style": {
+				"navigationBarTitleText": "厂商分享",
+				"app-plus": {
+					"titleNView": false //禁用原生导航栏
+				}
+			}
+		},
+		{
+			"path": "pages/supplierSharing/supplierSharingList",	//厂商分享
+			"aliasPath":"/supplierSharingList",
+			"name":"supplierSharingList",
+			"style": {
+				"navigationBarTitleText": "厂商分享",
+				"app-plus": {
+					"titleNView": false //禁用原生导航栏
+				}
+			}
+		},
+		{
+			"path": "pages/supplierSharing/supplierSharingContact",	//厂商分享
+			"aliasPath":"/supplierSharingContact",
+			"name":"supplierSharingContact",
 			"style": {
 				"navigationBarTitleText": "厂商分享",
 				"app-plus": {
