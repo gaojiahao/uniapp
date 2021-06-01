@@ -20,12 +20,12 @@
         <p>
           状态：<span
             :style="{
-              color: orderData.status == 0 ? '#3368A9' : '#2D7FE4'
+              color: orderData.orderStatus === 0 ? '#3368A9' : '#2D7FE4'
             }"
             >{{
-              orderData.status == 0
+              orderData.orderStatus === 0
                 ? "未审核"
-                : orderData.status == 1
+                : orderData.orderStatus === 1
                 ? "审核通过"
                 : "审核不通过"
             }}
@@ -34,7 +34,7 @@
       </div>
       <div class="flex_b">
         <p>
-          报价时间：<span v-if="orderData.createdOn"
+          {{ orderData.timeName }}：<span v-if="orderData.createdOn"
             >{{ orderData.createdOn.replace(/T/, " ") }}
           </span>
         </p>
@@ -95,6 +95,7 @@
         :multipleSelection="multipleSelection"
         :orderData="orderData"
         @handlePushDialog="handlePushDialog"
+        @handleCheckAllClosee="handleCheckAllClosee"
       ></bsPushDialogComponent>
     </el-dialog>
   </div>
@@ -146,8 +147,9 @@ export default {
         this.title = "展厅业务推送";
         this.orderData = {
           OrderTypeName: "采购单号",
+          timeName: "择样时间",
           offerName: this.item.orgPersonnelName,
-          linkman: this.item.linkman,
+          linkman: this.item.smS_handset,
           status: this.item.orderStatus,
           createdOn: this.item.createdOn,
           remark: this.item.pushContent,
@@ -159,13 +161,14 @@ export default {
         this.title = "报价推送";
         this.orderData = {
           OrderTypeName: "报价单号",
-          offerName: this.item.customerName,
-          linkman: this.item.linkman,
-          orderStatus: this.item.status,
-          createdOn: this.item.createdOn,
-          remark: this.item.title,
-          orderPushType: 2,
-          orderNumber: this.item.offerNumber
+          timeName: " 报价时间",
+          offerName: this.item.customerName, //客户名称
+          linkman: this.item.linkman, //业务员
+          orderStatus: this.item.status, //状态
+          createdOn: this.item.createdOn, //时间
+          remark: this.item.title, //备注
+          orderPushType: 2, //推送类型
+          orderNumber: this.item.offerNumber //单号
         };
         break;
       case "采购推送":
@@ -194,7 +197,6 @@ export default {
           res.data.result.item[i].checked = false;
         }
         this.tableData = res.data.result.item;
-        this.getPushSettingsPage();
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -206,6 +208,17 @@ export default {
     // 切换产品列表样式
     handerIsGrid(type) {
       this.isGrid = type;
+    },
+    // 关闭全选
+    handleCheckAllClosee() {
+      this.checkAll = false;
+      if (this.isGrid === "bsGridPushComponent") {
+        this.$refs.listComponent.plantList.forEach(row => {
+          row.checked = false;
+        });
+      } else {
+        this.$refs.listComponent.$refs.multipleTable.clearSelection();
+      }
     },
     //全选按钮
     handleCheckAllChange(val) {

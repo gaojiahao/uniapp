@@ -196,6 +196,7 @@ export default {
       const res = await this.$http.post("/api/SendPushTemplate", data);
       if (res.data.result.code === 200) {
         this.closeDialog();
+        this.$emit("handleCheckAllClosee", false);
         this.$common.handlerMsgState({
           msg: "推送成功",
           type: "success"

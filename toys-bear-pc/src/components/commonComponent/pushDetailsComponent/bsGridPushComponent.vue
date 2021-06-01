@@ -40,7 +40,7 @@
             v-model="item.checked"
           ></el-checkbox>
         </p>
-        <p><i class="el-icon-document"></i> 择样明细(4)</p>
+        <p><i class="el-icon-document"></i> 择样明细(0)</p>
         <p><i class="el-icon-time"></i>推送记录(0)</p>
       </div>
     </div>
@@ -104,6 +104,7 @@ export default {
     background: #ffffff;
     border: 1px solid #dcdfe6;
     border-radius: 5px;
+    margin-bottom: 20px;
     .title {
       height: 150px;
       border-bottom: 1px solid #dcdfe6;
