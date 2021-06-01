@@ -66,7 +66,7 @@
 			}
 		},
 		{
-			"path": "pages/supplierSharing/supplierSharing",	//厂商分享
+			"path": "pages/supplierSharing/supplierSharing",	//厂商分享首页
 			"aliasPath":"/supplierSharing",
 			"name":"supplierSharing",
 			"style": {
@@ -77,7 +77,7 @@
 			}
 		},
 		{
-			"path": "pages/supplierSharing/supplierSharingList",	//厂商分享
+			"path": "pages/supplierSharing/supplierSharingList",	//厂商分享产品列表
 			"aliasPath":"/supplierSharingList",
 			"name":"supplierSharingList",
 			"style": {
@@ -88,9 +88,20 @@
 			}
 		},
 		{
-			"path": "pages/supplierSharing/supplierSharingContact",	//厂商分享
+			"path": "pages/supplierSharing/supplierSharingContact",	//厂商分享联系方式
 			"aliasPath":"/supplierSharingContact",
 			"name":"supplierSharingContact",
+			"style": {
+				"navigationBarTitleText": "厂商分享",
+				"app-plus": {
+					"titleNView": false //禁用原生导航栏
+				}
+			}
+		},
+		{
+			"path": "pages/supplierSharing/supplierSharingDetail",	//厂商分享详情
+			"aliasPath":"/supplierSharingDetail",
+			"name":"supplierSharingDetail",
 			"style": {
 				"navigationBarTitleText": "厂商分享",
 				"app-plus": {

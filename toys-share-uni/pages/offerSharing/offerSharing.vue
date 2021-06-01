@@ -446,6 +446,7 @@ export default {
 					modifyOn:res.result.item.modifyOn?res.result.item.modifyOn.replace(/T.*/, "") : "",
 				};
 				uni.setStorageSync('offer_sharing_companyNumber', this.sampleInfo.companyNumber);
+				uni.setStorageSync('offer_sharing_userId', this.sampleInfo.userId);
 			} else {
 				// this.$message.error(res.result.msg);
 			}

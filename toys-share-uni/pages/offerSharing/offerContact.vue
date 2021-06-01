@@ -168,7 +168,8 @@ export default {
 		async getContactInformationListShare(){
 			var me = this;
 			const res = await me.$u.api.ContactInformationListShare({
-				CompanyNumber: uni.getStorageSync('offer_sharing_companyNumber')
+				CompanyNumber: uni.getStorageSync('offer_sharing_companyNumber'),
+				userId: uni.getStorageSync('offer_sharing_userId'),
 			});
 			if (res.result.code === 200) {
 				this.defaultContact = res.result.item;
