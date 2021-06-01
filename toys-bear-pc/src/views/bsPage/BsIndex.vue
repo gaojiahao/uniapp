@@ -321,7 +321,8 @@ export default {
         path.includes("bsSpotProducts") ||
         path.includes("bsVIPProducts") ||
         path.includes("bsMyCollection") ||
-        path.includes("bsBrowsingFootprints")
+        path.includes("bsBrowsingFootprints") ||
+        path.includes("bsVendorQuery")
       ) {
         eventBus.$emit("showCart", true);
       } else {

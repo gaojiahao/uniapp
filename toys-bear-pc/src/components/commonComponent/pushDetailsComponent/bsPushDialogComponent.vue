@@ -168,7 +168,7 @@ export default {
     // 单选框事件
     handleRadio(item) {
       this.dataRadio = item;
-      // console.log(item, "单选框事件");
+      console.log(item, "单选框事件");
     },
     // 确定推送
     async handleConfirmPush() {

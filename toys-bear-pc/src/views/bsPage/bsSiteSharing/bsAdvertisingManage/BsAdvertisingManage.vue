@@ -1,5 +1,5 @@
 <template>
-  <div class="bsLoginHistory">
+  <div class="BsAdvertisingManage">
     <div class="title">广告管理 ({{ totalCount }})</div>
     <div class="searchBox">
       <div class="left">
@@ -82,36 +82,54 @@
       </center>
     </div>
     <!-- 新增弹框 -->
-    <el-dialog :title="dialogTitle" :visible.sync="isDialog" width="600px">
-      <el-form label-width="100px" :rules="rules" :model="dialogFromData">
-        <el-form-item label="图片标题:" prop="name">
+    <el-dialog :title="dialogTitle" :visible.sync="isDialog" width="700px">
+      <el-form
+        ref="formDataRef"
+        label-width="100px"
+        :rules="rules"
+        :model="dialogFromData"
+      >
+        <el-form-item label="图片标题:" prop="title">
           <el-input
-            v-model="dialogFromData.name"
+            v-model="dialogFromData.title"
             placeholder="请输入图片标题"
           ></el-input>
         </el-form-item>
-        <el-form-item label="广告图片:" prop="contactAddress">
+        <el-form-item label="广告图片:" prop="imgUrl">
           <el-upload
+            action="api"
             style="width:100%"
-            size="medium"
-            action="/api/File/InsertPic"
             list-type="picture-card"
-            ref="upload2"
+            ref="upload"
             :auto-upload="false"
             :on-preview="handlePictureCardPreview"
+            :before-upload="beforeAvatarUpload"
+            :on-change="changeUpload"
             :on-remove="handleRemove"
-            accept=".jpg,.jpeg,.png,.ico,.bmp,.JPG,.JPEG,.PNG,.ICO,.BMP"
+            :file-list="editImages"
+            accept=".jpg,.png,.JPG,.PNG,"
           >
             <i class="el-icon-plus"></i>
           </el-upload>
+          <p class="uploadText">
+            图片格式(jpg、png) 内存最大不超过2MB， 尺寸为 : 长1920 x 宽550像素
+          </p>
         </el-form-item>
-        <el-form-item label="默认链接:" prop="contactAddress">
+        <el-form-item label="默认链接:" prop="defaultLinkUrl">
           <el-input
-            v-model="dialogFromData.name"
+            v-model="dialogFromData.defaultLinkUrl"
             placeholder="请输入默认链接"
           ></el-input>
         </el-form-item>
       </el-form>
+      <center>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="comfirmAddAdvertising"
+            >确 定</el-button
+          >
+          <el-button @click="isDialog = false">取 消</el-button>
+        </span>
+      </center>
     </el-dialog>
   </div>
 </template>
@@ -120,12 +138,14 @@
 import { mapState } from "vuex";
 import Table from "@/components/table";
 export default {
-  name: "bsLoginHistory",
+  name: "BsAdvertisingManage",
   components: {
     Table
   },
   data() {
     return {
+      editImages: [],
+      file: null,
       dialogTitle: "",
       isDialog: false,
       staffList: [],
@@ -135,9 +155,18 @@ export default {
       totalCount: 0,
       pageSize: 10,
       currentPage: 1,
-      dialogFromData: {},
+      dialogFromData: {
+        imgUrl: ""
+      },
       rules: {
-        name: [{ required: true, message: "请输入图片标题", trigger: "blur" }]
+        title: [{ required: true, message: "请输入图片标题", trigger: "blur" }],
+        imgUrl: [
+          { required: true, message: "请选择上传图片", trigger: "change" }
+        ],
+        defaultLinkUrl: [
+          { required: true, message: "请输入默认链接", trigger: "blur" },
+          { type: "url", message: `请输入正确的url`, trigger: "change" }
+        ]
       },
       tableData: {
         data: [],
@@ -155,7 +184,7 @@ export default {
               return row.imgUrl;
             }
           },
-          { prop: "siteRegion", label: "广告标题" },
+          { prop: "title", label: "广告标题" },
           { prop: "createdBy", label: "业务员" },
           { prop: "email", label: "关联站点数" },
           {
@@ -166,7 +195,7 @@ export default {
             }
           }
         ],
-        btnWidth: 150,
+        btnWidth: 250,
         actions: [
           {
             type: "primary",
@@ -245,19 +274,130 @@ export default {
       this.dialogTitle = "新增广告图";
       this.isDialog = true;
     },
+    // 选择图片/判断图片大小尺寸
+    changeUpload(file, fileList) {
+      let that = this;
+      const width = 1920;
+      const height = 551;
+      let img = new Image();
+      const isLt2M = file.size / 1024 / 1024 < 2; // 限制小于2M
+      img.src = URL.createObjectURL(file.raw);
+      img.onload = function() {
+        // console.log(img.width, img.height, "图片大小");
+        console.log(width, height);
+        const valid = img.width === width && img.height === height;
+        console.log(valid, "valid");
+        console.log(isLt2M, "isLt2M");
+        if (valid && isLt2M) {
+          that.file = file.raw;
+          that.editImages = fileList;
+          if (fileList.length > 1) fileList.shift();
+        } else {
+          fileList.pop();
+          that.$message.error("图片尺寸限制为1920 x 550，大小不可超过2MB");
+        }
+      };
+    },
 
-    async successUpload() {
-      // const fd = new FormData();
-      // fd.append("BusinessType", "Logo");
-      // fd.append("file", );
-      // return await this.$http.post("/api/File/InsertPic", fd);
-    },
+    // 删除图片事件
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+      this.dialogFromData.imgUrl = "";
+      this.editImages = fileList;
+      this.$refs["upload"].clearFiles();
     },
+    // 预览片事件
     handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
+      this.$PreviewPic({
+        zIndex: 9999, // 组件的zIndex值 默认为2000
+        index: 0, // 展示第几张图片 默认为0
+        list: [file.url], // 需要展示图片list
+        onClose: i => {
+          // 关闭时的回调
+          console.log(i);
+        },
+        onSelect: i => {
+          // 点击某张图片的回调
+          console.log(i);
+        }
+      });
+    },
+    async handleAvatarSuccess() {
+      this.dialogFromData.imageUrl = await this.successUpload();
+    },
+    // 上传图片
+    async successUpload() {
+      const fd = new FormData();
+      fd.append("BusinessType", "Head");
+      fd.append("file", this.file);
+      return await this.$http.post("/api/File/InsertPic", fd);
+    },
+    // 判断图片大小尺寸
+    beforeAvatarUpload(file) {
+      let _this = this;
+      const isLt2M = file.size / 1024 / 1024 < 2; // 限制小于1M
+      const isSize = new Promise(function(resolve, reject) {
+        let width = 1920; // 限制图片尺寸为654X270
+        let height = 551;
+        let _URL = window.URL || window.webkitURL;
+        let img = new Image();
+        img.onload = function() {
+          let valid = img.width === width && img.height === height;
+          valid ? resolve() : reject();
+        };
+        img.src = _URL.createObjectURL(file);
+      }).then(
+        () => {
+          return file;
+        },
+        () => {
+          _this.$message.error("图片尺寸限制为1920 x 550，大小不可超过2MB");
+          return Promise.reject();
+        }
+      );
+      if (!isLt2M) {
+        _this.$message.error("图片尺寸限制为1920 x 550，大小不可超过2MB");
+      }
+      return isSize & isLt2M;
+    },
+    // 确定新增广告
+    async comfirmAddAdvertising() {
+      console.log(this.dialogFromData);
+      if (this.editImages.length != 0) {
+        const imgRes = await this.successUpload();
+        if (imgRes.data.result.code === 200) {
+          this.dialogFromData.imgUrl =
+            imgRes.data.result.object[0] &&
+            imgRes.data.result.object[0].filePath
+              ? imgRes.data.result.object[0].filePath
+              : this.dialogFromData.imgUrl;
+        } else {
+          this.$messsage.error("头像上传失败");
+          return false;
+        }
+        this.$refs.formDataRef.validate(async valid => {
+          if (valid) {
+            const res = await this.$http.post(
+              "/api/CreateWebsiteShareAd",
+              this.dialogFromData
+            );
+            if (res.data.result.code === 200) {
+              this.$common.handlerMsgState({
+                msg: "新增操作成功",
+                type: "success"
+              });
+              this.isDialog = false;
+              this.GetWebsiteShareAdPage();
+            } else {
+              this.$common.handlerMsgState({
+                msg: res.data.result.msg,
+                type: "danger"
+              });
+            }
+          }
+        });
+      } else {
+        this.$refs.formDataRef.validateField("imgUrl");
+      }
     },
     // 切換頁容量
     handleSizeChange(pageSize) {
@@ -293,7 +433,7 @@ export default {
 </script>
 <style scoped lang="less">
 @deep: ~">>>";
-.bsLoginHistory {
+.BsAdvertisingManage {
   min-height: 100%;
   background-color: #fff;
   padding: 0 20px;
@@ -372,8 +512,39 @@ export default {
       }
     }
   }
-  @{deep}.el-upload {
+  @{deep} .el-upload {
     width: 100%;
+  }
+  @{deep}.avatar-uploader {
+    width: 100%;
+    height: 200px;
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    .el-upload:hover {
+      border-color: #409eff;
+    }
+    .avatar-uploader-icon {
+      font-size: 28px;
+      color: #8c939d;
+      line-height: 200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .avatar {
+      width: 178px;
+      height: 178px;
+      display: block;
+    }
+  }
+
+  .uploadText {
+    padding-top: 5px;
+    color: #b9b9b9;
+    line-height: 30px;
   }
 }
 </style>
