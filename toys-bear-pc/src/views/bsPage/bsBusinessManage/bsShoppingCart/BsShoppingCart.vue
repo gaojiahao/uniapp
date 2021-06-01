@@ -858,17 +858,23 @@ export default {
     // 提交扫码加购
     async submitCode() {
       this.$store.commit("updateAppLoading", true);
-      const res = await this.$http.post("/api/AddShoppingCart", {
-        userID: this.userInfo.userInfo.id,
-        companyNumber: this.userInfo.commparnyList[0].companyNumber,
-        // sourceFrom: "active",
-        sourceFrom: "QRCodeSearch",
-        number: 1,
-        currency: "￥",
-        Price: 0,
-        shopType: "companysamples",
-        productNumber: this.QRcodeValue.productNumber
-      });
+      const res = await this.$http.post(
+        "/api/AddShoppingCart",
+        {
+          userID: this.userInfo.userInfo.id,
+          companyNumber: this.userInfo.commparnyList[0].companyNumber,
+          // sourceFrom: "active",
+          sourceFrom: "QRCodeSearch",
+          number: 1,
+          currency: "￥",
+          Price: 0,
+          shopType: "companysamples",
+          productNumber: this.QRcodeValue.productNumber
+        },
+        {
+          timeout: 9999999
+        }
+      );
       if (res.data.result.code === 200) {
         this.getShoppingCartList();
         this.$common.handlerMsgState({
@@ -1139,10 +1145,13 @@ export default {
         .then(async () => {
           const selectProducts = this.$refs.myTableRef.selection;
           let productNumber = [];
-          for (let i = 0; i < selectProducts.length; i++) {
-            productNumber.push(selectProducts[i].productJson.productNumber);
-          }
-
+          // for (let i = 0; i < selectProducts.length; i++) {
+          //   productNumber.push(selectProducts[i].productJson.productNumber);
+          // }
+          productNumber = selectProducts.map(
+            val => val.productJson.productNumber
+          );
+          console.log(productNumber);
           const fd = {
             userID: this.userInfo.userInfo.id,
             companyNumber: this.userInfo.commparnyList[0].companyNumber,
@@ -1151,7 +1160,9 @@ export default {
             productNumber: productNumber.join()
           };
           this.$store.commit("updateAppLoading", true);
-          const res = await this.$http.post("/api/RemoveShoppingCart", fd);
+          const res = await this.$http.post("/api/RemoveShoppingCart", fd, {
+            timeout: 9999999
+          });
           if (res.data.result.code === 200) {
             for (let i = 0; i < selectProducts.length; i++) {
               eventBus.$emit(
@@ -1346,12 +1357,7 @@ export default {
             const res = await this.$http.post("/api/RemoveShoppingCart", data);
             if (res.data.result.code === 200) {
               this.getShoppingCartList();
-              // this.$common.handlerMsgState({
-              //   msg: "删除成功",
-              //   type: "success"
-              // });
             }
-            // this.$store.commit("resetShoppingCart", selectProducts);
             this.subDialogVisible = false;
             const fd = {
               name: "/bsIndex/bsSampleQuotation",
@@ -1428,7 +1434,9 @@ export default {
         userID: this.userInfo.userInfo.id,
         companyNumber: this.userInfo.commparnyList[0].companyNumber
       };
-      const res = await this.$http.post("/api/ShoppingCartList", fd);
+      const res = await this.$http.post("/api/ShoppingCartList", fd, {
+        timeout: 9999999
+      });
       if (res.data.result.code === 200) {
         this.cartList = res.data.result.item;
         for (let i = 0; i < this.cartList.length; i++) {
@@ -1449,7 +1457,7 @@ export default {
           const totalEl = document.getElementById("totalBox");
           totalEl.style.width =
             document.getElementById("tableId").offsetWidth + 60 + "px";
-          this.$refs.myTableRef.toggleAllSelection();
+          this.$refs.myTableRef && this.$refs.myTableRef.toggleAllSelection();
         });
       } else {
         this.$common.handlerMsgState({
@@ -1457,12 +1465,12 @@ export default {
           type: "danger"
         });
       }
-      this.getClientList();
     }
   },
   async mounted() {
     await this.getSelectProductOfferFormulaList();
     await this.getSelectCompanyOffer();
+    await this.getClientList();
     await this.getShoppingCartList();
     eventBus.$on("handlergetClientList", () => {
       this.getShoppingCartList();
