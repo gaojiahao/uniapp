@@ -1298,7 +1298,10 @@ export default {
               offerAmount: val.price
             };
           });
-          if (this.userInfo.commparnyList[0].companyType == "Sales") {
+          if (
+            this.userInfo.commparnyList[0].companyType == "Sales" ||
+            this.userInfo.commparnyList[0].companyType == "Exhibition"
+          ) {
             this.clienFormData.productOfferType = "company";
           }
           for (let i = 0; i < this.clientList.length; i++) {

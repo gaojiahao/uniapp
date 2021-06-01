@@ -253,6 +253,7 @@ export default {
               msg: " 一键加购成功",
               type: "success"
             });
+            this.checkAll = false;
             this.getCollectList();
           } else {
             this.$common.handlerMsgState({
