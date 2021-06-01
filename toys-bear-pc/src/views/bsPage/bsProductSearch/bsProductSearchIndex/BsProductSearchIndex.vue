@@ -1508,6 +1508,7 @@ export default {
               msg: " 一键加购成功",
               type: "success"
             });
+            this.checkAll = false;
             this.getProductList(false);
           } else {
             this.$common.handlerMsgState({
