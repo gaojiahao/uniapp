@@ -63,10 +63,23 @@
       </div>
       <div class="tableBox">
         <bsTable :table="tableData" />
+        <!-- 分页 -->
+        <center style="padding:20px 0;">
+          <el-pagination
+            layout="total, sizes, prev, pager, next, jumper"
+            :page-sizes="[10, 20, 30, 40]"
+            background
+            :total="totalCount"
+            :page-size="pageSize"
+            :current-page.sync="currentPage"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+          ></el-pagination>
+        </center>
       </div>
     </div>
     <!-- 统计值 -->
-    <!-- <Summary :summaryData="summaryData"></Summary> -->
+    <Summary v-if="totalAmount" :summaryData="totalAmount"></Summary>
     <!-- 导出订单模板dialog -->
     <transition name="el-zoom-in-center">
       <el-dialog
@@ -90,16 +103,16 @@
 </template>
 
 <script>
-// import Summary from "@/components/summaryComponent/summary";
-import bsExportOrder from "@/components/commonComponent/exportOrderComponent/gongsizhaoyangbaojia.vue";
+import Summary from "@/components/summaryComponent/summary";
+import bsExportOrder from "@/components/commonComponent/exportOrderComponent/commonYewu.vue";
 import bsTable from "@/components/table";
 import { mapState } from "vuex";
 export default {
   name: "bsSampleQuotationDetails",
   components: {
     bsExportOrder,
-    bsTable
-    // Summary
+    bsTable,
+    Summary
   },
   props: {
     item: {
@@ -108,6 +121,7 @@ export default {
   },
   data() {
     return {
+      totalAmount: null,
       exportTemplateDialog: false,
       tableData: {
         data: [],
@@ -234,11 +248,20 @@ export default {
           },
           {
             prop: "fa_pr",
-            label: "单价",
+            label: "厂价",
+            width: 50,
+            color: "#3368A9",
+            render: row => {
+              return "￥" + row.fa_pr;
+            }
+          },
+          {
+            prop: "ha_in_qu",
+            label: "报出价",
             width: 50,
             color: "red",
             render: row => {
-              return "￥ " + row.fa_pr;
+              return "￥" + row.fa_pr;
             }
           },
           {
@@ -249,7 +272,6 @@ export default {
             render: row => {
               return (
                 row.cu_de +
-                " " +
                 this.$calculate.countTotalprice(
                   row.fa_pr,
                   row.ou_lo,
@@ -262,25 +284,12 @@ export default {
       },
       currentPage: 1,
       pageSize: 10,
-      totalCount: 0,
-      summaryData: {
-        //汇总数据
-        totalDegree: 0, //总款数
-        totalCartons: 0, //总箱数
-        totalQuantity: 0, //总数量
-        totalBulkStere: 0, //总体积
-        totalBulkFeet: 0, //总材积
-        totalGrWe: 0, //总毛重
-        totalNeWe: 0, //总净重
-        cu_de: "", //金额单位
-        totalMoney: 0 //总金额
-        // countData: [],
-      }
+      totalCount: 0
     };
   },
-  mounted() {
-    this.getSearchCompanyShareOrderDetailsPage();
-    console.log(this.item);
+  async mounted() {
+    await this.getSearchCompanyShareOrderDetailsPage();
+    await this.getERPOrderTotal();
     if (this.userInfo.commparnyList[0].companyType != "Supplier") {
       this.tableData.columns.push({
         prop: "fa_pr",
@@ -291,24 +300,55 @@ export default {
           return this.filterTypesAndState(row);
         }
       });
+    } else {
+      this.$set(this.tableData, "dropdown", {
+        width: 100,
+        title: "状态",
+        list: []
+      });
     }
-    //  else {
-    //   this.tableData.columns.push({
-    //     prop: "fa_pr",
-    //     label: "状态",
-    //     width: 110,
-    //     color: "#3368A9",
-    //     render: row => {<button type="button" class="el-button el-button--warning el-button--medium">导出列表</button>
-    //       return (
-    //         "<button type='button' class='el-button el-button--warning el-button--medium'>" +
-    //         "更多菜单<i class='el-icon-arrow-down el-icon--right'></i>" +
-    //         "</button>"
-    //       );
-    //     }
-    //   });
-    // }
   },
   methods: {
+    // 获取合计total
+    async getERPOrderTotal() {
+      const res = await this.$http.post("/api/GetERPOrderTotal", {
+        id: this.item.erpOrderID
+      });
+      if (res.data.result.code === 200) {
+        const obj = res.data.result.item;
+        this.totalAmount = {
+          totalDegree: obj.sumCount, // 总款数
+          totalCartons: obj.sumtAmount, // 总箱数
+          totalQuantity: obj.sumAmountOu_lo, // 总数量
+          totalBulkStere: obj.sumBulk_stere, // 总体积
+          totalBulkFeet: obj.sumBulk_feet, // 总材积
+          totalGrWe: obj.sumGr_we, // 总毛重
+          totalNeWe: obj.sumNe_we, // 总净重
+          cu_de: "￥", // 币种
+          totalMoney: obj.sumAmountFa_pr // 总金额
+        };
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
+    // 切換頁容量
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+      if (
+        this.currentPage * pageSize > this.factoryTotalCount &&
+        this.currentPage != 1
+      )
+        return false;
+      this.getSearchCompanyShareOrderDetailsPage();
+    },
+    // 修改当前页
+    handleCurrentChange(page) {
+      this.currentPage = page;
+      this.getSearchCompanyShareOrderDetailsPage();
+    },
     // 获取订单详情单
     async getSearchCompanyShareOrderDetailsPage() {
       const res = await this.$http.post("/api/GetERPOrderDetailPage", {
@@ -318,7 +358,6 @@ export default {
       });
       if (res.data.result.code === 200) {
         this.tableData.data = res.data.result.item.items;
-        console.log(this.tableData.data);
         this.totalCount = res.data.result.item.totalCount;
       } else {
         this.$common.handlerMsgState({
@@ -334,11 +373,13 @@ export default {
           val.messageExt == raw.messageExt &&
           val.messageModel == raw.messageModel
       );
-      const child = current.itemList.find(
-        val => val.itemValue == raw.messageStatus
-      );
-      if (child) return child.itemText;
-      else return "未选择";
+      if (current) {
+        const child = current.itemList.find(
+          val => val.itemValue == raw.messageStatus
+        );
+        if (child) return child.itemText;
+        else return "未选择";
+      }
     },
     // 过滤消息类型
     filterTypes(Ext) {

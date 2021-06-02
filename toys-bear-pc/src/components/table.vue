@@ -279,6 +279,33 @@
           </div>
         </template>
       </el-table-column>
+      <!-- 下拉框 -->
+      {{ table.dropdown }}
+      <el-table-column
+        v-if="table.dropdown"
+        :label="table.dropdown.title"
+        align="center"
+        :width="table.dropdown.width || 300"
+        class-name="small-padding fixed-width"
+      >
+        <template slot-scope="scope">
+          {{ scope.row.ext }}
+          <el-dropdown szie="mini">
+            <el-button type="primary">
+              测试
+              <i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown" szie="mini">
+              <el-dropdown-item
+                szie="mini"
+                v-for="(btn, i) in table.dropdown.list"
+                :key="i"
+                >{{ btn }}</el-dropdown-item
+              >
+            </el-dropdown-menu>
+          </el-dropdown>
+        </template>
+      </el-table-column>
       <el-table-column
         v-if="table.addIcon"
         label=""
