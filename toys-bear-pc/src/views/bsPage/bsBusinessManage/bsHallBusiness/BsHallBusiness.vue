@@ -16,20 +16,21 @@
       </div>
       <div class="item">
         <span class="label">择样类型：</span>
-        <el-select
-          v-model="searchForm.messageExt"
-          size="medium"
-          clearable
-          placeholder="请选择"
-        >
-          <el-option
-            v-for="(item, i) in typesList"
-            :key="i"
-            :label="item.label"
-            :value="item.value"
+        <div class="content">
+          <el-select
+            v-model="searchForm.messageExt"
+            size="medium"
+            placeholder="请选择"
           >
-          </el-option>
-        </el-select>
+            <el-option
+              v-for="item in typesList"
+              :key="item.id"
+              :label="item.title"
+              :value="item.messageExt"
+            >
+            </el-option>
+          </el-select>
+        </div>
       </div>
       <div class="item">
         <span class="label">展厅名称：</span>
@@ -295,28 +296,7 @@ export default {
       staffList: [],
       exportTemplateDialog: false,
       orderRow: {},
-      typesList: [
-        {
-          label: "系统通知",
-          value: 0
-        },
-        {
-          label: "补样",
-          value: 3
-        },
-        {
-          label: "借样",
-          value: 5
-        },
-        {
-          label: "补样借样",
-          value: 11
-        },
-        {
-          label: "洽谈",
-          value: 12
-        }
-      ],
+      typesList: [],
       readStatusList: [
         {
           label: "全部",
@@ -335,7 +315,8 @@ export default {
         keyword: null,
         fromCompanyName: null,
         staffId: null,
-        messageExt: null,
+        messageModel: null,
+        messageExt: -1,
         readStatus: "-1",
         dateTime: null
       },
@@ -345,6 +326,17 @@ export default {
     };
   },
   methods: {
+    // 择样类型
+    async getTypeList() {
+      const res = await this.$http.post(
+        "/api/PushSettings/MessageTeplateSettingsByPage",
+        { maxResultCount: 9999, messageModel: "1", skipCount: 1 }
+      );
+      console.log(res);
+      if (res.data.result.code === 200) {
+        this.typesList = res.data.result.item.items;
+      }
+    },
     // 获取公司下的员工列表
     async getStaffList() {
       const res = await this.$http.post("/api/CompanyUserList", {
@@ -358,7 +350,8 @@ export default {
           type: "danger"
         });
       }
-      this.getTableDataList();
+      await this.getTableDataList();
+      await this.getTypeList();
     },
     // 导出
     exportOrder(row) {
