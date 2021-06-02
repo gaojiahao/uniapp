@@ -188,7 +188,7 @@ export default {
         companyNumber: this.userInfo.commparnyList[0].companyNumber,
         phoneNumber: this.userInfo.phoneNumber,
         orderPushType: this.orderData.orderPushType,
-        orderNumber: this.item.offerNumber,
+        orderNumber: this.orderData.orderNumber,
         toCompanyNumber: this.toCompanyNumber,
         PushContent: this.PushContent,
         messageExt: this.dataRadio.messageExt,

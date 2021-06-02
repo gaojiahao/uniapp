@@ -246,12 +246,12 @@
             >
               报价公式
             </div>
-            <div
+            <!-- <div
               :class="{ item: true, active: tp == 3 }"
               @click="handleTab('advertising', 3)"
             >
               站点广告
-            </div>
+            </div> -->
           </div>
           <div
             class="rightBox"
@@ -557,7 +557,7 @@
                 </div>
               </div>
             </div>
-            <div class="advertising" id="advertising">
+            <!-- <div class="advertising" id="advertising">
               <div class="advertisingTising">
                 <div class="title">站点广告</div>
                 <el-button
@@ -617,12 +617,12 @@
                 <el-table-column label="操作" align="center" width="120">
                   <template slot-scope="scope">
                     <div class="handle">
-                      <!-- 排序接口还没有 -->
-                      <!-- <img
+                      排序接口还没有
+                      <img
                         @click="handlegoUp(scope.$index, scope.row)"
                         src="@/assets/images/up_f.png"
                         alt=""
-                      /> -->
+                      />
                       <div
                         class="delete"
                         @click="
@@ -635,7 +635,7 @@
                   </template>
                 </el-table-column>
               </el-table>
-            </div>
+            </div> -->
           </div>
         </div>
       </el-form>
@@ -1454,7 +1454,7 @@ export default {
     this.getStaffList();
     this.getDefaultSites();
     this.getSelectProductOfferFormulaList();
-    this.GetWebsiteShareAdPage();
+    // this.GetWebsiteShareAdPage();
   },
   mounted() {
     this.getSelectCompanyOffer();

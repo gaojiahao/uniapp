@@ -135,8 +135,7 @@ export default {
       checkAll: false,
       pushDialog: false,
       orderData: {
-        orderPushType: null,
-        orderNumber: null
+        orderPushType: null
       },
       itemList: {},
       title: null,
