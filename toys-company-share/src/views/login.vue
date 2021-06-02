@@ -37,7 +37,7 @@
             </el-form-item>
             <el-form-item>
               <div class="myEmail">
-                {{ loginLang.userName }}
+                {{ loginLang.contact }}
                 <!-- <span class="remak">{{ loginLang.emailExplain }}</span> -->
               </div>
               <el-input
@@ -118,6 +118,7 @@ export default {
     toHome() {
       this.$refs.myFormRef.validate(async valid => {
         if (valid) {
+          this.$store.commit("setLoginForm", this.formLabelAlign);
           const res = await this.$http.post(
             "/api/Account/CompanyShareLogin",
             this.formLabelAlign
