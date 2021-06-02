@@ -21,14 +21,30 @@
               globalLang === "zh-CN" ? productData.name : productData.ename
             }}</span>
           </div>
-          <div class="itemText">
+          <div class="itemText" v-if="shareInfo.isShowPrice">
             {{ productLang.price }}：
             <span class="priceBox"
               >{{ userInfo.currencyType
               }}<span class="price">{{ productData.price }}</span></span
             >
           </div>
-          <div class="itemText">
+          <!-- <div class="itemText">
+            {{ productLang.exFactoryArticleNo }}：<span>{{
+              productData.outFactoryNumber
+            }}</span>
+          </div> -->
+          <div class="itemText" v-if="shareInfo.showNumber == 1">
+            {{ productLang.exFactoryArticleNo }}：<span>{{
+              productData.commodityNumber
+            }}</span>
+          </div>
+          <div class="itemText" v-else-if="shareInfo.showNumber == 2">
+            {{ productLang.exFactoryArticleNo }}：<span>{{
+              productData.productNumber
+            }}</span>
+          </div>
+          <div class="itemText" v-else-if="shareInfo.showNumber == -1"></div>
+          <div class="itemText" v-else>
             {{ productLang.exFactoryArticleNo }}：<span>{{
               productData.outFactoryNumber
             }}</span>
@@ -205,7 +221,13 @@ export default {
     publicLang() {
       return this.$t("lang.publicLang");
     },
-    ...mapState(["globalLang", "userInfo", "shopLength", "formLabelAlign"])
+    ...mapState([
+      "globalLang",
+      "userInfo",
+      "shopLength",
+      "formLabelAlign",
+      "shareInfo"
+    ])
   }
 };
 </script>
