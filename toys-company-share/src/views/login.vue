@@ -1,16 +1,22 @@
 <template>
-  <div class="content">
-    <div class="middle">
+  <div class="login_content">
+    <div class="login_middle">
       <div class="bgImg"></div>
       <div class="loginBox">
         <div class="title">
           <el-image :src="userLogo.companyLogo"></el-image>
           <div class="titleText">
-            <notice-bar
+            <!-- <notice-bar
               v-if="currentLang.companyName"
               :text="currentLang.companyName"
               :startRoll="currentLang.companyName.length > 7"
-            />
+            /> -->
+            <div class="text_content">
+              <vue-marquee
+                :content="currentLang.companyName"
+                :showtwo="false"
+              />
+            </div>
           </div>
         </div>
         <div class="minTitle">
@@ -60,10 +66,12 @@
 
 <script>
 import { mapState } from "vuex";
-import NoticeBar from "@/components/noticeBar/notice-bar";
+// import NoticeBar from "@/components/noticeBar/notice-bar";
+import VueMarquee from "vue-marquee-ho";
+require("vue-marquee-ho/dist/vue-marquee.min.css");
 export default {
   components: {
-    NoticeBar
+    "vue-marquee": VueMarquee
   },
   data() {
     return {
@@ -215,12 +223,12 @@ export default {
 };
 </script>
 <style scoped lang="less">
-.content {
+.login_content {
   font-size: 16px;
   height: 100vh;
   position: relative;
   color: #333;
-  .middle {
+  .login_middle {
     width: 100%;
     height: 550px;
     position: absolute;
@@ -269,6 +277,10 @@ export default {
         .titleText {
           margin-left: 20px;
           width: 250px;
+          .text_content {
+            width: 250px;
+            overflow: hidden;
+          }
         }
       }
       .minTitle {
