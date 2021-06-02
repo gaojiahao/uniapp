@@ -66,10 +66,11 @@
     <ul class="infoBox">
       <li class="info_item" v-for="item in erpOrderList" :key="item.id">
         <div class="tableHead">
-          <p>{{ item.fromCompanyName }}</p>
-          <!-- <div class="tableHeadIcon">
-              <img src="@/assets/images/delete.png" alt="" />
-            </div> -->
+          <p class="tableHead_title">
+            <el-badge :is-dot="!item.readStatusM">
+              {{ item.fromCompanyName }}
+            </el-badge>
+          </p>
         </div>
         <div class="tablemian">
           <div class="tablemian_left">
@@ -82,7 +83,12 @@
                 <span class="title">代号：</span>
                 <span>{{ item.the_nu }}</span>
               </p>
+              <p class="left_item">
+                <span class="title">单号：</span>
+                <span>{{ item.orderNumber }}</span>
+              </p>
               <p
+                v-if="item.orderStatus == '9' || item.orderStatus == '99'"
                 :class="{
                   left_item: true,
                   red: item.orderStatus == '0',
@@ -92,9 +98,9 @@
                 }"
               >
                 <span class="title">状态：</span>
-                <span v-if="item.orderStatus == '0'">未读</span>
-                <span v-else-if="item.orderStatus == '1'">已读</span>
-                <span v-else-if="item.orderStatus == '9'">已完成</span>
+                <!-- <span v-if="item.orderStatus == '0'">对方未读</span>
+                <span v-else-if="item.orderStatus == '1'">对方已读</span> -->
+                <span v-if="item.orderStatus == '9'">已完成</span>
                 <span v-else-if="item.orderStatus == '99'">已取消</span>
               </p>
             </div>
@@ -266,7 +272,7 @@ export default {
         keyword: this.searchForm.keyword,
         startTime: this.searchForm.time && this.searchForm.time[0],
         endTime: this.searchForm.time && this.searchForm.time[1],
-        readStatus: "-1",
+        // readStatus: "-1",
         messageModel: this.options.messageModel,
         messageExt: this.searchForm.messageExt,
         sampleFrom: this.options.sampleFrom,
@@ -296,6 +302,7 @@ export default {
 };
 </script>
 <style scoped lang="less">
+@deep: ~">>>";
 .searchBox {
   height: 71px;
   background-color: #fff;
@@ -346,6 +353,13 @@ export default {
       font-size: 16px;
       color: #333;
       border-bottom: 1px solid #dcdfe6;
+      @{deep} .tableHead_title {
+        .el-badge {
+          .el-badge__content {
+            top: 15px;
+          }
+        }
+      }
       .tableHeadIcon {
         width: 50px;
         min-width: 50px;

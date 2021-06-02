@@ -266,6 +266,9 @@ export default {
       this.currentPage = 1;
       this.getSearchCompanyShareProductPage();
     });
+    this.$root.eventHub.$on("resetAll", () => {
+      this.getSearchCompanyShareProductPage();
+    });
     if (this.imageSearchValue instanceof Array) {
       this.productList = this.imageSearchValue;
       this.totalCount = this.imageSearchValue.length;

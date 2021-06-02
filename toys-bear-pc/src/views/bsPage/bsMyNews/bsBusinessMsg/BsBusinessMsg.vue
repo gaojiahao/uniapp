@@ -15,7 +15,13 @@
           style="width:28px;height:28px;margin-right:15px;"
           :src="item.icon"
         ></el-avatar>
-        <span>{{ item.title }}</span>
+        <el-badge
+          class="hongdian"
+          :value="item.unreadCount"
+          :hidden="item.unreadCount < 1"
+        >
+          <span>{{ item.title }}</span>
+        </el-badge>
       </div>
     </div>
     <!-- 业务消息 -->
@@ -93,6 +99,7 @@ export default {
       const { code, item, msg } = res.data.result;
       if (code === 200) {
         this.businessConversations = item.businessConversations;
+        console.log(this.businessConversations);
         this.companyConversations = item.companyConversations;
         this.activeModel = item.businessConversations[1];
       } else {

@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <div>
-    <component :is="isHome"></component>
+    <component :is="isHome" :allCount="allCount"></component>
   </div>
 </template>
 
@@ -24,8 +24,25 @@ export default {
       isHome: "bsCompanyHome"
     };
   },
+  methods: {
+    // 获取业务消息未读数
+    async getOrderMessageCount() {
+      const res = await this.$http.post("/api/GetOrderMessageCount", {});
+      console.log(res);
+      if (res.data.result.code === 200) {
+        console.log(res.data.result.item.result);
+        const list = res.data.result.item.result;
+        let count = 0;
+        for (let i = 0; i < list.length; i++) {
+          count += list[i].count;
+        }
+        this.$store.commit("updataAllCount", count);
+      }
+    }
+  },
   created() {},
   mounted() {
+    this.getOrderMessageCount();
     switch (this.userInfo.commparnyList[0].companyType) {
       //   case "Exhibition": // 展厅首页
       //     this.isHome = "bsHallHome";
@@ -46,7 +63,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(["userInfo", "allCount"])
   }
 };
 </script>

@@ -730,10 +730,28 @@ export default {
       const { code, message } = res.data.result;
       if (code === 200) {
         this.$message.success(this.publicLang.submittedSuccessfully);
+        const products = selectProducts.map(val => {
+          return val.productNumber;
+        });
+        this.deleteSubmitProduct(products);
         this.$router.push("/index/myOrder");
       } else {
         this.$message.error(message);
       }
+    },
+    // 删除已提交的
+    async deleteSubmitProduct(productNumbers) {
+      const res = await this.$toys.post("/api/RemoveShoppingCart", {
+        shareID: this.userInfo.shareId,
+        customerRemarks: this.userInfo.loginEmail,
+        sourceFrom: "share",
+        shopType: "customersamples",
+        number: 1,
+        currency: "￥",
+        Price: 0,
+        productNumber: productNumbers.toString()
+      });
+      console.log(res);
     },
     // 单元格样式
     idStyle(column) {
