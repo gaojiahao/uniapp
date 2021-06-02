@@ -17,6 +17,7 @@ const v = new Vue();
 // }
 const store = new Vuex.Store({
   state: {
+    allCount: 0, // 所有未读业务消息
     myColles: [],
     isJindu: false,
     activeTab: "/bsIndex/bsHome",
@@ -76,6 +77,10 @@ const store = new Vuex.Store({
     myShoppingCartCount: 0
   },
   mutations: {
+    // 更新业务未读消息
+    updataAllCount(state, payLoad) {
+      state.allCount = payLoad;
+    },
     // 购物车CartCount
     handlerShoppingCartCount(state, payLoad) {
       state.myShoppingCartCount = payLoad;

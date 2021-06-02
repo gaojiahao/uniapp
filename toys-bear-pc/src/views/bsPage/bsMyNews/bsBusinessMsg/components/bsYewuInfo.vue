@@ -66,7 +66,11 @@
     <ul class="infoBox">
       <li class="info_item" v-for="item in erpOrderList" :key="item.id">
         <div class="tableHead">
-          <p>{{ item.fromCompanyName }}</p>
+          <p class="tableHead_title">
+            <el-badge :is-dot="!item.readStatus">
+              {{ item.fromCompanyName }}
+            </el-badge>
+          </p>
           <!-- <div class="tableHeadIcon">
               <img src="@/assets/images/delete.png" alt="" />
             </div> -->
@@ -296,6 +300,7 @@ export default {
 };
 </script>
 <style scoped lang="less">
+@deep: ~">>>";
 .searchBox {
   height: 71px;
   background-color: #fff;
@@ -346,6 +351,13 @@ export default {
       font-size: 16px;
       color: #333;
       border-bottom: 1px solid #dcdfe6;
+      @{deep} .tableHead_title {
+        .el-badge {
+          .el-badge__content {
+            top: 15px;
+          }
+        }
+      }
       .tableHeadIcon {
         width: 50px;
         min-width: 50px;
