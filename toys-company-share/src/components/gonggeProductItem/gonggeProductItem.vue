@@ -22,8 +22,10 @@
       </div>
       <div class="priceBox">
         <div class="left">
-          <span>{{ userInfo.currencyType }}</span>
-          <span class="price">{{ item.price }}</span>
+          <span v-if="shareInfo.isShowPrice">{{ userInfo.currencyType }}</span>
+          <span v-if="shareInfo.isShowPrice" class="price">
+            {{ item.price }}
+          </span>
         </div>
         <div class="right">
           <div
@@ -152,7 +154,13 @@ export default {
     });
   },
   computed: {
-    ...mapState(["globalLang", "userInfo", "shopLength", "formLabelAlign"]),
+    ...mapState([
+      "globalLang",
+      "userInfo",
+      "shopLength",
+      "formLabelAlign",
+      "shareInfo"
+    ]),
     publicLang() {
       return this.$t("lang.publicLang");
     }

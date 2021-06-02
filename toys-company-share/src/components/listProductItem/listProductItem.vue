@@ -18,7 +18,7 @@
         <div class="newIcon" v-if="item.isNew"></div>
       </div>
       <div class="priceBox">
-        <div class="leftPrice">
+        <div class="leftPrice" v-if="shareInfo.isShowPrice">
           <span class="currency">{{ userInfo.currencyType }}</span>
           <span class="price">{{ item.price }}</span>
         </div>
@@ -38,7 +38,18 @@
       <div class="productName">
         <span>{{ globalLang === "zh-CN" ? item.name : item.ename }}</span>
       </div>
-      <div class="itemText">
+      <div class="itemText" v-if="shareInfo.showNumber == 1">
+        {{ productLang.exFactoryArticleNo }}：<span>{{
+          item.commodityNumber
+        }}</span>
+      </div>
+      <div class="itemText" v-else-if="shareInfo.showNumber == 2">
+        {{ productLang.exFactoryArticleNo }}：<span>{{
+          item.productNumber
+        }}</span>
+      </div>
+      <div class="itemText" v-else-if="shareInfo.showNumber == -1"></div>
+      <div class="itemText" v-else>
         {{ productLang.exFactoryArticleNo }}：<span>{{
           item.outFactoryNumber
         }}</span>
@@ -195,7 +206,13 @@ export default {
     publicLang() {
       return this.$t("lang.publicLang");
     },
-    ...mapState(["globalLang", "shopLength", "userInfo", "formLabelAlign"])
+    ...mapState([
+      "globalLang",
+      "shopLength",
+      "userInfo",
+      "formLabelAlign",
+      "shareInfo"
+    ])
   }
 };
 </script>
