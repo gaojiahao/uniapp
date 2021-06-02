@@ -280,7 +280,7 @@ export default {
         // 开启长连接
         this.initWebSocket();
       }
-      // const TIME_COUNT = 20
+      // const TIME_COUNT = 20;
       const TIME_COUNT = 300;
       if (!this.timer) {
         let count = TIME_COUNT;
