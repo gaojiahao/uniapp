@@ -124,12 +124,24 @@
       </el-form>
       <center>
         <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="comfirmAddAdvertising"
+          <el-button
+            type="primary"
+            @click="
+              dialogTitle === '新增广告图'
+                ? comfirmAddAdvertising()
+                : comfirmUpdateAdvertising()
+            "
             >确 定</el-button
           >
           <el-button @click="isDialog = false">取 消</el-button>
         </span>
       </center>
+    </el-dialog>
+    <el-dialog
+      :title="dialogRelation"
+      :visible.sync="isDialogRelation"
+      width="700px"
+    >
     </el-dialog>
   </div>
 </template>
@@ -147,6 +159,8 @@ export default {
       editImages: [],
       file: null,
       dialogTitle: "",
+      dialogRelation: "已关联站点（0）",
+      isDialogRelation: false,
       isDialog: false,
       staffList: [],
       userId: null,
@@ -156,7 +170,9 @@ export default {
       pageSize: 10,
       currentPage: 1,
       dialogFromData: {
-        imgUrl: ""
+        imgUrl: "",
+        title: null,
+        defaultLinkUrl: null
       },
       rules: {
         title: [{ required: true, message: "请输入图片标题", trigger: "blur" }],
@@ -203,7 +219,7 @@ export default {
               return "编辑";
             },
             methods: row => {
-              console.log(row);
+              this.handleUpdate(row);
             }
           },
           {
@@ -221,7 +237,7 @@ export default {
               return "删除";
             },
             methods: row => {
-              console.log(row);
+              this.handelDelete(row);
             }
           }
         ]
@@ -381,11 +397,13 @@ export default {
               this.dialogFromData
             );
             if (res.data.result.code === 200) {
+              this.isDialog = false;
+              this.dialogFromData = {};
+              this.editImages = [];
               this.$common.handlerMsgState({
                 msg: "新增操作成功",
                 type: "success"
               });
-              this.isDialog = false;
               this.GetWebsiteShareAdPage();
             } else {
               this.$common.handlerMsgState({
@@ -397,6 +415,77 @@ export default {
         });
       } else {
         this.$refs.formDataRef.validateField("imgUrl");
+      }
+    },
+    // 打开编辑
+    handleUpdate(item) {
+      this.dialogTitle = "编辑广告图";
+      this.isDialog = true;
+      if (item.imgUrl) this.$set(this, "editImages", [{ url: item.imgUrl }]);
+      // this.dialogFromData = Object.assign({}, item);
+      this.dialogFromData.id = item.id;
+      this.dialogFromData.title = item.title;
+      this.dialogFromData.imgUrl = item.imgUrl;
+      this.dialogFromData.defaultLinkUrl = item.defaultLinkUrl;
+
+      console.log(this.dialogFromData);
+    },
+    // 确定编辑请求
+    async comfirmUpdateAdvertising() {
+      if (this.editImages.length != 0) {
+        const imgRes = await this.successUpload();
+        if (imgRes.data.result.code === 200) {
+          this.dialogFromData.imgUrl =
+            imgRes.data.result.object[0] &&
+            imgRes.data.result.object[0].filePath
+              ? imgRes.data.result.object[0].filePath
+              : this.dialogFromData.imgUrl;
+        } else {
+          this.$messsage.error("头像上传失败");
+          return false;
+        }
+        console.log(this.dialogFromData);
+        this.$refs.formDataRef.validate(async valid => {
+          if (valid) {
+            const res = await this.$http.post(
+              "/api/UpdateWebsiteShareAd",
+              this.dialogFromData
+            );
+            if (res.data.result.code === 200) {
+              this.isDialog = false;
+              this.dialogFromData = {};
+              this.editImages = [];
+              this.$common.handlerMsgState({
+                msg: "编辑操作成功",
+                type: "success"
+              });
+              this.GetWebsiteShareAdPage();
+            } else {
+              this.$common.handlerMsgState({
+                msg: res.data.result.msg,
+                type: "danger"
+              });
+            }
+          }
+        });
+      } else {
+        this.$refs.formDataRef.validateField("imgUrl");
+      }
+    },
+    // 删除广告
+    async handelDelete(item) {
+      const res = await this.$http.post("/api/DeleteWebsiteShareAd", item);
+      if (res.data.result.code === 200) {
+        this.GetWebsiteShareAdPage();
+        this.$common.handlerMsgState({
+          msg: "删除成功",
+          type: "success"
+        });
+      } else {
+        this.$common.handlerMsgState({
+          msg: "删除失败",
+          type: "danger"
+        });
       }
     },
     // 切換頁容量

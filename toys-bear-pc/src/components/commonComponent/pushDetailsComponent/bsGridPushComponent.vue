@@ -34,14 +34,16 @@
         </div>
       </div>
       <div class="cheDetail">
-        <p>
+        <div class="checkboxP">
           <el-checkbox
             @change="handleChecked"
             v-model="item.checked"
           ></el-checkbox>
-        </p>
-        <p><i class="el-icon-document"></i> 择样明细(0)</p>
-        <p><i class="el-icon-time"></i>推送记录(0)</p>
+        </div>
+        <div class="text">
+          <p><i class="el-icon-document"></i> 择样明细(0)</p>
+          <p><i class="el-icon-time"></i>推送记录(0)</p>
+        </div>
       </div>
     </div>
     <div class="kong"></div>
@@ -94,9 +96,9 @@ export default {
 </script>
 <style scoped lang="less">
 .bsGridPushComponent {
-  padding: 30px 0;
+  padding-top: 20px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   flex-wrap: wrap;
   .gridBox {
     width: 390px;
@@ -143,13 +145,27 @@ export default {
       height: 40px;
       display: flex;
       align-items: center;
-      justify-content: space-around;
-      p {
-        font-weight: 400;
-        color: #666666;
+      .checkboxP {
+        padding-left: 20px;
+      }
+      .text {
+        margin-left: 102px;
+        margin-right: 20px;
+        flex: 1;
         display: flex;
         align-items: center;
-        line-height: 19px;
+        justify-content: space-between;
+        p {
+          cursor: pointer;
+          font-weight: 400;
+          color: #666666;
+          display: flex;
+          align-items: center;
+          line-height: 19px;
+          i {
+            padding: 0 5px;
+          }
+        }
       }
     }
   }

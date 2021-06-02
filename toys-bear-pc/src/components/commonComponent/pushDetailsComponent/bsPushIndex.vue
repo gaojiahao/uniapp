@@ -70,7 +70,12 @@
         ></component>
       </div>
     </div>
-    <div class="PushFooter">
+    <div
+      :class="{
+        PushFooter: true,
+        PushFooterBorder: isGrid === 'bsGridPushComponent'
+      }"
+    >
       <div class="left">
         <el-checkbox v-model="checkAll" @change="handleCheckAllChange"
           >全选</el-checkbox
@@ -212,6 +217,7 @@ export default {
     // 关闭全选
     handleCheckAllClosee() {
       this.checkAll = false;
+      this.multipleSelection = [];
       if (this.isGrid === "bsGridPushComponent") {
         this.$refs.listComponent.plantList.forEach(row => {
           row.checked = false;
@@ -292,7 +298,7 @@ export default {
       margin-bottom: 10px;
       p {
         // width: 260px;
-        min-width: 250px;
+        min-width: 270px;
         margin-right: 30px;
         font-weight: 400;
         .pId {
@@ -307,7 +313,7 @@ export default {
       align-items: center;
       p {
         margin-right: 30px;
-        min-width: 250px;
+        min-width: 270px;
       }
       .right {
         flex: 1;
@@ -320,7 +326,7 @@ export default {
     }
   }
   .bsPushTable {
-    margin-bottom: 80px;
+    margin-top: 20px;
     .right {
       display: flex;
       width: 80px;
@@ -359,9 +365,12 @@ export default {
     }
   }
   .PushFooter {
+    // margin-top: 10px;
+
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    padding: 30px;
+    padding: 15px;
     .right {
       display: flex;
       align-items: center;
@@ -370,6 +379,9 @@ export default {
         color: #333333;
       }
     }
+  }
+  .PushFooterBorder {
+    border-top: 1px solid #dcdfe6;
   }
 }
 </style>
