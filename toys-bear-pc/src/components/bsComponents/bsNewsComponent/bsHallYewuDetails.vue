@@ -25,7 +25,14 @@
             gray: item.orderStatus == '99'
           }"
         >
-          <span class="title">状态：</span>
+          <span
+            class="title"
+            v-if="
+              item.toCompanyNumer != userInfo.commparnyList[0].companyNumber &&
+                item.orderStatus == '0'
+            "
+            >状态：</span
+          >
           <span
             v-if="
               item.toCompanyNumer != userInfo.commparnyList[0].companyNumber &&
@@ -279,7 +286,7 @@ export default {
             width: 100,
             color: "red",
             render: row => {
-              return "￥" + row.fa_pr;
+              return (row.cu_de || "￥") + row.ha_in_qu;
             }
           },
           {
@@ -289,9 +296,9 @@ export default {
             color: "red",
             render: row => {
               return (
-                row.cu_de +
+                (row.cu_de || "￥") +
                 this.$calculate.countTotalprice(
-                  row.fa_pr,
+                  row.ha_in_qu,
                   row.ou_lo,
                   row.tAmount || 1
                 )
