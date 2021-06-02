@@ -616,11 +616,12 @@
                 <el-table-column label="操作" align="center" width="120">
                   <template slot-scope="scope">
                     <div class="handle">
-                      <img
+                      <!-- 排序接口还没有 -->
+                      <!-- <img
                         @click="handlegoUp(scope.$index, scope.row)"
                         src="@/assets/images/up_f.png"
                         alt=""
-                      />
+                      /> -->
                       <div
                         class="delete"
                         @click="
@@ -902,7 +903,6 @@ export default {
       if (res.data.result.code === 200) {
         this.sitesList = [{ name: "全部", id: null }, ...res.data.result.item];
         this.handSitesList = res.data.result.item;
-        console.log(this.handSitesList, 123);
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -1069,8 +1069,9 @@ export default {
       };
       this.dialogTitle = "新增站点";
       this.defaultFormula = JSON.stringify(this.customerTemplate[0]);
+      this.addClienDialog = true;
       this.$nextTick(() => {
-        this.addClienDialog = true;
+        this.$refs.addClientFormRef.resetFields();
       });
     },
     // 获取客户报价模板
@@ -1090,7 +1091,6 @@ export default {
     },
     // 打开编辑分享
     openEdit(row) {
-      console.log(row);
       this.defaultFormula = null;
       this.dialogTitle = "编辑站点";
       for (const key in row) {
@@ -1117,7 +1117,6 @@ export default {
         shareId: this.clienFormData.websiteInfoId
       });
       if (res.data.result.code === 200) {
-        //  console.log(res);
         this.advertisingTable = res.data.result.item;
       } else {
         this.$common.handlerMsgState({
@@ -1205,7 +1204,6 @@ export default {
     },
     // 提交新增 | 编辑 分享
     async subProcessingLog() {
-      console.log(this.clienFormData);
       this.$refs.addClientFormRef.validate(async valid => {
         if (valid) {
           let url = "/api/CreateWebsiteShareInfo";
@@ -1296,7 +1294,6 @@ export default {
       const res = await this.$http.post("/api/SearchCustomerInfosPage", fd);
       if (res.data.result.code === 200) {
         this.clientList = res.data.result.item.items;
-        console.log(this.clientList);
         this.clientListTotalCount = res.data.result.item.totalCount;
       }
     },
@@ -1383,7 +1380,6 @@ export default {
     },
     // 编辑input
     handleUpdataAdvertising(item) {
-      console.log(item);
       const fd = {
         adId: item.adId,
         type: 1,
@@ -1470,7 +1466,7 @@ export default {
           this.clienFormData.currencyTypeName = obj.cu_deName;
           this.clienFormData.exchange = obj.exchange;
           this.clienFormData.size = obj.size;
-          this.clienFormData.showNumber = obj.showNumber;
+          // this.clienFormData.showNumber = obj.showNumber;
           this.clienFormData.decimalPlaces = obj.decimalPlaces;
           this.clienFormData.rejectionMethod = obj.rejectionMethod;
         }

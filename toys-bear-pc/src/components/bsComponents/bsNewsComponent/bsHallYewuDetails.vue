@@ -155,6 +155,7 @@ export default {
             // isHiden: true,
             infoBox: true,
             productInfo: true,
+            cartInfoIcon: true,
             elImage: row => {
               return row.imgUrl;
             },

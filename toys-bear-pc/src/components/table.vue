@@ -141,7 +141,7 @@
                   @click="toFactory(scope.row)"
                   v-html="col.fcatoryNameHtml(scope.row)"
                 ></div>
-                <div class="icons">
+                <div class="icons" v-if="col.cartInfoIcon">
                   <!-- <el-tooltip
                     class="item"
                     effect="dark"
