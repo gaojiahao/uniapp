@@ -67,13 +67,10 @@
       <li class="info_item" v-for="item in erpOrderList" :key="item.id">
         <div class="tableHead">
           <p class="tableHead_title">
-            <el-badge :is-dot="!item.readStatus">
+            <el-badge :is-dot="!item.readStatusM">
               {{ item.fromCompanyName }}
             </el-badge>
           </p>
-          <!-- <div class="tableHeadIcon">
-              <img src="@/assets/images/delete.png" alt="" />
-            </div> -->
         </div>
         <div class="tablemian">
           <div class="tablemian_left">
@@ -86,7 +83,12 @@
                 <span class="title">代号：</span>
                 <span>{{ item.the_nu }}</span>
               </p>
+              <p class="left_item">
+                <span class="title">单号：</span>
+                <span>{{ item.orderNumber }}</span>
+              </p>
               <p
+                v-if="item.orderStatus == '9' || item.orderStatus == '99'"
                 :class="{
                   left_item: true,
                   red: item.orderStatus == '0',
@@ -96,9 +98,9 @@
                 }"
               >
                 <span class="title">状态：</span>
-                <span v-if="item.orderStatus == '0'">未读</span>
-                <span v-else-if="item.orderStatus == '1'">已读</span>
-                <span v-else-if="item.orderStatus == '9'">已完成</span>
+                <!-- <span v-if="item.orderStatus == '0'">对方未读</span>
+                <span v-else-if="item.orderStatus == '1'">对方已读</span> -->
+                <span v-if="item.orderStatus == '9'">已完成</span>
                 <span v-else-if="item.orderStatus == '99'">已取消</span>
               </p>
             </div>
