@@ -152,6 +152,7 @@ export default {
       );
       const { code, data } = res.data.result;
       if (code === 200) {
+        console.log(data.shareInfo);
         this.$store.commit("setShareInfo", data.shareInfo);
         this.userLogo = data;
         // data.websiteLanguage ? this.$store.commit("localLangs",  || []);
