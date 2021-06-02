@@ -8,10 +8,10 @@
 				<view class="product_box">
 					<view class="tool_bar">
 						<template v-if="!isMobile">
-							<view class="tool_bar_item" :class="[searchType=='zonghe'?'active':'']" @click="change_search_type('zonghe')">综合</view>
-							<view class="tool_bar_item" :class="[searchType=='redu'?'active':'']" @click="change_search_type('redu')">热度</view>
-							<view class="tool_bar_item" :class="[searchType=='price'?'active':'']" @click="change_search_type('price')">单价<u-icon :name="sortType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
-							<view class="tool_bar_item" :class="[searchType=='time'?'active':'']" @click="change_search_type('time')">时间<u-icon :name="sortOrder < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+							<view class="tool_bar_item" :class="[sortType==0?'active':'']" @click="change_search_type(0)">综合</view>
+							<view class="tool_bar_item" :class="[sortType==3?'active':'']" @click="change_search_type(3)">热度<u-icon :name="hotType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+							<view class="tool_bar_item" :class="[sortType==1?'active':'']" @click="change_search_type(1)">单价<u-icon :name="priceType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+							<view class="tool_bar_item" :class="[sortType==2?'active':'']" @click="change_search_type(2)">时间<u-icon :name="timeType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
 							<view class="tool_bar_item guanjianci">关键词</view>
 							<view class="tool_bar_item search">
 								<x-search placeholder="请输入关键词" height="64" shape="square" v-model="keyword" :clearabled="true"
@@ -27,8 +27,8 @@
 									background: '#36ade2',
 									borderRadius: '4px'}"
 									@clear="clearKeyWord"
-									@search="getProductOfferDetailPage"
-									@custom="getProductOfferDetailPage"
+									@search="getData(1,'')"
+									@custom="getData(1,'')"
 									class="x_search"
 									>
 								</x-search>
@@ -40,13 +40,58 @@
 						</template>
 					</view>
 					<view class="total">
-						120条数据
+						{{total}}条数据
 					</view>
-					<view class="product_list">
+					<view class="product_list" v-if="listShowType=='list'">
 						<b-row no-gutters>
-							<b-col cols="3" v-for="(item,index) in rpList" :key='index'>
+							<b-col cols="3" v-for="(item,index) in proudctList" :key='index'>
 								<view class="product_list_item2">
-									<view class="product_list_img">
+									<view class="product_list_img" @click="goDetail(item)">
+										<image class="img" :src="item.imageUrl"></image>
+									</view>
+									<view class="product_list_info">
+										<view class="product_list_info_text active" :title="item.name">
+											{{item.name}}
+										</view>
+										<view class="product_list_info_plus2">
+											<view class="product_list_info_text_left">
+												单价：<text class="red_color">{{item.cu_de}}{{item.price}}</text>
+											</view>
+											<view class="product_list_info_text_left">
+												出厂货号：{{item.fa_no}}
+											</view>
+											<view class="product_list_info_text_left">
+												包装：{{item.ch_pa}}
+											</view>
+											<view class="product_list_info_text_left">
+												产品规格：{{item.pr_le}}x{{item.pr_wi}}x{{item.pr_hi}}(CM)
+											</view>
+											<view class="product_list_info_text_left">
+												外箱规格：{{item.ou_le}}x{{item.ou_wi}}x{{item.ou_hi}}(CM)
+											</view>
+											<view class="product_list_info_text_left">
+												包装规格：{{item.in_le}}x{{item.in_wi}}x{{item.in_hi}}(CM)
+											</view>
+											<view class="product_list_info_text_left">
+												装箱量：{{item.in_en}}/{{item.ou_lo}}(PCS)
+											</view>
+											<view class="product_list_info_text_left">
+												体积/材积：{{item.bulk_stere}}(CBM)/{{item.bulk_feet}}(CUFT)
+											</view>
+											<view class="product_list_info_text_left">
+												毛重/净重：{{item.gr_we}}/{{item.ne_we}}(KG)
+											</view>
+										</view>
+									</view>
+								</view>
+							</b-col>
+						</b-row>
+					</view>
+					<view class="product_list" v-else-if="listShowType=='grid'">
+						<b-row no-gutters>
+							<b-col cols="3" v-for="(item,index) in proudctList" :key='index'>
+								<view class="product_list_item2">
+									<view class="product_list_img" @click="goDetail(item)">
 										<image class="img" :src="item.imageUrl"></image>
 									</view>
 									<view class="product_list_info">
@@ -58,7 +103,7 @@
 												出厂货号：{{item.fa_no}}
 											</view>
 											<view class="product_list_info_text_right">
-												<text class="red_color">{{item.cu_de}}{{item.offerAmount}}</text>
+												<text class="red_color">{{item.cu_de}}{{item.price}}</text>
 											</view>
 										</view>
 									</view>
@@ -99,110 +144,88 @@ export default {
 			sortType: 0,   //时间搜索
 			searchType:'zonghe',
 			listShowType:'list', //列表显示类型 grid list
-			rpList:[
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				},
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				},
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				},
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				},
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				},
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				},
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				},
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				},
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				},
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				},
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				},
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				}
-			],
+			proudctList:[],
 			currentPage:1,
-			totalPage:20, //总页数 (引用页面传递过来)
-			total:200, //总记录数 (引用页面传递过来)
+			totalPage:1, //总页数 (引用页面传递过来)
+			total:0, //总记录数 (引用页面传递过来)
+			pageSize:8,
+			sortOrder:0, //1倒序，2升序
+			sortType:0,  //1价格，2时间，3热度
+			hotType:1,
+			priceType:1,
+			timeType:1,
+			listShowType:'list',
 		}
 	},
 	methods:{
+		//搜索清空
 		clearKeyWord(){
-			
+			this.keyword = "";
+			this.getData();
+			this.currentPage = 1;
 		},
-		getProductOfferDetailPage(){
-			
+		//修改搜索类
+		change_search_type(type){
+			// debugger
+			if(type==0){
+				this.sortType = 0;
+				this.sortOrder = 0;
+			} else if(type==1){
+				this.sortType = 1;
+				this.priceType = this.priceType == 1 ? 2:1;
+				this.sortOrder = this.priceType;
+			} else if(type==2){
+				this.sortType = 2;
+				this.timeType = this.timeType == 1 ? 2:1;
+				this.sortOrder = this.timeType;
+			} else if(type==3){
+				this.sortType = 3;
+				this.hotType = this.hotType == 1 ? 2:1;
+				this.sortOrder = this.hotType;
+			}
+			this.getData();
 		},
-		getData(){
-			
+		//修改显示类型
+		change_show_type(type){
+			this.listShowType = type;
+		},
+		async getData(value,keyword) {
+			var me = this;
+			me.$loading.show();
+			const res = await me.$u.api.RecommendProductByNumberPageShare({
+				companyNumber: uni.getStorageSync('supplier_sharing_companyNumber'),
+				skipCount: value||1,
+				maxResultCount: me.pageSize,
+				keyword: keyword||me.keyword,
+				sortOrder: me.sortOrder,
+				sortType: me.sortType,
+			});
+			if (res.result.code === 200) {
+				me.proudctList = res.result.item.items;
+				me.total = res.result.item.totalCount;
+				me.totalPage = Math.ceil(me.total / me.pageSize);
+				me.$loading.hide();
+			} else {
+				uni.showToast({
+					icon:'none',
+					title: res.data.result.msg,
+					duration: 2000
+				});
+				me.$loading.hide();
+			}
+		},
+		//去详情页
+		goDetail(item){
+			uni.setStorageSync('supplier_sharing_detail',JSON.stringify(item));
+			this.$Router.push({
+			    name:'supplierSharingDetail'
+			})
 		},
 		async init(){
+			this.$loading.show();
 			this.isMobile=util.isMobile();
-			// await this.getToken();
+			await this.getData();
+			this.$loading.hide();
 		},
 	},
 	mounted() {

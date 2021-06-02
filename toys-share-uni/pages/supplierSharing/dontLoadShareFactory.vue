@@ -3,22 +3,22 @@
 		<!-- pc端 -->
 		<template v-if="!isMobile">
 			<!-- 头部 -->
-			<xHead :contactInfo="contactInfo" active="supplierSharing"></xHead>
+			<xHead :contactInfo="contactInfo" active="dontLoadShareFactory"></xHead>
 			<view class="content">
 				<!-- 幻灯片 -->
 				<view class="content_swiper">
-					<image :src="supplier_sharing_3d" class="product_label"></image>
-					<customSwiper :swiper-list="threeProduct" @go-detail="goDetail"></customSwiper>
+					<image :src="threeProduct.length ? supplier_sharing_3d:recommendProduct.length?supplier_sharing_3d_2:supplier_sharing_3d_3" class="product_label"></image>
+					<customSwiper :swiper-lists="threeProduct.length ? threeProduct:recommendProduct.length?recommendProduct:allProduct" @go-detail="goDetail"></customSwiper>
 				</view>
 				<!-- 推荐产品 -->
-				<view class="content_recommend_product">
+				<view class="content_recommend_product" v-if="threeProduct.length&&recommendProduct.length">
 					<view class="title rp"></view>
 					<view class="product_list">
 						<b-row >
 							<b-col cols="6" v-for="(item,index) in recommendProduct.slice(0,2)" :key='index'>
 								<view class="product_list_item">
 									<view class="product_list_img" @click="goDetail(item)">
-										<image class="img" :src="item.img"></image>
+										<image class="img" :src="item.img?item.img:defaultImg"></image>
 									</view>
 									<view class="product_list_info">
 										<view class="product_list_info_text active" :title="item.name">
@@ -41,7 +41,7 @@
 							<b-col cols="3" v-for="(item,index) in recommendProduct.slice(2,6)" :key='index'>
 								<view class="product_list_item2">
 									<view class="product_list_img" @click="goDetail(item)">
-										<image class="img" :src="item.img"></image>
+										<image class="img" :src="item.img?item.img:defaultImg"></image>
 									</view>
 									<view class="product_list_info">
 										<view class="product_list_info_text active" :title="item.name">
@@ -60,19 +60,19 @@
 							</b-col>
 						</b-row>
 						<view class="more_btn">
-							<u-button class="orange-btn" shape="circle" >查看更多></u-button>
+							<u-button class="orange-btn" shape="circle" @click="toLink('supplierSharingRecList')">查看更多></u-button>
 						</view>
 					</view>
 				</view>
 				<!-- 最新产品 -->
-				<view class="content_new_product">
+				<view class="content_new_product" v-if="recommendProduct.length">
 					<view class="title rp"></view>
 					<view class="product_list">
 						<b-row>
 							<b-col cols="3" v-for="(item,index) in allProduct" :key='index'>
 								<view class="product_list_item">
 									<view class="product_list_img" @click="goDetail(item)">
-										<image class="img" :src="item.img"></image>
+										<image class="img" :src="item.img?item.img:defaultImg"></image>
 									</view>
 									<view class="product_list_info">
 										<view class="product_list_info_text active" :title="item.name">
@@ -91,7 +91,7 @@
 							</b-col>
 						</b-row>
 						<view class="more_btn">
-							<u-button class="grenn-btn" shape="circle" >查看更多></u-button>
+							<u-button class="grenn-btn" shape="circle" @click="toLink('supplierSharingAllList')">查看更多></u-button>
 						</view>
 					</view>
 				</view>
@@ -103,7 +103,7 @@
 							<b-col cols="3" v-for="(item,index) in allProduct" :key='index'>
 								<view class="product_list_item">
 									<view class="product_list_img" @click="goDetail(item)">
-										<image class="img" :src="item.img"></image>
+										<image class="img" :src="item.img?item.img:defaultImg"></image>
 									</view>
 									<view class="product_list_info">
 										<view class="product_list_info_text active" :title="item.name">
@@ -122,7 +122,7 @@
 							</b-col>
 						</b-row>
 						<view class="more_btn">
-							<u-button class="blue-btn" shape="circle" >查看更多></u-button>
+							<u-button class="blue-btn" shape="circle" @click="toLink('supplierSharingAllList')">查看更多></u-button>
 						</view>
 					</view>
 				</view>
@@ -155,7 +155,7 @@ import {
   getToken
 } from "@/service/common.js"
 export default {
-	name: "SupplierSharing",
+	name: "DontLoadShareFactory",
 	components: {
 		customSwiper,
 		xHead,
@@ -165,6 +165,9 @@ export default {
 		return {
 			logo: require("@/static/logo.png"),
 			supplier_sharing_3d: require("@/static/images/supplier_sharing_3d.png"),
+			supplier_sharing_3d_2: require("@/static/images/supplier_sharing_3d_2.png"),
+			supplier_sharing_3d_3: require("@/static/images/supplier_sharing_3d_3.png"),
+			defaultImg: require("@/static/images/logo.png"),
 			isMobile:false,   //是否移动端
 			contactInfo:{}, //联系信息
 			recommendProduct:[], //推荐信息
@@ -193,13 +196,18 @@ export default {
 		// 获取推荐产品
 		async getThreeDPage() {
 			var me = this;
-			const res = await me.$u.api.RecommendProductByNumberPageShare({
+			const res = await me.$u.api.SupplierProducts({
 				companyNumber: uni.getStorageSync('supplier_sharing_companyNumber'),
 				skipCount: 1,
-				maxResultCount: 5
+				maxResultCount: 5,
+				isUpInset3D: true,
+				isUpInsetImg: true,
+				videoId: 1,
 			});
 			if (res.result.code === 200) {
-				this.threeProduct = res.result.item.items;
+				this.threeProduct = res.result.item;
+				uni.setStorageSync('threeMenu',res.result.item.length);
+				//uni.setStorageSync('threeMenu',0);
 			} else {
 				uni.showToast({
 					icon:'none',
@@ -218,6 +226,7 @@ export default {
 			});
 			if (res.result.code === 200) {
 				this.recommendProduct = res.result.item.items;
+				uni.setStorageSync('remMenu',res.result.item.totalCount);
 			} else {
 				uni.showToast({
 					icon:'none',
@@ -249,7 +258,8 @@ export default {
 			var me = this;
 			await getToken().then(
 				(res) => {
-					me.$u.vuex('Utoken', res[1].data.result.item)
+					//me.$u.vuex('Utoken', res[1].data.result.item)
+					uni.setStorageSync('token',res[1].data.result.item);
 				}
 			)
 		},
@@ -260,13 +270,21 @@ export default {
 			    name:'supplierSharingDetail'
 			})
 		},
+		//链接跳转
+		toLink(value){
+			this.$Router.push({
+			    name: value
+			})
+		},
 		async init(){
+			this.$loading.show();
 			this.isMobile=util.isMobile();
 			await this.getToken();
 			await this.getCompanyByIDShare();
 			await this.getThreeDPage();
 			await this.getRecommendProductByNumberPage();
 			await this.getSupplierProductShare();
+			this.$loading.hide();
 		},
 	},
 	mounted() {
@@ -278,8 +296,12 @@ export default {
 	  })
 	},
 	created(){
-		uni.getStorageSync('supplier_sharing_companyNumber') ? '' : uni.setStorageSync('supplier_sharing_companyNumber', this.$route.query.id);
-		this.init();
+		if(uni.getStorageSync('supplier_sharing_companyNumber')||this.$route.query.id){
+			uni.getStorageSync('supplier_sharing_companyNumber') ?  (this.$route.query.id ? uni.setStorageSync('supplier_sharing_companyNumber', this.$route.query.id):''): uni.setStorageSync('supplier_sharing_companyNumber', this.$route.query.id);
+			this.init();
+		} else {
+			this.$loading.show();
+		}
 	}
 }
 </script>

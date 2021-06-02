@@ -2,20 +2,20 @@
 	<view class="head">
 		<view class="head_item_grid">
 			<view class="logo">
-				<image :src="contactInfo.companyLogo" class="image"></image>
+				<image :src="contactInfo2.companyLogo" class="image"></image>
 			</view>
 			<view class="title">
-				{{contactInfo.companyName}}
+				{{contactInfo2.companyName}}
 			</view>
 			<view class="menu">
 				<!-- <my-link to="{path: '/supplierSharing'}" navType="pushTab"> -->
-					<view class="menu_item" :class="[nowActive=='supplierSharing' ? 'active':'']" @click="toLink('supplierSharing')">首页</view>
+					<view class="menu_item" :class="[nowActive=='dontLoadShareFactory' ? 'active':'']" @click="toLink('dontLoadShareFactory')">首页</view>
 				<!-- </my-link>
 				<my-link to="{path: '/supplierSharingList'}" navType="pushTab"> -->
-					<view class="menu_item" :class="[nowActive=='supplierSharingList' ? 'active':'']" @click="toLink('supplierSharingList')">3D产品</view>
+					<view class="menu_item" :class="[nowActive=='supplierSharingList' ? 'active':'']" @click="toLink('supplierSharingList')" v-if="threeMenu">3D产品</view>
 				<!-- </my-link>
 				<my-link to="{path: '/supplierSharingRecList'}" navType="pushTab"> -->
-					<view class="menu_item" :class="[nowActive=='supplierSharingRecList' ? 'active':'']" @click="toLink('supplierSharingRecList')">推荐产品</view>
+					<view class="menu_item" :class="[nowActive=='supplierSharingRecList' ? 'active':'']" @click="toLink('supplierSharingRecList')" v-if="remMenu">推荐产品</view>
 				<!-- </my-link>
 				<my-link to="{path: '/supplierSharingAllList'}" navType="pushTab"> -->
 					<view class="menu_item" :class="[nowActive=='supplierSharingAllList' ? 'active':'']" @click="toLink('supplierSharingAllList')">全部产品</view>
@@ -51,27 +51,48 @@ export default {
 			},
 			deep:true,
 			immediate:true
+		},
+		contactInfo:{
+			handler(val){
+				this.contactInfo2 = val;
+			},
+			deep:true
 		}
 	},
 	data() {
 		return {
 			logo: require("@/static/logo.png"),
 			nowActive:'',
+			contactInfo2:{},
+			threeMenu:0,
+			remMenu:0,
 		}
 	},
 	methods:{
 		//链接跳转
 		toLink(value){
-			this.$Router.push({
-			    name: value
-			})
+			if(value == 'dontLoadShareFactory'){
+				var id = uni.getStorageSync('supplier_sharing_companyNumber');
+				this.$Router.push({
+				    path:'/'+value,
+					query:{
+						id:id
+					}
+				})
+			} else{
+				this.$Router.push({
+					name: value
+				})
+			}
 		}
 	},
 	mounted() {
 		
 	},
 	created(){
-
+		this.contactInfo2 = uni.getStorageSync('supplier_sharing_contactInfo')&&JSON.parse(uni.getStorageSync('supplier_sharing_contactInfo'));
+		this.threeMenu = uni.getStorageSync('threeMenu')&&JSON.parse(uni.getStorageSync('threeMenu'));
+		this.remMenu = uni.getStorageSync('remMenu')&&JSON.parse(uni.getStorageSync('remMenu'));
 	}
 }
 </script>

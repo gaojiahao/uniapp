@@ -19,6 +19,7 @@ const ContactInformationListShareAPi = '/api/ContactInformationListShare'
 const RecommendProductByNumberPageShareApi = '/api/RecommendProductByNumberPageShare'
 const SupplierProductShareApi = '/api/SupplierProductShare'
 const CompanyByIDShareApi = '/api/CompanyByIDShare'
+const SupplierProductsApi = '/api/SupplierProducts'
 
 
 // 此处第二个参数vm，就是我们在页面使用的this，你可以通过vm获取vuex等操作，更多内容详见uView对拦截器的介绍部分：
@@ -38,9 +39,10 @@ const install = (Vue, vm) => {
 	const RecommendProductByNumberPageShare = (params = {}) => vm.$u.post(RecommendProductByNumberPageShareApi, params);
 	const SupplierProductShare = (params = {}) => vm.$u.post(SupplierProductShareApi, params);
 	const CompanyByIDShare = (params = {}) => vm.$u.post(CompanyByIDShareApi, params);
+	const SupplierProducts = (params = {}) => vm.$u.post(SupplierProductsApi, params);
 	// 将各个定义的接口名称，统一放进对象挂载到vm.$u.api(因为vm就是this，也即this.$u.api)下
 	vm.$u.api = {getSearch, getToken, GetProductOfferByNumberInfo, ProductOfferDetailPage, GetProductByProductNumber, ContactInformationListShare,
-		RecommendProductByNumberPageShare, SupplierProductShare, CompanyByIDShare};
+		RecommendProductByNumberPageShare, SupplierProductShare, CompanyByIDShare, SupplierProducts};
 }
 
 export default {
