@@ -359,32 +359,32 @@
                   >
                 </el-form-item>
               </div>
-              <el-form-item label="显示价格：" prop="isCustomerInfo">
-                <el-radio v-model="clienFormData.isCustomerInfo" :label="true"
+              <el-form-item label="显示价格：" prop="isShowPrice">
+                <el-radio v-model="clienFormData.isShowPrice" :label="true"
                   >是</el-radio
                 >
-                <el-radio v-model="clienFormData.isCustomerInfo" :label="false"
+                <el-radio v-model="clienFormData.isShowPrice" :label="false"
                   >否</el-radio
                 >
               </el-form-item>
-              <el-form-item label="显示编号：" prop="isCustomerInfo">
-                <el-radio v-model="clienFormData.isCustomerInfo" :label="true"
+              <el-form-item label="显示编号：" prop="showNumber">
+                <el-radio v-model="clienFormData.showNumber" :label="0"
                   >出厂货号</el-radio
                 >
-                <el-radio v-model="clienFormData.isCustomerInfo" :label="false"
+                <el-radio v-model="clienFormData.showNumber" :label="1"
                   >展厅编号</el-radio
                 >
-                <el-radio v-model="clienFormData.isCustomerInfo" :label="true"
+                <el-radio v-model="clienFormData.showNumber" :label="2"
                   >平台编号</el-radio
                 >
-                <el-radio v-model="clienFormData.isCustomerInfo" :label="false"
+                <el-radio v-model="clienFormData.showNumber" :label="-1"
                   >均不显示</el-radio
                 >
               </el-form-item>
             </div>
             <div class="formula" id="formula">
               <div class="title">报价公式</div>
-              <el-form-item label="默认公式：">
+              <el-form-item label="默认公式：" prop="defaultFormula">
                 <el-select v-model="defaultFormula" placeholder="请选择">
                   <el-option
                     v-for="(item, i) in customerTemplate"
@@ -578,7 +578,7 @@
                   <template slot-scope="scope">
                     <el-image
                       style="width: 130px; height: 37px; cursor: pointer"
-                      :src="scope.row.img"
+                      :src="scope.row.imgUrl"
                       fit="contain"
                     >
                       <div
@@ -604,18 +604,28 @@
                     </el-image>
                   </template>
                 </el-table-column>
-                <el-table-column prop="name" label="链接" align="center">
+                <el-table-column prop="LinkUrl" label="链接" align="center">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.lianjie"> </el-input>
+                    <el-input
+                      @blur="handleUpdataAdvertising(scope.row)"
+                      v-model="scope.row.linkUrl"
+                    >
+                    </el-input>
                   </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center" width="120">
                   <template slot-scope="scope">
                     <div class="handle">
-                      <img src="@/assets/images/up_f.png" alt="" />
+                      <img
+                        @click="handlegoUp(scope.$index, scope.row)"
+                        src="@/assets/images/up_f.png"
+                        alt=""
+                      />
                       <div
                         class="delete"
-                        @click="handleDelete(scope.$index, scope.row)"
+                        @click="
+                          handleDeleteAdvertising(scope.$index, scope.row)
+                        "
                       >
                         删除
                       </div>
@@ -646,7 +656,7 @@
       :close-on-click-modal="false"
       :visible.sync="addMyClientDialog"
       destroy-on-close
-      width="1200px"
+      width="800px"
     >
       <el-form
         ref="addMyClientRef"
@@ -685,6 +695,54 @@
         </center>
       </el-form>
     </el-dialog>
+    <!-- 选择广告 -->
+    <el-dialog
+      title="选择广告"
+      :visible.sync="advertisingDialog"
+      v-if="advertisingDialog"
+      width="900px"
+    >
+      <div class="advertisingList">
+        <li v-for="item in advertisingData" :key="item.id">
+          <el-image
+            fit="contain"
+            style="width: 180px; height: 52px"
+            :src="item.imgUrl"
+          >
+            <div slot="placeholder" class="errorImg">
+              <img
+                style="width: 180px; height: 52px"
+                src="~@/assets/images/imgError.png"
+                alt
+              />
+            </div>
+            <div slot="error" class="errorImg">
+              <img
+                style="width: 180px; height: 52px"
+                src="~@/assets/images/imgError.png"
+                alt
+              />
+            </div>
+          </el-image>
+          <h4>{{ item.title }}</h4>
+          <div class="checkboxP">
+            <div>
+              <el-checkbox
+                @change="handleChecked"
+                v-model="item.checked"
+              ></el-checkbox>
+            </div>
+          </div>
+        </li>
+      </div>
+
+      <center>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="handleAddadv">确 定</el-button>
+          <el-button @click="advertisingDialog = false">取 消</el-button>
+        </span>
+      </center>
+    </el-dialog>
     <!-- 生成二维码 -->
     <el-dialog :visible.sync="QRCodeDialog" v-if="QRCodeDialog" width="385px">
       <vue-qr
@@ -710,10 +768,13 @@ export default {
   data() {
     return {
       langs: [],
+      listChecked: [],
+      advertisingTable: [],
+      advertisingData: [],
+      advertisingDialog: false,
       tp: 1,
       srcoll: "",
       rightBoxScroll: null, //滚动条的高度
-      advertisingTable: [{}],
       chufa: "(出厂价+(总费用/(每车尺码/体积*外箱装量)))/(1-报价利润/100)/汇率",
       chengfa:
         "(出厂价+(总费用/(每车尺码/体积*外箱装量)))*(1+报价利润/100)/汇率",
@@ -752,6 +813,7 @@ export default {
       clienFormData: {
         websiteLanguage: [],
         miniPrice: 1,
+        showNumber: 0,
         miniPriceDecimalPlaces: 1,
         url: null,
         isExportExcel: false,
@@ -768,7 +830,8 @@ export default {
         decimalPlaces: 3,
         rejectionMethod: "四舍五入",
         websiteInfoId: null,
-        isCustomerInfo: true
+        isCustomerInfo: true,
+        isShowPrice: true
       },
       options: {
         // 报价配置项
@@ -784,6 +847,16 @@ export default {
         ],
         isCustomerInfo: [
           { required: true, message: "请选择是否提交资料", trigger: "change" }
+        ],
+        showNumber: [
+          { required: true, message: "请选择是否显示编号", trigger: "change" }
+        ],
+
+        // defaultFormula: [
+        //   { required: true, message: "请选择默认公式", trigger: "change" },
+        // ],
+        isShowPrice: [
+          { required: true, message: "请选择是否显示价格", trigger: "change" }
         ],
         url: [{ required: true, message: "请选择站点域名", trigger: "change" }],
         isExportExcel: [
@@ -826,7 +899,6 @@ export default {
     // 获取站点列表
     async getDefaultSites() {
       const res = await this.$http.post("/api/SearchDropdownWebsiteInfos", {});
-      console.log(res);
       if (res.data.result.code === 200) {
         this.sitesList = [{ name: "全部", id: null }, ...res.data.result.item];
         this.handSitesList = res.data.result.item;
@@ -975,6 +1047,7 @@ export default {
       this.clienFormData = {
         websiteLanguage: [],
         miniPrice: 1,
+        showNumber: 0,
         miniPriceDecimalPlaces: 1,
         profitCalcMethod: 2,
         url: null,
@@ -991,7 +1064,8 @@ export default {
         decimalPlaces: 3,
         rejectionMethod: "四舍五入",
         websiteInfoId: null,
-        isCustomerInfo: true
+        isCustomerInfo: true,
+        isShowPrice: true
       };
       this.dialogTitle = "新增站点";
       this.defaultFormula = JSON.stringify(this.customerTemplate[0]);
@@ -1016,6 +1090,7 @@ export default {
     },
     // 打开编辑分享
     openEdit(row) {
+      console.log(row);
       this.defaultFormula = null;
       this.dialogTitle = "编辑站点";
       for (const key in row) {
@@ -1033,8 +1108,25 @@ export default {
           this.clienFormData.customerInfoId = row.customerId;
         }
       }
+      this.getGetWebsiteShareAdByShareIdList();
       this.addClienDialog = true;
     },
+    // 查询分享站点Id下的所有广告
+    async getGetWebsiteShareAdByShareIdList() {
+      const res = await this.$http.post("/api/GetWebsiteShareAdByShareIdList", {
+        shareId: this.clienFormData.websiteInfoId
+      });
+      if (res.data.result.code === 200) {
+        //  console.log(res);
+        this.advertisingTable = res.data.result.item;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
+
     // 生成二维码
     generateQRCode(url) {
       if (!url) {
@@ -1103,7 +1195,6 @@ export default {
     // 搜索客户
     filterMethod(val) {
       this.clientKeyword = val;
-      console.log(this.clientKeyword);
       if (this.timer) {
         // 如果存在延时器就清除
         clearTimeout(this.timer);
@@ -1114,12 +1205,12 @@ export default {
     },
     // 提交新增 | 编辑 分享
     async subProcessingLog() {
+      console.log(this.clienFormData);
       this.$refs.addClientFormRef.validate(async valid => {
         if (valid) {
           let url = "/api/CreateWebsiteShareInfo";
           if (this.dialogTitle === "编辑站点")
             url = "/api/UpdateWebsiteShareInfo";
-          console.log(this.clienFormData);
           const list = [];
           for (let i = 0; i < this.clienFormData.websiteLanguage.length; i++) {
             for (let j = 0; j < this.langs.length; j++) {
@@ -1141,8 +1232,20 @@ export default {
               delete this.clienFormData[key];
             }
           }
+
           const res = await this.$http.post(url, this.clienFormData);
           if (res.data.result.code === 200) {
+            if (this.advertisingTable.length > 0) {
+              for (
+                let index = 0;
+                index < this.advertisingTable.length;
+                index++
+              ) {
+                this.getCreateWebsiteShareAdRelation(
+                  this.advertisingTable[index]
+                );
+              }
+            }
             this.addClienDialog = false;
             this.getDataList();
             this.$common.handlerMsgState({
@@ -1158,6 +1261,27 @@ export default {
         }
       });
     },
+    // 关联站点
+    async getCreateWebsiteShareAdRelation(item) {
+      const fd = {
+        adId: item.id,
+        shareId: this.clienFormData.websiteInfoId,
+        linkUrl: item.linkUrl
+      };
+      const res = await this.$http.post(
+        "/api/CreateWebsiteShareAdRelation",
+        fd
+      );
+      if (res.data.result.code === 200) {
+        console.log(res);
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
+
     // 获取客户列表
     async getClientList() {
       const fd = {
@@ -1181,7 +1305,114 @@ export default {
       this.currentPage = 1;
       this.getDataList();
     },
-    addAdvertising() {},
+    handlegoUp(index, row) {
+      for (var i = 0; i < this.advertisingTable.length; i++) {
+        if (this.advertisingTable[i] === index) {
+          this.advertisingTable.splice(i, 1);
+          break;
+        }
+      }
+      this.advertisingTable.unshift(row);
+    },
+    // 广告弹框
+    addAdvertising() {
+      if (this.advertisingTable.length > 0) {
+        let id = this.advertisingTable.map(item => {
+          if (item.checked == true) {
+            return item.id;
+          }
+        });
+        for (let i = 0; i < this.advertisingData.length; i++) {
+          for (let j = 0; j < id.length; j++) {
+            if (this.advertisingTable[j].id == this.advertisingData[i].id) {
+              this.advertisingData[i].checked = false;
+            }
+          }
+        }
+      }
+      this.advertisingDialog = true;
+    },
+    // 获取管理列表
+    async GetWebsiteShareAdPage() {
+      const fd = {
+        skipCount: 1,
+        maxResultCount: 999
+      };
+      const res = await this.$http.post("/api/GetWebsiteShareAdPage", fd);
+      if (res.data.result.code === 200) {
+        for (let i = 0; i < res.data.result.item.items.length; i++) {
+          res.data.result.item.items[i].checked = false;
+        }
+        this.advertisingData = res.data.result.item.items;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
+    // 确定选择
+    async handleAddadv() {
+      this.advertisingTable = this.listChecked;
+      this.advertisingDialog = false;
+    },
+
+    // 单选
+    handleChecked() {
+      this.listChecked = this.advertisingData.filter(item => {
+        return item.checked === true;
+      });
+    },
+    // 删除广告关联
+    async handleDeleteAdvertising(index, item) {
+      const res = await this.$http.post("/api/DeleteWebsiteShareAdRelation", {
+        id: item.id
+      });
+      if (res.data.result.code === 200) {
+        this.advertisingTable.splice(index, 1);
+        this.$common.handlerMsgState({
+          msg: "删除成功",
+          type: "success"
+        });
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
+    // 编辑input
+    handleUpdataAdvertising(item) {
+      console.log(item);
+      const fd = {
+        adId: item.adId,
+        type: 1,
+        relations: [
+          {
+            id: item.id,
+            linkUrl: item.linkUrl
+          }
+        ]
+      };
+      this.getUpdate(fd);
+    },
+    async getUpdate(fd) {
+      const res = await this.$http.post(
+        "/api/UpdateWebsiteShareAdRelation",
+        fd
+      );
+      if (res.data.result.code === 200) {
+        this.$common.handlerMsgState({
+          msg: "编辑成功",
+          type: "success"
+        });
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
     // 点击导航菜单，页面滚动到指定位置
     handleTab(val, index) {
       this.tp = index;
@@ -1222,6 +1453,7 @@ export default {
     this.getStaffList();
     this.getDefaultSites();
     this.getSelectProductOfferFormulaList();
+    this.GetWebsiteShareAdPage();
   },
   mounted() {
     this.getSelectCompanyOffer();
@@ -1238,6 +1470,7 @@ export default {
           this.clienFormData.currencyTypeName = obj.cu_deName;
           this.clienFormData.exchange = obj.exchange;
           this.clienFormData.size = obj.size;
+          this.clienFormData.showNumber = obj.showNumber;
           this.clienFormData.decimalPlaces = obj.decimalPlaces;
           this.clienFormData.rejectionMethod = obj.rejectionMethod;
         }
@@ -1511,6 +1744,29 @@ export default {
           }
         }
       }
+    }
+  }
+}
+.advertisingList {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  li {
+    margin: 0 17px;
+    width: 180px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    h4 {
+      padding: 15px 0;
+      width: 180px;
+      overflow: hidden; /*超出部分隐藏*/
+      white-space: nowrap; /*不换行*/
+      text-overflow: ellipsis; /*超出部分文字以...显示*/
+      text-align: center;
+      color: #333333;
+    }
+    .checkboxP {
+      padding-left: 83px;
     }
   }
 }

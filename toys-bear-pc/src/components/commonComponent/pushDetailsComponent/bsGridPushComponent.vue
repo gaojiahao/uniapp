@@ -6,7 +6,7 @@
           <el-image
             fit="contain"
             style="width: 100px; height: 100px"
-            :src="item.imgUrl"
+            :src="item.companyLogo"
           >
             <div slot="placeholder" class="errorImg">
               <img

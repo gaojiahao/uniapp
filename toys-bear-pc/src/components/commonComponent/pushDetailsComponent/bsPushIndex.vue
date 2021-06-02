@@ -179,8 +179,15 @@ export default {
       case "采购推送":
         this.title = "采购推送";
         this.orderData = {
-          orderPushType: 4,
-          orderNumber: this.item.offerNumber
+          OrderTypeName: "采购单号",
+          timeName: " 采购时间",
+          offerName: this.item.fromCompanyName, //客户名称
+          linkman: this.item.orgPersonnelName, //业务员
+          orderStatus: this.item.readStatus, //状态
+          createdOn: this.item.createdOn, //时间
+          remark: this.item.pushContent, //备注
+          orderPushType: 4, //推送类型
+          orderNumber: this.item.offerNumber //单号
         };
         break;
       default:
@@ -257,7 +264,14 @@ export default {
 
     // 打开/关闭推送弹框
     handlePushDialog(flag) {
-      this.pushDialog = flag;
+      if (this.multipleSelection.length > 0) {
+        this.pushDialog = flag;
+      } else {
+        this.$common.handlerMsgState({
+          msg: "请勾选推送厂商",
+          type: "danger"
+        });
+      }
     }
   }
 };

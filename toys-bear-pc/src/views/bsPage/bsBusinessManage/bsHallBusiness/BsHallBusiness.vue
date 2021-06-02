@@ -238,16 +238,25 @@ export default {
             isHiden: true,
             label: "状态",
             render: row => {
-              let msg = "";
-              switch (row.readStatus) {
-                case false:
-                  msg = "<span style='color: #f56c6c'>未读</span>";
-                  break;
-                case true:
-                  msg = "<span style='color: green'>已读</span>";
-                  break;
+              // let msg = "";
+              // switch (row.readStatus) {
+              //   case false:
+              //     msg = "<span style='color: #f56c6c'>未读</span>";
+              //     break;
+              //   case true:
+              //     msg = "<span style='color: green'>已读</span>";
+              //     break;
+              // }
+              // return msg;
+              if (row.readStatus == 0) {
+                return "<span style='color: #FF4848; '>对方未读</span>";
+              } else if (row.readStatus == 1) {
+                return "<span style='color: #3368A9; '>对方已读</span>";
+              } else if (row.readStatus == 9) {
+                return "<span style='color: #33A96A; '>已完成</span>";
+              } else if (row.readStatus == 99) {
+                return "<span style='color: #999999; '>已取消</span>";
               }
-              return msg;
             }
           }
         ],
@@ -371,8 +380,10 @@ export default {
     // 获取列表
     async getTableDataList() {
       const fd = {
+        sampleTo: "Sales",
+        messageModel: "1",
         readStatus: this.searchForm.readStatus,
-        sampleFrom: "hall",
+        sampleFrom: "Hall",
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         keyWord: this.searchForm.keyword,

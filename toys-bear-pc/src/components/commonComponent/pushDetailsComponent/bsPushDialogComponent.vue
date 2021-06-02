@@ -53,6 +53,7 @@
       destroy-on-close
       append-to-body
       width="800px"
+      top="300px"
     >
       <bsAddOfferFormulaLang
         :messageExtType="messageExtType"
@@ -168,6 +169,7 @@ export default {
     // 单选框事件
     handleRadio(item) {
       this.dataRadio = item;
+      this.textareaData = item.content;
       console.log(item, "单选框事件");
     },
     // 确定推送
