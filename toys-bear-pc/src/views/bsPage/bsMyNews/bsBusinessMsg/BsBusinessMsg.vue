@@ -40,6 +40,7 @@
 import bsYewuInfo from "./components/bsYewuInfo";
 import bsSystemInfo from "./components/bsSystemInfo";
 import { mapState } from "vuex";
+import eventBus from "@/assets/js/common/eventBus.js";
 export default {
   components: {
     bsYewuInfo,
@@ -113,9 +114,24 @@ export default {
   created() {},
   async mounted() {
     await this.getConversationList();
+    eventBus.$on("resetTotalCount", async () => {
+      const res = await this.$im_http.post("/api/Conversation/List", {});
+      const { code, item, msg } = res.data.result;
+      if (code === 200) {
+        this.businessConversations = item.businessConversations;
+      } else {
+        this.$common.handlerMsgState({
+          msg: msg,
+          type: "danger"
+        });
+      }
+    });
   },
   computed: {
     ...mapState(["userInfo"])
+  },
+  beforeDestroy() {
+    eventBus.$off("resetTotalCount");
   }
 };
 </script>
