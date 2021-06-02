@@ -222,7 +222,7 @@ export default {
     // 查看业务消息详情
     openDetails(item) {
       const fd = {
-        name: item.orderNumber || item.offerNumber,
+        name: "bsHallYewuDetails" + item.orderNumber || item.offerNumber,
         linkUrl: this.$router.path,
         component: "bsHallYewuDetails",
         refresh: true,
