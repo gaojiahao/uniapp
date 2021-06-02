@@ -66,9 +66,9 @@
 			}
 		},
 		{
-			"path": "pages/supplierSharing/supplierSharing",	//厂商分享首页
-			"aliasPath":"/supplierSharing",
-			"name":"supplierSharing",
+			"path": "pages/supplierSharing/dontLoadShareFactory",	//厂商分享首页
+			"aliasPath":"/dontLoadShareFactory",
+			"name":"dontLoadShareFactory",
 			"style": {
 				"navigationBarTitleText": "厂商分享",
 				"app-plus": {

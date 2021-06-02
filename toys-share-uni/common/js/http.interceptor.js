@@ -40,7 +40,7 @@ const install = (Vue, vm) => {
 		// console.log(vm.$scope.globalData.Utoken);
 		// config.header.Utoken = vm.$scope.globalData.Utoken;
 		// // // #endif
-		config.header.Utoken = vm.$store.state.Utoken;
+		config.header.Utoken = vm.$store.state.Utoken||uni.getStorageSync('token');
 		
 		// 方式一，存放在vuex的token，假设使用了uView封装的vuex方式，见：https://uviewui.com/components/globalVariable.html
 		// config.header.token = vm.token;

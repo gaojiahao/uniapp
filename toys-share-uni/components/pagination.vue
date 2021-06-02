@@ -35,7 +35,7 @@
 	<div
 	  class="page-qianwang"
 	>前往</div>&ensp;
-    <input type="number" v-model="newPage" class="pagination_input">&ensp;
+    <input type="number" v-model="newPage" class="pagination_input" @keypress.enter="inputJump()">&ensp;
     <div class="page-button page-jump" @click="inputJump()">页</div>
   </div>
 </template>

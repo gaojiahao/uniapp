@@ -21,7 +21,7 @@
 					<image class="pic" :src="item.imageUrl"></image>
 				</view> -->
 				<view class="children">
-					<image class="pic" :src="item.imageUrl" @click="goDetail"></image>
+					<image class="pic" :src="item.imageUrl?item.imageUrl:defaultImg" @click="goDetail(item)"></image>
 					<view class="text_item">
 						<view class="title" :title="item.name">{{item.name}}</view>
 						<view class="content">
@@ -45,7 +45,7 @@
 <script>
 	export default {
 		props: {
-			swiperList: {
+			swiperLists: {
 				type: Array,
 				default: []
 			}
@@ -57,17 +57,21 @@
 					y: 0
 				},
 				screenWidth: 0,
-				itemStyle: []
+				itemStyle: [],
+				swiperList:[],
+				defaultImg: require("@/static/images/logo.png"),
 			};
 		},
 		watch:{
-			swiperList:{
+			swiperLists:{
 				handler(val){
+					this.swiperList = val.slice(0,5);
 					this.swiperList.forEach((item, index) => {
 						this.itemStyle.push(this.getStyle(index))
 					})
 				},
-				deep:true
+				deep:true,
+				immediate:true
 			}
 		},
 		created() {

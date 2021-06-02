@@ -3,14 +3,16 @@
 		<!-- pc端 -->
 		<template v-if="!isMobile">
 			<!-- 头部 -->
-			<xHead></xHead>
+			<xHead active="dontLoadShareFactory"></xHead>
 			<view class="content">
 				<div class="detailBox">
 					<div class="left">
-						<magnifierComponent ref="magnifierRef" v-if="productDetail.imgUrlList" :middleImgWidth="524"
+						<!-- <magnifierComponent ref="magnifierRef" v-if="productDetail.imgUrlList" :middleImgWidth="524"
 							:middleImgHeight="393" :thumbnailHeight="65" :thumbnailWidth="96" :thumbnailCount="5"
 							:imageUrls="productDetail.imgUrlList" :videoAddress="productDetail.videoAddress"
-							:threeDimensional="productDetail.threeDimensional" />
+							:threeDimensional="productDetail.threeDimensional" /> -->
+							<magnifierComponent ref="magnifierRef" v-if="productDetail.imgUrlList"
+								:productInfos="productDetail" />
 					</div>
 					<div class="right">
 						<div class="context">
@@ -68,17 +70,6 @@
 								</div>
 							</div>
 						</div>
-						<div class="myCartBox">
-							<div class="myCart" @click="handlerShopping(productDetail)">
-								<i class="myCartIcon"></i>
-								<span>加入购物车</span>
-							</div>
-							<div class="myShoucang" @click="addCollect(productDetail)">
-								<i class="shoucangActiveIcon" v-if="productDetail.isFavorite"></i>
-								<i class="shoucangIcon" v-else></i>
-								<span>产品收藏</span>
-							</div>
-						</div>
 						<!-- 上架时间，产品认证 -->
 						<div class="shelfTimeBox">
 							<div class="item">
@@ -100,17 +91,12 @@
 								<i v-if="productDetail.manuCertificateList" class="proveActiveIcon"></i>
 								<i v-else class="proveIcon"></i>
 
-								<div v-if="productDetail.manuCertificateList" class="manuCertificate">
+								<!-- <div v-if="productDetail.manuCertificateList" class="manuCertificate">
 									<div class="cate" v-for="item in productDetail.manuCertificateList"
 										:key="item.index">
-										<!-- <img
-				                  @click="openDialogCertificate(item)"
-				                  :src="item.certificateAddres"
-				                  alt=""
-				                /> -->
-										<el-image @click="openDialogCertificate(item)"
+										<image @click="openDialogCertificate(item)"
 											style="width: 21px; height: 30px; min-width: 21px"
-											:src="item.certificateAddres" fit="contain">
+											:src="item.certificateAddres">
 											<div slot="placeholder" class="image-slot"
 												style="width: 82px; height: 62px">
 												<img style="width: 21px; height: 30px; min-width: 21px"
@@ -121,42 +107,49 @@
 												<img style="width: 21px; height: 30px; min-width: 21px"
 													:src="require('@/static/images/PDF.png')" />
 											</div>
-										</el-image>
+										</image>
 										<span>{{ item.certificateName }}</span>
 									</div>
-								</div>
+								</div> -->
 							</div>
 						</div>
 						<!-- 联系方式 -->
 						<div class="contactMode">
-							<p class="item">
+							<view class="item">
 								<i class="factoryIcon"></i>
+								<span class="context" @click="toFactory(productDetail)" :title="productDetail.supplierName">{{
+								  productDetail.supplierName
+								}}</span>
 								<!-- <el-tooltip effect="dark" :content="productDetail.supplierName" placement="top">
 									<span class="context" @click="toFactory(productDetail)">{{
 				                productDetail.supplierName
 				              }}</span>
 								</el-tooltip> -->
-							</p>
-							<p class="item myHover" @click="toNews(productDetail)">
+							</view>
+							<!-- <p class="item myHover" @click="toNews(productDetail)">
 								<i class="infoIcon"></i>
 								<span>在线咨询</span>
-							</p>
-							<p class="item myHover" v-if="productDetail.supplierTelephoneNumber">
+							</p> -->
+							<view class="item myHover" v-if="productDetail.supplierTelephoneNumber">
 								<i class="phoneIcon"></i>
+								<span class="context">{{
+								  productDetail.supplierTelephoneNumber
+								}}</span>
 								<!-- <el-tooltip effect="dark" :content="productDetail.supplierTelephoneNumber"
 									placement="top">
 									<span class="context">{{
 				                productDetail.supplierTelephoneNumber
 				              }}</span>
 								</el-tooltip> -->
-							</p>
-							<p class="item myHover" v-if="productDetail.supplierPhone">
+							</view>
+							<view class="item myHover" v-if="productDetail.supplierPhone">
 								<i class="sjIcon"></i>
-								<el-tooltip effect="dark" :content="productDetail.supplierPhone" placement="top">
+								<span class="context">{{ productDetail.supplierPhone }}</span>
+								<!-- <el-tooltip effect="dark" :content="productDetail.supplierPhone" placement="top">
 									<span class="context">{{ productDetail.supplierPhone }}</span>
-								</el-tooltip>
-							</p>
-							<p class="item myHover" v-if="productDetail.supplierQQ">
+								</el-tooltip> -->
+							</view>
+							<!-- <p class="item myHover" v-if="productDetail.supplierQQ">
 								<i class="qqIcon"></i>
 								<el-tooltip effect="dark" :content="productDetail.supplierQQ" placement="top">
 									<span class="context">{{ productDetail.supplierQQ }}</span>
@@ -165,10 +158,10 @@
 							<p class="item myHover" @click="toFactory(productDetail)">
 								<i class="shopIcon"></i>
 								<span>厂商店铺</span>
-							</p>
+							</p> -->
 						</div>
 						<!-- 来源 -->
-						<div class="sourceBox">
+						<!-- <div class="sourceBox">
 							<p class="item">
 								资源来源：
 								<span>{{ productDetail.exhibitionName }}</span>
@@ -181,7 +174,7 @@
 								摊位号：
 								<span>{{ productDetail.booth_nu_pro }}</span>
 							</p>
-						</div>
+						</div> -->
 					</div>
 				</div>
 				<div class="productDetails">
@@ -248,6 +241,7 @@
 		},
 		created() {
 			this.init();
+			this.productDetail = JSON.parse(uni.getStorageSync('supplier_sharing_detail'));
 		}
 	}
 </script>
