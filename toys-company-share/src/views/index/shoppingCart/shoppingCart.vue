@@ -115,8 +115,17 @@
                         : scope.row.productJson.ename
                     }}
                   </p>
-                  <p class="fa_no">No.{{ scope.row.productJson.fa_no }}</p>
-                  <p class="price">
+                  <p class="fa_no" v-if="shareInfo.showNumber == 1">
+                    No.{{ scope.row.productJson.number }}
+                  </p>
+                  <p class="fa_no" v-else-if="shareInfo.showNumber == 2">
+                    No.{{ scope.row.productNumber }}
+                  </p>
+                  <p class="fa_no" v-else-if="shareInfo.showNumber == -1"></p>
+                  <p class="fa_no" v-else>
+                    No.{{ scope.row.productJson.fa_no }}
+                  </p>
+                  <p class="price" v-if="shareInfo.isShowPrice">
                     <span>{{ userInfo.currencyType }}</span>
                     <span class="priceText">{{
                       scope.row.productJson.price
@@ -251,7 +260,7 @@
                     }}cuft
                   </p>
                 </div>
-                <p class="item price">
+                <p class="item price" v-if="shareInfo.isShowPrice">
                   <span>{{ userInfo.currencyType }}</span>
                   <span>
                     {{
@@ -328,7 +337,7 @@
               </span>
             </div>
             <!-- 总价 -->
-            <div class="totalWrap totalPrice">
+            <div class="totalWrap totalPrice" v-if="shareInfo.isShowPrice">
               {{ myShoppingCartLang.totalPrice }}：
               <span class="price">{{ userInfo.currencyType }}</span>
               <span style="margin-left:5px;" class="price">
@@ -752,6 +761,9 @@ export default {
         productNumber: productNumbers.toString()
       });
       console.log(res);
+      if (res.data.result.code === 200) {
+        this.$store.commit("handlerShopLength", res.data.result.item);
+      }
     },
     // 单元格样式
     idStyle(column) {
@@ -997,7 +1009,7 @@ export default {
     myOrderLang() {
       return this.$t("lang.myOrder");
     },
-    ...mapState(["globalLang", "userInfo"])
+    ...mapState(["globalLang", "userInfo", "shareInfo"])
   },
   filters: {}
 };
