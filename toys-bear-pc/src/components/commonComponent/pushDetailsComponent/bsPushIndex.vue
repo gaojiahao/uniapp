@@ -11,9 +11,9 @@
             >{{ orderData.orderNumber }}
           </span>
         </p>
-        <p>
+        <!-- <p>
           客户名称：<span>{{ orderData.offerName }} </span>
-        </p>
+        </p> -->
         <p>
           业务员：<span style="color: #2d7fe4">{{ orderData.linkman }} </span>
         </p>
@@ -40,7 +40,7 @@
         </p>
         <div class="right">
           <p class="remark">
-            报价备注：<span>{{ orderData.remark }} </span>
+            {{ orderData.remarkName }}：<span>{{ orderData.remark }} </span>
           </p>
         </div>
       </div>
@@ -151,15 +151,16 @@ export default {
       case "展厅业务推送":
         this.title = "展厅业务推送";
         this.orderData = {
-          OrderTypeName: "采购单号",
+          OrderTypeName: "择样单号",
           timeName: "择样时间",
-          offerName: this.item.orgPersonnelName,
-          linkman: this.item.smS_handset,
+          remarkName: "择样备注",
+          // offerName: this.item.client_na,
+          linkman: this.item.orgPersonnelName,
           status: this.item.orderStatus,
           createdOn: this.item.createdOn,
           remark: this.item.pushContent,
           orderPushType: 1,
-          orderNumber: this.item.offerNumber
+          orderNumber: this.item.orderNumber
         };
         break;
       case "报价推送":
@@ -167,7 +168,8 @@ export default {
         this.orderData = {
           OrderTypeName: "报价单号",
           timeName: " 报价时间",
-          offerName: this.item.customerName, //客户名称
+          remarkName: "报价备注",
+          // offerName: this.item.customerName, //客户名称
           linkman: this.item.linkman, //业务员
           orderStatus: this.item.status, //状态
           createdOn: this.item.createdOn, //时间
@@ -181,10 +183,12 @@ export default {
         this.orderData = {
           OrderTypeName: "采购单号",
           timeName: " 采购时间",
-          offerName: this.item.fromCompanyName, //客户名称
+          remarkName: "采购备注",
+          // offerName: this.item.fromCompanyName, //客户名称
           linkman: this.item.orgPersonnelName, //业务员
           orderStatus: this.item.readStatus, //状态
           createdOn: this.item.createdOn, //时间
+
           remark: this.item.pushContent, //备注
           orderPushType: 4, //推送类型
           orderNumber: this.item.offerNumber //单号
@@ -269,7 +273,7 @@ export default {
       } else {
         this.$common.handlerMsgState({
           msg: "请勾选推送厂商",
-          type: "danger"
+          type: "warning"
         });
       }
     }

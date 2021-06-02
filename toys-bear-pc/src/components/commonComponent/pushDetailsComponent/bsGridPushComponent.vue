@@ -68,16 +68,16 @@ export default {
   methods: {
     // 去聊天
     toNews() {
-      const fd = {
-        name: this.companyInfo.companyNumber + "bsNews",
-        linkUrl: "/bsIndex/bsNews",
-        component: "bsNews",
-        refresh: true,
-        label: this.companyInfo.companyName,
-        value: this.companyInfo
-      };
-      this.$router.push("/bsIndex/bsNews");
-      this.$store.commit("myAddTab", fd);
+      // const fd = {
+      //   name: this.companyInfo.companyNumber + "bsNews",
+      //   linkUrl: "/bsIndex/bsNews",
+      //   component: "bsNews",
+      //   refresh: true,
+      //   label: this.companyInfo.companyName,
+      //   value: this.companyInfo
+      // };
+      // this.$router.push("/bsIndex/bsNews");
+      // this.$store.commit("myAddTab", fd);
     },
     // 单选
     handleChecked(value) {

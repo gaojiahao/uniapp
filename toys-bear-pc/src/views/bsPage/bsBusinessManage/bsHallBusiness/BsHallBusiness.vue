@@ -248,14 +248,25 @@ export default {
               //     break;
               // }
               // return msg;
-              if (row.readStatus == 0) {
-                return "<span style='color: #FF4848; '>对方未读</span>";
-              } else if (row.readStatus == 1) {
-                return "<span style='color: #3368A9; '>对方已读</span>";
-              } else if (row.readStatus == 9) {
-                return "<span style='color: #33A96A; '>已完成</span>";
-              } else if (row.readStatus == 99) {
-                return "<span style='color: #999999; '>已取消</span>";
+              if (
+                row.toCompanyName ==
+                this.userInfo.commparnyList[0].companyNumber
+              ) {
+                if (row.readStatus == 0) {
+                  return "--";
+                } else if (row.readStatus == 1) {
+                  return "--";
+                }
+              } else {
+                if (row.readStatus == 0) {
+                  return "<span style='color: #FF4848; '>对方未读</span>";
+                } else if (row.readStatus == 1) {
+                  return "<span style='color: #3368A9; '>对方已读</span>";
+                } else if (row.readStatus == 9) {
+                  return "<span style='color: #33A96A; '>已完成</span>";
+                } else if (row.readStatus == 99) {
+                  return "<span style='color: #999999; '>已取消</span>";
+                }
               }
             }
           }
