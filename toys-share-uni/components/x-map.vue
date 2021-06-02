@@ -18,7 +18,8 @@
 				handler(val){
 					this.BaiduMap();
 				},
-				deep:true
+				deep:true,
+				immediate:true
 			}
 		},
 		mounted() {

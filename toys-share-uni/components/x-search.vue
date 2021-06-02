@@ -35,7 +35,7 @@
 					backgroundColor: bgColor,
 				}, inputStyle]"
 			/>
-			<view class="u-close-wrap" v-if="keyword && clearabled && focused" @tap="clear" @mousedown="clear">111
+			<view class="u-close-wrap" v-if="keyword && clearabled && focused" @tap="clear" @mousedown="clear">
 				<u-icon class="u-clear-icon" name="close-circle-fill" size="34" color="#c0c4cc"></u-icon>
 			</view>
 		</view>
