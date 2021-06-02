@@ -1557,6 +1557,7 @@ export default {
           this.productList[i].isShop = item.isShop;
         }
       }
+      this.$forceUpdate();
     });
 
     // 取消收藏/刷新页面

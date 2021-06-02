@@ -7,7 +7,7 @@
           <span class="itemTitle">总款数：</span>
           <span>{{ summaryData.totalDegree }}</span>
         </p>
-        <p class="item" v-if="summaryData.totalCartons > -1">
+        <p class="item" v-if="summaryData.totalCartons > 0">
           <span class="itemTitle">总箱数：</span>
           <span>{{ summaryData.totalCartons }}</span>
         </p>
@@ -29,7 +29,7 @@
             >{{ summaryData.totalGrWe }}/{{ summaryData.totalNeWe }}(KG)</span
           >
         </p>
-        <p class="item" v-if="summaryData.totalMoney > -1">
+        <p class="item" v-if="summaryData.totalMoney > 0">
           <span class="itemTitle">总金额：</span>
           <span class="price"
             >{{ summaryData.cu_de }}{{ summaryData.totalMoney }}
@@ -37,7 +37,7 @@
         </p>
         <p
           class="item"
-          v-if="summaryData.sumAmountFa_pr > -1 && summaryData.sumHa_in_qu > -1"
+          v-if="summaryData.sumAmountFa_pr > 0 && summaryData.sumHa_in_qu > 0"
         >
           <span class="itemTitle">总出厂价/总报出价</span>
           <span class="price">￥{{ summaryData.sumAmountFa_pr }}</span>

@@ -25,16 +25,16 @@ module.exports = {
   proEnv: {
     NODE_ENV: "production",
     // 新测试环境
-    hosturl: "http://124.71.6.26:8089",
-    loginUrl: "http://124.71.6.26:8080/#/me",
-    wsBaseUrl: "ws://124.71.6.26:8090/ws?UserId=",
-    appkey: "bmdehs6pbfaas"
-    // appkey: "pkfcgjstp5888"
+    // hosturl: "http://124.71.6.26:8089",
+    // loginUrl: "http://124.71.6.26:8080/#/me",
+    // wsBaseUrl: "ws://124.71.6.26:8090/ws?UserId=",
+    // appkey: "bmdehs6pbfaas"
+
     // 生产环境
     // hosturl: "http://1.14.158.14:8081",
-
-    // hosturl: "https://www.toysbear.com",
-    // loginUrl: "https://www.toysbear.com/#/me",
-    // wsBaseUrl: "wss://impush.toysbear.com/ws?UserId="
+    appkey: "pkfcgjstp5888",
+    hosturl: "https://www.toysbear.com",
+    loginUrl: "https://www.toysbear.com/#/me",
+    wsBaseUrl: "wss://impush.toysbear.com/ws?UserId="
   }
 };

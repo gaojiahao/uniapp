@@ -136,7 +136,7 @@
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-            {{ scope.row.exhibitionCompany.companyName }}
+            {{ scope.row.companyName }}
           </template>
         </el-table-column>
         <el-table-column
@@ -1151,7 +1151,6 @@ export default {
           productNumber = selectProducts.map(
             val => val.productJson.productNumber
           );
-          console.log(productNumber);
           const fd = {
             userID: this.userInfo.userInfo.id,
             companyNumber: this.userInfo.commparnyList[0].companyNumber,
@@ -1449,8 +1448,9 @@ export default {
             { supplierJson: JSON.parse(this.cartList[i].supplierJson) }
           );
         }
-        // console.log(this.cartList, "解析的列表");
+
         this.tableData = this.cartList;
+        // console.log(this.tableData, "解析的列表");
         this.$store.commit(
           "handlerShoppingCartCount",
           res.data.result.item.length

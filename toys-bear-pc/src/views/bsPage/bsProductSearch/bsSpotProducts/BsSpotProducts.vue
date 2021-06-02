@@ -293,6 +293,7 @@ export default {
           this.productList[i].isShop = item.isShop;
         }
       }
+      this.$forceUpdate();
     });
   },
   computed: { ...mapState(["userInfo", "myShoppingCartCount"]) },
