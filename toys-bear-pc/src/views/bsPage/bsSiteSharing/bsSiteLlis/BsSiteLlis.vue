@@ -220,6 +220,7 @@
       class="siteDialog"
       :title="dialogTitle"
       :visible.sync="addClienDialog"
+      v-if="addClienDialog"
       :close-on-click-modal="false"
       top="50px"
       width="930px"
@@ -850,14 +851,14 @@ export default {
           { required: true, message: "请选择是否提交资料", trigger: "change" }
         ],
         showNumber: [
-          { required: true, message: "请选择是否显示编号", trigger: "change" }
+          { required: true, message: "请选择是否显示编号", trigger: "blur" }
         ],
 
         // defaultFormula: [
         //   { required: true, message: "请选择默认公式", trigger: "change" },
         // ],
         isShowPrice: [
-          { required: true, message: "请选择是否显示价格", trigger: "change" }
+          { required: true, message: "请选择是否显示价格", trigger: "blur" }
         ],
         url: [{ required: true, message: "请选择站点域名", trigger: "change" }],
         isExportExcel: [
@@ -1096,6 +1097,7 @@ export default {
       for (const key in row) {
         this.clienFormData[key] = row[key];
       }
+      // this.clienFormData = Object.assign({},row)
       if (row.websiteLanguage) {
         this.clienFormData.websiteLanguage = JSON.parse(
           row.websiteLanguage
@@ -1204,6 +1206,7 @@ export default {
     },
     // 提交新增 | 编辑 分享
     async subProcessingLog() {
+      console.log(this.clienFormData, "this.clienFormData");
       this.$refs.addClientFormRef.validate(async valid => {
         if (valid) {
           let url = "/api/CreateWebsiteShareInfo";
@@ -1219,6 +1222,7 @@ export default {
             }
           }
           this.clienFormData.websiteLanguage = JSON.stringify(list);
+
           for (const key in this.clienFormData) {
             if (
               this.clienFormData[key] == "undefined" ||
@@ -1246,6 +1250,7 @@ export default {
             }
             this.addClienDialog = false;
             this.getDataList();
+            this.clienFormData = {};
             this.$common.handlerMsgState({
               msg: "操作成功",
               type: "success"
@@ -1459,6 +1464,7 @@ export default {
       deep: true,
       handler(newVal) {
         if (newVal) {
+          console.log(newVal);
           const obj = JSON.parse(newVal);
           this.clienFormData.profit = obj.profit;
           this.clienFormData.offerMethod = obj.offerMethod;

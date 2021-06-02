@@ -235,39 +235,38 @@ export default {
             label: "备注"
           },
           {
-            prop: "readStatus",
+            prop: "orderStatus",
             isHiden: true,
             label: "状态",
             render: row => {
-              // let msg = "";
-              // switch (row.readStatus) {
-              //   case false:
-              //     msg = "<span style='color: #f56c6c'>未读</span>";
-              //     break;
-              //   case true:
-              //     msg = "<span style='color: green'>已读</span>";
-              //     break;
-              // }
-              // return msg;
               if (
-                row.toCompanyName ==
-                this.userInfo.commparnyList[0].companyNumber
+                row.toCompanyNumer !=
+                  this.userInfo.commparnyList[0].companyNumber &&
+                row.orderStatus == 0
               ) {
-                if (row.readStatus == 0) {
-                  return "--";
-                } else if (row.readStatus == 1) {
-                  return "--";
-                }
-              } else {
-                if (row.readStatus == 0) {
-                  return "<span style='color: #FF4848; '>对方未读</span>";
-                } else if (row.readStatus == 1) {
-                  return "<span style='color: #3368A9; '>对方已读</span>";
-                } else if (row.readStatus == 9) {
-                  return "<span style='color: #33A96A; '>已完成</span>";
-                } else if (row.readStatus == 99) {
-                  return "<span style='color: #999999; '>已取消</span>";
-                }
+                return "<span style='color: #FF4848; '>对方未读</span>";
+              } else if (
+                row.toCompanyNumer ==
+                  this.userInfo.commparnyList[0].companyNumber &&
+                row.orderStatus == 0
+              ) {
+                return "--";
+              } else if (
+                row.toCompanyNumer !=
+                  this.userInfo.commparnyList[0].companyNumber &&
+                row.orderStatus == 1
+              ) {
+                return "<span style='color: #3368A9; '>对方已读</span>";
+              } else if (
+                row.toCompanyNumer ==
+                  this.userInfo.commparnyList[0].companyNumber &&
+                row.orderStatus == 1
+              ) {
+                return "--";
+              } else if (row.orderStatus == 9) {
+                return "<span style='color: #33A96A; '>已完成</span>";
+              } else if (row.orderStatus == 99) {
+                return "<span style='color: #999999; '>已取消</span>";
               }
             }
           }

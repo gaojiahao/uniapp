@@ -14,7 +14,7 @@
           @keyup.native.enter="search"
         ></el-input>
       </div>
-      <div class="item" style="width: 200px">
+      <!-- <div class="item" style="width: 200px">
         <span class="label">站点：</span>
         <el-select
           v-model="websiteInfoId"
@@ -30,7 +30,7 @@
           >
           </el-option>
         </el-select>
-      </div>
+      </div> -->
       <div class="item" v-if="userInfo.userInfo.isMain">
         <span class="label">业务员：</span>
         <el-select
@@ -80,41 +80,47 @@
       <div class="item">
         <el-button
           size="medium"
-          @click="handletype(0)"
-          :class="{ all: btnType == 0 }"
+          @click="handletype('')"
+          :class="{ all: btnType == '' }"
         >
           <i class="allSource"></i>
-          <span :class="{ itemBtn: true, color: btnType == 0 }">全部来源</span>
+          <span :class="{ itemBtn: true, color: btnType == '' }">全部来源</span>
         </el-button>
       </div>
       <div class="item">
         <el-button
           size="medium"
-          @click="handletype(1)"
-          :class="{ ll: btnType == 1 }"
+          @click="handletype('BrowseProducts')"
+          :class="{ ll: btnType == 'BrowseProducts' }"
         >
           <i class="llcommodity"></i>
-          <span :class="{ itemBtn: true, color: btnType == 1 }">浏览商品</span>
+          <span :class="{ itemBtn: true, color: btnType == 'BrowseProducts' }"
+            >浏览商品</span
+          >
         </el-button>
       </div>
       <div class="item">
         <el-button
           size="medium"
-          @click="handletype(2)"
-          :class="{ jg: btnType == 2 }"
+          @click="handletype('ProductsShop')"
+          :class="{ jg: btnType == 'ProductsShop' }"
         >
           <i class="commodityJg"></i>
-          <span :class="{ itemBtn: true, color: btnType == 2 }">商品加购</span>
+          <span :class="{ itemBtn: true, color: btnType == 'ProductsShop' }"
+            >商品加购</span
+          >
         </el-button>
       </div>
       <div class="item">
         <el-button
           size="medium"
-          @click="handletype(3)"
-          :class="{ Dd: btnType == 3 }"
+          @click="handletype('ProductOrder')"
+          :class="{ Dd: btnType == 'ProductOrder' }"
         >
           <i class="commodityDd"></i>
-          <span :class="{ itemBtn: true, color: btnType == 3 }">商品订单</span>
+          <span :class="{ itemBtn: true, color: btnType == 'ProductOrder' }"
+            >商品订单</span
+          >
         </el-button>
       </div>
     </div>
@@ -154,7 +160,7 @@ export default {
       dateTime: null,
       sitesList: [],
       totalCount: 0,
-      btnType: 0,
+      btnType: "",
       pageSize: 10,
       currentPage: 1,
       tableData: {
@@ -177,25 +183,25 @@ export default {
               return row.productName;
             },
             fcatoryNameHtml: row => {
-              return row.companyName;
+              return row.supplierName;
             }
           },
-          { prop: "siteRegion", label: "浏览客户" },
-          { prop: "linkman", label: "联系人" },
-          { prop: "salesman", label: "业务员" },
+          { prop: "customerName", label: "浏览客户" },
+          { prop: "contactperson", label: "联系人" },
+          { prop: "linkman", label: "业务员" },
           {
             prop: "source",
             label: "浏览来源",
             render: row => {
               let msg = "";
               switch (row.source) {
-                case "ProductsShop":
+                case "BrowseProducts":
                   msg = "<i  class='iconll'></i>浏览商品";
                   break;
-                case "BrowseProducts":
+                case "ProductOrder":
                   msg = "<i  class='iconDd'></i>商品订单";
                   break;
-                case "ProductOrder":
+                case "ProductsShop":
                   msg = "<i  class='iconJg'></i>商品加购";
                   break;
               }
@@ -238,10 +244,11 @@ export default {
         keyword: this.keyword,
         userId: this.userId,
         startTime: this.dateTime && this.dateTime[0],
-        endTime: this.dateTime && this.dateTime[1]
+        endTime: this.dateTime && this.dateTime[1],
+        source: this.btnType
       };
       for (const key in fd) {
-        if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
+        if (fd[key] === null || fd[key] === undefined) {
           delete fd[key];
         }
       }
@@ -296,7 +303,7 @@ export default {
     }
   },
   created() {
-    this.getDefaultSites();
+    // this.getDefaultSites();
   },
   mounted() {
     this.getStaffList();
