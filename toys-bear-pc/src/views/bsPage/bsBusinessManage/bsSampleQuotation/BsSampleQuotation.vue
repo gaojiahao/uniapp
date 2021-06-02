@@ -466,7 +466,7 @@ export default {
           target = devEnv.hosturl;
           break;
       }
-      var url = target + "share/#/offerSharing?id=" + row.offerNumber;
+      var url = target + "/share/#/offerSharing?id=" + row.offerNumber;
       const input = document.createElement("input");
       document.body.appendChild(input);
       input.setAttribute("value", url);
