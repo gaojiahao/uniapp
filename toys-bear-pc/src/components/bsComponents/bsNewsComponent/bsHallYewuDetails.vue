@@ -254,7 +254,7 @@ export default {
           {
             prop: "fa_pr",
             label: "厂价",
-            width: 50,
+            width: 100,
             color: "#3368A9",
             render: row => {
               return "￥" + row.fa_pr;
@@ -263,7 +263,7 @@ export default {
           {
             prop: "ha_in_qu",
             label: "报出价",
-            width: 50,
+            width: 100,
             color: "red",
             render: row => {
               return "￥" + row.fa_pr;
@@ -272,7 +272,7 @@ export default {
           {
             prop: "OfferTotalAmount",
             label: "报出总价",
-            width: 60,
+            width: 100,
             color: "red",
             render: row => {
               return (
@@ -383,7 +383,7 @@ export default {
           val => val.itemValue == raw.messageStatus
         );
         if (child) return child.itemText;
-        else return "未选择";
+        else return "--";
       }
     },
     // 过滤消息类型
