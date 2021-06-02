@@ -59,6 +59,7 @@
           <el-button
             style="background-color: #F9AE3E;border-color: #F9AE3E;"
             type="warning"
+            @click="openAdd"
             size="medium"
           >
             <i class="el-icon-shopping-cart-full" style="font-size: 16px;"></i>
@@ -314,6 +315,13 @@ export default {
     }
   },
   methods: {
+    // 一键加购
+    openAdd() {
+      this.$common.handlerMsgState({
+        msg: "敬请期待",
+        type: "warning"
+      });
+    },
     // 获取合计total
     async getERPOrderTotal() {
       const res = await this.$http.post("/api/GetERPOrderTotal", {

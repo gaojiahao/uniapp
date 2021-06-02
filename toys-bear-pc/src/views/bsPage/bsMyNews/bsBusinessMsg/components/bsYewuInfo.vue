@@ -137,7 +137,11 @@
               style="color:#3368A9;border-color: #3368A9;"
               >查看详情</el-button
             >
-            <el-button size="small" type="primary" icon="el-icon-chat-dot-round"
+            <el-button
+              size="small"
+              @click="toNews(item)"
+              type="primary"
+              icon="el-icon-chat-dot-round"
               >立即沟通</el-button
             >
           </div>
@@ -219,6 +223,13 @@ export default {
     };
   },
   methods: {
+    toNews(item) {
+      console.log(item);
+      this.$common.handlerMsgState({
+        msg: "敬请期待",
+        type: "warning"
+      });
+    },
     // 切換頁容量
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
