@@ -1353,7 +1353,7 @@ export default {
             const data = {
               userID: this.userInfo.userInfo.id,
               companyNumber: this.userInfo.commparnyList[0].companyNumber,
-              sourceFrom: "active",
+              // sourceFrom: "active",
               shopType: "companysamples",
               productNumber: productNumber.join()
             };

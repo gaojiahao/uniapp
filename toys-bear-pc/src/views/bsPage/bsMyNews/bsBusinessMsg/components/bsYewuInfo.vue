@@ -270,7 +270,7 @@ export default {
         keyword: this.searchForm.keyword,
         startTime: this.searchForm.time && this.searchForm.time[0],
         endTime: this.searchForm.time && this.searchForm.time[1],
-        readStatus: "-1",
+        // readStatus: "-1",
         messageModel: this.options.messageModel,
         messageExt: this.searchForm.messageExt,
         sampleFrom: this.options.sampleFrom,
