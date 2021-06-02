@@ -16,7 +16,7 @@
             <el-image
               fit="contain"
               style="width: 50px; height: 50px"
-              :src="scope.row.imgUrl"
+              :src="scope.row.companyLogo"
             >
               <div slot="placeholder" class="errorImg">
                 <img

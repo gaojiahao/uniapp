@@ -222,15 +222,16 @@ export default {
               this.handleUpdate(row);
             }
           },
-          {
-            type: "success",
-            textWrapper() {
-              return "关联站点";
-            },
-            methods: row => {
-              console.log(row);
-            }
-          },
+          // 暂时不做
+          // {
+          //   type: "success",
+          //   textWrapper() {
+          //     return "关联站点";
+          //   },
+          //   methods: row => {
+          //     console.log(row);
+          //   }
+          // },
           {
             type: "danger",
             textWrapper() {
