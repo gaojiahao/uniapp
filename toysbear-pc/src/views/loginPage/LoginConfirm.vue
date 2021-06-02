@@ -59,9 +59,9 @@ export default {
   },
   data() {
     return {
-      // loginUrl: "https://www.toysbear.com/new/#/bsIndex",
+      loginUrl: "https://www.toysbear.com/new/#/bsIndex",
       // loginUrl: "http://139.9.71.135:8080/new/#/bsIndex",
-      loginUrl: "http://124.71.6.26:8080/new/#/bsIndex",
+      // loginUrl: "http://124.71.6.26:8080/new/#/bsIndex",
       radioValue: null,
       commparnyList: []
     };

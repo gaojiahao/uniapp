@@ -66,7 +66,7 @@
     <ul class="infoBox">
       <li class="info_item" v-for="item in erpOrderList" :key="item.id">
         <div class="tableHead">
-          <p>{{ item.client_na }}</p>
+          <p>{{ item.fromCompanyName }}</p>
           <!-- <div class="tableHeadIcon">
               <img src="@/assets/images/delete.png" alt="" />
             </div> -->
@@ -74,7 +74,7 @@
         <div class="tablemian">
           <div class="tablemian_left">
             <div class="tablemian_left_item">
-              <p class="left_item">
+              <p class="left_item" v-if="filterTypes(item.messageExt)">
                 <span class="title">类型：</span>
                 <span> {{ filterTypes(item.messageExt) }} </span>
               </p>
@@ -124,6 +124,19 @@
           </div>
         </div>
       </li>
+      <!-- 分页 -->
+      <center style="padding:20px 0;">
+        <el-pagination
+          layout="total, sizes, prev, pager, next, jumper"
+          :page-sizes="[10, 20, 30, 40]"
+          background
+          :total="totalCount"
+          :page-size="pageSize"
+          :current-page.sync="currentPage"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+        ></el-pagination>
+      </center>
     </ul>
   </div>
 </template>
@@ -185,6 +198,21 @@ export default {
     };
   },
   methods: {
+    // 切換頁容量
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+      if (
+        this.currentPage * pageSize > this.factoryTotalCount &&
+        this.currentPage != 1
+      )
+        return false;
+      this.getERPOrderListByPage();
+    },
+    // 修改当前页
+    handleCurrentChange(page) {
+      this.currentPage = page;
+      this.getERPOrderListByPage();
+    },
     // 查看业务消息详情
     openDetails(item) {
       const fd = {
@@ -204,7 +232,7 @@ export default {
     filterTypes(Ext) {
       const current = this.typeList.find(val => val.messageExt == Ext);
       if (current) return current.title;
-      else return Ext;
+      else return false;
     },
     // 获取消息类型
     async getMessageTeplateSettingsByPage() {
@@ -292,7 +320,7 @@ export default {
         width: 130px;
       }
       .el-date-editor--datetimerange.el-input__inner {
-        width: 250px;
+        width: 235px;
       }
     }
   }
