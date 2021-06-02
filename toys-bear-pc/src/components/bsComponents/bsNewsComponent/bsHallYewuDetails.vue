@@ -25,27 +25,34 @@
             gray: item.orderStatus == '99'
           }"
         >
+          <span class="title">状态：</span>
           <span
-            class="title"
             v-if="
               item.toCompanyNumer != userInfo.commparnyList[0].companyNumber &&
                 item.orderStatus == '0'
             "
-            >状态：</span
+            >对方未读</span
           >
           <span
-            v-if="
-              item.toCompanyNumer != userInfo.commparnyList[0].companyNumber &&
+            v-else-if="
+              item.toCompanyNumer == userInfo.commparnyList[0].companyNumber &&
                 item.orderStatus == '0'
             "
-            >未读</span
+            >--</span
           >
           <span
             v-if="
               item.toCompanyNumer != userInfo.commparnyList[0].companyNumber &&
                 item.orderStatus == '1'
             "
-            >已读</span
+            >对方已读</span
+          >
+          <span
+            v-else-if="
+              item.toCompanyNumer == userInfo.commparnyList[0].companyNumber &&
+                item.orderStatus == '1'
+            "
+            >--</span
           >
           <span v-if="item.orderStatus == '9'">已完成</span>
           <span v-else-if="item.orderStatus == '99'">已取消</span>
@@ -357,7 +364,7 @@ export default {
           totalGrWe: obj.sumGr_we, // 总毛重
           totalNeWe: obj.sumNe_we, // 总净重
           cu_de: obj.cu_de || "￥", // 币种
-          totalMoney: obj.sumAmountFa_pr // 总金额
+          totalMoney: obj.sumHa_in_quAll // 总金额
         };
       } else {
         this.$common.handlerMsgState({

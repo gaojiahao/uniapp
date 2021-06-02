@@ -102,12 +102,28 @@
                   >对方未读</span
                 >
                 <span
+                  v-else-if="
+                    item.toCompanyNumer ==
+                      userInfo.commparnyList[0].companyNumber &&
+                      item.orderStatus == '0'
+                  "
+                  >--</span
+                >
+                <span
                   v-if="
                     item.toCompanyNumer !=
                       userInfo.commparnyList[0].companyNumber &&
                       item.orderStatus == '1'
                   "
                   >对方已读</span
+                >
+                <span
+                  v-else-if="
+                    item.toCompanyNumer ==
+                      userInfo.commparnyList[0].companyNumber &&
+                      item.orderStatus == '1'
+                  "
+                  >--</span
                 >
                 <span v-if="item.orderStatus == '9'">已完成</span>
                 <span v-else-if="item.orderStatus == '99'">已取消</span>
