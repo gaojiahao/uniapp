@@ -67,11 +67,11 @@
 								<b-col cols="12" sm="6">
 									<view class="info">
 										<view class="item title">联系方式</view>
-										<view class="item" v-if="defaultContact.companyName"><view class="label">公司名称：</view><view>{{defaultContact.companyName}}</view></view>
-										<view class="item" v-if="defaultContact.contactName"><view class="label">联系人：</view><view>{{defaultContact.contactName}}</view></view>
-										<view class="item" v-if="defaultContact.phoneNumber||defaultContact.telephone"><view class="label">联系电话：</view><view>{{defaultContact.phoneNumber||defaultContact.telephone}}</view></view>
-										<view class="item" v-if="defaultContact.email"><view class="label">邮箱：</view><view>{{defaultContact.email}}</view></view>
-										<view class="item" v-if="defaultContact.contactAddress"><view class="label">地址：</view><view>{{defaultContact.contactAddress}}</view></view>
+										<view class="item" v-if="defaultContact.companyName"><label class="label">公司名称：</label><view class="text">{{defaultContact.companyName}}</view></view>
+										<view class="item" v-if="defaultContact.contactName"><label class="label">联系人：</label><view class="text">{{defaultContact.contactName}}</view></view>
+										<view class="item" v-if="defaultContact.phoneNumber||defaultContact.telephone"><label class="label">联系电话：</label><view class="text">{{defaultContact.phoneNumber||defaultContact.telephone}}</view></view>
+										<view class="item" v-if="defaultContact.email"><label class="label">邮箱：</label><view class="text">{{defaultContact.email}}</view></view>
+										<view class="item" v-if="defaultContact.contactAddress"><label class="label">地址：</label><view class="text">{{defaultContact.contactAddress}}</view></view>
 									</view>
 								</b-col>
 							</b-row>
@@ -97,11 +97,11 @@
 			</view>
 			<view class="mobile_content">
 				<view class="item title">联系方式</view>
-				<view class="item" v-if="defaultContact.companyName">公司名称：<text>{{defaultContact.companyName}}</text></view>
-				<view class="item" v-if="defaultContact.contactName">联系人：<text>{{defaultContact.contactName}}</text></view>
-				<view class="item" v-if="defaultContact.phoneNumber||defaultContact.telephone">联系电话：<text>{{defaultContact.phoneNumber||defaultContact.telephone}}</text></view>
-				<view class="item" v-if="defaultContact.email">邮箱：<text>{{defaultContact.email}}</text></view>
-				<view class="item" v-if="defaultContact.contactAddress">地址：<text>{{defaultContact.contactAddress}}</text></view>
+				<view class="item" v-if="defaultContact.companyName"><label class="label">公司名称：</label><view class="text">{{defaultContact.companyName}}</view></view>
+				<view class="item" v-if="defaultContact.contactName"><label class="label">联系人：</label><view class="text">{{defaultContact.contactName}}</view></view>
+				<view class="item" v-if="defaultContact.phoneNumber||defaultContact.telephone"><label class="label">联系电话：</label><view class="text">{{defaultContact.phoneNumber||defaultContact.telephone}}</view></view>
+				<view class="item" v-if="defaultContact.email"><label class="label">邮箱：</label><view class="text">{{defaultContact.email}}</view></view>
+				<view class="item" v-if="defaultContact.contactAddress"><label class="label">地址：</label><view class="text">{{defaultContact.contactAddress}}</view></view>
 			</view>
 			<view class="footer">
 				<view class="title">Copyright©2021 深圳小竹熊科技有限公司 粤ICP备13031421号-4</view>

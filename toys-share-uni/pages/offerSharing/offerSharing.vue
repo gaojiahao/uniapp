@@ -367,8 +367,10 @@ export default {
 			pageSize: 9999,
 			categoryNumber: "",
 			totalCount: 0,
-			sortOrder: 0,  //价格搜索
-			sortType: 0,   //时间搜索
+			sortOrder: 0,  //价格搜索标识
+			sortType: 0,   //时间搜索标识
+			search_sortOrder:'',
+			search_sortType:'',
 			searchType:'zonghe',
 			listShowType:'list', //列表显示类型 grid list
 			isMobile:false,   //是否移动端
@@ -401,14 +403,20 @@ export default {
 				this.searchType = type;
 				this.sortOrder = 0;
 				this.sortType = 0;
+				this.search_sortOrder = '';
+				this.search_sortType = '';
 			} else if(type=='price'){
 				this.searchType = type;
 				this.sortOrder = 1;
 				this.sortType = this.sortType == 1 ? 2:1;
+				this.search_sortOrder = 1;
+				this.search_sortType = this.sortType;
 			} else if(type=='time'){
 				this.searchType = type;
 				this.sortOrder = this.sortOrder == 1 ? 2:1;
 				this.sortType = 1;
+				this.search_sortOrder = 2;
+				this.search_sortType = this.sortOrder;
 			}
 			this.getProductOfferDetailPage();
 		},
@@ -427,8 +435,8 @@ export default {
 				offerNumber: uni.getStorageSync('offer_sharing_id'),
 				categoryNumber: me.currentCate && me.currentCate.id,
 				keyword: me.keyword,
-				sortOrder: me.sortOrder,
-				sortType: me.sortType,
+				sortOrder: me.search_sortOrder,
+				sortType: me.search_sortType,
 				searchType:me.searchType,
 				listShowType:me.listShowType,
 			};
@@ -496,8 +504,8 @@ export default {
 				offerNumber: uni.getStorageSync('offer_sharing_id'),
 				categoryNumber: me.currentCate && me.currentCate.id,
 				keyword: me.keyword,
-				sortOrder: me.sortOrder,
-				sortType: me.sortType,
+				sortOrder: me.search_sortOrder,
+				sortType: me.search_sortType,
 				searchType:me.searchType,
 				listShowType:me.listShowType,
 				// ...this.packingOptions
