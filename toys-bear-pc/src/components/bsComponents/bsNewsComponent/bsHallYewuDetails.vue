@@ -329,7 +329,7 @@ export default {
           totalBulkFeet: obj.sumBulk_feet, // 总材积
           totalGrWe: obj.sumGr_we, // 总毛重
           totalNeWe: obj.sumNe_we, // 总净重
-          cu_de: "￥", // 币种
+          cu_de: obj.cu_de || "￥", // 币种
           totalMoney: obj.sumAmountFa_pr // 总金额
         };
       } else {

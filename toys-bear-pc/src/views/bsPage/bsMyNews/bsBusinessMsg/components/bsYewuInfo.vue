@@ -83,12 +83,7 @@
                 <span class="title">代号：</span>
                 <span>{{ item.the_nu }}</span>
               </p>
-              <p class="left_item">
-                <span class="title">单号：</span>
-                <span>{{ item.orderNumber }}</span>
-              </p>
               <p
-                v-if="item.orderStatus == '9' || item.orderStatus == '99'"
                 :class="{
                   left_item: true,
                   red: item.orderStatus == '0',
@@ -98,8 +93,22 @@
                 }"
               >
                 <span class="title">状态：</span>
-                <!-- <span v-if="item.orderStatus == '0'">对方未读</span>
-                <span v-else-if="item.orderStatus == '1'">对方已读</span> -->
+                <span
+                  v-if="
+                    item.toCompanyNumer !=
+                      userInfo.commparnyList[0].companyNumber &&
+                      item.orderStatus == '0'
+                  "
+                  >对方未读</span
+                >
+                <span
+                  v-if="
+                    item.toCompanyNumer !=
+                      userInfo.commparnyList[0].companyNumber &&
+                      item.orderStatus == '1'
+                  "
+                  >对方已读</span
+                >
                 <span v-if="item.orderStatus == '9'">已完成</span>
                 <span v-else-if="item.orderStatus == '99'">已取消</span>
               </p>
@@ -111,9 +120,13 @@
                   item.createdOn && item.createdOn.replace(/T/, " ")
                 }}</span>
               </p>
-              <p class="left_content">
+              <p class="left_item">
                 <span class="title">内容：</span>
-                <span class="left_content_content">{{ item.pushContent }}</span>
+                <span>{{ item.pushContent }}</span>
+              </p>
+              <p class="left_item">
+                <span class="title">单号：</span>
+                <span>{{ item.orderNumber }}</span>
               </p>
             </div>
           </div>
@@ -148,6 +161,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import eventBus from "@/assets/js/common/eventBus.js";
 export default {
   props: {
     options: {
@@ -221,6 +236,7 @@ export default {
     },
     // 查看业务消息详情
     openDetails(item) {
+      eventBus.$emit("resetTotalCount");
       const fd = {
         name: "bsHallYewuDetails" + item.orderNumber || item.offerNumber,
         linkUrl: this.$router.path,
@@ -298,6 +314,9 @@ export default {
   async mounted() {
     await this.getMessageTeplateSettingsByPage();
     await this.getERPOrderListByPage();
+  },
+  computed: {
+    ...mapState(["userInfo"])
   }
 };
 </script>
@@ -340,8 +359,9 @@ export default {
   .info_item {
     background-color: #fff;
     border-radius: 4px;
-    height: 146px;
+    min-height: 146px;
     margin-bottom: 20px;
+    padding-bottom: 10px;
     .tableHead {
       padding: 0 20px;
       height: 50px;
