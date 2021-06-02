@@ -3,7 +3,7 @@
 		<!-- pc端 -->
 		<template v-if="!isMobile">
 			<!-- 头部 -->
-			<xHead active="supplierSharingList"></xHead>
+			<xHead active="supplierSharingRecList"></xHead>
 			<view class="content">
 				<view class="product_box">
 					<view class="tool_bar">
@@ -83,7 +83,7 @@ import xFooter from "@/components/supplierSharing/x-footer.vue"
 import util from "@/common/js/util.js"
 
 export default {
-	name: "SupplierSharingList",
+	name: "SupplierSharingRecList",
 	components: {
 		xSearch,
 		Pagination,

@@ -4,7 +4,7 @@
 			<view class="action_text"><</view>
 		</view>
 		<view class="swiperPanel" @touchstart="startMove" @touchend="endMove">
-			<view class="swiperItem" v-for="(item, index) in swiperList" :key="index" :style="{transform: itemStyle[index].transform, zIndex: itemStyle[index].zIndex, opacity: itemStyle[index].opacity}">
+			<view class="swiperItem" v-for="(item, index) in swiperList.slice(0,5)" :key="index" :style="{transform: itemStyle[index].transform, zIndex: itemStyle[index].zIndex, opacity: itemStyle[index].opacity}">
 				<!-- <view class="children" v-if="index==0">
 					<image class="pic rotateY" :src="item.imageUrl"></image>
 				</view>
@@ -21,15 +21,15 @@
 					<image class="pic" :src="item.imageUrl"></image>
 				</view> -->
 				<view class="children">
-					<image class="pic" :src="item.imageUrl"></image>
+					<image class="pic" :src="item.imageUrl" @click="goDetail"></image>
 					<view class="text_item">
-						<view class="title">99式坦克军事系列积木套装....</view>
+						<view class="title" :title="item.name">{{item.name}}</view>
 						<view class="content">
 							<view class="fc_no">
-								货号：WH-3042
+								货号：{{item.fa_no}}
 							</view>
 							<view class="price">
-								￥38.00
+								{{item.cu_de}}{{item.price}}
 							</view>
 						</view>
 					</view>
@@ -60,13 +60,23 @@
 				itemStyle: []
 			};
 		},
+		watch:{
+			swiperList:{
+				handler(val){
+					this.swiperList.forEach((item, index) => {
+						this.itemStyle.push(this.getStyle(index))
+					})
+				},
+				deep:true
+			}
+		},
 		created() {
 			var macInfo = uni.getSystemInfoSync();
 			this.screenWidth = macInfo.screenWidth;
 			// 计算swiper样式
-			this.swiperList.forEach((item, index) => {
-				this.itemStyle.push(this.getStyle(index))
-			})
+			// this.swiperList.forEach((item, index) => {
+			// 	this.itemStyle.push(this.getStyle(index))
+			// })
 		},
 		methods: {
 			getStyle(e) {
@@ -113,6 +123,9 @@
 				newList.push(newList[0])
 				newList.splice(0, 1)
 				this.itemStyle = newList
+			},
+			goDetail(item){
+				this.$emit('go-detail',item);
 			}
 		}
 	}
@@ -145,6 +158,9 @@
 			line-height: 43px;
 		}
 	}
+	.pre:hover{
+		cursor: pointer;
+	}
 	.next{
 		width: 53px;
 		height: 53px;
@@ -165,6 +181,9 @@
 			height: 40px;
 			line-height: 43px;
 		}
+	}
+	.next:hover{
+		cursor: pointer;
 	}
 	.swiperPanel {
 		// margin: 20px 0;
@@ -194,12 +213,18 @@
 					height: 368px;
 					// box-shadow: 0 0 10px #333;
 				}
+				.pic:hover{
+					cursor: pointer;
+				}
 				.text_item{
 					padding: 0 30px 30px 30px;
 					.title{
 						font-size: 24px;
 						font-weight: 400;
 						color: #333333;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
 					}
 					.content{
 						display: flex;

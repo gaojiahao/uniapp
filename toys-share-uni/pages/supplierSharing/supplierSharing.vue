@@ -3,21 +3,21 @@
 		<!-- pc端 -->
 		<template v-if="!isMobile">
 			<!-- 头部 -->
-			<xHead :contactInfo="contactInfo"></xHead>
+			<xHead :contactInfo="contactInfo" active="supplierSharing"></xHead>
 			<view class="content">
 				<!-- 幻灯片 -->
 				<view class="content_swiper">
 					<image :src="supplier_sharing_3d" class="product_label"></image>
-					<customSwiper :swiper-list="swiperList" ></customSwiper>
+					<customSwiper :swiper-list="threeProduct" @go-detail="goDetail"></customSwiper>
 				</view>
 				<!-- 推荐产品 -->
 				<view class="content_recommend_product">
 					<view class="title rp"></view>
 					<view class="product_list">
 						<b-row >
-							<b-col cols="6" v-for="(item,index) in allProduct.slice(0,2)" :key='index'>
+							<b-col cols="6" v-for="(item,index) in recommendProduct.slice(0,2)" :key='index'>
 								<view class="product_list_item">
-									<view class="product_list_img">
+									<view class="product_list_img" @click="goDetail(item)">
 										<image class="img" :src="item.img"></image>
 									</view>
 									<view class="product_list_info">
@@ -31,16 +31,16 @@
 											参考单价：<text class="red_color">{{item.cu_de}}{{item.price}}</text>
 										</view>
 										<view class="product_list_info_text">
-											<u-button type="warning" shape="circle" size="mini">查看详情</u-button>
+											<u-button type="warning" shape="circle" size="mini" @click="goDetail(item)">查看详情</u-button>
 										</view>
 									</view>
 								</view>
 							</b-col>
 						</b-row>
 						<b-row :style="{marginTop:'25px'}">
-							<b-col cols="3" v-for="(item,index) in allProduct.slice(2,6)" :key='index'>
+							<b-col cols="3" v-for="(item,index) in recommendProduct.slice(2,6)" :key='index'>
 								<view class="product_list_item2">
-									<view class="product_list_img">
+									<view class="product_list_img" @click="goDetail(item)">
 										<image class="img" :src="item.img"></image>
 									</view>
 									<view class="product_list_info">
@@ -71,7 +71,7 @@
 						<b-row>
 							<b-col cols="3" v-for="(item,index) in allProduct" :key='index'>
 								<view class="product_list_item">
-									<view class="product_list_img">
+									<view class="product_list_img" @click="goDetail(item)">
 										<image class="img" :src="item.img"></image>
 									</view>
 									<view class="product_list_info">
@@ -102,7 +102,7 @@
 						<b-row>
 							<b-col cols="3" v-for="(item,index) in allProduct" :key='index'>
 								<view class="product_list_item">
-									<view class="product_list_img">
+									<view class="product_list_img" @click="goDetail(item)">
 										<image class="img" :src="item.img"></image>
 									</view>
 									<view class="product_list_info">
@@ -166,90 +166,10 @@ export default {
 			logo: require("@/static/logo.png"),
 			supplier_sharing_3d: require("@/static/images/supplier_sharing_3d.png"),
 			isMobile:false,   //是否移动端
-			swiperList:[
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				},
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				},
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				},
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				},
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				}
-			],
-			rpList:[
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				},
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				},
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				},
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				},
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				},
-				{
-					name: "1:14 2.4G攀爬车土/绿",
-					cu_de: "¥",
-					fa_no: "GM1912-1",
-					imageUrl: "http://139.9.71.135:8087/ProductImgCutting//HS0000005/P161232370216465/P161232370216465_Photo03YS0595201.jpg",
-					offerAmount: 60.5
-				}
-			],
 			contactInfo:{}, //联系信息
 			recommendProduct:[], //推荐信息
 			allProduct:[],	//所有产品
+			threeProduct:[] 	//3d产品
 		}
 	},
 	methods:{
@@ -261,10 +181,29 @@ export default {
 			});
 			if (res.result.code === 200) {
 				this.contactInfo = res.result.item;
+				uni.setStorageSync('supplier_sharing_contactInfo',JSON.stringify(this.contactInfo));
 			} else {
 				uni.showToast({
 					icon:'none',
 					title: res.result.msg,
+					duration: 2000
+				});
+			}
+		},
+		// 获取推荐产品
+		async getThreeDPage() {
+			var me = this;
+			const res = await me.$u.api.RecommendProductByNumberPageShare({
+				companyNumber: uni.getStorageSync('supplier_sharing_companyNumber'),
+				skipCount: 1,
+				maxResultCount: 5
+			});
+			if (res.result.code === 200) {
+				this.threeProduct = res.result.item.items;
+			} else {
+				uni.showToast({
+					icon:'none',
+					title: res.data.result.msg,
 					duration: 2000
 				});
 			}
@@ -277,8 +216,8 @@ export default {
 				skipCount: 1,
 				maxResultCount: 8
 			});
-			if (res.data.result.code === 200) {
-				this.recommendProduct = res.data.result.item.items;
+			if (res.result.code === 200) {
+				this.recommendProduct = res.result.item.items;
 			} else {
 				uni.showToast({
 					icon:'none',
@@ -314,11 +253,19 @@ export default {
 				}
 			)
 		},
+		//去详情页
+		goDetail(item){
+			uni.setStorageSync('supplier_sharing_detail',JSON.stringify(item));
+			this.$Router.push({
+			    name:'supplierSharingDetail'
+			})
+		},
 		async init(){
 			this.isMobile=util.isMobile();
 			await this.getToken();
 			await this.getCompanyByIDShare();
-			//await this.getRecommendProductByNumberPage();
+			await this.getThreeDPage();
+			await this.getRecommendProductByNumberPage();
 			await this.getSupplierProductShare();
 		},
 	},
@@ -331,7 +278,7 @@ export default {
 	  })
 	},
 	created(){
-		uni.setStorageSync('supplier_sharing_companyNumber', this.$route.query.id);
+		uni.getStorageSync('supplier_sharing_companyNumber') ? '' : uni.setStorageSync('supplier_sharing_companyNumber', this.$route.query.id);
 		this.init();
 	}
 }

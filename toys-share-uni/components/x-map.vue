@@ -19,7 +19,7 @@
 					this.BaiduMap();
 				},
 				deep:true,
-				//immediate:true
+				immediate:true
 			}
 		},
 		mounted() {

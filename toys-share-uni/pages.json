@@ -81,7 +81,29 @@
 			"aliasPath":"/supplierSharingList",
 			"name":"supplierSharingList",
 			"style": {
-				"navigationBarTitleText": "厂商分享",
+				"navigationBarTitleText": "3D产品",
+				"app-plus": {
+					"titleNView": false //禁用原生导航栏
+				}
+			}
+		},
+		{
+			"path": "pages/supplierSharing/supplierSharingRecList",	//厂商分享产品列表
+			"aliasPath":"/supplierSharingRecList",
+			"name":"supplierSharingRecList",
+			"style": {
+				"navigationBarTitleText": "推荐产品",
+				"app-plus": {
+					"titleNView": false //禁用原生导航栏
+				}
+			}
+		},
+		{
+			"path": "pages/supplierSharing/supplierSharingAllList",	//厂商分享产品列表
+			"aliasPath":"/supplierSharingAllList",
+			"name":"supplierSharingAllList",
+			"style": {
+				"navigationBarTitleText": "全部产品",
 				"app-plus": {
 					"titleNView": false //禁用原生导航栏
 				}

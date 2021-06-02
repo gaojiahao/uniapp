@@ -2,27 +2,27 @@
 	<view class="head">
 		<view class="head_item_grid">
 			<view class="logo">
-				<image :src="logo" class="image"></image>
+				<image :src="contactInfo.companyLogo" class="image"></image>
 			</view>
 			<view class="title">
-				凯乐智玩具工厂
+				{{contactInfo.companyName}}
 			</view>
 			<view class="menu">
-				<my-link to="{path: '/supplierSharing'}" navType="pushTab">
-					<view class="menu_item active">首页</view>
-				</my-link>
-				<my-link to="{path: '/supplierSharingList',query: {type: 'threeD'}}" navType="pushTab">
-					<view class="menu_item">3D产品</view>
-				</my-link>
-				<my-link to="{path: '/supplierSharingList',query: {type: 'tuijian'}}" navType="pushTab">
-					<view class="menu_item">推荐产品</view>
-				</my-link>
-				<my-link to="{path: '/supplierSharingList',query: {type: 'all'}}" navType="pushTab">
-					<view class="menu_item">全部产品</view>
-				</my-link>
-				<my-link to="{path: '/supplierSharingContact'}" navType="pushTab">
-					<view class="menu_item">联系方式</view>
-				</my-link>
+				<!-- <my-link to="{path: '/supplierSharing'}" navType="pushTab"> -->
+					<view class="menu_item" :class="[nowActive=='supplierSharing' ? 'active':'']" @click="toLink('supplierSharing')">首页</view>
+				<!-- </my-link>
+				<my-link to="{path: '/supplierSharingList'}" navType="pushTab"> -->
+					<view class="menu_item" :class="[nowActive=='supplierSharingList' ? 'active':'']" @click="toLink('supplierSharingList')">3D产品</view>
+				<!-- </my-link>
+				<my-link to="{path: '/supplierSharingRecList'}" navType="pushTab"> -->
+					<view class="menu_item" :class="[nowActive=='supplierSharingRecList' ? 'active':'']" @click="toLink('supplierSharingRecList')">推荐产品</view>
+				<!-- </my-link>
+				<my-link to="{path: '/supplierSharingAllList'}" navType="pushTab"> -->
+					<view class="menu_item" :class="[nowActive=='supplierSharingAllList' ? 'active':'']" @click="toLink('supplierSharingAllList')">全部产品</view>
+				<!-- </my-link>
+				<my-link to="{path: '/supplierSharingContact'}" navType="pushTab"> -->
+					<view class="menu_item" :class="[nowActive=='supplierSharingContact' ? 'active':'']" @click="toLink('supplierSharingContact')">联系方式</view>
+				<!-- </my-link> -->
 			</view>
 		</view>
 	</view>
@@ -32,13 +32,40 @@
 
 export default {
 	name: "x-head",
+	props:{
+		contactInfo: {
+			type: Object,
+			default () {
+				return {}
+			}
+		},
+		active:{
+			type:String,
+			default:'supplierSharing',
+		}
+	},
+	watch:{
+		active:{
+			handler(val){
+				this.nowActive = val;
+			},
+			deep:true,
+			immediate:true
+		}
+	},
 	data() {
 		return {
 			logo: require("@/static/logo.png"),
+			nowActive:'',
 		}
 	},
 	methods:{
-
+		//链接跳转
+		toLink(value){
+			this.$Router.push({
+			    name: value
+			})
+		}
 	},
 	mounted() {
 		
@@ -57,10 +84,10 @@ export default {
 		width: 100%;
 		display: flex;
 		.logo{
-			width: 105px;
+			width: 73px;
 			height: 73px;
 			.image{
-				width: 105px;
+				width: 73px;
 				height: 73px;
 			}
 		}
@@ -85,6 +112,10 @@ export default {
 				margin-left: 30px;
 				line-height: 40px;
 				color: #333333;
+				text-align: center;
+			}
+			.menu_item:hover{
+				cursor: pointer;
 			}
 			.active{
 				background: #36ade2;
