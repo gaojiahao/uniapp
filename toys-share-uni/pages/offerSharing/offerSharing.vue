@@ -94,37 +94,39 @@
 									</view>
 								</b-col>
 							</b-row>
-							<view class="pc_offer_info_list" v-else>
-								<view class="offer_info_item">
-									<view class="offer_info_item_label">
-										报价单号：
+							<view class="pc_offer_info_list2" v-else>
+								<view class="left">
+									<view class="offer_info_item">
+										<view class="offer_info_item_label">
+											报价单号：
+										</view>
+										<view class="offer_info_item_text">
+											{{sampleInfo.offerNumber}}
+										</view>
 									</view>
-									<view class="offer_info_item_text">
-										{{sampleInfo.offerNumber}}
+									<view class="offer_info_item">
+										<view class="offer_info_item_label">
+											报价时间：
+										</view>
+										<view class="offer_info_item_text">
+											{{sampleInfo.createdOn&&sampleInfo.createdOn.replace(/T/, " ")}}
+										</view>
 									</view>
-								</view>
-								<view class="offer_info_item">
-									<view class="offer_info_item_label">
-										报价时间：
+									<view class="offer_info_item">
+										<view class="offer_info_item_label">
+											客户名称：
+										</view>
+										<view class="offer_info_item_text">
+											{{sampleInfo.customerName}}
+										</view>
 									</view>
-									<view class="offer_info_item_text">
-										{{sampleInfo.createdOn&&sampleInfo.createdOn.replace(/T/, " ")}}
-									</view>
-								</view>
-								<view class="offer_info_item">
-									<view class="offer_info_item_label">
-										客户名称：
-									</view>
-									<view class="offer_info_item_text">
-										{{sampleInfo.customerName}}
-									</view>
-								</view>
-								<view class="offer_info_item">
-									<view class="offer_info_item_label">
-										业务员：
-									</view>
-									<view class="offer_info_item_text renyuan">
-										{{sampleInfo.linkman}}
+									<view class="offer_info_item">
+										<view class="offer_info_item_label">
+											业务员：
+										</view>
+										<view class="offer_info_item_text">
+											{{sampleInfo.linkman}}
+										</view>
 									</view>
 								</view>
 								<view class="offer_info_item active_button">
@@ -388,6 +390,9 @@
 <script>
 import uniPagination from "@/uni_modules/uni-pagination/components/uni-pagination/uni-pagination.vue"
 import xSearch from "@/components/x-search.vue"
+import {
+  getToken
+} from "@/service/common.js"
 import util from "@/common/js/util.js"
 export default {
 	name: "OfferSharing",
@@ -499,40 +504,14 @@ export default {
 			}
 		},
 		//获取token
-		async getToken() {
+		async getToken(){
 			var me = this;
-			let baseUrl = "https://www.toysbear.com"
-			if(process.env.NODE_ENV === 'development'){
-			  baseUrl = "http://124.71.6.26:8080"
-			  // baseUrl = "https://www.toysbear.com"
-			}else{
-			  //baseUrl = "http://124.71.6.26:8080"
-			  baseUrl = "https://www.toysbear.com"
-			}
-			let httpDefaultOpts = {
-				url: baseUrl + '/api/GetToken',
-				data: JSON.stringify({
-					companyNum: 'LittleBearWeb',
-					platForm: 'PC'
-				}),
-				method: 'post',
-				header: {
-					'X-Requested-With': 'XMLHttpRequest',
-					'Content-Type': 'application/json; charset=utf-8'
-				},
-				dataType: 'json',
-			}
-			// let promise = new Promise(function(resolve, reject) {
-				await uni.request(httpDefaultOpts).then(
-					(res) => {
-						me.$u.vuex('Utoken', res[1].data.result.item)
-					}
-				).catch(
-					(response) => {
-						console.log(response)
-					}
-				)
-			// })
+			await getToken().then(
+				(res) => {
+					//me.$u.vuex('Utoken', res[1].data.result.item)
+					uni.setStorageSync('token',res[1].data.result.item);
+				}
+			)
 		},
 		// 获取报价信息产品列表
 		async getProductOfferDetailPage() {

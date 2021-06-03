@@ -130,6 +130,17 @@
 					"titleNView": false //禁用原生导航栏
 				}
 			}
+		},
+		{
+			"path": "pages/supplierProduct/supplierProduct",	//厂商产品分享
+			"aliasPath":"/supplierProduct",
+			"name":"supplierProduct",
+			"style": {
+				"navigationBarTitleText": "厂商产品分享",
+				"app-plus": {
+					"titleNView": false //禁用原生导航栏
+				}
+			}
 		}
 	],
 	"globalStyle": {
