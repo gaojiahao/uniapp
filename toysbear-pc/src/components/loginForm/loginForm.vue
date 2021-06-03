@@ -7,21 +7,24 @@
     <el-tabs v-model="activeName" class="loginFormLaout" stretch>
       <el-tab-pane label="二维码登录" name="erweima">
         <div class="qrCodeBox">
-          <div class="qrcode">
-            <vue-qr
-              :text="options.url"
-              :logoSrc="options.icon + '?cache'"
-              colorLight="#fff"
-              colorDark="#018e37"
-              :margin="0"
-              :size="230"
-            ></vue-qr>
-            <div class="refresh" v-show="showQrCode">
-              <div class="refreshIcon" @click="getQrCodeUrl">
-                <i class="el-icon-refresh"></i>
+          <div class="code_box">
+            <div class="qrcode">
+              <vue-qr
+                :text="options.url"
+                :logoSrc="options.icon + '?cache'"
+                colorLight="#fff"
+                colorDark="#018e37"
+                :margin="0"
+                :size="230"
+              ></vue-qr>
+              <div class="refresh" v-show="showQrCode">
+                <div class="refreshIcon" @click="getQrCodeUrl">
+                  <i class="el-icon-refresh"></i>
+                </div>
               </div>
             </div>
           </div>
+
           <p class="qrText">
             {{ qrcodeTitle }}
           </p>
@@ -161,6 +164,7 @@ export default {
     // webSocket 连接错误
     websocketonerror() {
       console.log("WebSocket连接发生错误");
+      this.$message.error("WebSocket连接发生错误");
     },
     // webSocket 数据接收
     websocketonmessage(e) {
@@ -263,7 +267,7 @@ export default {
         // 开启长连接
         this.initWebSocket();
       }
-      // const TIME_COUNT = 20
+      // const TIME_COUNT = 10;
       const TIME_COUNT = 300;
       if (!this.timer) {
         let count = TIME_COUNT;
@@ -426,14 +430,14 @@ export default {
     this.getQrCodeUrl();
   },
   watch: {
-    activeName(val) {
-      if (val === "mobile") {
-        //   this.getQrCodeUrl();
-        // } else {
-        clearInterval(this.qrTimer);
-        this.ws && this.ws.close();
-      }
-    }
+    // activeName(val) {
+    //   if (val === "mobile") {
+    //     //   this.getQrCodeUrl();
+    //     // } else {
+    //     clearInterval(this.qrTimer);
+    //     this.ws && this.ws.close();
+    //   }
+    // }
   },
   beforeDestroy() {
     clearInterval(this.timer);
@@ -567,41 +571,44 @@ export default {
     .qrCodeBox {
       height: 265px;
       box-sizing: border-box;
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      .qrcode {
-        width: 190px;
-        height: 190px;
-        position: relative;
-        margin-top: 15px;
-        img {
+      .code_box {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        .qrcode {
           width: 190px;
           height: 190px;
-        }
-        .refresh {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background-color: rgba(255, 255, 255, 0.9);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          .refreshIcon {
-            width: 100px;
-            height: 100px;
-            background-color: #fff !important;
-            border-radius: 50%;
-            cursor: pointer;
+          position: relative;
+          margin-top: 15px;
+          img {
+            width: 190px;
+            height: 190px;
+          }
+          .refresh {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
             display: flex;
-            justify-content: center;
             align-items: center;
-            font-size: 50px;
+            justify-content: center;
+            .refreshIcon {
+              width: 100px;
+              height: 100px;
+              background-color: #fff !important;
+              border-radius: 50%;
+              cursor: pointer;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              font-size: 50px;
+            }
           }
         }
       }
+
       .qrText {
         padding-top: 5px;
         font-size: 14px;
