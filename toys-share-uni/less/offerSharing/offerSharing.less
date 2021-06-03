@@ -364,9 +364,6 @@
 										font-size: 12px !important;
 										font-weight: 400;
 										color: #000000 !important;
-										overflow: hidden;
-										text-overflow: ellipsis;
-										white-space: nowrap;
 									}
 								}
 							}
@@ -382,14 +379,14 @@
 									font-size: 12px;
 									margin-bottom: 8px;
 									color: #666666;
+									overflow: hidden;
+									text-overflow: ellipsis;
+									white-space: nowrap;
 								}
 								.active{
 									font-size: 14px !important;
 									font-weight: 700;
 									color: #000000 !important;
-									overflow: hidden;
-									text-overflow: ellipsis;
-									white-space: nowrap;
 								}
 							}
 						}
@@ -483,6 +480,7 @@
 							margin-left: 0.20rem;
 						}
 						.pc_offer_info_list{
+							padding: 0.16rem 0;
 							.offer_info_item{
 								float: left;
 								margin-right: 0.5rem;
@@ -525,6 +523,7 @@
 								}
 								.grid{
 									width: 0.50rem !important;
+									font-size: 0.18rem;
 								}
 							}
 						}
@@ -568,14 +567,14 @@
 										font-size: 0.13rem;
 										margin-bottom: 0.08rem;
 										color: #666666;
+										overflow: hidden;
+										text-overflow: ellipsis;
+										white-space: nowrap;
 									}
 									.active{
 										font-size: 0.14rem !important;
 										font-weight: 400;
 										color: #000000 !important;
-										overflow: hidden;
-										text-overflow: ellipsis;
-										white-space: nowrap;
 									}
 								}
 							}
@@ -594,6 +593,9 @@
 									font-size: 0.13rem;
 									margin-bottom: 0.08rem;
 									color: #666666;
+									overflow: hidden;
+									text-overflow: ellipsis;
+									white-space: nowrap;
 								}
 							}
 						}
@@ -664,9 +666,9 @@
 	}
 	@media screen and (min-width: 768px){
 		.offer_info_item {
-			height: 0.62rem;
+			height: 0.32rem;
 			display: flex;
-			line-height: 0.62rem;
+			line-height: 0.32rem;
 			.offer_info_item_label{
 				font-size: 14px;
 				font-weight: 400;
@@ -691,9 +693,22 @@
 			background: #6072fc;
 			color: #ffffff;
 		}
+		.renyuan{
+			width: 230px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
 		.active_button{
-			height: 0.34rem !important;
-			margin-top: 0.14rem;
+			height: 0.32rem !important;
+			// margin: 0.14rem 0;
+			margin-right: 0 !important;
+			float: right !important;
+		}
+		.wrap {
+			width: 100%;
+			display: flex;
+			flex-direction: column;
 		}
 		/deep/ .u-content{
 			padding: 0 15px;
@@ -710,6 +725,16 @@
 				font-weight: 400;
 				color: #333333;
 			}
+			.left {
+				flex: 0 0 60px;
+			}
+			.right {
+				/* width: 0; */
+				min-width: 0;
+				/* overflow: hidden; */
+				flex: auto;
+				width: 130px;
+			}
 			//加粗
 			.active{
 				font-size: 16px !important;
@@ -719,19 +744,25 @@
 			.offer_info_item_text{
 				font-size: 14px;
 				color: #333333;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				flex: auto;
+				width: 0;
 			}
 		}
 		.custom_style {
 			font-size: 14px;
-			height: 1rem;
-			line-height: 1rem;
+			height: 30px;
+			line-height: 30px;
 			border-radius: 18px;
 			background: #6072fc;
 			color: #ffffff;
+			margin-top: 5px;
 		}
 		.active_button{
 			height: 30px !important;
-			margin-top: 0.14rem;
+			// margin-top: 0.14rem;
 			line-height: 30px !important;
 		}
 		.wrap {
