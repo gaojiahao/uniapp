@@ -37,7 +37,11 @@
     </div>
     <div class="btns">
       <div class="btns_btn">
-        <el-button type="primary" @click="$emit('submitCode')">
+        <el-button
+          type="primary"
+          :disabled="QRcodeValue.productCount < 1"
+          @click="$emit('submitCode')"
+        >
           一键添加全部商品到购物车
         </el-button>
       </div>
@@ -69,8 +73,11 @@ export default {
         case "offersharing":
           msg = "找样报价分享总数";
           break;
+        case "singleproduct":
+          msg = "产品分享数";
+          break;
         default:
-          msg = "";
+          msg = "产品分享数";
       }
       return msg;
     }
