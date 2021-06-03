@@ -45,7 +45,7 @@
 							<view class="text">报价信息</view>
 						</view>
 						<view class="wrap">
-							<b-row>
+							<b-row v-if="isMobile">
 								<b-col cols="12" sm="3">
 									<view class="offer_info_item">
 										<view class="offer_info_item_label">
@@ -78,10 +78,10 @@
 								</b-col>
 								<b-col cols="6" sm="2">
 									<view class="offer_info_item">
-										<view class="offer_info_item_label">
+										<view class="offer_info_item_label left">
 											业务员：
 										</view>
-										<view class="offer_info_item_text blue_color">
+										<view class="offer_info_item_text blue_color right">
 											{{sampleInfo.linkman}}
 										</view>
 									</view>
@@ -94,6 +94,45 @@
 									</view>
 								</b-col>
 							</b-row>
+							<view class="pc_offer_info_list" v-else>
+								<view class="offer_info_item">
+									<view class="offer_info_item_label">
+										报价单号：
+									</view>
+									<view class="offer_info_item_text">
+										{{sampleInfo.offerNumber}}
+									</view>
+								</view>
+								<view class="offer_info_item">
+									<view class="offer_info_item_label">
+										报价时间：
+									</view>
+									<view class="offer_info_item_text">
+										{{sampleInfo.createdOn&&sampleInfo.createdOn.replace(/T/, " ")}}
+									</view>
+								</view>
+								<view class="offer_info_item">
+									<view class="offer_info_item_label">
+										客户名称：
+									</view>
+									<view class="offer_info_item_text">
+										{{sampleInfo.customerName}}
+									</view>
+								</view>
+								<view class="offer_info_item">
+									<view class="offer_info_item_label">
+										业务员：
+									</view>
+									<view class="offer_info_item_text renyuan">
+										{{sampleInfo.linkman}}
+									</view>
+								</view>
+								<view class="offer_info_item active_button">
+									<view class="offer_info_item_label">
+										<u-button class="custom_style" :hair-line="false" @click="toContact" @tab="toContact">查看联系方式</u-button>
+									</view>
+								</view>
+							</view>
 							<div class="row_diver"></div>
 							<b-row no-gutters v-if="isMobile">
 								<b-col cols="12" sm="2" v-if="isMobile">
