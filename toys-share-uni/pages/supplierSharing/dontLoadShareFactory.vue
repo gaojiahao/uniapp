@@ -3,7 +3,7 @@
 		<!-- pc端 -->
 		<template v-if="!isMobile">
 			<!-- 头部 -->
-			<xHead :contactInfo="contactInfo" active="dontLoadShareFactory"></xHead>
+			<xHead :contactInfo="contactInfo" active="dontLoadShareFactory" :threeMenuTemp="threeMenuTemp" :remMenuTemp="remMenuTemp"></xHead>
 			<view class="content">
 				<!-- 幻灯片 -->
 				<view class="content_swiper">
@@ -172,7 +172,9 @@ export default {
 			contactInfo:{}, //联系信息
 			recommendProduct:[], //推荐信息
 			allProduct:[],	//所有产品
-			threeProduct:[] 	//3d产品
+			threeProduct:[] 	,//3d产品
+			threeMenuTemp:0,
+			remMenuTemp:0,
 		}
 	},
 	methods:{
@@ -207,6 +209,7 @@ export default {
 			if (res.result.code === 200) {
 				this.threeProduct = res.result.item;
 				uni.setStorageSync('threeMenu',res.result.item.length);
+				this.threeMenuTemp = res.result.item.length;
 				//uni.setStorageSync('threeMenu',0);
 			} else {
 				uni.showToast({
@@ -227,6 +230,7 @@ export default {
 			if (res.result.code === 200) {
 				this.recommendProduct = res.result.item.items;
 				uni.setStorageSync('remMenu',res.result.item.totalCount);
+				this.remMenuTemp = res.result.item.totalCount;
 			} else {
 				uni.showToast({
 					icon:'none',
@@ -296,8 +300,8 @@ export default {
 	  })
 	},
 	created(){
-		if(uni.getStorageSync('supplier_sharing_companyNumber')||this.$route.query.id){
-			uni.getStorageSync('supplier_sharing_companyNumber') ?  (this.$route.query.id ? uni.setStorageSync('supplier_sharing_companyNumber', this.$route.query.id):''): uni.setStorageSync('supplier_sharing_companyNumber', this.$route.query.id);
+		if(uni.getStorageSync('supplier_sharing_companyNumber')||this.$route.query.companyNumber){
+			uni.getStorageSync('supplier_sharing_companyNumber') ?  (this.$route.query.companyNumber ? uni.setStorageSync('supplier_sharing_companyNumber', this.$route.query.companyNumber):''): uni.setStorageSync('supplier_sharing_companyNumber', this.$route.query.companyNumber);
 			this.init();
 		} else {
 			this.$loading.show();

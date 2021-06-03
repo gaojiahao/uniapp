@@ -26,12 +26,15 @@ export default {
 <style lang="less" scoped>
 .footer{
 	width: 100%;
-	height: 108px;
-	background: #333333;
-	color: #FFFFFF;
+	height: 92px;
+	background: #FFFFFF;
+	color: #333333;
+	display: flex;
+	justify-content: center;
+	line-height: 92px;
 	.item{
-		text-align: center;
-		padding: 18px 0 0 0;
+		// text-align: center;
+		// padding: 18px 0 0 0;
 	}
 }
 </style>
