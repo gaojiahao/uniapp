@@ -312,7 +312,7 @@
                 <div class="more_btn_panel">
                   <template v-for="(btn, index) in table.actions">
                     <div class="more_btn_item" v-if="index >= 3" :key="index">
-                      <el-button
+                      <!-- <el-button
                         v-if="!btn.hidden(scope.row)"
                         :key="btn.index"
                         :type="btn.classWrapper(scope.row)"
@@ -330,7 +330,20 @@
                         ]"
                       >
                         {{ btn.textWrapper(scope.row) }}
-                      </el-button>
+                      </el-button> -->
+                      <div
+                        class="box"
+                        v-if="!btn.hidden(scope.row)"
+                        @click="btn.methods(scope.row)"
+                      >
+                        <i
+                          :class="btn.icon"
+                          :style="{
+                            color: btn.color
+                          }"
+                        ></i>
+                        {{ btn.textWrapper(scope.row) }}
+                      </div>
                     </div>
                   </template>
                 </div>
@@ -847,7 +860,7 @@ export default {
   // width: 120px;
   right: -5px;
   top: 0;
-  width: 80px;
+  width: 120px;
   background-color: #fff;
   color: #333333;
   font-size: 15px;
@@ -858,6 +871,12 @@ export default {
     padding: 10px 8px 0px 12px;
     .more_btn_item {
       margin-bottom: 10px;
+      color: #333333;
+      border-bottom: 1px solid #dcdfe6;
+      cursor: pointer;
+      .box {
+        margin-bottom: 8px;
+      }
     }
   }
   &::after {

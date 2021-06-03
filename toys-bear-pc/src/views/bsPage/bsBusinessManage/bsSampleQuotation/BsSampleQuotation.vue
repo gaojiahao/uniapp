@@ -268,6 +268,7 @@ export default {
           },
           {
             type: "warning",
+            color: "#F9723E",
             hidden(row) {
               return row.offerNumber[0] != "S" ? false : true;
             },
@@ -276,7 +277,8 @@ export default {
             },
             methods: row => {
               this.exportOrder(row);
-            }
+            },
+            icon: "el-icon-download"
           },
           {
             type: "warning",
@@ -290,7 +292,8 @@ export default {
             methods: row => {
               this.copyShare(row);
             },
-            class: "copy"
+            class: "copy",
+            icon: "el-icon-s-promotion"
           }
         ]
       },
