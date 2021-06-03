@@ -17,6 +17,7 @@ const v = new Vue();
 // }
 const store = new Vuex.Store({
   state: {
+    hallCount: 0, // 所有未读业务消息
     allCount: 0, // 所有未读业务消息
     myColles: [],
     isJindu: false,
@@ -77,6 +78,10 @@ const store = new Vuex.Store({
     myShoppingCartCount: 0
   },
   mutations: {
+    // 更新展厅业务未读消息
+    updataHallCount(state, payLoad) {
+      state.hallCount = payLoad;
+    },
     // 更新业务未读消息
     updataAllCount(state, payLoad) {
       state.allCount = payLoad;

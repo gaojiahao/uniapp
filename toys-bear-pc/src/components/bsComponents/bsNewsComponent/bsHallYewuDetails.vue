@@ -138,6 +138,7 @@ import Summary from "@/components/summaryComponent/summary";
 import bsExportOrder from "@/components/commonComponent/exportOrderComponent/commonYewu.vue";
 import bsTable from "@/components/table";
 import { mapState } from "vuex";
+import eventBus from "@/assets/js/common/eventBus.js";
 export default {
   name: "bsSampleQuotationDetails",
   components: {
@@ -398,6 +399,7 @@ export default {
       if (res.data.result.code === 200) {
         this.tableData.data = res.data.result.item.items;
         this.totalCount = res.data.result.item.totalCount;
+        eventBus.$emit("resetTotalCount");
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,

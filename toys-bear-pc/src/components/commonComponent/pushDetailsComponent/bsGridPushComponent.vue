@@ -27,7 +27,7 @@
         <div class="right">
           <h4>{{ item.companyName }}</h4>
           <p>联系电话：{{ item.phoneNumber }}</p>
-          <p class="onlineConsultation" @click="toNews">
+          <p class="onlineConsultation" @click="toNews(item)">
             <img src="~@/assets/images/consult.png" alt />
             在线咨询
           </p>
@@ -40,7 +40,7 @@
             v-model="item.checked"
           ></el-checkbox>
         </div>
-        <div class="text">
+        <div class="text" @click="openDetails">
           <p><i class="el-icon-document"></i> 择样明细(0)</p>
           <p><i class="el-icon-time"></i>推送记录(0)</p>
         </div>
@@ -66,18 +66,25 @@ export default {
     return {};
   },
   methods: {
+    // 去详情
+    openDetails() {
+      this.$common.handlerMsgState({
+        msg: "敬请期待",
+        type: "warning"
+      });
+    },
     // 去聊天
-    toNews() {
-      // const fd = {
-      //   name: this.companyInfo.companyNumber + "bsNews",
-      //   linkUrl: "/bsIndex/bsNews",
-      //   component: "bsNews",
-      //   refresh: true,
-      //   label: this.companyInfo.companyName,
-      //   value: this.companyInfo
-      // };
-      // this.$router.push("/bsIndex/bsNews");
-      // this.$store.commit("myAddTab", fd);
+    toNews(item) {
+      const fd = {
+        name: item.companyNumber + "bsNews",
+        linkUrl: "/bsIndex/bsNews",
+        component: "bsNews",
+        refresh: true,
+        label: item.companyName,
+        value: item
+      };
+      this.$store.commit("myAddTab", fd);
+      this.$router.push("/bsIndex/bsNews");
     },
     // 单选
     handleChecked(value) {

@@ -101,6 +101,17 @@ export default {
       if (code === 200) {
         this.businessConversations = item.businessConversations;
         console.log(this.businessConversations);
+        let count = 0;
+        for (let i = 0; i < item.businessConversations.length; i++) {
+          count += item.businessConversations[i].unreadCount;
+          if (item.businessConversations[i].sampleFrom == "EXHIBITION") {
+            this.$store.commit(
+              "updataHallCount",
+              item.businessConversations[i].unreadCount
+            );
+          }
+        }
+        this.$store.commit("updataAllCount", count);
         this.companyConversations = item.companyConversations;
         this.activeModel = item.businessConversations[1];
       } else {
@@ -114,17 +125,31 @@ export default {
   created() {},
   async mounted() {
     await this.getConversationList();
-    eventBus.$on("resetTotalCount", async () => {
-      const res = await this.$im_http.post("/api/Conversation/List", {});
-      const { code, item, msg } = res.data.result;
-      if (code === 200) {
-        this.businessConversations = item.businessConversations;
-      } else {
-        this.$common.handlerMsgState({
-          msg: msg,
-          type: "danger"
-        });
-      }
+    eventBus.$on("resetTotalCount", () => {
+      this.$nextTick(async () => {
+        const res = await this.$im_http.post("/api/Conversation/List", {});
+        const { code, item, msg } = res.data.result;
+        if (code === 200) {
+          this.businessConversations = item.businessConversations;
+          let count = 0;
+          for (let i = 0; i < item.businessConversations.length; i++) {
+            count += item.businessConversations[i].unreadCount;
+            if (item.businessConversations[i].sampleFrom == "EXHIBITION") {
+              this.$store.commit(
+                "updataHallCount",
+                item.businessConversations[i].unreadCount
+              );
+            }
+          }
+          eventBus.$emit("resetHallList");
+          this.$store.commit("updataAllCount", count);
+        } else {
+          this.$common.handlerMsgState({
+            msg: msg,
+            type: "danger"
+          });
+        }
+      });
     });
   },
   computed: {

@@ -21,8 +21,8 @@
             </el-image>
             <el-badge
               v-if="item.count"
-              :value="item.count"
-              :hidden="item.count < 1"
+              :value="hallCount"
+              :hidden="hallCount < 1"
               class="homeBadge"
             >
               <span class="text">{{ item.title }}</span>
@@ -460,7 +460,7 @@ export default {
         {
           title: "展厅业务",
           icon: require("@/assets/images/zhantingyewu.png"),
-          count: this.allCount
+          count: true
         },
         {
           title: "找样报价",
@@ -641,7 +641,6 @@ export default {
     this.timeData = Object.assign(calculateDate(this.dayValue));
   },
   mounted() {
-    this.gongzuoList[0].count = this.allCount;
     this.getOrgCompany();
     this.getGetSalesOrderDataStatistics();
     this.getGetSalesHotSample();
@@ -650,7 +649,7 @@ export default {
     swiper() {
       return this.$refs.mySwiper.$swiper;
     },
-    ...mapState(["allCount"])
+    ...mapState(["hallCount"])
   }
 };
 </script>

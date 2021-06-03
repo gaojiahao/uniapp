@@ -171,6 +171,10 @@ export default {
     },
     // webSocket 连接错误
     websocketonerror() {
+      this.$common.handlerMsgState({
+        msg: "WebSocket连接发生错误",
+        type: "danger"
+      });
       console.log("WebSocket连接发生错误");
     },
     // webSocket 数据接收
@@ -445,14 +449,6 @@ export default {
   created() {},
   mounted() {
     this.getQrCodeUrl();
-  },
-  watch: {
-    activeName(val) {
-      if (val === "mobile") {
-        clearInterval(this.qrTimer);
-        this.ws && this.ws.close();
-      }
-    }
   },
   beforeDestroy() {
     clearInterval(this.timer);

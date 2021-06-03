@@ -53,10 +53,11 @@
             :class="{ grid: true, active: isGrid === 'bsGridPushComponent' }"
             @click="handerIsGrid('bsGridPushComponent')"
           ></div>
-          <div
+          <!-- 列表版本未完成 -->
+          <!-- <div
             :class="{ column: true, active: isGrid === 'bsTablePushComponent' }"
             @click="handerIsGrid('bsTablePushComponent')"
-          ></div>
+          ></div> -->
         </div>
       </div>
       <div class="tableBox">
