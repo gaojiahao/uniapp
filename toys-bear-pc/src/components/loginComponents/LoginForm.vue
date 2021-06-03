@@ -446,14 +446,6 @@ export default {
   mounted() {
     this.getQrCodeUrl();
   },
-  watch: {
-    activeName(val) {
-      if (val === "mobile") {
-        clearInterval(this.qrTimer);
-        this.ws && this.ws.close();
-      }
-    }
-  },
   beforeDestroy() {
     clearInterval(this.timer);
     this.ws && this.ws.close();
