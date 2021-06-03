@@ -467,7 +467,8 @@ export default {
 			  baseUrl = "http://124.71.6.26:8080"
 			  // baseUrl = "https://www.toysbear.com"
 			}else{
-			  baseUrl = "http://124.71.6.26:8080"
+			  //baseUrl = "http://124.71.6.26:8080"
+			  baseUrl = "https://www.toysbear.com"
 			}
 			let httpDefaultOpts = {
 				url: baseUrl + '/api/GetToken',
