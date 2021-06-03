@@ -171,6 +171,10 @@ export default {
     },
     // webSocket 连接错误
     websocketonerror() {
+      this.$common.handlerMsgState({
+        msg: "WebSocket连接发生错误",
+        type: "danger"
+      });
       console.log("WebSocket连接发生错误");
     },
     // webSocket 数据接收

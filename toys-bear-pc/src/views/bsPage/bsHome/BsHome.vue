@@ -28,13 +28,15 @@ export default {
     // 获取业务消息未读数
     async getOrderMessageCount() {
       const res = await this.$http.post("/api/GetOrderMessageCount", {});
-      console.log(res);
+      console.log(res, 123);
       if (res.data.result.code === 200) {
-        console.log(res.data.result.item.result);
         const list = res.data.result.item.result;
         let count = 0;
         for (let i = 0; i < list.length; i++) {
           count += list[i].count;
+          if (list[i].sampleFrom == "HALL") {
+            this.$store.commit("updataHallCount", list[i].count);
+          }
         }
         this.$store.commit("updataAllCount", count);
       }

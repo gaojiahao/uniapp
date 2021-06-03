@@ -263,7 +263,7 @@ export default {
     },
     // 查看业务消息详情
     openDetails(item) {
-      eventBus.$emit("resetTotalCount");
+      // item.readStatusM = true;
       const fd = {
         name: "bsHallYewuDetails" + item.orderNumber || item.offerNumber,
         linkUrl: this.$router.path,
@@ -329,6 +329,7 @@ export default {
       if (res.data.result.code === 200) {
         this.erpOrderList = res.data.result.item.items;
         this.totalCount = res.data.result.item.totalCount;
+        console.log(this.erpOrderList);
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -341,6 +342,9 @@ export default {
   async mounted() {
     await this.getMessageTeplateSettingsByPage();
     await this.getERPOrderListByPage();
+    eventBus.$on("resetHallList", () => {
+      this.getERPOrderListByPage();
+    });
   },
   computed: {
     ...mapState(["userInfo"])
