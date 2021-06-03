@@ -1,6 +1,6 @@
 <template>
 	<view class="footer">
-		<view class="item">技术支持：0754-89671122</view>
+		<view class="item"><u-icon name="phone"></u-icon>技术支持：0754-89671122</view>
 		<view class="item">Copyright © 2021深圳宏升软件技术开发有限公司 粤ICP备13031421号-4</view>
 	</view>
 </template>

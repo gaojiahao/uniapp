@@ -42,6 +42,14 @@ export default {
 		active:{
 			type:String,
 			default:'supplierSharing',
+		},
+		threeMenuTemp:{
+			type:Number,
+			default:0,
+		},
+		remMenuTemp:{
+			type:Number,
+			default:0,
 		}
 	},
 	watch:{
@@ -57,6 +65,18 @@ export default {
 				this.contactInfo2 = val;
 			},
 			deep:true
+		},
+		threeMenuTemp:{
+			handler(val){
+				this.threeMenu = val;
+			},
+			deep:true,
+		},
+		remMenuTemp:{
+			handler(val){
+				this.remMenu = val;
+			},
+			deep:true,
 		}
 	},
 	data() {
@@ -76,7 +96,7 @@ export default {
 				this.$Router.push({
 				    path:'/'+value,
 					query:{
-						id:id
+						companyNumber:id
 					}
 				})
 			} else{
