@@ -188,7 +188,6 @@ export default {
               dateTime: Date.now(),
               token: res.data.result.accessToken
             });
-            console.log(123456, validityPeriod);
             localStorage.setItem("validityPeriod", validityPeriod);
           }
           const fd = {

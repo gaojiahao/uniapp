@@ -63,6 +63,7 @@ export default {
         this.getGetSalesOrderDataStatistics();
         this.getGetSalesHotSample();
     }
+    this.$cookies.remove("userInfo");
   },
   computed: {
     ...mapState(["userInfo", "allCount"])

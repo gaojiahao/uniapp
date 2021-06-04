@@ -130,9 +130,7 @@ export default {
     }
   },
   created() {},
-  mounted() {
-    console.log(this.allCount);
-  },
+  mounted() {},
   computed: {
     ...mapState(["routers", "allCount"])
   }
