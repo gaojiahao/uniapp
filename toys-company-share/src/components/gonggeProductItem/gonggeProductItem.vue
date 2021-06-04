@@ -58,6 +58,7 @@ export default {
   methods: {
     // 加购
     addCart(item) {
+      console.log(item);
       let api = "/api/AddShoppingCart";
       if (item.isShop) {
         api = "/api/RemoveShoppingCart";
