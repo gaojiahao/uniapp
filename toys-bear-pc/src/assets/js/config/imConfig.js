@@ -1,10 +1,10 @@
 module.exports = {
   devEnv: {
     NODE_ENV: "development", // 本地环境
-    hosturl: "http://124.71.6.26:8089",
-    appkey: "bmdehs6pbfaas"
-    // hosturl: "http://im.toysbear.com",
-    // appkey: "pkfcgjstp5888"
+    // hosturl: "http://124.71.6.26:8089",
+    // appkey: "bmdehs6pbfaas"
+    hosturl: "http://im.toysbear.com",
+    appkey: "pkfcgjstp5888"
     // hosturl: "https://www.toysbear.com",
   },
   testEnv: {
