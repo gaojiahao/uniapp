@@ -400,7 +400,7 @@ export default {
           const result = await this.$http.post("/api/CreateBearNotice", {
             NoticeTitle: "",
             NoticeType: gonggaoType,
-            Acceptor: this.acceptor,
+            Acceptor: this.acceptor == "All" ? "" : this.acceptor,
             Notice: this.formData.content,
             Publisher: this.$store.state.userInfo.userInfo.id,
             IssuedCompanyID: this.$store.state.userInfo.commparnyList[0]

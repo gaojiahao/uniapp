@@ -28,7 +28,7 @@
       </el-button>
     </center>
     <div class="ipList">
-      <span class="title">小竹熊域名IP地址：</span>
+      <span class="title">小竹熊域名IP：</span>
       <span class="value">119.29.72.160</span>
     </div>
     <div class="zhinanTitle">

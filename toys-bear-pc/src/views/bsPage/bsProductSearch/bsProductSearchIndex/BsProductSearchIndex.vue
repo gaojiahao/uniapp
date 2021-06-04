@@ -1631,11 +1631,12 @@ export default {
           this.searchHallCate.companyInfo &&
           this.searchHallCate.companyInfo.companyNumber;
         this.isOneDownCate = false;
-        this.getProductList(false);
+        await this.getProductList(false);
+        await this.GetProductChpaList();
       } else if (this.imgSearch) {
         eventBus.$emit("imgSearchChange");
-        this.GetProductChpaList();
-        this.getProductCategoryList();
+        await this.GetProductChpaList();
+        await this.getProductCategoryList();
       } else {
         // 默认搜索
         this.currentPage = 1;

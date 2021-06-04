@@ -136,7 +136,7 @@
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-            {{ scope.row.companyName }}
+            {{ scope.row.exhibitionCompany.companyName }}
           </template>
         </el-table-column>
         <el-table-column

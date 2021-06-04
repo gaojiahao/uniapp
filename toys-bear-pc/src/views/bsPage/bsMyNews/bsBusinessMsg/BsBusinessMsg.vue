@@ -54,9 +54,11 @@ export default {
     };
   },
   methods: {
-    // 点击了头部按钮
-    openBusinessType(item) {
-      this.activeModel = null;
+    // 过滤传参
+    filterParams(item) {
+      if (!item) {
+        return {};
+      }
       // (1=系统消息,2=展厅业务,3=厂商业务,4=公司业务)
       const myCompanyType = this.userInfo.commparnyList[0].companyType;
       if (myCompanyType == "Exhibition") {
@@ -89,9 +91,14 @@ export default {
             break;
         }
       }
-
+      return item;
+    },
+    // 点击了头部按钮
+    openBusinessType(item) {
+      this.activeModel = null;
+      const activeModel = this.filterParams(item);
       this.$nextTick(() => {
-        this.activeModel = item;
+        this.activeModel = activeModel;
       });
     },
     // 获取业务消息按钮
@@ -113,7 +120,7 @@ export default {
         }
         this.$store.commit("updataAllCount", count);
         this.companyConversations = item.companyConversations;
-        this.activeModel = item.businessConversations[1];
+        this.activeModel = this.filterParams(item.businessConversations[1]);
       } else {
         this.$common.handlerMsgState({
           msg: msg,

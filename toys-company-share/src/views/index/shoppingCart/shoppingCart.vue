@@ -128,7 +128,7 @@
                   <p class="price" v-if="shareInfo.isShowPrice">
                     <span>{{ userInfo.currencyType }}</span>
                     <span class="priceText">{{
-                      scope.row.productJson.price
+                      scope.row.shareProductJson.price
                     }}</span>
                   </p>
                 </div>
@@ -265,7 +265,7 @@
                   <span>
                     {{
                       priceCount(
-                        scope.row.price,
+                        scope.row.shareProductJson.price,
                         scope.row.productJson.ou_lo,
                         scope.row.number
                       )
@@ -715,21 +715,21 @@ export default {
       this.formInfo.currencyType = this.userInfo.currencyType;
       this.formInfo.shareOrderDetails = selectProducts.map(val => {
         return {
-          productNumber: val.productNumber,
-          productName: val.productJson.name,
-          productEName: val.productJson.ename,
-          productPrice: val.price,
+          productNumber: val.shareProductJson.productNumber,
+          productName: val.shareProductJson.name,
+          productEName: val.shareProductJson.ename,
+          productPrice: val.shareProductJson.price,
           productCount: val.number,
-          productFeet: val.productJson.bulk_feet,
-          productStere: val.productJson.bulk_stere,
+          productFeet: val.shareProductJson.outerBoxFeet,
+          productStere: val.shareProductJson.outerBoxStere,
           productImage: val.productImgs,
           currencyType: this.userInfo.currencyType,
-          outerBoxLo: val.productJson.ou_lo,
+          outerBoxLo: val.shareProductJson.outerBoxLo,
           packMethod:
             this.globalLang === "zh-CN"
-              ? val.productJson.ch_pa
-              : val.productJson.en_pa,
-          productInfo: JSON.parse(val.shareProductJson)
+              ? val.shareProductJson.packMethod
+              : val.shareProductJson.ePackMethod,
+          productInfo: val.shareProductJson
         };
       });
       const res = await this.$http.post(
@@ -855,7 +855,7 @@ export default {
         price = this.add(
           price,
           this.multiply(
-            this.multiply(list[i].price, list[i].number),
+            this.multiply(list[i].shareProductJson.price, list[i].number),
             list[i].productJson.ou_lo
           )
         );
@@ -889,8 +889,10 @@ export default {
       });
       if (res.data.result.code === 200) {
         this.dataList = res.data.result.item.map((val, i) => {
+          const shareProduct = JSON.parse(val.shareProductJson);
           const product = JSON.parse(val.productJson);
           val.productJson = product;
+          val.shareProductJson = shareProduct;
           val.index = i + 1;
           return val;
         });
@@ -907,6 +909,7 @@ export default {
       let my = JSON.parse(JSON.stringify(val));
       my.productJson = JSON.stringify(my.productJson);
       my.supplierJson = JSON.stringify(my.supplierJson);
+      my.shareProductJson = JSON.stringify(my.shareProductJson);
       const res = await this.$toys.post("/api/UpdateShoppingCart", my);
       if (res.data.result.code != 200) {
         this.$message.error(res.data.result.msg);
