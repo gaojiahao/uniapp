@@ -48,7 +48,21 @@ function resetToken(token) {
       });
   });
 }
-// console.log(resetToken);
+function getToken() {
+  return new Promise((result, reject) => {
+    v.prototype.$http
+      .post("/api/GetToken", {
+        companyNum: "LittleBearWeb",
+        platForm: "PC"
+      })
+      .then(res => {
+        result(res);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}
 
 /**
  * apiBaseURL
@@ -145,7 +159,7 @@ instance.interceptors.request.use(
 );
 // 响应拦截
 instance.interceptors.response.use(
-  res => {
+  async res => {
     // loaddingOptions[res.config.url] = false;
     v.prototype.$nextTick(() => {
       $Store.commit("updateAppLoading", false);
@@ -203,7 +217,7 @@ instance.interceptors.response.use(
     ) {
       return res;
     } else {
-      if (res.data.result.code === 401 || res.data.result.code === 403) {
+      if (res.data.result.code === 401) {
         const validityPeriod = localStorage.getItem("validityPeriod");
         if (validityPeriod) {
           const options = JSON.parse(validityPeriod);
@@ -212,16 +226,23 @@ instance.interceptors.response.use(
           const day = 86400000 * 7;
           // 超过7天
           if (currentDate - options.dateTime >= day) {
-            $Store.commit("updateAppLoading", false);
             v.prototype.$common.handlerMsgState({
               msg: "登录过期，请重新登录",
               type: "danger"
             });
+            const result = await getToken();
+            if (result.data.result.code === 200) {
+              $Store.commit("reset_Token", result.data.result.item);
+            }
             router.push({
               path: "/login?id=signOut"
             });
           } else {
-            console.log(resetToken, res);
+            const result = await resetToken(res.config.headers.Utoken);
+            if (result.data.result.isLogin) {
+              $Store.commit("reset_Token", result.data.result.accessToken);
+              location.reload();
+            }
           }
         } else {
           $Store.commit("updateAppLoading", false);
@@ -238,37 +259,7 @@ instance.interceptors.response.use(
     return res;
   },
   error => {
-    console.log(error.response, error.config, "响应错误拦截");
     if (error.response) {
-      // const validityPeriod = localStorage.getItem("validityPeriod");
-      //   if (validityPeriod) {
-      //     const options = JSON.parse(validityPeriod);
-      //     const currentDate = Date.now();
-      //     // 一天的时间戳为86400000
-      //     const day = 86400000 * 7;
-      //     // 超过7天
-      //     if (currentDate - options.dateTime >= day) {
-      //       $Store.commit("updateAppLoading", false);
-      //       v.prototype.$common.handlerMsgState({
-      //         msg: "登录过期，请重新登录",
-      //         type: "danger"
-      //       });
-      //       router.push({
-      //         path: "/login?id=signOut"
-      //       });
-      //     } else {
-      //       console.log(resetToken, res);
-      //     }
-      //   } else {
-      //     $Store.commit("updateAppLoading", false);
-      //     v.prototype.$common.handlerMsgState({
-      //       msg: "登录过期，请重新登录",
-      //       type: "danger"
-      //     });
-      //     router.push({
-      //       path: "/login?id=signOut"
-      //     });
-      //   }
       /** 全局设置请求时长和请求内容 */
       const myUrl = error.response.config.url;
       let httpDate;

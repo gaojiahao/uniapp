@@ -890,7 +890,6 @@ export default {
       if (res.data.result.code === 200) {
         this.dataList = res.data.result.item.map((val, i) => {
           const shareProduct = JSON.parse(val.shareProductJson);
-          console.log(shareProduct, 123);
           const product = JSON.parse(val.productJson);
           val.productJson = product;
           val.shareProductJson = shareProduct;
@@ -910,6 +909,7 @@ export default {
       let my = JSON.parse(JSON.stringify(val));
       my.productJson = JSON.stringify(my.productJson);
       my.supplierJson = JSON.stringify(my.supplierJson);
+      my.shareProductJson = JSON.stringify(my.shareProductJson);
       const res = await this.$toys.post("/api/UpdateShoppingCart", my);
       if (res.data.result.code != 200) {
         this.$message.error(res.data.result.msg);

@@ -78,6 +78,10 @@ const store = new Vuex.Store({
     myShoppingCartCount: 0
   },
   mutations: {
+    // 过期更新token
+    reset_Token(state, token) {
+      state.userInfo.accessToken = token;
+    },
     // 更新展厅业务未读消息
     updataHallCount(state, payLoad) {
       state.hallCount = payLoad;

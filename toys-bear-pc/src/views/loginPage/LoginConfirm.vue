@@ -181,7 +181,6 @@ export default {
             });
             this.$store.commit("removeLoginItems");
           }
-          console.log(132456, this.$route.query.thePassword);
           this.getShoppingCartCount();
           // 记住密码
           if (this.$route.query.thePassword) {
@@ -189,6 +188,7 @@ export default {
               dateTime: Date.now(),
               token: res.data.result.accessToken
             });
+            console.log(123456, validityPeriod);
             localStorage.setItem("validityPeriod", validityPeriod);
           }
           const fd = {
