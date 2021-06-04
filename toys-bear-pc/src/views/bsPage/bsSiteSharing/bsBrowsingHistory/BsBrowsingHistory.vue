@@ -307,6 +307,7 @@ export default {
   },
   mounted() {
     this.getStaffList();
+    this.getSearchWebsiteBrowsingPage();
   },
   computed: {
     ...mapState(["userInfo"])

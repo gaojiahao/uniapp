@@ -12,6 +12,7 @@
             @closeTag="closeTag"
             @handleSynthesis="handleSynthesis"
             @screeningShow="screeningShow"
+            @handleIsSynthesize="handleIsSynthesize"
           />
           <!-- 高级筛选 -->
           <div class="advancedScreening" v-show="screeningFlag == true">
@@ -884,10 +885,16 @@
     <div class="footer" v-if="totalCount >= 7">
       <img src="@/assets/images/footerBg.png" alt="" />
     </div>
+    <el-dialog title="综合搜索" :visible.sync="synthesizeShow" width="830px">
+      <BsSynthesizeSearch
+        @handelSynthesize="handelSynthesize"
+      ></BsSynthesizeSearch>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import BsSynthesizeSearch from "@/components/bsComponents/bsProductSearchComponent/bsSynthesizeSearch";
 import bsProductSearch from "@/components/bsComponents/bsProductSearchComponent/bsProductSearch";
 // import bsColumnComponent from "@/components/bsComponents/bsProductSearchComponent/bsColumnComponent";
 import bsGridComponent from "@/components/bsComponents/bsProductSearchComponent/bsGridComponent";
@@ -901,10 +908,15 @@ export default {
     bsProductSearch,
     bsColumnComponent,
     bsGridComponent,
-    VueCropper
+    VueCropper,
+    BsSynthesizeSearch
   },
   data() {
     return {
+      data: {},
+      isSynthesizeSearch: false,
+      getSynthesize: false,
+      synthesizeShow: false,
       loading: false,
       selection: true,
       baseImg: null,
@@ -1207,42 +1219,49 @@ export default {
     async getProductList(flag) {
       this.$store.commit("searchValues", null);
       let startDate = Date.now();
-      const fd = {
-        name: this.searchForm.keyword,
-        hallNumber: this.searchForm.companyNumber,
-        skipCount: this.currentPage,
-        maxResultCount: this.pageSize,
-        categoryNumber: this.searchForm.categoryNumber,
-        minPrice: this.searchForm.minPrice,
-        maxPrice: this.searchForm.maxPrice,
-        startTime: this.searchForm.time.length ? this.searchForm.time[0] : null,
-        endTime: this.searchForm.time.length ? this.searchForm.time[1] : null,
-        // precisionSearch: JSON.stringify({
-        //   fa_no: this.searchForm.fa_no ? 1 : 0,
-        //   number: this.searchForm.number ? 1 : 0,
-        //   name: this.searchForm.name ? 1 : 0,
-        //   packName: this.searchForm.packName ? 1 : 0
-        // }),
-        sortOrder: this.sortOrder,
-        sortType: this.sortType,
-        // 高级搜索条件
-        isUpInsetImg: this.isUpInsetImg,
-        isUpInset3D: this.addrSearch,
-        fa_no: this.advancedFormdata.fa_no,
-        ch_pa: this.advancedFormdata.ch_pa,
-        pr_le: this.advancedFormdata.pr_le,
-        pr_wi: this.advancedFormdata.pr_wi,
-        pr_hi: this.advancedFormdata.pr_hi,
-        ou_le: this.advancedFormdata.ou_le,
-        ou_wi: this.advancedFormdata.ou_wi,
-        ou_hi: this.advancedFormdata.ou_hi,
-        in_le: this.advancedFormdata.in_le,
-        in_wi: this.advancedFormdata.in_wi,
-        in_hi: this.advancedFormdata.in_hi
-      };
+
+      this.data.skipCount = this.currentPage;
+      this.data.maxResultCount = this.pageSize;
+
+      console.log(this.data, "searchType");
+      if (this.isSynthesizeSearch) {
+        this.data = {
+          name: this.searchForm.keyword,
+          hallNumber: this.searchForm.companyNumber,
+          categoryNumber: this.searchForm.categoryNumber,
+          minPrice: this.searchForm.minPrice,
+          maxPrice: this.searchForm.maxPrice,
+          startTime: this.searchForm.time.length
+            ? this.searchForm.time[0]
+            : null,
+          endTime: this.searchForm.time.length ? this.searchForm.time[1] : null,
+          // precisionSearch: JSON.stringify({
+          //   fa_no: this.searchForm.fa_no ? 1 : 0,
+          //   number: this.searchForm.number ? 1 : 0,
+          //   name: this.searchForm.name ? 1 : 0,
+          //   packName: this.searchForm.packName ? 1 : 0
+          // }),
+          sortOrder: this.sortOrder,
+          sortType: this.sortType,
+          // 高级搜索条件
+          isUpInsetImg: this.isUpInsetImg,
+          isUpInset3D: this.addrSearch,
+          fa_no: this.advancedFormdata.fa_no,
+          ch_pa: this.advancedFormdata.ch_pa,
+          pr_le: this.advancedFormdata.pr_le,
+          pr_wi: this.advancedFormdata.pr_wi,
+          pr_hi: this.advancedFormdata.pr_hi,
+          ou_le: this.advancedFormdata.ou_le,
+          ou_wi: this.advancedFormdata.ou_wi,
+          ou_hi: this.advancedFormdata.ou_hi,
+          in_le: this.advancedFormdata.in_le,
+          in_wi: this.advancedFormdata.in_wi,
+          in_hi: this.advancedFormdata.in_hi
+        };
+      }
       switch (this.isAccurate) {
         case "精准":
-          fd.precisionSearch = JSON.stringify({
+          this.data.precisionSearch = JSON.stringify({
             fa_no: this.searchForm.fa_no ? 2 : 0,
             name: this.searchForm.name ? 2 : 0,
             number: this.searchForm.number ? 2 : 0,
@@ -1250,7 +1269,7 @@ export default {
           });
           break;
         default:
-          fd.precisionSearch = JSON.stringify({
+          this.data.precisionSearch = JSON.stringify({
             fa_no: this.searchForm.fa_no ? 1 : 0,
             name: this.searchForm.name ? 1 : 0,
             number: this.searchForm.number ? 1 : 0,
@@ -1258,12 +1277,19 @@ export default {
           });
           break;
       }
-      for (const key in fd) {
-        if (fd[key] === null || fd[key] === undefined || fd[key] === "")
-          delete fd[key];
+      for (const key in this.data) {
+        if (
+          this.data[key] === null ||
+          this.data[key] === undefined ||
+          this.data[key] === ""
+        )
+          delete this.data[key];
       }
-
-      const res = await this.$http.post("/api/SearchBearProductPage", fd);
+      console.log(this.data, "this.data");
+      const res = await this.$http.post(
+        "/api/SearchBearProductPage",
+        this.data
+      );
       const { code, item, msg } = res.data.result;
       if (code === 200) {
         if (this.typeId === 1) {
@@ -1297,6 +1323,18 @@ export default {
         this.getProductCategoryList();
       }
     },
+    // 子组件综合搜索
+    handelSynthesize(data) {
+      // this.data = data;
+      this.isSynthesizeSearch = true;
+      this.data = Object.assign({}, data);
+      console.log(this.data);
+      this.$nextTick(() => {
+        this.getProductList(false);
+        this.synthesizeShow = false;
+      });
+    },
+
     // 切換頁容量
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
@@ -1313,6 +1351,7 @@ export default {
       this.currentPage = page;
       this.getProductList(false);
     },
+
     // 获取产品类目列表
     async getProductCategoryList() {
       const res = await this.$http.post("/api/ProductCategoryList", {});
@@ -1387,6 +1426,10 @@ export default {
     //高级搜索
     async screeningShow() {
       this.screeningFlag = !this.screeningFlag;
+    },
+    // 切换综合搜索
+    handleIsSynthesize() {
+      this.synthesizeShow = !this.synthesizeShow;
     },
     // 确认高级搜索
     confirmAdvanced() {
