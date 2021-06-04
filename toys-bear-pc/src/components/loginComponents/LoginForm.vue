@@ -73,6 +73,9 @@
             >
           </el-form-item>
         </el-form>
+        <div class="rememberPassword">
+          <el-checkbox v-model="thePassword">记住密码(7天)</el-checkbox>
+        </div>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -88,6 +91,7 @@ export default {
   },
   data() {
     return {
+      thePassword: false,
       value: null,
       ws: null,
       wsBaseUrl:
@@ -378,6 +382,15 @@ export default {
                 });
                 this.$store.commit("removeLoginItems");
               }
+              this.getShoppingCartCount();
+              // 记住密码
+              if (this.thePassword) {
+                const validityPeriod = JSON.stringify({
+                  dateTime: Date.now(),
+                  token: res.data.result.accessToken
+                });
+                localStorage.setItem("validityPeriod", validityPeriod);
+              }
               switch (res.data.result.commparnyList[0].companyType) {
                 // case "Admin":
                 // case "Supplier":
@@ -397,9 +410,15 @@ export default {
             } else if (res.data.result.commparnyList.length > 1) {
               // 多个角色
               this.$store.commit("setToken", res.data.result);
-              this.$router.push({
-                name: "LoginConfirm"
-              });
+              const path = {
+                path: "loginConfirm"
+              };
+              if (this.thePassword) {
+                path.query = {
+                  thePassword: this.thePassword
+                };
+              }
+              this.$router.push(path);
             }
           } else {
             this.$common.handlerMsgState({
@@ -409,6 +428,17 @@ export default {
           }
         }
       });
+    },
+    // 获取购物车CartCount
+    async getShoppingCartCount() {
+      const fd = {
+        userID: this.userInfo.userInfo.id,
+        companyNumber: this.userInfo.commparnyList[0].companyNumber
+      };
+      const res = await this.$http.post("/api/ShoppingCartCount", fd);
+      if (res.data.result.code === 200) {
+        this.$store.commit("handlerShoppingCartCount", res.data.result.item);
+      }
     },
     // 手机验证倒计时
     async getCode() {
@@ -457,6 +487,7 @@ export default {
 };
 </script>
 <style scoped lang="less">
+@deep: ~">>>";
 .formBox {
   width: 100%;
   height: 100%;
@@ -579,6 +610,11 @@ export default {
     }
   }
 }
+@{deep} .rememberPassword {
+  .el-checkbox {
+    color: #666;
+  }
+}
 ::v-deep .mobileIconBox {
   position: absolute;
   width: 50px;
@@ -604,7 +640,7 @@ export default {
   }
 }
 ::v-deep .el-form-item {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 ::v-deep .el-tabs__nav-wrap::after {
   background-color: transparent;

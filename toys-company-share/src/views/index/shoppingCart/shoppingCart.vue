@@ -714,22 +714,22 @@ export default {
       console.log(selectProducts);
       this.formInfo.currencyType = this.userInfo.currencyType;
       this.formInfo.shareOrderDetails = selectProducts.map(val => {
+        const obj = JSON.parse(val.shareProductJson);
+        console.log(obj);
         return {
-          productNumber: val.productNumber,
-          productName: val.productJson.name,
-          productEName: val.productJson.ename,
-          productPrice: val.price,
+          productNumber: obj.productNumber,
+          productName: obj.name,
+          productEName: obj.ename,
+          productPrice: obj.price,
           productCount: val.number,
-          productFeet: val.productJson.bulk_feet,
-          productStere: val.productJson.bulk_stere,
+          productFeet: obj.outerBoxFeet,
+          productStere: obj.outerBoxStere,
           productImage: val.productImgs,
           currencyType: this.userInfo.currencyType,
-          outerBoxLo: val.productJson.ou_lo,
+          outerBoxLo: obj.outerBoxLo,
           packMethod:
-            this.globalLang === "zh-CN"
-              ? val.productJson.ch_pa
-              : val.productJson.en_pa,
-          productInfo: JSON.parse(val.shareProductJson)
+            this.globalLang === "zh-CN" ? obj.packMethod : obj.ePackMethod,
+          productInfo: obj
         };
       });
       const res = await this.$http.post(

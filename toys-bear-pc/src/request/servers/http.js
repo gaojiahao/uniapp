@@ -33,6 +33,23 @@ const createLogRecord = async function(obj) {
   }
 };
 
+// 刷新token
+function resetToken(token) {
+  return new Promise((result, reject) => {
+    v.prototype.$http
+      .post("/api/RefreshToken", {
+        token: token
+      })
+      .then(res => {
+        result(res);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}
+// console.log(resetToken);
+
 /**
  * apiBaseURL
  */
@@ -187,20 +204,71 @@ instance.interceptors.response.use(
       return res;
     } else {
       if (res.data.result.code === 401 || res.data.result.code === 403) {
-        $Store.commit("updateAppLoading", false);
-        v.prototype.$common.handlerMsgState({
-          msg: "登录过期，请重新登录",
-          type: "danger"
-        });
-        router.push({
-          path: "/login?id=signOut"
-        });
+        const validityPeriod = localStorage.getItem("validityPeriod");
+        if (validityPeriod) {
+          const options = JSON.parse(validityPeriod);
+          const currentDate = Date.now();
+          // 一天的时间戳为86400000
+          const day = 86400000 * 7;
+          // 超过7天
+          if (currentDate - options.dateTime >= day) {
+            $Store.commit("updateAppLoading", false);
+            v.prototype.$common.handlerMsgState({
+              msg: "登录过期，请重新登录",
+              type: "danger"
+            });
+            router.push({
+              path: "/login?id=signOut"
+            });
+          } else {
+            console.log(resetToken, res);
+          }
+        } else {
+          $Store.commit("updateAppLoading", false);
+          v.prototype.$common.handlerMsgState({
+            msg: "登录过期，请重新登录",
+            type: "danger"
+          });
+          router.push({
+            path: "/login?id=signOut"
+          });
+        }
       }
     }
     return res;
   },
   error => {
+    console.log(error.response, error.config, "响应错误拦截");
     if (error.response) {
+      // const validityPeriod = localStorage.getItem("validityPeriod");
+      //   if (validityPeriod) {
+      //     const options = JSON.parse(validityPeriod);
+      //     const currentDate = Date.now();
+      //     // 一天的时间戳为86400000
+      //     const day = 86400000 * 7;
+      //     // 超过7天
+      //     if (currentDate - options.dateTime >= day) {
+      //       $Store.commit("updateAppLoading", false);
+      //       v.prototype.$common.handlerMsgState({
+      //         msg: "登录过期，请重新登录",
+      //         type: "danger"
+      //       });
+      //       router.push({
+      //         path: "/login?id=signOut"
+      //       });
+      //     } else {
+      //       console.log(resetToken, res);
+      //     }
+      //   } else {
+      //     $Store.commit("updateAppLoading", false);
+      //     v.prototype.$common.handlerMsgState({
+      //       msg: "登录过期，请重新登录",
+      //       type: "danger"
+      //     });
+      //     router.push({
+      //       path: "/login?id=signOut"
+      //     });
+      //   }
       /** 全局设置请求时长和请求内容 */
       const myUrl = error.response.config.url;
       let httpDate;
