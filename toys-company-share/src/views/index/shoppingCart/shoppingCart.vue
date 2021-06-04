@@ -889,10 +889,11 @@ export default {
       });
       if (res.data.result.code === 200) {
         this.dataList = res.data.result.item.map((val, i) => {
-          const shareProductJson = JSON.parse(val.shareProductJson);
+          const shareProduct = JSON.parse(val.shareProductJson);
+          console.log(shareProduct, 123);
           const product = JSON.parse(val.productJson);
           val.productJson = product;
-          val.shareProductJson = shareProductJson;
+          val.shareProductJson = shareProduct;
           val.index = i + 1;
           return val;
         });
