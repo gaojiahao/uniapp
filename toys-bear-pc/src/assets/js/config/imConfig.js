@@ -15,11 +15,11 @@ module.exports = {
   proEnv: {
     NODE_ENV: "production",
     // 新测试环境
-    hosturl: "http://124.71.6.26:8089",
-    appkey: "bmdehs6pbfaas"
+    // hosturl: "http://124.71.6.26:8089",
+    // appkey: "bmdehs6pbfaas"
 
     // 生产环境
-    // hosturl: "https://www.toysbear.com",
-    // appkey: "pkfcgjstp5888"
+    hosturl: "https://www.toysbear.com",
+    appkey: "pkfcgjstp5888"
   }
 };
