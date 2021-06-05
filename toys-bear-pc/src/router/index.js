@@ -121,10 +121,15 @@ router.beforeEach(async (to, from, next) => {
   // 如果没有登录token
   if (!store.state.userInfo) {
     // const token = Vue.prototype.$cookies.get("userInfo");
-    const validityPeriod = Vue.prototype.$cookies.get("userInfo");
+    const validityPeriod = Vue.prototype.$cookies.get("validityPeriod");
     if (validityPeriod) {
       localStorage.setItem("validityPeriod", validityPeriod);
       const tokenOptions = JSON.parse(validityPeriod);
+      console.log(
+        "跳转保存的token和是否保存7天失效",
+        tokenOptions,
+        validityPeriod
+      );
       const res = await resetPersonInfo(tokenOptions.token);
       store.commit("handlerLogin", true);
       // 设置token

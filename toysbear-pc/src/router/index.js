@@ -114,6 +114,9 @@ router.beforeEach(async (to, from, next) => {
       next();
     } else {
       if (store.state.isLogin) {
+        if (store.state.userInfo.commparnyList[0].companyType === "Sales") {
+          location.href = target + "/new";
+        }
         next();
       } else {
         // 如果有token但是没有经过正规登录

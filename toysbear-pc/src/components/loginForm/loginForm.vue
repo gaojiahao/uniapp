@@ -76,6 +76,9 @@
             >
           </el-form-item>
         </el-form>
+        <div class="rememberPassword">
+          <el-checkbox v-model="thePassword">记住密码(7天)</el-checkbox>
+        </div>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -90,15 +93,15 @@ export default {
   },
   data() {
     return {
+      thePassword: false,
       value: null,
       ws: null,
-      // loginUrl: "http://1.14.158.14:8081/new/#/bsIndex",
-      loginUrl: "https://www.toysbear.com/new/#/bsIndex",
-      wsBaseUrl: "wss://impush.toysbear.com/ws?UserId=",
+      // loginUrl: "https://www.toysbear.com/new/#/bsIndex",
+      // wsBaseUrl: "wss://impush.toysbear.com/ws?UserId=",
       // loginUrl: "http://139.9.71.135:8080/new/#/bsIndex",
       // wsBaseUrl: "ws://139.9.71.135:8090/ws?UserId=",
-      // loginUrl: "http://124.71.6.26:8080/new/#/bsIndex",
-      // wsBaseUrl: "ws://124.71.6.26:8090/ws?UserId=",
+      loginUrl: "http://124.71.6.26:8080/new/#/bsIndex",
+      wsBaseUrl: "ws://124.71.6.26:8090/ws?UserId=",
       lang: "zh-CN",
       qrTimer: null,
       randomCode: null,
@@ -324,8 +327,18 @@ export default {
             if (res.data.result.commparnyList.length === 1) {
               // 一个角色
               // 保存数据到cookit
-              this.$cookies.set("userInfo", res.data.result.accessToken);
-              console.log(this.$cookies.get("userInfo"));
+              // 记住密码
+              const options = {
+                token: res.data.result.accessToken
+              };
+              if (this.thePassword) {
+                options.dateTime = Date.now();
+              }
+              const validityPeriod = JSON.stringify(options);
+              console.log(validityPeriod);
+              localStorage.setItem("validityPeriod", validityPeriod);
+              this.$cookies.set("validityPeriod", validityPeriod);
+
               this.$store.commit("setToken", res.data.result);
               this.$store.commit(
                 "setComparnyId",
@@ -384,10 +397,19 @@ export default {
             } else if (res.data.result.commparnyList.length > 1) {
               // 多个角色
               this.$store.commit("setToken", res.data.result);
-              this.$router.push({
-                name: "LoginConfirm",
-                params: res.data.result
-              });
+              // this.$router.push({
+              //   name: "LoginConfirm",
+              //   params: res.data.result
+              // });
+              const pathOption = {
+                path: "loginConfirm"
+              };
+              if (this.thePassword) {
+                pathOption.query = {
+                  thePassword: this.thePassword
+                };
+              }
+              this.$router.push(pathOption);
             }
           } else {
             this.$message.error(res.data.result.message);
@@ -491,7 +513,7 @@ export default {
     .smsLogin {
       padding-top: 27px;
       .el-form-item {
-        margin-bottom: 25px;
+        margin-bottom: 20px;
         .submintBtn {
           width: 100%;
           height: 48px;
@@ -616,6 +638,11 @@ export default {
         text-align: center;
       }
     }
+  }
+}
+@{deep} .rememberPassword {
+  .el-checkbox {
+    color: #666;
   }
 }
 </style>

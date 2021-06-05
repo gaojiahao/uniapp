@@ -48,6 +48,7 @@ function resetToken(token) {
       });
   });
 }
+// 获取临时token
 function getToken() {
   return new Promise((result, reject) => {
     v.prototype.$http
