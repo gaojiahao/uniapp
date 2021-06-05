@@ -138,8 +138,8 @@ instance.interceptors.response.use(
   async res => {
     if (res.data.result.code === 401) {
       const validityPeriod = localStorage.getItem("validityPeriod");
-      if (validityPeriod) {
-        const options = JSON.parse(validityPeriod);
+      const options = JSON.parse(validityPeriod);
+      if (validityPeriod && options.dateTime) {
         const currentDate = Date.now();
         // 一天的时间戳为86400000
         const day = 86400000 * 7;
@@ -164,7 +164,11 @@ instance.interceptors.response.use(
           }
         }
       } else {
-        $Store.commit("updateAppLoading", false);
+        const result = await getToken();
+        if (result.data.result.code === 200) {
+          // accessToken = result.data.result.item;
+          $Store.commit("reset_Token", result.data.result.item);
+        }
         v.prototype.$common.handlerMsgState({
           msg: "登录过期，请重新登录",
           type: "danger"

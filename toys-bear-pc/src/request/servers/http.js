@@ -86,6 +86,7 @@ switch (env) {
     break;
 }
 console.log(target);
+// let accessToken = $Store.state.userInfo && $Store.state.userInfo.accessToken;
 // 基础实例
 const instance = axios.create({
   baseURL: target,
@@ -220,8 +221,8 @@ instance.interceptors.response.use(
     } else {
       if (res.data.result.code === 401) {
         const validityPeriod = localStorage.getItem("validityPeriod");
-        if (validityPeriod) {
-          const options = JSON.parse(validityPeriod);
+        const options = JSON.parse(validityPeriod);
+        if (validityPeriod && options.dateTime) {
           const currentDate = Date.now();
           // 一天的时间戳为86400000
           const day = 86400000 * 7;
@@ -233,6 +234,7 @@ instance.interceptors.response.use(
             });
             const result = await getToken();
             if (result.data.result.code === 200) {
+              // accessToken = result.data.result.item;
               $Store.commit("reset_Token", result.data.result.item);
             }
             router.push({
@@ -241,12 +243,17 @@ instance.interceptors.response.use(
           } else {
             const result = await resetToken(res.config.headers.Utoken);
             if (result.data.result.isLogin) {
+              // accessToken = result.data.result.item;
               $Store.commit("reset_Token", result.data.result.accessToken);
               location.reload();
             }
           }
         } else {
-          $Store.commit("updateAppLoading", false);
+          const result = await getToken();
+          if (result.data.result.code === 200) {
+            // accessToken = result.data.result.item;
+            $Store.commit("reset_Token", result.data.result.item);
+          }
           v.prototype.$common.handlerMsgState({
             msg: "登录过期，请重新登录",
             type: "danger"

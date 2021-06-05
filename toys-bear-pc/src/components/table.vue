@@ -170,6 +170,9 @@
               v-html="col.companyName(scope.row)"
             ></span>
             <span class="isMain" v-if="scope.row.isMain"><i>主账号</i></span>
+            <span class="isMe" v-if="scope.row.id == userInfo.userInfo.id">
+              <i>我的</i>
+            </span>
           </div>
           <!-- 只放图片 -->
           <div class="productInfo" v-else-if="col.elImageUrl">
