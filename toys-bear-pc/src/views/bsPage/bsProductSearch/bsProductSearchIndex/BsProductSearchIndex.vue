@@ -885,8 +885,15 @@
     <div class="footer" v-if="totalCount >= 7">
       <img src="@/assets/images/footerBg.png" alt="" />
     </div>
-    <el-dialog title="综合搜索" :visible.sync="synthesizeShow" width="830px">
+    <el-dialog
+      title="综合搜索"
+      v-if="synthesizeShow"
+      :visible.sync="synthesizeShow"
+      width="830px"
+    >
       <BsSynthesizeSearch
+        :categoryList="categoryList"
+        :chpaList="chpaList"
         @handelSynthesize="handelSynthesize"
       ></BsSynthesizeSearch>
     </el-dialog>
@@ -1219,13 +1226,9 @@ export default {
     async getProductList(flag) {
       this.$store.commit("searchValues", null);
       let startDate = Date.now();
-
-      this.data.skipCount = this.currentPage;
-      this.data.maxResultCount = this.pageSize;
-
-      console.log(this.data, "searchType");
-      if (this.isSynthesizeSearch) {
+      if (!this.isSynthesizeSearch) {
         this.data = {
+          searchType: 0, //0-默认，1-综合搜索
           name: this.searchForm.keyword,
           hallNumber: this.searchForm.companyNumber,
           categoryNumber: this.searchForm.categoryNumber,
@@ -1235,6 +1238,8 @@ export default {
             ? this.searchForm.time[0]
             : null,
           endTime: this.searchForm.time.length ? this.searchForm.time[1] : null,
+          // skipCount: this.currentPage,
+          // maxResultCount: this.pageSize,
           // precisionSearch: JSON.stringify({
           //   fa_no: this.searchForm.fa_no ? 1 : 0,
           //   number: this.searchForm.number ? 1 : 0,
@@ -1258,25 +1263,27 @@ export default {
           in_wi: this.advancedFormdata.in_wi,
           in_hi: this.advancedFormdata.in_hi
         };
+        switch (this.isAccurate) {
+          case "精准":
+            this.data.precisionSearch = JSON.stringify({
+              fa_no: this.searchForm.fa_no ? 2 : 0,
+              name: this.searchForm.name ? 2 : 0,
+              number: this.searchForm.number ? 2 : 0,
+              packName: this.searchForm.packName ? 2 : 0
+            });
+            break;
+          default:
+            this.data.precisionSearch = JSON.stringify({
+              fa_no: this.searchForm.fa_no ? 1 : 0,
+              name: this.searchForm.name ? 1 : 0,
+              number: this.searchForm.number ? 1 : 0,
+              packName: this.searchForm.packName ? 1 : 0
+            });
+            break;
+        }
       }
-      switch (this.isAccurate) {
-        case "精准":
-          this.data.precisionSearch = JSON.stringify({
-            fa_no: this.searchForm.fa_no ? 2 : 0,
-            name: this.searchForm.name ? 2 : 0,
-            number: this.searchForm.number ? 2 : 0,
-            packName: this.searchForm.packName ? 2 : 0
-          });
-          break;
-        default:
-          this.data.precisionSearch = JSON.stringify({
-            fa_no: this.searchForm.fa_no ? 1 : 0,
-            name: this.searchForm.name ? 1 : 0,
-            number: this.searchForm.number ? 1 : 0,
-            packName: this.searchForm.packName ? 1 : 0
-          });
-          break;
-      }
+      this.data.skipCount = this.currentPage;
+      this.data.maxResultCount = this.pageSize;
       for (const key in this.data) {
         if (
           this.data[key] === null ||
@@ -1285,7 +1292,6 @@ export default {
         )
           delete this.data[key];
       }
-      console.log(this.data, "this.data");
       const res = await this.$http.post(
         "/api/SearchBearProductPage",
         this.data
@@ -1305,6 +1311,10 @@ export default {
             }
           }
         }
+
+        if (this.isSynthesizeSearch) {
+          this.addHistoryText(this.data);
+        }
         if (Object.values(this.advancedFormdata).some(Boolean)) {
           this.$set(this.searchForm, "MyisGaoji", true);
         }
@@ -1323,18 +1333,100 @@ export default {
         this.getProductCategoryList();
       }
     },
+    // 存储历史记录
+    addHistoryText(item) {
+      var arr = [];
+      for (let key in item) {
+        switch (key) {
+          case "isUpInsetImg":
+            if (item[key] === true) {
+              arr.push("有图");
+              // item[key] = "有图"
+            } else {
+              delete item[key];
+            }
+            break;
+          case "isUpInset3D":
+            if (item[key] === true) {
+              arr.push("3D产品");
+              //  item[key] = "3D产品"
+            } else {
+              delete item[key];
+            }
+            break;
+          case "isSpotGoods":
+            if (item[key] === true) {
+              arr.push("现货产品");
+              //  item[key] = "现货产品"
+            } else {
+              delete item[key];
+            }
+            break;
+          case "isVip":
+            if (item[key] === true) {
+              arr.push("vip产品");
+              //  item[key] = "vip产品"
+            } else {
+              delete item[key];
+            }
+            break;
+          case "isHot":
+            if (item[key] === true) {
+              arr.push("热销产品");
+              //  item[key] = "热销产品"
+            } else {
+              delete item[key];
+            }
+            break;
+          case "isNew":
+            if (item[key] === true) {
+              arr.push("最新产品");
+              //  item[key] = "最新产品"
+            } else {
+              delete item[key];
+            }
+            break;
+          case "skipCount":
+          case "maxResultCount":
+          case "searchType":
+            delete item[key];
+            break;
+          case "categoryNumber":
+            for (let i = 0; i < this.categoryList.length; i++) {
+              if (this.categoryList[i].id === item[key]) {
+                arr.push(this.categoryList[i].name);
+                //  item[key] = this.categoryList[i].name;
+              }
+            }
+            break;
+          default:
+            arr.push(item[key]);
+        }
+      }
+      for (let i = 0; i < arr.length; i++) {
+        if (this.historyText.length > 28) {
+          this.$store.commit("deleteHandlerSynthesizeSearchData");
+          this.$store.commit("handlerSynthesizeSearchData", arr[i]);
+        } else {
+          this.$store.commit("handlerSynthesizeSearchData", arr[i]);
+        }
+      }
+    },
     // 子组件综合搜索
     handelSynthesize(data) {
-      // this.data = data;
       this.isSynthesizeSearch = true;
+      this.pageSize = 12;
+      this.currentPage = 1;
       this.data = Object.assign({}, data);
-      console.log(this.data);
       this.$nextTick(() => {
         this.getProductList(false);
         this.synthesizeShow = false;
       });
     },
-
+    //重置关闭弹框
+    handleIsSynthesizeSearch() {
+      this.isSynthesizeSearch = false;
+    },
     // 切換頁容量
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
@@ -1605,7 +1697,6 @@ export default {
 
     // 取消收藏/刷新页面
     eventBus.$on("resetProductCollection", item => {
-      // this.getProductList();
       for (let i = 0; i < this.productList.length; i++) {
         if (this.productList[i].productNumber == item.productNumber) {
           this.productList[i].isFavorite = item.isFavorite;
@@ -1656,6 +1747,7 @@ export default {
     },
     ...mapState([
       "myColles",
+      "historyText",
       "searchTxt",
       "searchHallCate",
       "imgSearch",
