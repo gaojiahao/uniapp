@@ -415,10 +415,7 @@
     <center style="margin-top: 20px; padding:0 0 20px 0">
       <template>
         <el-button type="primary" @click="subProcessingLog">确定</el-button>
-        <el-button
-          style="margin-left: 30px;"
-          plain
-          @click="addClienDialog = false"
+        <el-button style="margin-left: 30px;" plain @click="$emit('close')"
           >取消</el-button
         >
       </template>
@@ -573,7 +570,7 @@ export default {
         profitCalcMethod: 2,
         url: null,
         isExportExcel: false,
-        profit: 0,
+        profit: 1,
         expireTime: null,
         customerInfoId: null,
         offerMethod: "汕头",
@@ -756,11 +753,10 @@ export default {
     },
     // 提交新增 | 编辑 分享
     async subProcessingLog() {
-      console.log(this.clienFormData, "this.clienFormData");
       this.$refs.addClientFormRef.validate(async valid => {
         if (valid) {
           let url = "/api/CreateWebsiteShareInfo";
-          if (this.isEdit === "编辑站点") url = "/api/UpdateWebsiteShareInfo";
+          if (this.isEdit) url = "/api/UpdateWebsiteShareInfo";
           const list = [];
           for (let i = 0; i < this.clienFormData.websiteLanguage.length; i++) {
             for (let j = 0; j < this.langs.length; j++) {
@@ -786,20 +782,20 @@ export default {
 
           const res = await this.$http.post(url, this.clienFormData);
           if (res.data.result.code === 200) {
-            if (this.advertisingTable.length > 0) {
-              for (
-                let index = 0;
-                index < this.advertisingTable.length;
-                index++
-              ) {
-                this.getCreateWebsiteShareAdRelation(
-                  this.advertisingTable[index]
-                );
-              }
-            }
-            this.addClienDialog = false;
-            this.getDataList();
-            this.clienFormData = {};
+            // if (this.advertisingTable.length > 0) {
+            //   for (
+            //     let index = 0;
+            //     index < this.advertisingTable.length;
+            //     index++
+            //   ) {
+            //     this.getCreateWebsiteShareAdRelation(
+            //       this.advertisingTable[index]
+            //     );
+            //   }
+            // }
+            // this.getDataList();
+            // this.clienFormData = {};
+            this.$emit("submit");
             this.$common.handlerMsgState({
               msg: "操作成功",
               type: "success"
@@ -855,7 +851,7 @@ export default {
       this.clienFormData.websiteLanguage = myLangs.map(val => {
         return val.id;
       });
-      console.log(this.clienFormData.websiteLanguage);
+      console.log(this.clienFormData);
     }
     await this.getLanguageType();
     await this.getSelectCompanyOffer();

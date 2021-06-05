@@ -233,6 +233,8 @@
         :isEdit="isEdit"
         :langs="langs"
         :defaultFormula="defaultFormula"
+        @close="close"
+        @submit="submit"
       />
     </el-dialog>
     <!-- 生成二维码 -->
@@ -295,6 +297,18 @@ export default {
     };
   },
   methods: {
+    // 提交
+    submit() {
+      console.log(12345687979798);
+      this.isEdit = false;
+      this.addClienDialog = false;
+      this.getDataList();
+    },
+    // 关闭
+    close() {
+      this.isEdit = false;
+      this.addClienDialog = false;
+    },
     // 获取站点列表
     async getDefaultSites() {
       const res = await this.$http.post("/api/SearchDropdownWebsiteInfos", {});
