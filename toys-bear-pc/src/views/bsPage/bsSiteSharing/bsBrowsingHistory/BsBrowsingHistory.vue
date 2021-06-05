@@ -174,8 +174,9 @@ export default {
             color: "#3368a9",
             productInfo: true,
             prop: "customerName",
-            label: "客户",
+            label: "浏览产品",
             infoBox: true,
+            align: "left",
             elImage: row => {
               return row.imageUrls;
             },
