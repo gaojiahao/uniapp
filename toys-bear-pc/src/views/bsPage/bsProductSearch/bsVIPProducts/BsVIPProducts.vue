@@ -336,7 +336,7 @@ export default {
               type: "success"
             });
             this.checkAll = false;
-            this.getVipRegions();
+            this.getProductsList();
           } else {
             this.$common.handlerMsgState({
               msg: " 一键加购失败",
@@ -379,7 +379,7 @@ export default {
     });
     // 取消或加购样式/刷新页面
     eventBus.$on("resetProductIsShop", item => {
-      console.log(item, 123);
+      // console.log(item, 123);
       for (let i = 0; i < this.productList.length; i++) {
         if (this.productList[i].productNumber == item.productNumber) {
           this.productList[i].isShop = item.isShop;

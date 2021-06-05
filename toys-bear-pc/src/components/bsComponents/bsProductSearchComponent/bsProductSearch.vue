@@ -182,7 +182,7 @@ export default {
       // };
       // this.$store.commit("myAddTab", fd);
     },
-    // 选择综合
+    // 选择精准
     handleSynthesis() {
       this.$emit("handleSynthesis");
     },

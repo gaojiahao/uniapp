@@ -27,14 +27,16 @@
       <el-form-item label="手机:">
         <el-input
           size="small"
+          onkeyup="value=value.replace(/[^\d.]/g,'')"
           style="width:160px"
-          v-model="synthesizeFromData.handset"
+          v-model.number="synthesizeFromData.handset"
         ></el-input>
       </el-form-item>
       <el-form-item label="价格区间:">
         <div class="felxBox">
           <el-input
             size="small"
+            onkeyup="value=value.replace(/[^\d.]/g,'')"
             style="width:68px"
             placeholder="最低"
             v-model="synthesizeFromData.minPrice"
@@ -42,6 +44,7 @@
           <p>-</p>
           <el-input
             size="small"
+            onkeyup="value=value.replace(/[^\d.]/g,'')"
             style="width:68px"
             placeholder="最高"
             v-model="synthesizeFromData.maxPrice"
@@ -56,10 +59,10 @@
           placeholder="请选择"
         >
           <el-option
-            v-for="(item, i) in options"
-            :key="i"
-            :label="item.itemCode"
-            :value="item.parameter"
+            v-for="item in categoryList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
           >
           </el-option>
         </el-select>
@@ -98,10 +101,10 @@
           placeholder="请选择"
         >
           <el-option
-            v-for="(item, i) in options"
-            :key="i"
-            :label="item.itemCode"
-            :value="item.parameter"
+            v-for="item in chpaList"
+            :key="item.pa_nu"
+            :label="item.ch_pa"
+            :value="item.ch_pa"
           >
           </el-option>
         </el-select>
@@ -118,6 +121,7 @@
       <el-form-item label="外箱装量:">
         <el-input
           size="small"
+          onkeyup="value=value.replace(/[^\d.]/g,'')"
           style="width:100px"
           v-model="synthesizeFromData.ou_lo"
         ></el-input>
@@ -125,6 +129,7 @@
       <el-form-item label="内盒个数:" label-width="80px">
         <el-input
           size="small"
+          onkeyup="value=value.replace(/[^\d.]/g,'')"
           style="width:100px"
           v-model="synthesizeFromData.in_en"
         ></el-input>
@@ -141,6 +146,7 @@
       <el-form-item label="外箱毛重:">
         <el-input
           size="small"
+          onkeyup="value=value.replace(/[^\d.]/g,'')"
           style="width:100px"
           v-model="synthesizeFromData.gr_we"
         ></el-input>
@@ -148,6 +154,7 @@
       <el-form-item label="外箱净重:" label-width="80px">
         <el-input
           size="small"
+          onkeyup="value=value.replace(/[^\d.]/g,'')"
           style="width:100px"
           v-model="synthesizeFromData.ne_we"
         ></el-input>
@@ -155,6 +162,7 @@
       <el-form-item label="外箱材积:">
         <el-input
           size="small"
+          onkeyup="value=value.replace(/[^\d.]/g,'')"
           style="width:100px"
           v-model="synthesizeFromData.bulk_feet"
         ></el-input>
@@ -162,6 +170,7 @@
       <el-form-item label="外箱体积:" label-width="80px">
         <el-input
           size="small"
+          onkeyup="value=value.replace(/[^\d.]/g,'')"
           style="width:100px"
           v-model="synthesizeFromData.bulk_stere"
         ></el-input>
@@ -172,6 +181,7 @@
         <div class="felxBox">
           <el-input
             size="small"
+            onkeyup="value=value.replace(/[^\d.]/g,'')"
             style="width:80px"
             placeholder="长"
             v-model="synthesizeFromData.pr_le"
@@ -180,6 +190,7 @@
           <el-input
             size="small"
             style="width:80px"
+            onkeyup="value=value.replace(/[^\d.]/g,'')"
             placeholder="宽"
             v-model="synthesizeFromData.pr_wi"
           ></el-input>
@@ -187,6 +198,7 @@
           <el-input
             size="small"
             style="width:80px"
+            onkeyup="value=value.replace(/[^\d.]/g,'')"
             placeholder="高"
             v-model="synthesizeFromData.pr_hi"
           ></el-input>
@@ -211,6 +223,7 @@
         <div class="felxBox">
           <el-input
             size="small"
+            onkeyup="value=value.replace(/[^\d.]/g,'')"
             style="width:80px"
             placeholder="长"
             v-model="synthesizeFromData.iu_le"
@@ -218,6 +231,7 @@
           <p>-</p>
           <el-input
             size="small"
+            onkeyup="value=value.replace(/[^\d.]/g,'')"
             style="width:80px"
             placeholder="宽"
             v-model="synthesizeFromData.iu_wi"
@@ -225,6 +239,7 @@
           <p>-</p>
           <el-input
             size="small"
+            onkeyup="value=value.replace(/[^\d.]/g,'')"
             style="width:80px"
             placeholder="高"
             v-model="synthesizeFromData.iu_hi"
@@ -238,6 +253,7 @@
           <el-input
             size="small"
             style="width:80px"
+            onkeyup="value=value.replace(/[^\d.]/g,'')"
             placeholder="长"
             v-model="synthesizeFromData.ou_le"
           ></el-input>
@@ -245,6 +261,7 @@
           <el-input
             size="small"
             style="width:80px"
+            onkeyup="value=value.replace(/[^\d.]/g,'')"
             placeholder="宽"
             v-model="synthesizeFromData.ou_wi"
           ></el-input>
@@ -252,6 +269,7 @@
           <el-input
             size="small"
             style="width:80px"
+            onkeyup="value=value.replace(/[^\d.]/g,'')"
             placeholder="高"
             v-model="synthesizeFromData.ou_hi"
           ></el-input>
@@ -275,8 +293,10 @@
       </el-form-item>
     </div>
     <div class="item">
-      <div class="labelBox">查询历史:{{ historyText }}</div>
-      <div class="text"></div>
+      <div class="labelBox">查询历史:</div>
+      <div class="text">
+        <span v-for="(item, i) in historyText" :key="i"> {{ item }}, </span>
+      </div>
     </div>
     <center style="margin-top:26px">
       <span slot="footer" class="dialog-footer">
@@ -288,17 +308,28 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "",
+  props: {
+    categoryList: {
+      type: Array
+    },
+    chpaList: {
+      type: Array
+    }
+  },
+  computed: {
+    ...mapState(["historyText"])
+  },
   data() {
     return {
-      historyText: "",
       synthesizeFromData: {
         searchType: 1, //0-默认，1-综合搜索
-        pa_nu: "", //包装编号
-        productNumber: "", //产品编号
-        ma_na: "", //厂名
-        linkman: "", //联系人
+        pa_nu: null, //包装编号
+        productNumber: null, //产品编号
+        ma_na: null, //厂名
+        linkman: null, //联系人
         ma_ph_1: "", //电话
         handset: "", //手机
         minPrice: "", //最低价格
@@ -327,11 +358,11 @@ export default {
         ou_wi: "", //外箱宽度
         ou_hi: "", //外箱高度
         isUpInsetImg: true, //是否有图
-        isUpInset3D: false, //是否有3D图
-        isNew: false, //新品
-        isHot: false, //热销
-        isVip: false, //vip
-        isSpotGoods: false //现货
+        isUpInset3D: false, //是否有3D产品
+        isNew: false, //最新产品
+        isHot: false, //热销产品
+        isVip: false, //vip产品
+        isSpotGoods: false //现货产品
       },
       options: [],
       cities: []
@@ -348,7 +379,11 @@ export default {
       this.synthesizeFromData.endTime = this.synthesizeFromData.time.length
         ? this.synthesizeFromData.time[0]
         : null;
-      //   console.log(this.synthesizeFromData);
+
+      this.synthesizeFromData.fa_no = this.synthesizeFromData.fa_no.replace(
+        /，/g,
+        ","
+      );
       this.$emit("handelSynthesize", this.synthesizeFromData);
     },
     //重置
@@ -393,6 +428,8 @@ export default {
         isVip: false, //vip
         isSpotGoods: false //现货
       };
+      this.$emit("handleIsSynthesizeSearch");
+      this.$store.commit("claerHandlerSynthesizeSearchData", []);
     }
   }
 };
@@ -423,6 +460,8 @@ export default {
   .text {
     width: 695px;
     min-height: 90px;
+    line-height: 20px;
+    padding: 8px;
     background: #ffffff;
     border: 1px solid #dcdfe6;
     border-radius: 5px;

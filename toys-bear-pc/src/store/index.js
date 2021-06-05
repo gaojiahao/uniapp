@@ -35,6 +35,7 @@ const store = new Vuex.Store({
         refresh: true
       }
     ],
+    historyText: [], //存储查询历史记录
     offerProductList: [], //报价数据
     typeId: null, //报价详情我的产品组件切换
     historyNames: [],
@@ -106,10 +107,27 @@ const store = new Vuex.Store({
     handleraddrSearch(state, payLoad) {
       state.addrSearch = payLoad;
     },
+    // 综合搜索查询记录
+    handlerSynthesizeSearchData(state, payLoad) {
+      state.historyText.push(payLoad);
+    },
+    // 综合搜索查询记录清空
+    claerHandlerSynthesizeSearchData(state, payLoad) {
+      state.historyText = payLoad;
+    },
+    // 综合搜索查询记录清空
+    deleteHandlerSynthesizeSearchData(state) {
+      state.historyText.splice(0, 1);
+    },
     //修改查询值
     handlerSearchTxt(state, payLoad) {
       state.searchTxt = payLoad;
     },
+    // for (let i = 0; i < this.productList.length; i++) {
+    //   if (this.productList[i].productNumber == item.productNumber) {
+    //     this.productList[i].isFavorite = item.isFavorite;
+    //   }
+    // }
     // 展厅带分类查产品
     handlerHallSearchCate(state, payLoad) {
       state.searchHallCate = payLoad;
