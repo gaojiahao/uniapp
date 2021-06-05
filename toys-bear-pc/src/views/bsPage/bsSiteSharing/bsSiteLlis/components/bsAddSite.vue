@@ -11,7 +11,7 @@
         <div class="leftTab">
           <div
             :class="{ item: true, active: tp == 1 }"
-            @click="handleTab('set', 1)"
+            @click="handleTab('set_id', 1)"
           >
             站点设置
           </div>
@@ -34,7 +34,7 @@
           ref="rightBoxScroll"
           @scroll="handelScroll"
         >
-          <div class="set" id="set">
+          <div class="set" id="set_id">
             <div class="title">设置</div>
             <el-form-item label="站点域名：" prop="url">
               <div>
@@ -528,26 +528,52 @@ export default {
       default: () => {
         return [];
       }
+    },
+    isEdit: {
+      type: Boolean,
+      default: false
+    },
+    myFormData: {
+      type: Object
+    },
+    handSitesList: {
+      type: Array
+    },
+    customerTemplate: {
+      type: Array
+    },
+    defaultFormula: {
+      type: String
     }
   },
   data() {
     return {
-      addMyClientDialog: false,
-      addClientFormData: {
-        name: null,
-        phoneNumber: null,
-        remark: null
+      langs: [],
+      total: 0,
+      advertisingDialog: false,
+      addMyClientRules: {
+        name: [{ required: true, message: "请输入客户名称", trigger: "blur" }]
       },
-      tp: 1,
+      chufa: "(出厂价+(总费用/(每车尺码/体积*外箱装量)))/(1-报价利润/100)/汇率",
+      chengfa:
+        "(出厂价+(总费用/(每车尺码/体积*外箱装量)))*(1+报价利润/100)/汇率",
+      options: {
+        // 报价配置项
+        cu_deList: [],
+        decimalPlaces: [],
+        offerMethod: [],
+        rejectionMethod: [],
+        size: []
+      },
       clienFormData: {
         websiteLanguage: [],
         miniPrice: 1,
         showNumber: 0,
         miniPriceDecimalPlaces: 1,
+        profitCalcMethod: 2,
         url: null,
         isExportExcel: false,
         profit: 0,
-        profitCalcMethod: 2,
         expireTime: null,
         customerInfoId: null,
         offerMethod: "汕头",
@@ -562,6 +588,13 @@ export default {
         isCustomerInfo: true,
         isShowPrice: true
       },
+      addMyClientDialog: false,
+      addClientFormData: {
+        name: null,
+        phoneNumber: null,
+        remark: null
+      },
+      tp: 1,
       addRules: {
         websiteLanguage: [
           { required: true, message: "请选择语言", trigger: "change" }
@@ -608,6 +641,48 @@ export default {
     };
   },
   methods: {
+    // 广告弹框
+    addAdvertising() {
+      if (this.advertisingTable.length > 0) {
+        let id = this.advertisingTable.map(item => {
+          if (item.checked == true) {
+            return item.id;
+          }
+        });
+        for (let i = 0; i < this.advertisingData.length; i++) {
+          for (let j = 0; j < id.length; j++) {
+            if (this.advertisingTable[j].id == this.advertisingData[i].id) {
+              this.advertisingData[i].checked = false;
+            }
+          }
+        }
+      }
+      this.advertisingDialog = true;
+    },
+    // 下拉框输入事件
+    selectBlur(val) {
+      if (isNaN(Number(val))) {
+        this.clienFormData.size = null;
+      }
+    },
+    // 获取系统配置项
+    async getSelectCompanyOffer() {
+      const res = await this.$http.post("/api/GetSelectCompanyOffer", {
+        basisParameters: "CompanyProductOffer"
+      });
+      if (res.data.result.code === 200) this.options = res.data.result.item;
+      else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
+    // 点击站点选中站点
+    handlerTag(item) {
+      this.clienFormData.url = item.url;
+      this.clienFormData.websiteInfoId = item.id;
+    },
     // 提交新增客户
     subMyClient() {
       this.$refs.addMyClientRef.validate(async valid => {
@@ -643,12 +718,12 @@ export default {
     },
     // 滚动条事件
     handelScroll() {
-      let setOffset = document.getElementById("set").offsetTop - 51;
-      let formulaOffset = document.getElementById("formula").offsetTop - 51;
+      let setOffset = document.getElementById("set_id").offsetTop - 30;
+      let formulaOffset = document.getElementById("formula").offsetTop - 30;
       // let advertisingOffset =
       //   document.getElementById("advertising").offsetTop - 51;
-
-      if (this.$refs.rightBoxScroll.scrollTop === setOffset) {
+      console.log(this.$refs.rightBoxScroll.scrollTop, setOffset);
+      if (this.$refs.rightBoxScroll.scrollTop === 0) {
         this.tp = 1;
       } else if (
         this.$refs.rightBoxScroll.scrollTop >= formulaOffset &&
@@ -662,12 +737,225 @@ export default {
           this.$refs.rightBoxScroll.scrollTop ===
         this.$refs.rightBoxScroll.clientHeight
       ) {
-        this.tp = 3;
+        // this.tp = 3;
+        this.tp = 2;
       }
+    },
+    // 获取系统配置语言列表
+    async getLanguageType() {
+      const res = await this.$http.post("/api/ServiceConfigurationList", {
+        basisParameters: "languageType"
+      });
+      if (res.data.result.code === 200) this.langs = res.data.result.item;
+      else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
+    // 提交新增 | 编辑 分享
+    async subProcessingLog() {
+      console.log(this.clienFormData, "this.clienFormData");
+      this.$refs.addClientFormRef.validate(async valid => {
+        if (valid) {
+          let url = "/api/CreateWebsiteShareInfo";
+          if (this.isEdit === "编辑站点") url = "/api/UpdateWebsiteShareInfo";
+          const list = [];
+          for (let i = 0; i < this.clienFormData.websiteLanguage.length; i++) {
+            for (let j = 0; j < this.langs.length; j++) {
+              if (this.langs[j].id == this.clienFormData.websiteLanguage[i]) {
+                list.push(this.langs[j]);
+                break;
+              }
+            }
+          }
+          this.clienFormData.websiteLanguage = JSON.stringify(list);
+
+          for (const key in this.clienFormData) {
+            if (
+              this.clienFormData[key] == "undefined" ||
+              this.clienFormData[key] == null ||
+              this.clienFormData[key] == "" ||
+              this.clienFormData[key] == undefined ||
+              this.clienFormData[key] == "null"
+            ) {
+              delete this.clienFormData[key];
+            }
+          }
+
+          const res = await this.$http.post(url, this.clienFormData);
+          if (res.data.result.code === 200) {
+            if (this.advertisingTable.length > 0) {
+              for (
+                let index = 0;
+                index < this.advertisingTable.length;
+                index++
+              ) {
+                this.getCreateWebsiteShareAdRelation(
+                  this.advertisingTable[index]
+                );
+              }
+            }
+            this.addClienDialog = false;
+            this.getDataList();
+            this.clienFormData = {};
+            this.$common.handlerMsgState({
+              msg: "操作成功",
+              type: "success"
+            });
+          } else {
+            this.$common.handlerMsgState({
+              msg: res.data.result.msg,
+              type: "danger"
+            });
+          }
+        }
+      });
+    },
+    // 关联站点
+    async getCreateWebsiteShareAdRelation(item) {
+      const fd = {
+        adId: item.id,
+        shareId: this.clienFormData.websiteInfoId,
+        linkUrl: item.linkUrl
+      };
+      const res = await this.$http.post(
+        "/api/CreateWebsiteShareAdRelation",
+        fd
+      );
+      if (res.data.result.code === 200) {
+        console.log(res);
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
+    // 点击导航菜单，页面滚动到指定位置
+    handleTab(val, index) {
+      this.tp = index;
+      console.log(this.tp);
+      let total = document.getElementById(val).offsetTop;
+      this.$refs.rightBoxScroll.scrollTop = total - 71;
     }
   },
   created() {},
-  mounted() {}
+  async mounted() {
+    console.log(this.myFormData, 998);
+    if (this.isEdit) {
+      let myLangs = [];
+      if (this.myFormData.websiteLanguage) {
+        myLangs = JSON.parse(this.myFormData.websiteLanguage);
+      }
+      const fd = JSON.parse(JSON.stringify(this.myFormData));
+      this.clienFormData = fd;
+      this.clienFormData.customerInfoId = fd.customerId;
+      this.clienFormData.websiteLanguage = myLangs.map(val => {
+        return val.id;
+      });
+      console.log(this.clienFormData.websiteLanguage);
+    }
+    await this.getLanguageType();
+    await this.getSelectCompanyOffer();
+  },
+  watch: {
+    "clienFormData.currencyType": {
+      deep: true,
+      handler(newVal) {
+        if (newVal) {
+          this.options.cu_deList.forEach(val => {
+            if (val.parameter === newVal)
+              this.clienFormData.currencyTypeName = val.itemCode;
+          });
+        }
+      }
+    }
+  }
 };
 </script>
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.dialogForm {
+  width: 100%;
+  // height: 100%;
+  display: flex;
+  .leftTab {
+    width: 140px;
+    min-width: 140px;
+    border-right: 1px solid #e5e5e5;
+    font-size: 15px;
+    .item {
+      height: 50px;
+      line-height: 50px;
+      padding: 0 20px;
+      cursor: pointer;
+      position: relative;
+      &.active {
+        background-color: #eff6ff;
+        &::after {
+          position: absolute;
+          content: "";
+          left: 0;
+          top: 0;
+          width: 3px;
+          background-color: #3368a9;
+          height: 50px;
+        }
+      }
+    }
+  }
+  .rightBox {
+    flex: 1;
+    padding: 20px;
+    height: 600px;
+    overflow: hidden;
+    overflow-y: auto;
+    .title {
+      border: 0;
+    }
+    .Excel {
+      display: flex;
+      .el-form-item {
+        flex: 1;
+      }
+    }
+    .selectLang {
+      display: flex;
+      border-bottom: 1px solid #e5e5e5;
+      .el-form-item {
+        flex: 1;
+        .el-checkbox-group {
+          width: 100%;
+        }
+        &:last-of-type {
+          .el-form-item__label {
+            width: 220px !important;
+          }
+          .el-form-item__content {
+            margin: 0 !important;
+          }
+        }
+      }
+    }
+    .advertising {
+      .advertisingTising {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .handle {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        .delete {
+          width: 30px;
+          margin-left: 20px;
+        }
+      }
+    }
+  }
+}
+</style>

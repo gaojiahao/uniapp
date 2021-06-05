@@ -222,10 +222,18 @@
       :visible.sync="addClienDialog"
       v-if="addClienDialog"
       :close-on-click-modal="false"
-      top="50px"
+      top="80px"
       width="930px"
     >
-      <bsAddSite :clientList="clientList" />
+      <bsAddSite
+        :clientList="clientList"
+        :customerTemplate="customerTemplate"
+        :myFormData="myFormData"
+        :handSitesList="handSitesList"
+        :isEdit="isEdit"
+        :langs="langs"
+        :defaultFormula="defaultFormula"
+      />
     </el-dialog>
     <!-- 生成二维码 -->
     <el-dialog :visible.sync="QRCodeDialog" v-if="QRCodeDialog" width="385px">
@@ -252,17 +260,15 @@ export default {
   },
   data() {
     return {
+      myFormData: null,
+      isEdit: false,
       langs: [],
       listChecked: [],
       advertisingTable: [],
       advertisingData: [],
-      advertisingDialog: false,
       tp: 1,
       srcoll: "",
       rightBoxScroll: null, //滚动条的高度
-      chufa: "(出厂价+(总费用/(每车尺码/体积*外箱装量)))/(1-报价利润/100)/汇率",
-      chengfa:
-        "(出厂价+(总费用/(每车尺码/体积*外箱装量)))*(1+报价利润/100)/汇率",
       dateTime: null,
       handSitesList: [],
       websiteInfoId: null,
@@ -280,31 +286,15 @@ export default {
       currentPage: 1,
       QRCodeDialog: false,
       QRCodeUrl: "",
-      addMyClientRules: {
-        name: [{ required: true, message: "请输入客户名称", trigger: "blur" }]
-      },
       customerTemplate: [],
       clientListTotalCount: 0,
       clientList: [],
       addClienDialog: false,
       dialogTitle: "新增站点",
-      defaultShareDomain: [],
-      options: {
-        // 报价配置项
-        cu_deList: [],
-        decimalPlaces: [],
-        offerMethod: [],
-        rejectionMethod: [],
-        size: []
-      }
+      defaultShareDomain: []
     };
   },
   methods: {
-    // 点击站点选中站点
-    handlerTag(item) {
-      this.clienFormData.url = item.url;
-      this.clienFormData.websiteInfoId = item.id;
-    },
     // 获取站点列表
     async getDefaultSites() {
       const res = await this.$http.post("/api/SearchDropdownWebsiteInfos", {});
@@ -330,39 +320,6 @@ export default {
           msg: res.data.result.msg,
           type: "danger"
         });
-      }
-    },
-    // 获取系统配置项
-    async getSelectCompanyOffer() {
-      const res = await this.$http.post("/api/GetSelectCompanyOffer", {
-        basisParameters: "CompanyProductOffer"
-      });
-      if (res.data.result.code === 200) this.options = res.data.result.item;
-      else {
-        this.$common.handlerMsgState({
-          msg: res.data.result.msg,
-          type: "danger"
-        });
-      }
-      this.getLanguageType();
-    },
-    // 获取系统配置语言列表
-    async getLanguageType() {
-      const res = await this.$http.post("/api/ServiceConfigurationList", {
-        basisParameters: "languageType"
-      });
-      if (res.data.result.code === 200) this.langs = res.data.result.item;
-      else {
-        this.$common.handlerMsgState({
-          msg: res.data.result.msg,
-          type: "danger"
-        });
-      }
-    },
-    // 下拉框输入事件
-    selectBlur(val) {
-      if (isNaN(Number(val))) {
-        this.clienFormData.size = null;
       }
     },
     // 获取列表
@@ -452,35 +409,10 @@ export default {
     },
     // 打开新增分享
     openAddClien() {
-      this.clienFormData = {
-        websiteLanguage: [],
-        miniPrice: 1,
-        showNumber: 0,
-        miniPriceDecimalPlaces: 1,
-        profitCalcMethod: 2,
-        url: null,
-        isExportExcel: false,
-        profit: 0,
-        expireTime: null,
-        customerInfoId: null,
-        offerMethod: "汕头",
-        currencyType: "¥",
-        currencyTypeName: "RMB",
-        totalCost: "0",
-        exchange: 1,
-        size: "24",
-        decimalPlaces: 3,
-        rejectionMethod: "四舍五入",
-        websiteInfoId: null,
-        isCustomerInfo: true,
-        isShowPrice: true
-      };
+      this.isEdit = false;
       this.dialogTitle = "新增站点";
-      this.defaultFormula = JSON.stringify(this.customerTemplate[0]);
+      // this.defaultFormula = JSON.stringify(this.customerTemplate[0]);
       this.addClienDialog = true;
-      this.$nextTick(() => {
-        this.$refs.addClientFormRef.resetFields();
-      });
     },
     // 获取客户报价模板
     async getSelectProductOfferFormulaList() {
@@ -499,25 +431,9 @@ export default {
     },
     // 打开编辑分享
     openEdit(row) {
-      this.defaultFormula = null;
       this.dialogTitle = "编辑站点";
-      for (const key in row) {
-        this.clienFormData[key] = row[key];
-      }
-      // this.clienFormData = Object.assign({},row)
-      if (row.websiteLanguage) {
-        this.clienFormData.websiteLanguage = JSON.parse(
-          row.websiteLanguage
-        ).map(val => val.id);
-      } else {
-        this.clienFormData.websiteLanguage = [];
-      }
-      for (let i = 0; i < this.clientList.length; i++) {
-        if (this.clientList[i].id == row.customerId) {
-          this.clienFormData.customerInfoId = row.customerId;
-        }
-      }
-      this.getGetWebsiteShareAdByShareIdList();
+      this.isEdit = true;
+      this.myFormData = row;
       this.addClienDialog = true;
     },
     // 查询分享站点Id下的所有广告
@@ -578,86 +494,6 @@ export default {
         this.getClientList();
       }, 1000);
     },
-    // 提交新增 | 编辑 分享
-    async subProcessingLog() {
-      console.log(this.clienFormData, "this.clienFormData");
-      this.$refs.addClientFormRef.validate(async valid => {
-        if (valid) {
-          let url = "/api/CreateWebsiteShareInfo";
-          if (this.dialogTitle === "编辑站点")
-            url = "/api/UpdateWebsiteShareInfo";
-          const list = [];
-          for (let i = 0; i < this.clienFormData.websiteLanguage.length; i++) {
-            for (let j = 0; j < this.langs.length; j++) {
-              if (this.langs[j].id == this.clienFormData.websiteLanguage[i]) {
-                list.push(this.langs[j]);
-                break;
-              }
-            }
-          }
-          this.clienFormData.websiteLanguage = JSON.stringify(list);
-
-          for (const key in this.clienFormData) {
-            if (
-              this.clienFormData[key] == "undefined" ||
-              this.clienFormData[key] == null ||
-              this.clienFormData[key] == "" ||
-              this.clienFormData[key] == undefined ||
-              this.clienFormData[key] == "null"
-            ) {
-              delete this.clienFormData[key];
-            }
-          }
-
-          const res = await this.$http.post(url, this.clienFormData);
-          if (res.data.result.code === 200) {
-            if (this.advertisingTable.length > 0) {
-              for (
-                let index = 0;
-                index < this.advertisingTable.length;
-                index++
-              ) {
-                this.getCreateWebsiteShareAdRelation(
-                  this.advertisingTable[index]
-                );
-              }
-            }
-            this.addClienDialog = false;
-            this.getDataList();
-            this.clienFormData = {};
-            this.$common.handlerMsgState({
-              msg: "操作成功",
-              type: "success"
-            });
-          } else {
-            this.$common.handlerMsgState({
-              msg: res.data.result.msg,
-              type: "danger"
-            });
-          }
-        }
-      });
-    },
-    // 关联站点
-    async getCreateWebsiteShareAdRelation(item) {
-      const fd = {
-        adId: item.id,
-        shareId: this.clienFormData.websiteInfoId,
-        linkUrl: item.linkUrl
-      };
-      const res = await this.$http.post(
-        "/api/CreateWebsiteShareAdRelation",
-        fd
-      );
-      if (res.data.result.code === 200) {
-        console.log(res);
-      } else {
-        this.$common.handlerMsgState({
-          msg: res.data.result.msg,
-          type: "danger"
-        });
-      }
-    },
 
     // 获取客户列表
     async getClientList() {
@@ -689,24 +525,6 @@ export default {
         }
       }
       this.advertisingTable.unshift(row);
-    },
-    // 广告弹框
-    addAdvertising() {
-      if (this.advertisingTable.length > 0) {
-        let id = this.advertisingTable.map(item => {
-          if (item.checked == true) {
-            return item.id;
-          }
-        });
-        for (let i = 0; i < this.advertisingData.length; i++) {
-          for (let j = 0; j < id.length; j++) {
-            if (this.advertisingTable[j].id == this.advertisingData[i].id) {
-              this.advertisingData[i].checked = false;
-            }
-          }
-        }
-      }
-      this.advertisingDialog = true;
     },
     // 获取管理列表
     async GetWebsiteShareAdPage() {
@@ -787,12 +605,6 @@ export default {
           type: "danger"
         });
       }
-    },
-    // 点击导航菜单，页面滚动到指定位置
-    handleTab(val, index) {
-      this.tp = index;
-      let total = document.getElementById(val).offsetTop;
-      this.$refs.rightBoxScroll.scrollTop = total - 51;
     }
   },
   computed: {
@@ -806,9 +618,7 @@ export default {
     this.getSelectProductOfferFormulaList();
     // this.GetWebsiteShareAdPage();
   },
-  mounted() {
-    this.getSelectCompanyOffer();
-  },
+  mounted() {},
   watch: {
     defaultFormula: {
       deep: true,
@@ -853,17 +663,6 @@ export default {
               error: "danger"
             });
           }
-        }
-      }
-    },
-    "clienFormData.currencyType": {
-      deep: true,
-      handler(newVal) {
-        if (newVal) {
-          this.options.cu_deList.forEach(val => {
-            if (val.parameter === newVal)
-              this.clienFormData.currencyTypeName = val.itemCode;
-          });
         }
       }
     }
@@ -1015,88 +814,6 @@ export default {
 .siteDialog {
   @{deep}.el-dialog__body {
     padding: 0;
-  }
-  .dialogForm {
-    width: 100%;
-    // height: 100%;
-    display: flex;
-    .leftTab {
-      width: 140px;
-      min-width: 140px;
-      border-right: 1px solid #e5e5e5;
-      font-size: 15px;
-      .item {
-        height: 50px;
-        line-height: 50px;
-        padding: 0 20px;
-        cursor: pointer;
-        position: relative;
-        &.active {
-          background-color: #eff6ff;
-          &::after {
-            position: absolute;
-            content: "";
-            left: 0;
-            top: 0;
-            width: 3px;
-            background-color: #3368a9;
-            height: 50px;
-          }
-        }
-      }
-    }
-    .rightBox {
-      flex: 1;
-      padding: 0 20px;
-      height: 600px;
-      overflow: hidden;
-      overflow-y: auto;
-      .title {
-        border: 0;
-      }
-      .Excel {
-        display: flex;
-        .el-form-item {
-          flex: 1;
-        }
-      }
-      .selectLang {
-        display: flex;
-        border-bottom: 1px solid #e5e5e5;
-        .el-form-item {
-          flex: 1;
-          .el-checkbox-group {
-            width: 100%;
-          }
-          &:last-of-type {
-            .el-form-item__label {
-              width: 220px !important;
-            }
-            .el-form-item__content {
-              margin: 0 !important;
-            }
-          }
-        }
-      }
-      .advertising {
-        .advertisingTising {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-        .handle {
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          .delete {
-            width: 30px;
-            margin-left: 20px;
-          }
-        }
-      }
-    }
   }
 }
 .advertisingList {
