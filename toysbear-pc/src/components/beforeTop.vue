@@ -36,7 +36,9 @@
                 >
                 <span class="userName" @click="infoListEvent(4)"
                   ><i class="el-icon-user-solid"></i
-                  >{{ userInfo.userInfo && userInfo.userInfo.linkman }}发射点发多少个发射点发多少个发射点发多少个</span
+                  >{{
+                    userInfo.userInfo && userInfo.userInfo.linkman
+                  }}发射点发多少个发射点发多少个发射点发多少个</span
                 >
               </div>
               <a class="tuichu" width="20" @click="SignOut">退出</a>
