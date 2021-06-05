@@ -538,13 +538,11 @@ export default {
     },
     customerTemplate: {
       type: Array
-    },
-    defaultFormula: {
-      type: String
     }
   },
   data() {
     return {
+      defaultFormula: null,
       langs: [],
       total: 0,
       advertisingDialog: false,
@@ -865,6 +863,24 @@ export default {
             if (val.parameter === newVal)
               this.clienFormData.currencyTypeName = val.itemCode;
           });
+        }
+      }
+    },
+    defaultFormula: {
+      deep: true,
+      handler(newVal) {
+        if (newVal) {
+          console.log(newVal);
+          const obj = JSON.parse(newVal);
+          this.clienFormData.profit = obj.profit;
+          this.clienFormData.offerMethod = obj.offerMethod;
+          this.clienFormData.currencyType = obj.cu_de;
+          this.clienFormData.currencyTypeName = obj.cu_deName;
+          this.clienFormData.exchange = obj.exchange;
+          this.clienFormData.size = obj.size;
+          // this.clienFormData.showNumber = obj.showNumber;
+          this.clienFormData.decimalPlaces = obj.decimalPlaces;
+          this.clienFormData.rejectionMethod = obj.rejectionMethod;
         }
       }
     }

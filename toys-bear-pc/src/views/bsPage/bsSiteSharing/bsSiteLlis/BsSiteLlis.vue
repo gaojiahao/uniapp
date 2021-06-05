@@ -232,7 +232,6 @@
         :handSitesList="handSitesList"
         :isEdit="isEdit"
         :langs="langs"
-        :defaultFormula="defaultFormula"
         @close="close"
         @submit="submit"
       />
@@ -281,7 +280,6 @@ export default {
       clientPageSize: 999,
       clientKeyword: "",
       keyword: null,
-      defaultFormula: null,
       tableData: [],
       totalCount: 0,
       pageSize: 10,
