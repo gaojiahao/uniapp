@@ -4,7 +4,7 @@
 			<view class="head_item_panel">
 				<view class="left">
 					<view class="logo">
-						<image :src="head_logo" class="image"></image>
+						<image :src="contactInfo2.companyLogo" class="image"></image>
 					</view>
 					<view class="title">
 						{{contactInfo2.companyName}}
@@ -12,11 +12,11 @@
 				</view>
 				<view class="right">
 					<view class="contact">
-						<view class="item">联系人：蔡老板</view>
-						<view class="item">联系电话：18218413144</view>
+						<view class="item" v-if="contactInfo2.contactsMan">联系人：{{contactInfo2.contactsMan}}</view>
+						<view class="item" v-if="contactInfo2.phoneNumber||contactInfo2.telephoneNumber">联系电话：{{contactInfo2.phoneNumber||contactInfo2.telephoneNumber}}</view>
 					</view>
-					<view class="item">
-						<view>公司地址：广东省深圳市福田区11大丰收的</view>
+					<view class="item" v-if="contactInfo2.address">
+						<view>公司地址：{{contactInfo2.address}}</view>
 					</view>
 				</view>
 			</view>
@@ -47,10 +47,7 @@ export default {
 	data() {
 		return {
 			head_logo: require('@/static/images/supplierProduct/logo.png'),
-			nowActive:'',
 			contactInfo2:{},
-			threeMenu:0,
-			remMenu:0,
 		}
 	},
 	methods:{
@@ -65,66 +62,112 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.head{
-	width: 100%;
-	height: 240px;
-	background-image: url(../../static/images/supplierProduct/head_bg.png);
-	.head_item_grid{
-		width: 12rem;
-		background: #ffffff;
-		margin: auto;
-		height: 1.2rem;
-		border-radius: 0px 0px 0.2rem 0.2rem;
-		.head_item_panel{
-			width: 100%;
-			display: flex;
-			.left{
+@media screen and (min-width: 768px){
+	.head{
+		width: 100%;
+		height: 240px;
+		background-image: url(../../static/images/supplierProduct/head_bg.png);
+		.head_item_grid{
+			width: 12rem;
+			background: #ffffff;
+			margin: auto;
+			height: 1.2rem;
+			border-radius: 0px 0px 0.2rem 0.2rem;
+			.head_item_panel{
+				width: 100%;
 				display: flex;
-				.logo{
-					margin: 14px 30px;
-					width: 93px;
-					height: 93px;
-					.image{
+				.left{
+					display: flex;
+					.logo{
+						margin: 14px 30px;
 						width: 93px;
 						height: 93px;
+						.image{
+							width: 93px;
+							height: 93px;
+						}
+					}
+					.title{
+						height: 73px;
+						font-size: 32px;
+						font-weight: 800;
+						text-align: left;
+						color: #333333;
+						line-height: 73px;
+						margin-left: 16px;
+						margin: 22px 0;
 					}
 				}
-				.title{
-					height: 73px;
-					font-size: 32px;
-					font-weight: 800;
-					text-align: left;
-					color: #333333;
-					line-height: 73px;
-					margin-left: 16px;
-					margin: 22px 0;
+				.right{
+					margin-left: auto;
+					font-size: 16px;
+					color: #666666;
+					.contact{
+						margin-top: 33px;
+						display: -webkit-box;
+						display: -webkit-flex;
+						display: flex;
+						margin-bottom: 13px;
+						line-height: 21px;
+						font-size: 16px;
+						height: 21px;
+						text-align: right;
+						.item{
+							margin-left: 10px;
+							margin-bottom: 13px;
+						}
+					}
+					.item{
+						margin-right: 36px;
+						line-height: 21px;
+						font-size: 16px;
+						height: 21px;
+						text-align: right;
+					}
 				}
 			}
-			.right{
-				margin-left: auto;
-				font-size: 16px;
-				color: #666666;
-				.contact{
-					margin-top: 33px;
-					display: -webkit-box;
-					display: -webkit-flex;
+		}
+	}
+}
+@media screen and (max-width: 767px){
+	.head{
+		width: 100%;
+		height: 217.5px;
+		background-image: url(../../static/images/supplierProduct/head_bg_sm.png);
+		background-repeat: no-repeat;
+		.head_item_grid{
+			width: 90%;
+			background: #ffffff;
+			margin: 0 5%;
+			height: 60px;
+			border-radius: 0px 0px 20px 20px;
+			.head_item_panel{
+				width: 100%;
+				display: flex;
+				.left{
 					display: flex;
-					margin-bottom: 13px;
-					line-height: 21px;
-					font-size: 16px;
-					height: 21px;
-					text-align: right;
-					.item{
-						margin-left: 10px;
-						margin-bottom: 13px;
+					.logo{
+						margin: 7px 15px;
+						width: 46.5px;
+						height: 46.5px;
+						.image{
+							width: 46.5px;
+							height: 46.5px;
+						}
+					}
+					.title{
+						height: 36.5px;
+						font-size: 16px;
+						font-weight: 800;
+						text-align: left;
+						color: #333333;
+						line-height: 36.5px;
+						margin-left: 16px;
+						margin: 11px 0;
 					}
 				}
-				.item{
-					margin-right: 36px;
-					line-height: 21px;
-					font-size: 16px;
-					height: 21px;
-					text-align: right;
+				.right{
+					display: none;
 				}
 			}
 		}

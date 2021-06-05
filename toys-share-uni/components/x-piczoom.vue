@@ -32,7 +32,15 @@
             showEidt:{
                 type:Boolean,
                 default:false
-            }
+            },
+			myLeft:{
+                type:Number,
+                default:390
+            },
+			myTop:{
+			    type:Number,
+			    default:169
+			},
         },
         data () {
             return {
@@ -123,8 +131,8 @@
                 this.canvas=document.createElement('canvas')
                 this.canvas.className='mouse-cover-canvas'
                 this.canvas.style.position='absolute'
-                this.canvas.style.left=this.imgbox.offsetLeft+this.imgbox.offsetWidth+10+400+'px'
-                this.canvas.style.top=this.imgbox.offsetTop+169+'px'
+                this.canvas.style.left=this.imgbox.offsetLeft+this.imgbox.offsetWidth+10+this.myLeft+'px'
+                this.canvas.style.top=this.imgbox.offsetTop+this.myTop+'px'
                 this.canvas.style.border='1px solid #eee'
                 this.canvas.style.zIndex='99999'
                 this.canvas.height=this.imgbox.offsetHeight

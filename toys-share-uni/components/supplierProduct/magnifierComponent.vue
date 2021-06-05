@@ -2,8 +2,7 @@
 	<view class="images_left">
 		<view class="contact_info_image_box">
 			<view class="contact_info_single_image_box">
-				<!-- <image class="contact_info_image" :src="nowImg.image"></image> -->
-				<pic-zoom :url="nowImg.image" :scale="3"  v-if="nowImg.type === 'img'"></pic-zoom>
+				<pic-zoom :url="nowImg.imgUrl" :scale="3"  v-if="nowImg.type === 'img'" :myLeft='420' :myTop='390'></pic-zoom>
 				<video
 				  v-else-if="nowImg.type === 'video'"
 				  id="example_video"
@@ -19,7 +18,7 @@
 		</view>
 		<view class="contact_info_mulit_image_box">
 			<view class="pre" @click="pre_pc_img"><u-icon name="arrow-left" :style="{marginTop:'0.2rem'}"></u-icon></view>
-			<view class="image_item" v-for="(item,index) in productInfo.imgUrlList" :key="index" @mouseover="change_pc_img(item,index)">
+			<view class="image_item" v-for="(item,index) in productInfo.imglist" :key="index" @mouseover="change_pc_img(item,index)">
 				<view style="width: 100%; height: 100%;" @click="change_pc_img(item,index)" v-if="item.type=='video'">
 					<video
 					  style="border: 1px solid #dcdfe6"
@@ -30,7 +29,7 @@
 					>
 					</video>
 				</view>
-				<image class="image" :src="item.image" v-else></image>
+				<image class="image" :src="item.imgUrl" v-else></image>
 			</view>
 			<view class="next" @click="next_pc_img"><u-icon name="arrow-right" :style="{marginTop:'0.2rem'}"></u-icon></view>
 		</view>
@@ -64,7 +63,7 @@ import xSwiper from "@/components/x-swiper.vue"
 import util from "@/common/js/util.js"
 import PicZoom from "@/components/x-piczoom.vue";
 export default {
-	name: "MagnifierComponent",
+	name: "sp_MagnifierComponent",
 	components: {
 		xSwiper,
 		PicZoom
@@ -119,20 +118,20 @@ export default {
 		//pc端切换上一张图片
 		pre_pc_img(){
 			if((this.pc_img_index-1)>0){
-				this.nowImg = this.productInfo.imgUrlList[this.pc_img_index-1];
+				this.nowImg = this.productInfo.imglist[this.pc_img_index-1];
 				this.pc_img_index--;
 			} else {
-				this.nowImg = this.productInfo.imgUrlList[0];
+				this.nowImg = this.productInfo.imglist[0];
 				this.pc_img_index=0;
 			}
 		},
 		//pc端切换下一张图片
 		next_pc_img(){
-			if((this.pc_img_index+1)>=this.productInfo.imgUrlList.length){
-				this.nowImg = this.productInfo.imgUrlList[this.productInfo.imgUrlList.length-1];
-				this.pc_img_index=this.productInfo.imgUrlList.length-1;
+			if((this.pc_img_index+1)>=this.productInfo.imglist.length){
+				this.nowImg = this.productInfo.imglist[this.productInfo.imglist.length-1];
+				this.pc_img_index=this.productInfo.imglist.length-1;
 			} else {
-				this.nowImg = this.productInfo.imgUrlList[this.pc_img_index+1];
+				this.nowImg = this.productInfo.imglist[this.pc_img_index+1];
 				this.pc_img_index++;
 			}
 		},
@@ -145,19 +144,19 @@ export default {
 			if(this.productInfo.videoAddress){
 				var obj= {
 					type: 'video',
-					image: this.productInfo.videoAddress,
+					imgUrl: this.productInfo.videoAddress,
 				}
 				imgs.push(obj);
 			}
-			for(var i=0;i<this.productInfo.imgUrlList.length;i++){
+			for(var i=0;i<this.productInfo.imglist.length;i++){
 				var obj= {
 					type: 'img',
-					image: this.productInfo.imgUrlList[i],
+					imgUrl: this.productInfo.imglist[i].imgUrl,
 				}
 				imgs.push(obj);
 			}
-			this.$set(this.productInfo,'imgUrlList',imgs);
-			this.nowImg = this.productInfo.imgUrlList[0];
+			this.$set(this.productInfo,'imglist',imgs);
+			this.nowImg = this.productInfo.imglist[0];
 			this.pc_img_index = 0;
 		},
 		//pc端切换图片
