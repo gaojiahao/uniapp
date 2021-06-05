@@ -37,6 +37,7 @@ export default {
   },
   mounted() {
     this.$store.commit("removeLoginItems");
+    this.$cookies.remove("validityPeriod");
     localStorage.clear();
   }
 };

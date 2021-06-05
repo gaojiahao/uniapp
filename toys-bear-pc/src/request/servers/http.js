@@ -244,8 +244,18 @@ instance.interceptors.response.use(
             const result = await resetToken(res.config.headers.Utoken);
             if (result.data.result.isLogin) {
               // accessToken = result.data.result.item;
+              // Create new promise to handle exponential backoff
               $Store.commit("reset_Token", result.data.result.accessToken);
-              location.reload();
+              var backoff = new Promise(function(resolve) {
+                setTimeout(function() {
+                  resolve();
+                }, instance.defaults.retryDelay || 1);
+              });
+              // Return the promise in which recalls axios to retry the request
+              return backoff.then(function() {
+                return instance(res.config);
+              });
+              // location.reload();
             }
           }
         } else {
