@@ -21,12 +21,12 @@
           >
             报价公式
           </div>
-          <!-- <div
-              :class="{ item: true, active: tp == 3 }"
-              @click="handleTab('advertising', 3)"
-            >
-              站点广告
-            </div> -->
+          <div
+            :class="{ item: true, active: tp == 3 }"
+            @click="handleTab('advertising', 3)"
+          >
+            站点广告
+          </div>
         </div>
         <div
           class="rightBox"
@@ -330,85 +330,83 @@
               </div>
             </div>
           </div>
-          <!-- <div class="advertising" id="advertising">
-              <div class="advertisingTising">
-                <div class="title">站点广告</div>
-                <el-button
-                  @click="addAdvertising"
-                  icon="el-icon-plus"
-                  style="margin-left: 10px;height:36px"
-                  size="mini"
-                  type="primary"
-                  >添加广告</el-button
-                >
-              </div>
-              <el-table :data="advertisingTable" style="width: 100%">
-                <el-table-column
-                  prop="date"
-                  label="图片"
-                  align="center"
-                  width="180"
-                >
-                  <template slot-scope="scope">
-                    <el-image
-                      style="width: 130px; height: 37px; cursor: pointer"
-                      :src="scope.row.imgUrl"
-                      fit="contain"
+          <div class="advertising" id="advertising">
+            <div class="advertisingTising">
+              <div class="title">站点广告</div>
+              <el-button
+                @click="addAdvertising"
+                icon="el-icon-plus"
+                style="margin-left: 10px;height:36px"
+                size="mini"
+                type="primary"
+                >添加广告</el-button
+              >
+            </div>
+            <el-table :data="advertisingTable" style="width: 100%">
+              <el-table-column
+                prop="date"
+                label="图片"
+                align="center"
+                width="180"
+              >
+                <template slot-scope="scope">
+                  <el-image
+                    style="width: 130px; height: 37px; cursor: pointer"
+                    :src="scope.row.imgUrl"
+                    fit="contain"
+                  >
+                    <div
+                      slot="placeholder"
+                      class="image-slot"
+                      style="width: 130px; height: 37px; min-width: 130px"
                     >
-                      <div
-                        slot="placeholder"
-                        class="image-slot"
-                        style="width: 130px; height: 37px; min-width: 130px"
-                      >
-                        <img
-                          style="width: 130px; height: 37px; min-width: 130px"
-                          :src="require('@/assets/images/imgError.png')"
-                        />
-                      </div>
-                      <div
-                        slot="error"
-                        class="image-slot"
-                        style="width: 130px; height: 37px; min-width: 130px"
-                      >
-                        <img
-                          style="width: 130px; height: 37px; min-width: 130px"
-                          :src="require('@/assets/images/imgError.png')"
-                        />
-                      </div>
-                    </el-image>
-                  </template>
-                </el-table-column>
-                <el-table-column prop="LinkUrl" label="链接" align="center">
-                  <template slot-scope="scope">
-                    <el-input
-                      @blur="handleUpdataAdvertising(scope.row)"
-                      v-model="scope.row.linkUrl"
-                    >
-                    </el-input>
-                  </template>
-                </el-table-column>
-                <el-table-column label="操作" align="center" width="120">
-                  <template slot-scope="scope">
-                    <div class="handle">
-                      排序接口还没有
                       <img
-                        @click="handlegoUp(scope.$index, scope.row)"
-                        src="@/assets/images/up_f.png"
-                        alt=""
+                        style="width: 130px; height: 37px; min-width: 130px"
+                        :src="require('@/assets/images/imgError.png')"
                       />
-                      <div
-                        class="delete"
-                        @click="
-                          handleDeleteAdvertising(scope.$index, scope.row)
-                        "
-                      >
-                        删除
-                      </div>
                     </div>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </div> -->
+                    <div
+                      slot="error"
+                      class="image-slot"
+                      style="width: 130px; height: 37px; min-width: 130px"
+                    >
+                      <img
+                        style="width: 130px; height: 37px; min-width: 130px"
+                        :src="require('@/assets/images/imgError.png')"
+                      />
+                    </div>
+                  </el-image>
+                </template>
+              </el-table-column>
+              <el-table-column prop="LinkUrl" label="链接" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    @blur="handleUpdataAdvertising(scope.row)"
+                    v-model="scope.row.linkUrl"
+                  >
+                  </el-input>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" align="center" width="120">
+                <template slot-scope="scope">
+                  <div class="handle">
+                    排序接口还没有
+                    <img
+                      @click="handlegoUp(scope.$index, scope.row)"
+                      src="@/assets/images/up_f.png"
+                      alt=""
+                    />
+                    <div
+                      class="delete"
+                      @click="handleDeleteAdvertising(scope.$index, scope.row)"
+                    >
+                      删除
+                    </div>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
         </div>
       </div>
     </el-form>
@@ -542,6 +540,7 @@ export default {
   },
   data() {
     return {
+      advertisingTable: [],
       defaultFormula: null,
       langs: [],
       total: 0,
@@ -714,14 +713,14 @@ export default {
     // 滚动条事件
     handelScroll() {
       let setOffset = document.getElementById("set_id").offsetTop - 30;
-      let formulaOffset = document.getElementById("formula").offsetTop - 30;
+      // let formulaOffset = document.getElementById("formula").offsetTop - 30;
       // let advertisingOffset =
       //   document.getElementById("advertising").offsetTop - 51;
       console.log(this.$refs.rightBoxScroll.scrollTop, setOffset);
       if (this.$refs.rightBoxScroll.scrollTop === 0) {
         this.tp = 1;
       } else if (
-        this.$refs.rightBoxScroll.scrollTop >= formulaOffset &&
+        this.$refs.rightBoxScroll.scrollTop >= 340 &&
         this.$refs.rightBoxScroll.scrollHeight -
           this.$refs.rightBoxScroll.scrollTop !=
           this.$refs.rightBoxScroll.clientHeight
@@ -732,8 +731,8 @@ export default {
           this.$refs.rightBoxScroll.scrollTop ===
         this.$refs.rightBoxScroll.clientHeight
       ) {
-        // this.tp = 3;
-        this.tp = 2;
+        this.tp = 3;
+        // this.tp = 2;
       }
     },
     // 获取系统配置语言列表
@@ -780,19 +779,17 @@ export default {
 
           const res = await this.$http.post(url, this.clienFormData);
           if (res.data.result.code === 200) {
-            // if (this.advertisingTable.length > 0) {
-            //   for (
-            //     let index = 0;
-            //     index < this.advertisingTable.length;
-            //     index++
-            //   ) {
-            //     this.getCreateWebsiteShareAdRelation(
-            //       this.advertisingTable[index]
-            //     );
-            //   }
-            // }
-            // this.getDataList();
-            // this.clienFormData = {};
+            if (this.advertisingTable.length > 0) {
+              for (
+                let index = 0;
+                index < this.advertisingTable.length;
+                index++
+              ) {
+                this.getCreateWebsiteShareAdRelation(
+                  this.advertisingTable[index]
+                );
+              }
+            }
             this.$emit("submit");
             this.$common.handlerMsgState({
               msg: "操作成功",

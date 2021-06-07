@@ -265,7 +265,6 @@ export default {
       isEdit: false,
       langs: [],
       listChecked: [],
-      advertisingTable: [],
       advertisingData: [],
       tp: 1,
       srcoll: "",
