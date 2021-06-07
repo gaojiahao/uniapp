@@ -425,6 +425,7 @@
       :close-on-click-modal="false"
       :visible.sync="addMyClientDialog"
       destroy-on-close
+      append-to-body
       width="800px"
     >
       <el-form
@@ -467,6 +468,7 @@
     <!-- 选择广告 -->
     <el-dialog
       title="选择广告"
+      append-to-body
       :visible.sync="advertisingDialog"
       v-if="advertisingDialog"
       width="900px"
@@ -541,6 +543,7 @@ export default {
   data() {
     return {
       advertisingTable: [],
+      advertisingData: [],
       defaultFormula: null,
       langs: [],
       total: 0,
@@ -635,6 +638,12 @@ export default {
     };
   },
   methods: {
+    // 确定选择
+    async handleAddadv() {
+      this.advertisingTable = this.listChecked;
+      this.advertisingDialog = false;
+    },
+
     // 广告弹框
     addAdvertising() {
       if (this.advertisingTable.length > 0) {
@@ -712,11 +721,11 @@ export default {
     },
     // 滚动条事件
     handelScroll() {
-      let setOffset = document.getElementById("set_id").offsetTop - 30;
+      // let setOffset = document.getElementById("set_id").offsetTop - 30;
       // let formulaOffset = document.getElementById("formula").offsetTop - 30;
       // let advertisingOffset =
       //   document.getElementById("advertising").offsetTop - 51;
-      console.log(this.$refs.rightBoxScroll.scrollTop, setOffset);
+      // console.log(this.$refs.rightBoxScroll.scrollTop, setOffset);
       if (this.$refs.rightBoxScroll.scrollTop === 0) {
         this.tp = 1;
       } else if (
@@ -964,6 +973,30 @@ export default {
           margin-left: 20px;
         }
       }
+    }
+  }
+}
+.advertisingList {
+  min-height: 200px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  li {
+    margin: 0 17px;
+    width: 180px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    h4 {
+      padding: 15px 0;
+      width: 180px;
+      overflow: hidden; /*超出部分隐藏*/
+      white-space: nowrap; /*不换行*/
+      text-overflow: ellipsis; /*超出部分文字以...显示*/
+      text-align: center;
+      color: #333333;
+    }
+    .checkboxP {
+      padding-left: 83px;
     }
   }
 }

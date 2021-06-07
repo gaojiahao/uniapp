@@ -265,7 +265,6 @@ export default {
       isEdit: false,
       langs: [],
       listChecked: [],
-      advertisingData: [],
       tp: 1,
       srcoll: "",
       rightBoxScroll: null, //滚动条的高度
@@ -556,11 +555,6 @@ export default {
         });
       }
     },
-    // 确定选择
-    async handleAddadv() {
-      this.advertisingTable = this.listChecked;
-      this.advertisingDialog = false;
-    },
 
     // 单选
     handleChecked() {
@@ -825,29 +819,6 @@ export default {
 .siteDialog {
   @{deep}.el-dialog__body {
     padding: 0;
-  }
-}
-.advertisingList {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-  li {
-    margin: 0 17px;
-    width: 180px;
-    box-sizing: border-box;
-    margin-bottom: 20px;
-    h4 {
-      padding: 15px 0;
-      width: 180px;
-      overflow: hidden; /*超出部分隐藏*/
-      white-space: nowrap; /*不换行*/
-      text-overflow: ellipsis; /*超出部分文字以...显示*/
-      text-align: center;
-      color: #333333;
-    }
-    .checkboxP {
-      padding-left: 83px;
-    }
   }
 }
 </style>
