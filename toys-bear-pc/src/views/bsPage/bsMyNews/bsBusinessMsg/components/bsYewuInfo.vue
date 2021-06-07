@@ -346,6 +346,9 @@ export default {
       this.getERPOrderListByPage();
     });
   },
+  beforeDestroy() {
+    eventBus.$off("resetHallList");
+  },
   computed: {
     ...mapState(["userInfo"])
   }
