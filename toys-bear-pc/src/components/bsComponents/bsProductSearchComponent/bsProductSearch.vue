@@ -91,7 +91,7 @@
       </div>
       <p class="shuxian"></p>
       <div class="synthesizeBox" @click="handleIsSynthesize">
-        <i class="synthesizeIconv"></i>
+        <i class="synthesizeIcon"></i>
         综合搜索
       </div>
     </div>
