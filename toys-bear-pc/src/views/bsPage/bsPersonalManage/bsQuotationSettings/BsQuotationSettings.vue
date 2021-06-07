@@ -94,6 +94,7 @@
         @submit="submit"
         @close="close"
       />
+      <!-- <OfferFormulaDialog></OfferFormulaDialog> -->
     </el-dialog>
   </div>
 </template>
@@ -101,12 +102,14 @@
 <script>
 import Table from "@/components/table";
 import bsAddOfferFormula from "@/components/bsComponents/bsPersonalManageComponent/bsAddOfferFormula";
+// import OfferFormulaDialog from "@/views/bsPage/bsPersonalManage/bsQuotationSettings/components/offerFormulaDialog.vue";
 import { mapState } from "vuex";
 export default {
   name: "bsQuotationSettings",
   components: {
     bsAddOfferFormula,
     Table
+    // OfferFormulaDialog
   },
   data() {
     return {
