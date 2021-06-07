@@ -383,7 +383,7 @@ export default {
     // 获取列表
     async getTableDataList() {
       const fd = {
-        sampleTo: "Sales",
+        sampleTo: this.userInfo.commparnyList[0].companyType,
         messageModel: "1",
         readStatus: this.searchForm.readStatus,
         sampleFrom: "Hall",

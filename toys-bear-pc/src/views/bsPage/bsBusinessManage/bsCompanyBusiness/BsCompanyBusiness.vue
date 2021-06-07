@@ -431,8 +431,15 @@ export default {
     async getTableDataList() {
       console.log(this.searchForm.fromCompanyName);
       const fd = {
+        sampleTo:
+          this.userInfo.commparnyList[0].companyType == "Exhibition"
+            ? "Sales"
+            : this.userInfo.commparnyList[0].companyType,
+        sampleFrom:
+          this.userInfo.commparnyList[0].companyType == "Exhibition"
+            ? "Hall"
+            : "sales",
         readStatus: this.searchForm.readStatus,
-        sampleFrom: "sales",
         skipCount: this.currentPage,
         maxResultCount: this.pageSize,
         keyWord: this.searchForm.keyword,

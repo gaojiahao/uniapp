@@ -311,7 +311,7 @@ export default {
     // 获取列表
     async getTableDataList() {
       const fd = {
-        sampleFrom: "Sales",
+        sampleFrom: this.userInfo.commparnyList[0].companyType,
         sampleTo: "Supplier",
         readStatus: -1,
         skipCount: this.currentPage,
