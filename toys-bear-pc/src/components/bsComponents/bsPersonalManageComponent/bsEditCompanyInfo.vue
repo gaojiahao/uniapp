@@ -87,6 +87,7 @@
         <el-input
           id="suggestId"
           size="medium"
+          :maxlength="300"
           name="address_detail"
           @click.native="isShowAttrsList = false"
           @keyup.native="selectMapAttrs($event, false)"

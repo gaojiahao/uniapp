@@ -108,6 +108,7 @@
         </el-form-item>
         <el-form-item label="联系地址:" prop="contactAddress">
           <el-input
+            :maxlength="300"
             v-model="ContactWayRulesFormData.contactAddress"
             placeholder="请输入联系地址"
           ></el-input>
