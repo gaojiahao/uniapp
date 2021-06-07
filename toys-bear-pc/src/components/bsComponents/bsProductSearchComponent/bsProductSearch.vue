@@ -94,7 +94,6 @@
         <i class="synthesizeIcon"></i>
         综合搜索
       </div>
-      -->
     </div>
     <el-button
       v-if="typeId != 1"
