@@ -348,6 +348,14 @@ export default {
         msg: "敬请期待",
         type: "warning"
       });
+      // this.$http
+      //   .post("/api/OnekeyShopping", {
+      //     orderNumber: this.item.orderNumber,
+      //     orderType: this.item.orderType
+      //   })
+      //   .then(res => {
+      //     console.log(res);
+      //   });
     },
     // 获取合计total
     async getERPOrderTotal() {
@@ -399,7 +407,11 @@ export default {
       if (res.data.result.code === 200) {
         this.tableData.data = res.data.result.item.items;
         this.totalCount = res.data.result.item.totalCount;
-        eventBus.$emit("resetTotalCount");
+        this.$store.commit("updateAppLoading", true);
+        setTimeout(() => {
+          eventBus.$emit("resetTotalCount");
+          eventBus.$emit("resetListCount");
+        }, 1000);
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,

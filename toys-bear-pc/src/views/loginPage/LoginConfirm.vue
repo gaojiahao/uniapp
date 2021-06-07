@@ -183,19 +183,22 @@ export default {
           }
           this.getShoppingCartCount();
           // 记住密码
-          if (this.$route.query.thePassword) {
-            const validityPeriod = JSON.stringify({
-              dateTime: Date.now(),
-              token: res.data.result.accessToken
-            });
-            localStorage.setItem("validityPeriod", validityPeriod);
-            this.$cookies.set("validityPeriod", validityPeriod);
-          } else {
-            const validityPeriod = JSON.stringify({
-              token: res.data.result.accessToken
-            });
-            localStorage.setItem("validityPeriod", validityPeriod);
-            this.$cookies.set("validityPeriod", validityPeriod);
+          console.log(this.$route.query.id !== "checkted");
+          if (this.$route.query.id !== "checkted") {
+            if (this.$route.query.thePassword) {
+              const validityPeriod = JSON.stringify({
+                dateTime: Date.now(),
+                token: res.data.result.accessToken
+              });
+              localStorage.setItem("validityPeriod", validityPeriod);
+              this.$cookies.set("validityPeriod", validityPeriod);
+            } else {
+              const validityPeriod = JSON.stringify({
+                token: res.data.result.accessToken
+              });
+              localStorage.setItem("validityPeriod", validityPeriod);
+              this.$cookies.set("validityPeriod", validityPeriod);
+            }
           }
           const fd = {
             component: "bsHome",
