@@ -162,7 +162,7 @@ export default {
                 case undefined:
                 case "null":
                 case "undefined":
-                  row.supplierTelephoneNumber = "";
+                  row.supplierPhone = "";
                   break;
               }
               return row.supplierPhone + "<br>" + row.supplierTelephoneNumber;

@@ -169,6 +169,8 @@ export default {
           this.$store.commit("updateAppLoading", false);
           this.$message.error("获取菜单失败，请检查网络");
         }
+      } else {
+        this.$message.error(res.data.result.message);
       }
     }
   },
