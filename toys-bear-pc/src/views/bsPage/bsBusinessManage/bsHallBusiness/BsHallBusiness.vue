@@ -342,7 +342,6 @@ export default {
         "/api/PushSettings/MessageTeplateSettingsByPage",
         { maxResultCount: 9999, messageModel: "1", skipCount: 1 }
       );
-      console.log(res);
       if (res.data.result.code === 200) {
         this.typesList = res.data.result.item.items;
       }
