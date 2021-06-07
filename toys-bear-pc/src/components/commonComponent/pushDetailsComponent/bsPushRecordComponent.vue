@@ -1,32 +1,15 @@
 <template>
   <div class="bsPushRecordComponent">
-    <el-table
-      :data="tableData"
-      style="width: 100%"
-      ref="collecTable"
-      :header-cell-style="{ background: '#f1f3f6' }"
-    >
-      <el-table-column prop="ch_pa" label="主题"> </el-table-column>
-      <el-table-column prop="ch_pa" label="推送内容" min-width="250">
-      </el-table-column>
-      <el-table-column prop="ch_pa" label="推送时间" align="center">
-      </el-table-column>
-      <el-table-column label="推送状态" align="center">
-        <template slot-scope="scope">
-          <span>
-            {{ scope.row.supplierName }}
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" min-width="100" align="center">
-        <el-button size="medium" type="primary"> 再次推送 </el-button>
-      </el-table-column>
-    </el-table>
+    <Table :table="tableData"></Table>
   </div>
 </template>
 
 <script>
+import Table from "@/components/table";
 export default {
+  components: {
+    Table
+  },
   props: {
     productList: {
       type: Array
@@ -35,10 +18,84 @@ export default {
       type: Boolean
     }
   },
-  components: {},
   data() {
     return {
-      tableData: []
+      tableData: {
+        data: [],
+        showLoading: false,
+        sizeMini: "mini",
+        isIndex: true,
+        columns: [
+          {
+            prop: "messageExt",
+            isHiden: true,
+            label: "推送类型",
+            render: row => {
+              let msg;
+              switch (row.messageExt) {
+                case "0":
+                  msg = "系统通知";
+                  break;
+                case "3":
+                  msg = "补样";
+                  break;
+                case "5":
+                  msg = "借样";
+                  break;
+                case "11":
+                  msg = "补样借样";
+                  break;
+                case "12":
+                  msg = "洽谈";
+                  break;
+              }
+              return msg;
+            }
+          },
+          {
+            prop: "the_nu",
+            isHiden: true,
+            label: "推送内容"
+          },
+          {
+            prop: "happenDate",
+            isHiden: true,
+            label: "推送时间",
+            render: row => {
+              return row.happenDate ? row.happenDate.replace(/T.*/, "") : "";
+            }
+          },
+          {
+            prop: "readStatus",
+            isHiden: true,
+            label: "推送状态",
+            render: row => {
+              let msg = "";
+              switch (row.readStatus) {
+                case false:
+                  msg = "<span style='color: green'>未读</span>";
+                  break;
+                case true:
+                  msg = "<span style='color: #f56c6c'>已读</span>";
+                  break;
+              }
+              return msg;
+            }
+          }
+        ],
+        btnWidth: 100,
+        actions: [
+          {
+            type: "primary",
+            textWrapper() {
+              return "再次推送";
+            },
+            methods: row => {
+              console.log(row);
+            }
+          }
+        ]
+      }
     };
   },
   methods: {

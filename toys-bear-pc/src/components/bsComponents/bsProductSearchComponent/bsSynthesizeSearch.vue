@@ -362,7 +362,9 @@ export default {
         isNew: false, //最新产品
         isHot: false, //热销产品
         isVip: false, //vip产品
-        isSpotGoods: false //现货产品
+        isSpotGoods: false, //现货产品
+        startTime: "", //开始时间
+        endTime: "" //结束时间
       },
       options: [],
       cities: []

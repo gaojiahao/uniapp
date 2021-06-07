@@ -21,12 +21,12 @@
           >
             报价公式
           </div>
-          <div
+          <!-- <div
             :class="{ item: true, active: tp == 3 }"
             @click="handleTab('advertising', 3)"
           >
             站点广告
-          </div>
+          </div> -->
         </div>
         <div
           class="rightBox"
@@ -330,7 +330,7 @@
               </div>
             </div>
           </div>
-          <div class="advertising" id="advertising">
+          <!-- <div class="advertising" id="advertising">
             <div class="advertisingTising">
               <div class="title">站点广告</div>
               <el-button
@@ -406,7 +406,7 @@
                 </template>
               </el-table-column>
             </el-table>
-          </div>
+          </div> -->
         </div>
       </div>
     </el-form>
@@ -542,6 +542,7 @@ export default {
   },
   data() {
     return {
+      listChecked: [],
       advertisingTable: [],
       advertisingData: [],
       defaultFormula: null,
@@ -643,9 +644,29 @@ export default {
       this.advertisingTable = this.listChecked;
       this.advertisingDialog = false;
     },
-
-    // 广告弹框
+    // 查询分享站点Id下的所有广告
+    async getGetWebsiteShareAdByShareIdList() {
+      const res = await this.$http.post("/api/GetWebsiteShareAdByShareIdList", {
+        shareId: this.clienFormData.websiteInfoId
+      });
+      if (res.data.result.code === 200) {
+        this.advertisingTable = res.data.result.item;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
+    // 单选
+    handleChecked() {
+      this.listChecked = this.advertisingData.filter(item => {
+        return item.checked === true;
+      });
+    },
+    // 添加广告弹框
     addAdvertising() {
+      this.GetWebsiteShareAdPage();
       if (this.advertisingTable.length > 0) {
         let id = this.advertisingTable.map(item => {
           if (item.checked == true) {
@@ -662,6 +683,26 @@ export default {
       }
       this.advertisingDialog = true;
     },
+    // 获取广告管理列表
+    async GetWebsiteShareAdPage() {
+      const fd = {
+        skipCount: 1,
+        maxResultCount: 999
+      };
+      const res = await this.$http.post("/api/GetWebsiteShareAdPage", fd);
+      if (res.data.result.code === 200) {
+        for (let i = 0; i < res.data.result.item.items.length; i++) {
+          res.data.result.item.items[i].checked = false;
+        }
+        this.advertisingData = res.data.result.item.items;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
+
     // 下拉框输入事件
     selectBlur(val) {
       if (isNaN(Number(val))) {
@@ -740,8 +781,8 @@ export default {
           this.$refs.rightBoxScroll.scrollTop ===
         this.$refs.rightBoxScroll.clientHeight
       ) {
-        this.tp = 3;
-        // this.tp = 2;
+        // this.tp = 3;
+        this.tp = 2;
       }
     },
     // 获取系统配置语言列表
@@ -825,7 +866,10 @@ export default {
         fd
       );
       if (res.data.result.code === 200) {
-        console.log(res);
+        this.$common.handlerMsgState({
+          msg: "关联站点成功",
+          type: "success"
+        });
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -836,14 +880,12 @@ export default {
     // 点击导航菜单，页面滚动到指定位置
     handleTab(val, index) {
       this.tp = index;
-      console.log(this.tp);
       let total = document.getElementById(val).offsetTop;
-      this.$refs.rightBoxScroll.scrollTop = total - 71;
+      this.$refs.rightBoxScroll.scrollTop = total - 85;
     }
   },
   created() {},
   async mounted() {
-    console.log(this.myFormData, 998);
     if (this.isEdit) {
       let myLangs = [];
       if (this.myFormData.websiteLanguage) {
@@ -855,7 +897,8 @@ export default {
       this.clienFormData.websiteLanguage = myLangs.map(val => {
         return val.id;
       });
-      console.log(this.clienFormData);
+      console.log(this.clienFormData, "编辑传过来的数据");
+      this.getGetWebsiteShareAdByShareIdList();
     }
     await this.getLanguageType();
     await this.getSelectCompanyOffer();
@@ -876,7 +919,6 @@ export default {
       deep: true,
       handler(newVal) {
         if (newVal) {
-          console.log(newVal);
           const obj = JSON.parse(newVal);
           this.clienFormData.profit = obj.profit;
           this.clienFormData.offerMethod = obj.offerMethod;

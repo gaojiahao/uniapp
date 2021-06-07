@@ -68,10 +68,10 @@ export default {
   methods: {
     // 去详情
     openDetails() {
-      this.$common.handlerMsgState({
-        msg: "敬请期待",
-        type: "warning"
-      });
+      // this.$common.handlerMsgState({
+      //   msg: "敬请期待",
+      //   type: "warning"
+      // });
     },
     // 去聊天
     toNews(item) {

@@ -264,7 +264,6 @@ export default {
       myFormData: null,
       isEdit: false,
       langs: [],
-      listChecked: [],
       tp: 1,
       srcoll: "",
       rightBoxScroll: null, //滚动条的高度
@@ -446,21 +445,6 @@ export default {
       this.myFormData = row;
       this.addClienDialog = true;
     },
-    // 查询分享站点Id下的所有广告
-    async getGetWebsiteShareAdByShareIdList() {
-      const res = await this.$http.post("/api/GetWebsiteShareAdByShareIdList", {
-        shareId: this.clienFormData.websiteInfoId
-      });
-      if (res.data.result.code === 200) {
-        this.advertisingTable = res.data.result.item;
-      } else {
-        this.$common.handlerMsgState({
-          msg: res.data.result.msg,
-          type: "danger"
-        });
-      }
-    },
-
     // 生成二维码
     generateQRCode(url) {
       if (!url) {
@@ -536,32 +520,7 @@ export default {
       }
       this.advertisingTable.unshift(row);
     },
-    // 获取管理列表
-    async GetWebsiteShareAdPage() {
-      const fd = {
-        skipCount: 1,
-        maxResultCount: 999
-      };
-      const res = await this.$http.post("/api/GetWebsiteShareAdPage", fd);
-      if (res.data.result.code === 200) {
-        for (let i = 0; i < res.data.result.item.items.length; i++) {
-          res.data.result.item.items[i].checked = false;
-        }
-        this.advertisingData = res.data.result.item.items;
-      } else {
-        this.$common.handlerMsgState({
-          msg: res.data.result.msg,
-          type: "danger"
-        });
-      }
-    },
 
-    // 单选
-    handleChecked() {
-      this.listChecked = this.advertisingData.filter(item => {
-        return item.checked === true;
-      });
-    },
     // 删除广告关联
     async handleDeleteAdvertising(index, item) {
       const res = await this.$http.post("/api/DeleteWebsiteShareAdRelation", {
@@ -621,7 +580,6 @@ export default {
     this.getStaffList();
     this.getDefaultSites();
     this.getSelectProductOfferFormulaList();
-    // this.GetWebsiteShareAdPage();
   },
   mounted() {},
   watch: {

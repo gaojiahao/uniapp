@@ -920,7 +920,7 @@ export default {
   },
   data() {
     return {
-      data: {},
+      childData: null,
       isSynthesizeSearch: false,
       getSynthesize: false,
       synthesizeShow: false,
@@ -1226,76 +1226,64 @@ export default {
     async getProductList(flag) {
       this.$store.commit("searchValues", null);
       let startDate = Date.now();
-      if (!this.isSynthesizeSearch) {
-        this.data = {
-          searchType: 0, //0-默认，1-综合搜索
-          name: this.searchForm.keyword,
-          hallNumber: this.searchForm.companyNumber,
-          categoryNumber: this.searchForm.categoryNumber,
-          minPrice: this.searchForm.minPrice,
-          maxPrice: this.searchForm.maxPrice,
-          startTime: this.searchForm.time.length
-            ? this.searchForm.time[0]
-            : null,
-          endTime: this.searchForm.time.length ? this.searchForm.time[1] : null,
-          // skipCount: this.currentPage,
-          // maxResultCount: this.pageSize,
-          // precisionSearch: JSON.stringify({
-          //   fa_no: this.searchForm.fa_no ? 1 : 0,
-          //   number: this.searchForm.number ? 1 : 0,
-          //   name: this.searchForm.name ? 1 : 0,
-          //   packName: this.searchForm.packName ? 1 : 0
-          // }),
-          sortOrder: this.sortOrder,
-          sortType: this.sortType,
-          // 高级搜索条件
-          isUpInsetImg: this.isUpInsetImg,
-          isUpInset3D: this.addrSearch,
-          fa_no: this.advancedFormdata.fa_no,
-          ch_pa: this.advancedFormdata.ch_pa,
-          pr_le: this.advancedFormdata.pr_le,
-          pr_wi: this.advancedFormdata.pr_wi,
-          pr_hi: this.advancedFormdata.pr_hi,
-          ou_le: this.advancedFormdata.ou_le,
-          ou_wi: this.advancedFormdata.ou_wi,
-          ou_hi: this.advancedFormdata.ou_hi,
-          in_le: this.advancedFormdata.in_le,
-          in_wi: this.advancedFormdata.in_wi,
-          in_hi: this.advancedFormdata.in_hi
-        };
-        switch (this.isAccurate) {
-          case "精准":
-            this.data.precisionSearch = JSON.stringify({
-              fa_no: this.searchForm.fa_no ? 2 : 0,
-              name: this.searchForm.name ? 2 : 0,
-              number: this.searchForm.number ? 2 : 0,
-              packName: this.searchForm.packName ? 2 : 0
-            });
-            break;
-          default:
-            this.data.precisionSearch = JSON.stringify({
-              fa_no: this.searchForm.fa_no ? 1 : 0,
-              name: this.searchForm.name ? 1 : 0,
-              number: this.searchForm.number ? 1 : 0,
-              packName: this.searchForm.packName ? 1 : 0
-            });
-            break;
-        }
+      const fd = {
+        searchType: 0, //0-默认，1-综合搜索
+        name: this.searchForm.keyword,
+        hallNumber: this.searchForm.companyNumber,
+        categoryNumber: this.searchForm.categoryNumber,
+        minPrice: this.searchForm.minPrice,
+        maxPrice: this.searchForm.maxPrice,
+        startTime: this.searchForm.time.length ? this.searchForm.time[0] : null,
+        endTime: this.searchForm.time.length ? this.searchForm.time[1] : null,
+        skipCount: this.currentPage,
+        maxResultCount: this.pageSize,
+        // precisionSearch: JSON.stringify({
+        //   fa_no: this.searchForm.fa_no ? 1 : 0,
+        //   number: this.searchForm.number ? 1 : 0,
+        //   name: this.searchForm.name ? 1 : 0,
+        //   packName: this.searchForm.packName ? 1 : 0
+        // }),
+        sortOrder: this.sortOrder,
+        sortType: this.sortType,
+        // 高级搜索条件
+        isUpInsetImg: this.isUpInsetImg,
+        isUpInset3D: this.addrSearch,
+        fa_no: this.advancedFormdata.fa_no,
+        ch_pa: this.advancedFormdata.ch_pa,
+        pr_le: this.advancedFormdata.pr_le,
+        pr_wi: this.advancedFormdata.pr_wi,
+        pr_hi: this.advancedFormdata.pr_hi,
+        ou_le: this.advancedFormdata.ou_le,
+        ou_wi: this.advancedFormdata.ou_wi,
+        ou_hi: this.advancedFormdata.ou_hi,
+        in_le: this.advancedFormdata.in_le,
+        in_wi: this.advancedFormdata.in_wi,
+        in_hi: this.advancedFormdata.in_hi
+      };
+      switch (this.isAccurate) {
+        case "精准":
+          fd.precisionSearch = JSON.stringify({
+            fa_no: this.searchForm.fa_no ? 2 : 0,
+            name: this.searchForm.name ? 2 : 0,
+            number: this.searchForm.number ? 2 : 0,
+            packName: this.searchForm.packName ? 2 : 0
+          });
+          break;
+        default:
+          fd.precisionSearch = JSON.stringify({
+            fa_no: this.searchForm.fa_no ? 1 : 0,
+            name: this.searchForm.name ? 1 : 0,
+            number: this.searchForm.number ? 1 : 0,
+            packName: this.searchForm.packName ? 1 : 0
+          });
+          break;
       }
-      this.data.skipCount = this.currentPage;
-      this.data.maxResultCount = this.pageSize;
-      for (const key in this.data) {
-        if (
-          this.data[key] === null ||
-          this.data[key] === undefined ||
-          this.data[key] === ""
-        )
-          delete this.data[key];
+
+      for (const key in fd) {
+        if (fd[key] === null || fd[key] === undefined || fd[key] === "")
+          delete fd[key];
       }
-      const res = await this.$http.post(
-        "/api/SearchBearProductPage",
-        this.data
-      );
+      const res = await this.$http.post("/api/SearchBearProductPage", fd);
       const { code, item, msg } = res.data.result;
       if (code === 200) {
         if (this.typeId === 1) {
@@ -1312,9 +1300,6 @@ export default {
           }
         }
 
-        if (this.isSynthesizeSearch) {
-          this.addHistoryText(this.data);
-        }
         if (Object.values(this.advancedFormdata).some(Boolean)) {
           this.$set(this.searchForm, "MyisGaoji", true);
         }
@@ -1333,8 +1318,63 @@ export default {
         this.getProductCategoryList();
       }
     },
+    // 子组件综合搜索
+    handelSynthesize(val) {
+      this.isSynthesizeSearch = true;
+      if (val.categoryNumber != "") {
+        const currentCate = this.categoryList.find(
+          item => item.id == val.categoryNumber
+        );
+        currentCate && (this.oneCurrentTag = currentCate);
+      }
+      this.synthesizeShow = false;
+      this.childData = JSON.parse(JSON.stringify(val));
+      this.getSyntheProductList();
+    },
+    // 综合搜索
+    async getSyntheProductList() {
+      let startDate = Date.now();
+      const fd = this.childData;
+      for (const key in fd) {
+        if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
+          delete fd[key];
+        }
+      }
+      fd.skipCount = this.currentPage;
+      fd.maxResultCount = this.pageSize;
+      const res = await this.$http.post("/api/SearchBearProductPage", fd);
+      const { code, item, msg } = res.data.result;
+      if (code === 200) {
+        if (this.typeId === 1) {
+          for (let i = 0; i < item.items.length; i++) {
+            this.$set(item.items[i], "isShoppingUpdate", false);
+            for (let j = 0; j < this.offerProductList.length; j++) {
+              if (
+                item.items[i].productNumber ===
+                this.offerProductList[j].productNumber
+              ) {
+                this.$set(item.items[i], "isShoppingUpdate", true);
+              }
+            }
+          }
+        }
+
+        this.addHistoryText(this.childData);
+        this.productList = item.items;
+        this.totalCount = item.totalCount;
+        let endDate = Date.now();
+        this.searchHttpTime = (endDate - startDate) / 1000;
+      } else {
+        this.totalCount = 0;
+        this.$common.handlerMsgState({
+          msg: msg,
+          type: "danger"
+        });
+      }
+    },
     // 存储历史记录
-    addHistoryText(item) {
+    addHistoryText(valueItem) {
+      const item = JSON.parse(JSON.stringify(valueItem));
       var arr = [];
       for (let key in item) {
         switch (key) {
@@ -1404,24 +1444,13 @@ export default {
         }
       }
       for (let i = 0; i < arr.length; i++) {
-        if (this.historyText.length > 28) {
+        if (this.historyText.length > 10) {
           this.$store.commit("deleteHandlerSynthesizeSearchData");
           this.$store.commit("handlerSynthesizeSearchData", arr[i]);
         } else {
           this.$store.commit("handlerSynthesizeSearchData", arr[i]);
         }
       }
-    },
-    // 子组件综合搜索
-    handelSynthesize(data) {
-      this.isSynthesizeSearch = true;
-      this.pageSize = 12;
-      this.currentPage = 1;
-      this.data = Object.assign({}, data);
-      this.$nextTick(() => {
-        this.getProductList(false);
-        this.synthesizeShow = false;
-      });
     },
     //重置关闭弹框
     handleIsSynthesizeSearch() {
@@ -1435,13 +1464,21 @@ export default {
         this.currentPage != 1
       )
         return false;
-      this.getProductList(false);
+      if (this.isSynthesizeSearch) {
+        this.getSyntheProductList();
+      } else {
+        this.getProductList(false);
+      }
     },
     // 修改当前页
     handleCurrentChange(page) {
       eventBus.$emit("toTop");
       this.currentPage = page;
-      this.getProductList(false);
+      if (this.isSynthesizeSearch) {
+        this.getSyntheProductList();
+      } else {
+        this.getProductList(false);
+      }
     },
 
     // 获取产品类目列表
@@ -1644,7 +1681,11 @@ export default {
               type: "success"
             });
             this.checkAll = false;
-            this.getProductList(false);
+            if (this.isSynthesizeSearch) {
+              this.getSyntheProductList();
+            } else {
+              this.getProductList(false);
+            }
           } else {
             this.$common.handlerMsgState({
               msg: " 一键加购失败",
