@@ -1279,8 +1279,13 @@ export default {
       }
 
       for (const key in fd) {
-        if (fd[key] === null || fd[key] === undefined || fd[key] === "")
+        if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
           delete fd[key];
+        }
+
+        if (key != "isUpInsetImg" && fd[key] === false) {
+          delete fd[key];
+        }
       }
       const res = await this.$http.post("/api/SearchBearProductPage", fd);
       const { code, item, msg } = res.data.result;
@@ -1326,6 +1331,7 @@ export default {
         );
         currentCate && (this.oneCurrentTag = currentCate);
       }
+      this.currentPage = 1;
       this.synthesizeShow = false;
       this.childData = JSON.parse(JSON.stringify(val));
       this.getSyntheProductList();
