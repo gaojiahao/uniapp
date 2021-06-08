@@ -183,9 +183,9 @@ export default {
           }
           this.getShoppingCartCount();
           // 记住密码
-          console.log(this.$route.query.id !== "checkted");
+          // console.log(this.$route.query.id !== "checkted", this.$route.query.id == "thePassword");
           if (this.$route.query.id !== "checkted") {
-            if (this.$route.query.thePassword) {
+            if (this.$route.query.id == "thePassword") {
               const validityPeriod = JSON.stringify({
                 dateTime: Date.now(),
                 token: res.data.result.accessToken

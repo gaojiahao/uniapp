@@ -361,37 +361,36 @@ export default {
           })
             .then(async () => {
               this.$store.commit("updateAppLoading", true);
-              const res = await this.$http.post(
+              const re = await this.$http.post(
                 "/api/AddShoppingCart",
                 {
                   userID: this.userInfo.userInfo.id,
                   companyNumber: this.userInfo.commparnyList[0].companyNumber,
-                  // sourceFrom: "active",
-                  sourceFrom: "QRCodeSearch",
+                  sourceFrom: "active",
+                  // sourceFrom: "QRCodeSearch",
                   number: 1,
                   currency: "￥",
                   Price: 0,
                   shopType: "companysamples",
-                  productNumber: this.QRcodeValue.productNumber
+                  productNumber: res.data.result.item.productNumber
                 },
                 {
                   timeout: 9999999
                 }
               );
-              if (res.data.result.code === 200) {
+              if (re.data.result.code === 200) {
                 this.getShoppingCartList();
                 this.$common.handlerMsgState({
-                  msg: res.data.result.msg,
+                  msg: re.data.result.msg,
                   type: "success"
                 });
               } else {
                 this.$common.handlerMsgState({
-                  msg: res.data.result.msg,
+                  msg: re.data.result.msg,
                   type: "danger"
                 });
               }
-
-              this.showCodeValue = false;
+              // this.showCodeValue = false;
             })
             .catch(() => {
               this.$common.handlerMsgState({
