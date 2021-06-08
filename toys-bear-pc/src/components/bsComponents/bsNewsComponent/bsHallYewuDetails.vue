@@ -374,11 +374,39 @@ export default {
   },
   methods: {
     // 提交一键加购
-    submit() {
-      this.$common.handlerMsgState({
-        msg: "敬请期待",
-        type: "warning"
-      });
+    async submit() {
+      // this.$common.handlerMsgState({
+      //   msg: "敬请期待",
+      //   type: "warning"
+      // });
+      const re = await this.$http.post(
+        "/api/AddShoppingCart",
+        {
+          userID: this.userInfo.userInfo.id,
+          companyNumber: this.userInfo.commparnyList[0].companyNumber,
+          sourceFrom: "active",
+          // sourceFrom: "QRCodeSearch",
+          number: 1,
+          currency: "￥",
+          Price: 0,
+          shopType: "companysamples",
+          productNumber: this.addShopOption.productNumber
+        },
+        {
+          timeout: 9999999
+        }
+      );
+      if (re.data.result.code === 200) {
+        this.$common.handlerMsgState({
+          msg: re.data.result.msg,
+          type: "success"
+        });
+      } else {
+        this.$common.handlerMsgState({
+          msg: re.data.result.msg,
+          type: "danger"
+        });
+      }
       this.addPurchaseDialog = false;
     },
     // 关闭加购
@@ -392,58 +420,9 @@ export default {
         orderNumber: this.item.orderNumber,
         orderType: this.item.orderType
       });
-      console.log(res);
       if (res.data.result.code === 200) {
         this.addShopOption = res.data.result.item;
         this.addPurchaseDialog = true;
-        // if (res.data.result.item.productNumber) {
-        //   this.$confirm("产品数量：" + res.data.result.item.productCount + "下架产品数：", {
-        //     confirmButtonText: "确定",
-        //     cancelButtonText: "取消"
-        //   })
-        //     .then(async () => {
-        //       this.$store.commit("updateAppLoading", true);
-        //       const re = await this.$http.post(
-        //         "/api/AddShoppingCart",
-        //         {
-        //           userID: this.userInfo.userInfo.id,
-        //           companyNumber: this.userInfo.commparnyList[0].companyNumber,
-        //           sourceFrom: "active",
-        //           // sourceFrom: "QRCodeSearch",
-        //           number: 1,
-        //           currency: "￥",
-        //           Price: 0,
-        //           shopType: "companysamples",
-        //           productNumber: res.data.result.item.productNumber
-        //         },
-        //         {
-        //           timeout: 9999999
-        //         }
-        //       );
-        //       if (re.data.result.code === 200) {
-        //         this.$common.handlerMsgState({
-        //           msg: "加购成功",
-        //           type: "success"
-        //         });
-        //       } else {
-        //         this.$common.handlerMsgState({
-        //           msg: re.data.result.msg,
-        //           type: "danger"
-        //         });
-        //       }
-        //     })
-        //     .catch(() => {
-        //       this.$common.handlerMsgState({
-        //         msg: "取消加购",
-        //         type: "warning"
-        //       });
-        //     });
-        // } else {
-        //   this.$common.handlerMsgState({
-        //     msg: "产品编号为空",
-        //     type: "danger"
-        //   });
-        // }
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,

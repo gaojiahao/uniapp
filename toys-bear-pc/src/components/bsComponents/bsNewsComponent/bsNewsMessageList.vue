@@ -23,6 +23,9 @@
       <div class="center">
         <el-scrollbar style="height: 100%;" ref="myScrollbar">
           <div ref="scrollMain" class="scrollMain">
+            <center style="font-size: 20px;" v-show="noScroll">
+              <i class="el-icon-loading"></i>
+            </center>
             <template v-for="item in chatInfoList">
               <div :key="item.sentTime">
                 <!-- 别人 -->
@@ -601,46 +604,56 @@
       </div>
       <div class="title">
         <div
-          :class="{ tabs: true, active: isDiyu === 0 }"
+          :class="{ tabs: true, active: msgType === 0 }"
           @click="checkTabs(0)"
         >
           全部
         </div>
         <div
-          :class="{ tabs: true, active: isDiyu === 1 }"
-          @click="checkTabs(1)"
+          :class="{ tabs: true, active: msgType === 2 }"
+          @click="checkTabs(2)"
         >
           图片
         </div>
         <div
-          :class="{ tabs: true, active: isDiyu === 2 }"
-          @click="checkTabs(2)"
+          :class="{ tabs: true, active: msgType === 4 }"
+          @click="checkTabs(4)"
         >
           视频
         </div>
         <div
-          :class="{ tabs: true, active: isDiyu === 3 }"
+          :class="{ tabs: true, active: msgType === 3 }"
           @click="checkTabs(3)"
         >
           链接
         </div>
       </div>
-      <div class="chattingList">
-        <div class="recordData">
-          <div class="cecorLeft">
-            <img src="@/assets/images/imgError.png" alt="" />
+      <div class="chattingList" ref="myScrollBox">
+        <el-scrollbar
+          style="height: 100%;position:relative;"
+          ref="histroyScroll"
+        >
+          <div class="myScrollWrap" ref="myScrollWrap">
+            <template v-if="msgType === 0">
+              <bsAllMsg :msgList="historyList" />
+            </template>
+            <template v-else-if="msgType === 2">
+              <bsImgMsg :msgList="historyList" />
+            </template>
+            <template v-else-if="msgType === 3">
+              <bsLinkMsg :msgList="historyList" />
+            </template>
+            <template v-else-if="msgType === 4">
+              <bsVideoMsg :msgList="historyList" />
+            </template>
+            <center
+              style="width:100%; position: absolute; top:30px;left:0;font-size:30px;"
+              v-show="isDaoDiLe"
+            >
+              <i class="el-icon-loading"></i>
+            </center>
           </div>
-          <div class="cecorRight">
-            <div class="cecorHead">
-              <p>名字</p>
-              <p>28分钟前</p>
-            </div>
-            <div class="cecorMain">
-              <p>聊天消息</p>
-              <!-- <img src="" alt="" /> -->
-            </div>
-          </div>
-        </div>
+        </el-scrollbar>
       </div>
     </div>
   </div>
@@ -651,12 +664,22 @@ import eventBus from "@/assets/js/common/eventBus.js";
 import { dateDiff, base64file } from "@/assets/js/common/common.js";
 import { mapState } from "vuex";
 import RongIMLib from "RongIMLib";
+
+import bsAllMsg from "./bsNewsMsgComponents/bsAllMsg";
+import bsImgMsg from "./bsNewsMsgComponents/bsImgMsg";
+import bsLinkMsg from "./bsNewsMsgComponents/bsLinkMsg";
+import bsVideoMsg from "./bsNewsMsgComponents/bsVideoMsg";
 export default {
   name: "bsNewsMessageList",
   props: ["dataOption", "im"],
+  components: { bsAllMsg, bsImgMsg, bsLinkMsg, bsVideoMsg },
   data() {
     return {
-      msgType: 1,
+      historyPageIndex: 1,
+      isDaoDiLe: false,
+      msgType: 0,
+      historyList: [],
+      historyTotalCount: 0,
       historyKeyword: "",
       skipCount: 1,
       maxResultCount: 10,
@@ -668,16 +691,15 @@ export default {
       textInfo: "",
       dialogBusiness: null,
       hasMore: false,
-      isDiyu: 0,
       chatInfoList: [],
       expressionLibrary: [] // 表情库
     };
   },
   methods: {
     // 分页获取历史消息
-    async getMessageHisByPage() {
+    async getMessageHisByPage(flag) {
       const fd = {
-        skipCount: 1,
+        skipCount: this.historyPageIndex,
         maxResultCount: 10,
         type: this.dataOption.type === 1 ? 1 : 2,
         messageType: this.msgType,
@@ -687,9 +709,19 @@ export default {
         keyWord: this.historyKeyword
       };
       const res = await this.$im_http.post("/api/Message/MessageHisByPage", fd);
-      console.log(res);
       if (res.data.result.code === 200) {
-        console.log(123);
+        if (flag)
+          this.historyList = this.historyList.concat(
+            res.data.result.item.items
+          );
+        else this.historyList = res.data.result.item.items;
+        this.historyTotalCount = res.data.result.item.totalCount;
+        this.isDaoDiLe = false;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     // 发送表情
@@ -699,6 +731,7 @@ export default {
     },
     // 聊天窗口滚动事件
     handleScroll() {
+      // 聊天窗体
       let scrollbarEl = this.$refs.myScrollbar.wrap;
       scrollbarEl.onscroll = () => {
         // 到顶部了
@@ -716,6 +749,27 @@ export default {
         } else {
           this.isFixedTop = false;
         }
+      };
+      // 历史聊条滚动
+      let histroyScrollEl = this.$refs.histroyScroll.wrap;
+      const myScrollBox = this.$refs.myScrollBox;
+      const myWrapBox = this.$refs.myScrollWrap;
+      histroyScrollEl.onscroll = () => {
+        // 到底部了
+        if (
+          histroyScrollEl.scrollTop ===
+          myWrapBox.scrollHeight - (myScrollBox.offsetHeight - 40)
+        ) {
+          // 是否还有历史数据可获取
+          if (this.historyList.length < this.historyTotalCount) {
+            this.isDaoDiLe = true;
+            this.historyPageIndex++;
+            this.getMessageHisByPage(true);
+          }
+        }
+        // else {
+        //   this.isDaoDiLe = false;
+        // }
       };
     },
     // 发送上传图片
@@ -905,9 +959,11 @@ export default {
     dateDiff(time) {
       return dateDiff(time);
     },
-    // 切换专区
+    // 切换专聊天记录
     checkTabs(num) {
-      this.isDiyu = num;
+      this.historyPageIndex = 1;
+      this.msgType = num;
+      this.getMessageHisByPage(false);
     },
     // 发送消息
     sendInfo({ targetId, messageType, content }) {
@@ -1433,51 +1489,11 @@ export default {
       }
     }
     .chattingList {
+      height: 664px;
       padding: 20px;
       box-sizing: border-box;
-
-      .recordData {
-        background: #f6f8f9;
-        border-radius: 4px;
-        padding: 15px 18px;
-        display: flex;
-        .cecorLeft {
-          width: 40px;
-          height: 40px;
-          margin-right: 8px;
-          img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 1px solid #dcdfe6;
-            background: rgba(0, 0, 0, 0);
-          }
-        }
-        .cecorRight {
-          width: 100%;
-          .cecorHead {
-            display: flex;
-            justify-content: space-between;
-            p {
-              height: 17px;
-              font-size: 13px;
-              font-weight: 400;
-              text-align: left;
-              color: #999999;
-              line-height: 19px;
-            }
-          }
-          .cecorMain {
-            padding-top: 10px;
-            box-sizing: border-box;
-            p {
-              color: #666666;
-              font-size: 14px;
-              line-height: 22px;
-            }
-          }
-        }
-      }
+      // overflow-x: hidden;
+      // overflow-y: auto;
     }
   }
 }
