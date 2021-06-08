@@ -89,11 +89,11 @@
           :class="advanced == true ? 'el-icon-arrow-down' : ' el-icon-arrow-up'"
         ></i>
       </div>
-      <!-- <p class="shuxian"></p>
+      <p class="shuxian"></p>
       <div class="synthesizeBox" @click="handleIsSynthesize">
         <i class="synthesizeIcon"></i>
         综合搜索
-      </div> -->
+      </div>
     </div>
     <el-button
       v-if="typeId != 1"
