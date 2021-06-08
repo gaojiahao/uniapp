@@ -179,7 +179,7 @@ router.beforeEach(async (to, from, next) => {
         store.commit("setRouters", menus.data.result.item.modulesList || []);
         await getMenuFuc();
       }
-      next();
+      next({ path: "/bsIndex" });
     } else {
       const validityPeriod = localStorage.getItem("validityPeriod");
       if (validityPeriod) {
@@ -210,16 +210,6 @@ router.beforeEach(async (to, from, next) => {
               "setComparnyId",
               res.data.result.commparnyList[0].commparnyId
             );
-            // 清空菜单状态
-            const fd = {
-              component: "bsHome",
-              label: "后台首页",
-              linkUrl: "/bsIndex/bsHome",
-              name: "/bsIndex/bsHome",
-              refresh: true
-            };
-            store.commit("updateActiveTab", fd);
-            store.commit("closeTabAll");
             // 登录成功获取系统参数
             const Json = {};
             Json.MessageRestriction = await getClientTypeList(
@@ -253,7 +243,17 @@ router.beforeEach(async (to, from, next) => {
               );
               await getMenuFuc();
             }
-            next();
+            // 清空菜单状态
+            const fd = {
+              component: "bsHome",
+              label: "后台首页",
+              linkUrl: "/bsIndex/bsHome",
+              name: "/bsIndex/bsHome",
+              refresh: true
+            };
+            store.commit("updateActiveTab", fd);
+            store.commit("closeTabAll");
+            next({ path: "/bsIndex" });
           }
         } else {
           sessionStorage.clear();
