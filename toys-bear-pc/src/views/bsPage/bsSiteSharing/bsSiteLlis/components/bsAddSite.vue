@@ -159,10 +159,7 @@
           <div class="formula" id="formula">
             <div class="title">报价公式</div>
             <el-form-item label="默认公式：" prop="defaultFormula">
-              <el-select
-                v-model="clienFormData.defaultFormula"
-                placeholder="请选择"
-              >
+              <el-select v-model="defaultFormula" placeholder="请选择">
                 <el-option
                   v-for="(item, i) in customerTemplate"
                   :key="i"
@@ -615,9 +612,6 @@ export default {
         customerInfoId: [
           { required: true, message: "请选择客户", trigger: "change" }
         ],
-        defaultFormula: [
-          { required: true, message: "请选择公式", trigger: "change" }
-        ],
         offerMethod: [
           { required: true, message: "请选择报价方式", trigger: "change" }
         ],
@@ -692,10 +686,12 @@ export default {
     async handleAddadv() {
       this.advertisingTable = this.listChecked;
       for (let i = 0; i < this.advertisingTable.length; i++) {
-        this.advertisingTable[i].linkUrl = "";
+        for (let j = 0; j < this.listChecked.length; j++) {
+          this.advertisingTable[i].linkUrl = this.listChecked[i].defaultLinkUrl;
+        }
       }
-      // console.log(this.advertisingTable);
-      // this.advertisingDialog = false;
+      console.log(this.advertisingTable);
+      this.advertisingDialog = false;
     },
     // 获取广告管理列表
     async GetWebsiteShareAdPage() {
@@ -731,13 +727,54 @@ export default {
     handleDeleteAdvertising(index) {
       this.advertisingTable.splice(index, 1);
     },
+    // 提交新增 | 编辑 分享
+    async subProcessingLog() {
+      this.$refs.addClientFormRef.validate(async valid => {
+        if (valid) {
+          let url = "/api/CreateWebsiteShareInfo";
+          if (this.isEdit) url = "/api/UpdateWebsiteShareInfo";
+          const list = [];
+          for (let i = 0; i < this.clienFormData.websiteLanguage.length; i++) {
+            for (let j = 0; j < this.langs.length; j++) {
+              if (this.langs[j].id == this.clienFormData.websiteLanguage[i]) {
+                list.push(this.langs[j]);
+                break;
+              }
+            }
+          }
+          this.clienFormData.websiteLanguage = JSON.stringify(list);
+          for (const key in this.clienFormData) {
+            if (
+              this.clienFormData[key] == "undefined" ||
+              this.clienFormData[key] == null ||
+              this.clienFormData[key] == "" ||
+              this.clienFormData[key] == undefined ||
+              this.clienFormData[key] == "null"
+            ) {
+              delete this.clienFormData[key];
+            }
+          }
+          const res = await this.$http.post(url, this.clienFormData);
+          if (res.data.result.code === 200) {
+            this.shareId = res.data.result.item.id;
+            this.CreateWebsiteShareAdRelationList();
+            this.$emit("submit");
+          } else {
+            this.$common.handlerMsgState({
+              msg: res.data.result.msg,
+              type: "danger"
+            });
+          }
+        }
+      });
+    },
     // 新增广告关联/覆盖广告关联
     async CreateWebsiteShareAdRelationList() {
       if (this.advertisingTable.length > 0) {
         for (let i = 0; i < this.advertisingTable.length; i++) {
           this.relations.push({
             adId: this.advertisingTable[i].id,
-            linkUrl: this.advertisingTable[i].defaultLinkUrl,
+            linkUrl: this.advertisingTable[i].linkUrl,
             sort: i
           });
         }
@@ -764,7 +801,6 @@ export default {
     },
     // 编辑input
     handleUpdataAdvertising(item) {
-      console.log(item);
       const fd = {
         adId: this.clienFormData.id,
         type: 1,
@@ -905,47 +941,7 @@ export default {
         });
       }
     },
-    // 提交新增 | 编辑 分享
-    async subProcessingLog() {
-      this.$refs.addClientFormRef.validate(async valid => {
-        if (valid) {
-          let url = "/api/CreateWebsiteShareInfo";
-          if (this.isEdit) url = "/api/UpdateWebsiteShareInfo";
-          const list = [];
-          for (let i = 0; i < this.clienFormData.websiteLanguage.length; i++) {
-            for (let j = 0; j < this.langs.length; j++) {
-              if (this.langs[j].id == this.clienFormData.websiteLanguage[i]) {
-                list.push(this.langs[j]);
-                break;
-              }
-            }
-          }
-          this.clienFormData.websiteLanguage = JSON.stringify(list);
-          for (const key in this.clienFormData) {
-            if (
-              this.clienFormData[key] == "undefined" ||
-              this.clienFormData[key] == null ||
-              this.clienFormData[key] == "" ||
-              this.clienFormData[key] == undefined ||
-              this.clienFormData[key] == "null"
-            ) {
-              delete this.clienFormData[key];
-            }
-          }
-          const res = await this.$http.post(url, this.clienFormData);
-          if (res.data.result.code === 200) {
-            this.shareId = res.data.result.item.id;
-            this.CreateWebsiteShareAdRelationList();
-            this.$emit("submit");
-          } else {
-            this.$common.handlerMsgState({
-              msg: res.data.result.msg,
-              type: "danger"
-            });
-          }
-        }
-      });
-    },
+
     // 关联站点
     async getCreateWebsiteShareAdRelation(item) {
       const fd = {
@@ -1038,7 +1034,7 @@ export default {
         }
       }
     },
-    "clienFormData.defaultFormula": {
+    defaultFormula: {
       deep: true,
       handler(newVal) {
         if (newVal) {

@@ -347,7 +347,7 @@
                 </div>
               </div>
               <el-button
-                @click="getProductList(false)"
+                @click="textSearchProducts"
                 type="primary"
                 style="margin-left: 10px"
                 size="mini"
@@ -1029,9 +1029,8 @@ export default {
         this.dialogVisible = true;
       });
     },
-    // 文字搜
+    // 确定文字搜索
     textSearchProducts() {
-      this.currentPage = 1;
       this.getProductList(false);
     },
     handleIsgaoji(val) {
@@ -1582,7 +1581,11 @@ export default {
         return false;
       }
       this.currentPage--;
-      this.getProductList(false);
+      if (this.isSynthesizeSearch) {
+        this.getSyntheProductList();
+      } else {
+        this.getProductList(false);
+      }
     },
     // 下一页
     nextEvent() {
@@ -1722,6 +1725,7 @@ export default {
 
     // 点击搜索-文字搜索
     eventBus.$on("searchProducts", () => {
+      this.isSynthesizeSearch = false;
       this.currentPage = 1;
       this.getProductList(false);
     });
