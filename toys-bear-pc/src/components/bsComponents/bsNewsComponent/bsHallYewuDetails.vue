@@ -343,19 +343,74 @@ export default {
   },
   methods: {
     // 一键加购
-    openAdd() {
-      this.$common.handlerMsgState({
-        msg: "敬请期待",
-        type: "warning"
+    async openAdd() {
+      // this.$common.handlerMsgState({
+      //   msg: "敬请期待",
+      //   type: "warning"
+      // });
+      const res = await this.$http.post("/api/OnekeyShopping", {
+        orderNumber: this.item.orderNumber,
+        orderType: this.item.orderType
       });
-      // this.$http
-      //   .post("/api/OnekeyShopping", {
-      //     orderNumber: this.item.orderNumber,
-      //     orderType: this.item.orderType
-      //   })
-      //   .then(res => {
-      //     console.log(res);
-      //   });
+      console.log(res);
+      if (res.data.result.code === 200) {
+        if (res.data.result.item.productNumber) {
+          this.$confirm("产品数量：" + res.data.result.item.productCount, {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消"
+          })
+            .then(async () => {
+              this.$store.commit("updateAppLoading", true);
+              const res = await this.$http.post(
+                "/api/AddShoppingCart",
+                {
+                  userID: this.userInfo.userInfo.id,
+                  companyNumber: this.userInfo.commparnyList[0].companyNumber,
+                  // sourceFrom: "active",
+                  sourceFrom: "QRCodeSearch",
+                  number: 1,
+                  currency: "￥",
+                  Price: 0,
+                  shopType: "companysamples",
+                  productNumber: this.QRcodeValue.productNumber
+                },
+                {
+                  timeout: 9999999
+                }
+              );
+              if (res.data.result.code === 200) {
+                this.getShoppingCartList();
+                this.$common.handlerMsgState({
+                  msg: res.data.result.msg,
+                  type: "success"
+                });
+              } else {
+                this.$common.handlerMsgState({
+                  msg: res.data.result.msg,
+                  type: "danger"
+                });
+              }
+
+              this.showCodeValue = false;
+            })
+            .catch(() => {
+              this.$common.handlerMsgState({
+                msg: "取消加购",
+                type: "warning"
+              });
+            });
+        } else {
+          this.$common.handlerMsgState({
+            msg: "产品编号为空",
+            type: "danger"
+          });
+        }
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
     },
     // 获取合计total
     async getERPOrderTotal() {
