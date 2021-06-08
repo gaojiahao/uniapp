@@ -1339,6 +1339,9 @@ export default {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
           delete fd[key];
         }
+        if (key != "isUpInsetImg" && fd[key] === false) {
+          delete fd[key];
+        }
       }
       fd.skipCount = this.currentPage;
       fd.maxResultCount = this.pageSize;
