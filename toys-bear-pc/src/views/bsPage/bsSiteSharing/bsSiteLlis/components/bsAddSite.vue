@@ -21,12 +21,12 @@
           >
             报价公式
           </div>
-          <!-- <div
+          <div
             :class="{ item: true, active: tp == 3 }"
             @click="handleTab('advertising', 3)"
           >
             站点广告
-          </div> -->
+          </div>
         </div>
         <div
           class="rightBox"
@@ -159,7 +159,10 @@
           <div class="formula" id="formula">
             <div class="title">报价公式</div>
             <el-form-item label="默认公式：" prop="defaultFormula">
-              <el-select v-model="defaultFormula" placeholder="请选择">
+              <el-select
+                v-model="clienFormData.defaultFormula"
+                placeholder="请选择"
+              >
                 <el-option
                   v-for="(item, i) in customerTemplate"
                   :key="i"
@@ -330,7 +333,7 @@
               </div>
             </div>
           </div>
-          <!-- <div class="advertising" id="advertising">
+          <div class="advertising" id="advertising">
             <div class="advertisingTising">
               <div class="title">站点广告</div>
               <el-button
@@ -378,7 +381,7 @@
                   </el-image>
                 </template>
               </el-table-column>
-              <el-table-column prop="LinkUrl" label="链接" align="center">
+              <el-table-column prop="linkUrl" label="链接" align="center">
                 <template slot-scope="scope">
                   <el-input
                     @blur="handleUpdataAdvertising(scope.row)"
@@ -390,9 +393,8 @@
               <el-table-column label="操作" align="center" width="120">
                 <template slot-scope="scope">
                   <div class="handle">
-                    排序接口还没有
                     <img
-                      @click="handlegoUp(scope.$index, scope.row)"
+                      @click="handlegoUp(scope.row)"
                       src="@/assets/images/up_f.png"
                       alt=""
                     />
@@ -406,7 +408,7 @@
                 </template>
               </el-table-column>
             </el-table>
-          </div> -->
+          </div>
         </div>
       </div>
     </el-form>
@@ -520,12 +522,6 @@
 <script>
 export default {
   props: {
-    clientList: {
-      type: Array,
-      default: () => {
-        return [];
-      }
-    },
     isEdit: {
       type: Boolean,
       default: false
@@ -542,9 +538,13 @@ export default {
   },
   data() {
     return {
+      idList: [],
+      shareId: null, //分享站点Id
+      relations: [],
       listChecked: [],
       advertisingTable: [],
       advertisingData: [],
+      clientList: [],
       defaultFormula: null,
       langs: [],
       total: 0,
@@ -597,6 +597,7 @@ export default {
         websiteLanguage: [
           { required: true, message: "请选择语言", trigger: "change" }
         ],
+
         isCustomerInfo: [
           { required: true, message: "请选择是否提交资料", trigger: "change" }
         ],
@@ -613,6 +614,9 @@ export default {
         profit: [{ required: true, message: "请输入利润率", trigger: "blur" }],
         customerInfoId: [
           { required: true, message: "请选择客户", trigger: "change" }
+        ],
+        defaultFormula: [
+          { required: true, message: "请选择公式", trigger: "change" }
         ],
         offerMethod: [
           { required: true, message: "请选择报价方式", trigger: "change" }
@@ -639,18 +643,14 @@ export default {
     };
   },
   methods: {
-    // 确定选择
-    async handleAddadv() {
-      this.advertisingTable = this.listChecked;
-      this.advertisingDialog = false;
-    },
     // 查询分享站点Id下的所有广告
     async getGetWebsiteShareAdByShareIdList() {
       const res = await this.$http.post("/api/GetWebsiteShareAdByShareIdList", {
-        shareId: this.clienFormData.websiteInfoId
+        shareId: this.clienFormData.id
       });
       if (res.data.result.code === 200) {
         this.advertisingTable = res.data.result.item;
+        console.log(this.advertisingTable, "编辑站点下的广告列表");
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -666,22 +666,36 @@ export default {
     },
     // 添加广告弹框
     addAdvertising() {
-      this.GetWebsiteShareAdPage();
-      if (this.advertisingTable.length > 0) {
-        let id = this.advertisingTable.map(item => {
-          if (item.checked == true) {
-            return item.id;
-          }
+      if (
+        this.clienFormData.websiteInfoId == null ||
+        this.clienFormData.websiteInfoId == ""
+      ) {
+        this.$message({
+          message: "请先选择站点域名",
+          type: "warning"
         });
-        for (let i = 0; i < this.advertisingData.length; i++) {
-          for (let j = 0; j < id.length; j++) {
-            if (this.advertisingTable[j].id == this.advertisingData[i].id) {
-              this.advertisingData[i].checked = false;
+      } else {
+        console.log(this.advertisingTable);
+        if (this.advertisingTable.length > 0) {
+          for (let i = 0; i < this.advertisingData.length; i++) {
+            for (let j = 0; j < this.advertisingTable.length; j++) {
+              if (this.advertisingTable[j].id == this.advertisingData[i].id) {
+                this.advertisingData[i].checked = true;
+              }
             }
           }
         }
+        this.advertisingDialog = true;
       }
-      this.advertisingDialog = true;
+    },
+    // 确定选择
+    async handleAddadv() {
+      this.advertisingTable = this.listChecked;
+      for (let i = 0; i < this.advertisingTable.length; i++) {
+        this.advertisingTable[i].linkUrl = "";
+      }
+      // console.log(this.advertisingTable);
+      // this.advertisingDialog = false;
     },
     // 获取广告管理列表
     async GetWebsiteShareAdPage() {
@@ -702,7 +716,84 @@ export default {
         });
       }
     },
-
+    //排序
+    handlegoUp(row) {
+      console.log(row);
+      for (let i = 0; i < this.advertisingTable.length; i++) {
+        if (this.advertisingTable[i].id === row.id) {
+          this.advertisingTable.splice(i, 1);
+          break;
+        }
+      }
+      this.advertisingTable.unshift(row);
+    },
+    // 删除单个广告关联
+    handleDeleteAdvertising(index) {
+      this.advertisingTable.splice(index, 1);
+    },
+    // 新增广告关联/覆盖广告关联
+    async CreateWebsiteShareAdRelationList() {
+      if (this.advertisingTable.length > 0) {
+        for (let i = 0; i < this.advertisingTable.length; i++) {
+          this.relations.push({
+            adId: this.advertisingTable[i].id,
+            linkUrl: this.advertisingTable[i].defaultLinkUrl,
+            sort: i
+          });
+        }
+      }
+      const fd = {
+        shareId: this.shareId,
+        relations: this.relations
+      };
+      const res = await this.$http.post(
+        "/api/CreateWebsiteShareAdRelationList",
+        fd
+      );
+      if (res.data.result.code === 200) {
+        this.$common.handlerMsgState({
+          msg: "操作成功",
+          type: "success"
+        });
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
+    // 编辑input
+    handleUpdataAdvertising(item) {
+      console.log(item);
+      const fd = {
+        adId: this.clienFormData.id,
+        type: 1,
+        relations: [
+          {
+            id: item.id,
+            linkUrl: item.linkUrl
+          }
+        ]
+      };
+      this.getUpdate(fd);
+    },
+    async getUpdate(fd) {
+      const res = await this.$http.post(
+        "/api/UpdateWebsiteShareAdRelation",
+        fd
+      );
+      if (res.data.result.code === 200) {
+        this.$common.handlerMsgState({
+          msg: "编辑成功",
+          type: "success"
+        });
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
     // 下拉框输入事件
     selectBlur(val) {
       if (isNaN(Number(val))) {
@@ -750,6 +841,22 @@ export default {
           }
         }
       });
+    },
+    // 获取客户列表
+    async getClientList() {
+      const fd = {
+        skipCount: this.clientCurrentPage,
+        maxResultCount: this.clientPageSize
+      };
+      for (const key in fd) {
+        if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
+          delete fd[key];
+        }
+      }
+      const res = await this.$http.post("/api/SearchCustomerInfosPage", fd);
+      if (res.data.result.code === 200) {
+        this.clientList = res.data.result.item.items;
+      }
     },
     // 打开新增客户
     openAddMyClient() {
@@ -814,7 +921,6 @@ export default {
             }
           }
           this.clienFormData.websiteLanguage = JSON.stringify(list);
-
           for (const key in this.clienFormData) {
             if (
               this.clienFormData[key] == "undefined" ||
@@ -826,25 +932,11 @@ export default {
               delete this.clienFormData[key];
             }
           }
-
           const res = await this.$http.post(url, this.clienFormData);
           if (res.data.result.code === 200) {
-            if (this.advertisingTable.length > 0) {
-              for (
-                let index = 0;
-                index < this.advertisingTable.length;
-                index++
-              ) {
-                this.getCreateWebsiteShareAdRelation(
-                  this.advertisingTable[index]
-                );
-              }
-            }
+            this.shareId = res.data.result.item.id;
+            this.CreateWebsiteShareAdRelationList();
             this.$emit("submit");
-            this.$common.handlerMsgState({
-              msg: "操作成功",
-              type: "success"
-            });
           } else {
             this.$common.handlerMsgState({
               msg: res.data.result.msg,
@@ -900,10 +992,41 @@ export default {
       console.log(this.clienFormData, "编辑传过来的数据");
       this.getGetWebsiteShareAdByShareIdList();
     }
+    // this.defaultFormula = JSON.stringify(this.customerTemplate[0]);
+    await this.getClientList();
     await this.getLanguageType();
     await this.getSelectCompanyOffer();
+    await this.GetWebsiteShareAdPage();
   },
   watch: {
+    "clienFormData.profit": {
+      deep: true,
+      handler(newVal) {
+        if (newVal == 100) {
+          if (this.clienFormData.profitCalcMethod == 2) {
+            this.clienFormData.profit = 10;
+            this.$common.handlerMsgState({
+              msg: "除法利润率不可为100",
+              error: "danger"
+            });
+          }
+        }
+      }
+    },
+    "clienFormData.profitCalcMethod": {
+      deep: true,
+      handler(newVal) {
+        if (newVal == 2) {
+          if (this.clienFormData.profit == 100) {
+            this.clienFormData.profit = 10;
+            this.$common.handlerMsgState({
+              msg: "除法利润率不可为100",
+              error: "danger"
+            });
+          }
+        }
+      }
+    },
     "clienFormData.currencyType": {
       deep: true,
       handler(newVal) {
@@ -915,7 +1038,7 @@ export default {
         }
       }
     },
-    defaultFormula: {
+    "clienFormData.defaultFormula": {
       deep: true,
       handler(newVal) {
         if (newVal) {
