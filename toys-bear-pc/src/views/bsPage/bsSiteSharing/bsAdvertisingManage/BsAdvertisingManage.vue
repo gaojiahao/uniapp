@@ -289,6 +289,12 @@ export default {
     //新增
     handleAddAdvertising() {
       this.dialogTitle = "新增广告图";
+      this.editImages = [];
+      this.dialogFromData = {
+        imgUrl: "",
+        title: null,
+        defaultLinkUrl: null
+      };
       this.isDialog = true;
     },
     // 选择图片/判断图片大小尺寸
@@ -423,13 +429,7 @@ export default {
       this.dialogTitle = "编辑广告图";
       this.isDialog = true;
       if (item.imgUrl) this.$set(this, "editImages", [{ url: item.imgUrl }]);
-      // this.dialogFromData = Object.assign({}, item);
-      this.dialogFromData.id = item.id;
-      this.dialogFromData.title = item.title;
-      this.dialogFromData.imgUrl = item.imgUrl;
-      this.dialogFromData.defaultLinkUrl = item.defaultLinkUrl;
-
-      console.log(this.dialogFromData);
+      this.dialogFromData = JSON.parse(JSON.stringify(item));
     },
     // 确定编辑请求
     async comfirmUpdateAdvertising() {

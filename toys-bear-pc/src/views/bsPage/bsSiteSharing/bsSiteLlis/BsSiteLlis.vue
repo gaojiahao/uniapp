@@ -226,7 +226,6 @@
       width="930px"
     >
       <bsAddSite
-        :clientList="clientList"
         :customerTemplate="customerTemplate"
         :myFormData="myFormData"
         :handSitesList="handSitesList"
@@ -275,7 +274,6 @@ export default {
       staffList: [],
       clientCurrentPage: 1,
       clientPageSize: 999,
-      clientKeyword: "",
       keyword: null,
       tableData: [],
       totalCount: 0,
@@ -284,8 +282,6 @@ export default {
       QRCodeDialog: false,
       QRCodeUrl: "",
       customerTemplate: [],
-      clientListTotalCount: 0,
-      clientList: [],
       addClienDialog: false,
       dialogTitle: "新增站点",
       defaultShareDomain: []
@@ -294,7 +290,6 @@ export default {
   methods: {
     // 提交
     submit() {
-      console.log(12345687979798);
       this.isEdit = false;
       this.addClienDialog = false;
       this.getDataList();
@@ -420,7 +415,6 @@ export default {
     openAddClien() {
       this.isEdit = false;
       this.dialogTitle = "新增站点";
-      // this.defaultFormula = JSON.stringify(this.customerTemplate[0]);
       this.addClienDialog = true;
     },
     // 获取客户报价模板
@@ -442,8 +436,8 @@ export default {
     openEdit(row) {
       this.dialogTitle = "编辑站点";
       this.isEdit = true;
-      this.myFormData = row;
       this.addClienDialog = true;
+      this.myFormData = row;
     },
     // 生成二维码
     generateQRCode(url) {
@@ -477,98 +471,11 @@ export default {
         type: "success"
       });
     },
-    // 搜索客户
-    filterMethod(val) {
-      this.clientKeyword = val;
-      if (this.timer) {
-        // 如果存在延时器就清除
-        clearTimeout(this.timer);
-      }
-      this.timer = setTimeout(() => {
-        this.getClientList();
-      }, 1000);
-    },
 
-    // 获取客户列表
-    async getClientList() {
-      const fd = {
-        skipCount: this.clientCurrentPage,
-        maxResultCount: this.clientPageSize
-      };
-      for (const key in fd) {
-        if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
-          delete fd[key];
-        }
-      }
-      const res = await this.$http.post("/api/SearchCustomerInfosPage", fd);
-      if (res.data.result.code === 200) {
-        this.clientList = res.data.result.item.items;
-        this.clientListTotalCount = res.data.result.item.totalCount;
-      }
-    },
     // 搜索
     search() {
       this.currentPage = 1;
       this.getDataList();
-    },
-    handlegoUp(index, row) {
-      for (var i = 0; i < this.advertisingTable.length; i++) {
-        if (this.advertisingTable[i] === index) {
-          this.advertisingTable.splice(i, 1);
-          break;
-        }
-      }
-      this.advertisingTable.unshift(row);
-    },
-
-    // 删除广告关联
-    async handleDeleteAdvertising(index, item) {
-      const res = await this.$http.post("/api/DeleteWebsiteShareAdRelation", {
-        id: item.id
-      });
-      if (res.data.result.code === 200) {
-        this.advertisingTable.splice(index, 1);
-        this.$common.handlerMsgState({
-          msg: "删除成功",
-          type: "success"
-        });
-      } else {
-        this.$common.handlerMsgState({
-          msg: res.data.result.msg,
-          type: "danger"
-        });
-      }
-    },
-    // 编辑input
-    handleUpdataAdvertising(item) {
-      const fd = {
-        adId: item.adId,
-        type: 1,
-        relations: [
-          {
-            id: item.id,
-            linkUrl: item.linkUrl
-          }
-        ]
-      };
-      this.getUpdate(fd);
-    },
-    async getUpdate(fd) {
-      const res = await this.$http.post(
-        "/api/UpdateWebsiteShareAdRelation",
-        fd
-      );
-      if (res.data.result.code === 200) {
-        this.$common.handlerMsgState({
-          msg: "编辑成功",
-          type: "success"
-        });
-      } else {
-        this.$common.handlerMsgState({
-          msg: res.data.result.msg,
-          type: "danger"
-        });
-      }
     }
   },
   computed: {
@@ -576,59 +483,58 @@ export default {
   },
   created() {
     this.getDataList();
-    this.getClientList();
     this.getStaffList();
     this.getDefaultSites();
     this.getSelectProductOfferFormulaList();
   },
   mounted() {},
   watch: {
-    defaultFormula: {
-      deep: true,
-      handler(newVal) {
-        if (newVal) {
-          console.log(newVal);
-          const obj = JSON.parse(newVal);
-          this.clienFormData.profit = obj.profit;
-          this.clienFormData.offerMethod = obj.offerMethod;
-          this.clienFormData.currencyType = obj.cu_de;
-          this.clienFormData.currencyTypeName = obj.cu_deName;
-          this.clienFormData.exchange = obj.exchange;
-          this.clienFormData.size = obj.size;
-          // this.clienFormData.showNumber = obj.showNumber;
-          this.clienFormData.decimalPlaces = obj.decimalPlaces;
-          this.clienFormData.rejectionMethod = obj.rejectionMethod;
-        }
-      }
-    },
-    "clienFormData.profit": {
-      deep: true,
-      handler(newVal) {
-        if (newVal == 100) {
-          if (this.clienFormData.profitCalcMethod == 2) {
-            this.clienFormData.profit = 10;
-            this.$common.handlerMsgState({
-              msg: "除法利润率不可为100",
-              error: "danger"
-            });
-          }
-        }
-      }
-    },
-    "clienFormData.profitCalcMethod": {
-      deep: true,
-      handler(newVal) {
-        if (newVal == 2) {
-          if (this.clienFormData.profit == 100) {
-            this.clienFormData.profit = 10;
-            this.$common.handlerMsgState({
-              msg: "除法利润率不可为100",
-              error: "danger"
-            });
-          }
-        }
-      }
-    }
+    // defaultFormula: {
+    //   deep: true,
+    //   handler(newVal) {
+    //     if (newVal) {
+    //       console.log(newVal);
+    //       const obj = JSON.parse(newVal);
+    //       this.clienFormData.profit = obj.profit;
+    //       this.clienFormData.offerMethod = obj.offerMethod;
+    //       this.clienFormData.currencyType = obj.cu_de;
+    //       this.clienFormData.currencyTypeName = obj.cu_deName;
+    //       this.clienFormData.exchange = obj.exchange;
+    //       this.clienFormData.size = obj.size;
+    //       // this.clienFormData.showNumber = obj.showNumber;
+    //       this.clienFormData.decimalPlaces = obj.decimalPlaces;
+    //       this.clienFormData.rejectionMethod = obj.rejectionMethod;
+    //     }
+    //   }
+    // },
+    // "clienFormData.profit": {
+    //   deep: true,
+    //   handler(newVal) {
+    //     if (newVal == 100) {
+    //       if (this.clienFormData.profitCalcMethod == 2) {
+    //         this.clienFormData.profit = 10;
+    //         this.$common.handlerMsgState({
+    //           msg: "除法利润率不可为100",
+    //           error: "danger"
+    //         });
+    //       }
+    //     }
+    //   }
+    // },
+    // "clienFormData.profitCalcMethod": {
+    //   deep: true,
+    //   handler(newVal) {
+    //     if (newVal == 2) {
+    //       if (this.clienFormData.profit == 100) {
+    //         this.clienFormData.profit = 10;
+    //         this.$common.handlerMsgState({
+    //           msg: "除法利润率不可为100",
+    //           error: "danger"
+    //         });
+    //       }
+    //     }
+    //   }
+    // }
   }
 };
 </script>
