@@ -1570,6 +1570,7 @@ export default {
     },
     // 确认高级搜索
     confirmAdvanced() {
+      this.currentPage = 1;
       // this.searchForm.keyword = this.$refs.searchRef.searchForm.keyword;
       this.getProductList(false);
     },
