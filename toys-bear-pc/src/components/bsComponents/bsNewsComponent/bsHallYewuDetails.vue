@@ -144,10 +144,10 @@
               <span class="countItem_title">产品数量：</span>
               <span>{{ addShopOption.productCount }}</span>
             </p>
-            <p class="countItem">
+            <!-- <p class="countItem">
               <span class="countItem_title">下架产品数：</span>
               <span>{{ addShopOption.productCount }}</span>
-            </p>
+            </p> -->
           </div>
           <div class="countItem_btns">
             <el-button size="medium" @click="close">取消</el-button>
