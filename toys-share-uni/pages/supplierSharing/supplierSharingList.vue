@@ -8,10 +8,10 @@
 				<view class="product_box">
 					<view class="tool_bar">
 						<template v-if="!isMobile">
-							<view class="tool_bar_item" :class="[sortType==0?'active':'']" @click="change_search_type(0)">综合</view>
-							<view class="tool_bar_item" :class="[sortType==3?'active':'']" @click="change_search_type(3)">热度<u-icon :name="hotType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
-							<view class="tool_bar_item" :class="[sortType==1?'active':'']" @click="change_search_type(1)">单价<u-icon :name="priceType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
-							<view class="tool_bar_item" :class="[sortType==2?'active':'']" @click="change_search_type(2)">时间<u-icon :name="timeType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+							<view class="tool_bar_item" :class="[sortOrder==0?'active':'']" @click="change_search_type(0)">综合</view>
+							<view class="tool_bar_item" :class="[sortOrder==3?'active':'']" @click="change_search_type(3)">热度<u-icon :name="hotType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+							<view class="tool_bar_item" :class="[sortOrder==1?'active':'']" @click="change_search_type(1)">单价<u-icon :name="priceType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+							<view class="tool_bar_item" :class="[sortOrder==2?'active':'']" @click="change_search_type(2)">时间<u-icon :name="timeType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
 							<view class="tool_bar_item guanjianci">关键词</view>
 							<view class="tool_bar_item search">
 								<x-search placeholder="请输入关键词" height="64" shape="square" v-model="keyword" :clearabled="true"
@@ -149,8 +149,8 @@ export default {
 			totalPage:1, //总页数 (引用页面传递过来)
 			total:0, //总记录数 (引用页面传递过来)
 			pageSize:8,
-			sortOrder:0, //1倒序，2升序
-			sortType:0,  //1价格，2时间，3热度
+			sortOrder:0, //1价格，2时间，3热度
+			sortType:0,  //1倒序，2升序
 			hotType:1,
 			priceType:1,
 			timeType:1,
@@ -171,17 +171,17 @@ export default {
 				this.sortType = 0;
 				this.sortOrder = 0;
 			} else if(type==1){
-				this.sortType = 1;
+				this.sortOrder = 1;
 				this.priceType = this.priceType == 1 ? 2:1;
-				this.sortOrder = this.priceType;
+				this.sortType = this.priceType;
 			} else if(type==2){
-				this.sortType = 2;
+				this.sortOrder = 2;
 				this.timeType = this.timeType == 1 ? 2:1;
-				this.sortOrder = this.timeType;
+				this.sortType = this.timeType;
 			} else if(type==3){
-				this.sortType = 3;
+				this.sortOrder = 3;
 				this.hotType = this.hotType == 1 ? 2:1;
-				this.sortOrder = this.hotType;
+				this.sortType = this.hotType;
 			}
 			this.getData();
 		},
@@ -192,22 +192,19 @@ export default {
 		async getData(value,keyword) {
 			var me = this;
 			me.$loading.show();
-			const res = await me.$u.api.SupplierProducts({
-				companyNumber: uni.getStorageSync('supplier_sharing_companyNumber'),
+			const res = await me.$u.api.SupplierShareProducts({
+				shareCode: uni.getStorageSync('supplier_sharing_shareCode'),
 				skipCount: value||1,
 				maxResultCount: me.pageSize,
-				keyword: keyword||me.keyword,
+				keyWord: keyword||me.keyword,
 				sortOrder: me.sortOrder,
 				sortType: me.sortType,
-				isUpInset3D: true,
-				isUpInsetImg: true,
-				videoId: 1,
+				getProductName: '3DProduct'
 			});
 			if (res.result.code === 200) {
-				me.proudctList = res.result.item;
-				//me.proudctList = res.result.item.items;
-				// me.total = res.result.item.totalCount;
-				// me.totalPage = Math.ceil(me.total / me.pageSize);
+				me.proudctList = res.result.item.threeDProduct.newList;
+				me.total = res.result.item.threeDProduct.totalCount;
+				me.totalPage = Math.ceil(me.total / me.pageSize);
 				me.$loading.hide();
 			} else {
 				uni.showToast({

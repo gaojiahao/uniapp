@@ -550,17 +550,45 @@
 	}
 	.mobile_content{
 		background-color: #FFFFFF;
-		// margin-bottom: 10px;
-		.item{
-			padding:7.5px 30px 7.5px 30px ;
-			font-size: 15px;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-		}
+		padding-bottom: 50px;
 		.active{
 			font-weight: 700;
 			font-size: 16px;
 		}
+		min-height: 280px;
+		.item{
+			padding:7.5px 30px 7.5px 30px ;
+			font-size: 15px;
+			.label{
+				width: 100px;
+				// text-align: right;
+				vertical-align: middle;
+				float: left;
+				font-size: 14px;
+				color: #333;
+				line-height: 30px;
+				padding: 0 12px 0 0;
+				box-sizing: border-box;
+			}
+			.text{
+				line-height: 30px;
+				position: relative;
+				font-size: 14px;
+			}
+		}
+	}
+	.red_color{
+		color: #fa3534 !important;
+	}
+	.mobile_sm_panel{
+		width: 100%;
+		height: 292px;
+		overflow: auto;
+		-webkit-overflow-scrolling:touch;
+	}
+	.mobild_sm_iframe{
+		position: relative;
+		width: 100%;
+		height: 292px;
 	}
 }

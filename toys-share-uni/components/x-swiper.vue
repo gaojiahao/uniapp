@@ -9,11 +9,21 @@
 				backgroundColor: bgColor
 			}">
 			<swiper-item class="u-swiper-item" v-for="(item, index) in list" :key="index">
+				<video
+				  v-if="item.type === 'video'"
+				  id="example_video"
+				  class="video"
+				  controls
+				  poster=""
+				  :src="item.imgUrl"
+				  object-fit="cover"
+				>
+				</video>
 				<view class="u-list-image-wrap" @tap.stop.prevent="listClick(index)" :class="[uCurrent != index ? 'u-list-scale' : '']" :style="{
 						borderRadius: `${borderRadius}rpx`,
 						transform: effect3d && uCurrent != index ? 'scaleY(0.9)' : 'scaleY(1)',
 						margin: effect3d && uCurrent != index ? '0 20rpx' : 0,
-					}">
+					}" v-else>
 					<image class="u-swiper-image" :src="item[name] || item" :mode="imgMode"></image>
 					<view v-if="title && item.title" class="u-swiper-title u-line-1" :style="[{
 							'padding-bottom': titlePaddingBottom
@@ -336,5 +346,9 @@
 		@include vue-flex;
 		overflow: hidden;
 		align-items: center;
+	}
+	.video{
+		width: 100%;
+		height: 100%;
 	}
 </style>

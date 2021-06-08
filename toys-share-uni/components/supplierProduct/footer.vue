@@ -1,5 +1,5 @@
 <template>
-	<view class="footer">
+	<view class="footer" :class="[type=='absolute'?'fixed':'']">
 		<view class="item left"><u-icon name="phone"></u-icon>技术支持：0754-89671122</view>
 		<view class="item">Copyright © 2021深圳宏升软件技术开发有限公司 粤ICP备13031421号-4</view>
 	</view>
@@ -10,6 +10,12 @@
 
 export default {
 	name: "x-footer",
+	props: {
+		type: {
+			type: String,
+			default: 'relative'   //页脚固定位置类型
+		}
+	},
 	data() {
 		return {
 
@@ -59,6 +65,10 @@ export default {
 			flex: 0 0 300px;
 			display: none;
 		}
+	}
+	.fixed{
+		position: fixed;
+		bottom: 0;
 	}
 }
 </style>

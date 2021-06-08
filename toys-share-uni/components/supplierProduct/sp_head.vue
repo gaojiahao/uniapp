@@ -6,21 +6,40 @@
 					<view class="logo">
 						<image :src="contactInfo2.companyLogo" class="image"></image>
 					</view>
-					<view class="title">
+					<view class="title":title="contactInfo2.companyName" >
 						{{contactInfo2.companyName}}
 					</view>
 				</view>
+				<view v-if="isMobile" class="contact_modal" @click="show_modal(true)">
+					<u-icon name="phone"></u-icon>
+				</view>
 				<view class="right">
 					<view class="contact">
-						<view class="item" v-if="contactInfo2.contactsMan">联系人：{{contactInfo2.contactsMan}}</view>
-						<view class="item" v-if="contactInfo2.phoneNumber||contactInfo2.telephoneNumber">联系电话：{{contactInfo2.phoneNumber||contactInfo2.telephoneNumber}}</view>
+						<view class="item" v-if="contactInfo2.contactName" :title="contactInfo2.contactName">联系人：{{contactInfo2.contactName}}</view>
+						<view class="item" v-if="contactInfo2.phoneNumber||contactInfo2.telephone" :title="contactInfo2.phoneNumber||contactInfo2.telephon">联系电话：{{contactInfo2.phoneNumber||contactInfo2.telephone}}</view>
 					</view>
-					<view class="item" v-if="contactInfo2.address">
-						<view>公司地址：{{contactInfo2.address}}</view>
+					<view class="item" v-if="contactInfo2.contactAddress">
+						<view class="address" :title="contactInfo2.contactAddress">公司地址：{{contactInfo2.contactAddress}}</view>
 					</view>
 				</view>
 			</view>
 		</view>
+		<u-modal v-model="is_contact_modal" :width="'80%'" :show-confirm-button="false" :mask-close-able="true" :show-title="false" class="contact_modal">
+			<view class="slot-content">
+				<view class="sm_btn_item">
+					<view class="item">
+						<u-icon name="close" @click="show_modal(false)"></u-icon>
+					</view>
+				</view>
+				<view class="sm_panel">
+					<view class="item active">联系方式</view>
+					<view class="item" v-if="contactInfo2.companyName">公司名称：{{contactInfo2.companyName}}</view>
+					<view class="item" v-if="contactInfo2.contactName">联系人：{{contactInfo2.contactName}}</view>
+					<view class="item" v-if="contactInfo2.phoneNumber||contactInfo2.telephone">联系电话：{{contactInfo2.phoneNumber||contactInfo2.telephone}}</view>
+					<view class="item" v-if="contactInfo2.contactAddress">公司地址：{{contactInfo2.contactAddress}}</view>
+				</view>
+			</view>
+		</u-modal>
 	</view>
 </template>
 
@@ -35,6 +54,10 @@ export default {
 				return {}
 			}
 		},
+		isMobile:{
+			type:Boolean,
+			default:false
+		}
 	},
 	watch:{
 		contactInfo:{
@@ -48,10 +71,13 @@ export default {
 		return {
 			head_logo: require('@/static/images/supplierProduct/logo.png'),
 			contactInfo2:{},
+			is_contact_modal:false //是否展示联系方式
 		}
 	},
 	methods:{
-
+		show_modal(value){
+			this.is_contact_modal = value;
+		}
 	},
 	mounted() {
 		
@@ -96,12 +122,18 @@ export default {
 						line-height: 73px;
 						margin-left: 16px;
 						margin: 22px 0;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						width: 500px;
 					}
 				}
 				.right{
 					margin-left: auto;
 					font-size: 16px;
 					color: #666666;
+					width: 500px;
+					margin-left: 10px;
 					.contact{
 						margin-top: 33px;
 						display: -webkit-box;
@@ -112,10 +144,6 @@ export default {
 						font-size: 16px;
 						height: 21px;
 						text-align: right;
-						.item{
-							margin-left: 10px;
-							margin-bottom: 13px;
-						}
 					}
 					.item{
 						margin-right: 36px;
@@ -123,6 +151,14 @@ export default {
 						font-size: 16px;
 						height: 21px;
 						text-align: right;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						.address{
+							overflow: hidden;
+							text-overflow: ellipsis;
+							white-space: nowrap;
+						}
 					}
 				}
 			}
@@ -164,12 +200,54 @@ export default {
 						line-height: 36.5px;
 						margin-left: 16px;
 						margin: 11px 0;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						width: 200px;
 					}
 				}
 				.right{
 					display: none;
 				}
+				.contact_modal{
+					height: 30px;
+					font-size: 16px;
+					font-weight: 800;
+					color: #fff;
+					line-height: 30px;
+					margin: 14.25px 0 11px 0;
+					margin-left: auto;
+					background: #41aae4;
+					width: 30px;
+					text-align: center;
+					margin-right: 7px;
+					border-radius: 5px;
+				}
 			}
+		}
+	}
+}
+.contact_modal{
+	.sm_btn_item{
+	    display: flex;
+	    margin: 5px;
+		.item{
+			margin-right: 5px;
+			margin-left: auto;
+		}
+	}
+	.sm_panel {
+		width: 100%;
+		padding: 10px;
+		.item{
+			margin-bottom: 10px;
+			// overflow: hidden;
+			// text-overflow: ellipsis;
+			// white-space: nowrap;
+		}
+		.active{
+			font-weight: 700;
+			color: #666666;
 		}
 	}
 }

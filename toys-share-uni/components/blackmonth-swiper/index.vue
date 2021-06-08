@@ -158,8 +158,8 @@
 			text-align: center;
 			vertical-align: middle;
 			width: 45px;
-			height: 40px;
-			line-height: 43px;
+			height: 48px;
+			line-height: 48px;
 		}
 	}
 	.pre:hover{
@@ -182,8 +182,8 @@
 			text-align: center;
 			vertical-align: middle;
 			width: 55px;
-			height: 40px;
-			line-height: 43px;
+			height: 48px;
+			line-height: 48px;
 		}
 	}
 	.next:hover{

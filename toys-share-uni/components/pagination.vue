@@ -1,42 +1,58 @@
 <template>
   <div class="pagination">
-    <div class="count">
-      共
-      <span class="red">{{totalPage}}</span>&nbsp;页
-      <span class="red">{{totalElements}}</span>&nbsp;条记录
-    </div>&ensp;
-    <div
-      class="page-button page-first"
-      :class="{'page-disabled':currentPage <= 1}"
-      @click="jump(1)"
-    >首页</div>&ensp;
-    <div
-      class="page-button page-prev"
-      :class="{'page-disabled':currentPage <= 1}"
-      @click="prev()"
-    >上一页</div>&ensp;
-    <div
-      class="page-button page-nums"
-      v-for="(nPage,index) in pageNumbers"
-      :key="index"
-      :class="{currentPage:nPage+pageOffset==currentPage}"
-      @click="jump(nPage+pageOffset)"
-    >{{nPage+pageOffset}}&ensp;</div>
-    <div
-      class="page-button page-next"
-      :class="{'page-disabled':currentPage >= totalPage || totalPage <= 1}"
-      @click="next()"
-    >下一页</div>&ensp;
-    <div
-      class="page-button page-last"
-      :class="{'page-disabled':currentPage >= totalPage}"
-      @click="jump(totalPage)"
-    >尾页</div>&ensp;
-	<div
-	  class="page-qianwang"
-	>前往</div>&ensp;
-    <input type="number" v-model="newPage" class="pagination_input" @keypress.enter="inputJump()">&ensp;
-    <div class="page-button page-jump" @click="inputJump()">页</div>
+	<div class="pagination_pc">
+		<div class="count" v-if="isMobile">
+		  共
+		  <span class="red">{{totalPage}}</span>&nbsp;页
+		  <span class="red">{{totalElements}}</span>&nbsp;条记录
+		</div>&ensp;
+		<div
+		  class="page-button page-first"
+		  :class="{'page-disabled':currentPage <= 1}"
+		  @click="jump(1)"
+		>首页</div>&ensp;
+		<div
+		  class="page-button page-prev"
+		  :class="{'page-disabled':currentPage <= 1}"
+		  @click="prev()"
+		>上一页</div>&ensp;
+		<div
+		  class="page-button page-nums"
+		  v-for="(nPage,index) in pageNumbers"
+		  :key="index"
+		  :class="{currentPage:nPage+pageOffset==currentPage}"
+		  @click="jump(nPage+pageOffset)"
+		>{{nPage+pageOffset}}&ensp;</div>
+		<div
+		  class="page-button page-next"
+		  :class="{'page-disabled':currentPage >= totalPage || totalPage <= 1}"
+		  @click="next()"
+		>下一页</div>&ensp;
+		<div
+		  class="page-button page-last"
+		  :class="{'page-disabled':currentPage >= totalPage}"
+		  @click="jump(totalPage)"
+		>尾页</div>&ensp;
+		<template v-if="isMobile">
+			<div
+			  class="page-qianwang"
+			>前往</div>&ensp;
+			<input type="number" v-model="newPage" class="pagination_input" @keypress.enter="inputJump()">&ensp;
+			<div class="page-button page-jump" @click="inputJump()">页</div>
+		</template>
+	</div>
+	<div class="pagination_mobile" v-if="!isMobile">
+		<div class="count">
+		  共
+		  <span class="red">{{totalPage}}</span>&nbsp;页
+		  <span class="red">{{totalElements}}</span>&nbsp;条记录
+		</div>&ensp;
+		<div
+		  class="page-qianwang"
+		>前往</div>&ensp;
+		<input type="number" v-model="newPage" class="pagination_input" @keypress.enter="inputJump()">&ensp;
+		<div class="page-button page-jump" @click="inputJump()">页</div>
+	</div>
   </div>
 </template>
 <script>
@@ -63,6 +79,10 @@ export default {
       type: Number,
       default: 7,
     },
+	isMobile: {
+		type:Boolean,
+		default:false
+	}
   },
   data() {
     return {
@@ -119,10 +139,36 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.pagination {
-  padding-bottom: 20px;
-  display: flex;
-  justify-content: center;
+@media screen and (min-width: 768px){
+	.pagination {
+	  padding-bottom: 20px;
+	  display: flex;
+	  justify-content: center;
+	}
+}
+@media (max-width: 767px){
+	.pagination {
+	  padding-bottom: 20px;
+	  display: block;
+	  // justify-content: center;
+	}
+}
+.pagination_pc {
+	display: flex;
+	justify-content: center;
+}
+@media screen and (min-width: 768px){
+	.pagination_mobile{
+		display: flex;
+		justify-content: center;
+	}
+}
+@media screen and (max-width: 767px){
+	.pagination_mobile{
+		display: flex;
+		justify-content: center;
+		font-size: 12px;
+	}
 }
 input[type="number"] {
   width: 4em;
@@ -135,15 +181,30 @@ input[type="number"] {
 .red {
   color: #e4393c;
 }
-.page-button {
-  cursor: pointer;
-  height: 36px;
-  line-height: 36px;
-  user-select: none;
-   padding: 0 14px;
-  &:hover {
-    text-decoration: underline;
-  }
+@media screen and (min-width: 768px){
+	.page-button {
+	  cursor: pointer;
+	  height: 36px;
+	  line-height: 36px;
+	  user-select: none;
+	   padding: 0 14px;
+	  &:hover {
+		text-decoration: underline;
+	  }
+	}
+}
+@media screen and (max-width: 767px){
+	.page-button {
+	  cursor: pointer;
+	  height: 36px;
+	  line-height: 36px;
+	  user-select: none;
+	   padding: 0 7px;
+	   font-size: 12px;
+	  &:hover {
+		text-decoration: underline;
+	  }
+	}
 }
 .page-nums{
   border:1px solid red;
