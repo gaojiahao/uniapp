@@ -95,15 +95,22 @@
                 <div class="name" @click="goDetails(scope.row)">
                   <el-tooltip
                     effect="dark"
-                    :disabled="scope.row.productJson.name.length < 15"
-                    :content="scope.row.productJson.name"
+                    :disabled="
+                      scope.row.productJson &&
+                        scope.row.productJson.name.length < 15
+                    "
+                    :content="
+                      scope.row.productJson && scope.row.productJson.name
+                    "
                     placement="top-start"
                   >
                     <span
                       class=" spanName"
                       style="max-width:190px; display:inline-block"
                     >
-                      {{ scope.row.productJson.name }}</span
+                      {{
+                        scope.row.productJson && scope.row.productJson.name
+                      }}</span
                     >
                   </el-tooltip>
                 </div>
@@ -121,10 +128,18 @@
         </el-table-column>
         <el-table-column align="center" label="联系厂商">
           <template slot-scope="scope">
-            <div v-if="scope.row.supplierJson.phoneNumber">
+            <div
+              v-if="
+                scope.row.supplierJson && scope.row.supplierJson.phoneNumber
+              "
+            >
               {{ scope.row.supplierJson.phoneNumber }}
             </div>
-            <div v-if="scope.row.supplierJson.telephoneNumber">
+            <div
+              v-if="
+                scope.row.supplierJson && scope.row.supplierJson.telephoneNumber
+              "
+            >
               {{ scope.row.supplierJson.telephoneNumber }}
             </div>
           </template>
