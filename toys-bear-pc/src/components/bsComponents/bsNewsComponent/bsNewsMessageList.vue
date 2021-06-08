@@ -888,7 +888,10 @@ export default {
     },
     // 记录聊天消息
     recordMessageHis(fd) {
-      this.$im_http.post("/api/Message/RecordMessageHis", fd);
+      this.$im_http.post("/api/Message/RecordMessageHis", fd).then(() => {
+        this.historyPageIndex = 1;
+        this.getMessageHisByPage(false);
+      });
     },
     // 刷新历史记录
     resetHistoryChat(msg) {
@@ -911,6 +914,8 @@ export default {
         }
         // 清除未读
         this.clearReadInfo();
+        this.historyPageIndex = 1;
+        this.getMessageHisByPage(false);
       });
     },
     // im获取历史消息,聊天窗口消息
