@@ -1344,7 +1344,7 @@ export default {
         if (fd[key] === null || fd[key] === undefined || fd[key] === "") {
           delete fd[key];
         }
-        if (key != "isUpInsetImg" && fd[key] === false) {
+        if (fd[key] === false) {
           delete fd[key];
         }
       }
