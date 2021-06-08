@@ -149,8 +149,8 @@ export default {
 			totalPage:1, //总页数 (引用页面传递过来)
 			total:0, //总记录数 (引用页面传递过来)
 			pageSize:8,
-			sortOrder:0, //1倒序，2升序
-			sortType:0,  //1价格，2时间，3热度
+			sortOrder:0, //1价格，2时间，3热度
+			sortType:0,  //1倒序，2升序
 			hotType:1,
 			priceType:1,
 			timeType:1,
@@ -171,17 +171,17 @@ export default {
 				this.sortType = 0;
 				this.sortOrder = 0;
 			} else if(type==1){
-				this.sortType = 1;
+				this.sortOrder = 1;
 				this.priceType = this.priceType == 1 ? 2:1;
-				this.sortOrder = this.priceType;
+				this.sortType = this.priceType;
 			} else if(type==2){
-				this.sortType = 2;
+				this.sortOrder = 2;
 				this.timeType = this.timeType == 1 ? 2:1;
-				this.sortOrder = this.timeType;
+				this.sortType = this.timeType;
 			} else if(type==3){
-				this.sortType = 3;
+				this.sortOrder = 3;
 				this.hotType = this.hotType == 1 ? 2:1;
-				this.sortOrder = this.hotType;
+				this.sortType = this.hotType;
 			}
 			this.getData();
 		},
@@ -192,17 +192,18 @@ export default {
 		async getData(value,keyword) {
 			var me = this;
 			me.$loading.show();
-			const res = await me.$u.api.RecommendProductByNumberPageShare({
-				companyNumber: uni.getStorageSync('supplier_sharing_companyNumber'),
+			const res = await me.$u.api.SupplierShareProducts({
+				shareCode: uni.getStorageSync('supplier_sharing_shareCode'),
 				skipCount: value||1,
 				maxResultCount: me.pageSize,
-				keyword: keyword||me.keyword,
+				keyWord: keyword||me.keyword,
 				sortOrder: me.sortOrder,
 				sortType: me.sortType,
+				getProductName: 'RecommendProduct'
 			});
 			if (res.result.code === 200) {
-				me.proudctList = res.result.item.items;
-				me.total = res.result.item.totalCount;
+				me.proudctList = res.result.item.recommendProduct.newList;
+				me.total = res.result.item.recommendProduct.totalCount;
 				me.totalPage = Math.ceil(me.total / me.pageSize);
 				me.$loading.hide();
 			} else {

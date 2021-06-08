@@ -57,7 +57,7 @@
 		},
 		{
 			"path": "pages/erpProduct/productDetails",	//产品详情
-			"aliasPath":"/productDetails",
+			"aliasPath":"/productDetails/:id",
 			"style": {
 				"navigationBarTitleText": "productDetails",
 				"app-plus": {
@@ -144,7 +144,7 @@
 		},
 		{
 			"path": "pages/supplierProduct/supplierProductDetail",	//厂商产品分享详情
-			"aliasPath":"/supplierProductDetail",
+			"aliasPath":"/supplierProductDetail/:id",
 			"name":"supplierProductDetail",
 			"style": {
 				"navigationBarTitleText": "厂商产品分享",

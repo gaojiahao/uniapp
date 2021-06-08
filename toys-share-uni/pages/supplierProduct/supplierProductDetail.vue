@@ -21,7 +21,7 @@
 					<view class="product_info">
 						<view class="product_info_box">
 							<view class="left">
-								<spMagnifierComponent ref="magnifierRef" v-if="productDetail.imglist"
+								<spMagnifierComponent ref="magnifierRef" v-if="productDetail.imgUrlList"
 									:productInfos="productDetail"></spMagnifierComponent>
 							</view>
 							<view class="right">
@@ -35,7 +35,7 @@
 									<view class="priceWrap">
 										<!-- 参考单价： -->
 										<span class="priceBox">{{ productDetail.cu_de
-									  }}<span class="price">{{ productDetail.price }}</span></span>
+									  }}<span class="price">{{ productDetail.offerAmount }}</span></span>
 									</view>
 									<view class="textWrap">
 										<view class="textWrap_left">
@@ -133,21 +133,17 @@
 			</view>
 			<view class="mobile_content">
 				<view class="item active">{{productDetail.name}}</view>
-				<view class="item">出厂货号：{{productDetail.fa_no}}</view>
-				<view class="item">包装方式：{{productDetail.ch_pa}}</view>
-				<view class="item">样品规格：{{productDetail.pr_le}}x{{productDetail.pr_wi}}x{{productDetail.pr_hi}}(CM)</view>
-				<view class="item">包装规格：{{productDetail.in_le}}x{{productDetail.in_wi}}x{{productDetail.in_hi}}(CM)</view>
-				<view class="item">外箱规格：{{productDetail.ou_le}}x{{productDetail.ou_wi}}x{{productDetail.ou_hi}}(CM)</view>
-				<view class="item">装箱量：{{productDetail.in_en}}/{{productDetail.ou_lo}}(PCS)</view>
-				<view class="item">体积/材积：{{productDetail.bulk_stere}}(CBM)/{{productDetail.bulk_feet}}(CUFT)</view>
-				<view class="item">毛重/净重：{{productDetail.gr_we}}/{{productDetail.ne_we}}(kg)</view>
-				<view class="item red_color">报价：{{productDetail.cu_de}}{{productDetail.offerAmount}}</view>
-				<view class="item red_color">报价箱数：{{productDetail.boxNumber}}</view>
-				<view class="item red_color">总金额：{{productDetail.cu_de}}{{$calculate.countTotalprice(productDetail.offerAmount,productDetail.ou_lo,productDetail.boxNumber)}}</view>
+				<view class="item"><label class="label">报价：</label><text class="red_color text">{{productDetail.cu_de}}{{productDetail.offerAmount||0}}</text></view>
+				<view class="item"><label class="label">出厂货号：</label><text class="text">{{productDetail.fa_no}}</text></view>
+				<view class="item"><label class="label">包装方式：</label><text class="text">{{productDetail.ch_pa}}</text></view>
+				<view class="item"><label class="label">样品规格：</label><text class="text">{{productDetail.pr_le}}x{{productDetail.pr_wi}}x{{productDetail.pr_hi}}(CM)</text></view>
+				<view class="item"><label class="label">包装规格：</label><text class="text">{{productDetail.in_le}}x{{productDetail.in_wi}}x{{productDetail.in_hi}}(CM)</text></view>
+				<view class="item"><label class="label">外箱规格：</label><text class="text">{{productDetail.ou_le}}x{{productDetail.ou_wi}}x{{productDetail.ou_hi}}(CM)</text></view>
+				<view class="item"><label class="label">装箱量：</label><text class="text">{{productDetail.in_en}}/{{productDetail.ou_lo}}(PCS)</text></view>
+				<view class="item"><label class="label">体积/材积：</label><text class="text">{{productDetail.bulk_stere}}(CBM)/{{productDetail.bulk_feet}}(CUFT)</text></view>
+				<view class="item"><label class="label">毛重/净重：</label><text class="text">{{productDetail.gr_we}}/{{productDetail.ne_we}}(kg)</text></view>
 			</view>
-			<view class="footer">
-				<view class="title">Copyright©2021 深圳小竹熊科技有限公司 粤ICP备13031421号-4</view>
-			</view>
+			<xFooter type='absolute'></xFooter>
 			<u-toast ref="uToast" />
 		</template>
 	</view>
@@ -181,7 +177,7 @@
 				dialogCertificate: false,
 				dataCertificate: {},
 				proudctList:[],
-				background:{ background:'#5365f4'},
+				background:{ background:'#84C9EF'},
 				is_show_pc_modal:false,  //是否显示3d
 			}
 		},
@@ -189,27 +185,61 @@
 			goReturn(){
 				window.history.go(-1);
 			},
-			async dealImgUrl() {
+			dealImgUrl() {
+				var imgs = [];
+				if(this.productDetail.videoAddress){
+					var obj= {
+						type: 'video',
+						imgUrl: this.productDetail.videoAddress,
+					}
+					imgs.push(obj);
+				}
+				// for(var i=0;i<this.productDetail.imglist.length;i++){
+				// 	var obj= {
+				// 		type: 'img',
+				// 		image: this.productDetail.imglist[i].imgUrl,
+				// 	}
+				// 	imgs.push(obj);
+				// }
+				// this.$set(this.productDetail,'imgUrlList',imgs);
+				if(!this.isMobile){
+					this.nowImg = this.productDetail.imgUrlList[0];
+					this.pc_img_index = 0;
+				} else { //有3d就默认显示3d
+					if(this.productDetail.threeDimensional){
+						this.is_show_pc_modal = true;
+					}
+				}
+			},
+			//获取产品信息
+			async getProductByProductNumber() {
 				var me = this;
 				const res = await me.$u.api.GetProductByProductNumber({
 					id: me.$route.params.id
 				});
 				if (res.result.code === 200) {
-					this.productInfo = res.result.item;
+					this.productDetail = res.result.item;
 					var imgs = [];
-					for(var i=0;i<this.productInfo.imgUrlList.length;i++){
+					if(this.productDetail.videoAddress){
 						var obj= {
-							type: 'img',
-							image: this.productInfo.imgUrlList[i],
+							type: 'video',
+							imgUrl: this.productDetail.videoAddress,
 						}
 						imgs.push(obj);
 					}
-					this.$set(this.productInfo,'imgUrlList',imgs);
+					for(var i=0;i<this.productDetail.imgUrlList.length;i++){
+						var obj= {
+							type: 'img',
+							image: this.productDetail.imgUrlList[i],
+						}
+						imgs.push(obj);
+					}
+					this.$set(this.productDetail,'imgUrlList',imgs);
 					if(!this.isMobile){
-						this.nowImg = this.productInfo.imgUrlList[0];
+						this.nowImg = this.productDetail.imgUrlList[0];
 						this.pc_img_index = 0;
 					} else { //有3d就默认显示3d
-						if(this.productInfo.threeDimensional){
+						if(this.productDetail.threeDimensional){
 							this.is_show_pc_modal = true;
 						}
 					}
@@ -217,10 +247,10 @@
 					this.$message.error(res.result.msg);
 				}
 			},
-			// 获取所有产品
+			// 获取其他产品列表
 			async getData() {
 				var me = this;
-				me.$loading.show();
+				// me.$loading.show();
 				const res = await me.$u.api.SupplierProductShare({
 					companyNumber: uni.getStorageSync('supplier_sharing_companyNumber'),
 					skipCount: 1,
@@ -237,11 +267,23 @@
 						title: res.data.result.msg,
 						duration: 2000
 					});
-					me.$loading.hide();
+					// me.$loading.hide();
+				}
+			},
+			//移动端端3d显示
+			show_mobile_modal(){
+				if(this.productDetail.threeDimensional){
+					this.is_show_pc_modal = this.is_show_pc_modal ? false:true;
+				} else {
+					this.$refs.uToast.show({
+						title: '该产品暂无3D数据！',
+						type: 'error',
+					});
 				}
 			},
 			async init() {
 				this.isMobile = util.isMobile();
+				await this.getProductByProductNumber();
 				await this.getData();
 				// await this.getToken();
 			},
@@ -251,7 +293,8 @@
 		},
 		created() {
 			this.init();
-			this.productDetail = JSON.parse(uni.getStorageSync('supplierP_product_detail'));
+			//this.productDetail = JSON.parse(uni.getStorageSync('supplierP_product_detail'));
+			//this.isMobile ? this.dealImgUrl():'';
 		}
 	}
 </script>

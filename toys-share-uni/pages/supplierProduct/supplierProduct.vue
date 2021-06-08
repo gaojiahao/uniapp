@@ -3,7 +3,7 @@
 		<!-- pc端 -->
 		<template >
 			<!-- 头部 -->
-			<spHead :contactInfo="contactInfo"></spHead>
+			<spHead :contactInfo="contactInfo" :isMobile="isMobile"></spHead>
 			<view class="content" v-if="!isMobile">
 				<view class="title"><view class="text">产品分享展示</view></view>
 				<view class="content_panel">
@@ -41,7 +41,7 @@
 						<b-row no-gutters>
 							<b-col cols="6" v-for="(item,index) in productList" :key='index'>
 								<view class="product_list_item">
-									<view class="product_list_img" @click="goDetail(item)">
+									<view class="product_list_img" @click="goDetail(item.id)">
 										<image class="img" :src="item.imageUrl"></image>
 									</view>
 									<view class="product_list_info">
@@ -85,7 +85,7 @@
 					<view class="product_list" v-else-if="listShowType=='grid'">
 						<b-row no-gutters>
 							<b-col cols="3" v-for="(item,index) in productList" :key='index'>
-								<view class="product_list_item2" @click="goDetail(item)">
+								<view class="product_list_item2" @click="goDetail(item.id)">
 									<view class="product_list_img">
 										<image class="img" :src="item.imageUrl"></image>
 									</view>
@@ -145,7 +145,7 @@
 						<b-row v-if="listShowType=='grid'" no-gutters>
 							<b-col cols="6" sm="3" v-for="(item,index) in productList" :key='index'>
 								<view class="product_list_item">
-									<view class="product_list_img" @click="goDetail(item)" @tap="goDetail(item)">
+									<view class="product_list_img" @click="goDetail(item.id)" @tap="goDetail(item.id)">
 										<image class="img" :src="item.imageUrl"></image>
 									</view>
 									<view class="product_list_info">
@@ -168,7 +168,7 @@
 							<b-col cols="12" v-for="(item,index) in productList" :key='index'>
 								<b-row :style="{borderBottom: '1px solid #dcdfe6'}" class="product_list_item2" no-gutters>
 									<b-col cols="6" sm="2">
-										<image :src="item.imageUrl" class="product_list_img2" @click="goDetail(item)" @tap="goDetail(item)"></image>
+										<image :src="item.imageUrl" class="product_list_img2" @click="goDetail(item.id)" @tap="goDetail(item.id)"></image>
 									</b-col>
 									<b-col cols="6" sm="3">
 										<view class="product_list_info_text2 active"><span>{{item.name}}</span></view>
@@ -185,6 +185,10 @@
 								</b-row>
 							</b-col>
 						</b-row>
+					</view>
+					<!-- <pagination :totalPage="totalPage" :totalElements="total" v-model="currentPage" @change="getData"/> -->
+					<view class="loading_more">
+						<u-loadmore :status="status" />
 					</view>
 				</view>
 			</view>
@@ -220,7 +224,7 @@ export default {
 			defaultImg: require("@/static/images/logo.png"),
 			isMobile:false,   //是否移动端
 			keyword:'',
-			sortOrder:0, //1倒序，2升序
+			sortOrder:1, //1倒序，2升序
 			sortType:2,  //1价格，2时间，3热度
 			hotType:1,
 			priceType:1,
@@ -230,8 +234,19 @@ export default {
 			currentPage:1,
 			totalPage:1, //总页数 (引用页面传递过来)
 			total:0, //总记录数 (引用页面传递过来)
-			pageSize:9999999,
+			pageSize:8,
 			productList:[],
+			offerInfo:{},
+			status: 'loadmore',
+			list: 8,
+			page: 1,
+			iconType: 'flower',
+			loadText: {
+				loadmore: '点击或上拉加载更多',
+				loading: '努力加载中',
+				nomore: '实在没有了'
+			},
+			id:null
 		}
 	},
 	methods:{
@@ -267,51 +282,171 @@ export default {
 			this.listShowType = type;
 		},
 		//获取厂商联系方式
-		async getCompanyByIDShare() {
+		// async getCompanyByIDShare() {
+		// 	var me = this;
+		// 	const res = await me.$u.api.CompanyByIDShare({
+		// 		// companyNumber: uni.getStorageSync('supplier_product_shareCode'),
+		// 		companyNumber: 'HS0000006',
+		// 	});
+		// 	if (res.result.code === 200) {
+		// 		this.contactInfo = res.result.item;
+		// 		uni.setStorageSync('supplier_product_contactInfo',JSON.stringify(this.contactInfo));
+		// 	} else {
+		// 		uni.showToast({
+		// 			icon:'none',
+		// 			title: res.result.msg,
+		// 			duration: 2000
+		// 		});
+		// 	}
+		// },
+		//获取厂商联系方式
+		async getProductOfferByNumber() {
 			var me = this;
-			const res = await me.$u.api.CompanyByIDShare({
-				// companyNumber: uni.getStorageSync('supplier_product_shareCode'),
-				companyNumber: 'HS0000006',
+			const res = await me.$u.api.GetProductOfferByNumberInfo({
+				offerNumber: uni.getStorageSync('supplier_product_id')
 			});
 			if (res.result.code === 200) {
-				this.contactInfo = res.result.item;
+				this.offerInfo = res.result.item;
+			}
+		},
+		//获取联系方式
+		async getContactInformationListShare(){
+			var me = this;
+			const res = await me.$u.api.ContactInformationListShare({
+				companyNumber: me.offerInfo.companyNumber,
+				userId: me.offerInfo.userId,
+			});
+			if (res.result.code === 200) {
+				this.setContact(res.result.item);
 				uni.setStorageSync('supplier_product_contactInfo',JSON.stringify(this.contactInfo));
-			} else {
-				uni.showToast({
-					icon:'none',
-					title: res.result.msg,
-					duration: 2000
-				});
+			}
+		},
+		//设置联系方式
+		setContact(data){
+			for(var i = 0; i < data.length; i++){
+				if(data[i]['language']=="zh-CN"){
+					this.contactInfo = data[i];
+					break;
+				} else {
+					this.contactInfo = data[i]
+				}
 			}
 		},
 		// 获取所有产品
+		// async getData(value,keyword) {
+		// 	var me = this;
+		// 	me.$loading.show();
+		// 	const res = await me.$u.api.SupplierShareProducts({
+		// 		shareCode: uni.getStorageSync('supplier_product_id'),
+		// 		skipCount: value||1,
+		// 		maxResultCount: me.pageSize,
+		// 		keyword: keyword||me.keyword,
+		// 		sortOrder: me.sortOrder,
+		// 		sortType: me.sortType,
+		// 	});
+		// 	if (res.result.code === 200) {
+		// 		// me.productList = res.result.item.items;
+		// 		// me.total = res.result.item.totalCount;
+		// 		// me.totalPage = Math.ceil(me.total / me.pageSize);
+		// 		// me.$loading.hide();
+		// 		me.productList = res.result.item;
+		// 		me.total = res.result.item.length;
+		// 		me.totalPage = Math.ceil(me.total / me.pageSize);
+		// 		me.$loading.hide();
+		// 	} else {
+		// 		uni.showToast({
+		// 			icon:'none',
+		// 			title: res.data.result.msg,
+		// 			duration: 2000
+		// 		});
+		// 		me.$loading.hide();
+		// 	}
+		// },
+		// 获取报价信息产品列表
 		async getData(value,keyword) {
+			this.$loading.show();
 			var me = this;
-			me.$loading.show();
-			const res = await me.$u.api.SupplierShareProducts({
-				shareCode: uni.getStorageSync('supplier_product_shareCode'),
+			const fd = {
 				skipCount: value||1,
 				maxResultCount: me.pageSize,
+				offerNumber: uni.getStorageSync('supplier_product_id'),
 				keyword: keyword||me.keyword,
 				sortOrder: me.sortOrder,
 				sortType: me.sortType,
-			});
+				// searchType:me.searchType,
+				// listShowType:me.listShowType,
+				// ...this.packingOptions
+			};
+			for (const key in fd) {
+				if (fd[key] === null || fd[key] === undefined || fd[key] === "")
+					delete fd[key];
+			}
+			const res = await me.$u.api.ProductOfferDetailPage(fd);
 			if (res.result.code === 200) {
-				// me.productList = res.result.item.items;
-				// me.total = res.result.item.totalCount;
-				// me.totalPage = Math.ceil(me.total / me.pageSize);
-				// me.$loading.hide();
-				me.productList = res.result.item;
-				me.total = res.result.item.length;
-				me.totalPage = Math.ceil(me.total / me.pageSize);
-				me.$loading.hide();
+				this.productList = res.result.item.items;
+				me.total = res.result.item.totalCount;
+				me.totalPage = Math.ceil(res.result.item.totalCount / me.pageSize);
+				this.$loading.hide();
 			} else {
-				uni.showToast({
-					icon:'none',
-					title: res.data.result.msg,
-					duration: 2000
-				});
-				me.$loading.hide();
+				// this.$message.error(res.result.msg);
+			}
+		},
+		async onReachBottom() {
+			var me = this;
+			if(me.isMobile){
+				this.$loading.show();
+				const fd = {
+					skipCount: me.page,
+					maxResultCount: me.list,
+					offerNumber: uni.getStorageSync('supplier_product_id'),
+					keyword: me.keyword,
+					sortOrder: me.sortOrder,
+					sortType: me.sortType,
+				};
+				for (const key in fd) {
+					if (fd[key] === null || fd[key] === undefined || fd[key] === "")
+						delete fd[key];
+				}
+				const res = await me.$u.api.ProductOfferDetailPage(fd);
+				if (res.result.code === 200) {
+					if(res.result.item.items.length){
+						for(var i=0;i<res.result.item.items.length;i++){
+							me.productList.push(res.result.item.items[i]);
+						}
+						me.page++;
+						me.status = 'loading';
+						me.$loading.hide();
+					} else {
+						me.status = 'nomore';
+						me.$loading.hide();
+					}
+				}
+			}
+		},
+		async getData_mobile() {
+			this.$loading.show();
+			var me = this;
+			const fd = {
+				skipCount: me.page,
+				maxResultCount: me.list,
+				offerNumber: uni.getStorageSync('supplier_product_id'),
+				keyword: me.keyword,
+				sortOrder: me.sortOrder,
+				sortType: me.sortType,
+			};
+			for (const key in fd) {
+				if (fd[key] === null || fd[key] === undefined || fd[key] === "")
+					delete fd[key];
+			}
+			const res = await me.$u.api.ProductOfferDetailPage(fd);
+			if (res.result.code === 200) {
+				if(res.result.item.items.length){
+					for(var i=0;i<res.result.item.items.length;i++){
+						me.productList.push(res.result.item.items[i]);
+					}
+					me.page++;
+					me.$loading.hide();
+				}
 			}
 		},
 		//获取token
@@ -324,11 +459,22 @@ export default {
 			)
 		},
 		//去详情页
-		goDetail(item){
-			uni.setStorageSync('supplierP_product_detail',JSON.stringify(item));
+		goDetail(id){
+			// uni.setStorageSync('supplierP_product_detail',JSON.stringify(item));
+			// this.$Router.push({
+			//     name:'supplierProductDetail'
+			// })
+			if (!id) {
+				this.$refs.uToast.show({
+					title: '温馨提示：该产品没有编号！',
+					type:'error'
+				})
+				return false;
+			}
 			this.$Router.push({
-			    name:'supplierProductDetail'
-			})
+				name: "supplierProductDetail",
+				params: { id: id }
+			});
 		},
 		//链接跳转
 		toLink(value){
@@ -337,11 +483,17 @@ export default {
 			})
 		},
 		async init(){
+			var me = this;
 			this.$loading.show();
 			this.isMobile=util.isMobile();
 			await this.getToken();
-			await this.getCompanyByIDShare();
-			await this.getData();
+			await this.getProductOfferByNumber();
+			await this.getContactInformationListShare();
+			if(me.isMobile){
+				me.getData_mobile();
+			} else {
+				this.getData();
+			}
 			this.$loading.hide();
 		},
 	},
@@ -354,8 +506,9 @@ export default {
 	  })
 	},
 	created(){
-		if(uni.getStorageSync('supplier_product_shareCode')||this.$route.query.shareCode){
-			uni.getStorageSync('supplier_product_shareCode') ?  (this.$route.query.shareCode ? uni.setStorageSync('supplier_product_shareCode', this.$route.query.shareCode):''): uni.setStorageSync('supplier_product_shareCode', this.$route.query.shareCode);
+		if(uni.getStorageSync('supplier_product_id')||this.$route.query.id){
+			this.id = this.$route.query.id
+			uni.getStorageSync('supplier_product_id') ?  (this.$route.query.id ? uni.setStorageSync('supplier_product_id', this.$route.query.id):''): uni.setStorageSync('supplier_product_id', this.$route.query.id);
 			this.init();
 		} else {
 			this.$loading.show();

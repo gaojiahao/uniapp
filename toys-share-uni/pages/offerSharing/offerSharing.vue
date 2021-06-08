@@ -21,7 +21,7 @@
 					<u-divider color="#fa3534" height="3rpx"></u-divider>
 				</view>
 				<view class="bottom">
-					小竹熊玩具云科技公司的分享
+					{{sampleInfo.companyName}}<text v-if="sampleInfo.companyName">的分享</text>
 				</view>
 			</view>
 		</view>

@@ -18,7 +18,7 @@
 		</view>
 		<view class="contact_info_mulit_image_box">
 			<view class="pre" @click="pre_pc_img"><u-icon name="arrow-left" :style="{marginTop:'0.2rem'}"></u-icon></view>
-			<view class="image_item" v-for="(item,index) in productInfo.imglist" :key="index" @mouseover="change_pc_img(item,index)">
+			<view class="image_item" v-for="(item,index) in productInfo.imgUrlList" :key="index" @mouseover="change_pc_img(item,index)">
 				<view style="width: 100%; height: 100%;" @click="change_pc_img(item,index)" v-if="item.type=='video'">
 					<video
 					  style="border: 1px solid #dcdfe6"
@@ -118,20 +118,20 @@ export default {
 		//pc端切换上一张图片
 		pre_pc_img(){
 			if((this.pc_img_index-1)>0){
-				this.nowImg = this.productInfo.imglist[this.pc_img_index-1];
+				this.nowImg = this.productInfo.imgUrlList[this.pc_img_index-1];
 				this.pc_img_index--;
 			} else {
-				this.nowImg = this.productInfo.imglist[0];
+				this.nowImg = this.productInfo.imgUrlList[0];
 				this.pc_img_index=0;
 			}
 		},
 		//pc端切换下一张图片
 		next_pc_img(){
-			if((this.pc_img_index+1)>=this.productInfo.imglist.length){
-				this.nowImg = this.productInfo.imglist[this.productInfo.imglist.length-1];
-				this.pc_img_index=this.productInfo.imglist.length-1;
+			if((this.pc_img_index+1)>=this.productInfo.imgUrlList.length){
+				this.nowImg = this.productInfo.imgUrlList[this.productInfo.imgUrlList.length-1];
+				this.pc_img_index=this.productInfo.imgUrlList.length-1;
 			} else {
-				this.nowImg = this.productInfo.imglist[this.pc_img_index+1];
+				this.nowImg = this.productInfo.imgUrlList[this.pc_img_index+1];
 				this.pc_img_index++;
 			}
 		},
@@ -148,15 +148,15 @@ export default {
 				}
 				imgs.push(obj);
 			}
-			for(var i=0;i<this.productInfo.imglist.length;i++){
+			for(var i=0;i<this.productInfo.imgUrlList.length;i++){
 				var obj= {
 					type: 'img',
-					imgUrl: this.productInfo.imglist[i].imgUrl,
+					imgUrl: this.productInfo.imgUrlList[i].imgUrl,
 				}
 				imgs.push(obj);
 			}
-			this.$set(this.productInfo,'imglist',imgs);
-			this.nowImg = this.productInfo.imglist[0];
+			this.$set(this.productInfo,'imgUrlList',imgs);
+			this.nowImg = this.productInfo.imgUrlList[0];
 			this.pc_img_index = 0;
 		},
 		//pc端切换图片
@@ -198,6 +198,7 @@ export default {
 			height: 60px;
 			bottom: 24px;
 			right: 24px;
+			z-index: 1;
 		}
 		.three_d:hover{
 			cursor: pointer;
@@ -251,6 +252,34 @@ export default {
 	    line-height: 0;
 	    overflow: hidden;
 	    position: relative;
+	}
+	.sm_btn_item{
+	    display: flex;
+	    margin: 5px;
+		.active{
+			margin-left: auto;
+		}
+		.item{
+			margin-right: 5px;
+		}
+	}
+	.sm_panel {
+		width: 100%;
+		height: 771px;
+		.sm_iframe{
+			position: relative;
+			width: 100%;
+			height: 711px;
+		}
+	}
+	.bg_panel {
+		width: 100%;
+		height: 911px;
+		.sm_iframe{
+			position: relative;
+			width: 100%;
+			height: 911px;
+		}
 	}
 }
 </style>
