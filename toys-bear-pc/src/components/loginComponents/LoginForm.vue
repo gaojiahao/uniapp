@@ -390,6 +390,7 @@ export default {
                   token: res.data.result.accessToken
                 });
                 localStorage.setItem("validityPeriod", validityPeriod);
+                this.$cookies.set("validityPeriod", validityPeriod);
               }
               switch (res.data.result.commparnyList[0].companyType) {
                 // case "Admin":
@@ -410,15 +411,16 @@ export default {
             } else if (res.data.result.commparnyList.length > 1) {
               // 多个角色
               this.$store.commit("setToken", res.data.result);
-              const path = {
+              const pathOp = {
                 path: "loginConfirm"
               };
               if (this.thePassword) {
-                path.query = {
-                  thePassword: this.thePassword
+                pathOp.query = {
+                  id: "thePassword"
                 };
               }
-              this.$router.push(path);
+              console.log(pathOp);
+              this.$router.push(pathOp);
             }
           } else {
             this.$common.handlerMsgState({

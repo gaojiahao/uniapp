@@ -130,6 +130,35 @@
         />
       </el-dialog>
     </transition>
+    <!-- 一键加购dialog -->
+    <transition name="el-zoom-in-center">
+      <el-dialog
+        title="一键加购"
+        v-if="addPurchaseDialog"
+        :visible.sync="addPurchaseDialog"
+        width="500px"
+      >
+        <div class="addPushContent">
+          <div class="productCount">
+            <p class="countItem">
+              <span class="countItem_title">产品数量：</span>
+              <span>{{ addShopOption.productCount }}</span>
+            </p>
+            <!-- <p class="countItem">
+              <span class="countItem_title">下架产品数：</span>
+              <span>{{ addShopOption.productCount }}</span>
+            </p> -->
+          </div>
+          <div class="countItem_btns">
+            <el-button size="medium" @click="close">取消</el-button>
+            <el-button size="medium" type="primary" @click="submit">
+              加购
+            </el-button>
+          </div>
+          <p class="tips">（已下架产品无法加购）</p>
+        </div>
+      </el-dialog>
+    </transition>
   </div>
 </template>
 
@@ -153,7 +182,9 @@ export default {
   },
   data() {
     return {
+      addShopOption: null,
       totalAmount: null,
+      addPurchaseDialog: false,
       exportTemplateDialog: false,
       tableData: {
         data: [],
@@ -342,20 +373,83 @@ export default {
     }
   },
   methods: {
-    // 一键加购
-    openAdd() {
+    // 提交一键加购
+    submit() {
       this.$common.handlerMsgState({
         msg: "敬请期待",
         type: "warning"
       });
-      // this.$http
-      //   .post("/api/OnekeyShopping", {
-      //     orderNumber: this.item.orderNumber,
-      //     orderType: this.item.orderType
-      //   })
-      //   .then(res => {
-      //     console.log(res);
-      //   });
+      this.addPurchaseDialog = false;
+    },
+    // 关闭加购
+    close() {
+      this.addPurchaseDialog = false;
+      this.addShopOption = null;
+    },
+    // 一键加购
+    async openAdd() {
+      const res = await this.$http.post("/api/OnekeyShopping", {
+        orderNumber: this.item.orderNumber,
+        orderType: this.item.orderType
+      });
+      console.log(res);
+      if (res.data.result.code === 200) {
+        this.addShopOption = res.data.result.item;
+        this.addPurchaseDialog = true;
+        // if (res.data.result.item.productNumber) {
+        //   this.$confirm("产品数量：" + res.data.result.item.productCount + "下架产品数：", {
+        //     confirmButtonText: "确定",
+        //     cancelButtonText: "取消"
+        //   })
+        //     .then(async () => {
+        //       this.$store.commit("updateAppLoading", true);
+        //       const re = await this.$http.post(
+        //         "/api/AddShoppingCart",
+        //         {
+        //           userID: this.userInfo.userInfo.id,
+        //           companyNumber: this.userInfo.commparnyList[0].companyNumber,
+        //           sourceFrom: "active",
+        //           // sourceFrom: "QRCodeSearch",
+        //           number: 1,
+        //           currency: "￥",
+        //           Price: 0,
+        //           shopType: "companysamples",
+        //           productNumber: res.data.result.item.productNumber
+        //         },
+        //         {
+        //           timeout: 9999999
+        //         }
+        //       );
+        //       if (re.data.result.code === 200) {
+        //         this.$common.handlerMsgState({
+        //           msg: "加购成功",
+        //           type: "success"
+        //         });
+        //       } else {
+        //         this.$common.handlerMsgState({
+        //           msg: re.data.result.msg,
+        //           type: "danger"
+        //         });
+        //       }
+        //     })
+        //     .catch(() => {
+        //       this.$common.handlerMsgState({
+        //         msg: "取消加购",
+        //         type: "warning"
+        //       });
+        //     });
+        // } else {
+        //   this.$common.handlerMsgState({
+        //     msg: "产品编号为空",
+        //     type: "danger"
+        //   });
+        // }
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
     },
     // 获取合计total
     async getERPOrderTotal() {
@@ -699,6 +793,27 @@ export default {
 @{deep} .exportOrder {
   .el-dialog__body {
     padding: 0;
+  }
+}
+.addPushContent {
+  text-align: center;
+  .productCount {
+    margin-top: 30px;
+    font-size: 16px;
+    .countItem {
+      margin-bottom: 20px;
+      .countItem_title {
+        color: #666;
+      }
+    }
+  }
+  .countItem_btns {
+    margin-top: 40px;
+  }
+  .tips {
+    color: #999;
+    font-size: 13px;
+    margin-top: 10px;
   }
 }
 @media screen and (max-width: 1768px) {
