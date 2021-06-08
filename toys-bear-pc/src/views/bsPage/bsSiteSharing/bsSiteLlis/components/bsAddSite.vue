@@ -643,14 +643,20 @@ export default {
         shareId: this.clienFormData.id
       });
       if (res.data.result.code === 200) {
-        this.advertisingTable = res.data.result.item;
-        console.log(this.advertisingTable, "编辑站点下的广告列表");
+        this.advertisingTable = res.data.result.item.sort(this.compare("sort"));
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
           type: "danger"
         });
       }
+    },
+    compare(property) {
+      return function(a, b) {
+        let value1 = a[property];
+        let value2 = b[property];
+        return value1 - value2;
+      };
     },
     // 单选
     handleChecked() {
@@ -669,11 +675,10 @@ export default {
           type: "warning"
         });
       } else {
-        console.log(this.advertisingTable);
         if (this.advertisingTable.length > 0) {
           for (let i = 0; i < this.advertisingData.length; i++) {
             for (let j = 0; j < this.advertisingTable.length; j++) {
-              if (this.advertisingTable[j].id == this.advertisingData[i].id) {
+              if (this.advertisingTable[j].adId == this.advertisingData[i].id) {
                 this.advertisingData[i].checked = true;
               }
             }
@@ -688,9 +693,11 @@ export default {
       for (let i = 0; i < this.advertisingTable.length; i++) {
         for (let j = 0; j < this.listChecked.length; j++) {
           this.advertisingTable[i].linkUrl = this.listChecked[i].defaultLinkUrl;
+          if (this.isEdit) {
+            this.advertisingTable[i].adId = this.listChecked[i].id;
+          }
         }
       }
-      console.log(this.advertisingTable);
       this.advertisingDialog = false;
     },
     // 获取广告管理列表
@@ -714,9 +721,8 @@ export default {
     },
     //排序
     handlegoUp(row) {
-      console.log(row);
       for (let i = 0; i < this.advertisingTable.length; i++) {
-        if (this.advertisingTable[i].id === row.id) {
+        if (this.advertisingTable[i].adId === row.adId) {
           this.advertisingTable.splice(i, 1);
           break;
         }
@@ -757,7 +763,9 @@ export default {
           const res = await this.$http.post(url, this.clienFormData);
           if (res.data.result.code === 200) {
             this.shareId = res.data.result.item.id;
-            this.CreateWebsiteShareAdRelationList();
+            if (this.advertisingTable.length > 0) {
+              this.CreateWebsiteShareAdRelationList();
+            }
             this.$emit("submit");
           } else {
             this.$common.handlerMsgState({
@@ -770,8 +778,14 @@ export default {
     },
     // 新增广告关联/覆盖广告关联
     async CreateWebsiteShareAdRelationList() {
-      if (this.advertisingTable.length > 0) {
-        for (let i = 0; i < this.advertisingTable.length; i++) {
+      for (let i = 0; i < this.advertisingTable.length; i++) {
+        if (this.isEdit) {
+          this.relations.push({
+            adId: this.advertisingTable[i].adId,
+            linkUrl: this.advertisingTable[i].linkUrl,
+            sort: i
+          });
+        } else {
           this.relations.push({
             adId: this.advertisingTable[i].id,
             linkUrl: this.advertisingTable[i].linkUrl,
@@ -802,11 +816,11 @@ export default {
     // 编辑input
     handleUpdataAdvertising(item) {
       const fd = {
-        adId: this.clienFormData.id,
+        adId: item.adId,
         type: 1,
         relations: [
           {
-            id: item.id,
+            id: this.clienFormData.id,
             linkUrl: item.linkUrl
           }
         ]
@@ -819,10 +833,10 @@ export default {
         fd
       );
       if (res.data.result.code === 200) {
-        this.$common.handlerMsgState({
-          msg: "编辑成功",
-          type: "success"
-        });
+        // this.$common.handlerMsgState({
+        //   msg: "编辑成功",
+        //   type: "success",
+        // });
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
@@ -985,7 +999,6 @@ export default {
       this.clienFormData.websiteLanguage = myLangs.map(val => {
         return val.id;
       });
-      console.log(this.clienFormData, "编辑传过来的数据");
       this.getGetWebsiteShareAdByShareIdList();
     }
     // this.defaultFormula = JSON.stringify(this.customerTemplate[0]);

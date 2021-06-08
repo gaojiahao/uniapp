@@ -322,6 +322,17 @@ export default {
   computed: {
     ...mapState(["historyText"])
   },
+  watch: {
+    // "synthesizeFromData.maxPrice": {
+    //   deep: true,
+    //   handler(newVal) {
+    //     console.log(newVal);
+    //     if (newVal == 0) {
+    //       this.synthesizeFromData.maxPrice = "";
+    //     }
+    //   },
+    // },
+  },
   data() {
     return {
       synthesizeFromData: {
