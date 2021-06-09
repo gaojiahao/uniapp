@@ -7,8 +7,10 @@
             ref="searchRef"
             :keyword="searchForm.keyword"
             :MyisGaoji="searchForm.MyisGaoji"
+            :MyisZonghe="searchForm.MyisZonghe"
             v-model="searchForm.keyword"
             @handleIsgaoji="handleIsgaoji"
+            @handleIsZonghe="handleIsZonghe"
             @closeTag="closeTag"
             @handleSynthesis="handleSynthesis"
             @screeningShow="screeningShow"
@@ -991,6 +993,7 @@ export default {
         categoryNumber: null,
         time: [],
         MyisGaoji: false,
+        MyisZonghe: false,
         fa_no: true,
         number: false,
         name: true,
@@ -1033,9 +1036,15 @@ export default {
     textSearchProducts() {
       this.getProductList(false);
     },
-    handleIsgaoji(val) {
-      this.$set(this.searchForm, "MyisGaoji", val);
+    //关闭高级搜索显示
+    handleIsgaoji() {
+      this.$set(this.searchForm, "MyisGaoji", false);
       this.advancedFormdata = {};
+    },
+    //关闭综合搜索显示
+    handleIsZonghe() {
+      this.isSynthesizeSearch = false;
+      this.$set(this.searchForm, "MyisZonghe", false);
     },
     // 确定裁剪图片
     onCubeImg() {
@@ -1303,10 +1312,11 @@ export default {
             }
           }
         }
-
+        this.handleIsZonghe();
         if (Object.values(this.advancedFormdata).some(Boolean)) {
           this.$set(this.searchForm, "MyisGaoji", true);
         }
+
         this.productList = item.items;
         this.totalCount = item.totalCount;
         let endDate = Date.now();
@@ -1366,7 +1376,8 @@ export default {
             }
           }
         }
-
+        this.handleIsgaoji();
+        this.$set(this.searchForm, "MyisZonghe", true);
         this.addHistoryText(this.childData);
         this.productList = item.items;
         this.totalCount = item.totalCount;
@@ -1732,9 +1743,12 @@ export default {
 
     // 点击搜索-文字搜索
     eventBus.$on("searchProducts", () => {
-      this.isSynthesizeSearch = false;
       this.currentPage = 1;
-      this.getProductList(false);
+      if (this.isSynthesizeSearch) {
+        this.getSyntheProductList();
+      } else {
+        this.getProductList(false);
+      }
     });
     // 图搜
     eventBus.$on("openUpload", file => {
