@@ -54,6 +54,35 @@
             </div>
           </el-image>
         </div>
+        <div
+          class="cecorMain"
+          v-else-if="item.messageType === 'RC:ReferenceMsg'"
+        >
+          <p style="color:#999;">
+            引用：{{ jiexiJSON(item.content).referenceMessageContent }}
+          </p>
+          <p>{{ jiexiJSON(item.content).content }}</p>
+        </div>
+        <div
+          class="cecorMain"
+          v-else-if="item.messageType === 'XZX:LinkMessage'"
+        >
+          <div class="linkMsgBox" @click="openLink(item.content)">
+            <div class="link_left">
+              <!-- {{ jiexiJSON(item.content).linkUrl }} -->
+              <vue-qr
+                v-if="item.content"
+                :text="jiexiJSON(item.content).linkUrl"
+                :margin="0"
+                :size="82"
+              ></vue-qr>
+            </div>
+            <div class="link_right">
+              <div class="link_productItem">测试分享</div>
+              <div class="link_productItem">线上报价</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -61,14 +90,28 @@
 
 <script>
 import { dateDiff } from "@/assets/js/common/common.js";
+import VueQr from "vue-qr";
 export default {
   props: ["msgList"],
+  components: {
+    VueQr
+  },
   data() {
     return {};
   },
   methods: {
     myDateDiff(date) {
       return dateDiff(date);
+    },
+    jiexiJSON(json) {
+      let value = {};
+      if (json) value = JSON.parse(json);
+      return value;
+    },
+    openLink(json) {
+      let value = {};
+      if (json) value = JSON.parse(json);
+      window.open(value.linkUrl, "_blank");
     }
   },
   created() {},
@@ -116,6 +159,35 @@ export default {
         font-size: 14px;
         line-height: 22px;
       }
+    }
+  }
+}
+.linkMsgBox {
+  height: 100px;
+  width: 300px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  padding: 9px 10px;
+  box-sizing: border-box;
+  display: flex;
+  cursor: pointer;
+  .link_left {
+    width: 82px;
+    min-width: 82px;
+    min-height: 82px;
+    background-color: #ccc;
+  }
+  .link_right {
+    margin-left: 10px;
+    flex: 1;
+    overflow: hidden; /*超出部分隐藏*/
+    white-space: nowrap; /*不换行*/
+    text-overflow: ellipsis; /*超出部分文字以...显示*/
+    .link_productItem {
+      margin-top: 15px;
+      overflow: hidden; /*超出部分隐藏*/
+      white-space: nowrap; /*不换行*/
+      text-overflow: ellipsis; /*超出部分文字以...显示*/
     }
   }
 }

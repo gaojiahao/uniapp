@@ -333,31 +333,31 @@
                           v-if="item.messageType === 'RC:ReferenceMsg'"
                         >
                           <div class="yinyong">
-                            <p v-if="dataOption.type === 1">
-                              <span class="name">
-                                引用@
-                                {{
-                                  dataOption.userInfo &&
-                                    dataOption.userInfo.nickname
-                                }}
-                              </span>
-                            </p>
-                            <p v-else-if="dataOption.type === 3">
-                              <span class="name">
-                                引用@
-                                {{
+                            <div v-if="dataOption.type === 1">
+                              <p style="color:#999">
+                                @{{ dataOption.userInfo.nickname }}
+                              </p>
+                              <p>
+                                <span style="color:#999">引用：</span>
+                                {{ item.content.referMsg.content }}
+                              </p>
+                            </div>
+                            <div v-else-if="dataOption.type === 3">
+                              <p style="color:#999">
+                                @{{
                                   filterUserInfo(
                                     dataOption.userInfo.groupMemberInfos.items,
                                     {
                                       senderUserId: item.content.referMsgUserId
                                     }
                                   ).linkman
-                                }}:
-                                <span>
-                                  {{ item.content.referMsg.content }}</span
-                                >
-                              </span>
-                            </p>
+                                }}
+                              </p>
+                              <p>
+                                <span style="color:#999">引用：</span>
+                                {{ item.content.referMsg.content }}
+                              </p>
+                            </div>
                           </div>
                           <p>{{ item.content.content }}</p>
                         </div>
@@ -419,6 +419,24 @@
                             />
                           </video>
                         </div>
+                        <!-- 链接 -->
+                        <div
+                          class="linkMsgBox"
+                          @click="openLink(item.content.linkUrl)"
+                          v-else-if="item.messageType === 'XZX:LinkMessage'"
+                        >
+                          <div class="link_left">
+                            <vue-qr
+                              :text="item.content.linkUrl"
+                              :margin="0"
+                              :size="82"
+                            ></vue-qr>
+                          </div>
+                          <div class="link_right">
+                            <div class="link_productItem">测试分享</div>
+                            <div class="link_productItem">线上报价</div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -446,6 +464,33 @@
                         >
                           {{ item.content.content }}
                         </span>
+                        <!-- 引用消息 -->
+                        <div
+                          class="myYinyongMsg"
+                          v-if="item.messageType === 'RC:ReferenceMsg'"
+                        >
+                          <div class="yinyong">
+                            <div v-if="dataOption.type === 1">
+                              <p style="color:#999">
+                                @{{ userInfo.userInfo.linkman }}
+                              </p>
+                              <p>
+                                <span style="color:#999">引用：</span>
+                                {{ item.content.referMsg.content }}
+                              </p>
+                            </div>
+                            <div v-else-if="dataOption.type === 3">
+                              <p style="color:#999">
+                                @{{ userInfo.userInfo.linkman }}
+                              </p>
+                              <p>
+                                <span style="color:#999">引用：</span>
+                                {{ item.content.referMsg.content }}
+                              </p>
+                            </div>
+                          </div>
+                          <p>{{ item.content.content }}</p>
+                        </div>
                         <!-- 语音 -->
                         <span
                           class="message"
@@ -453,40 +498,6 @@
                         >
                           {{ item.content.content }}
                         </span>
-                        <!-- 引用消息 -->
-                        <div
-                          class="yinyongMsg"
-                          v-if="item.messageType === 'RC:ReferenceMsg'"
-                        >
-                          <div class="yinyong">
-                            <p v-if="dataOption.type === 1">
-                              <span class="name">
-                                引用@
-                                {{
-                                  dataOption.userInfo &&
-                                    dataOption.userInfo.nickname
-                                }}
-                              </span>
-                            </p>
-                            <p v-else-if="dataOption.type === 3">
-                              <span class="name">
-                                引用@
-                                {{
-                                  filterUserInfo(
-                                    dataOption.userInfo.groupMemberInfos.items,
-                                    {
-                                      senderUserId: item.content.referMsgUserId
-                                    }
-                                  ).linkman
-                                }}:
-                                <span>
-                                  {{ item.content.referMsg.content }}</span
-                                >
-                              </span>
-                            </p>
-                          </div>
-                          <p>{{ item.content.content }}</p>
-                        </div>
                         <!-- 图片 -->
                         <div
                           class="imgBox"
@@ -537,6 +548,24 @@
                               type="video/mp4"
                             />
                           </video>
+                        </div>
+                        <!-- 链接 -->
+                        <div
+                          class="linkMsgBox"
+                          @click="openLink(item.content.linkUrl)"
+                          v-else-if="item.messageType === 'XZX:LinkMessage'"
+                        >
+                          <div class="link_left">
+                            <vue-qr
+                              :text="item.content.linkUrl"
+                              :margin="0"
+                              :size="82"
+                            ></vue-qr>
+                          </div>
+                          <div class="link_right">
+                            <div class="link_productItem">测试分享</div>
+                            <div class="link_productItem">线上报价</div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -634,18 +663,10 @@
           ref="histroyScroll"
         >
           <div class="myScrollWrap" ref="myScrollWrap">
-            <template v-if="msgType === 0">
-              <bsAllMsg :msgList="historyList" />
-            </template>
-            <template v-else-if="msgType === 2">
-              <bsImgMsg :msgList="historyList" />
-            </template>
-            <template v-else-if="msgType === 3">
-              <bsLinkMsg :msgList="historyList" />
-            </template>
-            <template v-else-if="msgType === 4">
-              <bsVideoMsg :msgList="historyList" />
-            </template>
+            <bsAllMsg v-if="tp === 0" :msgList="historyList" />
+            <bsImgMsg v-if="tp === 2" :msgList="historyList" />
+            <bsLinkMsg v-if="tp === 3" :msgList="historyList" />
+            <bsVideoMsg v-if="tp === 4" :msgList="historyList" />
             <center
               style="width:100%; position: absolute; top:30px;left:0;font-size:30px;"
               v-show="isDaoDiLe"
@@ -664,7 +685,7 @@ import eventBus from "@/assets/js/common/eventBus.js";
 import { dateDiff, base64file } from "@/assets/js/common/common.js";
 import { mapState } from "vuex";
 import RongIMLib from "RongIMLib";
-
+import VueQr from "vue-qr";
 import bsAllMsg from "./bsNewsMsgComponents/bsAllMsg";
 import bsImgMsg from "./bsNewsMsgComponents/bsImgMsg";
 import bsLinkMsg from "./bsNewsMsgComponents/bsLinkMsg";
@@ -672,11 +693,12 @@ import bsVideoMsg from "./bsNewsMsgComponents/bsVideoMsg";
 export default {
   name: "bsNewsMessageList",
   props: ["dataOption", "im"],
-  components: { bsAllMsg, bsImgMsg, bsLinkMsg, bsVideoMsg },
+  components: { bsAllMsg, bsImgMsg, bsLinkMsg, bsVideoMsg, VueQr },
   data() {
     return {
       historyPageIndex: 1,
       isDaoDiLe: false,
+      tp: 0,
       msgType: 0,
       historyList: [],
       historyTotalCount: 0,
@@ -696,6 +718,10 @@ export default {
     };
   },
   methods: {
+    // 点击打开分享链接
+    openLink(url) {
+      window.open(url, "_blank");
+    },
     // 分页获取历史消息
     async getMessageHisByPage(flag) {
       const fd = {
@@ -726,7 +752,6 @@ export default {
     },
     // 发送表情
     sendEmoticon(b) {
-      console.log(b);
       this.textInfo += b.emoji;
     },
     // 聊天窗口滚动事件
@@ -739,7 +764,7 @@ export default {
           this.isFixedTop = true;
           // 是否还有历史数据可获取 hasMore
           if (this.hasMore) {
-            console.log(this.hasMore, "还有历史消息");
+            // console.log(this.hasMore, "还有历史消息");
             this.noScroll = true;
             const startTime =
               this.chatInfoList[0] && this.chatInfoList[0].sentTime;
@@ -905,9 +930,9 @@ export default {
       };
       conversation.getMessages(option).then(() => {
         if (msg.messageType === "RC:ReadNtf") {
-          console.log("已读");
+          // console.log("已读");
         } else if (msg.messageType === "RC:TypSts") {
-          console.log("正在输入");
+          // console.log("正在输入");
         } else {
           // 回复成功
           this.chatInfoList.push(msg);
@@ -941,11 +966,6 @@ export default {
         } else {
           this.chatInfoList = list;
         }
-        console.log(
-          "是否还有历史消息可以获取",
-          this.hasMore,
-          this.chatInfoList
-        );
         // 清除未读
         this.clearReadInfo();
       });
@@ -965,9 +985,11 @@ export default {
       return dateDiff(time);
     },
     // 切换专聊天记录
-    checkTabs(num) {
-      this.historyPageIndex = 1;
+    async checkTabs(num) {
+      this.msgType = 0;
       this.msgType = num;
+      this.historyPageIndex = 1;
+      this.tp = num;
       this.getMessageHisByPage(false);
     },
     // 发送消息
@@ -1029,10 +1051,8 @@ export default {
       if (e.ctrlKey && e.keyCode == 13) {
         // 用户点击了ctrl+enter触发
         this.textInfo += "\n";
-        console.log(this.textInfo);
       } else {
         //用户点击了enter触发
-        console.log("用户点击了回车");
         if (!this.textInfo) {
           this.$common.handlerMsgState({
             msg: "发送内容不能为空",
@@ -1285,6 +1305,35 @@ export default {
               width: 400px;
               height: 250px;
             }
+            .linkMsgBox {
+              height: 100px;
+              width: 300px;
+              background-color: #f5f5f5;
+              border-radius: 10px;
+              padding: 9px 10px;
+              box-sizing: border-box;
+              display: flex;
+              cursor: pointer;
+              .link_left {
+                width: 82px;
+                min-width: 82px;
+                min-height: 82px;
+                background-color: #ccc;
+              }
+              .link_right {
+                margin-left: 10px;
+                flex: 1;
+                overflow: hidden; /*超出部分隐藏*/
+                white-space: nowrap; /*不换行*/
+                text-overflow: ellipsis; /*超出部分文字以...显示*/
+                .link_productItem {
+                  margin-top: 15px;
+                  overflow: hidden; /*超出部分隐藏*/
+                  white-space: nowrap; /*不换行*/
+                  text-overflow: ellipsis; /*超出部分文字以...显示*/
+                }
+              }
+            }
           }
         }
       }
@@ -1318,12 +1367,54 @@ export default {
                 background-size: contain;
               }
             }
+            .myYinyongMsg {
+              color: #fff;
+              background-color: #3368a9;
+              border: 1px solid #3368a9;
+              border-radius: 10px;
+              padding: 9px 10px;
+              text-align: left;
+              .yinyong {
+                .name {
+                  color: #999;
+                }
+              }
+            }
             .imgBox {
               box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.16);
             }
             .videoBox {
               width: 400px;
               height: 250px;
+            }
+            .linkMsgBox {
+              height: 100px;
+              width: 300px;
+              background-color: #f5f5f5;
+              border-radius: 10px;
+              padding: 9px 10px;
+              box-sizing: border-box;
+              display: flex;
+              cursor: pointer;
+              .link_left {
+                width: 82px;
+                min-width: 82px;
+                min-height: 82px;
+                background-color: #ccc;
+              }
+              .link_right {
+                margin-left: 10px;
+                flex: 1;
+                overflow: hidden; /*超出部分隐藏*/
+                white-space: nowrap; /*不换行*/
+                text-overflow: ellipsis; /*超出部分文字以...显示*/
+                .link_productItem {
+                  margin-top: 15px;
+                  overflow: hidden; /*超出部分隐藏*/
+                  white-space: nowrap; /*不换行*/
+                  text-overflow: ellipsis; /*超出部分文字以...显示*/
+                }
+              }
             }
           }
         }

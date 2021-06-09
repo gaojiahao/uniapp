@@ -197,14 +197,14 @@ export function filterMsgTypes(param) {
     case "RC:HQVCMsg": // 语音消息
       msg = "[语音]";
       break;
-    case "XZX:LinkMessage": // 链接消息
-      msg = param.content;
-      break;
     case "RC:ImgMsg": // 链接消息
       msg = "[图片]";
       break;
     case "RC:ReferenceMsg": // 引用消息
       msg = "[引用]";
+      break;
+    case "XZX:LinkMessage": // 链接消息
+      msg = "[链接]" + param.content.linkUrl;
       break;
   }
   return msg;
@@ -233,7 +233,6 @@ export function compress(file, size) {
 export function base64file(file, type) {
   //判断支不支持FileReader
   if (!file || !window.FileReader) {
-    console.log(window.FileReader);
     return false;
   }
   return new Promise(resolve => {
