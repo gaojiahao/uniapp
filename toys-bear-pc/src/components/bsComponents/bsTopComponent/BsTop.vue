@@ -14,10 +14,12 @@
           <i class="el-icon-s-fold" v-show="!isCollapse"></i>
           <i class="el-icon-s-unfold" v-show="isCollapse"></i>
         </div>
-        <!-- <div class="isNotice">
+        <div class="isNotice" v-if="vesionList.length">
           <i class="laba iconfont icon-laba1"></i>
-          <p class="noticeContext">热烈庆祝小竹熊签约优选跨界玩具展厅</p>
-        </div> -->
+          <p class="noticeContext">
+            热烈庆祝小竹熊签约优选跨界玩具展厅热烈庆祝小竹熊签约优选跨界玩具展厅热烈庆祝小竹熊签约优选跨界玩具展厅
+          </p>
+        </div>
       </div>
       <div class="right">
         <div class="infoItem">
@@ -89,10 +91,27 @@ export default {
   },
   data() {
     return {
+      vesionList: [],
       isCheckUser: false
     };
   },
   methods: {
+    // 获取版本更新
+    async getBearVesionPage() {
+      const res = await this.$http.post("/api/BearVesionPage", {
+        skipCount: 1,
+        maxResultCount: 9999,
+        platForm: "pc"
+      });
+      if (res.data.result.code === 200) {
+        this.vesionList = res.data.result.item.items;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "error"
+        });
+      }
+    },
     // 去查看我的消息
     toMyInfo() {
       const fd = {
@@ -162,7 +181,9 @@ export default {
       this.isCheckUser = false;
     }
   },
-  created() {},
+  created() {
+    this.getBearVesionPage();
+  },
   mounted() {
     document.onclick = this.globalEvent;
   },

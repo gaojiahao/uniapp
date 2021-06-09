@@ -32,7 +32,7 @@
         cursor: pointer;
       }
       .isNotice {
-        // margin-left: 44px;
+        margin-left: 40px;
         height: 100%;
         display: flex;
         align-items: center;
@@ -42,6 +42,10 @@
         .noticeContext {
           margin-left: 15px;
           font-size: 14px;
+          max-width: 250px;
+          overflow: hidden; /*超出部分隐藏*/
+          white-space: nowrap; /*不换行*/
+          text-overflow: ellipsis; /*超出部分文字以...显示*/
         }
       }
     }
