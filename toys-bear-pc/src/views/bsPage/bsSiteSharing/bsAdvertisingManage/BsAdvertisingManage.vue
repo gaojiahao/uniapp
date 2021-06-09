@@ -146,7 +146,9 @@
       width="1000px"
     >
       <RelevanceSiteDialog
+        :adId="adId"
         :relevanceSiteDialogData="relevanceSiteDialogData"
+        @GetWebsiteShareAdRelationList="GetWebsiteShareAdRelationList"
       ></RelevanceSiteDialog>
     </el-dialog>
   </div>
@@ -164,7 +166,9 @@ export default {
   },
   data() {
     return {
+      adId: null,
       editImages: [],
+      selectTableData: [],
       relevanceSiteDialogData: [],
       file: null,
       RelevanceSiteDialogTitle: "已关联站点（0）",
@@ -231,16 +235,17 @@ export default {
               this.handleUpdate(row);
             }
           },
-          // 暂时不做
-          {
-            type: "success",
-            textWrapper() {
-              return "关联站点";
-            },
-            methods: row => {
-              this.handleRelevanceSiteDialog(row.id);
-            }
-          },
+          // 不开放隐藏
+          // {
+          //   type: "success",
+          //   textWrapper() {
+          //     return "关联站点";
+          //   },
+          //   methods: row => {
+          //     this.adId = row.id;
+          //     this.GetWebsiteShareAdRelationList(row.id);
+          //   }
+          // },
           {
             type: "danger",
             textWrapper() {
@@ -256,14 +261,14 @@ export default {
   },
   methods: {
     //查询广告Id所有关联的站点列表
-    async handleRelevanceSiteDialog(id) {
+    async GetWebsiteShareAdRelationList(id) {
       const res = await this.$http.post("/api/GetWebsiteShareAdRelationList", {
         id: id
       });
       if (res.data.result.code === 200) {
         this.relevanceSiteDialogData = res.data.result.item;
         this.RelevanceSiteDialogTitle =
-          "已关联站点" + this.relevanceSiteDialogData.length;
+          "已关联站点" + "(" + this.relevanceSiteDialogData.length + ")";
         this.isRelevanceSiteDialog = true;
       } else {
         this.$common.handlerMsgState({
@@ -272,6 +277,7 @@ export default {
         });
       }
     },
+
     // 获取公司下的员工列表
     async getStaffList() {
       const res = await this.$http.post("/api/CompanyUserList", {
@@ -327,16 +333,13 @@ export default {
     changeUpload(file, fileList) {
       let that = this;
       const width = 1920;
-      const height = 551;
+      const height = 550;
       let img = new Image();
       const isLt2M = file.size / 1024 / 1024 < 2; // 限制小于2M
       img.src = URL.createObjectURL(file.raw);
       img.onload = function() {
-        // console.log(img.width, img.height, "图片大小");
-        console.log(width, height);
+        console.log(img.width, img.height, "图片大小");
         const valid = img.width === width && img.height === height;
-        console.log(valid, "valid");
-        console.log(isLt2M, "isLt2M");
         if (valid && isLt2M) {
           that.file = file.raw;
           that.editImages = fileList;
@@ -410,7 +413,6 @@ export default {
     },
     // 确定新增广告
     async comfirmAddAdvertising() {
-      console.log(this.dialogFromData);
       if (this.editImages.length != 0) {
         const imgRes = await this.successUpload();
         if (imgRes.data.result.code === 200) {
@@ -471,7 +473,6 @@ export default {
           this.$messsage.error("头像上传失败");
           return false;
         }
-        console.log(this.dialogFromData);
         this.$refs.formDataRef.validate(async valid => {
           if (valid) {
             const res = await this.$http.post(

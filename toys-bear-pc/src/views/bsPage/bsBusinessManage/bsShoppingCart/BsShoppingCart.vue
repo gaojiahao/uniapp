@@ -504,7 +504,7 @@
                   <el-input
                     maxlength="30"
                     onkeyup="value=value.replace(/[^\d.]/g,'')"
-                    v-model.number="clienFormData.exchange"
+                    v-model="clienFormData.exchange"
                   ></el-input>
                 </el-form-item>
                 <el-form-item label="小数位数：" prop="decimalPlaces">
@@ -530,7 +530,7 @@
                       maxlength="30"
                       onkeyup="value=value.replace(/[^\d.]/g,'')"
                       style="flex:1;"
-                      v-model.number="clienFormData.profit"
+                      v-model="clienFormData.profit"
                     >
                       <span slot="suffix">%</span>
                     </el-input>
@@ -545,7 +545,7 @@
                 </el-form-item>
                 <el-form-item label="总费用：" prop="totalCost">
                   <el-input
-                    v-model.number="clienFormData.totalCost"
+                    v-model="clienFormData.totalCost"
                     onkeyup="value=value.replace(/[^\d.]/g,'')"
                     clearable
                     placeholder="请输入总费用"
@@ -558,7 +558,7 @@
                     style="width: 100%"
                     @change="selectBlur"
                     max-length="2"
-                    v-model.number="clienFormData.size"
+                    v-model="clienFormData.size"
                     filterable
                     allow-create
                     default-first-option
@@ -614,7 +614,7 @@
               <div class="left">
                 <el-form-item label="价格小于：" prop="miniPrice">
                   <el-input
-                    v-model.number="clienFormData.miniPrice"
+                    v-model="clienFormData.miniPrice"
                     onkeyup="value=value.replace(/[^\d.]/g,'')"
                     clearable
                     placeholder="请输入"
