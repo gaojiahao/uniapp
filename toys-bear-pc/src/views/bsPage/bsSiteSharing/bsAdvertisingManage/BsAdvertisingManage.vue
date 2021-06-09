@@ -137,11 +137,17 @@
         </span>
       </center>
     </el-dialog>
+    <!-- 关联站点弹框 -->
     <el-dialog
-      :title="dialogRelation"
-      :visible.sync="isDialogRelation"
-      width="700px"
+      class="siteDialog"
+      :title="RelevanceSiteDialogTitle"
+      :visible.sync="isRelevanceSiteDialog"
+      v-if="isRelevanceSiteDialog"
+      width="1000px"
     >
+      <RelevanceSiteDialog
+        :relevanceSiteDialogData="relevanceSiteDialogData"
+      ></RelevanceSiteDialog>
     </el-dialog>
   </div>
 </template>
@@ -149,18 +155,21 @@
 <script>
 import { mapState } from "vuex";
 import Table from "@/components/table";
+import RelevanceSiteDialog from "./components/relevanceSiteDialog.vue";
 export default {
   name: "BsAdvertisingManage",
   components: {
-    Table
+    Table,
+    RelevanceSiteDialog
   },
   data() {
     return {
       editImages: [],
+      relevanceSiteDialogData: [],
       file: null,
+      RelevanceSiteDialogTitle: "已关联站点（0）",
+      isRelevanceSiteDialog: false,
       dialogTitle: "",
-      dialogRelation: "已关联站点（0）",
-      isDialogRelation: false,
       isDialog: false,
       staffList: [],
       userId: null,
@@ -223,15 +232,15 @@ export default {
             }
           },
           // 暂时不做
-          // {
-          //   type: "success",
-          //   textWrapper() {
-          //     return "关联站点";
-          //   },
-          //   methods: row => {
-          //     console.log(row);
-          //   }
-          // },
+          {
+            type: "success",
+            textWrapper() {
+              return "关联站点";
+            },
+            methods: row => {
+              this.handleRelevanceSiteDialog(row.id);
+            }
+          },
           {
             type: "danger",
             textWrapper() {
@@ -246,6 +255,23 @@ export default {
     };
   },
   methods: {
+    //查询广告Id所有关联的站点列表
+    async handleRelevanceSiteDialog(id) {
+      const res = await this.$http.post("/api/GetWebsiteShareAdRelationList", {
+        id: id
+      });
+      if (res.data.result.code === 200) {
+        this.relevanceSiteDialogData = res.data.result.item;
+        this.RelevanceSiteDialogTitle =
+          "已关联站点" + this.relevanceSiteDialogData.length;
+        this.isRelevanceSiteDialog = true;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+    },
     // 获取公司下的员工列表
     async getStaffList() {
       const res = await this.$http.post("/api/CompanyUserList", {

@@ -342,7 +342,7 @@
                 >添加广告</el-button
               >
             </div>
-            <el-table :data="advertisingTable" style="width: 100%">
+            <el-table :data="advertisingTable" style="width: 100%" :header-cell-style="{ backgroundColor: '#f9fafc' }">
               <el-table-column
                 prop="date"
                 label="图片"
