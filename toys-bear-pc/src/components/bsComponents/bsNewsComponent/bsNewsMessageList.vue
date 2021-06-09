@@ -2,16 +2,62 @@
   <div class="bsNewsMessageList">
     <div class="chatMain">
       <div class="head">
-        <img
+        <el-image
           v-if="dataOption.type === 1"
+          class="header-img"
+          style="width: 30px;height: 30px;border-radius: 50%;position:static;"
           :src="dataOption.userInfo && dataOption.userInfo.avatar"
-          alt=""
-        />
-        <img
+          fit="contain"
+        >
+          <div
+            slot="placeholder"
+            class="image-slot"
+            style="width: 30px;height: 30px;border-radius:  50%;"
+          >
+            <img
+              style="width: 30px;height: 30px;border-radius:  50%;"
+              :src="require('@/assets/images/imgError.png')"
+            />
+          </div>
+          <div
+            slot="error"
+            class="image-slot"
+            style="width: 30px;height: 30px;border-radius:  50%;"
+          >
+            <img
+              style="width: 30px;height: 30px;border-radius:  50%;"
+              :src="require('@/assets/images/imgError.png')"
+            />
+          </div>
+        </el-image>
+        <el-image
           v-else-if="dataOption.type === 3"
+          class="header-img"
+          style="width: 30px;height: 30px;border-radius:  50%;position:static;"
           :src="dataOption.userInfo && dataOption.userInfo.userImage"
-          alt=""
-        />
+          fit="contain"
+        >
+          <div
+            slot="placeholder"
+            class="image-slot"
+            style="width: 30px;height: 30px;border-radius:  50%;"
+          >
+            <img
+              style="width: 30px;height: 30px;border-radius:  50%;"
+              :src="require('@/assets/images/imgError.png')"
+            />
+          </div>
+          <div
+            slot="error"
+            class="image-slot"
+            style="width: 30px;height: 30px;border-radius: 50%;"
+          >
+            <img
+              style="width: 30px;height: 30px;border-radius:  50%;"
+              :src="require('@/assets/images/imgError.png')"
+            />
+          </div>
+        </el-image>
         <p v-if="dataOption.type === 1">
           {{ dataOption.userInfo && dataOption.userInfo.nickname }}
         </p>
@@ -1138,7 +1184,7 @@ export default {
       display: flex;
       align-items: center;
       border-bottom: 1px solid #dcdfe6;
-      img {
+      .el-image {
         width: 30px;
         height: 30px;
         margin: 0 13px 0 20px;

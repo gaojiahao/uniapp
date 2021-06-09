@@ -29,16 +29,62 @@
                       :value="item.unreadMessageCount"
                       :hidden="item.unreadMessageCount < 1"
                     >
-                      <img
+                      <el-image
                         v-if="item.type === 1"
+                        class="header-img"
+                        style="width: 50px;height: 50px;border-radius: 100px;position:static;"
                         :src="item.userInfo && item.userInfo.avatar"
-                        alt=""
-                      />
-                      <img
+                        fit="contain"
+                      >
+                        <div
+                          slot="placeholder"
+                          class="image-slot"
+                          style="width: 50px;height: 50px;border-radius: 100px;"
+                        >
+                          <img
+                            style="width: 50px;height: 50px;border-radius: 100px;"
+                            :src="require('@/assets/images/imgError.png')"
+                          />
+                        </div>
+                        <div
+                          slot="error"
+                          class="image-slot"
+                          style="width: 50px;height: 50px;border-radius: 100px;"
+                        >
+                          <img
+                            style="width: 50px;height: 50px;border-radius: 100px;"
+                            :src="require('@/assets/images/imgError.png')"
+                          />
+                        </div>
+                      </el-image>
+                      <el-image
                         v-if="item.type === 3"
+                        class="header-img"
+                        style="width: 50px;height: 50px;border-radius: 100px;position:static;"
                         :src="item.userInfo && item.userInfo.userImage"
-                        alt=""
-                      />
+                        fit="contain"
+                      >
+                        <div
+                          slot="placeholder"
+                          class="image-slot"
+                          style="width: 50px;height: 50px;border-radius: 100px;"
+                        >
+                          <img
+                            style="width: 50px;height: 50px;border-radius: 100px;"
+                            :src="require('@/assets/images/imgError.png')"
+                          />
+                        </div>
+                        <div
+                          slot="error"
+                          class="image-slot"
+                          style="width: 50px;height: 50px;border-radius: 100px;"
+                        >
+                          <img
+                            style="width: 50px;height: 50px;border-radius: 100px;"
+                            :src="require('@/assets/images/imgError.png')"
+                          />
+                        </div>
+                      </el-image>
                     </el-badge>
                   </div>
                 </div>
@@ -443,7 +489,7 @@ export default {
         align-items: center;
         ._leftImg {
           border-radius: 50%;
-          img {
+          .el-image {
             width: 50px;
             height: 50px;
             border-radius: 50%;

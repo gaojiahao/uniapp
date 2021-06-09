@@ -14,33 +14,17 @@
               <span>通讯录</span>
               <i class="el-icon-circle-plus-outline"></i>
             </h3>
-            <ul
-              class="exhibition"
-              v-if="chatList.length"
-              style="border-top: none;"
-            >
-              <li
-                v-for="(item, i) in chatList"
-                :key="i"
-                @click="handerIsGrid(item, 0)"
-              >
+            <ul class="exhibition" style="border-top: none;">
+              <li v-for="(item, i) in chatList" :key="i">
                 <div class="exhibition_left">
                   <div class="_leftImg">
-                    <el-badge
-                      :value="item.unreadMessageCount"
-                      :hidden="item.unreadMessageCount < 1"
+                    <el-image
+                      class="header-img"
+                      style="width: 50px;height: 50px;border-radius: 100px;position:static;"
+                      :src="require('../../../../assets/images/imgError.png')"
+                      fit="contain"
                     >
-                      <img
-                        v-if="item.type === 1"
-                        :src="item.userInfo && item.userInfo.avatar"
-                        alt=""
-                      />
-                      <img
-                        v-if="item.type === 3"
-                        :src="item.userInfo && item.userInfo.userImage"
-                        alt=""
-                      />
-                    </el-badge>
+                    </el-image>
                   </div>
                 </div>
                 <div class="exhibition_right">
@@ -74,7 +58,7 @@
                       {{ item.userInfo && item.userInfo.linkName }}
                     </h4>
                   </el-tooltip>
-                  <p>{{ myFilterMsgTypes(item.latestMessage) }}</p>
+                  <p></p>
                 </div>
               </li>
             </ul>
@@ -120,7 +104,7 @@ export default {
   data() {
     return {
       connectState: false,
-      chatList: [],
+      chatList: 4,
       disabled: false,
       colorId: "2",
       isGrid: null,
