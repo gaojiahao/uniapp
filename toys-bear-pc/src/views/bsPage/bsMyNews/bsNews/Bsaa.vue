@@ -310,6 +310,11 @@ export default {
       const { code, item } = res.data.result;
       if (code === 200) {
         return item;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     // im获取群聊信息
@@ -369,16 +374,16 @@ export default {
             this.isGrid = "System";
             break;
           case 2:
-            console.log(item.sampleFrom == "EXHIBITION", "展厅对公司");
+            // item.sampleFrom == "EXHIBITION", "展厅对公司";
             this.isGrid = "Exhibition";
             break;
           case 3:
-            console.log(item.sampleFrom == "SALES", "公司对厂商");
-            console.log(item.sampleFrom == "EXHIBITION", "展厅对厂商");
+            // item.sampleFrom == "SALES", "公司对厂商";
+            // item.sampleFrom == "EXHIBITION", "展厅对厂商";
             this.isGrid = "Supplier";
             break;
           case 4:
-            console.log(item.sampleFrom == "EXHIBITION", "展厅对公司");
+            // item.sampleFrom == "EXHIBITION", "展厅对公司";
             this.isGrid = "Sales";
             break;
           case 5:

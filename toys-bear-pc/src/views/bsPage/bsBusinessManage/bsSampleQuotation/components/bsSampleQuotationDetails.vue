@@ -195,30 +195,29 @@ export default {
           {
             prop: "price",
             label: "厂价",
-            width: 50,
+            width: 100,
             color: "red",
             render: row => {
-              return "￥ " + row.price;
+              return "￥" + row.price;
             }
           },
           {
             prop: "offerAmount",
             label: "报出价",
-            width: 50,
+            width: 100,
             color: "red",
             render: row => {
-              return row.cu_de + " " + row.offerAmount;
+              return row.cu_de + row.offerAmount;
             }
           },
           {
             prop: "OfferTotalAmount",
             label: "报出总价",
-            width: 60,
+            width: 100,
             color: "red",
             render: row => {
               return (
                 row.cu_de +
-                " " +
                 this.$calculate.countTotalprice(
                   row.offerAmount,
                   row.ou_lo,

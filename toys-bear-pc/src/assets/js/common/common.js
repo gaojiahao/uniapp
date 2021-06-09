@@ -70,7 +70,7 @@ export function dateDiff(time) {
   };
 
   // 使用
-  if (monthC > 12) {
+  if (hourC > 24) {
     // 超过1年，直接显示年月日
     return (function() {
       var date = new Date(timestamp);
@@ -80,7 +80,13 @@ export function dateDiff(time) {
         zero(date.getMonth() + 1) +
         "月" +
         zero(date.getDate()) +
-        "日"
+        "日" +
+        " " +
+        zero(date.getHours()) +
+        ":" +
+        zero(date.getMinutes()) +
+        ":" +
+        zero(date.getSeconds())
       );
     })();
   } else if (monthC >= 1) {
@@ -197,14 +203,14 @@ export function filterMsgTypes(param) {
     case "RC:HQVCMsg": // 语音消息
       msg = "[语音]";
       break;
-    case "XZX:LinkMessage": // 链接消息
-      msg = param.content;
-      break;
     case "RC:ImgMsg": // 链接消息
       msg = "[图片]";
       break;
     case "RC:ReferenceMsg": // 引用消息
       msg = "[引用]";
+      break;
+    case "XZX:LinkMessage": // 链接消息
+      msg = "[链接]" + param.content.linkUrl;
       break;
   }
   return msg;
@@ -233,7 +239,6 @@ export function compress(file, size) {
 export function base64file(file, type) {
   //判断支不支持FileReader
   if (!file || !window.FileReader) {
-    console.log(window.FileReader);
     return false;
   }
   return new Promise(resolve => {

@@ -14,10 +14,12 @@
           <i class="el-icon-s-fold" v-show="!isCollapse"></i>
           <i class="el-icon-s-unfold" v-show="isCollapse"></i>
         </div>
-        <!-- <div class="isNotice">
+        <div class="isNotice" v-if="vesionList.length">
           <i class="laba iconfont icon-laba1"></i>
-          <p class="noticeContext">热烈庆祝小竹熊签约优选跨界玩具展厅</p>
-        </div> -->
+          <p class="noticeContext" @click="openVesionList">
+            <marqueeLeft :sendVal="vesionList" :duration="1" />
+          </p>
+        </div>
       </div>
       <div class="right">
         <div class="infoItem">
@@ -75,24 +77,78 @@
         </div>
       </div>
     </div>
+    <!-- 更新明细 -->
+    <el-dialog
+      class="detailsDialog"
+      :visible.sync="isShowDetails"
+      width="500px"
+      destroy-on-close
+    >
+      <div class="minxiBox">
+        <div class="minxiBody">
+          <div class="minxiBody_title">
+            <div class="title_label">
+              本次更新内容：
+            </div>
+            <div class="title_date">
+              更新时间：{{
+                vesionList[0] && vesionList[0].createdOn.replace(/T/, " ")
+              }}
+            </div>
+          </div>
+          <div class="minxiBody_body">
+            <el-scrollbar style="height: 100%;">
+              <pre>{{ vesionList[0] && vesionList[0].content }}</pre>
+            </el-scrollbar>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import eventBus from "@/assets/js/common/eventBus";
+import marqueeLeft from "@/components/commonComponent/marquee/marquee.vue";
 export default {
   props: {
+    item: Object,
     isCollapse: {
       type: Boolean
     }
   },
+  components: {
+    marqueeLeft
+  },
   data() {
     return {
+      isShowDetails: false,
+      vesionList: [],
       isCheckUser: false
     };
   },
   methods: {
+    // 查看更新明细
+    openVesionList() {
+      this.isShowDetails = true;
+    },
+    // 获取版本更新
+    async getBearVesionPage() {
+      const res = await this.$http.post("/api/BearVesionPage", {
+        skipCount: 1,
+        maxResultCount: 9999,
+        platForm: "pc"
+      });
+      if (res.data.result.code === 200) {
+        this.vesionList = res.data.result.item.items;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "error"
+        });
+      }
+    },
     // 去查看我的消息
     toMyInfo() {
       const fd = {
@@ -162,7 +218,9 @@ export default {
       this.isCheckUser = false;
     }
   },
-  created() {},
+  created() {
+    this.getBearVesionPage();
+  },
   mounted() {
     document.onclick = this.globalEvent;
   },
