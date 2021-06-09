@@ -325,7 +325,14 @@
                           class="message"
                           v-if="item.messageType === 'RC:TxtMsg'"
                         >
-                          {{ item.content.content }}
+                          <a
+                            :href="item.content.content"
+                            target="_brack"
+                            v-if="/^(http)|(www)/.test(item.content.content)"
+                            style="color:blue;"
+                            >{{ item.content.content }}</a
+                          >
+                          <span v-else>{{ item.content.content }}</span>
                         </span>
                         <!-- 引用消息 -->
                         <div
@@ -462,7 +469,14 @@
                           class="message"
                           v-if="item.messageType === 'RC:TxtMsg'"
                         >
-                          {{ item.content.content }}
+                          <a
+                            :href="item.content.content"
+                            target="_brack"
+                            v-if="/^(http)|(www)/.test(item.content.content)"
+                            style="color:blue;"
+                            >{{ item.content.content }}</a
+                          >
+                          <span v-else>{{ item.content.content }}</span>
                         </span>
                         <!-- 引用消息 -->
                         <div
@@ -1403,6 +1417,7 @@ export default {
                 background-color: #ccc;
               }
               .link_right {
+                text-align: left;
                 margin-left: 10px;
                 flex: 1;
                 overflow: hidden; /*超出部分隐藏*/

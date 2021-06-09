@@ -310,6 +310,11 @@ export default {
       const { code, item } = res.data.result;
       if (code === 200) {
         return item;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
       }
     },
     // im获取群聊信息
