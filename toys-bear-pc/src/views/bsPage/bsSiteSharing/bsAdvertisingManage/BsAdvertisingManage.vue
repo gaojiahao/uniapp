@@ -236,16 +236,16 @@ export default {
             }
           },
           // 不开放隐藏
-          // {
-          //   type: "success",
-          //   textWrapper() {
-          //     return "关联站点";
-          //   },
-          //   methods: row => {
-          //     this.adId = row.id;
-          //     this.GetWebsiteShareAdRelationList(row.id);
-          //   }
-          // },
+          {
+            type: "success",
+            textWrapper() {
+              return "关联站点";
+            },
+            methods: row => {
+              this.adId = row.id;
+              this.GetWebsiteShareAdRelationList(row.id);
+            }
+          },
           {
             type: "danger",
             textWrapper() {
