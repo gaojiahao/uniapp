@@ -38,6 +38,7 @@
                 />
               </div>
             </el-image>
+            <p style="margin-left:15px">{{ scope.row.companyName }}</p>
           </div>
         </template>
       </el-table-column>
@@ -136,6 +137,7 @@ export default {
     },
     //打开推送记录弹框
     async openBsPushRecord(val) {
+      console.log(val);
       const fd = {
         order: this.orderData.orderNumber,
         supplierNumber: val.companyNumber,
@@ -166,8 +168,9 @@ export default {
 <style scoped lang="less">
 @deep: ~">>>";
 .bsTablePushComponent {
-  @{deep} .el-table__header-wrapper .el-checkbox {
-    display: none;
+  .imgBox {
+    display: flex;
+    align-items: center;
   }
 }
 </style>

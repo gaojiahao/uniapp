@@ -333,7 +333,7 @@ export default {
     changeUpload(file, fileList) {
       let that = this;
       const width = 1920;
-      const height = 550;
+      const height = 551;
       let img = new Image();
       const isLt2M = file.size / 1024 / 1024 < 2; // 限制小于2M
       img.src = URL.createObjectURL(file.raw);

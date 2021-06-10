@@ -100,24 +100,23 @@ export default {
   methods: {
     //打开推送记录弹框
     async openBsPushRecord(val) {
-      console.log(222);
+      console.log(val);
       const fd = {
         order: this.orderData.orderNumber,
         supplierNumber: val.companyNumber,
         PageSize: 999,
         PageIndex: 1
       };
-
       const res = await this.$http.post("/api/getSupplierPushRecord", fd);
       if (res.data.result.code === 200) {
         this.pushRecordData = res.data.result.item.items;
+        this.pushRecordDialog = true;
       } else {
         this.$common.handlerMsgState({
           msg: res.data.result.msg,
           type: "danger"
         });
       }
-      this.pushRecordDialog = true;
     },
     //关闭推送记录弹框
     closePushRecordDialog() {

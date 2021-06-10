@@ -21,12 +21,12 @@
           >
             报价公式
           </div>
-          <!-- <div
+          <div
             :class="{ item: true, active: tp == 3 }"
             @click="handleTab('advertising', 3)"
           >
             站点广告
-          </div> -->
+          </div>
         </div>
         <div
           class="rightBox"
@@ -330,7 +330,7 @@
               </div>
             </div>
           </div>
-          <!-- <div class="advertising" id="advertising">
+          <div class="advertising" id="advertising">
             <div class="advertisingTising">
               <div class="title">站点广告</div>
               <el-button
@@ -342,7 +342,11 @@
                 >添加广告</el-button
               >
             </div>
-            <el-table :data="advertisingTable" style="width: 100%" :header-cell-style="{ backgroundColor: '#f9fafc' }">
+            <el-table
+              :data="advertisingTable"
+              style="width: 100%"
+              :header-cell-style="{ backgroundColor: '#f9fafc' }"
+            >
               <el-table-column
                 prop="date"
                 label="图片"
@@ -405,7 +409,7 @@
                 </template>
               </el-table-column>
             </el-table>
-          </div> -->
+          </div>
         </div>
       </div>
     </el-form>
