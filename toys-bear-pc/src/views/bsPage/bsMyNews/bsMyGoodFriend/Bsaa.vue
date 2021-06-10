@@ -2,69 +2,143 @@
   <!-- <div>敬请期待</div> -->
   <div class="bsNews">
     <div class="bsNewsLeft">
-      <el-scrollbar style="height: 100%;">
-        <div
-          class="infinite-list"
-          :infinite-scroll-immediate="false"
-          v-infinite-scroll="scrollSessionList"
-          infinite-scroll-delay="50"
-        >
-          <div>
-            <h3 class="infinite_title">
-              <span>通讯录</span>
-              <i class="el-icon-circle-plus-outline"></i>
-            </h3>
-            <ul class="exhibition" style="border-top: none;">
-              <li v-for="(item, i) in chatList" :key="i">
+      <div
+        class="infinite-list"
+        :infinite-scroll-immediate="false"
+        v-infinite-scroll="scrollSessionList"
+        infinite-scroll-delay="50"
+      >
+        <div>
+          <h3 class="infinite_title">
+            <span>通讯录</span>
+            <i class="el-icon-circle-plus-outline"></i>
+          </h3>
+          <ul class="exhibition">
+            <el-scrollbar style="height: 100%;">
+              <li
+                class="exhibition_side"
+                v-for="(item, i) in chatList"
+                :key="i"
+              >
                 <div class="exhibition_left">
                   <div class="_leftImg">
                     <el-image
                       class="header-img"
                       style="width: 50px;height: 50px;border-radius: 100px;position:static;"
-                      :src="require('../../../../assets/images/imgError.png')"
+                      :src="item.img"
                       fit="contain"
                     >
                     </el-image>
                   </div>
                 </div>
                 <div class="exhibition_right">
-                  <el-tooltip
-                    class="item"
-                    effect="dark"
-                    :disabled="
-                      item.userInfo &&
-                        item.userInfo.nickname &&
-                        item.userInfo.nickname.length < 15
-                    "
-                    :content="item.userInfo && item.userInfo.nickname"
-                    placement="top"
-                  >
-                    <h4 v-if="item.type === 1">
-                      {{ item.userInfo && item.userInfo.nickname }}
-                    </h4>
-                  </el-tooltip>
-                  <el-tooltip
-                    class="item"
-                    effect="dark"
-                    :disabled="
-                      item.userInfo &&
-                        item.userInfo.linkName &&
-                        item.userInfo.linkName.length < 15
-                    "
-                    :content="item.userInfo && item.userInfo.linkName"
-                    placement="top"
-                  >
-                    <h4 v-if="item.type === 3">
-                      {{ item.userInfo && item.userInfo.linkName }}
-                    </h4>
-                  </el-tooltip>
-                  <p></p>
+                  <h4>
+                    {{ item.title }}
+                  </h4>
                 </div>
               </li>
-            </ul>
-          </div>
+              <li class="exhibition_side">
+                <div class="exhibition_left">
+                  <div class="_leftImg">
+                    <el-image
+                      class="header-img"
+                      style="width: 50px;height: 50px;border-radius: 50%;position:static;"
+                      :src="orgCompany.companyLogo"
+                      fit="contain"
+                    >
+                      <div
+                        slot="placeholder"
+                        class="image-slot"
+                        style="width: 50px;height: 50px;border-radius: 50%;"
+                      >
+                        <img
+                          style="width: 50px;height: 50px;border-radius: 50%;"
+                          :src="require('@/assets/images/imgError.png')"
+                        />
+                      </div>
+                      <div
+                        slot="error"
+                        class="image-slot"
+                        style="width: 50px;height: 50px;border-radius: 50%;"
+                      >
+                        <img
+                          style="width: 50px;height: 50px;border-radius: 50%;"
+                          :src="require('@/assets/images/imgError.png')"
+                        />
+                      </div>
+                    </el-image>
+                  </div>
+                </div>
+                <div class="exhibition_right">
+                  <h4 style="font-weight: 700;">
+                    {{ orgCompany.companyName }}
+                  </h4>
+                </div>
+              </li>
+              <li class="exhibition_tongxunlu">
+                <div class="exhibition_left">
+                  <div class="_leftImg">
+                    <i class="icon_L"></i>
+                  </div>
+                </div>
+                <div class="exhibition_right" @click="checkTongxunlu">
+                  <h4>
+                    同事通讯录
+                    <i class="el-icon-arrow-up" v-show="isShowTongxunlu"></i>
+                    <i class="el-icon-arrow-down" v-show="!isShowTongxunlu"></i>
+                  </h4>
+                </div>
+              </li>
+              <!-- 通讯录 -->
+              <transition-group name="el-zoom-in-top">
+                <li
+                  v-show="isShowTongxunlu"
+                  class="exhibition_tongxunlu"
+                  v-for="item in orgList"
+                  :key="item.id"
+                >
+                  <div class="exhibition_left">
+                    <div class="_leftImg">
+                      <el-image
+                        class="header-img"
+                        style="width: 30px;height: 30px;border-radius: 50%;position:static;"
+                        :src="item.userImage"
+                        fit="contain"
+                      >
+                        <div
+                          slot="placeholder"
+                          class="image-slot"
+                          style="width: 30px;height: 30px;border-radius: 50%;"
+                        >
+                          <img
+                            style="width: 30px;height: 30px;border-radius: 50%;"
+                            :src="require('@/assets/images/imgError.png')"
+                          />
+                        </div>
+                        <div
+                          slot="error"
+                          class="image-slot"
+                          style="width: 30px;height: 30px;border-radius: 50%;"
+                        >
+                          <img
+                            style="width: 30px;height: 30px;border-radius: 50%;"
+                            :src="require('@/assets/images/imgError.png')"
+                          />
+                        </div>
+                      </el-image>
+                    </div>
+                  </div>
+                  <div class="exhibition_right" @click="checkTongxunlu">
+                    <h4>
+                      {{ item.linkman }}
+                    </h4>
+                  </div>
+                </li>
+              </transition-group>
+            </el-scrollbar>
+          </ul>
         </div>
-      </el-scrollbar>
+      </div>
     </div>
     <component
       v-if="isGrid"
@@ -103,17 +177,51 @@ export default {
   props: ["im"],
   data() {
     return {
-      connectState: false,
-      chatList: 4,
-      disabled: false,
-      colorId: "2",
+      isShowTongxunlu: true,
       isGrid: null,
-      isDiyu: "0",
-      dataOption: {},
-      msgList: []
+      connectState: false,
+      chatList: [
+        {
+          img: require("@/assets/images/changlianxiren.png"),
+          title: "常联系人"
+        },
+        {
+          img: require("@/assets/images/xindehaoyou.png"),
+          title: "新的好友"
+        },
+        {
+          img: require("@/assets/images/wodehaoyou.png"),
+          title: "我的好友"
+        },
+        {
+          img: require("@/assets/images/wodequnzu.png"),
+          title: "我的群组"
+        }
+      ],
+      orgList: [],
+      orgCompany: {}
     };
   },
   methods: {
+    // 展开通讯录
+    checkTongxunlu() {
+      this.isShowTongxunlu = !this.isShowTongxunlu;
+    },
+    // 获取公司架构
+    async getOrgList() {
+      const res = await this.$http.post("/api/OrgList", {});
+      console.log(res);
+      if (res.data.result.code === 200) {
+        this.orgList = res.data.result.item.personnes;
+        this.orgCompany = res.data.result.item.orgCompany;
+      } else {
+        this.$common.handlerMsgState({
+          msg: "取消删除",
+          type: "danger"
+        });
+      }
+    },
+    // 滚动事件
     scrollSessionList() {
       if (!this.connectState) {
         return false;
@@ -123,6 +231,7 @@ export default {
   created() {},
   mounted() {
     console.log(this.im);
+    this.getOrgList();
   },
   computed: {
     ...mapState(["userInfo"])
@@ -157,13 +266,13 @@ export default {
       }
     }
     .exhibition {
-      border-top: 1px solid #e5e5e5;
-      border-bottom: 1px solid #e5e5e5;
+      height: 715px;
+      max-height: 715px;
     }
     .exhibition li:hover {
       background-color: #eff6ff;
     }
-    .exhibition li {
+    .exhibition .exhibition_side {
       height: 70px;
       display: flex;
       padding: 0 20px;
@@ -184,21 +293,61 @@ export default {
         }
       }
       .exhibition_right {
-        padding: 13px 0 0 15px;
+        padding-left: 15px;
+        box-sizing: border-box;
+        flex: 1;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
         h4 {
-          font-weight: bold;
-          height: 20px;
-          line-height: 20px;
+          font-weight: 400;
           color: #333;
-          font-size: 14px;
-          max-width: 195px;
+          max-width: 190px;
           overflow: hidden;
           white-space: nowrap; /*不换行*/
           text-overflow: ellipsis; /*超出部分文字以...显示*/
         }
-        p {
-          color: #999;
-          max-width: 195px;
+      }
+    }
+    .exhibition .exhibition_tongxunlu {
+      height: 40px;
+      display: flex;
+      padding: 0 20px;
+      cursor: pointer;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      .exhibition_left {
+        margin-left: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        ._leftImg {
+          border-radius: 50%;
+          img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+          }
+          .icon_L {
+            display: block;
+            width: 8px;
+            height: 8px;
+            background: url("~@/assets/images/erceng.png") no-repeat center;
+          }
+        }
+      }
+      .exhibition_right {
+        padding-left: 10px;
+        box-sizing: border-box;
+        flex: 1;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        h4 {
+          font-weight: 400;
+          color: #333;
+          max-width: 190px;
           overflow: hidden;
           white-space: nowrap; /*不换行*/
           text-overflow: ellipsis; /*超出部分文字以...显示*/
