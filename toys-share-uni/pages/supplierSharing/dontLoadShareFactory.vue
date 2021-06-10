@@ -27,7 +27,7 @@
 										出厂货号：{{item.fa_no}}
 									</view>
 									<view class="product_list_info_text">
-										参考单价：<text class="red_color">{{item.cu_de}}{{item.price}}</text>
+										参考单价：<text class="red_color">￥{{item.price}}</text>
 									</view>
 									<view class="product_list_info_text">
 										<u-button type="warning" shape="circle" size="mini" @click="goDetail(item)">查看详情</u-button>
@@ -51,7 +51,7 @@
 											出厂货号：{{item.fa_no}}
 										</view>
 										<view class="product_list_info_text_right">
-											<text class="red_color">{{item.cu_de}}{{item.price}}</text>
+											<text class="red_color">￥{{item.price}}</text>
 										</view>
 									</view>
 								</view>
@@ -82,7 +82,7 @@
 											出厂货号：{{item.fa_no}}
 										</view>
 										<view class="product_list_info_text_right">
-											<text class="red_color">{{item.cu_de}}{{item.price}}</text>
+											<text class="red_color">￥{{item.price}}</text>
 										</view>
 									</view>
 								</view>
@@ -113,7 +113,7 @@
 											出厂货号：{{item.fa_no}}
 										</view>
 										<view class="product_list_info_text_right">
-											<text class="red_color">{{item.cu_de}}{{item.price}}</text>
+											<text class="red_color">￥{{item.price}}</text>
 										</view>
 									</view>
 								</view>
@@ -140,7 +140,79 @@
 			</view>
 		</view>
 		<!-- 尾部 -->
-		<xFooter></xFooter>
+		<view class="mb_content" v-else>
+			<view class="wrap">
+				<u-swiper :list="threeProduct.length ? dealImage(threeProduct):recommendProduct.length?dealImage(recommendProduct):dealImage(allProduct)" height="350" @click="goDetails"></u-swiper>
+			</view>
+			<view class="product_panel">
+				<view class="title_box">
+					<view class="icon_blue"></view>
+					<view class="title_box_title">推荐产品</view>
+					<view class="title_box_more" @click="toLink('supplierSharingAllList')">更多</view>
+				</view>
+				<view class="product_grid">
+					<b-row no-gutters>
+						<b-col cols="4" v-for="(item,index) in recommendProduct.slice(0,3)" :key='index'>
+							<view class="product_grid_item">
+								<image class="img" :src="item.img?item.img:defaultImg" @click="goDetail(item)"></image>
+								<view class="text" :title="item.name">{{item.name}}</view>
+							</view>
+						</b-col>
+					</b-row>
+				</view>
+			</view>
+			<view class="product_panel">
+				<view class="title_box">
+					<view class="icon_blue"></view>
+					<view class="title_box_title">最新产品</view>
+					<view class="title_box_more" @click="toLink('supplierSharingAllList')">更多</view>
+				</view>
+				<view class="product_list">
+					<view class="product_list_item" v-for="(item,index) in newProduct.slice(0,3)" :key='index'>
+						<view class="left">
+							<image class="img" :src="item.img?item.img:defaultImg" @click="goDetail(item)"></image>
+						</view>
+						<view class="right">
+							<view class="item name" :title="item.name">{{item.name}}</view>
+							<view class="item number" :title="item.name">货号：{{item.name}}</view>
+							<view class="item price" :title="item.name">参考单价：<text class="red_color">￥{{item.price}}</text></view>
+						</view>
+					</view>
+				</view>
+			</view>
+			<view class="product_panel">
+				<view class="title_box">
+					<view class="icon_blue"></view>
+					<view class="title_box_title">其他产品</view>
+					<view class="title_box_more"  @click="toLink('supplierSharingAllList')">更多</view>
+				</view>
+				<view class="product_list">
+					<b-row no-gutters>
+						<b-col cols="6" sm="3" v-for="(item,index) in newProduct.slice(0,4)" :key='index'>
+							<view class="product_list_item2">
+								<view class="product_list_img" @click="goDetail(item)">
+									<image class="img" :src="item.imageUrl"></image>
+								</view>
+								<view class="product_list_info">
+									<view class="product_list_info_text active" :title="item.name">
+										{{item.name}}
+									</view>
+									<view class="product_list_info_plus">
+										<view class="product_list_info_text_left">
+											出厂货号：{{item.fa_no}}
+										</view>
+										<view class="product_list_info_text_right">
+											参考单价：<text class="red_color">￥{{item.price}}</text>
+										</view>
+									</view>
+								</view>
+							</view>
+						</b-col>
+					</b-row>
+				</view>
+			</view>
+		</view>
+		<xFooter :isMobile="isMobile"></xFooter>
 	</view>
 </template>
 
@@ -183,7 +255,7 @@ export default {
 		async getCompanyByIDShare() {
 			var me = this;
 			const res = await me.$u.api.CompanyByIDShare({
-				companyNumber: uni.getStorageSync('supplier_sharing_companyNumber')
+				companyNumber: uni.getStorageSync('supplier_sharing_shareCode')
 			});
 			if (res.result.code === 200) {
 				this.contactInfo = res.result.item;
@@ -208,7 +280,7 @@ export default {
 			if (res.result.code === 200) {
 				this.threeProduct = res.result.item.threeDProduct.newList;
 				uni.setStorageSync('threeMenu',res.result.item.threeDProduct.totalCount);
-				this.threeMenuTemp = res.result.item.threeDProduct.length;
+				this.threeMenuTemp = res.result.item.threeDProduct.totalCount;
 			} else {
 				uni.showToast({
 					icon:'none',
@@ -229,7 +301,7 @@ export default {
 			if (res.result.code === 200) {
 				this.recommendProduct = res.result.item.recommendProduct.newList;
 				uni.setStorageSync('remMenu',res.result.item.recommendProduct.totalCount);
-				this.remMenuTemp = res.result.item.recommendProduct.length;
+				this.remMenuTemp = res.result.item.recommendProduct.totalCount;
 			} else {
 				uni.showToast({
 					icon:'none',
@@ -272,8 +344,8 @@ export default {
 			});
 			if (res.result.code === 200) {
 				this.allProduct = res.result.item.allProduct.newList;
-				this.contactInfo = res.result.item.companyInfo;
-				uni.setStorageSync('supplier_sharing_contactInfo',JSON.stringify(this.contactInfo));
+				// this.contactInfo = res.result.item.companyInfo;
+				// uni.setStorageSync('supplier_sharing_contactInfo',JSON.stringify(this.contactInfo));
 			} else {
 				uni.showToast({
 					icon:'none',
@@ -293,7 +365,24 @@ export default {
 		},
 		//去详情页
 		goDetail(item){
-			uni.setStorageSync('supplier_sharing_detail',JSON.stringify(item));
+			var arr = [];
+			var obj = {
+				...item
+			};
+			if(item.imglist.length){
+				for(var i=0;i<item.imglist.length;i++){
+					
+					arr.push(item.imglist[0].imgUrl);
+				}
+				obj['imgUrlList'] = arr;
+			}
+			uni.setStorageSync('supplier_sharing_detail',JSON.stringify(obj));
+			this.$Router.push({
+			    name:'supplierSharingDetail'
+			})
+		},
+		goDetails(index){
+			uni.setStorageSync('supplier_sharing_detail',JSON.stringify(this.threeProduct[index]));
 			this.$Router.push({
 			    name:'supplierSharingDetail'
 			})
@@ -304,10 +393,20 @@ export default {
 			    name: value
 			})
 		},
+		//修改数据返回类型，符合u-swiper的传参
+		dealImage(data){
+			var temp_data = data.map((e,index)=>{
+				e.image = e.imageUrl;
+				e.title = e.name;
+				return e;
+			});
+			return temp_data;
+		},
 		async init(){
 			this.$loading.show();
 			this.isMobile=util.isMobile();
 			await this.getToken();
+			await this.getCompanyByIDShare();
 			await this.getThreeDPage();
 			await this.getRecommendProductByNumberPage();
 			await this.getSupplierProductShareNew();

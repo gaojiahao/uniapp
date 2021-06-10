@@ -15,11 +15,11 @@
 				</view>
 				<view class="right">
 					<view class="contact">
-						<view class="item" v-if="contactInfo2.contactName" :title="contactInfo2.contactName">联系人：{{contactInfo2.contactName}}</view>
 						<view class="item" v-if="contactInfo2.phoneNumber||contactInfo2.telephone" :title="contactInfo2.phoneNumber||contactInfo2.telephon">联系电话：{{contactInfo2.phoneNumber||contactInfo2.telephone}}</view>
+						<view class="item" v-if="contactInfo2.contactsMan" :title="contactInfo2.contactsMan">联系人：{{contactInfo2.contactsMan}}</view>
 					</view>
-					<view class="item" v-if="contactInfo2.contactAddress">
-						<view class="address" :title="contactInfo2.contactAddress">公司地址：{{contactInfo2.contactAddress}}</view>
+					<view class="item" v-if="contactInfo2.address">
+						<view class="address" :title="contactInfo2.address">公司地址：{{contactInfo2.address}}</view>
 					</view>
 				</view>
 			</view>
@@ -34,9 +34,9 @@
 				<view class="sm_panel">
 					<view class="item active">联系方式</view>
 					<view class="item" v-if="contactInfo2.companyName">公司名称：{{contactInfo2.companyName}}</view>
-					<view class="item" v-if="contactInfo2.contactName">联系人：{{contactInfo2.contactName}}</view>
+					<view class="item" v-if="contactInfo2.contactsMan">联系人：{{contactInfo2.contactsMan}}</view>
 					<view class="item" v-if="contactInfo2.phoneNumber||contactInfo2.telephone">联系电话：{{contactInfo2.phoneNumber||contactInfo2.telephone}}</view>
-					<view class="item" v-if="contactInfo2.contactAddress">公司地址：{{contactInfo2.contactAddress}}</view>
+					<view class="item" v-if="contactInfo2.address">公司地址：{{contactInfo2.address}}</view>
 				</view>
 			</view>
 		</u-modal>
@@ -64,7 +64,7 @@ export default {
 			handler(val){
 				this.contactInfo2 = val;
 			},
-			deep:true
+			deep:true,
 		},
 	},
 	data() {
@@ -144,6 +144,7 @@ export default {
 						font-size: 16px;
 						height: 21px;
 						text-align: right;
+						flex-direction: row-reverse;
 					}
 					.item{
 						margin-right: 36px;

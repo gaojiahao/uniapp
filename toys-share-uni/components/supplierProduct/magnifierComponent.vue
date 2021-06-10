@@ -151,7 +151,7 @@ export default {
 			for(var i=0;i<this.productInfo.imgUrlList.length;i++){
 				var obj= {
 					type: 'img',
-					imgUrl: this.productInfo.imgUrlList[i].imgUrl,
+					imgUrl: this.productInfo.imgUrlList[i].image,
 				}
 				imgs.push(obj);
 			}

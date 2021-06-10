@@ -1,17 +1,16 @@
 <template>
 	<view class="supplier_sharing_list">
 		<!-- pc端 -->
+		<xHead active="supplierSharingAllList" :isMobile="isMobile"></xHead>
 		<template v-if="!isMobile">
-			<!-- 头部 -->
-			<xHead active="supplierSharingAllList"></xHead>
 			<view class="content">
 				<view class="product_box">
 					<view class="tool_bar">
 						<template v-if="!isMobile">
-							<view class="tool_bar_item" :class="[sortType==0?'active':'']" @click="change_search_type(0)">综合</view>
-							<view class="tool_bar_item" :class="[sortType==3?'active':'']" @click="change_search_type(3)">热度<u-icon :name="hotType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
-							<view class="tool_bar_item" :class="[sortType==1?'active':'']" @click="change_search_type(1)">单价<u-icon :name="priceType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
-							<view class="tool_bar_item" :class="[sortType==2?'active':'']" @click="change_search_type(2)">时间<u-icon :name="timeType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+							<view class="tool_bar_item" :class="[sortOrder==0?'active':'']" @click="change_search_type(0)">综合</view>
+							<view class="tool_bar_item" :class="[sortOrder==3?'active':'']" @click="change_search_type(3)">热度<u-icon :name="hotType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+							<view class="tool_bar_item" :class="[sortOrder==1?'active':'']" @click="change_search_type(1)">单价<u-icon :name="priceType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+							<view class="tool_bar_item" :class="[sortOrder==2?'active':'']" @click="change_search_type(2)">时间<u-icon :name="timeType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
 							<view class="tool_bar_item guanjianci">关键词</view>
 							<view class="tool_bar_item search">
 								<x-search placeholder="请输入关键词" height="64" shape="square" v-model="keyword" :clearabled="true"
@@ -55,7 +54,7 @@
 										</view>
 										<view class="product_list_info_plus2">
 											<view class="product_list_info_text_left">
-												单价：<text class="red_color">{{item.cu_de}}{{item.price}}</text>
+												单价：<text class="red_color">￥{{item.price}}</text>
 											</view>
 											<view class="product_list_info_text_left">
 												出厂货号：{{item.fa_no}}
@@ -103,7 +102,7 @@
 												出厂货号：{{item.fa_no}}
 											</view>
 											<view class="product_list_info_text_right">
-												<text class="red_color">{{item.cu_de}}{{item.price}}</text>
+												<text class="red_color">￥{{item.price}}</text>
 											</view>
 										</view>
 									</view>
@@ -116,6 +115,96 @@
 			</view>
 			<!-- 尾部 -->
 			<xFooter></xFooter>
+		</template>
+		<template v-else>
+			<view class="content_mb">
+				<view class="content_panel">
+					<view class="tool_bar">
+						<view class="tool_bar_item search">
+							<x-search placeholder="请输入关键词" height="64" shape="square" v-model="keyword" :clearabled="true"
+								bg-color="#fff"
+								border-color="#D2D2D2"
+								action-text="搜索"
+								:input-style="{fontSize:'14px'}" 
+								:action-style="{fontSize:'14px',width: '50px',
+								marginLeft: '10px',
+								height:'32px',
+								color: '#ffffff',
+								background: '#41AAE4',
+								borderRadius: '4px'}"
+								@clear="clearKeyWord"
+								@search="getData(1,'')"
+								@custom="getData(1,'')"
+								class="x_search"
+								>
+							</x-search>
+						</view>
+					</view>
+					<view class="tool_bar_mobile">
+						<view class="tool_bar_item" :class="[sortOrder==0?'active':'']" @click="change_search_type(0)">综合</view>
+						<view class="tool_bar_item" :class="[sortOrder==3?'active':'']" @click="change_search_type(3)">热度<u-icon :name="hotType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+						<view class="tool_bar_item" :class="[sortOrder==2?'active':'']" @click="change_search_type(2)">时间<u-icon :name="timeType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+						<view class="tool_bar_item" :class="[sortOrder==1?'active':'']" @click="change_search_type(1)">价格<u-icon :name="priceType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+						<view class="tool_bar_item_right">
+							<view class="tool_bar_item grid" :class="[listShowType=='grid'?'active':'']" @click="change_show_type('grid')"><u-icon name="grid"></u-icon></view>
+							<view class="tool_bar_item grid" :class="[listShowType=='list'?'active':'']" @click="change_show_type('list')"><u-icon name="list"></u-icon></view>
+						</view>
+					</view>
+					<view class="product_list">
+						<b-row v-if="listShowType=='grid'" no-gutters>
+							<b-col cols="6" sm="3" v-for="(item,index) in proudctList" :key='index'>
+								<view class="product_list_item">
+									<view class="product_list_img" @click="goDetail(item)" @tap="goDetail(item)">
+										<image class="img" :src="item.imageUrl"></image>
+									</view>
+									<view class="product_list_info">
+										<view class="product_list_info_text active" :title="item.name">
+											{{item.name}}
+										</view>
+										<view class="product_list_info_plus">
+											<view class="product_list_info_text_left">
+												{{item.fa_no}}
+											</view>
+											<view class="product_list_info_text_right">
+												<text class="red_color">￥{{item.price}}</text>
+											</view>
+										</view>
+									</view>
+								</view>
+							</b-col>
+						</b-row>
+						<b-row v-else-if="listShowType=='list'" no-gutters>
+							<b-col cols="12" v-for="(item,index) in proudctList" :key='index'>
+								<b-row :style="{borderBottom: '1px solid #dcdfe6'}" class="product_list_item2" no-gutters>
+									<b-col cols="6" sm="2">
+										<image :src="item.imageUrl" class="product_list_img2" @click="goDetail(item)" @tap="goDetail(item)"></image>
+										<view class="time"><view class="time_icon"></view>{{item.createdOn&&item.createdOn.replace(/T/, " ")}}</view>
+									</b-col>
+									<b-col cols="6" sm="3">
+										<view class="product_list_info_text2 active"><span>{{item.name}}</span></view>
+										<view class="product_list_info_text2">出厂货号：<span>{{item.fa_no}}</span></view>
+										<view class="product_list_info_text2">包装方式：<span>{{item.ch_pa}}</span></view>
+										<view class="product_list_info_text2">产品规格：<span>{{item.pr_le}}x{{item.pr_wi}}x{{item.pr_hi}}(cm)</span></view>
+										<view class="product_list_info_text2">包装规格：<span>{{item.in_le}}x{{item.in_wi}}x{{item.in_hi}}(cm)</span></view>
+										<view class="product_list_info_text2">外箱规格：<span>{{item.ou_le}}x{{item.ou_wi}}x{{item.ou_hi}}(cm)</span></view>
+										<view class="product_list_info_text2">装箱量：<span>{{item.in_en}}/{{item.ou_lo}}(PCS)</span></view>
+										<view class="product_list_info_text2">体积/材积：<span>{{item.bulk_stere}}(CBM)/{{item.bulk_feet}}(CUFT)</span></view>
+										<view class="product_list_info_text2">毛重/净重：<span>{{item.gr_we}}/{{item.ne_we}}(KG)</span></view>
+										<view class="product_list_info_text2">参考报价：<span class="red_color">￥{{item.offerAmount||0}}</span></view>
+									</b-col>
+								</b-row>
+							</b-col>
+						</b-row>
+					</view>
+					<!-- <pagination :totalPage="totalPage" :totalElements="total" v-model="currentPage" @change="getData"/> -->
+					<view class="loading_more">
+						<u-loadmore :status="status" />
+					</view>
+				</view>
+			</view>
+			<view style="height: 200px;">
+				<u-back-top :scroll-top="scrollTop" top="600" z-index="999999"></u-back-top>
+			</view>
 		</template>
 	</view>
 </template>
@@ -155,9 +244,22 @@ export default {
 			priceType:1,
 			timeType:1,
 			listShowType:'list',
+			status: 'loadmore',
+			list: 8,
+			page: 1,
+			iconType: 'flower',
+			loadText: {
+				loadmore: '点击或上拉加载更多',
+				loading: '努力加载中',
+				nomore: '实在没有了'
+			},
+			scrollTop: 0
 		}
 	},
 	methods:{
+		onPageScroll(e) {
+			this.scrollTop = e.scrollTop;
+		},
 		//搜索清空
 		clearKeyWord(){
 			this.keyword = "";
@@ -215,17 +317,95 @@ export default {
 				me.$loading.hide();
 			}
 		},
+		async onReachBottom() {
+			var me = this;
+			if(me.isMobile){
+				this.$loading.show();
+				const fd = {
+					shareCode: uni.getStorageSync('supplier_sharing_shareCode'),
+					skipCount: me.page,
+					maxResultCount: me.list,
+					keyWord: me.keyword,
+					sortOrder: me.sortOrder,
+					sortType: me.sortType,
+					getProductName: 'AllProduct'
+				};
+				for (const key in fd) {
+					if (fd[key] === null || fd[key] === undefined || fd[key] === "")
+						delete fd[key];
+				}
+				const res = await me.$u.api.SupplierShareProducts(fd);
+				if (res.result.code === 200) {
+					if(res.result.item.allProduct.newList.length){
+						for(var i=0;i<res.result.item.allProduct.newList.length;i++){
+							me.proudctList.push(res.result.item.allProduct.newList[i]);
+						}
+						me.page++;
+						me.status = 'loading';
+						me.$loading.hide();
+					} else {
+						me.status = 'nomore';
+						me.$loading.hide();
+					}
+				}
+			}
+		},
+		async getData_mobile() {
+			var me = this;
+			this.$loading.show();
+			const fd = {
+				shareCode: uni.getStorageSync('supplier_sharing_shareCode'),
+				skipCount: me.page,
+				maxResultCount: me.list,
+				keyWord: me.keyword,
+				sortOrder: me.sortOrder,
+				sortType: me.sortType,
+				getProductName: 'AllProduct'
+			};
+			for (const key in fd) {
+				if (fd[key] === null || fd[key] === undefined || fd[key] === "")
+					delete fd[key];
+			}
+			const res = await me.$u.api.SupplierShareProducts(fd);
+			if (res.result.code === 200) {
+				if(res.result.item.allProduct.newList.length){
+					for(var i=0;i<res.result.item.allProduct.newList.length;i++){
+						me.proudctList.push(res.result.item.allProduct.newList[i]);
+					}
+					me.page++;
+					me.status = 'loading';
+					me.$loading.hide();
+				}
+			}
+		},
 		//去详情页
 		goDetail(item){
-			uni.setStorageSync('supplier_sharing_detail',JSON.stringify(item));
+			var arr = [];
+			var obj = {
+				...item
+			};
+			if(item.imglist.length){
+				for(var i=0;i<item.imglist.length;i++){
+					
+					arr.push(item.imglist[0].imgUrl);
+				}
+				obj['imgUrlList'] = arr;
+			}
+			uni.setStorageSync('supplier_sharing_detail',JSON.stringify(obj));
 			this.$Router.push({
 			    name:'supplierSharingDetail'
 			})
 		},
 		async init(){
+			var me = this;
 			this.$loading.show();
 			this.isMobile=util.isMobile();
-			await this.getData();
+			//await this.getData();
+			if(me.isMobile){
+				me.getData_mobile();
+			} else {
+				this.getData();
+			}
 			this.$loading.hide();
 		},
 	},

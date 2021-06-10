@@ -6,8 +6,8 @@ const install = (Vue, vm) => {
 	  baseUrl = "http://124.71.6.26:8080"
 	  // baseUrl = "https://www.toysbear.com"
 	}else{
-		//baseUrl = "http://124.71.6.26:8080"
-		baseUrl = "https://www.toysbear.com"
+		baseUrl = "http://124.71.6.26:8080"
+		//baseUrl = "https://www.toysbear.com"
 	}
 	
 	Vue.prototype.$u.http.setConfig({
