@@ -942,8 +942,8 @@ export default {
           this.$refs.rightBoxScroll.scrollTop ===
         this.$refs.rightBoxScroll.clientHeight
       ) {
-        // this.tp = 3;
-        this.tp = 2;
+        this.tp = 3;
+        // this.tp = 2;
       }
     },
     // 获取系统配置语言列表

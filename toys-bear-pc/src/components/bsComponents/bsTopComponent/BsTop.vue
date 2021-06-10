@@ -17,7 +17,7 @@
         <div class="isNotice" v-if="vesionList.length">
           <i class="laba iconfont icon-laba1"></i>
           <p class="noticeContext" @click="openVesionList">
-            <marqueeLeft :sendVal="vesionList" :duration="1" />
+            <marqueeLeft :list="vesionList" :duration="1" :showDate="true" />
           </p>
         </div>
       </div>
