@@ -11,11 +11,8 @@ export default {
     Table
   },
   props: {
-    productList: {
+    pushRecordData: {
       type: Array
-    },
-    pushDialog: {
-      type: Boolean
     }
   },
   data() {
@@ -104,7 +101,10 @@ export default {
       this.$emit("handlePushDialog", false);
     }
   },
-  created() {},
+  created() {
+    console.log(this.pushRecordData, "推送记录数据");
+    this.tableData.data = this.pushRecordData;
+  },
   mounted() {}
 };
 </script>

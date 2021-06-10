@@ -76,9 +76,6 @@ export default {
     pushDialog: {
       type: Boolean
     },
-    // pushList: {
-    //   type: Array,
-    // },
     orderData: {
       type: Object
     },
@@ -99,7 +96,6 @@ export default {
       checkAll: false,
       textareaData: "",
       messageExtType: [],
-      toCompanyNumber: [],
       pushList: [],
       PushContent: null,
       editRow: {},
@@ -170,13 +166,9 @@ export default {
     handleRadio(item) {
       this.dataRadio = item;
       this.textareaData = item.content;
-      console.log(item, "单选框事件");
     },
     // 确定推送
     async handleConfirmPush() {
-      for (let i = 0; i < this.multipleSelection.length; i++) {
-        this.toCompanyNumber.push(this.multipleSelection[i].companyNumber);
-      }
       if (this.textareaData != "") {
         this.PushContent = this.textareaData;
       } else {
@@ -189,7 +181,7 @@ export default {
         phoneNumber: this.userInfo.phoneNumber,
         orderPushType: this.orderData.orderPushType,
         orderNumber: this.orderData.orderNumber,
-        toCompanyNumber: this.toCompanyNumber,
+        toCompanyNumber: this.multipleSelection,
         PushContent: this.PushContent,
         messageExt: this.dataRadio.messageExt,
         messageModel: this.dataRadio.messageModel,
@@ -198,7 +190,7 @@ export default {
       const res = await this.$http.post("/api/SendPushTemplate", data);
       if (res.data.result.code === 200) {
         this.closeDialog();
-        this.$emit("handleCheckAllClosee", false);
+        this.$emit("handleCheckAllClosee");
         this.$common.handlerMsgState({
           msg: "推送成功",
           type: "success"
@@ -221,7 +213,6 @@ export default {
         maxResultCount: 999,
         messageModel: this.parameter
       };
-
       const res = await this.$http.post(
         "/api/PushSettings/MessageTeplateSettingsByPage",
         fd

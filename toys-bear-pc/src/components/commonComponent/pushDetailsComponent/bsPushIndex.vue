@@ -54,10 +54,10 @@
             @click="handerIsGrid('bsGridPushComponent')"
           ></div>
           <!-- 列表版本未完成 -->
-          <!-- <div
+          <div
             :class="{ column: true, active: isGrid === 'bsTablePushComponent' }"
             @click="handerIsGrid('bsTablePushComponent')"
-          ></div> -->
+          ></div>
         </div>
       </div>
       <div class="tableBox">
@@ -65,9 +65,9 @@
         <component
           ref="listComponent"
           :is="isGrid"
+          :orderData="orderData"
           :plantList="tableData"
-          :multipleSelection.sync="multipleSelection"
-          :checkAll.sync="checkAll"
+          @updateMultipleSelection="updateMultipleSelection"
         ></component>
       </div>
     </div>
@@ -124,11 +124,16 @@ export default {
   },
 
   watch: {
-    // multipleSelection: {
-    //   handler(newName, oldName) {
-    //     console.log(newName, oldName);
-    //   },
-    // },
+    multipleSelection: {
+      deep: true,
+      handler(newName) {
+        if (this.tableData.length === newName.length) {
+          this.checkAll = true;
+        } else {
+          this.checkAll = false;
+        }
+      }
+    }
   },
   data() {
     return {
@@ -140,7 +145,6 @@ export default {
       },
       itemList: {},
       title: null,
-
       multipleSelection: [],
       tableData: []
     };
@@ -188,7 +192,6 @@ export default {
           linkman: this.item.orgPersonnelName, //业务员
           orderStatus: this.item.readStatus, //状态
           createdOn: this.item.createdOn, //时间
-
           remark: this.item.pushContent, //备注
           orderPushType: 4, //推送类型
           orderNumber: this.item.offerNumber //单号
@@ -225,47 +228,43 @@ export default {
     handerIsGrid(type) {
       this.isGrid = type;
     },
+    // 单选添加和删除
+    updateMultipleSelection(event, companyNumber) {
+      if (event) {
+        this.multipleSelection.push(companyNumber);
+      } else {
+        this.multipleSelection.splice(
+          this.multipleSelection.findIndex(item => item === companyNumber),
+          1
+        );
+      }
+      console.log(this.multipleSelection);
+    },
     // 关闭全选
     handleCheckAllClosee() {
       this.checkAll = false;
       this.multipleSelection = [];
-      if (this.isGrid === "bsGridPushComponent") {
-        this.$refs.listComponent.plantList.forEach(row => {
-          row.checked = false;
-        });
-      } else {
-        this.$refs.listComponent.$refs.multipleTable.clearSelection();
-      }
+      this.$refs.listComponent.plantList.forEach(row => {
+        row.checked = false;
+      });
     },
     //全选按钮
     handleCheckAllChange(val) {
       if (val) {
         //点击全选后数据所有选择的数据存到这个数组里边
-        this.multipleSelection = this.tableData;
-        if (this.isGrid === "bsGridPushComponent") {
-          this.$refs.listComponent.plantList.forEach(row => {
-            row.checked = true;
-          });
-        } else {
-          this.$refs.listComponent.plantList.forEach(row => {
-            this.$refs.listComponent.$refs.multipleTable.toggleRowSelection(
-              row,
-              true
-            );
-          });
-        }
+        this.multipleSelection = this.tableData.map(item => {
+          return item.companyNumber;
+        });
+        this.$refs.listComponent.plantList.forEach(row => {
+          row.checked = true;
+        });
       } else {
         this.multipleSelection = [];
-        if (this.isGrid === "bsGridPushComponent") {
-          this.$refs.listComponent.plantList.forEach(row => {
-            row.checked = false;
-          });
-        } else {
-          this.$refs.listComponent.$refs.multipleTable.clearSelection();
-        }
+        this.$refs.listComponent.plantList.forEach(row => {
+          row.checked = false;
+        });
       }
     },
-
     // 打开/关闭推送弹框
     handlePushDialog(flag) {
       if (this.multipleSelection.length > 0) {
