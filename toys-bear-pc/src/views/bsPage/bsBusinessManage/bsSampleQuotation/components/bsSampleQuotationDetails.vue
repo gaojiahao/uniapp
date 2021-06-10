@@ -62,7 +62,7 @@ export default {
           {
             prop: "name",
             label: "产品",
-            width: 300,
+            width: 280,
             color: "#3368a9",
             align: "left",
             // isHiden: true,
@@ -82,6 +82,7 @@ export default {
           {
             prop: "supplierPhone",
             label: "联系厂商",
+            width: 100,
             render: row => {
               switch (row.supplierTelephoneNumber) {
                 case "":
@@ -109,10 +110,11 @@ export default {
             isHiden: true,
             label: "资料来源"
           },
-          { prop: "fa_no", width: 60, label: "出厂货号", isHiden: true },
-          { prop: "ch_pa", width: 50, label: "包装", isHiden: true },
+          { prop: "fa_no", Width: 60, label: "出厂货号", isHiden: true },
+          { prop: "ch_pa", minWidth: 70, label: "包装", isHiden: true },
           {
             prop: "pr_le",
+            minWidth: 100,
             renderHeard: () => {
               return "产品规格</br>(cm)";
             },
@@ -123,7 +125,7 @@ export default {
           },
           {
             prop: "pr_le",
-
+            minWidth: 100,
             renderHeard: () => {
               return "包装规格</br>(cm)";
             },
@@ -134,7 +136,7 @@ export default {
           },
           {
             prop: "pr_le",
-
+            minWidth: 100,
             renderHeard: () => {
               return "外箱规格</br>(cm)";
             },
@@ -150,14 +152,14 @@ export default {
               return "体积/材积</br>(cbm)/(cuft)";
             },
             isHiden: true,
-            width: 150,
+            minWidth: 100,
             render: row => {
               return row.bulk_stere + "/" + row.bulk_feet;
             }
           },
           {
             prop: "gr_we",
-
+            minWidth: 90,
             renderHeard: () => {
               return "毛重/净重</br>(kg)";
             },
@@ -205,6 +207,7 @@ export default {
             prop: "offerAmount",
             label: "报出价",
             width: 100,
+            padding: "0  2px",
             color: "red",
             render: row => {
               return row.cu_de + row.offerAmount;
@@ -214,6 +217,7 @@ export default {
             prop: "OfferTotalAmount",
             label: "报出总价",
             width: 100,
+            padding: "0  2px",
             color: "red",
             render: row => {
               return (

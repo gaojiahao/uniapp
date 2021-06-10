@@ -44,7 +44,7 @@
           <!-- 字段判断 -->
           <span
             v-if="col.render"
-            :style="{ color: col.color }"
+            :style="{ color: col.color, padding: col.padding }"
             v-html="col.render(scope.row)"
           ></span>
           <!-- 产品信息和图片 -->
@@ -607,7 +607,7 @@ export default {
   }
   .el-table__body-wrapper {
     .cell {
-      padding: 8px 0;
+      padding: 8px 4px;
     }
   }
   .el-table__row {
@@ -624,19 +624,17 @@ export default {
 .productInfo {
   display: flex;
   justify-content: center;
-  .el-image {
-    cursor: pointer;
-  }
+  cursor: pointer;
+
   @{deep}.infoBox {
-    width: 190px;
+    width: 170px;
     height: 60px;
-    margin-left: 10px;
+    margin-left: 15px;
     div {
       line-height: 25px;
     }
     .name {
       margin-top: 5px;
-      cursor: pointer;
       overflow: hidden; /*超出部分隐藏*/
       white-space: nowrap; /*不换行*/
       text-overflow: ellipsis; /*超出部分文字以...显示*/
@@ -647,7 +645,6 @@ export default {
       }
     }
     .factory {
-      cursor: pointer;
       display: flex;
       align-items: center;
       color: #3368a9;

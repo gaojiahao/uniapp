@@ -12,7 +12,7 @@
             size="medium"
             ref="focusKeyword"
             @keyup.native.enter="searchProducts"
-            style="width: 340px; margin: 0 15px"
+            style="width: 340px; margin: 0 15px;"
             :placeholder="
               MyisGaoji || MyisZonghe === true ? '' : placeholderVal
             "
@@ -305,6 +305,12 @@ export default {
       }
       .history_box {
         position: relative;
+        @{deep}.el-input--prefix .el-input__inner {
+          padding-left: 45px;
+        }
+        @{deep}.el-input__prefix {
+          left: 14px;
+        }
         @{deep}.isPadding {
           .el-input__inner {
             padding-left: 130px;

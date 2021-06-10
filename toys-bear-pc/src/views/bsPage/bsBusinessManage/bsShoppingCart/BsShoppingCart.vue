@@ -36,7 +36,7 @@
         ></el-table-column>
         <el-table-column label="序号" type="index" align="center" width="40">
         </el-table-column>
-        <el-table-column label="产品" width="280">
+        <el-table-column label="产品" width="270">
           <template slot-scope="scope">
             <div class="imgBox">
               <el-tooltip
@@ -126,7 +126,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="联系厂商">
+        <el-table-column align="center" label="联系厂商" min-width="100">
           <template slot-scope="scope">
             <div
               v-if="
@@ -164,7 +164,7 @@
           label="出厂货号"
         ></el-table-column>
         <el-table-column
-          width="60"
+          min-width="70"
           align="center"
           prop="productJson.ch_pa"
           label="包装"
@@ -227,7 +227,7 @@
         <el-table-column
           align="center"
           label="体积(cbm)/材积(cuft)"
-          width="150"
+          min-width="100"
           show-overflow-tooltip
         >
           <template slot="header">
@@ -245,7 +245,7 @@
         <el-table-column
           align="center"
           label="毛重/净重(kg)"
-          width="100"
+          width="90"
           show-overflow-tooltip
         >
           <template slot="header">
@@ -312,7 +312,7 @@
           align="center"
           prop="price"
           label="单价"
-          width="50"
+          min-width="70"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
@@ -321,7 +321,7 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="总价" min-width="60">
+        <el-table-column align="center" label="总价" min-width="70">
           <template slot-scope="scope">
             <p class="item price">
               <span>{{ scope.row.currency }}</span>
@@ -1723,6 +1723,7 @@ export default {
       bottom: 0;
       box-sizing: border-box;
       padding-right: 20px;
+      border-top: 1px solid #ebeef5;
       .total_wrap {
         background-color: #fff;
         display: flex;

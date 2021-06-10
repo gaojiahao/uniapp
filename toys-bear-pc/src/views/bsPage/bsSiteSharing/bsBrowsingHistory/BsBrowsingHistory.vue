@@ -79,7 +79,7 @@
       </div>
       <div class="item">
         <el-button
-          size="medium"
+          size="mini"
           @click="handletype('')"
           :class="{ all: btnType == '' }"
         >
@@ -89,7 +89,7 @@
       </div>
       <div class="item">
         <el-button
-          size="medium"
+          size="mini"
           @click="handletype('BrowseProducts')"
           :class="{ ll: btnType == 'BrowseProducts' }"
         >
@@ -101,7 +101,7 @@
       </div>
       <div class="item">
         <el-button
-          size="medium"
+          size="mini"
           @click="handletype('ProductsShop')"
           :class="{ jg: btnType == 'ProductsShop' }"
         >
@@ -113,7 +113,7 @@
       </div>
       <div class="item">
         <el-button
-          size="medium"
+          size="mini"
           @click="handletype('ProductOrder')"
           :class="{ Dd: btnType == 'ProductOrder' }"
         >

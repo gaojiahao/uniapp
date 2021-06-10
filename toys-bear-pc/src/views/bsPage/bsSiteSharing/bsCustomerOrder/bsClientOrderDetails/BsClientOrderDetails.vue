@@ -124,7 +124,7 @@ export default {
           {
             prop: "productName",
             label: "产品",
-            width: 300,
+            width: 280,
             color: "#3368a9",
             align: "left",
             // isHiden: true,
@@ -144,6 +144,7 @@ export default {
           {
             prop: "supplierPhone",
             label: "联系厂商",
+            width: 100,
             render: row => {
               switch (row.supplierTelephoneNumber) {
                 case "":
@@ -171,67 +172,64 @@ export default {
             isHiden: true,
             label: "资料来源"
           },
-          { prop: "fa_no", label: "出厂货号", isHiden: true },
-          { prop: "ch_pa", label: "包装", isHiden: true, width: 90 },
+          { prop: "fa_no", label: "出厂货号", isHiden: true, Width: 60 },
+          { prop: "ch_pa", label: "包装", isHiden: true, minWidth: 70 },
           {
             prop: "pr_le",
+            minWidth: 100,
             renderHeard: () => {
               return "产品规格<br /> (cm)";
             },
-            isHiden: true,
+
             render: row => {
               return row.pr_le + "x" + row.pr_wi + "x" + row.pr_hi;
             }
           },
           {
             prop: "pr_le",
-
+            minWidth: 100,
             renderHeard: () => {
               return "包装规格<br /> (cm)";
             },
-            isHiden: true,
+
             render: row => {
               return row.in_le + "x" + row.in_wi + "x" + row.in_hi;
             }
           },
           {
             prop: "pr_le",
-
+            minWidth: 100,
             renderHeard: () => {
               return "外箱规格<br /> (cm)";
             },
-            isHiden: true,
+
             render: row => {
               return row.ou_le + "x" + row.ou_wi + "x" + row.ou_hi;
             }
           },
           {
             prop: "bulk_stere",
+            minWidth: 100,
 
-            isHiden: true,
             renderHeard: () => {
               return "体积/材积<br />(cbm)/(cuft)";
             },
-            width: 150,
             render: row => {
               return row.bulk_stere + "/" + row.bulk_feet;
             }
           },
           {
             prop: "gr_we",
-
-            isHiden: true,
+            minWidth: 90,
             renderHeard: () => {
               return "毛重/净重<br />(kg)";
             },
-            width: 100,
             render: row => {
               return row.gr_we + "/" + row.ne_we;
             }
           },
           {
             prop: "in_en",
-
             renderHeard: () => {
               return "装箱量<br />(pcs)";
             },
@@ -257,8 +255,7 @@ export default {
           {
             prop: "costPrice",
             label: "参考单价",
-            isHiden: true,
-            width: 70,
+            minWidth: 80,
             color: "#3368a9",
             render: row => {
               return "￥" + row.costPrice;
@@ -267,8 +264,7 @@ export default {
           {
             prop: "productPrice",
             label: "报出价",
-            isHiden: true,
-            width: 70,
+            minWidth: 100,
             color: "#f56c6c",
             render: row => {
               return this.options.currencyType + row.productPrice;
@@ -277,8 +273,8 @@ export default {
           {
             prop: "OfferTotalAmount",
             label: "报出总价",
-            width: 70,
-            isHiden: true,
+            minWidth: 100,
+
             color: "#f56c6c",
             render: row => {
               return (
