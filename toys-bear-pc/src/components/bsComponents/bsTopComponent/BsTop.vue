@@ -84,25 +84,7 @@
       width="500px"
       destroy-on-close
     >
-      <div class="minxiBox">
-        <div class="minxiBody">
-          <div class="minxiBody_title">
-            <div class="title_label">
-              本次更新内容：
-            </div>
-            <div class="title_date">
-              更新时间：{{
-                vesionList[0] && vesionList[0].createdOn.replace(/T/, " ")
-              }}
-            </div>
-          </div>
-          <div class="minxiBody_body">
-            <el-scrollbar style="height: 100%;">
-              <pre>{{ vesionList[0] && vesionList[0].content }}</pre>
-            </el-scrollbar>
-          </div>
-        </div>
-      </div>
+      <bsUpdateBox @close="close" :vesionList="vesionList" />
     </el-dialog>
   </div>
 </template>
@@ -111,6 +93,7 @@
 import { mapState } from "vuex";
 import eventBus from "@/assets/js/common/eventBus";
 import marqueeLeft from "@/components/commonComponent/marquee/marquee.vue";
+import bsUpdateBox from "./components/bsUpdateBox.vue";
 export default {
   props: {
     item: Object,
@@ -119,16 +102,21 @@ export default {
     }
   },
   components: {
-    marqueeLeft
+    marqueeLeft,
+    bsUpdateBox
   },
   data() {
     return {
       isShowDetails: false,
-      vesionList: [],
-      isCheckUser: false
+      isCheckUser: false,
+      vesionList: []
     };
   },
   methods: {
+    // 关闭更新明细
+    close() {
+      this.isShowDetails = false;
+    },
     // 查看更新明细
     openVesionList() {
       this.isShowDetails = true;

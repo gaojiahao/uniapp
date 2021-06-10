@@ -341,24 +341,20 @@
       title="举报"
       :visible.sync="dialogjubao"
       destroy-on-close
-      width="800px"
+      width="500px"
     >
       <ul class="selectJubaoInfo">
-        <li
+        <el-radio
           v-for="(item, i) in ['政治敏感', '欺诈骗钱', '其他']"
           :key="i"
-          @click="checkJubaoInfo($event, item)"
-          :class="{ active: jubaoActive === item }"
+          v-model="selectJubaoValue"
+          :label="item"
+          >{{ item }}</el-radio
         >
-          {{ item }}
-        </li>
-        <el-button
-          type="primary"
-          round
-          style="width: 100%; height: 50px"
-          @click="jubaoEvent"
-          >确 定</el-button
-        >
+        <center class="btns">
+          <el-button @click="dialogjubao = false">取 消</el-button>
+          <el-button type="primary" @click="jubaoEvent">确 定</el-button>
+        </center>
       </ul>
     </el-dialog>
     <!-- 发布公告 -->
@@ -1455,23 +1451,14 @@ export default {
   //   }
 }
 .selectJubaoInfo {
-  li {
-    height: 80px;
-    border-bottom: 1px solid #ccc;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    text-indent: 50px;
-    cursor: pointer;
-    &:last-of-type {
-      border: none;
-    }
-    &:hover {
-      background-color: #f5f7fa;
-    }
-    &.active {
-      color: red;
-    }
+  .el-radio {
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    border-bottom: 1px solid #e5e5e5;
+  }
+  .btns {
+    margin-top: 20px;
   }
 }
 @{deep} .el-input-group__append {

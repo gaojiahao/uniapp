@@ -138,25 +138,14 @@
         :visible.sync="addPurchaseDialog"
         width="500px"
       >
-        <div class="addPushContent">
-          <div class="productCount">
-            <p class="countItem">
-              <span class="countItem_title">产品数量：</span>
-              <span>{{ addShopOption.productCount }}</span>
-            </p>
-            <!-- <p class="countItem">
-              <span class="countItem_title">下架产品数：</span>
-              <span>{{ addShopOption.productCount }}</span>
-            </p> -->
-          </div>
-          <div class="countItem_btns">
-            <el-button size="medium" @click="close">取消</el-button>
-            <el-button size="medium" type="primary" @click="submit">
-              加购
-            </el-button>
-          </div>
-          <p class="tips">（已下架产品无法加购）</p>
-        </div>
+        <oneClickPurchase
+          :addShopOption="{
+            orderNumber: item.orderNumber,
+            orderType: item.orderType
+          }"
+          @close="close"
+          @submit="submit"
+        />
       </el-dialog>
     </transition>
   </div>
@@ -168,12 +157,14 @@ import bsExportOrder from "@/components/commonComponent/exportOrderComponent/com
 import bsTable from "@/components/table";
 import { mapState } from "vuex";
 import eventBus from "@/assets/js/common/eventBus.js";
+import oneClickPurchase from "@/components/commonComponent/oneClickPurchase/oneClickPurchase.vue";
 export default {
   name: "bsSampleQuotationDetails",
   components: {
     bsExportOrder,
     bsTable,
-    Summary
+    Summary,
+    oneClickPurchase
   },
   props: {
     item: {
@@ -182,7 +173,6 @@ export default {
   },
   data() {
     return {
-      addShopOption: null,
       totalAmount: null,
       addPurchaseDialog: false,
       exportTemplateDialog: false,
@@ -374,7 +364,7 @@ export default {
   },
   methods: {
     // 提交一键加购
-    async submit() {
+    async submit(myData) {
       // this.$common.handlerMsgState({
       //   msg: "敬请期待",
       //   type: "warning"
@@ -390,7 +380,7 @@ export default {
           currency: "￥",
           Price: 0,
           shopType: "companysamples",
-          productNumber: this.addShopOption.productNumber
+          productNumber: myData.productNumber
         },
         {
           timeout: 9999999
@@ -412,23 +402,10 @@ export default {
     // 关闭加购
     close() {
       this.addPurchaseDialog = false;
-      this.addShopOption = null;
     },
     // 一键加购
     async openAdd() {
-      const res = await this.$http.post("/api/OnekeyShopping", {
-        orderNumber: this.item.orderNumber,
-        orderType: this.item.orderType
-      });
-      if (res.data.result.code === 200) {
-        this.addShopOption = res.data.result.item;
-        this.addPurchaseDialog = true;
-      } else {
-        this.$common.handlerMsgState({
-          msg: res.data.result.msg,
-          type: "danger"
-        });
-      }
+      this.addPurchaseDialog = true;
     },
     // 获取合计total
     async getERPOrderTotal() {
