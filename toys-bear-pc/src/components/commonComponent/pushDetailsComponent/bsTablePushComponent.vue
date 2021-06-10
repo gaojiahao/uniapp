@@ -68,14 +68,14 @@
             type="success"
             @click="openBsSampleDetail(scope.row)"
           >
-            泽洋明细
+            择样明细
           </el-button>
 
           <el-button
             size="mini"
             type="warning"
             @click="openBsPushRecord(scope.row)"
-            >推送记录（{{}}）</el-button
+            >推送记录（）</el-button
           >
           <el-button size="mini" type="primary"> 在线咨询 </el-button>
         </template>
@@ -87,7 +87,7 @@
       width="1620px"
       :before-close="closeSampleDetailDialog"
     >
-      <bsSampleDetailComponent></bsSampleDetailComponent>
+      <bsSampleDetailComponent :orderData="orderData"></bsSampleDetailComponent>
     </el-dialog>
 
     <el-dialog
@@ -117,6 +117,7 @@ export default {
   components: { bsSampleDetailComponent, bsPushRecordComponent },
   data() {
     return {
+      item: {},
       sampleDetailDialog: false,
       pushRecordDialog: false,
       pushRecordData: []
@@ -129,12 +130,13 @@ export default {
     },
     //打开择样明细弹框
     openBsSampleDetail() {
-      this.sampleDetailDialog = true;
+      // this.sampleDetailDialog = true;
     },
     //关闭择样明细弹框
     closeSampleDetailDialog() {
       this.sampleDetailDialog = false;
     },
+
     //打开推送记录弹框
     async openBsPushRecord(val) {
       console.log(val);

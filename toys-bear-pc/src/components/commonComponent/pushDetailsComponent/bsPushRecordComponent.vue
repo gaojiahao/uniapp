@@ -20,60 +20,61 @@ export default {
       tableData: {
         data: [],
         showLoading: false,
+        height: "500px",
         sizeMini: "mini",
         isIndex: true,
         columns: [
           {
-            prop: "messageExt",
+            prop: "businessType",
             isHiden: true,
             label: "推送类型",
             render: row => {
               let msg;
-              switch (row.messageExt) {
-                case "0":
-                  msg = "系统通知";
+              switch (row.businessType) {
+                // case "0":
+                //   msg = "系统通知";
+                //   break;
+                case 1:
+                  msg = "系统消息";
                   break;
-                case "3":
-                  msg = "补样";
+                case 2:
+                  msg = "广告消息";
                   break;
-                case "5":
-                  msg = "借样";
+                case 3:
+                  msg = "订单消息";
                   break;
-                case "11":
-                  msg = "补样借样";
-                  break;
-                case "12":
-                  msg = "洽谈";
+                case 4:
+                  msg = "短信";
                   break;
               }
               return msg;
             }
           },
           {
-            prop: "the_nu",
+            prop: "content",
             isHiden: true,
             label: "推送内容"
           },
           {
-            prop: "happenDate",
+            prop: "createdOn",
             isHiden: true,
             label: "推送时间",
             render: row => {
-              return row.happenDate ? row.happenDate.replace(/T.*/, "") : "";
+              return row.createdOn ? row.createdOn.replace(/T.*/, "") : "";
             }
           },
           {
-            prop: "readStatus",
+            prop: "status",
             isHiden: true,
             label: "推送状态",
             render: row => {
               let msg = "";
-              switch (row.readStatus) {
-                case false:
-                  msg = "<span style='color: green'>未读</span>";
+              switch (row.status) {
+                case 0:
+                  msg = "<span style='color: #EB1515'>未查看</span>";
                   break;
-                case true:
-                  msg = "<span style='color: #f56c6c'>已读</span>";
+                case 1:
+                  msg = "<span style='color: #33A96A'>已查看</span>";
                   break;
               }
               return msg;
@@ -102,7 +103,6 @@ export default {
     }
   },
   created() {
-    console.log(this.pushRecordData, "推送记录数据");
     this.tableData.data = this.pushRecordData;
   },
   mounted() {}

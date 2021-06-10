@@ -95,7 +95,11 @@
       </div>
     </div>
 
-    <el-dialog :title="title" :visible.sync="pushDialog" width="800px">
+    <el-dialog
+      :title="orderData.title"
+      :visible.sync="pushDialog"
+      width="800px"
+    >
       <bsPushDialogComponent
         :item="item"
         :multipleSelection="multipleSelection"
@@ -144,7 +148,7 @@ export default {
         orderPushType: null
       },
       itemList: {},
-      title: null,
+
       multipleSelection: [],
       tableData: []
     };
@@ -153,8 +157,8 @@ export default {
     console.log(this.item, "点击推送按钮传过来的数据");
     switch (this.item.label) {
       case "展厅业务推送":
-        this.title = "展厅业务推送";
         this.orderData = {
+          title: "展厅业务推送",
           OrderTypeName: "择样单号",
           timeName: "择样时间",
           remarkName: "择样备注",
@@ -168,8 +172,9 @@ export default {
         };
         break;
       case "报价推送":
-        this.title = "报价推送";
         this.orderData = {
+          cu_de: this.item.cu_de,
+          title: "报价推送",
           OrderTypeName: "报价单号",
           timeName: " 报价时间",
           remarkName: "报价备注",
@@ -183,8 +188,8 @@ export default {
         };
         break;
       case "采购推送":
-        this.title = "采购推送";
         this.orderData = {
+          title: "采购推送",
           OrderTypeName: "采购单号",
           timeName: " 采购时间",
           remarkName: "采购备注",
