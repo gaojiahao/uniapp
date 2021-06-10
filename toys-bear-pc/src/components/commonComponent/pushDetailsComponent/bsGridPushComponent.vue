@@ -60,7 +60,7 @@
       width="1620px"
       :before-close="closeSampleDetailDialog"
     >
-      <bsSampleDetailComponent></bsSampleDetailComponent>
+      <bsSampleDetailComponent :orderData="orderData"></bsSampleDetailComponent>
     </el-dialog>
 
     <el-dialog
@@ -124,7 +124,7 @@ export default {
     },
     //打开择样明细弹框
     openBsSampleDetail() {
-      this.sampleDetailDialog = true;
+      // this.sampleDetailDialog = true;
     },
     //关闭择样明细弹框
     closeSampleDetailDialog() {
