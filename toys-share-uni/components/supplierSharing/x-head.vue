@@ -1,5 +1,5 @@
 <template>
-	<view class="head">
+	<view class="head" :class="[showHead ? '':'sm']">
 		<template v-if="!isMobile">
 			<view class="head_item_grid">
 				<view class="logo">
@@ -18,7 +18,7 @@
 			</view>
 		</template>
 		<template v-else>
-			<view class="head_item_grid_mb">
+			<view class="head_item_grid_mb" v-if="showHead">
 				<view class="logo">
 					<image :src="contactInfo2.companyLogo" class="image"></image>
 				</view>
@@ -27,9 +27,18 @@
 						{{contactInfo2.companyName}}
 					</view>
 					<view class="contact">
-						<view class="item"><text>联系人：</text>{{contactInfo2.contactsMan}}</view>
-						<view class="item"><text>电话：</text>{{contactInfo2.phoneNumber||contactInfo2.telephoneNumber}}</view>
+						<view class="item" v-if="contactInfo2.contactsMan"><text>联系人：</text>{{contactInfo2.contactsMan}}</view>
+						<view class="item" v-if="contactInfo2.phoneNumber||contactInfo2.telephoneNumber"><text>电话：</text>{{contactInfo2.phoneNumber||contactInfo2.telephoneNumber}}</view>
 					</view>
+				</view>
+			</view>
+			<view class="menu_mb">
+				<view class="menu">
+					<view class="menu_item" :class="[nowActive=='dontLoadShareFactory' ? 'active':'']" @click="toLink('dontLoadShareFactory')">首页</view>
+					<view class="menu_item" :class="[nowActive=='supplierSharingList' ? 'active':'']" @click="toLink('supplierSharingList')" v-if="threeMenu">3D产品</view>
+					<view class="menu_item" :class="[nowActive=='supplierSharingRecList' ? 'active':'']" @click="toLink('supplierSharingRecList')" v-if="remMenu">推荐产品</view>
+					<view class="menu_item" :class="[nowActive=='supplierSharingAllList' ? 'active':'']" @click="toLink('supplierSharingAllList')">全部产品</view>
+					<view class="menu_item" :class="[nowActive=='supplierSharingContact' ? 'active':'']" @click="toLink('supplierSharingContact')">联系方式</view>
 				</view>
 			</view>
 		</template>
@@ -62,6 +71,10 @@ export default {
 		isMobile:{
 			type:Boolean,
 			default:false
+		},
+		showHead:{
+			type:Boolean,
+			default:true
 		}
 	},
 	watch:{
@@ -83,6 +96,7 @@ export default {
 				this.threeMenu = val;
 			},
 			deep:true,
+			immediate:true
 		},
 		remMenuTemp:{
 			handler(val){
@@ -189,10 +203,81 @@ export default {
 }
 @media screen and (max-width: 767px){
 	.head{
-		display: flex;
 		padding: 0;
-		background: #ffffff;
-		
+		background: #00B0EC;
+		width: 100%;
+		height: 65px;
+		color: #ffffff;
+		.head_item_grid_mb{
+			display: flex;
+			width: 100%;
+			height: 65px;
+			.logo{
+				width: 55px;
+				height: 55px;
+				margin: 5px 10px;
+				.image{
+					width: 55px;
+					height: 55px;
+				}
+			}
+			.info{
+				margin-left: 15px;
+				font-size: 13px;
+				margin-top: 5px;
+				margin-bottom: 5px;
+				.title{
+					font-size: 18px;
+					line-height: 27.5px;
+					font-weight: 700;
+				}
+				.contact{
+					display: flex;
+					line-height: 27.5px;
+					.item{
+						margin-right: 10px;
+					}
+				}
+			}
+		}
+		.menu_mb{
+			height: 40px;
+			position: fixed;
+			bottom: 0;
+			border-top: 1px solid #DCDCDC;
+			background: #fff;
+			z-index: 2;
+			.menu{
+				display: flex;
+				height: 30px;
+				line-height: 30px;
+				margin: 5px 10px 5px 10px;
+				.menu_item{
+					width: 100px;
+					// height: 40px;
+					// margin-top: 16.5px;
+					// margin-left: 30px;
+					// line-height: 40px;
+					color: #333333;
+					text-align: center;
+					height: 30px;
+					line-height: 30px;
+				}
+				.menu_item:hover{
+					cursor: pointer;
+				}
+				.active{
+					background: #36ade2;
+					border-radius: 20px;
+					text-align: center;
+					color: #ffffff;
+					font-size: 15px;
+				}
+			}
+		}
+	}
+	.sm{
+		height: 0px;
 	}
 }
 </style>

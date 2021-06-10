@@ -50,7 +50,7 @@
 										</view>
 										<view class="product_list_info_plus2">
 											<view class="product_list_info_text_left">
-												单价：<text class="text red_color">{{item.cu_de}}{{item.price}}</text>
+												单价：<text class="text red_color">￥{{item.price}}</text>
 											</view>
 											<view class="product_list_info_text_left">
 												出厂货号：<text class="text">{{item.fa_no}}</text>
@@ -98,7 +98,7 @@
 												出厂货号：{{item.fa_no}}
 											</view>
 											<view class="product_list_info_text_right">
-												<text class="red_color">{{item.cu_de}}{{item.price}}</text>
+												<text class="red_color">￥{{item.price}}</text>
 											</view>
 										</view>
 									</view>
@@ -157,7 +157,7 @@
 												{{item.fa_no}}
 											</view>
 											<view class="product_list_info_text_right">
-												<text class="red_color">{{item.cu_de}}{{item.price}}</text>
+												<text class="red_color">￥{{item.price}}</text>
 											</view>
 										</view>
 									</view>
@@ -173,7 +173,7 @@
 									<b-col cols="6" sm="3">
 										<view class="product_list_info_text2 active"><span>{{item.name}}</span></view>
 										<view class="product_list_info_text2">出厂货号：<span>{{item.fa_no}}</span></view>
-										<view class="product_list_info_text2">报价：<span class="red_color">{{item.cu_de}}{{item.offerAmount}}</span></view>
+										<view class="product_list_info_text2">报价：<span class="red_color">￥{{item.offerAmount}}</span></view>
 										<view class="product_list_info_text2">包装方式：<span>{{item.ch_pa}}</span></view>
 										<view class="product_list_info_text2">产品规格：<span>{{item.pr_le}}x{{item.pr_wi}}x{{item.pr_hi}}(cm)</span></view>
 										<view class="product_list_info_text2">包装规格：<span>{{item.in_le}}x{{item.in_wi}}x{{item.in_hi}}(cm)</span></view>
@@ -312,13 +312,12 @@ export default {
 		//获取联系方式
 		async getContactInformationListShare(){
 			var me = this;
-			const res = await me.$u.api.ContactInformationListShare({
+			const res = await me.$u.api.CompanyByIDShare({
 				companyNumber: me.offerInfo.companyNumber,
-				userId: me.offerInfo.userId,
 			});
 			if (res.result.code === 200) {
-				this.setContact(res.result.item);
-				uni.setStorageSync('supplier_product_contactInfo',JSON.stringify(this.contactInfo));
+				this.contactInfo = res.result.item;
+				uni.setStorageSync('supplier_product_contactInfo',JSON.stringify(res.result.item));
 			}
 		},
 		//设置联系方式

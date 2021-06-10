@@ -1,18 +1,13 @@
 <template>
 	<view class="supplier_sharing_detail">
 		<!-- pc端 -->
+		<xHead active="dontLoadShareFactory" :isMobile="isMobile" :showHead="false"></xHead>
 		<template v-if="!isMobile">
-			<!-- 头部 -->
-			<xHead active="dontLoadShareFactory"></xHead>
 			<view class="content">
 				<div class="detailBox">
 					<div class="left">
-						<!-- <magnifierComponent ref="magnifierRef" v-if="productDetail.imgUrlList" :middleImgWidth="524"
-							:middleImgHeight="393" :thumbnailHeight="65" :thumbnailWidth="96" :thumbnailCount="5"
-							:imageUrls="productDetail.imgUrlList" :videoAddress="productDetail.videoAddress"
-							:threeDimensional="productDetail.threeDimensional" /> -->
-							<magnifierComponent ref="magnifierRef" v-if="productDetail.imgUrlList"
-								:productInfos="productDetail" />
+						<magnifierComponent ref="magnifierRef" v-if="productDetail.imgUrlList"
+							:productInfos="productDetail" />
 					</div>
 					<div class="right">
 						<div class="context">
@@ -87,30 +82,8 @@
 							</div>
 							<div class="item">
 								产品认证：
-
 								<i v-if="productDetail.manuCertificateList" class="proveActiveIcon"></i>
 								<i v-else class="proveIcon"></i>
-
-								<!-- <div v-if="productDetail.manuCertificateList" class="manuCertificate">
-									<div class="cate" v-for="item in productDetail.manuCertificateList"
-										:key="item.index">
-										<image @click="openDialogCertificate(item)"
-											style="width: 21px; height: 30px; min-width: 21px"
-											:src="item.certificateAddres">
-											<div slot="placeholder" class="image-slot"
-												style="width: 82px; height: 62px">
-												<img style="width: 21px; height: 30px; min-width: 21px"
-													:src="require('@/static/images/PDF.png')" />
-											</div>
-											<div slot="error" class="image-slot"
-												style="width: 21px; height: 30px; min-width: 21px">
-												<img style="width: 21px; height: 30px; min-width: 21px"
-													:src="require('@/static/images/PDF.png')" />
-											</div>
-										</image>
-										<span>{{ item.certificateName }}</span>
-									</div>
-								</div> -->
 							</div>
 						</div>
 						<!-- 联系方式 -->
@@ -120,61 +93,19 @@
 								<span class="context" @click="toFactory(productDetail)" :title="productDetail.supplierName">{{
 								  productDetail.supplierName
 								}}</span>
-								<!-- <el-tooltip effect="dark" :content="productDetail.supplierName" placement="top">
-									<span class="context" @click="toFactory(productDetail)">{{
-				                productDetail.supplierName
-				              }}</span>
-								</el-tooltip> -->
 							</view>
-							<!-- <p class="item myHover" @click="toNews(productDetail)">
-								<i class="infoIcon"></i>
-								<span>在线咨询</span>
-							</p> -->
 							<view class="item myHover" v-if="productDetail.supplierTelephoneNumber">
 								<i class="phoneIcon"></i>
 								<span class="context">{{
 								  productDetail.supplierTelephoneNumber
 								}}</span>
-								<!-- <el-tooltip effect="dark" :content="productDetail.supplierTelephoneNumber"
-									placement="top">
-									<span class="context">{{
-				                productDetail.supplierTelephoneNumber
-				              }}</span>
-								</el-tooltip> -->
 							</view>
 							<view class="item myHover" v-if="productDetail.supplierPhone">
 								<i class="sjIcon"></i>
 								<span class="context">{{ productDetail.supplierPhone }}</span>
-								<!-- <el-tooltip effect="dark" :content="productDetail.supplierPhone" placement="top">
-									<span class="context">{{ productDetail.supplierPhone }}</span>
-								</el-tooltip> -->
+
 							</view>
-							<!-- <p class="item myHover" v-if="productDetail.supplierQQ">
-								<i class="qqIcon"></i>
-								<el-tooltip effect="dark" :content="productDetail.supplierQQ" placement="top">
-									<span class="context">{{ productDetail.supplierQQ }}</span>
-								</el-tooltip>
-							</p>
-							<p class="item myHover" @click="toFactory(productDetail)">
-								<i class="shopIcon"></i>
-								<span>厂商店铺</span>
-							</p> -->
 						</div>
-						<!-- 来源 -->
-						<!-- <div class="sourceBox">
-							<p class="item">
-								资源来源：
-								<span>{{ productDetail.exhibitionName }}</span>
-							</p>
-							<p class="item">
-								展厅编号：
-								<span>{{ productDetail.number }}</span>
-							</p>
-							<p class="item">
-								摊位号：
-								<span>{{ productDetail.booth_nu_pro }}</span>
-							</p>
-						</div> -->
 					</div>
 				</div>
 				<div class="productDetails">
@@ -185,15 +116,39 @@
 						</div>
 					</div>
 				</div>
-
-				<!-- <el-dialog title="证书详情" :visible.sync="dialogCertificate">
-					<div class="dialogCertificateCss">
-						<img :src="dataCertificate.certificateAddres" alt="" />
-					</div>
-				</el-dialog> -->
 			</view>
 			<!-- 尾部 -->
 			<xFooter></xFooter>
+		</template>
+		<template v-else>
+			<u-navbar back-text="" title="产品详情" :background="background" title-color="#333333" back-icon-color="#333333"></u-navbar>
+			<view class="mobile_head">
+				<xSwiper :list="productDetail.imgUrlList" mode="number" :autoplay="false"  indicator-pos="bottomRight" height="529" border-radius='0' v-if="!is_show_pc_modal"></xSwiper>
+				<view class="mobile_sm_panel" v-else>
+					<iframe
+					  :src="productDetail.threeDimensional"
+					  id="map2"
+					  scrolling="no"
+					  frameborder="0"
+					  class="mobild_sm_iframe"
+					></iframe>
+				</view>
+				<view class="three_d" @click='show_mobile_modal' @tap='show_mobile_modal' v-if="productDetail.threeDimensional">{{is_show_pc_modal?'图片展示':'3D展示'}}</view>
+			</view>
+			<view class="mobile_content">
+				<view class="item active">{{productDetail.name}}</view>
+				<view class="item"><label class="label">报价：</label><text class="red_color text">{{productDetail.cu_de}}{{productDetail.offerAmount||0}}</text></view>
+				<view class="item"><label class="label">出厂货号：</label><text class="text">{{productDetail.fa_no}}</text></view>
+				<view class="item"><label class="label">包装方式：</label><text class="text">{{productDetail.ch_pa}}</text></view>
+				<view class="item"><label class="label">样品规格：</label><text class="text">{{productDetail.pr_le}}x{{productDetail.pr_wi}}x{{productDetail.pr_hi}}(CM)</text></view>
+				<view class="item"><label class="label">包装规格：</label><text class="text">{{productDetail.in_le}}x{{productDetail.in_wi}}x{{productDetail.in_hi}}(CM)</text></view>
+				<view class="item"><label class="label">外箱规格：</label><text class="text">{{productDetail.ou_le}}x{{productDetail.ou_wi}}x{{productDetail.ou_hi}}(CM)</text></view>
+				<view class="item"><label class="label">装箱量：</label><text class="text">{{productDetail.in_en}}/{{productDetail.ou_lo}}(PCS)</text></view>
+				<view class="item"><label class="label">体积/材积：</label><text class="text">{{productDetail.bulk_stere}}(CBM)/{{productDetail.bulk_feet}}(CUFT)</text></view>
+				<view class="item"><label class="label">毛重/净重：</label><text class="text">{{productDetail.gr_we}}/{{productDetail.ne_we}}(kg)</text></view>
+			</view>
+			<xFooter :isMobile="isMobile"></xFooter>
+			<u-toast ref="uToast" />
 		</template>
 	</view>
 </template>
@@ -204,13 +159,16 @@
 	import util from "@/common/js/util.js"
 	import customSwiper from '@/components/blackmonth-swiper/index'
 	import magnifierComponent from '@/components/supplierSharing/magnifierComponent.vue'
+	import xSwiper from "@/components/x-swiper.vue"
+	
 	export default {
 		name: "SupplierSharingDetail",
 		components: {
 			customSwiper,
 			xHead,
 			xFooter,
-			magnifierComponent
+			magnifierComponent,
+			xSwiper
 		},
 		data() {
 			return {
@@ -222,18 +180,44 @@
 				},
 				dialogCertificate: false,
 				dataCertificate: {},
+				background:{ background:'#ffffff'},
+				is_show_pc_modal:false,  //是否显示3d
 			}
 		},
 		methods: {
-			onSwiper(swiper) {
-				console.log(swiper);
+			goReturn(){
+				window.history.go(-1);
 			},
-			onSlideChange() {
-				console.log('slide change');
+			dealImgUrl() {
+				var imgs = [];
+				if(this.productDetail.videoAddress){
+					var obj= {
+						type: 'video',
+						imgUrl: this.productDetail.videoAddress,
+					}
+					imgs.push(obj);
+				}
+				// for(var i=0;i<this.productDetail.imglist.length;i++){
+				// 	var obj= {
+				// 		type: 'img',
+				// 		image: this.productDetail.imglist[i].imgUrl,
+				// 	}
+				// 	imgs.push(obj);
+				// }
+				// this.$set(this.productDetail,'imgUrlList',imgs);
+				if(!this.isMobile){
+					this.nowImg = this.productDetail.imgUrlList[0];
+					this.pc_img_index = 0;
+				} else { //有3d就默认显示3d
+					if(this.productDetail.threeDimensional){
+						this.is_show_pc_modal = true;
+					}
+				}
 			},
 			async init() {
 				this.isMobile = util.isMobile();
 				// await this.getToken();
+				this.isMobile ? this.dealImgUrl():'';
 			},
 		},
 		mounted() {

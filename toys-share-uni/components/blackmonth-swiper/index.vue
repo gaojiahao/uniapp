@@ -29,7 +29,7 @@
 								货号：{{item.fa_no}}
 							</view>
 							<view class="price">
-								{{item.cu_de}}{{item.price}}
+								￥{{item.price}}
 							</view>
 						</view>
 					</view>
@@ -44,6 +44,7 @@
 
 <script>
 	export default {
+		name:'CustomSwiper',
 		props: {
 			swiperLists: {
 				type: Array,

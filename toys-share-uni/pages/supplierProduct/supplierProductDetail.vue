@@ -15,7 +15,7 @@
 						</view>
 						<view class="item_right">
 							<view class="item_btn return_png" @click="goReturn()"></view>
-							<view class="item_btn share_png"></view>
+							<view class="item_btn share_png" @click="copyShare"></view>
 						</view>
 					</view>
 					<view class="product_info">
@@ -34,8 +34,7 @@
 									</view>
 									<view class="priceWrap">
 										<!-- 参考单价： -->
-										<span class="priceBox">{{ productDetail.cu_de
-									  }}<span class="price">{{ productDetail.offerAmount }}</span></span>
+										<span class="priceBox">￥<span class="price">{{ productDetail.offerAmount }}</span></span>
 									</view>
 									<view class="textWrap">
 										<view class="textWrap_left">
@@ -82,15 +81,12 @@
 						</view>
 					</view>
 				</view>
-				<view class="productDetails">
+				<!-- <view class="productDetails">
 					<view class="productDetails_title">其他产品</view>
 					<view class="productDetails_content">
-						<!-- <view class="imgItem" v-for="imgItem in productDetail.imgUrlList" :key="imgItem">
-							<img style="margin: 0 auto" :src="imgItem" alt="" />
-						</view> -->
 						<b-row no-gutters>
 							<b-col cols="3" v-for="(item,index) in proudctList" :key='index'>
-								<view class="product_list_item2" @click="goDetail(item)">
+								<view class="product_list_item2" @click="goDetail(item.id)">
 									<view class="product_list_img">
 										<image class="img" :src="item.imageUrl"></image>
 									</view>
@@ -103,7 +99,7 @@
 												出厂货号：{{item.fa_no}}
 											</view>
 											<view class="product_list_info_text_right">
-												<text class="red_color">{{item.cu_de}}{{item.price}}</text>
+												<text class="red_color">￥{{item.price}}</text>
 											</view>
 										</view>
 									</view>
@@ -111,8 +107,9 @@
 							</b-col>
 						</b-row>
 					</view>
-				</view>
+				</view> -->
 			</view>
+			<u-toast ref="uToast" />
 			<!-- 尾部 -->
 			<xFooter></xFooter>
 		</template>
@@ -133,7 +130,7 @@
 			</view>
 			<view class="mobile_content">
 				<view class="item active">{{productDetail.name}}</view>
-				<view class="item"><label class="label">报价：</label><text class="red_color text">{{productDetail.cu_de}}{{productDetail.offerAmount||0}}</text></view>
+				<view class="item"><label class="label">报价：</label><text class="red_color text">￥{{productDetail.offerAmount||0}}</text></view>
 				<view class="item"><label class="label">出厂货号：</label><text class="text">{{productDetail.fa_no}}</text></view>
 				<view class="item"><label class="label">包装方式：</label><text class="text">{{productDetail.ch_pa}}</text></view>
 				<view class="item"><label class="label">样品规格：</label><text class="text">{{productDetail.pr_le}}x{{productDetail.pr_wi}}x{{productDetail.pr_hi}}(CM)</text></view>
@@ -156,6 +153,9 @@
 	import customSwiper from '@/components/blackmonth-swiper/index'
 	import spMagnifierComponent from '@/components/supplierProduct/magnifierComponent.vue'
 	import xSwiper from "@/components/x-swiper.vue"
+	import {
+	  getToken
+	} from "@/service/common.js"
 	
 	export default {
 		name: "SupplierProductDetail",
@@ -281,11 +281,63 @@
 					});
 				}
 			},
+			//分享链接
+			copyShare(row) {
+				var target = '';
+				if(process.env.NODE_ENV === 'development'){
+				  target = "http://124.71.6.26:8080"
+				  // target = "https://www.toysbear.com"
+				}else{
+				  target = "http://124.71.6.26:8080"
+				  //target = "https://www.toysbear.com"
+				}
+				var url = target + "/share/#" + this.$route.path;
+				const input = document.createElement("input");
+				document.body.appendChild(input);
+				input.setAttribute("value", url);
+				input.select();
+				if (document.execCommand("Copy")) {
+					document.execCommand("Copy");
+					this.$refs.uToast.show({
+						title: '温馨提示：复制找样报价分享链接成功！',
+						type: 'success',
+					});
+				}
+				document.body.removeChild(input);
+			},
+			goDetail(id){
+				// uni.setStorageSync('supplierP_product_detail',JSON.stringify(item));
+				// this.$Router.push({
+				//     name:'supplierProductDetail'
+				// })
+				if (!id) {
+					this.$refs.uToast.show({
+						title: '温馨提示：该产品没有编号！',
+						type:'error'
+					})
+					return false;
+				}
+				this.$Router.push({
+					name: "supplierProductDetail",
+					params: { id: id }
+				});
+			},
+			//获取token
+			async getToken(){
+				var me = this;
+				await getToken().then(
+					(res) => {
+						uni.setStorageSync('token',res[1].data.result.item);
+					}
+				)
+			},
 			async init() {
 				this.isMobile = util.isMobile();
+				if(!uni.getStorageSync('token')){
+					await this.getToken();
+				}
 				await this.getProductByProductNumber();
 				await this.getData();
-				// await this.getToken();
 			},
 		},
 		mounted() {
