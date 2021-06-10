@@ -27,7 +27,7 @@
 										出厂货号：{{item.fa_no}}
 									</view>
 									<view class="product_list_info_text">
-										参考单价：<text class="red_color">￥{{item.price}}</text>
+										参考报价：<text class="red_color">￥{{item.price}}</text>
 									</view>
 									<view class="product_list_info_text">
 										<u-button type="warning" shape="circle" size="mini" @click="goDetail(item)">查看详情</u-button>
@@ -142,73 +142,76 @@
 		<!-- 尾部 -->
 		<view class="mb_content" v-else>
 			<view class="wrap">
-				<u-swiper :list="threeProduct.length ? dealImage(threeProduct):recommendProduct.length?dealImage(recommendProduct):dealImage(allProduct)" height="350" @click="goDetails"></u-swiper>
+				<image :src="threeProduct.length ? supplier_sharing_3d:recommendProduct.length?supplier_sharing_3d_2:supplier_sharing_3d_3" class="product_label"></image>
+				<u-swiper :list="threeProduct.length ? dealImage(threeProduct):recommendProduct.length?dealImage(recommendProduct):dealImage(allProduct)" height="350" @click="goDetails" border-radius="0"></u-swiper>
 			</view>
-			<view class="product_panel">
-				<view class="title_box">
-					<view class="icon_blue"></view>
-					<view class="title_box_title">推荐产品</view>
-					<view class="title_box_more" @click="toLink('supplierSharingAllList')">更多</view>
+			<view class="panel">
+				<view class="product_panel" v-if="threeProduct.length&&recommendProduct.length">
+					<view class="title_box">
+						<view class="icon_blue"></view>
+						<view class="title_box_title">推荐产品</view>
+						<view class="title_box_more" @click="toLink('supplierSharingList')">更多</view>
+					</view>
+					<view class="product_grid">
+						<b-row no-gutters>
+							<b-col cols="4" v-for="(item,index) in recommendProduct.slice(0,3)" :key='index'>
+								<view class="product_grid_item">
+									<image class="img" :src="item.img?item.img:defaultImg" @click="goDetail(item)"></image>
+									<view class="text" :title="item.name">{{item.name}}</view>
+								</view>
+							</b-col>
+						</b-row>
+					</view>
 				</view>
-				<view class="product_grid">
-					<b-row no-gutters>
-						<b-col cols="4" v-for="(item,index) in recommendProduct.slice(0,3)" :key='index'>
-							<view class="product_grid_item">
+				<view class="product_panel" v-if="newProduct.length">
+					<view class="title_box">
+						<view class="icon_blue"></view>
+						<view class="title_box_title">最新产品</view>
+						<view class="title_box_more" @click="toLink('supplierSharingAllList')">更多</view>
+					</view>
+					<view class="product_list">
+						<view class="product_list_item" v-for="(item,index) in newProduct.slice(0,3)" :key='index'>
+							<view class="left">
 								<image class="img" :src="item.img?item.img:defaultImg" @click="goDetail(item)"></image>
-								<view class="text" :title="item.name">{{item.name}}</view>
 							</view>
-						</b-col>
-					</b-row>
-				</view>
-			</view>
-			<view class="product_panel">
-				<view class="title_box">
-					<view class="icon_blue"></view>
-					<view class="title_box_title">最新产品</view>
-					<view class="title_box_more" @click="toLink('supplierSharingAllList')">更多</view>
-				</view>
-				<view class="product_list">
-					<view class="product_list_item" v-for="(item,index) in newProduct.slice(0,3)" :key='index'>
-						<view class="left">
-							<image class="img" :src="item.img?item.img:defaultImg" @click="goDetail(item)"></image>
-						</view>
-						<view class="right">
-							<view class="item name" :title="item.name">{{item.name}}</view>
-							<view class="item number" :title="item.name">货号：{{item.name}}</view>
-							<view class="item price" :title="item.name">参考单价：<text class="red_color">￥{{item.price}}</text></view>
+							<view class="right">
+								<view class="item name" :title="item.name">{{item.name}}</view>
+								<view class="item number" :title="item.fa_no">货号：{{item.fa_no}}</view>
+								<view class="item price" :title="item.price">参考报价：<text class="red_color">￥{{item.price}}</text></view>
+							</view>
 						</view>
 					</view>
 				</view>
-			</view>
-			<view class="product_panel">
-				<view class="title_box">
-					<view class="icon_blue"></view>
-					<view class="title_box_title">其他产品</view>
-					<view class="title_box_more"  @click="toLink('supplierSharingAllList')">更多</view>
-				</view>
-				<view class="product_list">
-					<b-row no-gutters>
-						<b-col cols="6" sm="3" v-for="(item,index) in newProduct.slice(0,4)" :key='index'>
-							<view class="product_list_item2">
-								<view class="product_list_img" @click="goDetail(item)">
-									<image class="img" :src="item.imageUrl"></image>
-								</view>
-								<view class="product_list_info">
-									<view class="product_list_info_text active" :title="item.name">
-										{{item.name}}
+				<view class="product_panel" v-if="allProduct.length">
+					<view class="title_box">
+						<view class="icon_blue"></view>
+						<view class="title_box_title">其他产品</view>
+						<view class="title_box_more"  @click="toLink('supplierSharingAllList')">更多</view>
+					</view>
+					<view class="product_list">
+						<b-row no-gutters>
+							<b-col cols="6" sm="3" v-for="(item,index) in newProduct.slice(0,4)" :key='index'>
+								<view class="product_list_item2">
+									<view class="product_list_img" @click="goDetail(item)">
+										<image class="img" :src="item.imageUrl"></image>
 									</view>
-									<view class="product_list_info_plus">
-										<view class="product_list_info_text_left">
-											出厂货号：{{item.fa_no}}
+									<view class="product_list_info">
+										<view class="product_list_info_text active" :title="item.name">
+											{{item.name}}
 										</view>
-										<view class="product_list_info_text_right">
-											参考单价：<text class="red_color">￥{{item.price}}</text>
+										<view class="product_list_info_plus">
+											<view class="product_list_info_text_left">
+												出厂货号：{{item.fa_no}}
+											</view>
+											<view class="product_list_info_text_right">
+												参考报价：<text class="red_color">￥{{item.price}}</text>
+											</view>
 										</view>
 									</view>
 								</view>
-							</view>
-						</b-col>
-					</b-row>
+							</b-col>
+						</b-row>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -237,6 +240,7 @@ export default {
 			supplier_sharing_3d: require("@/static/images/supplier_sharing_3d.png"),
 			supplier_sharing_3d_2: require("@/static/images/supplier_sharing_3d_2.png"),
 			supplier_sharing_3d_3: require("@/static/images/supplier_sharing_3d_3.png"),
+			supplier_sharing_3d_sm: require("@/static/images/supplier_sharing_3d_sm.png"),
 			defaultImg: require("@/static/images/logo.png"),
 			isMobile:false,   //是否移动端
 			contactInfo:{}, //联系信息
@@ -255,7 +259,7 @@ export default {
 		async getCompanyByIDShare() {
 			var me = this;
 			const res = await me.$u.api.CompanyByIDShare({
-				companyNumber: uni.getStorageSync('supplier_sharing_shareCode')
+				shareCode: uni.getStorageSync('supplier_sharing_shareCode')
 			});
 			if (res.result.code === 200) {
 				this.contactInfo = res.result.item;
@@ -382,7 +386,20 @@ export default {
 			})
 		},
 		goDetails(index){
-			uni.setStorageSync('supplier_sharing_detail',JSON.stringify(this.threeProduct[index]));
+			var item = this.threeProduct.length ? this.threeProduct[index]:this.recommendProduct.length ? this.recommendProduct[index]:this.newProduct[index];
+			var arr = [];
+			var obj = {
+				...item
+			};
+			if(item.imglist&&item.imglist.length){
+				for(var i=0;i<item.imglist.length;i++){
+					
+					arr.push(item.imglist[0].imgUrl);
+				}
+				obj['imgUrlList'] = arr;
+			}
+			uni.setStorageSync('supplier_sharing_detail',JSON.stringify(obj));
+			//uni.setStorageSync('supplier_sharing_detail',JSON.stringify(this.threeProduct[index]));
 			this.$Router.push({
 			    name:'supplierSharingDetail'
 			})
@@ -400,7 +417,7 @@ export default {
 				e.title = e.name;
 				return e;
 			});
-			return temp_data;
+			return temp_data.slice(0,5);
 		},
 		async init(){
 			this.$loading.show();

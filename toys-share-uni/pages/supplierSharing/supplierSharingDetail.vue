@@ -18,9 +18,8 @@
 									<i class="vipIcon" v-if="productDetail.isVip">VIP</i></span>
 							</div>
 							<div class="priceWrap">
-								参考单价：
-								<span class="priceBox">{{ productDetail.cu_de
-				              }}<span class="price">{{ productDetail.price }}</span></span>
+								参考报价：
+								<span class="priceBox">￥<span class="price">{{ productDetail.price }}</span></span>
 							</div>
 							<div class="textWrap">
 								<div class="textWrap_left">
@@ -90,19 +89,19 @@
 						<div class="contactMode">
 							<view class="item">
 								<i class="factoryIcon"></i>
-								<span class="context" @click="toFactory(productDetail)" :title="productDetail.supplierName">{{
-								  productDetail.supplierName
+								<span class="context" @click="toFactory(productDetail)" :title="defaultContact.companyName">{{
+								  defaultContact.companyName
 								}}</span>
 							</view>
-							<view class="item myHover" v-if="productDetail.supplierTelephoneNumber">
+							<view class="item myHover" v-if="defaultContact.telephoneNumber">
 								<i class="phoneIcon"></i>
 								<span class="context">{{
-								  productDetail.supplierTelephoneNumber
+								  defaultContact.telephoneNumber
 								}}</span>
 							</view>
-							<view class="item myHover" v-if="productDetail.supplierPhone">
+							<view class="item myHover" v-if="defaultContact.phoneNumber">
 								<i class="sjIcon"></i>
-								<span class="context">{{ productDetail.supplierPhone }}</span>
+								<span class="context">{{ defaultContact.phoneNumber }}</span>
 
 							</view>
 						</div>
@@ -137,7 +136,7 @@
 			</view>
 			<view class="mobile_content">
 				<view class="item active">{{productDetail.name}}</view>
-				<view class="item"><label class="label">报价：</label><text class="red_color text">{{productDetail.cu_de}}{{productDetail.offerAmount||0}}</text></view>
+				<view class="item"><label class="label">参考报价：</label><text class="red_color text">￥{{productDetail.price||0}}</text></view>
 				<view class="item"><label class="label">出厂货号：</label><text class="text">{{productDetail.fa_no}}</text></view>
 				<view class="item"><label class="label">包装方式：</label><text class="text">{{productDetail.ch_pa}}</text></view>
 				<view class="item"><label class="label">样品规格：</label><text class="text">{{productDetail.pr_le}}x{{productDetail.pr_wi}}x{{productDetail.pr_hi}}(CM)</text></view>
@@ -182,6 +181,7 @@
 				dataCertificate: {},
 				background:{ background:'#ffffff'},
 				is_show_pc_modal:false,  //是否显示3d
+				defaultContact:{}
 			}
 		},
 		methods: {
@@ -214,6 +214,17 @@
 					}
 				}
 			},
+			//移动端端3d显示
+			show_mobile_modal(){
+				if(this.productDetail.threeDimensional){
+					this.is_show_pc_modal = this.is_show_pc_modal ? false:true;
+				} else {
+					this.$refs.uToast.show({
+						title: '该产品暂无3D数据！',
+						type: 'error',
+					});
+				}
+			},
 			async init() {
 				this.isMobile = util.isMobile();
 				// await this.getToken();
@@ -224,8 +235,9 @@
 
 		},
 		created() {
-			this.init();
+			this.defaultContact = JSON.parse(uni.getStorageSync('supplier_sharing_contactInfo'));
 			this.productDetail = JSON.parse(uni.getStorageSync('supplier_sharing_detail'));
+			this.init();
 		}
 	}
 </script>

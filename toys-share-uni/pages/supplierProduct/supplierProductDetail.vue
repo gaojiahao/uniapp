@@ -34,7 +34,7 @@
 									</view>
 									<view class="priceWrap">
 										<!-- 参考单价： -->
-										<span class="priceBox">￥<span class="price">{{ productDetail.offerAmount }}</span></span>
+										<span class="priceBox">￥<span class="price">{{ productDetail.offerAmount||0 }}</span></span>
 									</view>
 									<view class="textWrap">
 										<view class="textWrap_left">
@@ -130,7 +130,7 @@
 			</view>
 			<view class="mobile_content">
 				<view class="item active">{{productDetail.name}}</view>
-				<view class="item"><label class="label">报价：</label><text class="red_color text">￥{{productDetail.offerAmount||0}}</text></view>
+				<view class="item"><label class="label">参考报价：</label><text class="red_color text">￥{{productDetail.offerAmount||0}}</text></view>
 				<view class="item"><label class="label">出厂货号：</label><text class="text">{{productDetail.fa_no}}</text></view>
 				<view class="item"><label class="label">包装方式：</label><text class="text">{{productDetail.ch_pa}}</text></view>
 				<view class="item"><label class="label">样品规格：</label><text class="text">{{productDetail.pr_le}}x{{productDetail.pr_wi}}x{{productDetail.pr_hi}}(CM)</text></view>
@@ -286,10 +286,10 @@
 				var target = '';
 				if(process.env.NODE_ENV === 'development'){
 				  target = "http://124.71.6.26:8080"
-				  // target = "https://www.toysbear.com"
-				}else{
-				  target = "http://124.71.6.26:8080"
 				  //target = "https://www.toysbear.com"
+				}else{
+				  //target = "http://124.71.6.26:8080"
+				  target = "https://www.toysbear.com"
 				}
 				var url = target + "/share/#" + this.$route.path;
 				const input = document.createElement("input");
@@ -337,7 +337,7 @@
 					await this.getToken();
 				}
 				await this.getProductByProductNumber();
-				await this.getData();
+				//await this.getData();
 			},
 		},
 		mounted() {
