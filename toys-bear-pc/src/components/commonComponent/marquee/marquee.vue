@@ -3,6 +3,9 @@
     <div class="my-inbox" ref="box">
       <div class="my-list" v-for="(item, index) in sendVal" :key="index">
         <span class="my-uname">{{ item.title }}</span>
+        <span class="my-uname" style="margin-left: 10px;">
+          {{ item.createdOn && item.createdOn.replace(/T/, " ") }}
+        </span>
       </div>
       <div
         class="my-list"
@@ -10,6 +13,9 @@
         :key="(index + 1) * 100"
       >
         <span class="my-uname">{{ item.title }}</span>
+        <span class="my-uname" style="margin-left: 10px;">
+          {{ item.createdOn && item.createdOn.replace(/T/, " ") }}
+        </span>
       </div>
     </div>
   </div>
