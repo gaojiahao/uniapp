@@ -77,6 +77,7 @@ export default {
       height: 180px;
       .content_body {
         line-height: 30px;
+        color: #666;
       }
       .myKnow_box {
         display: flex;
@@ -88,6 +89,7 @@ export default {
         color: #fff;
         font-weight: 700;
         margin-top: 30px;
+        border: none;
       }
     }
   }
