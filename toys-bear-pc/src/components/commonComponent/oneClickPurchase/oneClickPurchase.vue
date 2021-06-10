@@ -3,7 +3,7 @@
     <div class="productCount">
       <p class="countItem">
         <span class="countItem_title">产品数量：</span>
-        <span>{{ myData.productCount }}</span>
+        <span>{{ myData.productCount || 0 }}</span>
       </p>
       <!-- <p class="countItem">
               <span class="countItem_title">下架产品数：</span>
