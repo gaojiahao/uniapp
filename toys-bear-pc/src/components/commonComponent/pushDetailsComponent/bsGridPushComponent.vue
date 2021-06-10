@@ -36,13 +36,17 @@
       <div class="cheDetail">
         <div class="checkboxP">
           <el-checkbox
-            @change="handleChecked"
+            @change="handleChecked($event, item.companyNumber)"
             v-model="item.checked"
           ></el-checkbox>
         </div>
         <div class="text" @click="openDetails">
-          <p><i class="el-icon-document"></i> 择样明细(0)</p>
-          <p><i class="el-icon-time"></i>推送记录(0)</p>
+          <p @click="openBsSampleDetail(item)">
+            <i class="el-icon-document"></i> 择样明细(0)
+          </p>
+          <p @click="openBsPushRecord(item)">
+            <i class="el-icon-time"></i>推送记录(0)
+          </p>
         </div>
       </div>
     </div>
@@ -50,22 +54,83 @@
     <div class="kong"></div>
     <div class="kong"></div>
     <div class="kong"></div>
+    <el-dialog
+      title="择样明细"
+      :visible.sync="sampleDetailDialog"
+      width="1620px"
+      :before-close="closeSampleDetailDialog"
+    >
+      <bsSampleDetailComponent></bsSampleDetailComponent>
+    </el-dialog>
+
+    <el-dialog
+      title="推送记录"
+      :visible.sync="pushRecordDialog"
+      width="800px"
+      :before-close="closePushRecordDialog"
+    >
+      <bsPushRecordComponent
+        :pushRecordData="pushRecordData"
+      ></bsPushRecordComponent>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import bsSampleDetailComponent from "@/components/commonComponent/pushDetailsComponent/bsSampleDetailComponent.vue";
+import bsPushRecordComponent from "@/components/commonComponent/pushDetailsComponent/bsPushRecordComponent.vue";
 export default {
+  components: { bsSampleDetailComponent, bsPushRecordComponent },
   props: {
     plantList: {
       type: Array
+    },
+    orderData: {
+      type: Object
     }
   },
-  components: {},
   watch: {},
   data() {
-    return {};
+    return {
+      sampleDetailDialog: false,
+      pushRecordDialog: false,
+      pushRecordData: []
+    };
   },
   methods: {
+    //打开推送记录弹框
+    async openBsPushRecord(val) {
+      console.log(222);
+      const fd = {
+        order: this.orderData.orderNumber,
+        supplierNumber: val.companyNumber,
+        PageSize: 999,
+        PageIndex: 1
+      };
+
+      const res = await this.$http.post("/api/getSupplierPushRecord", fd);
+      if (res.data.result.code === 200) {
+        this.pushRecordData = res.data.result.item.items;
+      } else {
+        this.$common.handlerMsgState({
+          msg: res.data.result.msg,
+          type: "danger"
+        });
+      }
+      this.pushRecordDialog = true;
+    },
+    //关闭推送记录弹框
+    closePushRecordDialog() {
+      this.pushRecordDialog = false;
+    },
+    //打开择样明细弹框
+    openBsSampleDetail() {
+      this.sampleDetailDialog = true;
+    },
+    //关闭择样明细弹框
+    closeSampleDetailDialog() {
+      this.sampleDetailDialog = false;
+    },
     // 去详情
     openDetails() {
       // this.$common.handlerMsgState({
@@ -87,14 +152,8 @@ export default {
       this.$router.push("/bsIndex/bsNews");
     },
     // 单选
-    handleChecked(value) {
-      let arr = this.plantList.filter(item => {
-        return item.checked === true;
-      });
-      this.$emit("update:multipleSelection", arr);
-      if (!value) {
-        this.$emit("update:checkAll", false);
-      }
+    handleChecked(event, companyNumber) {
+      this.$emit("updateMultipleSelection", event, companyNumber);
     }
   },
   created() {},
