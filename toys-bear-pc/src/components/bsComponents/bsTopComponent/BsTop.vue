@@ -98,7 +98,7 @@
           </div>
           <div class="minxiBody_body">
             <el-scrollbar style="height: 100%;">
-              <pre>{{ vesionList[0] && vesionList[0].content }}</pre>
+              <pre class="content_body">{{ vesionList[0] && vesionList[0].content }}</pre>
             </el-scrollbar>
           </div>
         </div>
