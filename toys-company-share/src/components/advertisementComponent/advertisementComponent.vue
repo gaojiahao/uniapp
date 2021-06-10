@@ -1,8 +1,15 @@
 <template>
-  <div class="advertisementComponent">
-    <el-carousel height="550px">
-      <el-carousel-item v-for="item in 4" :key="item">
-        123456
+  <div class="advertisementComponent" v-if="list.length">
+    <el-carousel height="550px" arrow="never">
+      <el-carousel-item
+        v-for="item in list"
+        :key="item.id"
+        @click.native="openLink(item)"
+      >
+        <el-image
+          style="width:1920px;height:550px;"
+          :src="item.imgUrl"
+        ></el-image>
       </el-carousel-item>
     </el-carousel>
   </div>
@@ -12,9 +19,16 @@
 import { mapState } from "vuex";
 export default {
   data() {
-    return {};
+    return {
+      list: []
+    };
   },
   methods: {
+    // 跳转广告链接
+    openLink(item) {
+      window.open(item.linkUrl, "_blank");
+    },
+    // 获取广告
     async getWebsiteShareAdByShareIdList() {
       const res = await this.$toys.post("/api/GetWebsiteShareAdByShareIdList", {
         shareId: this.userInfo.shareId
@@ -37,9 +51,26 @@ export default {
 };
 </script>
 <style scoped lang="less">
+@deep: ~">>>";
 .advertisementComponent {
   width: 100%;
   height: 551px;
-  background-color: #ccc;
+  cursor: pointer;
+  @{deep} .el-carousel__indicator {
+    .el-carousel__button {
+      width: 8px;
+      height: 8px;
+      background-color: #fff;
+      border-radius: 4px;
+    }
+    &.is-active {
+      .el-carousel__button {
+        width: 30px;
+        height: 8px;
+        background-color: #fff;
+        border-radius: 4px;
+      }
+    }
+  }
 }
 </style>
