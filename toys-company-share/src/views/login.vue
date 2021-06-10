@@ -6,16 +6,8 @@
         <div class="title">
           <el-image :src="userLogo.companyLogo"></el-image>
           <div class="titleText">
-            <!-- <notice-bar
-              v-if="currentLang.companyName"
-              :text="currentLang.companyName"
-              :startRoll="currentLang.companyName.length > 7"
-            /> -->
             <div class="text_content">
-              <vue-marquee
-                :content="currentLang.companyName"
-                :showtwo="false"
-              />
+              <marqueeLeft :list="[currentLang.companyName]" />
             </div>
           </div>
         </div>
@@ -44,7 +36,6 @@
             <el-form-item>
               <div class="myEmail">
                 {{ loginLang.contact }}
-                <!-- <span class="remak">{{ loginLang.emailExplain }}</span> -->
               </div>
               <el-input
                 v-model="formLabelAlign.email"
@@ -66,12 +57,10 @@
 
 <script>
 import { mapState } from "vuex";
-// import NoticeBar from "@/components/noticeBar/notice-bar";
-import VueMarquee from "vue-marquee-ho";
-require("vue-marquee-ho/dist/vue-marquee.min.css");
+import marqueeLeft from "@/components/marqueeLeft/marqueeLeft.vue";
 export default {
   components: {
-    "vue-marquee": VueMarquee
+    marqueeLeft
   },
   data() {
     return {
@@ -213,14 +202,6 @@ export default {
     loginLang() {
       return this.$t("lang.login");
     }
-    // companyNameLength() {
-    //   if (this.currentLang.companyName) {
-    //     console.log(this.currentLang.companyName);
-    //     return this.currentLang.companyName.length > 7;
-    //   } else {
-    //     return false;
-    //   }
-    // }
   }
 };
 </script>
@@ -264,7 +245,6 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 32px;
         font-weight: bold;
         .el-image {
           width: 51px;
@@ -281,6 +261,7 @@ export default {
           width: 250px;
           .text_content {
             width: 250px;
+            font-size: 25px;
             overflow: hidden;
           }
         }
