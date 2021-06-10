@@ -253,5 +253,33 @@ export default {
 	    overflow: hidden;
 	    position: relative;
 	}
+	.sm_btn_item{
+	    display: flex;
+	    margin: 5px;
+		.active{
+			margin-left: auto;
+		}
+		.item{
+			margin-right: 5px;
+		}
+	}
+	.sm_panel {
+		width: 100%;
+		height: 771px;
+		.sm_iframe{
+			position: relative;
+			width: 100%;
+			height: 711px;
+		}
+	}
+	.bg_panel {
+		width: 100%;
+		height: 911px;
+		.sm_iframe{
+			position: relative;
+			width: 100%;
+			height: 911px;
+		}
+	}
 }
 </style>

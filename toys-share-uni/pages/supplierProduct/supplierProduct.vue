@@ -9,8 +9,8 @@
 				<view class="content_panel">
 					<view class="tool_bar">
 						<template v-if="!isMobile">
-							<view class="tool_bar_item" :class="[sortType==2?'active':'']" @click="change_search_type(2)">时间<u-icon :name="timeType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
-							<view class="tool_bar_item" :class="[sortType==1?'active':'']" @click="change_search_type(1)">价格<u-icon :name="priceType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+							<view class="tool_bar_item" :class="[sortOrder==2?'active':'']" @click="change_search_type(2)">时间<u-icon :name="timeType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+							<view class="tool_bar_item" :class="[sortOrder==1?'active':'']" @click="change_search_type(1)">价格<u-icon :name="priceType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
 							<view class="tool_bar_item search">
 								<x-search placeholder="请输入关键词" height="64" shape="square" v-model="keyword" :clearabled="true"
 									bg-color="#fff"
@@ -50,7 +50,7 @@
 										</view>
 										<view class="product_list_info_plus2">
 											<view class="product_list_info_text_left">
-												单价：<text class="text red_color">￥{{item.price}}</text>
+												参考报价：<text class="text red_color">￥{{item.offerAmount}}</text>
 											</view>
 											<view class="product_list_info_text_left">
 												出厂货号：<text class="text">{{item.fa_no}}</text>
@@ -98,7 +98,7 @@
 												出厂货号：{{item.fa_no}}
 											</view>
 											<view class="product_list_info_text_right">
-												<text class="red_color">￥{{item.price}}</text>
+												<text class="red_color">￥{{item.offerAmount}}</text>
 											</view>
 										</view>
 									</view>
@@ -134,8 +134,8 @@
 						</view>
 					</view>
 					<view class="tool_bar_mobile">
-						<view class="tool_bar_item" :class="[sortType==2?'active':'']" @click="change_search_type(2)">时间<u-icon :name="timeType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
-						<view class="tool_bar_item" :class="[sortType==1?'active':'']" @click="change_search_type(1)">价格<u-icon :name="priceType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+						<view class="tool_bar_item" :class="[sortOrder==2?'active':'']" @click="change_search_type(2)">时间<u-icon :name="timeType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+						<view class="tool_bar_item" :class="[sortOrder==1?'active':'']" @click="change_search_type(1)">价格<u-icon :name="priceType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
 						<view class="tool_bar_item_right">
 							<view class="tool_bar_item grid" :class="[listShowType=='grid'?'active':'']" @click="change_show_type('grid')"><u-icon name="grid"></u-icon></view>
 							<view class="tool_bar_item grid" :class="[listShowType=='list'?'active':'']" @click="change_show_type('list')"><u-icon name="list"></u-icon></view>
@@ -157,7 +157,7 @@
 												{{item.fa_no}}
 											</view>
 											<view class="product_list_info_text_right">
-												<text class="red_color">￥{{item.price}}</text>
+												<text class="red_color">￥{{item.offerAmount}}</text>
 											</view>
 										</view>
 									</view>
@@ -173,7 +173,7 @@
 									<b-col cols="6" sm="3">
 										<view class="product_list_info_text2 active"><span>{{item.name}}</span></view>
 										<view class="product_list_info_text2">出厂货号：<span>{{item.fa_no}}</span></view>
-										<view class="product_list_info_text2">报价：<span class="red_color">￥{{item.offerAmount}}</span></view>
+										<view class="product_list_info_text2">参考报价：<span class="red_color">￥{{item.offerAmount}}</span></view>
 										<view class="product_list_info_text2">包装方式：<span>{{item.ch_pa}}</span></view>
 										<view class="product_list_info_text2">产品规格：<span>{{item.pr_le}}x{{item.pr_wi}}x{{item.pr_hi}}(cm)</span></view>
 										<view class="product_list_info_text2">包装规格：<span>{{item.in_le}}x{{item.in_wi}}x{{item.in_hi}}(cm)</span></view>
@@ -185,6 +185,9 @@
 								</b-row>
 							</b-col>
 						</b-row>
+					</view>
+					<view style="height: 200px;">
+						<u-back-top :scroll-top="scrollTop" top="600" z-index="999999"></u-back-top>
 					</view>
 					<!-- <pagination :totalPage="totalPage" :totalElements="total" v-model="currentPage" @change="getData"/> -->
 					<view class="loading_more">
@@ -224,8 +227,8 @@ export default {
 			defaultImg: require("@/static/images/logo.png"),
 			isMobile:false,   //是否移动端
 			keyword:'',
-			sortOrder:1, //1倒序，2升序
-			sortType:2,  //1价格，2时间，3热度
+			sortOrder:2, //1价格，2时间，3热度
+			sortType:1,  //1倒序，2升序
 			hotType:1,
 			priceType:1,
 			timeType:1,
@@ -246,10 +249,14 @@ export default {
 				loading: '努力加载中',
 				nomore: '实在没有了'
 			},
-			id:null
+			id:null,
+			scrollTop: 0
 		}
 	},
 	methods:{
+		onPageScroll(e) {
+			this.scrollTop = e.scrollTop;
+		},
 		//搜索清空
 		clearKeyWord(){
 			this.keyword = "";
@@ -263,17 +270,17 @@ export default {
 				this.sortType = 0;
 				this.sortOrder = 0;
 			} else if(type==1){
-				this.sortType = 1;
+				this.sortOrder = 1;
 				this.priceType = this.priceType == 1 ? 2:1;
-				this.sortOrder = this.priceType;
+				this.sortType = this.priceType;
 			} else if(type==2){
-				this.sortType = 2;
+				this.sortOrder = 2;
 				this.timeType = this.timeType == 1 ? 2:1;
-				this.sortOrder = this.timeType;
+				this.sortType = this.timeType;
 			} else if(type==3){
-				this.sortType = 3;
+				this.sortOrder = 3;
 				this.hotType = this.hotType == 1 ? 2:1;
-				this.sortOrder = this.hotType;
+				this.sortType = this.hotType;
 			}
 			this.getData();
 		},
@@ -313,7 +320,7 @@ export default {
 		async getContactInformationListShare(){
 			var me = this;
 			const res = await me.$u.api.CompanyByIDShare({
-				companyNumber: me.offerInfo.companyNumber,
+				supplierNumber: me.offerInfo.companyNumber,
 			});
 			if (res.result.code === 200) {
 				this.contactInfo = res.result.item;

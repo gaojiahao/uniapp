@@ -63,7 +63,7 @@ export default {
 		color: #999999;
 		line-height: 18px;
 		.list{
-			padding: 10px 0 45px 0;
+			padding: 10px 0 55px 0;
 			.item{
 				text-align: center;
 				margin-bottom: 5px;

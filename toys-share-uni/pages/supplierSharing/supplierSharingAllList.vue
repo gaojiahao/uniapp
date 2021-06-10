@@ -9,7 +9,7 @@
 						<template v-if="!isMobile">
 							<view class="tool_bar_item" :class="[sortOrder==0?'active':'']" @click="change_search_type(0)">综合</view>
 							<view class="tool_bar_item" :class="[sortOrder==3?'active':'']" @click="change_search_type(3)">热度<u-icon :name="hotType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
-							<view class="tool_bar_item" :class="[sortOrder==1?'active':'']" @click="change_search_type(1)">单价<u-icon :name="priceType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
+							<view class="tool_bar_item" :class="[sortOrder==1?'active':'']" @click="change_search_type(1)">价格<u-icon :name="priceType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
 							<view class="tool_bar_item" :class="[sortOrder==2?'active':'']" @click="change_search_type(2)">时间<u-icon :name="timeType < 2 ? 'arrow-downward':'arrow-upward'"></u-icon></view>
 							<view class="tool_bar_item guanjianci">关键词</view>
 							<view class="tool_bar_item search">
@@ -54,7 +54,7 @@
 										</view>
 										<view class="product_list_info_plus2">
 											<view class="product_list_info_text_left">
-												单价：<text class="red_color">￥{{item.price}}</text>
+												参考报价：<text class="red_color">￥{{item.price}}</text>
 											</view>
 											<view class="product_list_info_text_left">
 												出厂货号：{{item.fa_no}}
@@ -190,7 +190,7 @@
 										<view class="product_list_info_text2">装箱量：<span>{{item.in_en}}/{{item.ou_lo}}(PCS)</span></view>
 										<view class="product_list_info_text2">体积/材积：<span>{{item.bulk_stere}}(CBM)/{{item.bulk_feet}}(CUFT)</span></view>
 										<view class="product_list_info_text2">毛重/净重：<span>{{item.gr_we}}/{{item.ne_we}}(KG)</span></view>
-										<view class="product_list_info_text2">参考报价：<span class="red_color">￥{{item.offerAmount||0}}</span></view>
+										<view class="product_list_info_text2">参考报价：<span class="red_color">￥{{item.price||0}}</span></view>
 									</b-col>
 								</b-row>
 							</b-col>

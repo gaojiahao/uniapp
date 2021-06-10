@@ -38,7 +38,6 @@
 					<view class="menu_item" :class="[nowActive=='supplierSharingList' ? 'active':'']" @click="toLink('supplierSharingList')" v-if="threeMenu">3D产品</view>
 					<view class="menu_item" :class="[nowActive=='supplierSharingRecList' ? 'active':'']" @click="toLink('supplierSharingRecList')" v-if="remMenu">推荐产品</view>
 					<view class="menu_item" :class="[nowActive=='supplierSharingAllList' ? 'active':'']" @click="toLink('supplierSharingAllList')">全部产品</view>
-					<view class="menu_item" :class="[nowActive=='supplierSharingContact' ? 'active':'']" @click="toLink('supplierSharingContact')">联系方式</view>
 				</view>
 			</view>
 		</template>
@@ -241,17 +240,18 @@ export default {
 			}
 		}
 		.menu_mb{
-			height: 40px;
+			height: 50px;
 			position: fixed;
 			bottom: 0;
 			border-top: 1px solid #DCDCDC;
 			background: #fff;
 			z-index: 2;
+			width: 100%;
 			.menu{
 				display: flex;
 				height: 30px;
 				line-height: 30px;
-				margin: 5px 10px 5px 10px;
+				margin: 10px 10px 10px 10px;
 				.menu_item{
 					width: 100px;
 					// height: 40px;

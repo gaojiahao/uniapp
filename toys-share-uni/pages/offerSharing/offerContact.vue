@@ -134,7 +134,8 @@ export default {
 			}],
 			isMobile:false,   //是否移动端
 			background:{ background:'#5365f4'},
-			defaultContact:{
+			defaultContact:{},
+			defaultContacts:{
 				companyName:'小竹熊玩具云科技公司',
 				contactName:'李小姐',
 				phoneNumber:'',
@@ -182,11 +183,13 @@ export default {
 			for(var i = 0; i < data.length; i++){
 				if(data[i]['language']=="zh-CN"){
 					this.defaultContact = data[i];
+					return;
 					break;
 				} else {
 					this.defaultContact = data[i]
 				}
 			}
+			this.defaultContact = this.defaultContacts;
 		},
 		//初始化
 		async init(){
