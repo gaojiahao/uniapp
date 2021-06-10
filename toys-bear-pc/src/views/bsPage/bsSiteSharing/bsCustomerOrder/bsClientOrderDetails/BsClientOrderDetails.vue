@@ -47,10 +47,21 @@
           <span class="title">产品列表</span>
           ({{ totalCount }})
         </div>
-        <el-button size="medium" @click="openSelectTemplate" type="warning">
-          <i class="iconfont icon-daochujinruchukou"></i>
-          导出列表
-        </el-button>
+        <div class="btns">
+          <el-button size="medium" @click="openSelectTemplate" type="warning">
+            <i class="iconfont icon-daochujinruchukou"></i>
+            导出列表
+          </el-button>
+          <el-button
+            size="medium"
+            @click="openAdd"
+            style="background-color: #F9AE3E;border-color: #F9AE3E;"
+            type="warning"
+          >
+            <i class="el-icon-shopping-cart-full" style="font-size: 16px;"></i>
+            一键加购
+          </el-button>
+        </div>
       </div>
       <bsTables :table="tableData" />
       <center style="margin-top: 20px">
@@ -85,6 +96,21 @@
         />
       </el-dialog>
     </transition>
+    <!-- 一键加购dialog -->
+    <transition name="el-zoom-in-center">
+      <el-dialog
+        title="一键加购"
+        v-if="addPurchaseDialog"
+        :visible.sync="addPurchaseDialog"
+        width="500px"
+      >
+        <oneClickPurchase
+          :addShopOption="addShopOption"
+          @close="close"
+          @submit="submit"
+        />
+      </el-dialog>
+    </transition>
   </div>
 </template>
 
@@ -92,8 +118,10 @@
 import bsExportOrder from "@/components/bsComponents/bsSiteSharingComponent/bsExportOrder";
 import bsTables from "@/components/table";
 import Summary from "@/components/summaryComponent/summary";
+import oneClickPurchase from "@/components/commonComponent/oneClickPurchase/oneClickPurchase.vue";
+import { mapState } from "vuex";
 export default {
-  components: { bsExportOrder, bsTables, Summary },
+  components: { bsExportOrder, bsTables, Summary, oneClickPurchase },
   props: {
     item: {
       type: Object
@@ -294,6 +322,8 @@ export default {
         ],
         btnWidth: 100
       },
+      addShopOption: null,
+      addPurchaseDialog: false,
       exportTemplateDialog: false,
       isOrderDetailDialog: false,
       options: {},
@@ -303,13 +333,62 @@ export default {
       orderOption: {}
     };
   },
-  created() {
-    // console.log(this.item, "客户详情");
+  computed: {
+    ...mapState(["userInfo"])
   },
   mounted() {
     this.getSearchCompanyShareOrderDetailsPage();
   },
   methods: {
+    // 提交一键加购
+    async submit(myData) {
+      // this.$common.handlerMsgState({
+      //   msg: "敬请期待",
+      //   type: "warning"
+      // });
+      const re = await this.$http.post(
+        "/api/AddShoppingCart",
+        {
+          userID: this.userInfo.userInfo.id,
+          companyNumber: this.userInfo.commparnyList[0].companyNumber,
+          sourceFrom: "active",
+          // sourceFrom: "QRCodeSearch",
+          number: 1,
+          currency: "￥",
+          Price: 0,
+          shopType: "companysamples",
+          productNumber: myData.productNumber
+        },
+        {
+          timeout: 9999999
+        }
+      );
+      if (re.data.result.code === 200) {
+        this.$common.handlerMsgState({
+          msg: re.data.result.msg,
+          type: "success"
+        });
+      } else {
+        this.$common.handlerMsgState({
+          msg: re.data.result.msg,
+          type: "danger"
+        });
+      }
+      this.addPurchaseDialog = false;
+    },
+    // 关闭加购
+    close() {
+      this.addPurchaseDialog = false;
+      this.addShopOption = null;
+    },
+    // 一键加购
+    async openAdd() {
+      this.addShopOption = {
+        orderNumber: this.item.orderNumber,
+        orderType: "ShareOrder"
+      };
+      this.addPurchaseDialog = true;
+    },
     // 去消息聊天
     toNews(item) {
       console.log(item);
@@ -502,6 +581,27 @@ export default {
 @{deep} .exportOrder {
   .el-dialog__body {
     padding: 0;
+  }
+}
+.addPushContent {
+  text-align: center;
+  .productCount {
+    margin-top: 30px;
+    font-size: 16px;
+    .countItem {
+      margin-bottom: 20px;
+      .countItem_title {
+        color: #666;
+      }
+    }
+  }
+  .countItem_btns {
+    margin-top: 40px;
+  }
+  .tips {
+    color: #999;
+    font-size: 13px;
+    margin-top: 10px;
   }
 }
 </style>
