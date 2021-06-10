@@ -55,6 +55,7 @@ export default {
       deep: true,
       handler(val) {
         if (val) {
+          this.isShowTwo = true;
           this.myAnimation();
         }
       }
@@ -84,16 +85,16 @@ export default {
 <style lang="less" scoped>
 .my-outbox {
   overflow: hidden;
-  height: 35px;
+  height: 100%;
   position: relative;
   .my-inbox {
+    height: 100%;
     white-space: nowrap;
     position: absolute;
     .my-list {
+      height: 100%;
       margin-right: 25px;
       display: inline-block;
-      height: 35px;
-      line-height: 35px;
     }
   }
 }

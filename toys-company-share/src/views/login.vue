@@ -28,7 +28,7 @@
           >
             <el-form-item prop="verifyCode" :label="loginLang.InvitationCode">
               <el-input
-                v-model="formLabelAlign.verifyCode"
+                v-model.trim="formLabelAlign.verifyCode"
                 @keyup.native.enter="toHome"
                 clearable
               ></el-input>
@@ -38,7 +38,7 @@
                 {{ loginLang.contact }}
               </div>
               <el-input
-                v-model="formLabelAlign.email"
+                v-model.trim="formLabelAlign.email"
                 clearable
                 @keyup.native.enter="toHome"
               ></el-input>
@@ -261,6 +261,7 @@ export default {
           width: 250px;
           .text_content {
             width: 250px;
+            height: 35px;
             font-size: 25px;
             overflow: hidden;
           }
